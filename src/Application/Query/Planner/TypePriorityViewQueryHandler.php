@@ -52,7 +52,6 @@ class TypePriorityViewQueryHandler
             return $ruleA->getPriority() > $ruleB->getPriority();
         });
 
-        $priority = 0;
         foreach ($rules as $rule) {
             $seer        = $rule->getSeer();
             $seeable     = $rule->getSeeable();
@@ -80,7 +79,7 @@ class TypePriorityViewQueryHandler
                     $priorityViews[] = new TypePriorityView(
                         $seerView,
                         $seeableView,
-                        $priority
+                        $rule->getPriority()
                     );
                 }
             } elseif (is_array($seerView) && $seeableView instanceof TypeView) {
@@ -89,7 +88,7 @@ class TypePriorityViewQueryHandler
                         $priorityViews[] = new TypePriorityView(
                             $seerSingleView,
                             $seeableView,
-                            $priority
+                            $rule->getPriority()
                         );
                     }
                 }
@@ -99,7 +98,7 @@ class TypePriorityViewQueryHandler
                         $priorityViews[] = new TypePriorityView(
                             $seerView,
                             $seeableSingleView,
-                            $priority
+                            $rule->getPriority()
                         );
                     }
                 }
@@ -110,14 +109,12 @@ class TypePriorityViewQueryHandler
                             $priorityViews[] = new TypePriorityView(
                                 $seerSingleView,
                                 $seeableSingleView,
-                                $priority
+                                $rule->getPriority()
                             );
                         }
                     }
                 }
             }
-
-            $priority++;
         }
 
         return $priorityViews;

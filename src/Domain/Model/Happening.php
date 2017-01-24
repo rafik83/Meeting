@@ -18,6 +18,9 @@ use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\Talking;
 
+/**
+ * Domain language: "Conférence"  (aka "Sous-événement")
+ */
 class Happening
 {
     /**
@@ -66,7 +69,9 @@ class Happening
     private $limitParticipant;
 
     /**
-     * @var HappeningParticipation[]
+     * array of HappeningParticipation
+     *
+     * @var ArrayCollection
      */
     private $participations;
 

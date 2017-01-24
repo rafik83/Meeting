@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUnApproveMeetingRequestException;
 use Proximum\Vimeet\Domain\Repository\Meeting;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UnApproveMeetingRequestHandler
 {
@@ -27,6 +30,11 @@ class UnApproveMeetingRequestHandler
     private $permissionManager;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * @var \DateTimeInterface
      */
     private $dateTime;
@@ -34,15 +42,18 @@ class UnApproveMeetingRequestHandler
     /**
      * @param Meeting\RequestRepositoryInterface $requestRepository
      * @param RequestPermissionManager           $permissionManager
+     * @param DelayedEventDispatcher             $eventDispatcher
      * @param \DateTimeInterface                 $dateTime
      */
     public function __construct(
         Meeting\RequestRepositoryInterface $requestRepository,
         RequestPermissionManager $permissionManager,
+        DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->requestRepository = $requestRepository;
         $this->permissionManager = $permissionManager;
+        $this->eventDispatcher   = $eventDispatcher;
         $this->dateTime          = $dateTime;
     }
 
@@ -63,5 +74,10 @@ class UnApproveMeetingRequestHandler
 
         $unApproveMeetingRequest->meetingRequest->unApprove($this->dateTime);
         $this->requestRepository->set($unApproveMeetingRequest->meetingRequest);
+
+        $this->eventDispatcher->dispatch(
+            Events::MEETING_REQUEST_UNAPPROVED,
+            new UnapprovedRequestEvent($unApproveMeetingRequest->meetingRequest)
+        );
     }
 }

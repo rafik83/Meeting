@@ -296,7 +296,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-                // Participant have not already a meeting during this period
+            // Participant have not already a meeting during this period
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
@@ -350,7 +350,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting) {
+    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting)
+    {
         return $this->getAvailableParticipants(
             $participants,
             $meeting->getSlot()->getBegin(),
@@ -362,7 +363,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAvailableParticipantsForHappening(array $participants, Happening $happening) {
+    public function getAvailableParticipantsForHappening(array $participants, Happening $happening)
+    {
         return $this->getAvailableParticipants(
             $participants,
             $happening->getBegin(),
@@ -389,8 +391,26 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 'participant.sheet = :sheet AND happeningParticipation.happening = :happening'
             )
             ->setParameter('sheet', $sheet)
-            ->setParameter('happening', $happening)
-        ;
+            ->setParameter('happening', $happening);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.user', 'user')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.event', 'event')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

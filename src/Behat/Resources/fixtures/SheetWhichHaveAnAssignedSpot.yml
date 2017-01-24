@@ -1,0 +1,29 @@
+Proximum\Vimeet\Domain\Model\User\Account (local):
+    account_asddays_user_sheet_which_have_a_spot:
+        __construct: false
+        firstName: "Victor"
+        lastName: "HUGO"
+
+Proximum\Vimeet\Domain\Model\User:
+    user_asddays_sheet_which_have_a_spot:
+        __construct: false
+        email: "user_asddays_sheet_asddays_which_have_a_spot@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+        account: "@account_asddays_user_sheet_which_have_a_spot"
+
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_asddays_which_have_a_spot:
+        __construct:
+            - '@event_asddays_2016'
+            - '@event_asddays_2016_type_fournisseur'
+            - []
+            - '@user_asddays_sheet_which_have_a_spot'
+            - <dateTime()>
+        completeness: 67
+        registrationData: []
+        lastLoginAt: <dateTime()>
+        inCatalog: true
+        inCatalogAt: <dateTime()>
+        spot: '@asddays_spot_4'

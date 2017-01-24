@@ -11,6 +11,7 @@
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
+use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
@@ -19,20 +20,17 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use SendGrid\Mail;
 
 class SendHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()
     {
-        $event       = EventFactory::createEvent();
-        $createdAt   = new \DateTime();
-        $receiver    = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet       = SheetFactory::create($event, $receiver);
-        $participant = ParticipantFactory::create($sheet, $receiver);
-        $message     = new Message($event, $createdAt, 'test', 'test subject', 'test content');
+        $event     = EventFactory::createEvent();
+        $createdAt = new \DateTime();
+        $receiver  = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $sheet     = SheetFactory::create($event, $receiver);
+        $message   = new Message($event, $createdAt, 'test', 'test subject', 'test content');
 
         $campaign  = new Campaign($event, 'amazing campaign', [], $createdAt);
         $campaign->setMessage($message);
@@ -40,20 +38,22 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $campaign->addSheet($sheet);
 
         $template = $this->prophesize(\Twig_TemplateInterface::class);
-        $template->render(['mail' => $message])->shouldBeCalled()->willReturn('test content');
+        $template->render(['mail' => $message])->willReturn('test content');
 
         $twig = $this->prophesize(\Twig_Environment::class);
         $twig->load($message->getTemplate())->willReturn($template);
 
-        $billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-        $campaignRepository    = $this->prophesize(CampaignRepositoryInterface::class);
-        $mailer                = new SendGridApiAdapter($this->prophesize(SendGridApiClient::class)->reveal(), $twig->reveal());
+        $mailer                = new SendGridApiAdapter(
+            $this->prophesize(SendGridApiClient::class)->reveal(),
+            $twig->reveal(),
+            $this->getEventSender()
+        );
 
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->getEventSender()
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
@@ -71,14 +71,15 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $campaign  = new Campaign($event, 'amazing campaign', [], $createdAt);
         $mailer    = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
-            $this->prophesize(\Twig_Environment::class)->reveal()
+            $this->prophesize(\Twig_Environment::class)->reveal(),
+            $this->getEventSender()
         );
 
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->getEventSender()
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
@@ -97,14 +98,15 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mailer = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
-            $this->prophesize(\Twig_Environment::class)->reveal()
+            $this->prophesize(\Twig_Environment::class)->reveal(),
+            $this->getEventSender()
         );
 
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->getEventSender()
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
@@ -124,14 +126,15 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mailer = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
-            $this->prophesize(\Twig_Environment::class)->reveal()
+            $this->prophesize(\Twig_Environment::class)->reveal(),
+            $this->getEventSender()
         );
 
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->getEventSender()
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));

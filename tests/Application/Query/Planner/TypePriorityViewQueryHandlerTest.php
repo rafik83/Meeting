@@ -53,7 +53,7 @@ class TypePriorityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $rule  = new Rule($this->event, $type, $type2, [], 10);
         $rule2 = new Rule($this->event, $type2, $type, [], 2);
         $rule3 = new Rule($this->event, $type, $type3, [], 100);
-        $rule4 = new Rule($this->event, $type3, $type2, [], -4);
+        $rule4 = new Rule($this->event, $type3, $type2, [], 1);
         $rule5 = new Rule($this->event, $type3, $type, [], 9);
 
         // Reflection
@@ -74,11 +74,11 @@ class TypePriorityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expected = [
-            new TypePriorityView($typeView3, $typeView2, 0),
-            new TypePriorityView($typeView2, $typeView, 1),
-            new TypePriorityView($typeView3, $typeView, 2),
-            new TypePriorityView($typeView, $typeView2, 3),
-            new TypePriorityView($typeView, $typeView3, 4),
+            new TypePriorityView($typeView3, $typeView2, 1),
+            new TypePriorityView($typeView2, $typeView, 2),
+            new TypePriorityView($typeView3, $typeView, 9),
+            new TypePriorityView($typeView, $typeView2, 10),
+            new TypePriorityView($typeView, $typeView3, 100),
         ];
 
         $this->assertEquals($expected, $result);
@@ -105,7 +105,7 @@ class TypePriorityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $rule  = new Rule($this->event, $category2, $type2, [], 10);
         $rule2 = new Rule($this->event, $type2, $category, [], 2);
         $rule3 = new Rule($this->event, $category, $category2, [], 100);
-        $rule4 = new Rule($this->event, $category, $category, [], -4);
+        $rule4 = new Rule($this->event, $category, $category, [], 1);
         $rule5 = new Rule($this->event, $type3, $type, [], 9);
 
         // Reflection
@@ -126,14 +126,14 @@ class TypePriorityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expected = [
-            new TypePriorityView($typeView, $typeView, 0), // rule4
-            new TypePriorityView($typeView, $typeView2, 0), // rule4
-            new TypePriorityView($typeView2, $typeView, 0), // rule4
-            new TypePriorityView($typeView2, $typeView2, 0), // rule4
-            new TypePriorityView($typeView3, $typeView, 2), // rule5
-            new TypePriorityView($typeView3, $typeView2, 3), //rule
-            new TypePriorityView($typeView, $typeView3, 4), // rule3
-            new TypePriorityView($typeView2, $typeView3, 4), // rule3
+            new TypePriorityView($typeView, $typeView, 1), // rule4
+            new TypePriorityView($typeView, $typeView2, 1), // rule4
+            new TypePriorityView($typeView2, $typeView, 1), // rule4
+            new TypePriorityView($typeView2, $typeView2, 1), // rule4
+            new TypePriorityView($typeView3, $typeView, 9), // rule5
+            new TypePriorityView($typeView3, $typeView2, 10), //rule
+            new TypePriorityView($typeView, $typeView3, 100), // rule3
+            new TypePriorityView($typeView2, $typeView3, 100), // rule3
         ];
 
         $this->assertEquals($expected, $result);

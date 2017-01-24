@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -89,6 +90,8 @@ class MeetingRepository implements MeetingRepositoryInterface
         $pagination->results = array_map(function (Meeting $meeting) use ($locale) {
             return new MeetingView(
                 $meeting->getId(),
+                $meeting->getFromSheet()->getId(),
+                $meeting->getToSheet()->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet(), $locale),
                 $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
@@ -127,10 +130,15 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting, fromSheet, toSheet')
+            ->select('meeting, fromSheet, toSheet, spot, slot, request, fromParticipantSelected, toParticipantSelected')
             ->from(Meeting::class, 'meeting')
             ->join('meeting.fromSheet', 'fromSheet')
             ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.spot', 'spot')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.request', 'request')
+            ->leftJoin('meeting.fromParticipants', 'fromParticipantSelected')
+            ->leftJoin('meeting.toParticipants', 'toParticipantSelected')
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
             ->where('fromParticipant = :participant OR toParticipant = :participant')
@@ -149,7 +157,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(meeting)')
+            ->select('COUNT(meeting.id)')
             ->from(Meeting::class, 'meeting')
             ->join('meeting.fromSheet', 'fromSheet')
             ->join('meeting.toSheet', 'toSheet')
@@ -208,5 +216,45 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = new MeetingQueryBuilder($this->entityManager);
 
         return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingsOfSheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet')
+            ->join('meeting.toSheet', 'toSheet')
+            ->where('fromSheet = :sheet OR toSheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeetingOnSlot(MeetingSlot $meetingSlot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.slot = :slot')
+            ->setParameter('slot', $meetingSlot)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

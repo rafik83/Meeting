@@ -83,15 +83,29 @@ class IndicatorCalculator
             $this->slots = $this->slotRepository->findByEvent($sheet->getEvent());
         }
 
-        $participantsCount    = $sheet->countParticipant();
-        $meetingRequestsCount = $this->requestRepository->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
-        $planningQuantity     = $this->planningQuantityGuesser->guess($sheet);
-        $unavailabilities     = [];
+        $participantsCount       = $sheet->countParticipant();
+        $pendingPropositionCount = $this->requestRepository->countPendingPropositionReceivedBySheet($sheet);
+        $planningQuantity        = $this->planningQuantityGuesser->guess($sheet);
+        $unavailabilities        = [];
+
+        $meetingRequestsCount = $this
+            ->requestRepository
+            ->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
+
+        $slotUsables = [];
+
+        foreach ($this->slots as $slot) {
+            if ($this->slotAvailability->isUsable($slot)) {
+                $slotUsables[] = $slot;
+            }
+        }
 
         foreach ($sheet->getParticipants()->toArray() as $participant) {
-            foreach ($this->slots as $slot) {
-                if (!$this->slotAvailability->isAvailable($slot, $participant)->isAvailable()) {
-                    $unavailabilities[] = $slot;
+            foreach ($slotUsables as $slotUsable) {
+                $slotAvailability = $this->slotAvailability->getSlotAvailability($slotUsable, $participant);
+
+                if (!$slotAvailability->isAvailable()) {
+                    $unavailabilities[] = $slotUsable;
                 }
             }
         }
@@ -99,11 +113,12 @@ class IndicatorCalculator
         $unavailabilitiesCount = count($unavailabilities);
 
         return new IndicatorView(
-            count($this->slots),
+            count($slotUsables),
             $participantsCount,
             $unavailabilitiesCount,
             $planningQuantity,
-            $meetingRequestsCount
+            $meetingRequestsCount,
+            $pendingPropositionCount
         );
     }
 }

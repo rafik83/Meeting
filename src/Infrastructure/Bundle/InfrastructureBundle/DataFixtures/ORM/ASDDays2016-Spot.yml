@@ -7,3 +7,27 @@ Proximum\Vimeet\Domain\Model\Spot:
         meetingCapacity: 3
         seatCapacity: 4
         active: true
+    asddays_spot_2:
+        __construct: false
+        reference: A001
+        event: '@event_asddays_2016'
+        size: 2
+        meetingCapacity: 1
+        seatCapacity: 2
+        active: true
+    asddays_spot_3:
+        __construct: false
+        reference: A002
+        event: '@event_asddays_2016'
+        size: 2
+        meetingCapacity: 1
+        seatCapacity: 2
+        active: true
+    asddays_spot_4:
+        __construct: false
+        reference: A003
+        event: '@event_asddays_2016'
+        size: 2
+        meetingCapacity: 1
+        seatCapacity: 2
+        active: true

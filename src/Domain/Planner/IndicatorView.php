@@ -13,20 +13,22 @@ namespace Proximum\Vimeet\Domain\Planner;
 class IndicatorView
 {
     /**
-     * Nombre de slots totals de l'event
+     * "Nombre de slots totals de l'event"
+     *
      * @var int
      */
     public $slotTotal;
 
     /**
-     * nb de slots indisponibles de tous participants d'une fiche
-     * (indisponibles ou participant à une conférence, ou indispo de masse)
+     * "Nombre de slots indisponibles de tous participants d'une fiche"
+     * "(indisponibles ou participant à une conférence, ou indispo de masse)"
      *
      * @var int
      */
     public $unavailabilitiesCount;
 
     /**
+     * "Nombre de participants de la fiche"
      *
      * @var int
      */
@@ -40,39 +42,53 @@ class IndicatorView
     public $sheetsPlanningQuantity;
 
     /**
-     * Nombre de demandes de RDV
+     * "Nombre de demandes de RDV"
      *
      * @var int
      */
     public $meetingRequestsCount;
 
     /**
-     * Nombre de slots en tenant compte du nombre de planning
+     * "Nombre de slots en tenant compte du nombre de planning"
      *
      * @var int
      */
     public $slotCount;
 
     /**
-     * Nombre de slots (en tenant du nb de participants)
+     * "Nombre de slots en tenant du nombre de participants"
      *
      * @var int
      */
     public $slotsParticipantsCount;
 
     /**
-     * Nombre de slots où les participants sont disponibles
+     * "Nombre de slots où les participants sont disponibles"
      *
      * @var int
      */
     public $availableSlotsCount;
 
     /**
-     * Nombre de slots utilisables
+     * "Nombre de RDV maximum possibles"
      *
      * @var int
      */
     public $possibleMeetingsQuantity;
+
+    /**
+     * "Nombre de slots utilisables"
+     *
+     * @var int
+     */
+    public $usableSlots;
+
+    /**
+     * "Nombre de propositions reçues à valider"
+     *
+     * @var int
+     */
+    public $pendingPropositionCount;
 
     /**
      * @param int $slotTotal
@@ -80,23 +96,27 @@ class IndicatorView
      * @param int $unavailabilitiesCount
      * @param int $sheetsPlanningQuantity
      * @param int $meetingRequestsCount
+     * @param int $pendingPropositionCount
      */
     public function __construct(
         $slotTotal,
         $participantsCount,
         $unavailabilitiesCount,
         $sheetsPlanningQuantity,
-        $meetingRequestsCount
+        $meetingRequestsCount,
+        $pendingPropositionCount
     ) {
-        $this->slotTotal              = $slotTotal;
-        $this->participantsCount      = $participantsCount;
-        $this->unavailabilitiesCount  = $unavailabilitiesCount;
-        $this->sheetsPlanningQuantity = $sheetsPlanningQuantity;
-        $this->meetingRequestsCount   = $meetingRequestsCount;
+        $this->slotTotal               = $slotTotal;
+        $this->participantsCount       = $participantsCount;
+        $this->unavailabilitiesCount   = $unavailabilitiesCount;
+        $this->sheetsPlanningQuantity  = $sheetsPlanningQuantity;
+        $this->meetingRequestsCount    = $meetingRequestsCount;
+        $this->pendingPropositionCount = $pendingPropositionCount;
 
         $this->slotCount                = $slotTotal * $sheetsPlanningQuantity;
         $this->slotsParticipantsCount   = $slotTotal * $participantsCount;
         $this->availableSlotsCount      = $this->slotsParticipantsCount - $unavailabilitiesCount;
-        $this->possibleMeetingsQuantity = min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount);
+        $this->possibleMeetingsQuantity = max(0, min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount));
+        $this->usableSlots              = max(0, min($this->slotCount, $this->availableSlotsCount));
     }
 }

@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
@@ -165,5 +167,71 @@ class SpotRepository implements SpotRepositoryInterface
         ;
 
         $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotsForMeeting(Meeting $meeting)
+    {
+        return $this->getSpotsForSlotAndParticipantsQuantity(
+            $meeting->getSlot(),
+            $meeting->countParticipants(),
+            $meeting
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null
+    ) {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
+            ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants')
+            ->from(Spot::class, 'spot')
+            // Get meetings assigned to this spot on current slot
+            ->leftJoin(
+                Meeting::class,
+                'meeting',
+                'WITH',
+                sprintf(
+                    'meeting.spot = spot AND meeting.state = :state AND meeting.slot = :slot %s',
+                    // Exclude $exceptMeeting
+                    null !== $exceptMeeting ? 'AND meeting != :exceptMeeting' : ''
+                )
+            )
+            ->setParameter('exceptMeeting', $exceptMeeting)
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setParameter('slot', $slot)
+            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
+            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->andWhere('spot.active = true')
+            ->groupBy('spot.id')
+            ->andHaving('countMeetings < spot.meetingCapacity')
+            ->andHaving('(countParticipants + :participantsQuantity) <= spot.seatCapacity')
+            ->setParameter('participantsQuantity', $participantsQuantity);
+
+        if (null !== $exceptMeeting) {
+            $queryBuilder
+                // Get meeting sheets assigned to spot in order to sort Spots list by assigned spots then by shared spots
+                ->addSelect('sheetAssignedToSpot.id AS HIDDEN hasSheetAssignedFromMeeting')
+                ->leftJoin('spot.sheets', 'sheetAssignedToSpot', 'WITH', 'sheetAssignedToSpot IN (:fromSheetId, :toSheetId)')
+                // Exclude spots assigned to others sheet
+                ->andWhere('NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
+                ->setParameter('fromSheetId', $exceptMeeting->getFromSheet()->getId())
+                ->setParameter('toSheetId', $exceptMeeting->getToSheet()->getId())
+                ->addOrderBy('hasSheetAssignedFromMeeting', 'DESC');
+        }
+
+        $queryBuilder->addOrderBy('spot.reference');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

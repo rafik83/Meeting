@@ -105,9 +105,10 @@ class SheetListViewQueryHandler
                 $request,
                 $propositions,
                 $indicator->meetingRequestsCount,
-                $indicator->slotTotal,
-                $indicator->possibleMeetingsQuantity,
+                $indicator->slotCount,
+                $indicator->usableSlots,
                 $this->getPlacedMeetingsNumber($sheet),
+                $indicator->pendingPropositionCount,
                 null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
                 $this->router->generate(
                     'admin_sheet_details',
@@ -127,7 +128,7 @@ class SheetListViewQueryHandler
     private function sortSheetsByTitle(array &$sheetList)
     {
         usort($sheetList, function (SheetView $one, SheetView $other) {
-            return strcmp($one->title, $other->title);
+            return strcasecmp($one->title, $other->title);
         });
     }
 
@@ -138,13 +139,6 @@ class SheetListViewQueryHandler
      */
     private function getPlacedMeetingsNumber(Sheet $sheet)
     {
-        $participants        = $sheet->getParticipants();
-        $countPlacedMeetings = 0;
-
-        foreach ($participants as $participant) {
-            $countPlacedMeetings += $this->meetingRepository->countByParticipant($participant);
-        }
-
-        return $countPlacedMeetings;
+        return (int) $this->meetingRepository->countMeetingsOfSheet($sheet);
     }
 }

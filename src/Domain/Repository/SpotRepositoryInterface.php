@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 interface SpotRepositoryInterface
@@ -73,4 +75,24 @@ interface SpotRepositoryInterface
      * @param Event $event
      */
     public function enableBatchSpot(array $ids, Event $event);
+
+    /**
+     * @param Meeting $meeting
+     *
+     * @return Spot[]
+     */
+    public function getSpotsForMeeting(Meeting $meeting);
+
+    /**
+     * @param MeetingSlot  $slot
+     * @param int          $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     *
+     * @return Spot[]
+     */
+    public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null
+    );
 }

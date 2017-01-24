@@ -197,11 +197,27 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        return $this->countPendingPropositionReceivedBySheet($sheet) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
         return $queryBuilder->sendBy($sheet)->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRequestSentBySheet(Sheet $sheet)
+    {
+        return $this->countRequestSentBySheet($sheet) > 0;
     }
 
     /**
@@ -278,9 +294,9 @@ class RequestRepository implements RequestRepositoryInterface
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
                 $request->getState(),
                 $request->getCreatedAt(),
                 ''

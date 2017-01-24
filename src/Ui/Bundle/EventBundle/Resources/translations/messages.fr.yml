@@ -10,11 +10,13 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.meeting.details: Details
+agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'
-agenda.unavailability.add: 'Add unavailability'
-agenda.unavailability.back: Back
+agenda.unavailability.add: 'Ajouter une indisponibilité'
+agenda.unavailability.back: Retour
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
-agenda.unavailability.remove: Remove
+agenda.unavailability.remove: Supprimer
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -31,9 +33,11 @@ catalog.meeting_request.approve: Accepter
 catalog.meeting_request.create: 'Demander en RDV'
 catalog.meeting_request.pending: 'Demande en attente'
 catalog.meeting_request.proposition.approved: 'Proposition acceptée'
+catalog.meeting_request.proposition.placed: 'RDV planifié'
 catalog.meeting_request.proposition.refused: 'Proposition refusée'
 catalog.meeting_request.refuse: Refuser
 catalog.meeting_request.request.approved: 'Demande acceptée'
+catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
@@ -86,14 +90,14 @@ navigation.links.happening.accept: Acceptées
 navigation.links.happening.approved: Acceptées
 navigation.links.happening.decline: Refusées
 navigation.links.happening.open_date: 'Disponible le'
-navigation.links.happening.proposal: 'Meetings requests'
+navigation.links.happening.proposal: 'Propositions de RDV'
 navigation.links.happening.refused: Refusées
 navigation.links.happening.sent: 'Demandes en attente'
 navigation.links.happening.waiting: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.meetingRequest.approved: Acceptées
 navigation.links.meetingRequest.open_date: 'Disponible le'
-navigation.links.meetingRequest.proposal: 'Meetings requests'
+navigation.links.meetingRequest.proposal: 'Propositions de RDV'
 navigation.links.meetingRequest.refused: Refusées
 navigation.links.meetingRequest.sent: 'Demandes en attente'
 navigation.links.member_space.avatar: Photo
@@ -249,6 +253,8 @@ sheet.object.action.add: 'Ajouter:'
 sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Compléter
 sheet.object.action.remove: 'Supprimer:'
+sheet.object.boolean.false: Non
+sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
@@ -262,7 +268,7 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
-sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous BtoB.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
 sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
 sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'

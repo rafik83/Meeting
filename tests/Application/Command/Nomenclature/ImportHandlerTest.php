@@ -14,7 +14,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Nomenclature;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\ImporterInterface;
 use Proximum\Vimeet\Domain\Event\HasSheet;
 use Proximum\Vimeet\Domain\Model\Nomenclature;

@@ -52,6 +52,11 @@ class MeetingRequestView
     public $sheetName;
 
     /**
+     * @var bool
+     */
+    public $isMeetingPublished;
+
+    /**
      * MeetingRequestView constructor.
      *
      * @param Sheet              $sheet
@@ -61,6 +66,7 @@ class MeetingRequestView
      * @param \DateTimeInterface $createdAt
      * @param MeetingRequest     $meetingRequest
      * @param PreviewView[]      $previewViews
+     * @param bool               $isMeetingPublished
      */
     public function __construct(
         Sheet $sheet,
@@ -69,15 +75,17 @@ class MeetingRequestView
         $type,
         \DateTimeInterface $createdAt,
         MeetingRequest $meetingRequest,
-        array $previewViews
+        array $previewViews,
+        $isMeetingPublished = false
     ) {
-        $this->sheet          = $sheet;
-        $this->sheetName      = $sheetName;
-        $this->state          = $state;
-        $this->type           = $type;
-        $this->createdAt      = $createdAt;
-        $this->meetingRequest = $meetingRequest;
-        $this->previewViews   = $previewViews;
+        $this->sheet              = $sheet;
+        $this->sheetName          = $sheetName;
+        $this->state              = $state;
+        $this->type               = $type;
+        $this->createdAt          = $createdAt;
+        $this->meetingRequest     = $meetingRequest;
+        $this->previewViews       = $previewViews;
+        $this->isMeetingPublished = $isMeetingPublished;
     }
 
     /**

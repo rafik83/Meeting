@@ -32,6 +32,13 @@ interface ParticipantRepositoryInterface
     public function delete(Participant $participant);
 
     /**
+     * @param Event $event
+     *
+     * @return Participant[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
      * @param int $id
      *
      * @return Participant

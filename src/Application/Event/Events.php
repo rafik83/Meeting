@@ -23,10 +23,12 @@ final class Events
     const USER_MAIL_CHANGED                    = 'change_mail';
     const MEETING_PARTICIPANT_ADDED            = 'meeting.participant.added';
     const MEETING_PARTICIPANT_REMOVED          = 'meeting.participant.removed';
-    const REQUEST_SENT                         = 'meeting_request.sent';
-    const REQUEST_REFUSED                      = 'meeting_request.refused';
-    const REQUEST_CANCELED                     = 'meeting_request.canceled';
-    const REQUEST_ACCEPTED                     = 'meeting_request.accepted';
+    const MEETING_REQUEST_CREATED              = 'meeting_request.created';
+    const MEETING_REQUEST_CANCELED             = 'meeting_request.canceled';
+    const MEETING_REQUEST_REFUSED              = 'meeting_request.refused';
+    const MEETING_REQUEST_APPROVED             = 'meeting_request.approved';
+    const MEETING_REQUEST_UNAPPROVED           = 'meeting_request.unapproved';
+    const MEETING_REQUEST_UNREFUSED            = 'meeting_request.unrefused';
     const MEETING_CANCELED                     = 'meeting.canceled';
     const REQUEST_PARTICIPANT_ADDED            = 'meeting_request.participant.added';
     const REQUEST_PARTICIPANT_REMOVED          = 'meeting_request.participant.removed';
@@ -37,12 +39,12 @@ final class Events
     const EVENT_LOCALE_CHANGED                 = 'event.locale_changed';
     const USER_RESET_PASSWORD_CONFIRMED        = 'user.reset_password.confirm';
     const ORDER_CONFIRMED                      = 'order.confirm';
+    const ORDER_UPDATED                        = 'order.updated';
     const ADMIN_ACCOUNT_ACTIVATED              = 'admin.account_activated';
     const ADMIN_PASSWORD_RESET                 = 'admin.password_reset';
     const USER_ACCOUNT_ACTIVATED               = 'user.account_activated';
     const USER_PASSWORD_RESET                  = 'user.password_reset';
     const USER_PROFILE_COMPLETED               = 'user.profile_completed';
-    const TRANSACTION_CONFIRMED                = 'transaction.confirm';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
     const REGISTRATION_STEP                    = 'user.registration.step';
@@ -54,4 +56,7 @@ final class Events
     const TRANSACTION_CREATED                  = 'transaction.created';
     const TRANSACTION_UPDATED                  = 'transaction.updated';
     const TRANSACTION_REMOVED                  = 'transaction.removed';
+    const PARTICIPANT_IMPORTED                 = 'participant.imported';
+    const TRANSACTION_CONFIRMED                = 'transaction.confirm';
+    const HAPPENING_PARTICIPATED               = 'happening.participated';
 }

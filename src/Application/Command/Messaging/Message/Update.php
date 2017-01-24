@@ -30,6 +30,11 @@ final class Update
     public $content;
 
     /**
+     * @var Message
+     */
+    private $message;
+
+    /**
      * @param Message $message
      */
     public function __construct(Message $message)

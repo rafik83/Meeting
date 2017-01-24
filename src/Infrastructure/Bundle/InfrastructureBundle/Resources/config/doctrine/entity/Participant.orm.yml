@@ -16,6 +16,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             nullable: true
         registrationComplete:
             type: boolean
+        imported:
+            type: boolean
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

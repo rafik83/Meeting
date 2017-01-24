@@ -18,6 +18,9 @@ class TypeView
     /** @var string */
     public $title;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param int    $id
      * @param string $title

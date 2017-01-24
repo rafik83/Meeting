@@ -38,7 +38,7 @@ form.admin.picto.Cocktail: Cocktail
 form.admin.picto.Conference: Micro
 form.admin.picto.Dejeuner: Déjeuner
 form.admin.picto.PresFlash_2: Flash
-form.admin.picto.RDV: Meeting
+form.admin.picto.RDV: Rendez-vous
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -86,6 +86,7 @@ form.change_password.children.submit.label: Envoyer
 form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
+form.common.choices.all: 'Tout sélectionner'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -246,6 +247,7 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
 form.login.children.password.label: 'Mot de passe'
@@ -343,6 +345,12 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Libe
 form.package_update.children.title.label: 'Titre du template'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
+form.participant_import.children.charset.label: Encodage
+form.participant_import.children.file.label: 'Fichier CSV'
+form.participant_import.children.submit.label: Importer
+form.participant_import.children.type.label: Type
+form.participant_import.field.ignore: Ignorer
+form.participant_import.field.mail: Email
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
@@ -535,6 +543,11 @@ form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
+form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
+form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
+form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
+form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'

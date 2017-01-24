@@ -172,9 +172,23 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet $sheet
      *
+     * @return bool
+     */
+    public function hasPendingPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
      * @return int
      */
     public function countRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasRequestSentBySheet(Sheet $sheet);
 
     /**
      * @param Sheet $sheet
