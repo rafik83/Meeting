@@ -11,6 +11,12 @@ module.exports = {
     data: function () {
         return {
             filteredSheets: [],
+            formFilters: {
+                selectedTypes: [],
+                hasSentMeetingRequest: false,
+                hasMeetingToApprove: false,
+                hasNotEnoughAvailableSlot: false
+            },
             filters: {
                 selectedTypes: [],
                 hasSentMeetingRequest: false,
@@ -24,6 +30,8 @@ module.exports = {
             this.$emit('refresh-list', this.filteredSheets);
         },
         save: function () {
+            this.setUsedFilter();
+
             var filteredSheet = this.sheets;
 
             if (this.filters.selectedTypes.length > 0) {
@@ -60,6 +68,18 @@ module.exports = {
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false
             };
+            this.formFilters =  {
+                selectedTypes: [],
+                hasSentMeetingRequest: false,
+                hasMeetingToApprove: false,
+                hasNotEnoughAvailableSlot: false
+            }
+        },
+        setUsedFilter: function() {
+            Object.assign(this.filters, this.formFilters);
+        },
+        setFormFilter: function () {
+            Object.assign(this.formFilters, this.filters);
         }
     },
     computed: {

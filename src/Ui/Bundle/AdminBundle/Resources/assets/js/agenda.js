@@ -131,6 +131,14 @@ new Vue({
             this.loadSheets();
         },
 
+        showSheetFilter: function () {
+            this.showFilterModal = true;
+            var child = this.$refs.sheetFilterModal;
+            if (typeof child !== 'undefined') {
+                child.setFormFilter();
+            }
+        },
+
         refreshList: function (filteredSheets) {
             this.hasUsedSheetFilter = true;
             this.filteredSheets = filteredSheets;

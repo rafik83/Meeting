@@ -7,7 +7,7 @@
             <h4 class="modal-title" id="filterSheetModalLabel">{{ 'admin.agenda.filters.title.label'|trans }}</h4>
         </div>
         <div class="modal-body">
-           <filter-sheet-form :filters="filters" :sheets="sheets"></filter-sheet-form>
+           <filter-sheet-form :filters="formFilters" :sheets="sheets"></filter-sheet-form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" @click="$emit('close-modal')">
