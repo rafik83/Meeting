@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
-use Proximum\Vimeet\Application\Command\Meeting\UpdateSlot;
-use Proximum\Vimeet\Application\Command\Meeting\UpdateSpot;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
