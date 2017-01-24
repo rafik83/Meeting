@@ -64,6 +64,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 $meetingRequest,
                 $sheet,
                 'fr',
+                false,
                 false
             ))
             ->shouldBeCalled()
