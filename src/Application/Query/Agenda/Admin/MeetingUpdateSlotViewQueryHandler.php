@@ -22,6 +22,10 @@ class MeetingUpdateSlotViewQueryHandler
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
+    /**
+     * @param SpotRepositoryInterface        $spotRepository
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     */
     public function __construct(
         SpotRepositoryInterface $spotRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository

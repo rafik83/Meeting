@@ -104,15 +104,11 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
-        if (Request::METHOD_POST === $request->getMethod()) {
-            return $this->handleUpdateSpotAction($request, $event, $meeting);
-        }
-
-        $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
+        $meetingUpdateSlotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
             new MeetingUpdateSlotViewQuery($meeting)
         );
 
-        return new JsonResponse($meetingUpdateSpotView);
+        return new JsonResponse($meetingUpdateSlotView);
     }
 
     /**
