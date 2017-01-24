@@ -24,7 +24,7 @@ class ImportHandler
     private $localFileStorageAdapter;
 
     /**
-     * @var SessionAdapter
+     * @var SessionInterface
      */
     private $session;
 
