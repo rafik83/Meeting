@@ -10,6 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
+use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
+use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -44,29 +48,54 @@ class UpdateSlotHandler
     /**
      * @param UpdateSlot $updateSlot
      *
-     * @throws \Exception
+     * @throws BlockedSpotNotAvailableForThisMeetingAndSlotException
+     * @throws MeetingIsBlockedSlotException
+     * @throws NoSpotsAvailableForThisSlotAndMeetingException
+     * @throws SlotNotAvailableForThisMeetingException
      */
     public function handle(UpdateSlot $updateSlot)
     {
+        // Check if meeting can be moved
+        if (true === $updateSlot->meeting->isBlockedSlot()) {
+            throw new MeetingIsBlockedSlotException();
+        }
+
+        // Get available slots
         $meetingUpdateSlotView = $this->meetingUpdateSlotViewQueryHandler->handle(
             new MeetingUpdateSlotViewQuery($updateSlot->meeting)
         );
 
+        // Check if selected slot is in available slots
         if (false === in_array($updateSlot->slot->getId(), $meetingUpdateSlotView->availableSlotsId)) {
-            throw new \Exception('slot not available');
+            throw new SlotNotAvailableForThisMeetingException();
         }
 
+        // Get available spots for this slot and meeting
         $spots = $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $updateSlot->slot,
             $updateSlot->meeting->countParticipants(),
             $updateSlot->meeting
         );
 
+        // If no spot available
         if (0 === count($spots)) {
-            throw new \Exception('No spot is available');
+            throw new NoSpotsAvailableForThisSlotAndMeetingException();
         }
 
-        $updateSlot->meeting->updateSlotAndSpot($updateSlot->slot, reset($spots));
+        // Get first spot
+        $newSpot = reset($spots);
+
+        // Is meeting blockedSpot, keep same spot
+        if (true === $updateSlot->meeting->isBlockedSpot()) {
+            $newSpot = $updateSlot->meeting->getSpot();
+
+            // Current meeting spot not available for selected slot
+            if (false === in_array($updateSlot->meeting->getSpot(), $spots)) {
+                throw new BlockedSpotNotAvailableForThisMeetingAndSlotException();
+            }
+        }
+
+        $updateSlot->meeting->updateSlotAndSpot($updateSlot->slot, $newSpot);
         $this->meetingRepository->set($updateSlot->meeting);
     }
 }

@@ -12,7 +12,11 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
+use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
+use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
+use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
@@ -65,6 +69,10 @@ class MeetingController extends Controller
             (int) $data->spotId
         );
 
+        if (null === $spot) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.selectedSpotNotExists');
+        }
+
         $updateSpot = new UpdateSpot(
             $meeting,
             $spot,
@@ -78,6 +86,8 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting');
         } catch (MeetingIsBlockedSpotException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.isBlockedSpot');
+        } catch (\Exception $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.error');
         }
 
         return new JsonResponse();
@@ -127,13 +137,34 @@ class MeetingController extends Controller
             (int) $data->slotId
         );
 
+        if (null === $slot) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.selectedSlotNotExists');
+        }
+
         $updateSlot = new UpdateSlot($meeting, $slot);
-        dump($updateSlot);
 
         try {
             $this->get('tactician.commandbus')->handle($updateSlot);
+        } catch (BlockedSpotNotAvailableForThisMeetingAndSlotException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.blockedSpotNotAvailableForThisMeetingAndSlot'
+            );
+        } catch (MeetingIsBlockedSlotException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.meetingIsBlockedSlot'
+            );
+        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting'
+            );
+        } catch (SlotNotAvailableForThisMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting'
+            );
         } catch (\Exception $exception) {
-            return $this->createErrorJsonResponse($exception->getMessage().' - '. $exception->getFile().' - '.$exception->getLine());
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.error'
+            );
         }
 
         return new JsonResponse();
