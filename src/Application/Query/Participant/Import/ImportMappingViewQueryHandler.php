@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
-use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 class ImportMappingViewQueryHandler
 {
@@ -26,7 +25,7 @@ class ImportMappingViewQueryHandler
     private $session;
 
     /**
-     * @var DecoderInterface
+     * @var CsvDecoder
      */
     private $csvDecoder;
 
