@@ -1,8 +1,8 @@
 @admin
 @agenda
 
-Feature: Update meeting spot in agenda via the API
-  I need to update a meeting spot via the API
+Feature: Update meeting spot and slot in agenda via the API
+  I need to update a meeting spot and slot via the API
 
   Scenario: I can get available spots for a meeting
     Given the database is purged
@@ -23,11 +23,10 @@ Feature: Update meeting spot in agenda via the API
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml                |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-MeetingSlot.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/ASDDays2016-Meeting.yml     |
     And I am logged with "test@test.com" on admin
     When I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-spot"
-    Then the response should be in JSON
-    When I am on "/admin/fr/event/1/agenda/meeting/1/update-spot"
     Then the JSON should be equal to:
       """
       {
@@ -103,4 +102,72 @@ Feature: Update meeting spot in agenda via the API
     And the JSON should be equal to:
       """
           "admin.agenda.meeting.updateSpot.isBlockedSpot"
+      """
+
+  Scenario: I can get available slots for a meeting
+    Given I am logged with "test@test.com" on admin
+    When I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-slot"
+    Then the JSON should be equal to:
+      """
+      {
+          "availableSlotsId": [
+              1,
+              3,
+              4,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
+          ]
+      }
+      """
+  Scenario: I can move a meeting to available slot
+    Given I am logged with "test@test.com" on admin
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+      """
+      {
+          "slotId": 10
+      }
+      """
+    Then the response status code should be 200
+
+  Scenario: I can not move a meeting to unavailable slot
+    Given I am logged with "test@test.com" on admin
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+      """
+      {
+          "slotId": 2
+      }
+      """
+    Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting"
+      """
+
+  Scenario: I can not change the slot for a meeting when slot is blocked
+    Given I am logged with "test@test.com" on admin
+    And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+      """
+      {
+          "spotId": 2,
+          "blockedSlot": true,
+          "blockedSpot": false
+      }
+      """
+    And the response status code should be 200
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+      """
+      {
+          "slotId": 1
+      }
+      """
+    Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSlot.meetingIsBlockedSlot"
       """
