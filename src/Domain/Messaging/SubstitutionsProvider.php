@@ -169,7 +169,7 @@ class SubstitutionsProvider
         }
 
         // Owner who does not participate:
-        if ($recipient instanceof User && null === $sheet->getParticipantOwner($recipient)) {
+        if ($recipient instanceof User && null === $sheet->getParticipantOwner()) {
             return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', []);
         }
 

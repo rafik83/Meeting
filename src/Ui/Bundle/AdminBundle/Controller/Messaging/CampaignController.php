@@ -177,12 +177,11 @@ class CampaignController extends Controller
     /**
      * Display all messaging campaigns for a given event.
      *
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function listAction(Request $request, Event $event)
+    public function listAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
