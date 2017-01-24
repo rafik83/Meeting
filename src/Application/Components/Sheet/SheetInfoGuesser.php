@@ -120,17 +120,4 @@ class SheetInfoGuesser
 
         return sprintf('#%s', $sheet->getId());
     }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return string
-     *
-     * @deprecated Must be rewrited in order to get Sheet productsSelectionTemplate and corresponding data
-     */
-    public function guessSheetPackage(Sheet $sheet, $locale)
-    {
-        return '';
-    }
 }
