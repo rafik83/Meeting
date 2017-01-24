@@ -55,7 +55,8 @@ class RequestViewQueryHandler
         return new RequestView(
             $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
             $sheetMet->getId(),
-            $this->getParticipantViews($query->request, $query->sheet, $query->locale)
+            $this->getParticipantViews($query->request, $query->sheet, $query->locale),
+            $query->request->isTransformableIntoMeeting()
         );
     }
 

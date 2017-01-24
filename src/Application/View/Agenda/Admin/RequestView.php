@@ -28,19 +28,27 @@ class RequestView
     public $participants;
 
     /**
+     * @var bool
+     */
+    public $isTransformableIntoMeeting;
+
+    /**
      * RequestView constructor.
      *
      * @param string            $sheetMetTitle
      * @param int               $sheetMetId
      * @param ParticipantView[] $participants
+     * @param bool              $isTransformableIntoMeeting
      */
     public function __construct(
         $sheetMetTitle,
         $sheetMetId,
-        array $participants
+        array $participants,
+        $isTransformableIntoMeeting
     ) {
-        $this->sheetMetTitle = $sheetMetTitle;
-        $this->sheetMetId    = $sheetMetId;
-        $this->participants  = $participants;
+        $this->sheetMetTitle              = $sheetMetTitle;
+        $this->sheetMetId                 = $sheetMetId;
+        $this->participants               = $participants;
+        $this->isTransformableIntoMeeting = $isTransformableIntoMeeting;
     }
 }

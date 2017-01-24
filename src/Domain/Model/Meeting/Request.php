@@ -456,6 +456,18 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isTransformableIntoMeeting()
+    {
+        if ($this->hasNoPreference($this->from) || $this->hasNoPreference($this->to)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Sheet

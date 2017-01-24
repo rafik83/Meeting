@@ -220,6 +220,10 @@ new Vue({
                     }.bind(this));
 
                     requests.forEach(function (request) {
+                        request.participantsName = request.participants.map(function (participant) {
+                            return participant.fullName;
+                        }).join(', ');
+
                         if (undefined !== this.agendas[sheetId] && undefined !== this.agendas[sheetId].requests) {
                             this.agendas[sheetId].requests.push(request);
                         }
