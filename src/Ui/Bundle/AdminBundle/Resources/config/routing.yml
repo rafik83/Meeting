@@ -288,6 +288,20 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_export_participant_index:
+    path: /event/{event}/agenda/export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:index }
+
+admin_agenda_export_participant_export:
+    path: /event/{event}/agenda/do-export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
+
 admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
     requirements:
@@ -1082,3 +1096,27 @@ admin_messaging_campaign_send:
         campaign: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Messaging\Campaign:send }
+
+#
+# Planner
+#
+admin_planner:
+    path: /event/{event}/planner
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Planner:index }
+
+admin_export_planner_data:
+    path: /event/{event}/planner/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Export:export }
+
+admin_import_planner_data:
+    path: /event/{event}/planner/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Planner/Import:import }

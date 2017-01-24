@@ -54,12 +54,11 @@ class StepCommandFactory
      * @param string $type
      * @param Sheet  $sheet
      * @param int    $stepIndex
-     * @param string $locale
      *
      * @return AbstractStep
      * @throws StepNotImplementedException
      */
-    public function create($type, Sheet $sheet, $stepIndex, $locale)
+    public function create($type, Sheet $sheet, $stepIndex)
     {
         switch ($type) {
             case Step::TYPE_PLAN:
@@ -67,7 +66,7 @@ class StepCommandFactory
             case Step::TYPE_PARTICIPANT_PLANNING:
                 return $this->stepParticipantAndPlanning->build($sheet, $stepIndex);
             case Step::TYPE_OPTIONS:
-                return $this->stepOption->build($sheet, $stepIndex, $locale);
+                return $this->stepOption->build($sheet, $stepIndex);
             default:
                 throw new StepNotImplementedException(sprintf('Command Package Step type %s not implemented', $type));
         }

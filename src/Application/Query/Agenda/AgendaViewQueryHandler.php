@@ -101,7 +101,11 @@ class AgendaViewQueryHandler
         $eventDays              = $this->dayRepository->findByEvent($query->event);
         $participant            = $query->participant;
         $sheet                  = $query->sheet;
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($query->user, $sheet);
+
+        $isUserAloneParticipant = null !== $query->user ?
+            ParticipantHelper::isUserAloneParticipant($query->user, $sheet)
+            : false
+        ;
 
         $participants = $this->participantViewQueryHandler->handle(
             new ParticipantViewQuery($sheet->getParticipants()->toArray(), $query->locale)

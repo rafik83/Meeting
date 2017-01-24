@@ -1389,7 +1389,6 @@ services:
             - '@repository.messaging.campaign_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage }
-
     command.messaging.campaign.send_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler
         arguments:
@@ -1399,6 +1398,21 @@ services:
             - '@domain.messaging.substitutions_provider'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+
+    command.planner.import_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@adapter.entity_manager_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
+
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
         arguments:
@@ -1443,6 +1457,14 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
+    adapter.entity_manager_adapter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\EntityManagerAdapter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter.serializer_adapter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter
+        arguments:
+            - '@serializer'
 
     adapter.validator_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter
@@ -1677,18 +1699,6 @@ services:
             - '@domain.messaging.sendgrid_api_client'
             - '@twig'
             - '@event_sender'
-
-    #
-    # Proforma component
-    #
-    components.sheet.billing_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingViewFactory
-        arguments:
-            - '@components.sheet.billing_info_guesser'
-    components.sheet.billing_info_guesser:
-        class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
-        arguments:
-            - '@tagged_info_guesser'
 
     #
     # Notification component
@@ -2752,10 +2762,6 @@ services:
     domain.key_dates.checker.catalog_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments: ['@datetime']
-    domain.key_dates.checker.meeting_published_access_checker:
-        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
-        arguments:
-            - '@datetime'
 
     domain.key_dates.checker.meeting_published_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
@@ -2888,6 +2894,19 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.event_participant_schedules:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantSchedulesNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.agenda_view_query_handler'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'
@@ -2932,6 +2951,126 @@ services:
             - { name: serializer.decoder }
 
     #
+    # Planner
+    #
+    service_planner.exporter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Planner\Exporter
+        arguments:
+            - '@query.planner.planner_view_query_handler'
+            - '@serializer'
+
+    query.planner.day_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
+
+    query.planner.slot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\SlotViewQueryHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+
+    query.planner.type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\TypeViewQueryHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.type_repository'
+
+    query.planner.type_priority_view_query_handler:
+       class: Proximum\Vimeet\Application\Query\Planner\TypePriorityViewQueryHandler
+       arguments:
+            - '@repository.rule_repository'
+
+    query.planner.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\SheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.planner.indicator_calculator'
+
+    query.planner.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.meeting.slot.slot_availability'
+
+    query.planner.meeting_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    query.planner.spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\SpotViewQueryHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.spot_repository'
+
+    query.planner.planner_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler
+        arguments:
+            - '@query.planner.day_view_query_handler'
+            - '@query.planner.slot_view_query_handler'
+            - '@query.planner.type_view_query_handler'
+            - '@query.planner.type_priority_view_query_handler'
+            - '@query.planner.sheet_view_query_handler'
+            - '@query.planner.participant_view_query_handler'
+            - '@query.planner.meeting_view_query_handler'
+            - '@query.planner.spot_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery }
+
+    #
+    # Planner normalizer
+    #
+    serializer_normalizer_planner.day_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\DayNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.slot_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\SlotNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.type_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\TypeNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.type_priority_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\TypePriorityNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.sheet_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\SheetNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.participant_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\ParticipantNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.meeting_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\MeetingNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.spot_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\SpotNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.planner_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\PlannerNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
+    # Planner Denormalizer
+    #
+    serializer_denormalizer_planner.planner_denormalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Denormalizer\Planner\PlannerDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
     # Domain Planner services
     #
     planner.planning_quantity_guesser:
@@ -2939,6 +3078,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
+
     domain.planner.indicator_calculator:
         class: Proximum\Vimeet\Domain\Planner\IndicatorCalculator
         arguments:
@@ -2957,6 +3097,16 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+
+    #
+    # Form extension
+    #
+    form_extension.confirm_extension:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\ConfirmExtension
+        arguments:
+             - '@translator'
+        tags:
+            - { name: form.type_extension,  extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
 
     #
     # SendGrid API

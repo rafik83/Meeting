@@ -50,6 +50,13 @@ interface MeetingSlotRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return MeetingSlot[]
+     */
+    public function getAvailableSlotByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
      * @return int
      */
     public function countByEvent(Event $event);

@@ -1,0 +1,23 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.agenda.export.link'|trans %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ 'admin.agenda.export.title'|trans }}</h1>
+
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ 'admin.agenda.export.omz'|trans }}</div>
+                <div class="panel-body">
+                    <div class="alert alert-danger" role="alert">{{ 'admin.agenda.export.participant_schedules.danger'|trans }}</div>
+                    <form action="{{ path('admin_agenda_export_participant_export', { 'event': event.id }) }}" method="GET">
+                        <input type="submit" class="btn btn-default btn-lg" value="{{ 'admin.agenda.export.participant_schedules.title'|trans }}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

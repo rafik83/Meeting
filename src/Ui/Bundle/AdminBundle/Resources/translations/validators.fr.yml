@@ -34,6 +34,7 @@ validators.participant_imported.duplicate_mail_mapping: 'Vous ne pouvez pas sele
 validators.participant_imported.empty_mail_mapping: 'La sélection du champ email Vimeet est obligatoire'
 validators.password.min: 'Le mot de passe doit comporter au moins {{ limit }} caractères'
 validators.password.mismatch: 'Les 2 mots de passe ne sont pas identiques'
+validators.planner.import.invalidXml: 'Le fichier XML proposé n''est pas valide, il ne contient certains des noeuds indispensables à la récupération des rendez-vous'
 validators.position_meeting.fromParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.position_meeting.toParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.product.quantity.greaterOrEqual: 'La quantité min doit être inférieure à la quantité max'
