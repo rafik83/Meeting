@@ -97,8 +97,8 @@ class AgendaController extends Controller
             $eventDomain->getEvent(),
             $sheet,
             $participant,
-            $this->getUser(),
-            $request->getLocale()
+            $request->getLocale(),
+            $this->getUser()
         ));
 
         return $this->render('EventBundle:Agenda:index.html.twig', [

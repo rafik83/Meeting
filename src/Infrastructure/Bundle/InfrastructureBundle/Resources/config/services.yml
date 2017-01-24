@@ -2881,6 +2881,19 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.event_participant_schedules:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantSchedulesNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.agenda_view_query_handler'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'

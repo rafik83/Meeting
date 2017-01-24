@@ -89,4 +89,17 @@ class DayView
     {
         return gmdate('H:i', $this->scale * 60);
     }
+
+    /**
+     * @return array
+     */
+    public function getTimeEntities()
+    {
+        return array_merge(
+            $this->happenings,
+            $this->unavailabilities,
+            $this->masses,
+            $this->meetings
+        );
+    }
 }
