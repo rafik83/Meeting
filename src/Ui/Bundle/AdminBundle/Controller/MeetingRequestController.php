@@ -186,11 +186,17 @@ class MeetingRequestController extends Controller
         return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
     public function lockMeetingRequestAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        if (!$this->getUser() instanceof Admin || !$this->getUser()->isSuperAdmin()) {
+        if (!$this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
             throw $this->createNotFoundException('Action not allowed for this user');
         }
 

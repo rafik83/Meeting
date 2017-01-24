@@ -213,7 +213,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
-     * @param array $types
+     * @param Type[] $types
      *
      * @return Admin
      */
@@ -221,6 +221,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     {
         foreach ($this->events as $event) {
             $find = false;
+
             foreach ($types as $type) {
                 if ($type->getEvent() === $event) {
                     $find = true;
