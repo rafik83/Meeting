@@ -344,6 +344,11 @@ admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
 admin.planner.index: Planification
 admin.planner.export: Exporter
+admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvelle solution supprime l''ensemble des rendez-vous positionnés sur cet événement'
+admin.planner.import.link: 'Importer'
+admin.planner.import.title: 'Importation d''une solution'
+admin.planner.heading.export: 'Exporter les données pour l''algorithme'
+admin.planner.heading.import: 'Importer une solution depuis l''algorithme'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -780,3 +785,8 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
+
+admin:
+    planner:
+        export:
+            heading: 'admin.planner.export.heading'
