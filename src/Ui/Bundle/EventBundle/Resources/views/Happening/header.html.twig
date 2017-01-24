@@ -5,6 +5,6 @@
             {{ happening.title }}
             <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>
         </p>
-        {{ include('EventBundle:Happening:actions.html.twig', { 'sheet': sheet, 'happening': happening, 'isUserAloneParticipant': isUserAloneParticipant }) }}
     </a>
+    {{ include('EventBundle:Happening:actions.html.twig', { 'sheet': sheet, 'happening': happening, 'isUserAloneParticipant': isUserAloneParticipant }) }}
 </header>

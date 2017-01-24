@@ -2,8 +2,8 @@
     {#<a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>#}
     {#<a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>#}
     {#<a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>#}
-    <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
-    <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+    {#<a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>#}
+    {#<a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>#}
 
     {% if happening.hasParticipations or not happening.isFull %}
         <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}"

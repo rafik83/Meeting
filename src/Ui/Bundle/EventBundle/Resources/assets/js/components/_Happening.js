@@ -15,6 +15,7 @@ function Happening(happening, modal)
 
     if (null !== this.happeningParticipateAction) {
         this.happeningParticipateAction.addEventListener('click', function (event) {
+            event.stopPropagation();
             event.preventDefault();
             this.onParticipate();
         }.bind(this), false);
