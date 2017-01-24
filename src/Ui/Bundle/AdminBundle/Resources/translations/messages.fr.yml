@@ -52,6 +52,7 @@ admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'Le créneau sélectionn�
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
 admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
+admin.agenda.request.cancelTransformToMeeting: 'Annuler l''action de placer en RDV'
 admin.agenda.request.transformToMeeting: 'Placer en RDV'
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'

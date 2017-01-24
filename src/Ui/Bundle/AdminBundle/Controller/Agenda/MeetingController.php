@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeeting
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -167,6 +168,24 @@ class MeetingController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function transformRequestIntoMeetingAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $requestSlotView = $this->get('query.agenda.admin.request_slot_view_query_handler')->handle(
+            new RequestSlotViewQuery($meetingRequest)
+        );
+
+        return new JsonResponse($requestSlotView);
+    }
+
+    /**
      * @param Event   $event
      * @param Meeting $meeting
      */
@@ -175,6 +194,19 @@ class MeetingController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         if ($meeting->getFromSheet()->getEvent() !== $event) {
+            throw new \InvalidArgumentException('Meeting are not on this event');
+        }
+    }
+
+    /**
+     * @param Event           $event
+     * @param Meeting\Request $meetingRequest
+     */
+    private function checkMeetingRequestAccess(Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($meetingRequest->getFromSheet()->getEvent() !== $event) {
             throw new \InvalidArgumentException('Meeting are not on this event');
         }
     }

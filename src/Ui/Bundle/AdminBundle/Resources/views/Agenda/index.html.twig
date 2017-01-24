@@ -76,9 +76,12 @@
                             <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
                         </tr>
                         <tr v-for="request in focus.requests">
-                            <td>
-                                <a href="#" title="{{ 'admin.agenda.request.transformToMeeting'|trans }}" class="pull-right" v-on:click="updateMeetingSlot(slot)" v-show="request.isTransformableIntoMeeting && !focus.isAgendaLoading">
+                            <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request }">
+                                <a href="#" title="{{ 'admin.agenda.request.transformToMeeting'|trans }}" v-on:click="loadSlotsForRequest(request)" class="pull-right" v-show="request.isTransformableIntoMeeting && !focus.isAgendaLoading && null === meetingRequestToTransformIntoMeeting">
                                     <span class="glyphicon glyphicon-move"></span>
+                                </a>
+                                <a href="#" title="{{ 'admin.agenda.request.transformToMeeting'|trans }}" v-on:click="cancelSlotAction()" class="pull-right" v-show="meetingRequestToTransformIntoMeeting === request">
+                                    <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                                 {#<span class="glyphicon glyphicon-cog"></span>#}
 

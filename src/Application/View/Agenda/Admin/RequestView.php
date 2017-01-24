@@ -13,6 +13,11 @@ namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 class RequestView
 {
     /**
+     * @var int
+     */
+    public $requestId;
+
+    /**
      * @var string
      */
     public $sheetMetTitle;
@@ -35,17 +40,20 @@ class RequestView
     /**
      * RequestView constructor.
      *
+     * @param int               $requestId
      * @param string            $sheetMetTitle
      * @param int               $sheetMetId
      * @param ParticipantView[] $participants
      * @param bool              $isTransformableIntoMeeting
      */
     public function __construct(
+        $requestId,
         $sheetMetTitle,
         $sheetMetId,
         array $participants,
         $isTransformableIntoMeeting
     ) {
+        $this->requestId                  = $requestId;
         $this->sheetMetTitle              = $sheetMetTitle;
         $this->sheetMetId                 = $sheetMetId;
         $this->participants               = $participants;

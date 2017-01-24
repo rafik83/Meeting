@@ -50,4 +50,15 @@ AgendaApiEndpoints.prototype.getMeetingUpdateSlotEndpoint = function (meetingId)
     return this.getPathname() + '/meeting/' + meetingId + '/update-slot';
 };
 
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/transform-into-meeting
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/transform-into-meeting
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getTransformRequestIntoMeetingEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/transform-into-meeting';
+};
+
 module.exports = AgendaApiEndpoints;

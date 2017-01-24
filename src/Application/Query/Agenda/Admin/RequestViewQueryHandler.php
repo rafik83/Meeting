@@ -53,6 +53,7 @@ class RequestViewQueryHandler
         $sheetMet = $query->request->getSheetMet($query->sheet);
 
         return new RequestView(
+            $query->request->getId(),
             $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
             $sheetMet->getId(),
             $this->getParticipantViews($query->request, $query->sheet, $query->locale),
