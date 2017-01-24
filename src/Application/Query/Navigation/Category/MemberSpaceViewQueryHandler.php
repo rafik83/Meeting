@@ -77,7 +77,7 @@ class MemberSpaceViewQueryHandler
             );
         }
 
-        if (!empty($templateData->getCompanyObjects())) {
+        if (!empty($templateData->getEditableSheetDataExceptedImageObjects())) {
             $linksView[] = new LinkView(
                 'navigation.links.member_space.company',
                 $this->navigationBuilder->getRoute('event_account_participant_company', [
