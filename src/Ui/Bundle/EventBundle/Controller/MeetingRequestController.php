@@ -211,6 +211,7 @@ class MeetingRequestController extends Controller
      * Approve a meeting request
      *
      * @param Request        $request
+     * @param EventDomain    $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
@@ -218,6 +219,7 @@ class MeetingRequestController extends Controller
      */
     public function approveRequestAction(
         Request $request,
+        EventDomain $eventDomain,
         Sheet $sheet,
         MeetingRequest $meetingRequest
     ) {
@@ -255,7 +257,9 @@ class MeetingRequestController extends Controller
                 true,
                 true,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
-                    'meetingRequest' => $meetingRequest
+                    'meetingRequest'               => $meetingRequest,
+                    'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
+                    'isMeetingRequestUpdateLocked' =>$eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
                 ])
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
@@ -594,6 +598,7 @@ class MeetingRequestController extends Controller
             $isSubmitted = $form->handleRequest($request)->isSubmitted();
             if ($isSubmitted && $form->isValid()) {
                 $this->get('tactician.commandbus')->handle($command);
+
                 if ($meetingRequest->isApproved()) {
                     if ($isProposition) {
                         $this->addFlash('success', 'flash.meeting_request.approved.proposition.edit.success');
