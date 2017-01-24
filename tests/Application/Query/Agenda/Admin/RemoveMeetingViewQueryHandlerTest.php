@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\RemoveMeetingViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\RemoveMeetingViewQueryHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
