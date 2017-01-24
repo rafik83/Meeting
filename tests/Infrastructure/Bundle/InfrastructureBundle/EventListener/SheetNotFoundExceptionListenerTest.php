@@ -27,6 +27,7 @@ class SheetNotFoundExceptionListenerTest extends \PHPUnit_Framework_TestCase
     {
         $event   = EventFactory::createEvent();
         $request = Request::create('/undefined-sheet');
+        $request->setDefaultLocale('fr');
 
         $request->headers->set('HOST', $event->getDomain());
 
@@ -52,7 +53,6 @@ class SheetNotFoundExceptionListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelExceptionOnlyHandlesSheetNotFoundException()
     {
-        $event  = EventFactory::createEvent();
         $router = $this->prophesize(RouterInterface::class);
 
         $router->generate()->shouldNotBeCalled();
