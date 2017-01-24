@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -42,14 +43,14 @@ class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $toParticipant   = $this->createParticipant(93, $toSheet, $toUser);
         $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
 
-        $slot1 = $this->createSlot(
+        $slot1 = SlotFactory::createSlot(
             9,
             $event,
             new \DateTime('2017-01-01 08:00:00'),
             new \DateTime('2017-01-01 09:00:00')
         );
 
-        $slot2 = $this->createSlot(
+        $slot2 = SlotFactory::createSlot(
             99,
             $event,
             new \DateTime('2017-01-01 09:00:00'),
@@ -155,28 +156,6 @@ class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(false);
 
         return $meeting;
-    }
-
-    /**
-     * @param int                $id
-     * @param Event              $event
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     *
-     * @return MeetingSlot
-     */
-    private function createSlot($id, Event $event, \DateTimeInterface $begin, \DateTimeInterface $end)
-    {
-        $slot = new MeetingSlot($event, $begin, $end, false);
-
-        $reflection = new \ReflectionClass(MeetingSlot::class);
-
-        $property = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($slot, $id);
-        $property->setAccessible(false);
-
-        return $slot;
     }
 
     /**
