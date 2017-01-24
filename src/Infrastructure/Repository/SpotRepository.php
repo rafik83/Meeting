@@ -238,9 +238,18 @@ class SpotRepository implements SpotRepositoryInterface
             ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
             ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants')
             ->from(Spot::class, 'spot')
-            ->where('spot.event = :eventId')
-            ->setParameter('eventId', $slot->getEvent()->getId())
-            // Get meetings assigned to this spot on current slot
+            ->where('spot.event = :eventId AND spot.active = true')
+            ->setParameter('eventId', $slot->getEvent()->getId());
+
+        // If meeting has a blocked spot, check only meeting's spot availability
+        if (null !== $exceptMeeting && $exceptMeeting->isBlockedSpot()) {
+            $queryBuilder
+                ->andWhere('spot.id = :spotId')
+                ->setParameter('spotId', $exceptMeeting->getSpot()->getId());
+        }
+
+        // Get meetings and participants count assigned to this spot on current slot
+        $queryBuilder
             ->leftJoin(
                 Meeting::class,
                 'meeting',
@@ -256,7 +265,6 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('slot', $slot)
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
-            ->andWhere('spot.active = true')
             ->groupBy('spot.id')
             ->andHaving('countMeetings < spot.meetingCapacity')
             ->andHaving('(countParticipants + :participantsQuantity) <= spot.seatCapacity')
