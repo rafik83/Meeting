@@ -162,6 +162,11 @@
                     {{ 'admin.planner.index'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_agenda_export_participant_index', { 'event': event.id}) }}">
+                    {{ 'admin.agenda.export.link'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
     <li class="dropdown-submenu">

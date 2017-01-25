@@ -43,8 +43,8 @@ class StepOption
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param int    $stepIndex
+     * @param Sheet $sheet
+     * @param int   $stepIndex
      *
      * @return SelectOptions
      */

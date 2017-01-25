@@ -54,12 +54,11 @@ class StepCommandFactory
      * @param string $type
      * @param Sheet  $sheet
      * @param int    $stepIndex
-     * @param string $locale
      *
      * @return AbstractStep
      * @throws StepNotImplementedException
      */
-    public function create($type, Sheet $sheet, $stepIndex, $locale)
+    public function create($type, Sheet $sheet, $stepIndex)
     {
         switch ($type) {
             case Step::TYPE_PLAN:
