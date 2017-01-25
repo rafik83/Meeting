@@ -447,6 +447,10 @@ new Vue({
     computed: {
         sheetsIterator: function () {
             return this.hasUsedSheetFilter ? this.filteredSheets : this.sheets;
+        },
+
+        countFilteredSheets: function () {
+            return this.sheetsIterator.length;
         }
     }
 });

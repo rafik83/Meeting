@@ -13,6 +13,11 @@
                     <thead>
                     <tr>
                         <td>
+                            {{ 'admin.agenda.filters.count.label'|trans }} <span class="badge">${ countFilteredSheets }</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <button class="btn btn-default btn-sm" v-on:click="showSheetFilter">
                                 <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }}
                             </button>

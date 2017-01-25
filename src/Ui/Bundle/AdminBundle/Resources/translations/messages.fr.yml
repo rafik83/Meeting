@@ -58,6 +58,7 @@ admin.agenda.filters.hasNotEnoughtAvailableSlot.label: "Pas assez de créneaux d
 admin.agenda.filters.title.label: "Filtre fiche"
 admin.agenda.filters.submit.label: "Filtrer les fiches"
 admin.agenda.filters.reset.label: "Reinitialiser"
+admin.agenda.filters.count.label: "Résultats : "
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler
