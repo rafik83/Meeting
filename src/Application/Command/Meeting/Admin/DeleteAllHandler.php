@@ -22,6 +22,11 @@ class DeleteAllHandler
     private $meetingRepository;
 
     /**
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
      * @param MeetingRepositoryInterface    $meetingRepository
      * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
      */

@@ -297,6 +297,20 @@ admin_agenda_sheet_meeting_remove:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
 
+admin_agenda_export_participant_index:
+    path: /event/{event}/agenda/export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:index }
+
+admin_agenda_export_participant_export:
+    path: /event/{event}/agenda/do-export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
+
 admin_agenda_meeting_update:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
     requirements:
@@ -1077,9 +1091,17 @@ admin_planner:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Planner/Planner:index }
+
 admin_export_planner_data:
     path: /event/{event}/planner/export
     requirements:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Planner/Export:export }
+
+admin_import_planner_data:
+    path: /event/{event}/planner/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Planner/Import:import }

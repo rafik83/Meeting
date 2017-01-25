@@ -42,7 +42,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event = EventFactory::createEvent();
 
         $slot = new MeetingSlot($event, new \DateTime(), new \DateTime(), true);
-        $this->slotRepository->findByEvent($event)->shouldBeCalled()->willReturn([$slot]);
+        $this->slotRepository->getAvailableSlotByEvent($event)->shouldBeCalled()->willReturn([$slot]);
 
         $slotViewQueryHandler = new SlotViewQueryHandler($this->slotRepository->reveal());
         $slotViewQueryHandler->handle(new SlotViewQuery($event, []));
@@ -58,7 +58,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event = EventFactory::createEvent();
         $day   = new Day(1, 12, 10, 2016);
         $slot  = new MeetingSlot($event, new \DateTime('2016-10-14 10:00:00.000'), new \DateTime('2016-10-14 11:00:00.000'), true);
-        $this->slotRepository->findByEvent($event)->shouldBeCalled()->willReturn([$slot]);
+        $this->slotRepository->getAvailableSlotByEvent($event)->shouldBeCalled()->willReturn([$slot]);
 
         $slotViewQueryHandler = new SlotViewQueryHandler($this->slotRepository->reveal());
         $slotViewQueryHandler->handle(new SlotViewQuery($event, [$day]));
@@ -97,7 +97,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(false);
 
         // Mock
-        $this->slotRepository->findByEvent($event)->shouldBeCalled()->willReturn([$slot1, $slot2, $slot3]);
+        $this->slotRepository->getAvailableSlotByEvent($event)->shouldBeCalled()->willReturn([$slot1, $slot2, $slot3]);
 
         // Handler
         $slotViewQueryHandler = new SlotViewQueryHandler($this->slotRepository->reveal());

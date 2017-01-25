@@ -26,10 +26,8 @@ class ObjectValidatorFactory
         switch ($object) {
             case $object instanceof TemplateObject\Telephone:
                 return new TelephoneValidator();
-                break;
             case $object instanceof TemplateObject\Country:
                 return new CountryValidator();
-                break;
             case $object instanceof TemplateObject\Nomenclature:
                 return new NomenclatureValidator();
             default:

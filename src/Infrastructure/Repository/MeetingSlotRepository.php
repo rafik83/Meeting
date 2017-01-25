@@ -79,6 +79,24 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getAvailableSlotByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot', 'slot.id')
+            ->where('slot.event = :event')
+            ->andWhere('slot.locked = false')
+            ->setParameter('event', $event)
+            ->orderBy('slot.begin', 'ASC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countByEvent(Event $event)
     {
         $queryBuilder = $this

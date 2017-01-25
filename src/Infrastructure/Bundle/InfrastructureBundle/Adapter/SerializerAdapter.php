@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
+
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Symfony\Component\Serializer\Serializer;
+
+class SerializerAdapter implements SerializerAdapterInterface
+{
+    /**
+     * @var Serializer
+     */
+    private $serializer;
+
+    /**
+     * @param Serializer $serializer
+     */
+    public function __construct(Serializer $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deserialize($data, $type, $format, array $context = [])
+    {
+        return $this->serializer->deserialize($data, $type, $format, $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize($data, $format, array $context = [])
+    {
+        return $this->serializer->serialize($data, $format, $context);
+    }
+}

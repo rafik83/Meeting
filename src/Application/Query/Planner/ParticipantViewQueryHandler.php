@@ -64,7 +64,7 @@ class ParticipantViewQueryHandler
     {
         $participantViews = [];
         $this->indexSlotById($query);
-        $slots = $this->slotRepository->findByEvent($query->event);
+        $slots = $this->slotRepository->getAvailableSlotByEvent($query->event);
 
         foreach ($query->sheets as $sheet) {
             $participants = $this->participantRepository->getParticipantsBySheetId($sheet->id);
