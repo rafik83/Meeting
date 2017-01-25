@@ -347,7 +347,7 @@ new Vue({
 
             if (window.confirm(message)) {
 
-                this.$http.delete(agendaApiEndpoints.getRemoveMeetingEndpoint(sheet , slot))
+                this.$http.delete(agendaApiEndpoints.getRemoveMeetingEndpoint(slot))
                 .then(function() {
 
                     this.focusAgenda(sheet);

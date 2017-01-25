@@ -40,13 +40,14 @@ AgendaApiEndpoints.prototype.getMeetingUpdateSpotEndpoint = function (meetingId)
 };
 
 /**
- * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}/meeting/{meeting_id}/remove
- * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}/meeting/{meeting_id}/remove
+ * Returns /admin/fr/event/{event_id}/agenda/meeting/{meeting_id}/remove
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meeting_id}/remove
  *
+ * @param {Object} slot
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getRemoveMeetingEndpoint = function (sheet, slot) {
-    return document.location.pathname + '/sheet/' + sheet.id + '/meeting/' + slot.meetingId + '/remove';
+AgendaApiEndpoints.prototype.getRemoveMeetingEndpoint = function (slot) {
+    return document.location.pathname + '/meeting/' + slot.meetingId + '/remove';
 };
 
 module.exports = AgendaApiEndpoints;
