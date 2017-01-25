@@ -663,7 +663,6 @@ new Vue({
             var sheetMetId = this.meetingSlotToUpdate.slot.sheetMetId;
             var sheet = this.meetingSlotToUpdate.sheet;
             this.cancelSlotAction();
-            this.isMeetingToUpdateLoading = true;
 
             this.$http.post(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(meetingId), {
                 slotId: slot.id
