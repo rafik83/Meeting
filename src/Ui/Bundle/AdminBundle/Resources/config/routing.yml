@@ -289,13 +289,13 @@ admin_agenda_sheet:
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
 admin_agenda_sheet_meeting_remove:
-    path: /event/{event}/agenda/sheet/{sheet}/meeting/{meeting}/remove
+    path: /event/{event}/agenda/meeting/{meeting}/remove
     requirements:
         event: \d+
         sheet: \d+
         meeting: \d+
     methods: [DELETE]
-    defaults: { _controller: AdminBundle:Agenda/Agenda:removeMeeting }
+    defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
 
 admin_agenda_meeting_update:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot

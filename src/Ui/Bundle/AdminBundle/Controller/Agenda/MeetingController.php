@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateSpot;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -85,6 +87,33 @@ class MeetingController extends Controller
         }
 
         return new JsonResponse();
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting $meeting
+     *
+     * @return JsonResponse
+     */
+    public function removeAction(Request $request, Event $event, Meeting $meeting)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($meeting->getFromSheet()->getEvent() !== $event) {
+            return new JsonResponse('Meeting are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $response = new JsonResponse();
+
+        try {
+            $this->get('tactician.commandbus.query')->handle(new RemoveMeetingViewQuery($meeting, $this->getUser()));
+        } catch (LockedException $lockedException) {
+            $response->setData($lockedException->getMessage());
+            $response->setStatusCode(Response::HTTP_LOCKED);
+        }
+
+        return $response;
     }
 
     /**
