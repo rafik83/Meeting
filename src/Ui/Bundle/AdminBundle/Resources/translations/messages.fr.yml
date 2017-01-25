@@ -56,6 +56,7 @@ admin.agenda.request.transformIntoMeeting.cancel: 'Annuler l''action de placer e
 admin.agenda.request.transformIntoMeeting.label: 'Placer en RDV'
 admin.agenda.request.transformIntoMeeting.error: 'Impossible de placer cette demande de RDV'
 admin.agenda.request.transformIntoMeeting.noSlotAvailable: 'Aucun créneau n''est disponible pour placer cette demande en RDV'
+admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'

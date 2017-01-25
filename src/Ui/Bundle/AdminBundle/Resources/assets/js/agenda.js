@@ -688,7 +688,7 @@ new Vue({
          * @param slot
          */
         transformRequestIntoMeeting: function (slot) {
-            var sheet = focus.sheet;
+            var sheet = this.focus;
             var requestId = this.meetingRequestToTransformIntoMeeting.requestId;
             var sheetMetId = this.meetingRequestToTransformIntoMeeting.sheetMetId;
             this.cancelSlotAction();

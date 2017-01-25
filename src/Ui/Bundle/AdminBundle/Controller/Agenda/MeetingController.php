@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
@@ -184,7 +185,21 @@ class MeetingController extends Controller
                 new RequestSlotViewQuery($meetingRequest)
             );
         } catch (NoSlotAvailableException $exception) {
-            return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.noSlotAvailable');
+            return $this->createErrorJsonResponse(
+                'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
+            );
+        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting'
+            );
+        } catch (SlotNotAvailableForThisMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting'
+            );
+        } catch (\Exception $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.error'
+            );
         }
 
         return new JsonResponse($requestSlotView);
@@ -208,6 +223,23 @@ class MeetingController extends Controller
 
         if (!isset($data->slotId)) {
             return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.error');
+        }
+
+        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+            $event,
+            (int) $data->slotId
+        );
+
+        if (null === $slot) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists');
+        }
+
+        $transformRequestIntoMeeting = new TransformRequestIntoMeeting($meetingRequest, $slot);
+
+        try {
+            $this->get('tactician.commandbus')->handle($transformRequestIntoMeeting);
+        } catch (NoSlotAvailableException $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.noSlotAvailable');
         }
 
         return new JsonResponse();

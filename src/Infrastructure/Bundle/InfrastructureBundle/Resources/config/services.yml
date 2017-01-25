@@ -505,6 +505,15 @@ services:
             - '@query.agenda.admin.meeting_update_slot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot }
+    vimeet_infrastructure.vimeet.application.command.request.transform_request_into_meeting:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetingHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@query.agenda.admin.request_slot_view_query_handler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting }
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
