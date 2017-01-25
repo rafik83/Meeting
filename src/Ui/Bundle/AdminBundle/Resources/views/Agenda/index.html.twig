@@ -137,12 +137,9 @@
 
                                                                         <div class="slot-label slot-time"><span class="glyphicon glyphicon-lock" v-show="slot.blockedSlot === true"></span> ${ slot.beginEndHour }</div>
 
-                                                                        <a href="#" class="pull-right">
-                                                                            <div v-if="slot.blockedSlot == false" class="slot-label slot-time">
-                                                                                <span class="glyphicon glyphicon-remove" v-on:click="removeMeeting(sheet, slot, '{{ 'admin.agenda.remove.confirm'|trans }}')"></span>
-                                                                            </div>
+                                                                        <a href="#" class="pull-right" v-show="!slot.blockedSlot" v-on:click="removeMeeting(sheet, slot, '{{ 'admin.agenda.remove.confirm'|trans }}')">
+                                                                            <span class="glyphicon glyphicon-remove"></span>
                                                                         </a>
-
                                                                         <a href="#" class="pull-right" v-on:click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null">
                                                                             <span class="glyphicon glyphicon-cog"></span>
                                                                         </a>
