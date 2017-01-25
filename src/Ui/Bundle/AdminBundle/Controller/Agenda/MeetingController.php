@@ -188,18 +188,6 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse(
                 'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
             );
-        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
-            return $this->createErrorJsonResponse(
-                'admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting'
-            );
-        } catch (SlotNotAvailableForThisMeetingException $exception) {
-            return $this->createErrorJsonResponse(
-                'admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting'
-            );
-        } catch (\Exception $exception) {
-            return $this->createErrorJsonResponse(
-                'admin.agenda.meeting.updateSlot.error'
-            );
         }
 
         return new JsonResponse($requestSlotView);
@@ -239,7 +227,21 @@ class MeetingController extends Controller
         try {
             $this->get('tactician.commandbus')->handle($transformRequestIntoMeeting);
         } catch (NoSlotAvailableException $exception) {
-            return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.noSlotAvailable');
+            return $this->createErrorJsonResponse(
+                'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
+            );
+        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting'
+            );
+        } catch (SlotNotAvailableForThisMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting'
+            );
+        } catch (\Exception $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.error'
+            );
         }
 
         return new JsonResponse();
