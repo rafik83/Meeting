@@ -24,7 +24,8 @@ CheckAllCheckbox.prototype.check = function ()
         element.checked = checked;
 
         if (old !== checked) {
-            element.dispatchEvent(new Event('change'));
+            element.dispatchEvent(document.createEvent('change'));
+
         }
     });
 };

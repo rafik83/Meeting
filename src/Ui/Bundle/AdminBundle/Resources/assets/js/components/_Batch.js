@@ -36,7 +36,7 @@ function Batch(element)
             event.preventDefault();
             var checkbox = item.querySelector('input[type=checkbox]');
             checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change'));
+            checkbox.dispatchEvent(document.createEvent('change'));
         });
     });
 }
