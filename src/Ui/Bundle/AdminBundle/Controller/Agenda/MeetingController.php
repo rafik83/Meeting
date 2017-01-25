@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
@@ -178,11 +179,38 @@ class MeetingController extends Controller
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
-        $requestSlotView = $this->get('query.agenda.admin.request_slot_view_query_handler')->handle(
-            new RequestSlotViewQuery($meetingRequest)
-        );
+        try {
+            $requestSlotView = $this->get('query.agenda.admin.request_slot_view_query_handler')->handle(
+                new RequestSlotViewQuery($meetingRequest)
+            );
+        } catch (NoSlotAvailableException $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.noSlotAvailable');
+        }
 
         return new JsonResponse($requestSlotView);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function handleTransformRequestIntoMeetingAction(
+        Request $request,
+        Event $event,
+        Meeting\Request $meetingRequest
+    ) {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $data = json_decode($request->getContent());
+
+        if (!isset($data->slotId)) {
+            return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.error');
+        }
+
+        return new JsonResponse();
     }
 
     /**
