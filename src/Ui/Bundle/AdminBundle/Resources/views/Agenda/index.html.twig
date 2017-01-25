@@ -13,10 +13,10 @@
                     <thead>
                     <tr>
                         <td>
-                            <button class="btn btn-default btn-sm" @click="showSheetFilter">
+                            <button class="btn btn-default btn-sm" v-on:click="showSheetFilter">
                                 <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }}
                             </button>
-                            <button class="btn btn-default btn-sm" @click="resetSheetFilter">
+                            <button class="btn btn-default btn-sm" v-on:click="resetSheetFilter">
                                 <i class="glyphicon glyphicon-remove"></i> {{ 'admin.agenda.filters.reset.label'|trans }}
                             </button>
                         </td>
@@ -165,7 +165,7 @@
                                                                     </div>
 
                                                                     <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true }" v-if="slot.type === 'meeting_unavailability'">
-                                                                        <a href="#" class="pull-right" @click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null"><span class="glyphicon glyphicon-cog"></span></a>
+                                                                        <a href="#" class="pull-right" v-on:click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null"><span class="glyphicon glyphicon-cog"></span></a>
                                                                         <div class="slot-label slot-time"><span class="glyphicon glyphicon-lock" v-show="slot.blockedSlot === true"></span> ${ slot.beginEndHour }</div>
 
                                                                         <div class="slot-label">
@@ -202,7 +202,7 @@
         </div>
     </div>
 
-    <filter-modal :sheets="sheets" :show="showFilterModal" @refresh-list="refreshList" @close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
+    <filter-modal :sheets="sheets" :show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
 </div>
 {% endblock %}
 
@@ -216,8 +216,8 @@
 
     <!-- template for the Modal component -->
     <script type="x/template" id="modal-template">
-        <div class="modal-mask" @click="close()" v-show="show">
-            <div class="modal-dialog" role="document" @click.stop>
+        <div class="modal-mask" v-on:click="close()" v-show="show">
+            <div class="modal-dialog" role="document" v-on:click.stop>
                 <div class="modal-content">
                     <slot></slot>
                 </div>

@@ -1,7 +1,7 @@
 <script type="x/template" id="filter-modal">
-    <modal :show="show" @close-modal="$emit('close-modal')" @refresh-list="refreshList">
+    <modal :show="show" v-on:close-modal="$emit('close-modal')" v-on:refresh-list="refreshList">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'admin.common.close'|trans }}" @click="$emit('close-modal')">
+            <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'admin.common.close'|trans }}" v-on:click="$emit('close-modal')">
                 <span aria-hidden="true">&times;</span>
             </button>
             <h4 class="modal-title" id="filterSheetModalLabel">{{ 'admin.agenda.filters.title.label'|trans }}</h4>
@@ -10,10 +10,10 @@
            <filter-sheet-form :filters="formFilters" :sheets="sheets"></filter-sheet-form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" @click="$emit('close-modal')">
+            <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="$emit('close-modal')">
                 {{ 'admin.common.close'|trans }}
             </button>
-            <button type="button" class="btn btn-primary" @click="save()">
+            <button type="button" class="btn btn-primary" v-on:click="save()">
                 {{ 'admin.agenda.filters.submit.label'|trans }}
             </button>
         </div>
