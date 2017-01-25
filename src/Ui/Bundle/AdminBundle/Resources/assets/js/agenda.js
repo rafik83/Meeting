@@ -633,6 +633,23 @@ new Vue({
         },
 
         /**
+         * Select slot
+         *
+         * @param slot
+         */
+        selectSlot: function (slot) {
+            if (false !== this.hasMeetingSlotToUpdate()) {
+                return this.updateMeetingSlot(slot)
+            }
+
+            if (null !== this.meetingRequestToTransformIntoMeeting) {
+                return this.transformRequestIntoMeeting(slot);
+            }
+
+            this.cancelSlotAction();
+        },
+
+        /**
          * Update meeting slot
          *
          * @param slot new selected slot
@@ -649,6 +666,34 @@ new Vue({
             this.isMeetingToUpdateLoading = true;
 
             this.$http.post(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(meetingId), {
+                slotId: slot.id
+            })
+            .then(function () {
+                this.loadAgenda(sheet);
+                this.loadAgenda(this.findSheetBySheetId(sheetMetId));
+            }.bind(this))
+            .catch(function (error) {
+                this.loadAgenda(sheet);
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert(error.message);
+                }
+            }.bind(this));
+        },
+
+        /**
+         * Transform request into meeting
+         *
+         * @param slot
+         */
+        transformRequestIntoMeeting: function (slot) {
+            var sheet = focus.sheet;
+            var requestId = this.meetingRequestToTransformIntoMeeting.requestId;
+            var sheetMetId = this.meetingRequestToTransformIntoMeeting.sheetMetId;
+            this.cancelSlotAction();
+
+            this.$http.post(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(requestId), {
                 slotId: slot.id
             })
             .then(function () {
