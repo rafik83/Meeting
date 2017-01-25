@@ -104,11 +104,11 @@ class SheetView
     public $url;
 
     /**
-     * "La fiche a-t-elle effectuée des demandes de rendez-vous"
+     * "La fiche a-t-elle effectuée aucune demandes de rendez-vous"
      *
      * @var bool
      */
-    public $hasSentMeetingRequest;
+    public $hasNotSentMeetingRequest;
 
     /**
      * "La fiche a-t-elle des demandes de rendez-vous en attente de validation"
@@ -122,7 +122,7 @@ class SheetView
      *
      * @var bool
      */
-    public $hasNotEnoughtAvailableSlot;
+    public $hasNotEnoughAvailableSlot;
 
     /**
      * @param int         $id
@@ -168,17 +168,17 @@ class SheetView
         $this->url                      = $url;
         $this->follower                 = $follower;
 
-        $this->hasSentMeetingRequest      = $this->hasSentMeetingRequest();
-        $this->hasNotEnoughtAvailableSlot = $this->hasNotEnoughtAvailableSlot();
+        $this->hasNotSentMeetingRequest   = $this->hasNotSentMeetingRequest();
+        $this->hasNotEnoughAvailableSlot = $this->hasNotEnoughAvailableSlot();
         $this->hasMeetingToApprove        = $this->hasMeetingToApprove();
     }
 
     /**
      * @return bool
      */
-    private function hasSentMeetingRequest()
+    private function hasNotSentMeetingRequest()
     {
-        return $this->countRequest > 0;
+        return $this->countRequest === 0;
     }
 
     /**
@@ -192,7 +192,7 @@ class SheetView
     /**
      * @return bool
      */
-    private function hasNotEnoughtAvailableSlot()
+    private function hasNotEnoughAvailableSlot()
     {
         if ($this->usableSlots === 0) {
             return false;
