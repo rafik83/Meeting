@@ -98,12 +98,4 @@ class Create
 
         return false;
     }
-
-    /**
-     * @return bool
-     */
-    public function checkMaxLength()
-    {
-        return strlen($this->message) < 150;
-    }
 }
