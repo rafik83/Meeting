@@ -8,12 +8,12 @@ function Happening(happening, modal)
     this.happeningParticipateIcon = happening.querySelector('.happeningParticipateIcon');
     this.happeningParticipateAction = happening.querySelector('.happeningParticipateAction');
 
-    this.picto = this.happeningParticipateAction.getAttribute('data-picto');
-    this.labelParticipate = this.happeningParticipateAction.getAttribute('data-label-participate');
-    this.labelUpdate = this.happeningParticipateAction.getAttribute('data-label-participation-update');
-    this.labelCancel = this.happeningParticipateAction.getAttribute('data-label-cancel');
-
     if (null !== this.happeningParticipateAction) {
+        this.picto = this.happeningParticipateAction.getAttribute('data-picto');
+        this.labelParticipate = this.happeningParticipateAction.getAttribute('data-label-participate');
+        this.labelUpdate = this.happeningParticipateAction.getAttribute('data-label-participation-update');
+        this.labelCancel = this.happeningParticipateAction.getAttribute('data-label-cancel');
+
         this.happeningParticipateAction.addEventListener('click', function (event) {
             event.stopPropagation();
             event.preventDefault();

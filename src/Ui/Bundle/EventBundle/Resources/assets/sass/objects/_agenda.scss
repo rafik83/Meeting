@@ -59,12 +59,18 @@
       }
       .actions {
         display: inline-block;
+        width: 100%;
         flex-flow: row;
         z-index: 9999;
         position: absolute;
         margin-left: 10px;
-        right: 45px;
+        padding-right: 45px;
+        right: 0;
         bottom: 5%;
+        > a, label {
+          float: right;
+          margin-left: 5px;
+        }
       }
     }
   }
