@@ -67,7 +67,7 @@ class ProductController extends Controller
         $create = new CreateOption($event);
         $form = $this->createForm(CreateOptionType::class, $create, [
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
 
@@ -99,7 +99,7 @@ class ProductController extends Controller
         $form   = $this->createForm(UpdateOptionType::class, $update, [
             'submit'  => true,
             'product' => $product,
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -130,7 +130,7 @@ class ProductController extends Controller
         $form   = $this->createForm(CreatePlanType::class, $create, [
             'submit' => true,
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -161,7 +161,7 @@ class ProductController extends Controller
         $form = $this->createForm(UpdatePlanType::class, $update, [
             'submit'  => true,
             'product' => $product,
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
             'event'   => $event,
         ]);
 
@@ -192,7 +192,7 @@ class ProductController extends Controller
         $create = new CreateParticipant($event);
         $form = $this->createForm(CreateParticipantType::class, $create, [
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
 
@@ -224,7 +224,7 @@ class ProductController extends Controller
         $form = $this->createForm(UpdateParticipantType::class, $update, [
             'submit'  => true,
             'product' => $product,
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -254,7 +254,7 @@ class ProductController extends Controller
         $form = $this->createForm(CreatePlanningType::class, $create, [
             'submit' => true,
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -285,7 +285,7 @@ class ProductController extends Controller
         $form = $this->createForm(UpdatePlanningType::class, $update, [
             'submit'  => true,
             'product' => $product,
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

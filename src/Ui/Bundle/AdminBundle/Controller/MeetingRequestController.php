@@ -87,7 +87,7 @@ class MeetingRequestController extends Controller
      */
     public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        $locale = $request->getLocale();
+        $locale = $event->getAvailableLocale($request->getLocale());
 
         $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
             ->getMessagesByMeetingRequest($meetingRequest);
