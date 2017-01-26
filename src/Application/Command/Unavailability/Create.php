@@ -42,7 +42,7 @@ class Create
     public $time;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $message;
 

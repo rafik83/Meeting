@@ -33,7 +33,7 @@ class Unavailability
     private $end;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $message;
 
@@ -43,7 +43,7 @@ class Unavailability
      * @param Participant        $participant
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
-     * @param string             $message
+     * @param string|null        $message
      */
     public function __construct(Participant $participant, \DateTimeInterface $begin, \DateTimeInterface $end, $message = null)
     {
@@ -94,7 +94,7 @@ class Unavailability
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMessage()
     {
