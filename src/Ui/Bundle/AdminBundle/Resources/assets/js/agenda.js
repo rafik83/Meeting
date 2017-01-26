@@ -190,7 +190,7 @@ new Vue({
             }
 
             this.agendas[sheetId].participants = [];
-            this.agendas[sheetId].requests = [];
+            this.agendas[sheetId].requests     = [];
         },
 
         /**
@@ -419,6 +419,33 @@ new Vue({
             }
 
             return meetings;
+        },
+
+        /**
+         * Remove meeting from sheet (and sheet met) and reload agenda(s)
+         *
+         * @param {Object} sheet
+         * @param {Object} slot
+         * @param {string} message
+         */
+        removeMeeting: function(sheet, slot, message) {
+
+            if (window.confirm(message)) {
+
+                this.$http.delete(agendaApiEndpoints.getRemoveMeetingEndpoint(slot))
+                    .then(function () {
+
+                        this.focusAgenda(sheet);
+                        this.loadAgenda(sheet);
+                        this.loadAgenda(this.findSheetBySheetId(slot.sheetMetId));
+                    }.bind(this))
+                    .catch(function (error) {
+                        if (error.response) {
+                            window.alert(error.response.data);
+                        }
+                        console.log(error);
+                    });
+            }
         },
 
         /**

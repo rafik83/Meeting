@@ -121,7 +121,6 @@
                                     <tr>
                                         <td v-for="participant in sheet.participants">
                                             <p class="text-center">${ participant.fullname }</p>
-
                                             <table class="table">
                                                 <tr>
                                                     <td v-for="day in participant.days" class="col-xs-6">
@@ -147,6 +146,10 @@
                                                                     <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true, 'meeting-to-be-moved': isAvailableForMeeting(slot) }" v-if="slot.type === 'meeting_unavailability'">
                                                                         <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right" v-on:click="loadMeetingUpdateSpot(sheet, slot)" v-show="isAvailableAction && !sheet.isAgendaLoading">
                                                                             <span class="glyphicon glyphicon-cog"></span>
+                                                                        </a>
+
+                                                                        <a href="#" class="pull-right" v-show="isAvailableAction && !sheet.isAgendaLoading && !slot.blockedSlot" v-on:click="removeMeeting(sheet, slot, '{{ 'admin.agenda.remove.confirm'|trans }}')">
+                                                                            <span class="glyphicon glyphicon-remove"></span>
                                                                         </a>
 
                                                                         <a href="#" title="{{ 'admin.agenda.meeting.move'|trans }}" class="pull-right" v-on:click="loadSlotsForMeeting(sheet, participant, slot)" v-show="isAvailableAction && !sheet.isAgendaLoading && !slot.blockedSlot">
