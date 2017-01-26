@@ -326,6 +326,43 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
+    public function testPrepareComment()
+    {
+        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
+        $event       = EventFactory::createEvent();
+        $day         = new Day($event, $startTime, $endTime);
+        $event->setDays([$day]);
+        $user        = UserFactory::create();
+        $sheet       = SheetFactory::create($event, $user);
+        $create      = new Create($event, $sheet, $user, 'fr');
+
+        $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
+        $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
+        $expectedMessage = "test";
+
+        $create->time['begin']['hour']   = 10;
+        $create->time['begin']['minute'] = 30;
+
+        $create->time['end']['hour']     = 14;
+        $create->time['end']['minute']   = 00;
+
+        $handler = new CreateHandler(
+            $this->unavailabilityRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->paticipantInfoGuesser->reveal()
+        );
+
+        $reflection = new \ReflectionClass(CreateHandler::class);
+        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method->setAccessible(true);
+        list ($begin, $end, $mess) = $method->invokeArgs($handler, [$create]);
+
+        $this->assertEquals($expectedBegin, $begin);
+        $this->assertEquals($expectedEnd, $end);
+        $this->assertEquals($expectedMessage, $mess);
+    }
+
     public function testPrepareBeginAndEndWithOtherTimeZoneNewYork()
     {
         $startTime   = new \DateTime('2016-10-12 10:00:00.000');
