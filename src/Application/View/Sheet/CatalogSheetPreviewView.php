@@ -61,6 +61,11 @@ class CatalogSheetPreviewView
     public $isMeetingPublished;
 
     /**
+     * @var bool
+     */
+    public $isMeetingRequestUpdateLocked;
+
+    /**
      * @param int             $id
      * @param Sheet           $sheet
      * @param string          $title
