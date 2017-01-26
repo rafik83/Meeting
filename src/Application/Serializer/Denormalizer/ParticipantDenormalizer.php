@@ -185,7 +185,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function isAlreadyParticipant($email, &$participants)
     {
         foreach ($participants as $participant) {
-            if ($participant->getUser()->getEmail() === $email) {
+            if (strtolower($participant->getUser()->getEmail()) === strtolower($email)) {
                 return true;
             }
         }
