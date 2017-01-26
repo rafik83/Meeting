@@ -31,7 +31,8 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         return $this->render('AdminBundle:Agenda:index.html.twig', [
-            'event' => $event,
+            'event'                        => $event,
+            'isMeetingRequestUpdateLocked' => $event->getConfiguration()->isMeetingRequestUpdateLocked()
         ]);
     }
 

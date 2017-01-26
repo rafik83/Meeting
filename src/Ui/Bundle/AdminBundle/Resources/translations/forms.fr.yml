@@ -264,6 +264,10 @@ form.meeting_request_create.children.description.label: 'Motiver votre demande'
 form.meeting_request_create.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
 form.meeting_request_create.children.submit.label: Envoyer
 form.meeting_request_filter.children.state.label: Statut
+form.meeting_request_update_lock.children.lock.label: Verrouillage
+form.meeting_request_update_lock.children.submit.label: Enregistrer
+form.meeting_request_update_lock.choice.yes: Verrouillé
+form.meeting_request_update_lock.choice.no: Déverrouillé
 form.meeting_request_message.children.message.label: 'Expliquer pourquoi'
 form.meeting_request_message.children.submit.label: Envoyer
 form.meeting_request_refuse.children.message.label: 'Expliquer pourquoi'
@@ -356,6 +360,9 @@ form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
 form.planning.add_with_participant: 'Ajouter un pack de rendez-vous supplémentaire avec le participant'
+form.planner_import.children.file.label: 'Solution à importer'
+form.planner_import.children.submit.label: 'Importer'
+form.planner_import.confirm.submit.label: 'L''import d''une nouvelle solution a pour effet de supprimer l''ensemble des rendez-vous positionnés de l''événement, êtes-vous sûr de vouloir réaliser cette action ?'
 form.position_meeting.children.fromParticipants.label: Participants
 form.position_meeting.children.slot.label: 'Créneau de rendez-vous'
 form.position_meeting.children.submit.label: Placer

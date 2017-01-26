@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
 
 class ImportHandler
 {
@@ -24,7 +23,7 @@ class ImportHandler
     private $localFileStorageAdapter;
 
     /**
-     * @var SessionAdapter
+     * @var SessionInterface
      */
     private $session;
 

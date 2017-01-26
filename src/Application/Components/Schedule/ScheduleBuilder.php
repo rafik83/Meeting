@@ -178,7 +178,7 @@ class ScheduleBuilder
                 $meeting->getSlot()->getId(),
                 new ScheduleSlotView(
                     $meeting->getId(),
-                    $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+                    $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                     $meeting->getSlot()->getBegin(),
                     $meeting->getSlot()->getEnd(),
                     true

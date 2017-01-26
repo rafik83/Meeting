@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate;
 use Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\View\Meeting\AdminShowDetailsView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\LockMeetingRequestType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -85,7 +87,7 @@ class MeetingRequestController extends Controller
      */
     public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        $locale = $request->getLocale();
+        $locale = $event->getAvailableLocale($request->getLocale());
 
         $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
             ->getMessagesByMeetingRequest($meetingRequest);
@@ -181,5 +183,37 @@ class MeetingRequestController extends Controller
         $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
         return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function lockMeetingRequestAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if (!$this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+            throw $this->createNotFoundException('Action not allowed for this user');
+        }
+
+        $lockMeetingRequest = new LockMeetingRequestUpdate($event);
+        $form               = $this->createForm(LockMeetingRequestType::class, $lockMeetingRequest, [
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($lockMeetingRequest);
+            $this->addFlash('success', 'flash.admin.meeting_request.lock.update.success');
+
+            return $this->redirectToRoute('admin_meeting_request_lock_update', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:MeetingRequest:lock.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
     }
 }

@@ -101,15 +101,21 @@ class Configuration
     private $schedulePublishDate;
 
     /**
+     * @var bool
+     */
+    private $meetingRequestUpdateLocked;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
      */
     public function __construct($leftColor, $rightColor, $textColor)
     {
-        $this->leftColor  = $leftColor;
-        $this->rightColor = $rightColor;
-        $this->textColor  = $textColor;
+        $this->leftColor                  = $leftColor;
+        $this->rightColor                 = $rightColor;
+        $this->textColor                  = $textColor;
+        $this->meetingRequestUpdateLocked = false;
     }
 
     /**
@@ -335,5 +341,21 @@ class Configuration
     public function getSchedulePublishDate()
     {
         return $this->schedulePublishDate;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMeetingRequestUpdateLocked()
+    {
+        return $this->meetingRequestUpdateLocked;
+    }
+
+    /**
+     * @param boolean $meetingRequestUpdateLocked
+     */
+    public function setMeetingRequestUpdateLocked($meetingRequestUpdateLocked)
+    {
+        $this->meetingRequestUpdateLocked = $meetingRequestUpdateLocked;
     }
 }

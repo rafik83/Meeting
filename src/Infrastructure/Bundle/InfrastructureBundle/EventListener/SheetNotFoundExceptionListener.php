@@ -31,10 +31,10 @@ final class SheetNotFoundExceptionListener extends AbstractRedirectToEventListen
     public function onKernelException(GetResponseForExceptionEvent $getResponseForExceptionEvent)
     {
         if (!$getResponseForExceptionEvent->getException() instanceof SheetNotFoundException) {
-            return;
+            return null;
         }
 
-        return $this->handleRedirect($getResponseForExceptionEvent);
+        $this->handleRedirect($getResponseForExceptionEvent);
     }
 
     /**
@@ -42,7 +42,7 @@ final class SheetNotFoundExceptionListener extends AbstractRedirectToEventListen
      */
     protected function doRedirect(GetResponseEvent $getResponseEvent, Request $request, Event $event, $locale, $route)
     {
-        $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, self::TARGET_ROUTE, $route, $locale));
+        $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, self::TARGET_ROUTE, $locale));
     }
 
     /**

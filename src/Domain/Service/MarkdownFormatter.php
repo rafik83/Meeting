@@ -52,10 +52,10 @@ final class MarkdownFormatter
     public static function lists(array $list)
     {
         return sprintf('%s%s',
-            implode(PHP_EOL, array_map(function ($item) {
+            implode("\n", array_map(function ($item) {
                 return sprintf('- %s', $item);
             }, $list)),
-            PHP_EOL
+            "\n"
         );
     }
 
@@ -67,7 +67,7 @@ final class MarkdownFormatter
      */
     public static function highlight($string, $format = null)
     {
-        return sprintf('```%s%s%s%s```%s', $format, PHP_EOL, $string, PHP_EOL, PHP_EOL);
+        return sprintf('```%s%s%s%s```%s', $format, "\n", $string, "\n", "\n");
     }
 
     /**
@@ -77,7 +77,7 @@ final class MarkdownFormatter
      */
     public static function newLine($string)
     {
-        return sprintf('%s%s', $string, PHP_EOL . PHP_EOL);
+        return sprintf('%s%s%s', $string, "\n" , "\n");
     }
 
     /**

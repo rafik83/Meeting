@@ -9,7 +9,29 @@
     <hr>
     <div class="row">
         <div class="col-md-6">
-            <a href="{{ path('admin_export_planner_data', {'event': event.id}) }}" class="btn btn-primary btn-lg">{{ 'admin.planner.export'|trans }}</a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ 'admin.planner.heading.export'|trans }}
+                </div>
+                <div class="panel-body text-center">
+                    <a href="{{ path('admin_export_planner_data', {'event': event.id}) }}" class="btn btn-primary btn-lg">
+                        {{ 'admin.planner.export'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ 'admin.planner.heading.import'|trans }}
+                </div>
+                <div class="panel-body text-center">
+                    <a href="{{ path('admin_import_planner_data', {'event': event.id}) }}" class="btn btn-success btn-lg">
+                        {{ 'admin.planner.import.link'|trans }}
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

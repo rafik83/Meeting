@@ -41,7 +41,7 @@ class SlotViewQueryHandler
     {
         $slotViews = [];
 
-        $slots = $this->slotRepository->findByEvent($query->event);
+        $slots = $this->slotRepository->getAvailableSlotByEvent($query->event);
 
         foreach ($slots as $slot) {
             $day = $this->getCorrespondingDay($query, $slot);

@@ -47,7 +47,7 @@ class UserController extends Controller
 
         $filterType = $this->createFilterForm(FilterType::class, $filters, [
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $locale,
             'user'   => $this->getUser(),
         ]);
 

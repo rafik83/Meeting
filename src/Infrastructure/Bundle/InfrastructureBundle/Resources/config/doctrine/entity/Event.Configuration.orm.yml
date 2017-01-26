@@ -53,3 +53,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         schedulePublishDate:
             type: datetime
             nullable: true
+        meetingRequestUpdateLocked:
+            type: boolean
+            options:
+                default: false

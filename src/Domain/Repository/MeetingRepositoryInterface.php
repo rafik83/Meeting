@@ -87,6 +87,11 @@ interface MeetingRepositoryInterface
     public function countByParticipant(Participant $participant);
 
     /**
+     * @param Meeting $meeting
+     */
+    public function remove(Meeting $meeting);
+    
+    /**
      * @param MeetingSlot $meetingSlot
      *
      * @return bool
