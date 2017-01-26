@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,17 +25,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateType extends AbstractType
 {
+    const MESSAGE_MAX_LENGTH = 150;
+
     /**
      * @var ParticipantInfoGuesser
      */
     private $guesser;
 
+    /** @var TranslatorAdapter */
+    private $translator;
+
     /**
      * @param ParticipantInfoGuesser $guesser
+     * @param TranslatorAdapter      $translator
      */
-    public function __construct(ParticipantInfoGuesser $guesser)
+    public function __construct(ParticipantInfoGuesser $guesser, TranslatorAdapter $translator)
     {
-        $this->guesser = $guesser;
+        $this->guesser      = $guesser;
+        $this->translator   = $translator;
     }
 
     /**
@@ -82,6 +90,27 @@ class CreateType extends AbstractType
         $builder
             ->add('message', TextareaType::class, [
                 'required' => false,
+                'attr' => [
+                    'data-text-max-length-indicator'    => self::MESSAGE_MAX_LENGTH,
+                    'data-text-max-length-translations' => sprintf(
+                        '%s|%s|%s',
+                        $this->translator->trans(
+                            'form.create_unavailability.data.maxLength.translations.plural',
+                            [],
+                            'forms'
+                        ),
+                        $this->translator->trans(
+                            'form.create_unavailability.data.maxLength.translations.singular',
+                            [],
+                            'forms'
+                        ),
+                        $this->translator->trans(
+                            'form.create_unavailability.data.maxLength.translations.reached',
+                            [],
+                            'forms'
+                        )
+                    ),
+                ]
             ])
         ;
     }
