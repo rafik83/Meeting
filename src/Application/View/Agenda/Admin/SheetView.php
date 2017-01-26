@@ -168,9 +168,9 @@ class SheetView
         $this->url                      = $url;
         $this->follower                 = $follower;
 
-        $this->hasNotSentMeetingRequest   = $this->hasNotSentMeetingRequest();
+        $this->hasNotSentMeetingRequest  = $this->hasNotSentMeetingRequest();
         $this->hasNotEnoughAvailableSlot = $this->hasNotEnoughAvailableSlot();
-        $this->hasMeetingToApprove        = $this->hasMeetingToApprove();
+        $this->hasMeetingToApprove       = $this->hasMeetingToApprove();
     }
 
     /**
@@ -198,6 +198,6 @@ class SheetView
             return false;
         }
 
-        return (($this->countRequest + $this->countProposition) / $this->usableSlots) > 1;
+        return ($this->countValidatedRequest / $this->usableSlots) > 1;
     }
 }
