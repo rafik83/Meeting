@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -463,13 +462,13 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Event          $event
-     * @param array          $visibleTypes
-     * @param array          $filters
-     * @param array          $currentAggregations
-     * @param TypeView[]     $typeViews
-     * @param CategoryView[] $organizationCategoryViews
-     * @param PositionView[] $positionViews
+     * @param Event                      $event
+     * @param array                      $visibleTypes
+     * @param array                      $filters
+     * @param array                      $currentAggregations
+     * @param TypeView[]                 $typeViews
+     * @param OrganizationCategoryView[] $organizationCategoryViews
+     * @param PositionView[]             $positionViews
      *
      * @return FormInterface
      */

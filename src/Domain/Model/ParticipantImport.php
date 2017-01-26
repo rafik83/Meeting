@@ -28,15 +28,15 @@ class ParticipantImport
     private $result;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
      * ParticipantImport constructor.
      *
-     * @param Type      $type
-     * @param array     $result
+     * @param Type               $type
+     * @param array              $result
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(Type $type, array $result, \DateTimeInterface $createdAt)
@@ -71,7 +71,7 @@ class ParticipantImport
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
