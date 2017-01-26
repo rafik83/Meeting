@@ -51,6 +51,13 @@ interface SpotRepositoryInterface
     public function getSpotFilter(Event $event, array $filter = []);
 
     /**
+     * @param array $spotsIds
+     *
+     * @return Spot[]
+     */
+    public function getSpotsByIds(array $spotsIds = []);
+
+    /**
      * @param Event  $event
      * @param string $reference
      *
