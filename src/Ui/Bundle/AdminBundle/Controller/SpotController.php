@@ -98,7 +98,8 @@ class SpotController extends Controller
         if (!empty($spotsToDelete)) {
             if ($deleteButton) {
                 $deleteBatch = new DeleteBatch($spotsToDelete, $event);
-                $this->get('tactician.commandbus')->handle($deleteBatch);
+                $spotToAvoid = $this->get('tactician.commandbus')->handle($deleteBatch);
+                dump($spotToAvoid);
                 $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
             } elseif ($disableButton) {
                 $disableBatch = new DisableBatch($spotsToDelete, $event);

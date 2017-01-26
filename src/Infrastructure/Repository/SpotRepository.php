@@ -120,16 +120,15 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('spots.id')
+            ->select('spots')
             ->from(Spot::class, 'spots')
             ->where('spots.id IN (:spotsIds)')
             ->setParameter('spotsIds', $spotsIds)
         ;
 
-        return $queryBuilder->getQuery()->getArrayResult();
-
+        return $queryBuilder->getQuery()->getResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -197,6 +196,24 @@ class SpotRepository implements SpotRepositoryInterface
             $meeting->countParticipants(),
             $meeting
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeeting(Spot $spot) {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.spot_id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.spot_id = :spot_id')
+            ->setParameter('spot_id', $spot->getId())
+        ;
+
+        $count = count($queryBuilder->getQuery()->getResult());
+
+        return ($count === 0) ? false : true;
     }
 
     /**
