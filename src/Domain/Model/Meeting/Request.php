@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -456,6 +457,18 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isTransformableIntoMeeting()
+    {
+        if ($this->hasNoPreference($this->from) || $this->hasNoPreference($this->to)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Sheet
@@ -497,5 +510,42 @@ class Request implements MessageSubjectInterface
     public function hasMeeting()
     {
         return $this->meeting !== null;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getAllParticipants()
+    {
+        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+    }
+
+    /**
+     * @return int[] array of all participants id
+     */
+    public function getParticipantsId()
+    {
+        return array_map(
+            function (Participant $participant) {
+                return $participant->getId();
+            },
+            $this->getAllParticipants()
+        );
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->getFromSheet()->getEvent();
+    }
+
+    /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
     }
 }
