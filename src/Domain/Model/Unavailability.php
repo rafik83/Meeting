@@ -33,6 +33,11 @@ class Unavailability
     private $end;
 
     /**
+     * @var string
+     */
+    private $message = '';
+
+    /**
      * Unavailability constructor.
      *
      * @param Participant        $participant
@@ -84,6 +89,22 @@ class Unavailability
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
     }
 
     /**
