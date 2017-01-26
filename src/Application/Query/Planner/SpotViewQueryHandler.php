@@ -65,7 +65,8 @@ class SpotViewQueryHandler
                 $spot->getSeatCapacity(),
                 $spot->getMeetingCapacity(),
                 $sheetsList,
-                $priority
+                $priority,
+                [] // Coming spot unavailability
             );
         }
 
