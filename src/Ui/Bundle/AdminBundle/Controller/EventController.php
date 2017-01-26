@@ -167,7 +167,7 @@ class EventController extends Controller
 
         $form = $this->createForm(UpdateType::class, $update, [
             'locales'       => $event->getLocales(),
-            'currentLocale' => $request->getLocale(),
+            'currentLocale' => $event->getAvailableLocale($request->getLocale()),
             'submit'        => true,
             'action'        => $this->generateUrl('admin_event_update', ['event' => $event->getId()]),
         ]);

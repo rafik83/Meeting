@@ -101,14 +101,14 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetTitle($order->getSheet(), $request->getLocale())
+            ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
         $summaryView = $this->get('tactician.commandbus.query')->handle(
             new SummaryQuery(
                 $order->getSheet(),
                 $order,
-                $request->getLocale()
+                $event->getAvailableLocale($request->getLocale())
             )
         );
 
@@ -135,7 +135,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetTitle($order->getSheet(), $request->getLocale())
+            ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
         $addRow = new AddRowToGroup($order, $group);
@@ -177,7 +177,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetTitle($order->getSheet(), $request->getLocale())
+            ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
         $addRow = new AddRowToProduct($order, $row);
@@ -221,7 +221,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($order->getSheet(), $request->getLocale());
+            ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()));
 
         $updateRow = new UpdateRow($row);
         $form      = $this->createForm(UpdateRowType::class, $updateRow);

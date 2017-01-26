@@ -135,7 +135,6 @@ class CategoryViewQueryHandler
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery(
                     $categoryViewQuery->sheet,
@@ -148,7 +147,6 @@ class CategoryViewQueryHandler
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PACKAGE:
                 return $this->packageViewQueryHandler->handle(new PackageViewQuery(
                     $categoryViewQuery->sheet,

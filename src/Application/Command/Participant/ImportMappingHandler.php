@@ -33,7 +33,7 @@ class ImportMappingHandler
     private $session;
 
     /**
-     * @var CsvDecoder
+     * @var DecoderInterface
      */
     private $csvDecoder;
 

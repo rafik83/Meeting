@@ -41,30 +41,53 @@
     background: #32b5fc;
   }
 
-  .meeting {
-    background: #32b5fc;
-  }
-
-  .meeting-common {
-    background: #ffe237;
-  }
-
   .slot {
     padding: 4px;
     height: 65px;
     width: 120px;
-  }
 
-  .slot-label {
-    width: 100px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+    &.meeting {
+      background: #32b5fc;
+    }
 
-  .slot-time {
-    font-size: 85%;
-    display: inline;
+    &.meeting-common {
+      background: #ffe237;
+    }
+
+    &.happening {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    &.unavailability {
+      background: #999999;
+      color: #ffffff;
+    }
+
+    &.mass-unavailability {
+      background: darkblue;
+      color: #ffffff;
+    }
+
+    &.available {
+      background: #75cb0b;
+    }
+
+    &.meeting-to-be-moved {
+      background: greenyellow;
+    }
+
+    .slot-label {
+      width: 100px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .slot-time {
+      font-size: 85%;
+      display: inline;
+    }
   }
 
   .sheets-list {
@@ -95,21 +118,6 @@
     }
   }
 
-  .happening {
-    background: #000000;
-    color: #ffffff;
-  }
-
-  .unavailability {
-    background: #999999;
-    color: #ffffff;
-  }
-
-  .mass-unavailability {
-    background: darkblue;
-    color: #ffffff;
-  }
-
   .glyphicon {
     z-index: 1; /* fix for not having glyphicons on top of request-list */
   }
@@ -128,6 +136,10 @@
       overflow-y: scroll;
       background-color: #fff;
       font-size: 85%;
+    }
+
+    .request-to-be-placed {
+      background: greenyellow;
     }
   }
 }

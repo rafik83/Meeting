@@ -89,7 +89,7 @@ class RuleController extends Controller
         $seeWhat = new SeeWhat($rule);
         $form    = $this->createForm(SeeWhatType::class, $seeWhat, [
             'rule'   => $rule,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
 

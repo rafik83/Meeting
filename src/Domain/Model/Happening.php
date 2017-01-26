@@ -76,7 +76,9 @@ class Happening
     private $participations;
 
     /**
-     * @var Question[]
+     * Question[]
+     *
+     * @var ArrayCollection
      */
     private $questions;
 

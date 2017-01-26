@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Meeting;
+namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
@@ -41,10 +41,10 @@ class UpdateSpotHandler
      */
     public function handle(UpdateSpot $updateSpot)
     {
-        $isMeetinSpotChanged     = $updateSpot->spot !== $updateSpot->meeting->getSpot();
-        $isMeetinSpotStayBlocked = $updateSpot->meeting->isBlockedSpot() && $updateSpot->isBlockedSpot();
+        $isMeetingSpotChanged     = $updateSpot->spot !== $updateSpot->meeting->getSpot();
+        $isMeetingSpotStayBlocked = $updateSpot->meeting->isBlockedSpot() && $updateSpot->isBlockedSpot();
 
-        if (true === $isMeetinSpotChanged && true === $isMeetinSpotStayBlocked) {
+        if (true === $isMeetingSpotChanged && true === $isMeetingSpotStayBlocked) {
             throw new MeetingIsBlockedSpotException();
         }
 

@@ -6,7 +6,13 @@
             {% if meetingRequest.isSent %}
                 {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': meetingRequest, 'sheet': viewer}, false) }}
             {% elseif meetingRequest.isApproved %}
-                {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {'meetingRequest': meetingRequest, 'isMeetingPublished': isMeetingPublished|default(false)}, false) }}
+                {% if not isMeetingRequestUpdateLocked %}
+                    {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {
+                        'meetingRequest': meetingRequest,
+                        'isMeetingPublished': isMeetingPublished|default(false),
+                        'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                    }, false) }}
+                {% endif %}
             {% elseif meetingRequest.isRefused %}
                 {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': meetingRequest}, false) }}
             {% endif %}
@@ -14,7 +20,13 @@
             {% if meetingRequest.isSent %}
                 {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {'meetingRequest': meetingRequest}, false) }}
             {% elseif meetingRequest.isApproved %}
-                {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {'meetingRequest': meetingRequest, 'isMeetingPublished': isMeetingPublished|default(false)}, false) }}
+                {% if not isMeetingRequestUpdateLocked %}
+                    {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {
+                        'meetingRequest': meetingRequest,
+                        'isMeetingPublished': isMeetingPublished|default(false),
+                        'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                    }, false) }}
+                {% endif %}
             {% elseif meetingRequest.isRefused %}
                 {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': meetingRequest}, false) }}
             {% endif %}

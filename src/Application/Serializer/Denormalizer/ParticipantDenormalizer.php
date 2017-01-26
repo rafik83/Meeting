@@ -185,7 +185,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function isAlreadyParticipant($email, &$participants)
     {
         foreach ($participants as $participant) {
-            if ($participant->getUser()->getEmail() === $email) {
+            if (strtolower($participant->getUser()->getEmail()) === strtolower($email)) {
                 return true;
             }
         }
@@ -202,7 +202,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function hasUserAccount($email, &$users)
     {
         foreach ($users as $user) {
-            if ($user->getEmail() === $email) {
+            if (strtolower($user->getEmail()) === strtolower($email)) {
                 return $user;
             }
         }
@@ -313,8 +313,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $participantData,
         TemplateData $registrationTemplate
     ) {
-        if (($user = $this->hasUserAccount($email, $users)) === false) {
-            $user = new User($email, '', '', $context['locale']);
+        $user = $this->hasUserAccount($email, $users);
+
+        if ($user === false) {
+            $user = new User(strtolower($email), '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
             $this->userRepository->add($user);

@@ -21,6 +21,7 @@ flash.admin.happening.participation.empty: 'Il n''y a aucun participant à expor
 flash.admin.happening.update.success: 'Le sous événement a bien été mis à jour'
 flash.admin.meeting.remove.failed: 'Ce rendez-vous est verrouillé'
 flash.admin.meeting_request.position.success: 'Le rendez-vous a bien été placé'
+flash.admin.meeting_request.lock.update.success: 'La modification du changement de status du verrouillage des demandes de rendez-vous a bien été pris en compte'
 flash.admin.meeting.notAllowedToDeleteAllMeetingsException: 'Vous ne pouvez pas supprimer les rendez-vous car la date de publication est passée'
 flash.admin.messaging.campaign.create.success: 'Campagne d''emailing créée avec succès. Vous pouvez à présent sélectionner vos destinataires.'
 flash.admin.messaging.campaign.message.success: 'Campagne créée avec succès. Elle est désormais prête à être envoyée.'
