@@ -286,7 +286,7 @@ class SpotRepository implements SpotRepositoryInterface
                 ->addSelect('sheetAssignedToSpot.id AS HIDDEN hasSheetAssignedFromMeeting')
                 ->leftJoin('spot.sheets', 'sheetAssignedToSpot', 'WITH', 'sheetAssignedToSpot IN (:fromSheetId, :toSheetId)')
                 // Exclude spots assigned to others sheet
-                ->andWhere('NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
+                ->andWhere('sheetAssignedToSpot IN (:fromSheetId, :toSheetId) OR NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
                 ->setParameter('fromSheetId', $exceptMeeting->getFromSheet()->getId())
                 ->setParameter('toSheetId', $exceptMeeting->getToSheet()->getId())
                 ->setParameter('exceptMeeting', $exceptMeeting)
