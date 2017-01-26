@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
@@ -18,8 +19,10 @@ use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -104,15 +107,11 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
-        if (Request::METHOD_POST === $request->getMethod()) {
-            return $this->handleUpdateSpotAction($request, $event, $meeting);
-        }
-
-        $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
+        $meetingUpdateSlotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
             new MeetingUpdateSlotViewQuery($meeting)
         );
 
-        return new JsonResponse($meetingUpdateSpotView);
+        return new JsonResponse($meetingUpdateSlotView);
     }
 
     /**
@@ -171,6 +170,84 @@ class MeetingController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function transformRequestIntoMeetingAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        try {
+            $requestSlotView = $this->get('query.agenda.admin.request_slot_view_query_handler')->handle(
+                new RequestSlotViewQuery($meetingRequest)
+            );
+        } catch (NoSlotAvailableException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
+            );
+        }
+
+        return new JsonResponse($requestSlotView);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function handleTransformRequestIntoMeetingAction(
+        Request $request,
+        Event $event,
+        Meeting\Request $meetingRequest
+    ) {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $data = json_decode($request->getContent());
+
+        if (!isset($data->slotId)) {
+            return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.error');
+        }
+
+        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+            $event,
+            (int) $data->slotId
+        );
+
+        if (null === $slot) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists');
+        }
+
+        $transformRequestIntoMeeting = new TransformRequestIntoMeeting($meetingRequest, $slot);
+
+        try {
+            $this->get('tactician.commandbus')->handle($transformRequestIntoMeeting);
+        } catch (NoSlotAvailableException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
+            );
+        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting'
+            );
+        } catch (SlotNotAvailableForThisMeetingException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting'
+            );
+        } catch (\Exception $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.meeting.updateSlot.error'
+            );
+        }
+
+        return new JsonResponse();
+    }
+
+    /**
      * @param Event   $event
      * @param Meeting $meeting
      */
@@ -179,6 +256,19 @@ class MeetingController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         if ($meeting->getFromSheet()->getEvent() !== $event) {
+            throw new \InvalidArgumentException('Meeting are not on this event');
+        }
+    }
+
+    /**
+     * @param Event           $event
+     * @param Meeting\Request $meetingRequest
+     */
+    private function checkMeetingRequestAccess(Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($meetingRequest->getFromSheet()->getEvent() !== $event) {
             throw new \InvalidArgumentException('Meeting are not on this event');
         }
     }

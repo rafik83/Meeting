@@ -334,6 +334,22 @@ admin_agenda_meeting_update_slot_handler:
     methods: [POST]
     defaults: { _controller: AdminBundle:Agenda/Meeting:handleUpdateSlot }
 
+admin_agenda_meeting_request_transform_into_meeting:
+    path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:transformRequestIntoMeeting }
+
+admin_agenda_meeting_request_transform_into_meeting_handler:
+    path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleTransformRequestIntoMeeting }
+
 #
 # Meeting
 #

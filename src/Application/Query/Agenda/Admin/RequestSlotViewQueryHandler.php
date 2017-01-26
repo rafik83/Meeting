@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
-use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSlotView;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\View\Agenda\Admin\RequestSlotView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
-class MeetingUpdateSlotViewQueryHandler
+class RequestSlotViewQueryHandler
 {
     /** @var SpotRepositoryInterface */
     private $spotRepository;
@@ -35,17 +36,17 @@ class MeetingUpdateSlotViewQueryHandler
     }
 
     /**
-     * @param MeetingUpdateSlotViewQuery $query
+     * @param RequestSlotViewQuery $query
      *
-     * @return MeetingUpdateSlotView
+     * @return RequestSlotView
+     * @throws NoSlotAvailableException
      */
-    public function handle(MeetingUpdateSlotViewQuery $query)
+    public function handle(RequestSlotViewQuery $query)
     {
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
-            $query->meeting->getEvent(),
-            $query->meeting->getParticipantsId(),
-            false,
-            $query->meeting
+            $query->meetingRequest->getEvent(),
+            $query->meetingRequest->getParticipantsId(),
+            false
         );
 
         $availableSlotsId = [];
@@ -53,13 +54,16 @@ class MeetingUpdateSlotViewQueryHandler
         foreach ($slots as $slot) {
             if (true === $this->spotRepository->hasSpotsForSlotAndParticipantsQuantity(
                 $slot,
-                $query->meeting->countParticipants(),
-                $query->meeting
+                $query->meetingRequest->countParticipants()
             )) {
                 $availableSlotsId[] = $slot->getId();
             }
         }
 
-        return new MeetingUpdateSlotView($availableSlotsId);
+        if (0 === count($availableSlotsId)) {
+            throw new NoSlotAvailableException();
+        }
+
+        return new RequestSlotView($availableSlotsId);
     }
 }
