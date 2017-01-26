@@ -44,6 +44,11 @@ class Create
     /**
      * @var string
      */
+    public $message;
+
+    /**
+     * @var string
+     */
     public $locale;
 
     /**
@@ -92,5 +97,13 @@ class Create
         }
 
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkMaxLength()
+    {
+        return strlen($this->message) < 150;
     }
 }

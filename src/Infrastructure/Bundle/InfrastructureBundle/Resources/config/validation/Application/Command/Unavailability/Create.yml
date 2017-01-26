@@ -23,4 +23,8 @@ Proximum\Vimeet\Application\Command\Unavailability\Create:
             - Count:
                 min: 1
                 minMessage: validators.unavailability.participantsNotSelected
+        message:
+            - Expression:
+                expression: "this.checkMaxLength()"
+                message: "validators.unavailability.messageLength"
 

@@ -57,4 +57,5 @@ validators.sheet.messaging_campaign.recipients: 'Veuillez sélectionner un desti
 validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
 validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.unavailability.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
+validators.unavailability.messageLength: 'Le nombre de caractères ne doit pas être supérieur à 150'
 validators.whitespace: 'Ce champ ne doit pas contenir d''espace'

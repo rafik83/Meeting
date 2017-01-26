@@ -33,6 +33,7 @@ form.create_unavailability.children.participants.label: 'Indisponible:'
 form.create_unavailability.children.submit.label: Ajouter
 form.create_unavailability.children.time.children.begin.label: de
 form.create_unavailability.children.time.children.end.label: à
+form.create_unavailability.children.message.label: 'Commentaire'
 form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'

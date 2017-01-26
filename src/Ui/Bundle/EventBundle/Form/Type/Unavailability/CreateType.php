@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -77,6 +78,12 @@ class CreateType extends AbstractType
                 ])
             ;
         }
+
+        $builder
+            ->add('message', TextareaType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     /**
