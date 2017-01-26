@@ -360,6 +360,13 @@ admin_spot_batch_create:
     methods: [GET , POST]
     defaults: { _controller: AdminBundle:Spot:batchCreate }
 
+admin_spot_batch_unavailability:
+    path: /event/{event}/spot/unavailability/batch
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: AdminBundle:Spot:batchUnavailability }
+
 admin_spot_update:
     path: /event/{event}/spot/update
     requirements:
