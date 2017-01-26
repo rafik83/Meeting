@@ -409,6 +409,13 @@ admin_meeting_request_slots:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:slots }
 
+admin_meeting_request_lock_update:
+    path: /event/{event}/meeting-request/lock/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
+
 #
 # Sheet
 #

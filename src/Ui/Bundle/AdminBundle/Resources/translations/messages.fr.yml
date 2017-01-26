@@ -49,6 +49,8 @@ admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.title: 'Gestion des rendez-vous'
+admin.agenda.event.configuration.isMeetingRequestLocked: 'Les demandes de rendez-vous sont verrouillées'
+admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
@@ -168,6 +170,7 @@ admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
+admin.meeting_request.action.lock: 'Verrouiller les demandes'
 admin.meeting_request.createdAt: 'Date de création'
 admin.meeting_request.details: Détail
 admin.meeting_request.from: De

@@ -263,7 +263,8 @@ class CatalogController extends Controller
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);
         $ruleApplyer->applyRuleForCardList($participants, $rules);
 
-        $isMeetingPublished = false;
+        $isMeetingPublished           = false;
+        $isMeetingRequestUpdateLocked = false;
 
         if ($sheet === $userSheet) {
             $meetingRequest = null;
@@ -274,20 +275,22 @@ class CatalogController extends Controller
             $isMeetingPublished = $this
                 ->get('domain.key_dates.checker.meeting_published_access_checker')
                 ->allowedToAccess($event);
+            $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'              => $event,
-            'sheet'              => $sheet,
-            'taggedData'         => $taggedData,
-            'locale'             => $locale,
-            'nomenclatures'      => $nomenclatures,
-            'participants'       => $participants,
-            'templateData'       => $templateData,
-            'isCatalog'          => true,
-            'userSheet'          => $userSheet,
-            'meetingRequest'     => $meetingRequest,
-            'isMeetingPublished' => $isMeetingPublished,
+            'event'                        => $event,
+            'sheet'                        => $sheet,
+            'taggedData'                   => $taggedData,
+            'locale'                       => $locale,
+            'nomenclatures'                => $nomenclatures,
+            'participants'                 => $participants,
+            'templateData'                 => $templateData,
+            'isCatalog'                    => true,
+            'userSheet'                    => $userSheet,
+            'meetingRequest'               => $meetingRequest,
+            'isMeetingPublished'           => $isMeetingPublished,
+            'isMeetingRequestUpdateLocked' => $isMeetingRequestUpdateLocked,
         ]);
     }
 

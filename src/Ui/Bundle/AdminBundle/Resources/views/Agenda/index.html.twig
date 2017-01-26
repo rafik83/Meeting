@@ -63,7 +63,11 @@
             </div>
         </div>
         <div class="col-xs-10">
-
+            {% if isMeetingRequestUpdateLocked == true %}
+                <div style="height: 50px" class="bg-danger alert alert-danger">
+                    {{ 'admin.agenda.event.configuration.isMeetingRequestLocked'|trans }}
+                </div>
+            {% endif %}
             <div class="requests-list" v-if="focus">
                 <p>
                     <b>${ focus.title }</b>

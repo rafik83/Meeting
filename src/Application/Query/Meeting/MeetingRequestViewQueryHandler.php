@@ -59,7 +59,8 @@ class MeetingRequestViewQueryHandler
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
             $previews,
-            $query->isMeetingPublished
+            $query->isMeetingPublished,
+            $query->isMeetingRequestUpdateLocked
         );
     }
 
