@@ -318,6 +318,16 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * @param MeetingSlot $slot
+     * @param Spot        $spot
+     */
+    public function updateSlotAndSpot(MeetingSlot $slot, Spot $spot)
+    {
+        $this->slot = $slot;
+        $this->spot = $spot;
+    }
+
+    /**
      * @return boolean
      */
     public function isBlockedSpot()
@@ -355,5 +365,34 @@ class Meeting implements MessageSubjectInterface
     public function getSheets()
     {
         return [$this->fromSheet, $this->toSheet];
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getAllParticipants()
+    {
+        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+    }
+
+    /**
+     * @return int[] array of all participants id
+     */
+    public function getParticipantsId()
+    {
+        return array_map(
+            function (Participant $participant) {
+                return $participant->getId();
+            },
+            $this->getAllParticipants()
+        );
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->slot->getEvent();
     }
 }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -184,7 +185,59 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function hasSpotsForMeeting(Meeting $meeting)
+    {
+        return $this->hasSpotsForSlotAndParticipantsQuantity(
+            $meeting->getSlot(),
+            $meeting->countParticipants(),
+            $meeting
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null
+    ) {
+        $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+            $slot,
+            $participantsQuantity,
+            $exceptMeeting
+        );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null
+    ) {
+        $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+            $slot,
+            $participantsQuantity,
+            $exceptMeeting
+        );
+
+        $queryBuilder->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param MeetingSlot  $slot
+     * @param              $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     *
+     * @return QueryBuilder
+     */
+    private function getSpotsForSlotAndParticipantsQuantityQueryBuilder(
         MeetingSlot $slot,
         $participantsQuantity,
         Meeting $exceptMeeting = null
@@ -196,7 +249,18 @@ class SpotRepository implements SpotRepositoryInterface
             ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
             ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants')
             ->from(Spot::class, 'spot')
-            // Get meetings assigned to this spot on current slot
+            ->where('spot.event = :eventId AND spot.active = true')
+            ->setParameter('eventId', $slot->getEvent()->getId());
+
+        // If meeting has a blocked spot, check only meeting's spot availability
+        if (null !== $exceptMeeting && $exceptMeeting->isBlockedSpot()) {
+            $queryBuilder
+                ->andWhere('spot.id = :spotId')
+                ->setParameter('spotId', $exceptMeeting->getSpot()->getId());
+        }
+
+        // Get meetings and participants count assigned to this spot on current slot
+        $queryBuilder
             ->leftJoin(
                 Meeting::class,
                 'meeting',
@@ -212,7 +276,6 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('slot', $slot)
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
-            ->andWhere('spot.active = true')
             ->groupBy('spot.id')
             ->andHaving('countMeetings < spot.meetingCapacity')
             ->andHaving('(countParticipants + :participantsQuantity) <= spot.seatCapacity')
@@ -232,6 +295,6 @@ class SpotRepository implements SpotRepositoryInterface
 
         $queryBuilder->addOrderBy('spot.reference');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
     }
 }
