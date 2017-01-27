@@ -61,7 +61,7 @@ class Spot
     /**
      * @var ArrayCollection
      */
-    private $spotUnavailabilities;
+    private $spotUnavailabilities = [];
 
     /**
      * Spot constructor.
