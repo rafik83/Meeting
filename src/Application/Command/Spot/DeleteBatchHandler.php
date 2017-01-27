@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
-use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
 class DeleteBatchHandler
@@ -33,52 +33,51 @@ class DeleteBatchHandler
     /**
      * @param DeleteBatch $deleteBatch
      *
-     * @return array
+     * @return DeleteBatchView
      */
     public function handle(DeleteBatch $deleteBatch)
     {
         $spots = $this->spotRepository->getSpotsByIds($deleteBatch->ids);
-        $spotToAvoid = [
-            DeleteBatch::SPOT_WITH_SHEETS  => [],
-            DeleteBatch::SPOT_WITH_MEETING => []
-        ];
-        $spotToDelete = [];
+
+        $deleteBatchView = new DeleteBatchView();
         
         foreach($spots as $spot) {
             
 
             if ($spot->hasSheets() !== false) {
 
-                $spotToAvoid[DeleteBatch::SPOT_WITH_SHEETS][] = $spot;
-                continue;
+                $deleteBatchView->spotsWithSheets[] = $spot->getId();
             }
 
             if ($this->spotRepository->hasMeeting($spot) !== false) {
 
-                $spotToAvoid[DeleteBatch::SPOT_WITH_MEETING][] = $spot;
-                continue;
+                $deleteBatchView->spotsWithMeetings[] = $spot->getId();
             }
 
-            $spotToDelete[] = $spot;
+            $deleteBatchView->deletedSpots[] = $spot->getId();
 
         }
 
-        $spotToDelete = $this->getSpotToDelete($spotToDelete, $spotToAvoid);
+        $deleteBatchView = $this->getSpotToDelete($deleteBatchView);
         
-        $this->spotRepository->removeBatchSpot($spotToDelete, $deleteBatch->event);
+        $this->spotRepository->removeBatchSpot($deleteBatchView->deletedSpots, $deleteBatch->event);
 
-        return $spotToAvoid;
+        return $deleteBatchView;
     }
 
     /**
-     * @param $spotToDelete[]
-     * @param $avoidedSpot[]
+     * @param DeleteBatchView $deleteBatchView
      *
-     * @return array
+     * @return DeleteBatchView
      */
-    private function getSpotToDelete(array $spotToDelete = [], array $avoidedSpot = [])
+    private function getSpotToDelete(DeleteBatchView $deleteBatchView)
     {
-        return array_diff($spotToDelete, $avoidedSpot[DeleteBatch::SPOT_WITH_MEETING], $avoidedSpot[DeleteBatch::SPOT_WITH_SHEETS]);
-    }
+        $deleteBatchView->deletedSpots = array_diff(
+            $deleteBatchView->deletedSpots,
+           $deleteBatchView->spotsWithMeetings,
+           $deleteBatchView->spotsWithSheets
+        );
 
+        return $deleteBatchView;
+    }
 }

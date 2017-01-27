@@ -14,9 +14,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class DeleteBatch
 {
-    const SPOT_WITH_SHEETS  = 'spotWithSheets';
-    const SPOT_WITH_MEETING = 'spotWithMeeting';
-
     /**
      * @var Event
      */

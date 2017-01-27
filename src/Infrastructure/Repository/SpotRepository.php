@@ -205,9 +205,9 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(meeting.spot_id)')
+            ->select('COUNT(meeting.spot)')
             ->from(Meeting::class, 'meeting')
-            ->where('meeting.spot_id = :spot_id')
+            ->where('meeting.spot = :spot_id')
             ->setParameter('spot_id', $spot->getId())
         ;
 

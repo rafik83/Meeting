@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
+use Proximum\Vimeet\Application\View\Spot\DeleteBatchView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
@@ -98,9 +99,22 @@ class SpotController extends Controller
         if (!empty($spotsToDelete)) {
             if ($deleteButton) {
                 $deleteBatch = new DeleteBatch($spotsToDelete, $event);
-                $spotToAvoid = $this->get('tactician.commandbus')->handle($deleteBatch);
-                dump($spotToAvoid);
-                $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
+
+                /** @var DeleteBatchView */
+                $deleteBatchView = $this->get('tactician.commandbus')->handle($deleteBatch);
+
+                if (!empty($deleteBatchView->spotsWithMeetings)) {
+                    $this->addFlash('error', 'flash.admin.spot_batch.delete.failure.meetings');
+                }
+                
+                if (!empty($deleteBatchView->spotsWithSheets)) {
+                    $this->addFlash('error', 'flash.admin.spot_batch.delete.failure.sheets');
+                }
+
+                if (!empty($deleteBatchView->spotToDelete)) {
+                    $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
+                }
+
             } elseif ($disableButton) {
                 $disableBatch = new DisableBatch($spotsToDelete, $event);
                 $this->get('tactician.commandbus')->handle($disableBatch);
