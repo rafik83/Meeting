@@ -3,7 +3,14 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(meeting_requests.total, {'%count%': meeting_requests.total}) }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.meeting_request.title'|transchoice(meeting_requests.total, {'%count%': meeting_requests.total}) }}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <a href="{{ path('admin_meeting_request_lock_update', {'event': event.id}) }}" class="btn btn-info pull-right">
+                {{ 'admin.meeting_request.action.lock'|trans }}
+            </a>
+        {% endif %}
+    </h1>
 
     {{ include('AdminBundle:Common:filters_summary.html.twig', {
         filters:   filters_summary,

@@ -61,6 +61,11 @@ class CatalogSheetPreviewView
     public $isMeetingPublished;
 
     /**
+     * @var bool
+     */
+    public $isMeetingRequestUpdateLocked;
+
+    /**
      * @param int             $id
      * @param Sheet           $sheet
      * @param string          $title
@@ -69,6 +74,7 @@ class CatalogSheetPreviewView
      * @param Meeting\Request $meetingRequest
      * @param bool            $isItMySheet
      * @param bool            $isMeetingPublished
+     * @param bool            $isMeetingRequestUpdateLocked
      */
     public function __construct(
         $id,
@@ -77,16 +83,18 @@ class CatalogSheetPreviewView
         array $preview,
         Meeting\Request $meetingRequest = null,
         $isItMySheet,
-        $isMeetingPublished = false
+        $isMeetingPublished = false,
+        $isMeetingRequestUpdateLocked = false
     ) {
-        $this->id                 = $id;
-        $this->sheet              = $sheet;
-        $this->title              = $title;
-        $this->type               = $type;
-        $this->preview            = $preview;
-        $this->meetingRequest     = $meetingRequest;
-        $this->isItMySheet        = $isItMySheet;
-        $this->isMeetingPublished = $isMeetingPublished;
+        $this->id                           = $id;
+        $this->sheet                        = $sheet;
+        $this->title                        = $title;
+        $this->type                         = $type;
+        $this->preview                      = $preview;
+        $this->meetingRequest               = $meetingRequest;
+        $this->isItMySheet                  = $isItMySheet;
+        $this->isMeetingPublished           = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
     }
 
     /**

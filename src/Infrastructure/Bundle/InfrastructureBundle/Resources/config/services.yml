@@ -1430,6 +1430,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
+    command.meeting_request.admin.lock_meeting_request_update_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate }
+
     #
     # Security
     #
@@ -1636,6 +1643,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.manager'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
 
     #
     # Security Component
@@ -1644,10 +1652,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
     components.security.admin_sheet_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
-    components.security.happening_access:
-        class: Proximum\Vimeet\Application\Components\Security\HappeningAccess
-        arguments:
-            - '@datetime'
 
     #
     # Guideline Component
@@ -2301,6 +2305,13 @@ services:
             - '@query.agenda.request_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery }
+    query.agenda.remove_meeting_query_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery }
     query.agenda.request_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQueryHandler
         arguments:
@@ -3120,7 +3131,13 @@ services:
         arguments:
              - '@translator'
         tags:
-            - { name: form.type_extension,  extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+            - { name: form.type_extension, extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+    form_extension.default_form_extension:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\DefaultFormExtension
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: form.type_extension, extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
 
     #
     # SendGrid API

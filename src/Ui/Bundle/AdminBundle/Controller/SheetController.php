@@ -208,7 +208,7 @@ class SheetController extends Controller
         $charset       = Charset::WINDOWS_1252;
         $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($event, 'csv', [
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
             'charset' => $charset,
         ]);
 
@@ -239,7 +239,7 @@ class SheetController extends Controller
 
         $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($normaliserView, 'csv', [
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
             'charset' => $charset,
         ]);
 

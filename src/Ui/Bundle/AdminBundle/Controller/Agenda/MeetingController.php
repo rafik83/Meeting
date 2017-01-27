@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAnd
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
@@ -33,13 +35,12 @@ use Symfony\Component\HttpFoundation\Response;
 class MeetingController extends Controller
 {
     /**
-     * @param Request $request
      * @param Event   $event
      * @param Meeting $meeting
      *
      * @return JsonResponse
      */
-    public function updateSpotAction(Request $request, Event $event, Meeting $meeting)
+    public function updateSpotAction(Event $event, Meeting $meeting)
     {
         $this->checkAccess($event, $meeting);
 
@@ -246,7 +247,6 @@ class MeetingController extends Controller
 
         return new JsonResponse();
     }
-
     /**
      * @param Event   $event
      * @param Meeting $meeting
@@ -258,6 +258,32 @@ class MeetingController extends Controller
         if ($meeting->getFromSheet()->getEvent() !== $event) {
             throw new \InvalidArgumentException('Meeting are not on this event');
         }
+    }
+
+    /**
+     * @param Event   $event
+     * @param Meeting $meeting
+     *
+     * @return JsonResponse
+     */
+    public function removeAction(Event $event, Meeting $meeting)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($meeting->getFromSheet()->getEvent() !== $event) {
+            return new JsonResponse('Meeting are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $response = new JsonResponse();
+
+        try {
+            $this->get('tactician.commandbus.query')->handle(new RemoveMeetingViewQuery($meeting, $this->getUser()));
+        } catch (LockedException $lockedException) {
+            $response->setData($lockedException->getMessage());
+            $response->setStatusCode(Response::HTTP_LOCKED);
+        }
+
+        return $response;
     }
 
     /**

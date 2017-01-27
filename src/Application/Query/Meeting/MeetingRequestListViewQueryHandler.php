@@ -61,13 +61,16 @@ class MeetingRequestListViewQueryHandler
         $meetingRequestListView = new MeetingRequestListView();
         $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
+        $isMeetingRequestUpdateLocked = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
+
         foreach ($meetingRequests as $meetingRequest) {
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
                 new MeetingRequestViewQuery(
                     $meetingRequest,
                     $query->sheet,
                     $query->locale,
-                    $isMeetingPublished
+                    $isMeetingPublished,
+                    $isMeetingRequestUpdateLocked
                 )
             );
 

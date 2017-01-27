@@ -288,6 +288,15 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_sheet_meeting_remove:
+    path: /event/{event}/agenda/meeting/{meeting}/remove
+    requirements:
+        event: \d+
+        sheet: \d+
+        meeting: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
+
 admin_agenda_export_participant_index:
     path: /event/{event}/agenda/export-participants
     requirements:
@@ -448,6 +457,13 @@ admin_meeting_request_slots:
         meetingRequest: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:slots }
+
+admin_meeting_request_lock_update:
+    path: /event/{event}/meeting-request/lock/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
 
 #
 # Sheet
