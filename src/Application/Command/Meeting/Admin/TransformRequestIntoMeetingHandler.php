@@ -82,14 +82,17 @@ class TransformRequestIntoMeetingHandler
         // Get first spot
         $spot = reset($spots);
 
+        $fromSheet = $transformRequestIntoMeeting->meetingRequest->getFromSheet();
+        $toSheet = $transformRequestIntoMeeting->meetingRequest->getToSheet();
+
         $this->meetingRepository->add(
             new Meeting(
                 $transformRequestIntoMeeting->meetingRequest,
                 $transformRequestIntoMeeting->slot,
-                $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
-                $transformRequestIntoMeeting->meetingRequest->getFromParticipantsArray(),
-                $transformRequestIntoMeeting->meetingRequest->getToSheet(),
-                $transformRequestIntoMeeting->meetingRequest->getToParticipantsArray(),
+                $fromSheet,
+                $transformRequestIntoMeeting->meetingRequest->getParticipants($fromSheet),
+                $toSheet,
+                $transformRequestIntoMeeting->meetingRequest->getParticipants($toSheet),
                 $this->dateTime,
                 $spot
             )

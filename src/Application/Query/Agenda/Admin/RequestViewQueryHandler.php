@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use InvalidArgumentException;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
@@ -71,15 +72,20 @@ class RequestViewQueryHandler
     public function getParticipantViews(Request $request, Sheet $sheet, $locale)
     {
         $participantViews = [];
-        $participants     = $request->getParticipants($sheet);
 
-        foreach ($participants as $participant) {
-            $participantViews[] = new ParticipantView(
-                $participant->getId(),
-                $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale)
-            );
+        try {
+            $participants = $request->getParticipants($sheet);
+
+            foreach ($participants as $participant) {
+                $participantViews[] = new ParticipantView(
+                    $participant->getId(),
+                    $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale)
+                );
+            }
+
+            return $participantViews;
+        } catch (InvalidArgumentException $exception) {
+            return $participantViews;
         }
-
-        return $participantViews;
     }
 }

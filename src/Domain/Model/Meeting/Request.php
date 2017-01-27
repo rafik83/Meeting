@@ -461,11 +461,7 @@ class Request implements MessageSubjectInterface
      */
     public function isTransformableIntoMeeting()
     {
-        if ($this->hasNoPreference($this->from) || $this->hasNoPreference($this->to)) {
-            return false;
-        }
-
-        return true;
+        return TransformableRequest::isTransformable($this);
     }
 
     /**
@@ -487,18 +483,25 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * "Quand la demande de RDV n'a pas de participant de préférence et que la liste
+     *  des participants disponible est vide on utilise le seul participant de la fiche"
+     *
      * @param Sheet $sheet
      *
      * @return Participant[]
      */
     public function getParticipants(Sheet $sheet)
     {
+        if ($this->hasNoPreference($sheet) && $sheet->getParticipants()->count() === 1) {
+            return [$sheet->getParticipants()->first()];
+        }
+
         if ($this->isSender($sheet)) {
-            return $this->fromParticipants;
+            return $this->fromParticipants->toArray();
         }
 
         if ($this->isReceiver($sheet)) {
-            return $this->toParticipants;
+            return $this->toParticipants->toArray();
         }
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
@@ -517,7 +520,7 @@ class Request implements MessageSubjectInterface
      */
     public function getAllParticipants()
     {
-        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+        return array_merge($this->getParticipants($this->from), $this->getParticipants($this->to));
     }
 
     /**
