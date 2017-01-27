@@ -80,7 +80,7 @@ abstract class MassType extends BaseAbstractType
                     'second_name'   => 'to',
                     'first_options' => ['view_timezone' => $options['event']->getTimeZone()],
                     'first_second'  => ['view_timezone' => $options['event']->getTimeZone()],
-                    'message'       => 'Le début doit être avant la fin',
+                    'message'       => 'form.unavailability.mass.children.time_slots.range_error',
                 ],
             ])
         ;
