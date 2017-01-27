@@ -264,7 +264,7 @@ class Mass
      *
      * @return $this
      */
-    public function setTimeSlots(array $timeSlots)
+    private function setTimeSlots(array $timeSlots)
     {
         // Update and add
         foreach ($timeSlots as $key => $value) {
