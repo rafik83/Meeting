@@ -520,7 +520,7 @@ class Request implements MessageSubjectInterface
      */
     public function getAllParticipants()
     {
-        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+        return array_merge($this->getParticipants($this->from), $this->getParticipants($this->to));
     }
 
     /**
