@@ -222,6 +222,23 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Meeting $meeting)
+    {
+        $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete(Meeting::class, 'meeting')
+            ->where('meeting = :meeting')
+            ->setParameter('meeting', $meeting)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countMeetingsOfSheet(Sheet $sheet)
     {
         $queryBuilder = $this

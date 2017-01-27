@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
 use DateTime;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Command\Meeting\UpdateSpot;
-use Proximum\Vimeet\Application\Command\Meeting\UpdateSpotHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpotHandler;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Domain\Model\Meeting;
