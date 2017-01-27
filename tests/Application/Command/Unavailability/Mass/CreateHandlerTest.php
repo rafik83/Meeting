@@ -64,4 +64,60 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler($massRepository->reveal());
         $handler->handle($create);
     }
+
+    public function testDispatchHandle()
+    {
+        $event    = EventFactory::createEvent();
+        $category = new Category($event, 'Conference', 'title', '#123123', '#312312');
+        $begin    = new \DateTime('10/10/2016 10:00');
+        $end      = new \DateTime('10/10/2016 12:00');
+
+        // Expected
+        $expected = new Mass(
+            $event,
+            $category,
+            'name',
+            $begin,
+            $end,
+            true,
+            true,
+            [
+                ['from' => new \DateTime('10/10/2016 10:00'), 'to' => new \DateTime('10/10/2016 11:00')],
+                ['from' => new \DateTime('10/10/2016 11:00'), 'to' => new \DateTime('10/10/2016 12:00')],
+            ]
+        );
+        $expected->createTranslation('fr', 'titre', 'description');
+        $expected->createTranslation('en', 'title', 'description');
+
+        // Mock
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massRepository->create($expected)->shouldBeCalled();
+
+        // Create
+        $create               = new Create($event, null);
+        $create->category     = $category;
+        $create->begin        = $begin;
+        $create->end          = $end;
+        $create->name         = 'name';
+        $create->translations = [
+            'fr' => [
+                'title'       => 'titre',
+                'description' => 'description',
+            ],
+            'en' => [
+                'title'       => 'title',
+                'description' => 'description',
+            ]
+        ];
+
+        $create->dispatch = true;
+        $create->timeSlots = [
+            ['from' => new \DateTime('10/10/2016 10:00'), 'to' => new \DateTime('10/10/2016 11:00')],
+            ['from' => new \DateTime('10/10/2016 11:00'), 'to' => new \DateTime('10/10/2016 12:00')],
+        ];
+
+        // Handler
+        $handler = new CreateHandler($massRepository->reveal());
+        $handler->handle($create);
+    }
 }
