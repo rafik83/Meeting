@@ -74,13 +74,13 @@ abstract class MassType extends BaseAbstractType
                 'allow_delete'  => true,
                 'entry_type'    => DataRangeType::class,
                 'entry_options' => [
-                    'label'         => false,
-                    'entry_type'    => DateTimePickerType::class,
-                    'first_name'    => 'from',
-                    'second_name'   => 'to',
-                    'first_options' => ['view_timezone' => $options['event']->getTimeZone()],
-                    'first_second'  => ['view_timezone' => $options['event']->getTimeZone()],
-                    'message'       => 'form.unavailability.mass.children.time_slots.range_error',
+                    'label'          => false,
+                    'entry_type'     => DateTimePickerType::class,
+                    'first_name'     => 'from',
+                    'second_name'    => 'to',
+                    'first_options'  => ['view_timezone' => $options['event']->getTimeZone()],
+                    'second_options' => ['view_timezone' => $options['event']->getTimeZone()],
+                    'message'        => 'form.unavailability.mass.children.time_slots.range_error',
                 ],
             ])
         ;
