@@ -94,4 +94,3 @@ class RequestTransformableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 }
-
