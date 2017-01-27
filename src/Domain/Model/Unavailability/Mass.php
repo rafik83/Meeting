@@ -58,12 +58,24 @@ class Mass
     private $translations;
 
     /**
+     * @var bool
+     */
+    private $dispatch = false;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $timeSlots;
+
+    /**
      * @param Event              $event
      * @param Category           $category
      * @param string             $name
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param bool               $blocking
+     * @param bool               $dispatch
+     * @param array              $timeSlots
      */
     public function __construct(
         Event $event,
@@ -71,7 +83,9 @@ class Mass
         $name,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $blocking
+        $blocking,
+        $dispatch = false,
+        array $timeSlots = []
     ) {
         $this->translations = new ArrayCollection();
         $this->event        = $event;
@@ -80,6 +94,10 @@ class Mass
         $this->begin        = $begin;
         $this->end          = $end;
         $this->blocking     = $blocking;
+        $this->dispatch     = $dispatch;
+        $this->timeSlots    = new ArrayCollection();
+
+        $this->setTimeSlots($timeSlots);
     }
 
     /**
@@ -174,19 +192,26 @@ class Mass
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param bool               $blocking
+     * @param bool               $dispatch
+     * @param array              $timeSlots
      */
     public function update(
         Category $category,
         $name,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $blocking
+        $blocking,
+        $dispatch = false,
+        array $timeSlots = []
     ) {
         $this->category = $category;
         $this->name     = $name;
         $this->begin    = $begin;
         $this->end      = $end;
         $this->blocking = $blocking;
+        $this->dispatch = $dispatch;
+
+        $this->setTimeSlots($timeSlots);
     }
 
     /**
@@ -211,5 +236,51 @@ class Mass
         } else {
             $this->translations->set($locale, new MassTranslation($this, $locale, $title, $description));
         }
+    }
+
+    /**
+     * Get dispatch
+     *
+     * @return boolean
+     */
+    public function isDispatch()
+    {
+        return $this->dispatch;
+    }
+
+    /**
+     * Get timeSlots
+     *
+     * @return MassTimeSlot[]
+     */
+    public function getTimeSlots()
+    {
+        return $this->timeSlots->toArray();
+    }
+
+    /**
+     * @param array $timeSlots
+     *
+     * @return $this
+     */
+    public function setTimeSlots(array $timeSlots)
+    {
+        // Update and add
+        foreach ($timeSlots as $key => $value) {
+            if ($this->timeSlots->containsKey($key)) {
+                $this->timeSlots->get($key)->setFrom($value['from'])->setTo($value['to']);
+            } else {
+                $this->timeSlots->set($key, new MassTimeSlot($this, $value['from'], $value['to']));
+            }
+        }
+
+        // Remove deleted
+        foreach ($this->timeSlots as $key => $value) {
+            if (!isset($timeSlots[$key])) {
+                $this->timeSlots->removeElement($value);
+            }
+        }
+
+        return $this;
     }
 }

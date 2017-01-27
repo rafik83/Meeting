@@ -51,6 +51,20 @@ class Create
     public $translations;
 
     /**
+     * Is dispatch enable
+     *
+     * @var bool
+     */
+    public $dispatch;
+
+    /**
+     * Dispatch time slots
+     *
+     * @var array
+     */
+    public $timeSlots = [];
+
+    /**
      * @param Event          $event
      * @param Event\Day|null $day
      */
