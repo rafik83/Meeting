@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Unavailability;
 
+use Proximum\Vimeet\Domain\Exception\Unavailability\InvalidTimeSlotException;
+
 class MassTimeSlot
 {
     /**
@@ -41,6 +43,10 @@ class MassTimeSlot
      */
     public function __construct(Mass $mass, \DateTimeInterface $from, \DateTimeInterface $to)
     {
+        if ($from > $to) {
+            throw new InvalidTimeSlotException('From date must be lesser than to date.');
+        }
+
         $this->mass = $mass;
         $this->from = $from;
         $this->to   = $to;

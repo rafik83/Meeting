@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Unavailability;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Unavailability\InvalidTimeSlotException;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class Mass
@@ -267,6 +268,10 @@ class Mass
     {
         // Update and add
         foreach ($timeSlots as $key => $value) {
+            if ($value['from'] < $this->begin || $this->end < $value['to']) {
+                throw new InvalidTimeSlotException('Time slots can\'t exceed mass unavailabilty date range.');
+            }
+
             if ($this->timeSlots->containsKey($key)) {
                 $this->timeSlots->get($key)->setFrom($value['from'])->setTo($value['to']);
             } else {
