@@ -26,6 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -104,15 +105,30 @@ class SpotController extends Controller
                 $deleteBatchView = $this->get('tactician.commandbus')->handle($deleteBatch);
 
                 if (!empty($deleteBatchView->spotsWithMeetings)) {
-                    $this->addFlash('error', 'flash.admin.spot_batch.delete.failure.meetings');
+                    $this->addFlash('error', new TransMessage(
+                        'flash.admin.spot_batch.delete.failure.meetings',
+                        [
+                            '%spots%' => $deleteBatchView->addError($deleteBatchView->spotsWithMeetings)
+                        ]
+                    ));
                 }
                 
                 if (!empty($deleteBatchView->spotsWithSheets)) {
-                    $this->addFlash('error', 'flash.admin.spot_batch.delete.failure.sheets');
+                    $this->addFlash('error', new TransMessage(
+                        'flash.admin.spot_batch.delete.failure.sheets',
+                        [
+                            '%spots%' => $deleteBatchView->addError($deleteBatchView->spotsWithSheets)
+                        ]
+                    ));
                 }
 
-                if (!empty($deleteBatchView->spotToDelete)) {
-                    $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
+                if (!empty($deleteBatchView->deletedSpots)) {
+                    $this->addFlash('success', new TransMessage(
+                        'flash.admin.spot_batch.delete.success',
+                        [
+                            '%spots%' => $deleteBatchView->addError($deleteBatchView->deletedSpots)
+                        ]
+                    ));
                 }
 
             } elseif ($disableButton) {

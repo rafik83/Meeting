@@ -42,5 +42,19 @@ class DeleteBatchView
         $this->spotsWithSheets = $spotsWithSheets;
     }
 
+    /**
+     * @param $spotsIds[]
+     *
+     * @return string
+     */
+    public function addError($spotsIds)
+    {
+        $errorString = '';
+        foreach($spotsIds as $val) {
+            $errorString.= $val . ' - ';
+        }
+        return rtrim($errorString , '- ');
+    }
+
 
 }
