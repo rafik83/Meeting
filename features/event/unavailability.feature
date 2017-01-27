@@ -47,18 +47,6 @@ Feature: Unavailability
     And I should not see "unavailability.title"
 
   Scenario: I can add comment to an unavailability
-    Given the database is empty
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
