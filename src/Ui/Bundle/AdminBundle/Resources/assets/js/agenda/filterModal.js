@@ -42,18 +42,24 @@ module.exports = {
 
             if (this.hasIndicatorFilter) {
                 filteredSheet = filteredSheet.filter(function (sheet) {
+                    var filterMatching = false;
+
                     if (this.filters.hasNotSentMeetingRequest === true
                         && sheet.hasNotSentMeetingRequest === this.filters.hasNotSentMeetingRequest) {
-                        return true
+                        filterMatching = true;
                     }
 
                     if (this.filters.hasMeetingToApprove === true
                         && sheet.hasMeetingToApprove === this.filters.hasMeetingToApprove) {
-                        return true
+                        filterMatching = true;
                     }
 
-                    return this.filters.hasNotEnoughAvailableSlot === true
-                        && sheet.hasNotEnoughAvailableSlot === this.filters.hasNotEnoughAvailableSlot;
+                    if (this.filters.hasNotEnoughAvailableSlot === true
+                        && sheet.hasNotEnoughAvailableSlot === this.filters.hasNotEnoughAvailableSlot) {
+                        filterMatching = true;
+                    }
+
+                    return filterMatching;
                 }.bind(this));
             }
 
