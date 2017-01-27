@@ -210,6 +210,8 @@ class SpotController extends Controller
         if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
             $this->get('tactician.commandbus')->handle($unavailabilityBatch);
             $this->addFlash('success', 'flash.admin.spot_batch.spotUnavailability.success');
+
+            return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Spot:batchUnavailability.html.twig', [

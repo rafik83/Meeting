@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
@@ -256,5 +257,23 @@ class MeetingRepository implements MeetingRepositoryInterface
         ;
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.slot = :slot')
+            ->andWhere('meeting.spot = :spot')
+            ->setParameter('slot', $meetingSlot)
+            ->setParameter('spot', $spot);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

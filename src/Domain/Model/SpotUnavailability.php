@@ -30,13 +30,11 @@ class SpotUnavailability
     /**
      * SpotUnavailability constructor.
      *
-     * @param int         $id
      * @param MeetingSlot $slot
      * @param Spot        $spot
      */
-    public function __construct($id, MeetingSlot $slot, Spot $spot)
+    public function __construct(MeetingSlot $slot, Spot $spot)
     {
-        $this->id   = $id;
         $this->slot = $slot;
         $this->spot = $spot;
     }

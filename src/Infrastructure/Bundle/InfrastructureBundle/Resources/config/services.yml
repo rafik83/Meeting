@@ -53,6 +53,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.repository.spot_unavailability_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\SpotUnavailabilityRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.rule_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
@@ -384,6 +388,14 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\EnableBatch }
+    vimeet.application.command.spot.unavailability_batch_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatchHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.spot_unavailability_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch }
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:

@@ -726,3 +726,4 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
+form.spot_batch_unavailability.children.submit.label: "Créer les indisponibilitées"

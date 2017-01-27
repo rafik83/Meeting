@@ -60,15 +60,15 @@ class BatchUnavailabilityType extends AbstractType
         );
 
         $builder
-            ->add('spot', ChoiceType::class, [
+            ->add('meetingSlots', ChoiceType::class, [
                 'choices'      => $meetingSlots,
                 'expanded'     => true,
                 'multiple'     => true,
-                'choice_label' => function ($spot) use ($dateFormatter, $timeFormatter) {
-                    if ($spot !== null) {
-                        $label = $dateFormatter->format($spot->getBegin()) . ' ' .
-                            $timeFormatter->format($spot->getBegin()) . ' - ' .
-                            $timeFormatter->format($spot->getEnd());
+                'choice_label' => function ($meetingSlot) use ($dateFormatter, $timeFormatter) {
+                    if ($meetingSlot !== null) {
+                        $label = $dateFormatter->format($meetingSlot->getBegin()) . ' ' .
+                            $timeFormatter->format($meetingSlot->getBegin()) . ' - ' .
+                            $timeFormatter->format($meetingSlot->getEnd());
 
                         return $label;
                     }
@@ -89,5 +89,13 @@ class BatchUnavailabilityType extends AbstractType
             'data_class' => UnavailabilityBatch::class,
             'submit'     => true,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'spot_batch_unavailability';
     }
 }

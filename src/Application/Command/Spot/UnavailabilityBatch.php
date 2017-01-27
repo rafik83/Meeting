@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class UnavailabilityBatch
 {
@@ -21,25 +21,27 @@ class UnavailabilityBatch
     private $event;
 
     /**
+     * Array of Spot ids
+     *
      * @var array
      */
-    private $ids;
+    private $spotIds;
 
     /**
-     * @var ArrayCollection
+     * @var MeetingSlot[]
      */
-    public $spot;
+    public $meetingSlots;
 
     /**
      * UnavailabilityBatch constructor.
      *
-     * @param array $ids
+     * @param array $ids "Array of Spot ids"
      * @param Event $event
      */
     public function __construct(array $ids, Event $event)
     {
-        $this->ids   = $ids;
-        $this->event = $event;
+        $this->spotIds = $ids;
+        $this->event   = $event;
     }
 
     /**
@@ -51,10 +53,12 @@ class UnavailabilityBatch
     }
 
     /**
+     * Array of Spot ids
+     *
      * @return array
      */
-    public function getIds()
+    public function getSpotIds()
     {
-        return $this->ids;
+        return $this->spotIds;
     }
 }
