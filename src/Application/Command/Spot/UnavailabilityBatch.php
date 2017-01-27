@@ -28,7 +28,7 @@ class UnavailabilityBatch
     /**
      * @var ArrayCollection
      */
-    public $spotUnavailabilities;
+    public $spot;
 
     /**
      * UnavailabilityBatch constructor.

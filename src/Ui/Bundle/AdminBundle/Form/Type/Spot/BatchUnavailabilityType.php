@@ -10,22 +10,72 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot;
 
+use IntlDateFormatter;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BatchUnavailabilityType extends AbstractType
 {
     /**
+     * @var MeetingSlotRepositoryInterface
+     */
+    private $meetingSlotRepository;
+
+    /**
+     * BatchUnavailabilityType constructor.
+     *
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     */
+    public function __construct(MeetingSlotRepositoryInterface $meetingSlotRepository)
+    {
+        $this->meetingSlotRepository = $meetingSlotRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('spotUnavailabilities', UnavailabilityType::class, [
-            'event' => $options['event'],
-        ]);
+        /** @var Event $event */
+        $event        = $options['event'];
+        $meetingSlots = $this->meetingSlotRepository->findByEvent($options['event']);
+
+        $dateFormatter = IntlDateFormatter::create(
+            $options['locale'],
+            IntlDateFormatter::SHORT,
+            IntlDateFormatter::NONE,
+            $event->getTimeZone()
+        );
+
+        $timeFormatter = IntlDateFormatter::create(
+            $options['locale'],
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::SHORT,
+            $event->getTimeZone()
+        );
+
+        $builder
+            ->add('spot', ChoiceType::class, [
+                'choices'      => $meetingSlots,
+                'expanded'     => true,
+                'multiple'     => true,
+                'choice_label' => function ($spot) use ($dateFormatter, $timeFormatter) {
+                    if ($spot !== null) {
+                        $label = $dateFormatter->format($spot->getBegin()) . ' ' .
+                            $timeFormatter->format($spot->getBegin()) . ' - ' .
+                            $timeFormatter->format($spot->getEnd());
+
+                        return $label;
+                    }
+
+                    return '';
+                },
+            ]);
     }
 
     /**
@@ -33,20 +83,11 @@ class BatchUnavailabilityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['event', 'locale']);
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => UnavailabilityBatch::class,
             'submit'     => true,
         ]);
-        $resolver->setAllowedTypes('event', Event::class);
-        $resolver->setRequired('event');
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'spot_batch_unavailability';
     }
 }

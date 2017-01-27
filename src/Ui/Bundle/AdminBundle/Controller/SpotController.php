@@ -27,6 +27,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\UnavailabilityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -202,7 +203,8 @@ class SpotController extends Controller
         $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event);
 
         $form = $this->createForm(BatchUnavailabilityType::class, $unavailabilityBatch, [
-            'event' => $event,
+            'event'  => $event,
+            'locale' => $request->getLocale(),
         ]);
 
         if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
