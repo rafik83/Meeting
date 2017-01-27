@@ -73,7 +73,7 @@ class MassTimeSlot
      *
      * @return MassTimeSlot
      */
-    public function setFrom($from)
+    public function setFrom(\DateTimeInterface $from)
     {
         $this->from = $from;
 
@@ -97,7 +97,7 @@ class MassTimeSlot
      *
      * @return MassTimeSlot
      */
-    public function setTo($to)
+    public function setTo(\DateTimeInterface $to)
     {
         $this->to = $to;
 
