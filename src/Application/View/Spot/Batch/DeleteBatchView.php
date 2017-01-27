@@ -55,6 +55,4 @@ class DeleteBatchView
         }
         return rtrim($errorString , '- ');
     }
-
-
 }

@@ -213,9 +213,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->groupBy('meeting.spot')
         ;
 
-        $count = count($queryBuilder->getQuery()->getResult());
-
-        return ($count === 0) ? false : true;
+        return $queryBuilder->getQuery()->getResult() ? false : true;
     }
 
     /**
