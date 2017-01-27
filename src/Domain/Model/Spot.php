@@ -230,4 +230,12 @@ class Spot
     {
         return $this->spotUnavailabilities;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasUnavailability()
+    {
+        return $this->spotUnavailabilities->count() > 0;
+    }
 }

@@ -48,21 +48,28 @@ class SpotView
     public $sheets = [];
 
     /**
+     * @var bool
+     */
+    public $hasUnavailability;
+
+    /**
      * @param int    $id
      * @param string $reference
      * @param float  $size
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
      * @param bool   $active
+     * @param bool   $hasUnavailability
      */
-    public function __construct($id, $reference, $size, $meetingCapacity, $seatCapacity, $active)
+    public function __construct($id, $reference, $size, $meetingCapacity, $seatCapacity, $active, $hasUnavailability)
     {
-        $this->id              = $id;
-        $this->reference       = $reference;
-        $this->size            = $size;
-        $this->meetingCapacity = $meetingCapacity;
-        $this->seatCapacity    = $seatCapacity;
-        $this->active          = $active;
+        $this->id                = $id;
+        $this->reference         = $reference;
+        $this->size              = $size;
+        $this->meetingCapacity   = $meetingCapacity;
+        $this->seatCapacity      = $seatCapacity;
+        $this->active            = $active;
+        $this->hasUnavailability = $hasUnavailability;
     }
 
     /**
