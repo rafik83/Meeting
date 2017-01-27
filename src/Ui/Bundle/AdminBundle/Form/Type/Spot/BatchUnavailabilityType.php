@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot;
 use IntlDateFormatter;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -64,7 +65,7 @@ class BatchUnavailabilityType extends AbstractType
                 'choices'      => $meetingSlots,
                 'expanded'     => true,
                 'multiple'     => true,
-                'choice_label' => function ($meetingSlot) use ($dateFormatter, $timeFormatter) {
+                'choice_label' => function (MeetingSlot $meetingSlot) use ($dateFormatter, $timeFormatter) {
                     if ($meetingSlot !== null) {
                         $label = $dateFormatter->format($meetingSlot->getBegin()) . ' ' .
                             $timeFormatter->format($meetingSlot->getBegin()) . ' - ' .
