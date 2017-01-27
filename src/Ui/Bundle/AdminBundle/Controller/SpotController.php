@@ -21,7 +21,7 @@ use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
-use Proximum\Vimeet\Application\View\Spot\DeleteBatchView;
+use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
@@ -100,7 +100,7 @@ class SpotController extends Controller
             if ($deleteButton) {
                 $deleteBatch = new DeleteBatch($spotsToDelete, $event);
 
-                /** @var DeleteBatchView */
+                /** @var DeleteBatchView $deleteBatchView */
                 $deleteBatchView = $this->get('tactician.commandbus')->handle($deleteBatch);
 
                 if (!empty($deleteBatchView->spotsWithMeetings)) {
