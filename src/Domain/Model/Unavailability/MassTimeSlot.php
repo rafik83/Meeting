@@ -63,6 +63,16 @@ class MassTimeSlot
     }
 
     /**
+     * Get mass
+     *
+     * @return Mass
+     */
+    public function getMass()
+    {
+        return $this->mass;
+    }
+
+    /**
      * Get from
      *
      * @return \DateTimeInterface
