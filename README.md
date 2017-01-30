@@ -13,6 +13,10 @@
 * [Ansible 1.9.3+](http://docs.ansible.com/intro_installation.html)
 * [Vagrant Landrush 0.18.0+](https://github.com/phinze/landrush)
 
+To avoid trouble with vagrant 1.8.4 and landrush plugin, specify plugin version
+
+        $ vagrant plugin install landrush --plugin-version 0.18.0
+
 ### Setup
 
 Clone the project in your workspace, and launch setup
