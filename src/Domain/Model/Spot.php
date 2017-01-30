@@ -243,10 +243,14 @@ class Spot
 
     /**
      * @param int $priority
+     *
+     * @return self
      */
     public function setPriority($priority)
     {
         $this->priority = $priority;
+
+        return $this;
     }
 
     /**

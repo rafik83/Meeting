@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -47,7 +48,10 @@ class AssignSpotHandler
      */
     public function handle(AssignSpot $assignSpot)
     {
+        $oldSpot = null;
         if ($assignSpot->spotCode === null || $assignSpot->spotCode === '') {
+            $oldSpot = $assignSpot->sheet->getSpot();
+
             $assignSpot->sheet->removeSpot();
             $numberOfSheet = 0;
         } else {
@@ -61,12 +65,23 @@ class AssignSpotHandler
                 throw new SpotNotActiveException();
             }
 
+            if ($assignSpot->sheet->getSpot() !== $spot) {
+                $oldSpot = $assignSpot->sheet->getSpot();
+            }
+
             $assignSpot->sheet->setSpot($spot);
+            $this->spotRepository->set($spot->setPriority(8));
             $spot->addSheet($assignSpot->sheet);
             $numberOfSheet = $spot->countSheets();
         }
 
         $this->sheetRepository->set($assignSpot->sheet);
+
+        if ($oldSpot instanceof Spot) {
+            if ($oldSpot->countSheets() === 0) {
+                $this->spotRepository->set($oldSpot->setPriority(12));
+            }
+        }
 
         return new AssignSpotResult($numberOfSheet);
     }
