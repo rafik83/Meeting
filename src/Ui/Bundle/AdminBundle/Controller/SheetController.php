@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Exception\Participant\ParticipantException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
@@ -34,7 +35,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\VisioType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -520,11 +520,21 @@ class SheetController extends Controller
 
         $isVisio = ($request->request->get('isVisio') === 'true') ? true : false;
 
-        $command = new UpdateVisio($participant, $isVisio);
+        try {
+            $command = new UpdateVisio($participant, $isVisio);
 
-        $this->get('tactician.commandbus')->handle($command);
+            $this->get('tactician.commandbus')->handle($command);
 
-        return new JsonResponse();
+            return new JsonResponse([
+                'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success')
+            ], 200);
+
+        } catch (ParticipantException $participantException) {
+            
+           return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.participant.not_found'),
+            ], 404);
+        }
     }
 
     /**

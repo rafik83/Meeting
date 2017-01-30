@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Exception\Participant\ParticipantException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class UpdateVisioHandler
@@ -30,10 +31,16 @@ class UpdateVisioHandler
 
     /**
      * @param UpdateVisio $updateVisio
+     * 
+     * @throws ParticipantException
      */
     public function handle(UpdateVisio $updateVisio)
     {
         $participant = $updateVisio->participant;
+
+        if ($participant == null) {
+            throw new ParticipantException();
+        }
 
         $participant->setVisio($updateVisio->visio);
 

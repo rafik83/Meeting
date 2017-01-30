@@ -19,11 +19,9 @@ ParticipantVisio.prototype.onChange = function ()
             isVisio: data
         })
     )
-    .then(function (response) {
-        console.log(response);
-    })
+    .then(function (response) {})
     .catch(function (error) {
-        console.log(error);
+        alert(error);
     });
 };
 

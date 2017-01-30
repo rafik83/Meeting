@@ -524,6 +524,8 @@ admin.sheet.import.button.label: Importer
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
+admin.sheet.participant.not_found: 'Ce participant n''existe pas'
+admin.sheet.participant_visio.success: 'Le participant à été mis à jour'
 admin.sheet.read: Voir
 admin.sheet.see_list: 'Voir liste des participations'
 admin.sheet.spot: Lieu
