@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\SpotUnavailability;
 use Proximum\Vimeet\Domain\Repository\SpotUnavailabilityRepositoryInterface;
 
@@ -38,5 +39,19 @@ class SpotUnavailabilityRepository implements SpotUnavailabilityRepositoryInterf
     {
         $this->entityManager->persist($spotUnavailability);
         $this->entityManager->flush($spotUnavailability);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySpot(Spot $spot)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('spot_unavailability')
+            ->from(SpotUnavailability::class, 'spot_unavailability')
+            ->where('spot_unavailability.spot = :spot')
+            ->setParameter('spot', $spot);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

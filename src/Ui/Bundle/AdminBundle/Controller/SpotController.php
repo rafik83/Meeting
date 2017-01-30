@@ -199,6 +199,8 @@ class SpotController extends Controller
     {
         $selectedSpots = $this->get('session')->get('selectedSpots');
 
+        $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->find($event, $selectedSpots);
+
         $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event);
 
         $form = $this->createForm(BatchUnavailabilityType::class, $unavailabilityBatch, [

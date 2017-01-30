@@ -37,11 +37,13 @@ class UnavailabilityBatch
      *
      * @param array $ids "Array of Spot ids"
      * @param Event $event
+     * @param array $meetingSlots
      */
-    public function __construct(array $ids, Event $event)
+    public function __construct(array $ids, Event $event, array $meetingSlots = [])
     {
-        $this->spotIds = $ids;
-        $this->event   = $event;
+        $this->spotIds      = $ids;
+        $this->event        = $event;
+        $this->meetingSlots = $meetingSlots;
     }
 
     /**
