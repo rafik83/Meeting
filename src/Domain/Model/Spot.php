@@ -256,4 +256,28 @@ class Spot
     {
         return $this->visio;
     }
+
+    /**
+     * Set visio to false
+     *
+     * @return self
+     */
+    public function unVisio()
+    {
+        $this->visio = false;
+
+        return $this;
+    }
+
+    /**
+     * Set visio to true
+     *
+     * @return self
+     */
+    public function goToVisio()
+    {
+        $this->visio = true;
+
+        return $this;
+    }
 }
