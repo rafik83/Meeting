@@ -552,6 +552,8 @@ admin.spot.listSpot.reference: Identifiant
 admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
 admin.spot.listSpot.sheet: 'Fiche(s) assignée(s)'
 admin.spot.listSpot.size: 'Taille (en m²)'
+admin.spot.listSpot.spot.un-visio: 'Non visio'
+admin.spot.listSpot.spot.visio: 'Visio'
 admin.spot.listSpot.visio: 'Visio'
 admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
