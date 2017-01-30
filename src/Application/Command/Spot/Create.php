@@ -45,12 +45,24 @@ class Create
     public $active;
 
     /**
+     * @var int
+     */
+    public $priority;
+
+    /**
+     * @var bool
+     */
+    public $visio;
+
+    /**
      * Create constructor.
      *
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event    = $event;
+        $this->priority = 12;
+        $this->visio    = false;
     }
 }

@@ -46,6 +46,16 @@ class BatchCreate
     public $active;
 
     /**
+     * @var int
+     */
+    public $priority;
+
+    /**
+     * @var bool
+     */
+    public $visio;
+
+    /**
      * BatchCreate constructor.
      *
      * @param Event $event
@@ -54,5 +64,7 @@ class BatchCreate
     {
         $this->event     = $event;
         $this->recipes[] = new Recipe('');
+        $this->visio     = false;
+        $this->priority  = 12;
     }
 }
