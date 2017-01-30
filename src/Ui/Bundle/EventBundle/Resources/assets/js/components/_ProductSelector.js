@@ -35,7 +35,11 @@ function ProductSelector (element) {
             event.preventDefault();
             var checkbox     = item.querySelector('input[type=radio]');
             checkbox.checked = true;
-            checkbox.dispatchEvent(document.createEvent('change'));
+
+            var htmlEvent = document.createEvent('HTMLEvents');
+            htmlEvent.initEvent('change', true, true);
+
+            checkbox.dispatchEvent(htmlEvent);
         });
     });
 }
