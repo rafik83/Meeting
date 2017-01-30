@@ -195,9 +195,9 @@ class SheetView
     private function hasNotEnoughAvailableSlot()
     {
         if ($this->usableSlots === 0) {
-            return false;
+            return true;
         }
 
-        return ($this->countValidatedRequest / $this->usableSlots) > 1;
+        return (($this->countValidatedRequest - $this->countPlacedMeetings) / $this->usableSlots) > 1;
     }
 }
