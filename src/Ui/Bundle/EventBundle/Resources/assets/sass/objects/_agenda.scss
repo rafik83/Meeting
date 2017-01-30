@@ -67,9 +67,12 @@
         padding-right: 45px;
         right: 0;
         bottom: 5%;
-        > a, label {
+        > a, .label {
           float: right;
           margin-left: 5px;
+        }
+        > .label {
+          margin-top: 10px;
         }
       }
     }
