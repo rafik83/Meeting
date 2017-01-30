@@ -228,7 +228,7 @@ class Spot
      */
     public function getSpotUnavailabilities()
     {
-        return $this->spotUnavailabilities;
+        return $this->spotUnavailabilities->toArray();
     }
 
     /**

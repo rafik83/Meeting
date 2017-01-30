@@ -22,6 +22,8 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
+use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
+use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
@@ -199,9 +201,17 @@ class SpotController extends Controller
     {
         $selectedSpots = $this->get('session')->get('selectedSpots');
 
-        $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->find($event, $selectedSpots);
+        /** @var SpotUnavailabilityView $spotUnavailabilityView */
+        $spotUnavailabilityView = $this->get('tactician.commandbus.query')
+            ->handle(new SpotUnavailabilityQuery($event, $selectedSpots)
+        );
 
-        $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event);
+        $meetingSlots = [];
+        if ($spotUnavailabilityView->isSameUnavailabilities()) {
+           $meetingSlots = $spotUnavailabilityView->getMeetingSlots();
+        }
+
+        $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event, $meetingSlots);
 
         $form = $this->createForm(BatchUnavailabilityType::class, $unavailabilityBatch, [
             'event'  => $event,

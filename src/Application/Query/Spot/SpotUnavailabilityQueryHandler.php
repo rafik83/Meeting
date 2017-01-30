@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Spot;
 
+use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SpotUnavailabilityRepositoryInterface;
 
 class SpotUnavailabilityQueryHandler
 {
@@ -21,26 +21,19 @@ class SpotUnavailabilityQueryHandler
     private $spotRepository;
 
     /**
-     * @var SpotUnavailabilityRepositoryInterface
-     */
-    private $spotUnavailabilityRepository;
-
-    /**
      * SpotUnavailabilityQueryHandler constructor.
      *
-     * @param SpotRepositoryInterface               $spotRepository
-     * @param SpotUnavailabilityRepositoryInterface $spotUnavailabilityRepository
+     * @param SpotRepositoryInterface $spotRepository
      */
-    public function __construct(
-        SpotRepositoryInterface $spotRepository,
-        SpotUnavailabilityRepositoryInterface $spotUnavailabilityRepository
-    ) {
-        $this->spotRepository               = $spotRepository;
-        $this->spotUnavailabilityRepository = $spotUnavailabilityRepository;
+    public function __construct(SpotRepositoryInterface $spotRepository)
+    {
+        $this->spotRepository = $spotRepository;
     }
 
     /**
      * @param SpotUnavailabilityQuery $query
+     *
+     * @return SpotUnavailabilityView
      */
     public function handle(SpotUnavailabilityQuery $query)
     {
@@ -49,11 +42,11 @@ class SpotUnavailabilityQueryHandler
         $spotUnavailabilities = [];
 
         foreach ($spots as $spot) {
-            $unavailabilities = $this->spotUnavailabilityRepository->findBySpot($spot);
+            $unavailabilities = $spot->getSpotUnavailabilities();
 
-            foreach ($unavailabilities as $unavailability) {
-                $spotUnavailabilities[$spot->getId()] = $unavailability->getId();
-            }
+            $spotUnavailabilities[$spot->getId()] = $unavailabilities;
         }
+
+        return new SpotUnavailabilityView($spotUnavailabilities);
     }
 }
