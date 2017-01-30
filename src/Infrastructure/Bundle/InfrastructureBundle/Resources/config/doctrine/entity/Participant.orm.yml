@@ -18,6 +18,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: boolean
         imported:
             type: boolean
+        visio:
+            type: boolean
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
