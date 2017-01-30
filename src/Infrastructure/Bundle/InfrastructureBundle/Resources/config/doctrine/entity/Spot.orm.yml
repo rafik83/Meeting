@@ -21,6 +21,9 @@ Proximum\Vimeet\Domain\Model\Spot:
         sheets:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             mappedBy: spot
+        spotUnavailabilities:
+            targetEntity: Proximum\Vimeet\Domain\Model\SpotUnavailability
+            mappedBy: spot
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

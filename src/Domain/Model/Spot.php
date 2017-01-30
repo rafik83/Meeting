@@ -59,6 +59,11 @@ class Spot
     private $sheets;
 
     /**
+     * @var ArrayCollection
+     */
+    private $spotUnavailabilities = [];
+
+    /**
      * Spot constructor.
      *
      * @param string $reference
@@ -76,13 +81,14 @@ class Spot
         $seatCapacity,
         $active
     ) {
-        $this->reference       = $reference;
-        $this->event           = $event;
-        $this->size            = $size;
-        $this->meetingCapacity = $meetingCapacity;
-        $this->seatCapacity    = $seatCapacity;
-        $this->active          = $active;
-        $this->sheets          = new ArrayCollection();
+        $this->reference            = $reference;
+        $this->event                = $event;
+        $this->size                 = $size;
+        $this->meetingCapacity      = $meetingCapacity;
+        $this->seatCapacity         = $seatCapacity;
+        $this->active               = $active;
+        $this->sheets               = new ArrayCollection();
+        $this->spotUnavailabilities = new ArrayCollection();
     }
 
     /**
@@ -215,5 +221,21 @@ class Spot
     public function getSheets()
     {
         return $this->sheets->toArray();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSpotUnavailabilities()
+    {
+        return $this->spotUnavailabilities;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasUnavailability()
+    {
+        return $this->spotUnavailabilities->count() > 0;
     }
 }
