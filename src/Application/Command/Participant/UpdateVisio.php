@@ -10,10 +10,31 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-class Visio
+use Proximum\Vimeet\Domain\Model\Participant;
+
+class UpdateVisio
 {
     /**
      * @var boolean
      */
     public $visio;
+
+    /**
+     * @var Participant
+     */
+    public $participant;
+
+    /**
+     * VisioHandler constructor.
+     *
+     * @param Participant   $participant
+     * @param boolean       $visio
+     */
+    public function __construct(
+        Participant $participant = null,
+        $visio
+    ) {
+        $this->participant = $participant;
+        $this->visio = $visio;
+    }
 }

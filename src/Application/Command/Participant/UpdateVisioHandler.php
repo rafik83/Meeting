@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
-class VisioHandler
+class UpdateVisioHandler
 {
     /**
      * @var ParticipantRepositoryInterface
@@ -29,10 +29,14 @@ class VisioHandler
     }
 
     /**
-     * @param Visio $visio
+     * @param UpdateVisio $updateVisio
      */
-    public function handler(Visio $visio)
+    public function handler(UpdateVisio $updateVisio)
     {
-        
+        $participant = $updateVisio->participant;
+
+        $participant->setVisio($updateVisio->visio);
+
+        $this->participantRepository->set($participant);
     }
 }
