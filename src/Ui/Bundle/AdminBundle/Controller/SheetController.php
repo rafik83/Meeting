@@ -363,8 +363,7 @@ class SheetController extends Controller
      */
     public function assignSpotAction(Request $request, Event $event, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
 
         $data = json_decode($request->getContent(), true);
 
@@ -411,8 +410,7 @@ class SheetController extends Controller
      */
     public function importAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
 
         $import = new Import();
 
@@ -447,8 +445,7 @@ class SheetController extends Controller
      */
     public function importMappingAction(Request $request, Event $event, Type $type)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
         $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
 
         $availableLocale = $event->getAvailableLocale($request->getLocale());
@@ -496,8 +493,7 @@ class SheetController extends Controller
      */
     public function importResultAction(Event $event)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
 
         $participantDenormalizerView = $this->get('query.participant.import.import_result_view_query_handler')
             ->handle();
@@ -527,5 +523,14 @@ class SheetController extends Controller
         }
 
         return $filters;
+    }
+
+    /**
+     * @param Event $event
+     */
+    private function checkAccess(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
     }
 }
