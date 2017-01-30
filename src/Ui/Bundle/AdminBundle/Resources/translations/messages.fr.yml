@@ -547,10 +547,12 @@ admin.spot.listSpot.active: Actif
 admin.spot.listSpot.add: 'Créer un lieu'
 admin.spot.listSpot.meetingCapacity: 'Nombre de rendez-vous en simultané'
 admin.spot.listSpot.no: Non
+admin.spot.listSpot.priority: 'Priorité'
 admin.spot.listSpot.reference: Identifiant
 admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
 admin.spot.listSpot.sheet: 'Fiche(s) assignée(s)'
 admin.spot.listSpot.size: 'Taille (en m²)'
+admin.spot.listSpot.visio: 'Visio'
 admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
