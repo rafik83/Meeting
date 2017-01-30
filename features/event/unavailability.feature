@@ -45,3 +45,29 @@ Feature: Unavailability
     When I press "agenda.unavailability.remove"
     Then I should be on this page "/fr/agenda/participant/2"
     And I should not see "unavailability.title"
+
+  Scenario: I can add comment to an unavailability
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr"
+    Then I should be on this page "/fr/sheet"
+    When I go to this page "/fr/agenda"
+    Then I should be on this page "/fr/agenda/participant/2"
+    And I should see "agenda.title"
+    And I should see "Mercredi 12 octobre 2016"
+    And I should not see "unvailability.title"
+    And I follow "agenda.unavailability.add"
+    And I should be on this page "/fr/agenda/participant/2/unavailability/create"
+    And I should see "form.create_unavailability.children.submit.label"
+    And I should see "agenda.unavailability.back"
+    Then I fill in the following:
+      #mercredi 12 octobre 2016
+      | form.create_unavailability.children.day.label | 0   |
+      | create_unavailability_time_begin_hour         | 11  |
+      | create_unavailability_time_begin_minute       | 30  |
+      | create_unavailability_time_end_hour           | 13  |
+      | create_unavailability_time_end_minute         | 45  |
+      | create_unavailability_message                 | "Concert de Patrick sebastien" |
+    And I press "form.create_unavailability.children.submit.label"
+    Then I should be on this page "/fr/agenda/participant/2"
+    And I should not see "unavailability.title"
+    And I should see "Concert de Patrick sebastien"
