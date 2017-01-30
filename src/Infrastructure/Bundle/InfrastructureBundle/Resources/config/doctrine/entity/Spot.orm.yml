@@ -19,6 +19,8 @@ Proximum\Vimeet\Domain\Model\Spot:
             type: boolean
         visio:
             type: boolean
+            options:
+                default: false
         priority:
             type: integer
             options:
