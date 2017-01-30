@@ -43,6 +43,16 @@ class SpotView
     public $active;
 
     /**
+     * @var int
+     */
+    public $priority;
+
+    /**
+     * @var bool
+     */
+    public $visio;
+
+    /**
      * @var SheetView
      */
     public $sheets = [];
@@ -54,8 +64,10 @@ class SpotView
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
      * @param bool   $active
+     * @param int    $priority
+     * @param bool   $visio
      */
-    public function __construct($id, $reference, $size, $meetingCapacity, $seatCapacity, $active)
+    public function __construct($id, $reference, $size, $meetingCapacity, $seatCapacity, $active, $priority, $visio)
     {
         $this->id              = $id;
         $this->reference       = $reference;
@@ -63,6 +75,8 @@ class SpotView
         $this->meetingCapacity = $meetingCapacity;
         $this->seatCapacity    = $seatCapacity;
         $this->active          = $active;
+        $this->priority        = $priority;
+        $this->visio           = $visio;
     }
 
     /**

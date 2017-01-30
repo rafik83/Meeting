@@ -40,7 +40,9 @@ class SpotViewQueryHandler
             $query->spot->getSize(),
             $query->spot->getMeetingCapacity(),
             $query->spot->getSeatCapacity(),
-            $query->spot->isActive()
+            $query->spot->isActive(),
+            $query->spot->getPriority(),
+            $query->spot->isVisio()
         );
 
         foreach ($query->spot->getSheets() as $sheet) {

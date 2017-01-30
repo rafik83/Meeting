@@ -77,6 +77,12 @@
                     <th>
                         {{ 'admin.spot.listSpot.seatCapacity'|trans }}
                     </th>
+                    <th>
+                        {{ 'admin.spot.listSpot.priority'|trans }}
+                    </th>
+                    <th>
+                        {{ 'admin.spot.listSpot.visio'|trans }}
+                    </th>
                     <th>{{ 'admin.spot.listSpot.sheet'|trans }}</th>
                     <th>
                         {{ list_macros.choice_as_dropdown(filter_form.active, false, true) }}
@@ -91,6 +97,8 @@
                         <td class="updatable" data-type="float" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'seatCapacity', 'value': spot.seatCapacity }|json_encode }}">{{ spot.seatCapacity }}</td>
+                        <td class="updatable" data-type="int" data-url="{{ update_url }}"  data-update="{{ { 'id': spot.id, 'property': 'priority', 'value': spot.priority }|json_encode }}">{{ spot.priority }}</td>
+                        <td>{{ spot.visio }}</td>
                         <td>
                             <ul>
                             {% for sheet in spot.sheets %}
