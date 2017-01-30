@@ -26,6 +26,23 @@
                     {% if participant.isOwner %}
                         ({{ 'admin.sheet.details.owner.title'|trans }})
                     {% endif %}
+
+                    <div class="pull-right">
+                        <form class="form-participant-visio" action="{{ path('admin_sheet_update_participant_visio', {
+                                    'event': event.id,
+                                    'sheet': sheet.id,
+                                    'participant': participant.id
+                                }) }}"
+                                data-action="{{ path('admin_sheet_update_participant_visio', {
+                                    'event': event.id,
+                                    'sheet': sheet.id,
+                                    'participant': participant.id
+                                }) }}">
+                            <label for="is-visio-{{ participant.id }}">Visio
+                                <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio">
+                            </label>
+                        </form>
+                    </div>
                 </div>
                 <div class="panel-body">
                     {% for object in participant.templateData.getProfileObjects %}

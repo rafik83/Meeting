@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
+use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -27,11 +28,13 @@ use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\VisioType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -502,6 +505,26 @@ class SheetController extends Controller
             'event' => $event,
             'view'  => $participantDenormalizerView,
         ]);
+    }
+
+    /**
+     * @param Request           $request
+     * @param Event             $event
+     * @param Participant       $participant
+     *
+     * @return JsonResponse
+     */
+    public function updateVisioAction(Request $request , Event $event, Participant $participant)
+    {
+        $this->checkAccess($event);
+
+        $isVisio = ($request->request->get('isVisio') === 'true') ? true : false;
+
+        $command = new UpdateVisio($participant, $isVisio);
+
+        $this->get('tactician.commandbus')->handle($command);
+
+        return new JsonResponse();
     }
 
     /**

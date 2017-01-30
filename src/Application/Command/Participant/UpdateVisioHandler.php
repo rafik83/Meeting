@@ -31,7 +31,7 @@ class UpdateVisioHandler
     /**
      * @param UpdateVisio $updateVisio
      */
-    public function handler(UpdateVisio $updateVisio)
+    public function handle(UpdateVisio $updateVisio)
     {
         $participant = $updateVisio->participant;
 
