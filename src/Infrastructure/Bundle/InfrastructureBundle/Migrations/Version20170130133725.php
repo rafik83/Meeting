@@ -8,14 +8,14 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Add properties visio and priority to the Spot entity
  */
-class Version20170130095809 extends AbstractMigration
+class Version20170130133725 extends AbstractMigration
 {
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-        $this->addSql('ALTER TABLE spot ADD visio TINYINT(1) NOT NULL, ADD priority INT DEFAULT 12 NOT NULL');
+        $this->addSql('ALTER TABLE spot ADD visio TINYINT(1) DEFAULT \'0\' NOT NULL, ADD priority INT DEFAULT 12 NOT NULL');
     }
 
     /**
