@@ -39,7 +39,7 @@
                                     'participant': participant.id
                                 }) }}">
                             <label for="is-visio-{{ participant.id }}">Visio
-                                <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio">
+                                <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio" {{ participant.isVisio }}>
                             </label>
                         </form>
                     </div>

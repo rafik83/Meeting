@@ -14,6 +14,8 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ParticipantView
 {
+    const VISIO_CHECKED = 'checked';
+
     /**
      * @var int
      */
@@ -30,14 +32,29 @@ class ParticipantView
     public $isOwner;
 
     /**
+     * @var bool
+     */
+    public $visio;
+
+    /**
      * @param int          $id
      * @param TemplateData $templateData
      * @param bool         $isOwner
+     * @param bool         $visio
      */
-    public function __construct($id, TemplateData $templateData, $isOwner = false)
+    public function __construct($id, TemplateData $templateData, $isOwner = false, $visio)
     {
         $this->id           = $id;
         $this->templateData = $templateData;
         $this->isOwner      = $isOwner;
+        $this->visio        = $visio;
+    }
+
+    /**
+     * @return string
+     */
+    public function isVisio()
+    {
+        return $this->visio === true ? self::VISIO_CHECKED : '';
     }
 }
