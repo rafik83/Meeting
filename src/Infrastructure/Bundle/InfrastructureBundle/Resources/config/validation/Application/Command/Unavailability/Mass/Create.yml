@@ -20,3 +20,9 @@ Proximum\Vimeet\Application\Command\Unavailability\Mass\Create:
             - Expression:
                 expression: "this.begin < this.end"
                 message: "validators.unavailability.startTimeMustBeBeforeEndTime"
+        dispatch:
+            - Type: { type: boolean }
+        timeSlots:
+            - Expression:
+                expression: "this.areTimeSlotsValid()"
+                message: "validators.unavailability.timeSlotsExceedRange"

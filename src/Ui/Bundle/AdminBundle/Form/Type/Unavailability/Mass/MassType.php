@@ -70,17 +70,18 @@ abstract class MassType extends BaseAbstractType
                 'required' => false,
             ])
             ->add('timeSlots', CollectionType::class, [
-                'allow_add'     => true,
-                'allow_delete'  => true,
-                'entry_type'    => DataRangeType::class,
-                'entry_options' => [
+                'error_bubbling' => false,
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'entry_type'     => DataRangeType::class,
+                'entry_options'  => [
                     'label'          => false,
                     'entry_type'     => DateTimePickerType::class,
                     'first_name'     => 'from',
                     'second_name'    => 'to',
                     'first_options'  => ['view_timezone' => $options['event']->getTimeZone()],
                     'second_options' => ['view_timezone' => $options['event']->getTimeZone()],
-                    'message'        => 'form.unavailability.mass.children.time_slots.range_error',
+                    'message'        => 'validators.unavailability.mass.children.time_slots.range_error',
                 ],
             ])
         ;

@@ -688,7 +688,6 @@ form.unavailability_mass_update.children.translations.prototype.children.descrip
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
 form.unavailability.mass.children.blocking.answer.false: Non
 form.unavailability.mass.children.blocking.answer.true: Oui
-form.unavailability.mass.children.time_slots.range_error: Le début doit être avant la fin
 form.update_admin.children.email.label: Email
 form.update_admin.children.events.label: Événements
 form.update_admin.children.firstname.label: Prénom

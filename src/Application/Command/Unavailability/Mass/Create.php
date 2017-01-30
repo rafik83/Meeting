@@ -11,58 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 
-class Create
+class Create extends Base
 {
     /**
      * @var Event
      */
     public $event;
-
-    /**
-     * @var Category
-     */
-    public $category;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $begin;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $end;
-
-    /**
-     * @var bool
-     */
-    public $blocking;
-
-    /**
-     * @var array
-     */
-    public $translations;
-
-    /**
-     * Is dispatch enable
-     *
-     * @var bool
-     */
-    public $dispatch;
-
-    /**
-     * Dispatch time slots
-     *
-     * @var array
-     */
-    public $timeSlots = [];
 
     /**
      * @param Event          $event
