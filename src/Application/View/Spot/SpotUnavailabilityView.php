@@ -59,7 +59,8 @@ class SpotUnavailabilityView
             // check if same spot unavailabilities using ids diff
             $diff = array_diff($unavailabilitiesIds, $pattern);
 
-            if (count($diff) !== 0) {
+            // unavailabilities and pattern are different or unavailabilities are empty
+            if (count($diff) !== 0 || count($unavailabilitiesIds) === 0) {
                 return false;
             }
 
