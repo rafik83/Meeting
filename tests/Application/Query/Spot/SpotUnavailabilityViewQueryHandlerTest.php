@@ -30,7 +30,7 @@ class SpotUnavailabilityViewQueryHandlerTest extends PHPUnit_Framework_TestCase
         // Mock
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
 
-        $spotRepository->find($event, $spotIds)->shouldBeCalled()->willReturn($spots);
+        $spotRepository->findMany($event, $spotIds)->shouldBeCalled()->willReturn($spots);
 
         $handler = new SpotUnavailabilityQueryHandler(
             $spotRepository->reveal()
