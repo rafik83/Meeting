@@ -1,0 +1,74 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'event.meeting.details.title'|trans %}
+
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
+{% block content %}
+    <h1>
+        {{ 'event.meeting.details.title'|trans }}
+        <span class="label label-default">
+            <i class="glyphicon glyphicon-map-marker"></i> {{ meeting.spot.ref }}
+        </span>
+        <span class="label label-info">
+             {{ 'event.meeting.details.createdAt'|trans }} {{ meeting.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+        </span>
+        <span class="label label-primary">
+            <i class="glyphicon glyphicon-time"></i>
+            {{ meeting.slot.begin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }} >
+            {{ meeting.slot.end|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
+        </span>
+        <span class="label label-success">
+            <a href="{{ path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting.requestId}) }}" style="color: white;">
+                <i class="glyphicon glyphicon-link"></i>
+                {{ 'event.meeting.details.request'|trans }}
+            </a>
+        </span>
+    </h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <b>{{ meeting.fromSheet.title }}</b>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                    {% for fromParticipant in meeting.fromParticipants %}
+                        <li>{{ fromParticipant.fullName }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <b>{{ meeting.toSheet.title }}</b>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for toParticipant in meeting.toParticipants %}
+                            <li>{{ toParticipant.fullName }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-offset-10 col-md-2">
+            <div class="panel panel-warning">
+                <div class="panel-body text-center">
+                    {{ delete_button(path('admin_meeting_delete', {'event': event.id, 'meeting': meeting.meetingId, }), 'admin.meeting.action.remove.link'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.meeting.action.remove.confirm'|trans})}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group submit-section">
+        <div class="col-sm-3">
+            <a href="{{ path('admin_meeting_list', {'event': event.id}) }}" class="btn btn-link">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                {{ 'admin.goback.link'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
