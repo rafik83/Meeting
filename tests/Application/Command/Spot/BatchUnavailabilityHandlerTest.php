@@ -44,7 +44,7 @@ class BatchUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $spotUnavailabilityRepository = $this->prophesize(SpotUnavailabilityRepositoryInterface::class);
         $meetingRepository            = $this->prophesize(MeetingRepositoryInterface::class);
 
-        $spotRepository->find($event, $spotIds)->shouldBeCalled()->willReturn($spots);
+        $spotRepository->findMany($event, $spotIds)->shouldBeCalled()->willReturn($spots);
 
         foreach ($spots as $spot) {
             $meetingRepository->findBySpotAndSlot($spot, $meetingSlot)->shouldBeCalled()->willReturn([]);

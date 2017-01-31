@@ -37,6 +37,14 @@ interface SpotRepositoryInterface
 
     /**
      * @param Event $event
+     * @param array $ids
+     *
+     * @return Spot[]
+     */
+    public function findMany(Event $event, array $ids);
+
+    /**
+     * @param Event $event
      *
      * @return Spot[]
      */
