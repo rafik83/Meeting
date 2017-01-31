@@ -88,6 +88,10 @@ class Mass
         $dispatch = false,
         array $timeSlots = []
     ) {
+        if ($begin >= $end) {
+            throw new InvalidTimeSlotException('Begin date must be lesser than end date.');
+        }
+
         $this->translations = new ArrayCollection();
         $this->event        = $event;
         $this->category     = $category;

@@ -232,7 +232,11 @@ services:
     repository.unavailability.mass_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassRepository
         arguments:
-                - '@doctrine.orm.entity_manager'
+            - '@doctrine.orm.entity_manager'
+    repository.unavailability.mass_assignment_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassAssignmentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.messaging.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository
         arguments:
@@ -2873,6 +2877,16 @@ services:
             - '%phantomjs_path%'
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
+
+    #
+    # Unavailability
+    #
+    unavailability.time_slot_dispatcher:
+        class: Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.unavailability.mass_repository'
+            - '@repository.unavailability.mass_assignment_repository'
 
     #
     # Filter

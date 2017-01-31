@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment:
+    type:  entity
+    table: mass_unavailability_assignment
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        from:
+            type: datetime
+            column: from_date
+        to:
+            type: datetime
+            column: to_date
+    manyToOne:
+        mass:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Mass
+            joinColumn:
+                onDelete: CASCADE
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinColumn:
+                onDelete: CASCADE
+    uniqueConstraints:
+        date_unique_idx:
+            columns: [participant_id, from_date, to_date]
