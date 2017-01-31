@@ -20,7 +20,6 @@ use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
-use Proximum\Vimeet\Application\Exception\Spot\SpotUnavailbilityEmptyException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
