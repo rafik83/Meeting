@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotUnavailbilityEmptyException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
@@ -207,8 +208,11 @@ class SpotController extends Controller
         );
 
         $meetingSlots = [];
+
         if ($spotUnavailabilityView->isSameUnavailabilities()) {
-           $meetingSlots = $spotUnavailabilityView->getMeetingSlots();
+            $meetingSlots = $spotUnavailabilityView->getMeetingSlots();
+        } else {
+            $this->addFlash('warning', 'flash.admin.spot_batch.spotUnavailability.exist.warning');
         }
 
         $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event, $meetingSlots);

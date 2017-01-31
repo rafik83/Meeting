@@ -40,4 +40,19 @@ class SpotUnavailabilityRepository implements SpotUnavailabilityRepositoryInterf
         $this->entityManager->persist($spotUnavailability);
         $this->entityManager->flush($spotUnavailability);
     }
+
+    /**
+     * @param Spot $spot
+     */
+    public function remove(Spot $spot)
+    {
+        $this->entityManager->createQueryBuilder()
+            ->delete(SpotUnavailability::class, 'spot_unavailability')
+            ->where('spot_unavailability.spot = :spot')
+            ->setParameter('spot', $spot)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
 }

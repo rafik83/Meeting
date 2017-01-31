@@ -57,6 +57,9 @@ class UnavailabilityBatchHandler
         $spots = $this->spotRepository->find($batch->getEvent(), $batch->getSpotIds());
 
         foreach ($spots as $spot) {
+            // remove all spot unavailability for this spot
+            $this->spotUnavailabilityRepository->remove($spot);
+
             foreach ($batch->meetingSlots as $meetingSlot) {
                 $meetings = $this->meetingRepository->findBySpotAndSlot($spot, $meetingSlot);
 

@@ -19,4 +19,9 @@ interface SpotUnavailabilityRepositoryInterface
      * @param SpotUnavailability $spotUnavailability
      */
     public function add(SpotUnavailability $spotUnavailability);
+
+    /**
+     * @param Spot $spot
+     */
+    public function remove(Spot $spot);
 }

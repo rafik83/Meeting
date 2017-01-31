@@ -38,23 +38,32 @@ class SpotUnavailabilityView
     public function isSameUnavailabilities()
     {
         if (count($this->spotUnavailabilities) === 0) {
-            return false;
+            return true;
         }
 
         $pattern = array_map(function (SpotUnavailability $unavailability) {
-            return $unavailability->getId();
+            return $unavailability->getSlot()->getId();
         }, reset($this->spotUnavailabilities));
 
+        $i = 0;
         foreach ($this->spotUnavailabilities as $unavailabilities) {
+            // prevent checking the first element because its the pattern
+            if ($i === 0) {
+                $i++; continue;
+            }
+
             $unavailabilitiesIds = array_map(function (SpotUnavailability $unavailability) {
-                return $unavailability->getId();
+                return $unavailability->getSlot()->getId();
             }, $unavailabilities);
 
-            $diff = array_diff($pattern, $unavailabilitiesIds);
+            // check if same spot unavailabilities using ids diff
+            $diff = array_diff($unavailabilitiesIds, $pattern);
 
             if (count($diff) !== 0) {
                 return false;
             }
+
+            $i++;
         }
 
         return true;
