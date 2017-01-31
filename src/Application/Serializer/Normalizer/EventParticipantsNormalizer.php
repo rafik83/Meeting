@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -23,14 +25,18 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class EventParticipantsNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_SHEET_ID               = 'sheet_id';
-    const COL_SHEET_NAME             = 'sheet_name';
-    const COL_PARTICIPANT_TYPE       = 'participant_type';
-    const COL_PARTICIPANT_ID         = 'participant_id';
-    const COL_PARTICIPANT_EMAIL      = 'participant_email';
-    const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
-    const COL_HAPPENING_SUBSCRIBER   = 'happening_subscriber';
+    const COL_SHEET_ID                     = 'sheet_id';
+    const COL_SHEET_NAME                   = 'sheet_name';
+    const COL_PARTICIPANT_TYPE             = 'participant_type';
+    const COL_PARTICIPANT_ID               = 'participant_id';
+    const COL_PARTICIPANT_EMAIL            = 'participant_email';
+    const COL_PARTICIPANT_CREATED_AT       = 'participant_created_at';
+    const COL_HAPPENING_SUBSCRIBER         = 'happening_subscriber';
+    const COL_PARTICIPANT_ORDER_PROMO_CODE = 'participant_order_promo_code';
 
+    /**
+     * @var string
+     */
     protected $normalizerType = 'participant';
 
     /**
@@ -61,18 +67,27 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
     private $templateDataFactory;
 
     /**
+     * Order merger
+     *
+     * @var Merger
+     */
+    private $merger;
+
+    /**
      * @param TranslatorInterface                       $translator
      * @param TemplateDataFactory                       $templateDataFactory
      * @param ParticipantRepositoryInterface            $participantRepository
      * @param SheetInfoGuesser                          $sheetInfoGuesser
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
+     * @param Merger                                    $merger
      */
     public function __construct(
         TranslatorInterface $translator,
         TemplateDataFactory $templateDataFactory,
         ParticipantRepositoryInterface $participantRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        HappeningParticipationRepositoryInterface $happeningParticipationRepository
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
+        Merger $merger
     ) {
         parent::__construct($translator);
 
@@ -81,6 +96,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
         $this->sheetInfoGuesser                 = $sheetInfoGuesser;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->templateDataFactory              = $templateDataFactory;
+        $this->merger                           = $merger;
     }
 
     /**
@@ -99,7 +115,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
             $rawSheets[] = $this->getParticipantRawData($participant, $locale);
         }
 
-        $charset                = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
+        $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedParticipants = [];
 
         foreach ($rawSheets as $rawSheet) {
@@ -131,7 +147,6 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
         $fallbackLocale  = $event->getFallback();
         $sheet           = $participant->getSheet();
 
-
         $timeFormatter = \IntlDateFormatter::create(
             $availableLocale,
             \IntlDateFormatter::SHORT,
@@ -139,16 +154,25 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
             $event->getTimeZone()
         );
 
+        $promotionCodes = [];
+
+        if ($sheet->hasOrders()) {
+            $order = $this->merger->merge($sheet->getOrders());
+            foreach($order->getPromotionCodes() as $orderPromotionCode) {
+                $promotionCodes[] = $orderPromotionCode->getPromotionCode()->getCode();
+            }
+        }
 
         // 1. Common fields (sheet ID, participant ID, etc.)
         $rawData = [
-            self::COL_SHEET_ID               => $sheet->getId(),
-            self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($availableLocale),
-            self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
-            self::COL_PARTICIPANT_ID         => $participant->getId(),
-            self::COL_PARTICIPANT_EMAIL      => $participant->getUser()->getEmail(),
-            self::COL_PARTICIPANT_CREATED_AT => $timeFormatter->format($sheet->getCreatedAt()),
-            self::COL_HAPPENING_SUBSCRIBER   => $this->getHappeningSubscriberData($participant),
+            self::COL_SHEET_ID                     => $sheet->getId(),
+            self::COL_PARTICIPANT_TYPE             => $sheet->getType()->getTitle($availableLocale),
+            self::COL_SHEET_NAME                   => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
+            self::COL_PARTICIPANT_ID               => $participant->getId(),
+            self::COL_PARTICIPANT_EMAIL            => $participant->getUser()->getEmail(),
+            self::COL_PARTICIPANT_CREATED_AT       => $timeFormatter->format($sheet->getCreatedAt()),
+            self::COL_HAPPENING_SUBSCRIBER         => $this->getHappeningSubscriberData($participant),
+            self::COL_PARTICIPANT_ORDER_PROMO_CODE => implode(',', $promotionCodes),
         ];
 
         // 2. Registration data
@@ -158,10 +182,10 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
     }
 
     /**
-     * @param array  $rawData
+     * @param array       $rawData
      * @param Participant $participant
-     * @param string $availableLocale
-     * @param string $fallbackLocale
+     * @param string      $availableLocale
+     * @param string      $fallbackLocale
      */
     private function addRegistrationRawData(&$rawData, Participant $participant, $availableLocale, $fallbackLocale)
     {
@@ -178,6 +202,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
                         $availableLocale,
                         $fallbackLocale
                     );
+
                     $this->registrationFields[$key] = $fieldName;
                 }
 
@@ -240,6 +265,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
             self::COL_PARTICIPANT_EMAIL,
             self::COL_PARTICIPANT_CREATED_AT,
             self::COL_HAPPENING_SUBSCRIBER,
+            self::COL_PARTICIPANT_ORDER_PROMO_CODE,
         ];
     }
 

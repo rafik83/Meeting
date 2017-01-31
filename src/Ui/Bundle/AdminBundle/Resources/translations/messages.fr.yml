@@ -356,6 +356,7 @@ admin.participant.export.fields.planning.unavailability: Indisponible
 admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.participant.export.fields.participant_order_promo_code: "Codes promo"
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non
