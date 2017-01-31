@@ -18,7 +18,7 @@ class SpotView
     public $ref;
 
     /**
-     * @param $ref
+     * @param string $ref
      */
     public function __construct($ref)
     {
