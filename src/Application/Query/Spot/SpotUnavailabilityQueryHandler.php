@@ -37,7 +37,7 @@ class SpotUnavailabilityQueryHandler
      */
     public function handle(SpotUnavailabilityQuery $query)
     {
-        $spots = $this->spotRepository->find($query->event, $query->spots);
+        $spots = $this->spotRepository->findMany($query->event, $query->spots);
 
         $spotUnavailabilities = [];
 

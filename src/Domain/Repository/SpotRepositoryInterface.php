@@ -31,7 +31,7 @@ interface SpotRepositoryInterface
      * @param Event     $event
      * @param int|array $id
      *
-     * @return Spot|Spot[]|null
+     * @return Spot|null
      */
     public function find(Event $event, $id);
 
