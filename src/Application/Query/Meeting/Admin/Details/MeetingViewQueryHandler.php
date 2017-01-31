@@ -79,6 +79,7 @@ class MeetingViewQueryHandler
         $slot = new SlotView($meeting->getSlot()->getBegin(), $meeting->getSlot()->getEnd());
 
         return new MeetingView(
+            $meeting->getId(),
             $meeting->getRequest()->getId(),
             $fromSheet,
             $fromParticipants,

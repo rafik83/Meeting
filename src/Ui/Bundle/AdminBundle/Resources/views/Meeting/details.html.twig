@@ -2,6 +2,8 @@
 
 {% block title 'event.meeting.details.title'|trans %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block content %}
     <h1>
         {{ 'event.meeting.details.title'|trans }}
@@ -50,6 +52,13 @@
                             <li>{{ toParticipant.fullName }}</li>
                         {% endfor %}
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-offset-10 col-md-2">
+            <div class="panel panel-warning">
+                <div class="panel-body text-center">
+                    {{ delete_button(path('admin_meeting_delete', {'event': event.id, 'meeting': meeting.meetingId, }), 'admin.meeting.action.remove.link'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.meeting.action.remove.confirm'|trans})}}
                 </div>
             </div>
         </div>

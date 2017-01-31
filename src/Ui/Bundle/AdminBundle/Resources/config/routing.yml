@@ -378,6 +378,14 @@ admin_meeting_details:
     methods: [GET]
     defaults: { _controller: AdminBundle:Meeting:details }
 
+admin_meeting_delete:
+    path: /event/{event}/meeting/{meeting}/delete
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Meeting:deleteMeeting }
+
 admin_meeting_delete_all:
     path: /event/{event}/meeting/delete/all
     requirements:

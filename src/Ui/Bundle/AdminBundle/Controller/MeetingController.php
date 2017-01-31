@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting;
 use Proximum\Vimeet\Application\Exception\Meeting\NotAllowedToDeleteAllMeetingsException;
 use Proximum\Vimeet\Application\Query\Meeting\Admin\Details\MeetingViewQuery;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -75,6 +76,12 @@ class MeetingController extends Controller
         ]);
     }
 
+    /**
+     * @param Event   $event
+     * @param Meeting $meeting
+     *
+     * @return RedirectResponse
+     */
     public function deleteMeetingAction(Event $event, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -84,6 +91,10 @@ class MeetingController extends Controller
                 sprintf('The meeting %s is not on the given event %s', $meeting->getId(), $event->getId())
             );
         }
+
+        $this->get('tactician.commandbus')->handle(new DeleteMeeting($meeting));
+
+        return $this->redirectToRoute('admin_meeting_list', ['event' => $event->getId()]);
     }
 
     /**

@@ -47,9 +47,7 @@
                     </td>
                     <td>{{ meeting.createdAt|localizeddate('medium', 'none', app.request.locale) }}</td>
                     <td>
-                        {{ macro.btnGroupAndRightMenuDropdown({
-                            ('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id}),
-                        }) }}
+                        {{ macro.btnGroupAndRightMenuDropdown({('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id})}) }}
                     </td>
                 </tr>
             {% else %}

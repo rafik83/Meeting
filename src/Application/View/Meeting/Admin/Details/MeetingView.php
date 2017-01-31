@@ -15,6 +15,11 @@ class MeetingView
     /**
      * @var int
      */
+    public $meetingId;
+
+    /**
+     * @var int
+     */
     public $requestId;
 
     /**
@@ -53,6 +58,7 @@ class MeetingView
     public $createdAt;
 
     /**
+     * @param int                $meetingId
      * @param int                $requestId
      * @param SheetView          $fromSheet
      * @param ParticipantView[]  $fromParticipants
@@ -63,6 +69,7 @@ class MeetingView
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
+        $meetingId,
         $requestId,
         SheetView $fromSheet,
         array $fromParticipants,
@@ -72,6 +79,7 @@ class MeetingView
         SlotView $slotView,
         \DateTimeInterface $createdAt
     ) {
+        $this->meetingId        = $meetingId;
         $this->requestId        = $requestId;
         $this->fromSheet        = $fromSheet;
         $this->fromParticipants = $fromParticipants;
