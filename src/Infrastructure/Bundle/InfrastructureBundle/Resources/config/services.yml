@@ -2969,6 +2969,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@order.merger'
         tags:
             - { name: serializer.normalizer }
 
