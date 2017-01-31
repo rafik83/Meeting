@@ -640,6 +640,7 @@ admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
 admin.unavailability.mass.link: 'Indisponibilité de masse'
 admin.unavailability.mass.table.column.begin: Debut
 admin.unavailability.mass.table.column.category: Catégorie
+admin.unavailability.mass.table.column.dispatch: 'Créneaux de dispatchs'
 admin.unavailability.mass.table.column.end: Fin
 admin.unavailability.mass.table.column.name: 'Nom back office'
 admin.unavailability.mass.table.column.title: Titre
