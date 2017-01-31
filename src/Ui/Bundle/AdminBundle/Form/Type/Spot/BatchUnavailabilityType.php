@@ -67,9 +67,10 @@ class BatchUnavailabilityType extends AbstractType
                 'multiple'     => true,
                 'choice_label' => function (MeetingSlot $meetingSlot) use ($dateFormatter, $timeFormatter) {
                     if ($meetingSlot !== null) {
-                        $label = $dateFormatter->format($meetingSlot->getBegin()) . ' ' .
-                            $timeFormatter->format($meetingSlot->getBegin()) . ' - ' .
-                            $timeFormatter->format($meetingSlot->getEnd());
+                        $label =
+                            $this->getFormattedValue($dateFormatter, $meetingSlot->getBegin()) . ' ' .
+                            $this->getFormattedValue($timeFormatter, $meetingSlot->getBegin()) . ' - ' .
+                            $this->getFormattedValue($timeFormatter, $meetingSlot->getEnd());
 
                         return $label;
                     }
@@ -77,6 +78,19 @@ class BatchUnavailabilityType extends AbstractType
                     return '';
                 },
             ]);
+    }
+
+    /**
+     * @param IntlDateFormatter  $formatter
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return string
+     */
+    private function getFormattedValue(IntlDateFormatter $formatter, \DateTimeInterface $dateTime)
+    {
+        $formattedValue = $formatter->format($dateTime);
+
+        return $formattedValue !== false ? $formattedValue : '';
     }
 
     /**

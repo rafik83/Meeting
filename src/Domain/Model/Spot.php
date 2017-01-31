@@ -224,7 +224,7 @@ class Spot
     }
 
     /**
-     * @return ArrayCollection
+     * @return SpotUnavailability[]
      */
     public function getSpotUnavailabilities()
     {

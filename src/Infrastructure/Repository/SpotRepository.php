@@ -64,21 +64,35 @@ class SpotRepository implements SpotRepositoryInterface
             ->select('spot')
             ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
-            ->setParameter('event', $event);
-
-        if (is_array($id)) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->in('spot.id', $id)
-            );
-
-            return $queryBuilder->getQuery()->getResult();
-        }
-
-        $queryBuilder->andWhere('spot.id = :id')
+            ->andWhere('spot.id = :id')
+            ->setParameter('event', $event)
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Event $event
+     * @param array $ids
+     *
+     * @return Spot[]
+     */
+    public function findMany(Event $event, array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in('spot.id', $ids)
+        );
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

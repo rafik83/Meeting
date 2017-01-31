@@ -54,7 +54,7 @@ class UnavailabilityBatchHandler
      */
     public function handle(UnavailabilityBatch $batch)
     {
-        $spots = $this->spotRepository->find($batch->getEvent(), $batch->getSpotIds());
+        $spots = $this->spotRepository->findMany($batch->getEvent(), $batch->getSpotIds());
 
         foreach ($spots as $spot) {
             // remove all spot unavailability for this spot
