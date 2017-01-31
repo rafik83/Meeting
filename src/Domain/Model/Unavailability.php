@@ -33,17 +33,24 @@ class Unavailability
     private $end;
 
     /**
+     * @var string|null
+     */
+    private $message;
+
+    /**
      * Unavailability constructor.
      *
      * @param Participant        $participant
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param string|null        $message
      */
-    public function __construct(Participant $participant, \DateTimeInterface $begin, \DateTimeInterface $end)
+    public function __construct(Participant $participant, \DateTimeInterface $begin, \DateTimeInterface $end, $message = null)
     {
         $this->participant = $participant;
         $this->begin       = $begin;
         $this->end         = $end;
+        $this->message     = $message;
     }
 
     /**
@@ -84,6 +91,14 @@ class Unavailability
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     /**

@@ -1,13 +1,10 @@
 var Vue                = require('vue'),
     axios              = require('axios'),
+    filterModal        = require('./agenda/filterModal'),
+    options            = require('./vueComponents/options'),
     AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
 var agendaApiEndpoints = new AgendaApiEndpoints();
-
-/**
- * Customs delimiters to avoid collision with Twig
- */
-var delimiters = ['${', '}'];
 
 /**
  * Pass axios to Vue
@@ -25,7 +22,7 @@ Vue.component('Modal', {
 });
 
 Vue.component('MeetingUpdateModal', {
-    delimiters: delimiters,
+    delimiters: options.delimiters,
     template: '#meeting-update-modal-template',
     props: {
         meetingToUpdate: {
@@ -83,7 +80,10 @@ Vue.component('MeetingUpdateModal', {
 
 new Vue({
     el: '#agenda',
-    delimiters: delimiters,
+    delimiters: options.delimiters,
+    components: {
+        'filter-modal': filterModal
+    },
     data: {
         /**
          * Array of sheets
@@ -109,6 +109,9 @@ new Vue({
          * Meeting to update form
          */
         meetingToUpdate: null,
+        filteredSheets: [], /** Sheet[] */
+        showFilterModal: false,
+        hasUsedSheetFilter: false,
 
         /**
          * Meeting slot to update
@@ -149,6 +152,13 @@ new Vue({
             return this.isMeetingToUpdateLoading === false
                 && this.meetingToUpdate === null
                 && this.meetingSlotToUpdate === null;
+        },
+        sheetsIterator: function () {
+            return this.hasUsedSheetFilter ? this.filteredSheets : this.sheets;
+        },
+
+        countFilteredSheets: function () {
+            return this.sheetsIterator.length;
         }
     },
 
@@ -158,6 +168,28 @@ new Vue({
          */
         init: function () {
             this.loadSheets();
+        },
+
+        showSheetFilter: function () {
+            this.showFilterModal = true;
+            var child = this.$refs.sheetFilterModal;
+            if (typeof child !== 'undefined') {
+                child.setFormFilter();
+            }
+        },
+
+        refreshList: function (filteredSheets) {
+            this.hasUsedSheetFilter = true;
+            this.filteredSheets = filteredSheets;
+        },
+
+        resetSheetFilter: function () {
+            var child = this.$refs.sheetFilterModal;
+            if (typeof child !== 'undefined') {
+                child.reset();
+                this.hasUsedSheetFilter = false;
+                this.filteredSheets = [];
+            }
         },
 
         /**
@@ -275,7 +307,7 @@ new Vue({
          * @param sheet
          */
         showAgenda: function (sheet) {
-            if(-1 === this.findSheetAgenda(sheet)) {
+            if (-1 === this.findSheetAgenda(sheet)) {
                 this.agendas.push(sheet);
             }
 
