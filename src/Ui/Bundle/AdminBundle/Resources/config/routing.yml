@@ -428,13 +428,6 @@ admin_meeting_request_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
 
-admin_meeting_request_sheets_list:
-    path: /event/{event}/meeting-request/sheets
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
-
 admin_transform_requests_to_meetings:
     path: /event/{event}/meeting-request/transform-requests-to-meetings
     requirements:
