@@ -62,7 +62,7 @@ flash.admin.speaker.create.success: 'L''intervenant a bien été créé'
 flash.admin.speaker.update.success: 'L''intervenant a bien été mis à jour'
 flash.admin.spot_batch.delete.success: 'Les lieux sélectionnés ont bien été supprimés'
 flash.admin.spot_batch.disable.success: 'Les lieux sélectionnés ont bien été désactivés'
-flash.admin.spot_batch.spotUnavailability.success: 'Les indisponibilités de lieu ont été créée'
+flash.admin.spot_batch.spotUnavailability.success: 'Les indisponibilités de lieux ont été créée'
 flash.admin.spot_batch.spotUnavailability.exist.warning: "Des indisponibilités existent pour un ou plusieurs lieux. Ils seront supprimés et remplacés par ceux que vous allez sélectionner"
 flash.admin.spot.batch_create.duplicate: 'Les lieux avec les identifiants suivants n''ont pas pu être créé car les identifiants sont déjà utilisé : %references%'
 flash.admin.spot.batch_create.success: 'Les lieux ont été créés'
