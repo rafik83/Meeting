@@ -23,6 +23,7 @@
                 <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
                 <th>{{ 'admin.meeting.list.column.head.slot'|trans }}</th>
                 <th>{{ 'admin.meeting.list.column.head.createdAt'|trans }}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -45,10 +46,15 @@
                         {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
                     </td>
                     <td>{{ meeting.createdAt|localizeddate('medium', 'none', app.request.locale) }}</td>
+                    <td>
+                        {{ macro.btnGroupAndRightMenuDropdown({
+                            ('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id}),
+                        }) }}
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" class="text-center">
+                    <td colspan="5" class="text-center">
                          {{ 'admin.meeting.list.noResult'|trans }}
                     </td>
                 </tr>
