@@ -53,6 +53,29 @@
     right: 15px - $agenda-meet-margin;
     width: calc(100% - 30px - 50px + 4px);
     z-index: 1;
+    .happening {
+      header {
+        position: relative;
+      }
+      .actions {
+        display: inline-block;
+        width: 100%;
+        flex-flow: row;
+        z-index: 9999;
+        position: absolute;
+        margin-left: 10px;
+        padding-right: 45px;
+        right: 0;
+        bottom: 5%;
+        > a, .label {
+          float: right;
+          margin-left: 5px;
+        }
+        > .label {
+          margin-top: 10px;
+        }
+      }
+    }
   }
 
   .meet {
@@ -64,6 +87,13 @@
     &.open {
       > header {
         height: 56px !important;
+        .actions {
+          display: block;
+          z-index: 9999;
+          position: absolute;
+          right: 45px;
+          bottom: 16%;
+        }
       }
 
       .details { display: block; }
@@ -152,6 +182,10 @@
     &.collapsed {
       header {
         text-align: center;
+
+        .actions {
+          display: none;
+        }
 
         .content {
           padding: 0;

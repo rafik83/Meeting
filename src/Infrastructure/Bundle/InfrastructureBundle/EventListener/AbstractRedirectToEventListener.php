@@ -70,7 +70,7 @@ abstract class AbstractRedirectToEventListener
             $getResponseEvent,
             $request,
             $event,
-            $event->getAvailableLocale($request->getLocale()),
+            $request->getLocale(),
             $route
         );
     }

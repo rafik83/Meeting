@@ -66,6 +66,14 @@ admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
+admin.agenda.filters.type: 'Type de participation'
+admin.agenda.filters.indicators.label: "Indicateurs"
+admin.agenda.filters.hasSentMeetingRequest.label: "Pas de demande de rendez-vous"
+admin.agenda.filters.hasMeetingToApprove.label: "A des rendez-vous à valider"
+admin.agenda.filters.hasNotEnoughtAvailableSlot.label: "Pas assez de créneaux disponible"
+admin.agenda.filters.title.label: "Filtre fiche"
+admin.agenda.filters.submit.label: "Filtrer les fiches"
+admin.agenda.filters.reset.label: "Reset"
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler

@@ -104,6 +104,27 @@ class SheetView
     public $url;
 
     /**
+     * "La fiche a-t-elle effectuée aucune demandes de rendez-vous"
+     *
+     * @var bool
+     */
+    public $hasNotSentMeetingRequest;
+
+    /**
+     * "La fiche a-t-elle des demandes de rendez-vous en attente de validation"
+     *
+     * @var bool
+     */
+    public $hasMeetingToApprove;
+
+    /**
+     * "La fiche a-t-elle assez de creneaux disponible"
+     *
+     * @var bool
+     */
+    public $hasNotEnoughAvailableSlot;
+
+    /**
      * @param int         $id
      * @param string      $title
      * @param string      $type
@@ -146,5 +167,37 @@ class SheetView
         $this->countPendingPropositions = $countPendingPropositions;
         $this->url                      = $url;
         $this->follower                 = $follower;
+
+        $this->hasNotSentMeetingRequest  = $this->hasNotSentMeetingRequest();
+        $this->hasNotEnoughAvailableSlot = $this->hasNotEnoughAvailableSlot();
+        $this->hasMeetingToApprove       = $this->hasMeetingToApprove();
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasNotSentMeetingRequest()
+    {
+        return $this->countRequest === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasMeetingToApprove()
+    {
+        return $this->countPendingPropositions > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasNotEnoughAvailableSlot()
+    {
+        if ($this->usableSlots === 0) {
+            return true;
+        }
+
+        return (($this->countValidatedRequest - $this->countPlacedMeetings) / $this->usableSlots) > 1;
     }
 }
