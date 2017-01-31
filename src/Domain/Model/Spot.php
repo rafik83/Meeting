@@ -224,11 +224,11 @@ class Spot
     }
 
     /**
-     * @return ArrayCollection
+     * @return SpotUnavailability[]
      */
     public function getSpotUnavailabilities()
     {
-        return $this->spotUnavailabilities;
+        return $this->spotUnavailabilities->toArray();
     }
 
     /**

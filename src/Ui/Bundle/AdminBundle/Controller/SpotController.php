@@ -197,6 +197,8 @@ class SpotController extends Controller
      */
     public function batchUnavailabilityAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $selectedSpots = $this->get('session')->get('selectedSpots');
 
         $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event);
