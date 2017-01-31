@@ -63,7 +63,7 @@ class AssignSpotHandler
                 $oldSpot->removeSheet($assignSpot->sheet);
 
                 if ($oldSpot->countSheets() === 0) {
-                    $oldSpot->setPriority(12);
+                    $oldSpot->setPriority(Spot::PRIORITY_MUTUALIZE);
                 }
 
                 $this->spotRepository->set($oldSpot);
@@ -86,7 +86,7 @@ class AssignSpotHandler
                     $oldSpot->removeSheet($assignSpot->sheet);
 
                     if ($oldSpot->countSheets() === 0) {
-                       $oldSpot->setPriority(12);
+                       $oldSpot->setPriority(Spot::PRIORITY_MUTUALIZE);
                     }
 
                     $this->spotRepository->set($oldSpot);
@@ -97,7 +97,7 @@ class AssignSpotHandler
             $spot->addSheet($assignSpot->sheet);
 
             // A call to the sheetRepository is not necessary as the spot will carry the link with the sheet
-            $this->spotRepository->set($spot->setPriority(8));
+            $this->spotRepository->set($spot->setPriority(Spot::PRIORITY_ASSIGN));
 
             $numberOfSheet = $spot->countSheets();
         }
