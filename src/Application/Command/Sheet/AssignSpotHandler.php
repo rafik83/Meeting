@@ -49,11 +49,25 @@ class AssignSpotHandler
     public function handle(AssignSpot $assignSpot)
     {
         $oldSpot = null;
+
         if ($assignSpot->spotCode === null || $assignSpot->spotCode === '') {
             $oldSpot = $assignSpot->sheet->getSpot();
 
             $assignSpot->sheet->removeSpot();
             $numberOfSheet = 0;
+
+            // Call the sheetRepository to detach the sheet from the spot
+            $this->sheetRepository->set($assignSpot->sheet);
+
+            if ($oldSpot instanceof Spot) {
+                $oldSpot->removeSheet($assignSpot->sheet);
+
+                if ($oldSpot->countSheets() === 0) {
+                    $oldSpot->setPriority(12);
+                }
+
+                $this->spotRepository->set($oldSpot);
+            }
         } else {
             $spot = $this->spotRepository->findByReference($assignSpot->event, $assignSpot->spotCode);
 
@@ -67,20 +81,25 @@ class AssignSpotHandler
 
             if ($assignSpot->sheet->getSpot() !== $spot) {
                 $oldSpot = $assignSpot->sheet->getSpot();
+
+                if ($oldSpot instanceof Spot) {
+                    $oldSpot->removeSheet($assignSpot->sheet);
+
+                    if ($oldSpot->countSheets() === 0) {
+                       $oldSpot->setPriority(12);
+                    }
+
+                    $this->spotRepository->set($oldSpot);
+                }
             }
 
             $assignSpot->sheet->setSpot($spot);
-            $this->spotRepository->set($spot->setPriority(8));
             $spot->addSheet($assignSpot->sheet);
+
+            // A call to the sheetRepository is not necessary as the spot will carry the link with the sheet
+            $this->spotRepository->set($spot->setPriority(8));
+
             $numberOfSheet = $spot->countSheets();
-        }
-
-        $this->sheetRepository->set($assignSpot->sheet);
-
-        if ($oldSpot instanceof Spot) {
-            if ($oldSpot->countSheets() === 0) {
-                $this->spotRepository->set($oldSpot->setPriority(12));
-            }
         }
 
         return new AssignSpotResult($numberOfSheet);

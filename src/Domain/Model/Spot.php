@@ -226,6 +226,14 @@ class Spot
     }
 
     /**
+     * @param Sheet $sheet
+     */
+    public function removeSheet(Sheet $sheet)
+    {
+        $this->sheets->removeElement($sheet);
+    }
+
+    /**
      * @return Sheet[]
      */
     public function getSheets()
