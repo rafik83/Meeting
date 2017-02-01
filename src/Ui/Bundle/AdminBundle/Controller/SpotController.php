@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch;
+use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatchResult;
 use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotException;
@@ -32,6 +33,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -227,8 +229,16 @@ class SpotController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
-            $this->get('tactician.commandbus')->handle($unavailabilityBatch);
+            /** @var UnavailabilityBatchResult $result */
+            $result = $this->get('tactician.commandbus')->handle($unavailabilityBatch);
             $this->addFlash('success', 'flash.admin.spot_batch.spotUnavailability.success');
+
+            if ($result->hasSpotWithMeetingWarning()) {
+                $this->addFlash('warning', new TransMessage(
+                    'flash.admin.spot_batch.spotUnavailability.spotWithMeetingWarning',
+                    ['%spots%' => $result->getSpotReferences()]
+                ));
+            }
 
             return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
         }

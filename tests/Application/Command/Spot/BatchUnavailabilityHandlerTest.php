@@ -60,6 +60,10 @@ class BatchUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal()
         );
 
-        $handler->handle($command);
+        $result = $handler->handle($command);
+
+        $expected = new UnavailabilityBatchResult();
+
+        $this->assertEquals($expected, $result);
     }
 }

@@ -51,10 +51,14 @@ class UnavailabilityBatchHandler
 
     /**
      * @param UnavailabilityBatch $batch
+     *
+     * @return UnavailabilityBatchResult
      */
     public function handle(UnavailabilityBatch $batch)
     {
         $spots = $this->spotRepository->findMany($batch->getEvent(), $batch->getSpotIds());
+
+        $spotWithMeetingWarning = [];
 
         foreach ($spots as $spot) {
             // remove all spot unavailability for this spot
@@ -64,6 +68,8 @@ class UnavailabilityBatchHandler
                 $meetings = $this->meetingRepository->findBySpotAndSlot($spot, $meetingSlot);
 
                 if (count($meetings) > 0) {
+                    $spotWithMeetingWarning[$spot->getId()] = $spot;
+
                     continue;
                 }
 
@@ -71,5 +77,7 @@ class UnavailabilityBatchHandler
                 $this->spotUnavailabilityRepository->add($spotUnavailability);
             }
         }
+
+        return new UnavailabilityBatchResult($spotWithMeetingWarning);
     }
 }
