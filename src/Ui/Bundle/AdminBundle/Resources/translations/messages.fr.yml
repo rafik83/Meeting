@@ -359,7 +359,6 @@ admin.participant.export.fields.planning.unavailability: Indisponible
 admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
-admin.participant.export.fields.participant_order_promo_code: "Codes promo"
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non
@@ -503,6 +502,7 @@ admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
 admin.sheet.export.fields.in_catalog: 'Ajouté au catalogue'
+admin.sheet.export.fields.order_promo_code: 'Codes promo'
 admin.sheet.export.fields.owner_email: 'Email propriétaire'
 admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
