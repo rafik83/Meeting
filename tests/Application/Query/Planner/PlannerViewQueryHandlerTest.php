@@ -87,7 +87,7 @@ class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$meetingView]);
         $spotViewQueryHandler
-            ->handle(new SpotViewQuery($event, [$sheetView]))
+            ->handle(new SpotViewQuery($event, [$sheetView], [$slotView]))
             ->shouldBeCalled()
             ->willReturn([$spotView]);
 
