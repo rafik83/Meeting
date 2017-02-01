@@ -75,10 +75,10 @@ interface SpotRepositoryInterface
     public function findByReference(Event $event, $reference);
 
     /**
-     * @param array $refIds
-     * @param Event $event
+     * @param Spot[] $spots
+     * @param Event  $event
      */
-    public function removeBatchSpot(array $refIds, Event $event);
+    public function removeBatchSpot(array $spots, Event $event);
 
     /**
      * @param array $ids

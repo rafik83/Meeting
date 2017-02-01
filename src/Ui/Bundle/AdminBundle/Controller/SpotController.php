@@ -117,27 +117,21 @@ class SpotController extends Controller
                 if (!empty($deleteBatchView->spotsWithMeetings)) {
                     $this->addFlash('error', new TransMessage(
                         'flash.admin.spot_batch.delete.failure.meetings',
-                        [
-                            '%spots%' => $deleteBatchView->addError($deleteBatchView->spotsWithMeetings)
-                        ]
+                        ['%spots%' => $deleteBatchView->getSpotsWithMeetings()]
                     ));
                 }
                 
                 if (!empty($deleteBatchView->spotsWithSheets)) {
                     $this->addFlash('error', new TransMessage(
                         'flash.admin.spot_batch.delete.failure.sheets',
-                        [
-                            '%spots%' => $deleteBatchView->addError($deleteBatchView->spotsWithSheets)
-                        ]
+                        ['%spots%' => $deleteBatchView->getSpotsWithSheets()]
                     ));
                 }
 
                 if (!empty($deleteBatchView->deletedSpots)) {
                     $this->addFlash('success', new TransMessage(
                         'flash.admin.spot_batch.delete.success',
-                        [
-                            '%spots%' => $deleteBatchView->addError($deleteBatchView->deletedSpots)
-                        ]
+                        ['%spots%' => $deleteBatchView->getDeletedSpots()]
                     ));
                 }
             } elseif ($disableButton) {

@@ -26,22 +26,21 @@ class DeleteBatchHandlerTest extends \PHPUnit_Framework_TestCase
         //Context
         $event = EventFactory::createEvent();
         $ids = [1, 2, 3, 4, 5];
-        $spots = [new Spot('REF', $event, 20.0, 1, 1, true)];
+        $spot = new Spot('REF', $event, 20.0, 1, 1, true);
 
-        $expectedView = new DeleteBatchView(
-            ['REF']
-        );
+        $expectedView = new DeleteBatchView();
+        $expectedView->addDeletedSpot($spot);
 
         //Command
         $command = new DeleteBatch($ids, $event);
 
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
 
-        $spotRepository->getSpotsByIds($ids)->willReturn($spots);
+        $spotRepository->getSpotsByIds($ids)->willReturn([$spot]);
 
-        $spotRepository->hasMeeting($spots[0])->shouldBeCalled()->willReturn(false);
+        $spotRepository->hasMeeting($spot)->shouldBeCalled()->willReturn(false);
         
-        $spotRepository->removeBatchSpot(['REF'], $event)->shouldBeCalled();
+        $spotRepository->removeBatchSpot([$spot], $event)->shouldBeCalled();
 
         //Handler
         $handle = new DeleteBatchHandler($spotRepository->reveal());
@@ -55,21 +54,19 @@ class DeleteBatchHandlerTest extends \PHPUnit_Framework_TestCase
         //Context
         $event = EventFactory::createEvent();
         $ids = [1, 2, 3, 4, 5];
-        $spots = [new Spot('REF', $event, 20.0, 1, 1, true)];
+        $spot = new Spot('REF', $event, 20.0, 1, 1, true);
 
-        $expectedView = new DeleteBatchView(
-            [],
-            ['REF']
-        );
+        $expectedView = new DeleteBatchView();
+        $expectedView->addSpotWithMeeting($spot);
 
         //Command
         $command = new DeleteBatch($ids, $event);
 
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
 
-        $spotRepository->getSpotsByIds($ids)->willReturn($spots);
+        $spotRepository->getSpotsByIds($ids)->willReturn([$spot]);
 
-        $spotRepository->hasMeeting($spots[0])->shouldBeCalled()->willReturn(true);
+        $spotRepository->hasMeeting($spot)->shouldBeCalled()->willReturn(true);
 
         $spotRepository->removeBatchSpot([], $event)->shouldBeCalled();
 
@@ -84,16 +81,13 @@ class DeleteBatchHandlerTest extends \PHPUnit_Framework_TestCase
     {
         //Context
         $event = EventFactory::createEvent();
-        $ids = [1, 2, 3, 4, 5];
-        $spot = new Spot('REF', $event, 20.0, 1, 1, true);
+        $ids   = [1, 2, 3, 4, 5];
+        $spot  = new Spot('REF', $event, 20.0, 1, 1, true);
         $sheet = SheetFactory::create($event);
         $spot->addSheet($sheet);
 
-        $expectedView = new DeleteBatchView(
-            [],
-            [],
-            ['REF']
-        );
+        $expectedView = new DeleteBatchView();
+        $expectedView->addSpotWithSheets($spot);
 
         //Command
         $command = new DeleteBatch($ids, $event);

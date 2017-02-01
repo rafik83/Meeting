@@ -15,45 +15,68 @@ use Proximum\Vimeet\Domain\Model\Spot;
 class DeleteBatchView
 {
     /**
-     * @var Spot[]
+     * array of spot reference
+     * @var array
      */
-    public $deletedSpots;
+    public $deletedSpots = [];
 
     /**
-     * @var Spot[]
+     * array of spot reference
+     * @var array
      */
-    public $spotsWithMeetings;
+    public $spotsWithMeetings = [];
 
     /**
-     * @var Spot[]
+     * array of spot reference
+     * @var array
      */
-    public $spotsWithSheets;
+    public $spotsWithSheets = [];
 
     /**
-     * DeleteBatchView constructor.
-     * @param Spot[] $deletedSpots
-     * @param Spot[] $spotsWithMeetings
-     * @param Spot[] $spotsWithSheets
+     * @param Spot $spot
      */
-    public function __construct(array $deletedSpots = [], array $spotsWithMeetings = [], array $spotsWithSheets = [])
+    public function addDeletedSpot(Spot $spot)
     {
-        $this->deletedSpots      = $deletedSpots;
-        $this->spotsWithMeetings = $spotsWithMeetings;
-        $this->spotsWithSheets   = $spotsWithSheets;
+        $this->deletedSpots[$spot->getReference()] = $spot->getReference();
     }
 
     /**
-     * @param $spotsIds[]
-     *
      * @return string
      */
-    public function addError($spotsIds)
+    public function getDeletedSpots()
     {
-        $errorString = '';
-        foreach($spotsIds as $val) {
-            $errorString .= $val . ' - ';
-        }
+        return implode(', ', $this->deletedSpots);
+    }
 
-        return rtrim($errorString , '- ');
+    /**
+     * @param Spot $spot
+     */
+    public function addSpotWithMeeting(Spot $spot)
+    {
+        $this->spotsWithMeetings[$spot->getReference()] = $spot->getReference();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpotsWithMeetings()
+    {
+        return implode(', ', $this->spotsWithMeetings);
+    }
+
+    /**
+     * @param Spot $spot
+     */
+    public function addSpotWithSheets(Spot $spot)
+    {
+        $this->spotsWithSheets[$spot->getReference()] = $spot->getReference();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpotsWithSheets()
+    {
+        return implode(', ', $this->spotsWithSheets);
     }
 }
