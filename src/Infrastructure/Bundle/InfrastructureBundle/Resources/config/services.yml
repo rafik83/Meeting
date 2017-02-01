@@ -2549,6 +2549,21 @@ services:
             - '@sheet.preview'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
 
+    query.meeting.meeting_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.meeting.participants_view_query_handler'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@sheet.sheet_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery }
+
+    query.meeting.participants_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
+        arguments:
+            - '@template.participant_info_guesser'
+
     query.meeting_request.status_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\StateListViewQueryHandler
         arguments:
@@ -2934,6 +2949,14 @@ services:
 
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.meeting_sheet_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\MeetingSheetNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'

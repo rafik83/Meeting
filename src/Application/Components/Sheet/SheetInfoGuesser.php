@@ -120,4 +120,33 @@ class SheetInfoGuesser
 
         return sprintf('#%s', $sheet->getId());
     }
+
+    /**
+     * @param Sheet       $sheet
+     * @param string|null $locale
+     *
+     * @return array
+     */
+    public function guessSheetInfos(Sheet $sheet, $locale = null)
+    {
+        $tags  = Tag::getSheetTags();
+        $infos = [];
+
+        if (null === $locale) {
+            $locale = $sheet->getEvent()->getFallback();
+        }
+
+        $template = $sheet->getTypeSheetTemplate();
+
+        foreach ($tags as $tag) {
+            $infos[$tag] = $this->taggedInfoGuesser->guessFirst(
+                $template,
+                $sheet->getData(),
+                $tag,
+                $locale
+            );
+        }
+
+        return $infos;
+    }
 }
