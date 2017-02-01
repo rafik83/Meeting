@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1eee18149571e86b6a0ce94a7b35e8c5",
-    "content-hash": "973ad13a6b16a37dfe224d8c6271c1c9",
+    "hash": "cd478c2f3d62e1777e1af8bb61b8108d",
+    "content-hash": "4505612ecec1dfc912916fbd7df77944",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -4404,7 +4404,6 @@
                 "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
                 "phpdocumentor/reflection-docblock": "^3.0",
                 "predis/predis": "~1.0",
-                "sensio/framework-extra-bundle": "^3.0.2",
                 "symfony/phpunit-bridge": "~3.2",
                 "symfony/polyfill-apcu": "~1.1",
                 "symfony/security-acl": "~2.8|~3.0"
