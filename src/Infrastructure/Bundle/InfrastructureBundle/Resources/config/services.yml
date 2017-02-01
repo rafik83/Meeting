@@ -2951,6 +2951,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
+            - '@order.merger'
         tags:
             - { name: serializer.normalizer }
 
