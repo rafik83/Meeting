@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -22,13 +23,22 @@ class ParticipantsViewQueryHandler
     private $participantInfoGuesser;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * ParticipantsViewQueryHandler constructor.
      *
      * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param TranslatorInterface    $translator
      */
-    public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        TranslatorInterface $translator
+    ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->translator             = $translator;
     }
 
     /**
@@ -46,12 +56,14 @@ class ParticipantsViewQueryHandler
                 $query->locale
             );
 
+            $gender = $participantInfo[Tag::PARTICIPANT_GENDER];
+
             $participantView[] = new MeetingParticipantView(
                 $participantInfo[Tag::PARTICIPANT_FIRSTNAME],
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
                 $participantInfo[Tag::PARTICIPANT_PHONE],
-                $participantInfo[Tag::PARTICIPANT_GENDER],
+                $this->translator->trans('gender.' . $gender, [], 'messages'),
                 $participant->getEmail()
             );
         }

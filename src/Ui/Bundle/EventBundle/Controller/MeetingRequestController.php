@@ -651,6 +651,9 @@ class MeetingRequestController extends Controller
 
     /**
      * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
      */
     public function exportContactAction(Request $request, EventDomain $eventDomain)
     {
@@ -664,9 +667,9 @@ class MeetingRequestController extends Controller
             )
         );
 
-        $charset              = Charset::WINDOWS_1252;
-        $exportContent        = $this->get('serializer')->serialize($meetingSheetListView, 'csv',[
-            'charset' => $charset
+        $charset       = Charset::WINDOWS_1252;
+        $exportContent = $this->get('serializer')->serialize($meetingSheetListView, 'csv', [
+            'charset' => $charset,
         ]);
 
         $response    = new Response($exportContent);

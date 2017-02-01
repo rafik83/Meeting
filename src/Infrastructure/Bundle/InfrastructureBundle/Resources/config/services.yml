@@ -2563,6 +2563,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     query.meeting_request.status_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\StateListViewQueryHandler

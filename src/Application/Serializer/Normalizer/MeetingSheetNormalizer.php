@@ -119,7 +119,7 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_SHEET_ADDRESS,
             self::COL_SHEET_ZIPCODE,
             self::COL_SHEET_CITY,
-            self::COl_SHEET_COUNTRY,
+            self::COL_SHEET_COUNTRY,
         ];
     }
 
