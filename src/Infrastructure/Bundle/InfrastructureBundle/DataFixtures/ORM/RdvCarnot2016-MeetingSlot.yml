@@ -1,0 +1,9 @@
+Proximum\Vimeet\Domain\Model\MeetingSlot:
+    meeting_slot_day_one_1:
+        __construct: ['@event_rdv_carnot_2016', <(new DateTime('2016-10-12 08:00:00'))>, <(new DateTime('2016-10-12 08:30:00'))>]
+    meeting_slot_day_one_2:
+        __construct: ['@event_rdv_carnot_2016', <(new DateTime('2016-10-12 08:30:00'))>, <(new DateTime('2016-10-12 09:00:00'))>]
+    meeting_slot_day_one_3:
+        __construct: ['@event_rdv_carnot_2016', <(new DateTime('2016-10-12 09:00:00'))>, <(new DateTime('2016-10-12 09:30:00'))>]
+    meeting_slot_day_one_4:
+        __construct: ['@event_rdv_carnot_2016', <(new DateTime('2016-10-12 09:30:00'))>, <(new DateTime('2016-10-12 10:00:00'))>]

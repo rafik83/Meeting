@@ -47,6 +47,9 @@
                         <li>
                             <button name="disable" value="1" type="submit">{{ 'admin.spot.disable'|trans }}</button>
                         </li>
+                        <li>
+                            <button name="spotUnavailability" value="1" type="submit">{{ 'admin.spot.unavailability'|trans }}</button>
+                        </li>
                     {% endblock actions %}
                 {% endembed %}
             </div>
@@ -84,6 +87,7 @@
                         {{ 'admin.spot.listSpot.visio'|trans }}
                     </th>
                     <th>{{ 'admin.spot.listSpot.sheet'|trans }}</th>
+                    <th>{{ 'admin.spot.listSpot.hasUnavailability'|trans }}</th>
                     <th>
                         {{ list_macros.choice_as_dropdown(filter_form.active, false, true) }}
                     </th>
@@ -91,7 +95,7 @@
             </thead>
             <tbody>
                 {% for spot in spotsList.spots %}
-                    <tr>
+                    <tr id="spot-{{ spot.id }}">
                         <td><input type="checkbox" id="batch_checkbox_{{ spot.id }}" name="ids[]" value="{{ spot.id }}" /></td>
                         <td class="updatable" data-type="string" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'reference', 'value': spot.reference }|json_encode }}">{{ spot.reference }}</td>
                         <td class="updatable" data-type="float" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
@@ -130,6 +134,7 @@
                             {% endfor %}
                             </ul>
                         </td>
+                        <td>{{ spot.hasUnavailability ? '✓' : '' }}</td>
                         <td>{{ spot.active ? 'admin.spot.active.yes'|trans : 'admin.spot.active.no'|trans }}</td>
                     </tr>
                 {% endfor %}

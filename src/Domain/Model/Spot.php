@@ -71,6 +71,11 @@ class Spot
     private $sheets;
 
     /**
+     * @var ArrayCollection
+     */
+    private $spotUnavailabilities = [];
+
+    /**
      * Spot constructor.
      *
      * @param string $reference
@@ -92,15 +97,16 @@ class Spot
         $priority = self::PRIORITY_MUTUALIZE,
         $visio = false
     ) {
-        $this->reference       = $reference;
-        $this->event           = $event;
-        $this->size            = $size;
-        $this->meetingCapacity = $meetingCapacity;
-        $this->seatCapacity    = $seatCapacity;
-        $this->active          = $active;
-        $this->sheets          = new ArrayCollection();
-        $this->priority        = $priority;
-        $this->visio           = $visio;
+        $this->reference            = $reference;
+        $this->event                = $event;
+        $this->size                 = $size;
+        $this->meetingCapacity      = $meetingCapacity;
+        $this->seatCapacity         = $seatCapacity;
+        $this->active               = $active;
+        $this->sheets               = new ArrayCollection();
+        $this->spotUnavailabilities = new ArrayCollection();
+        $this->priority             = $priority;
+        $this->visio                = $visio;
     }
 
     /**
@@ -244,6 +250,14 @@ class Spot
     }
 
     /**
+     * @return SpotUnavailability[]
+     */
+    public function getSpotUnavailabilities()
+    {
+        return $this->spotUnavailabilities->toArray();
+    }
+
+    /**
      * @return int
      */
     public function getPriority()
@@ -263,6 +277,13 @@ class Spot
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function hasUnavailability()
+    {
+        return $this->spotUnavailabilities->count() > 0;
+    }
     /**
      * @return bool
      */

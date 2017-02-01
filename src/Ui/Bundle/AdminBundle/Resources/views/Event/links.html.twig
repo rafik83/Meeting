@@ -29,11 +29,6 @@
                 </a>
             </li>
             <li>
-                <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
-                    {{ 'admin.spot.link'|trans }}
-                </a>
-            </li>
-            <li>
                 <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">
                     {{ 'admin.event.practicalInfo.link'|trans }}
                 </a>
@@ -160,6 +155,18 @@
             <li>
                 <a href="{{ path('admin_agenda_export_participant_index', { 'event': event.id}) }}">
                     {{ 'admin.agenda.export.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
+            {{ 'admin.spot.link'|trans }}
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
+                    {{ 'admin.spot.link'|trans }}
                 </a>
             </li>
         </ul>

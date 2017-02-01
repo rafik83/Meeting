@@ -14,20 +14,22 @@ use Proximum\Vimeet\Application\Command\Spot\Action\UnVisio;
 use Proximum\Vimeet\Application\Command\Spot\Action\Visio;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
-use Proximum\Vimeet\Application\Command\Spot\Update;
+use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
+use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
+use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch;
+use Proximum\Vimeet\Application\Command\Spot\Update;
 use Proximum\Vimeet\Application\Exception\Spot\MultipleUniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
-use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
-use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
-use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -93,24 +95,29 @@ class SpotController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $spotsToDelete = $request->request->get('ids', []);
-        $deleteButton  = $request->request->getBoolean('delete');
-        $disableButton = $request->request->getBoolean('disable');
-        $enableButton  = $request->request->getBoolean('enable');
+        $selectedSpots            = $request->request->get('ids', []);
+        $deleteButton             = $request->request->getBoolean('delete');
+        $disableButton            = $request->request->getBoolean('disable');
+        $enableButton             = $request->request->getBoolean('enable');
+        $spotUnavailabilityButton = $request->request->getBoolean('spotUnavailability');
 
-        if (!empty($spotsToDelete)) {
+        if (!empty($selectedSpots)) {
             if ($deleteButton) {
-                $deleteBatch = new DeleteBatch($spotsToDelete, $event);
+                $deleteBatch = new DeleteBatch($selectedSpots, $event);
                 $this->get('tactician.commandbus')->handle($deleteBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
             } elseif ($disableButton) {
-                $disableBatch = new DisableBatch($spotsToDelete, $event);
+                $disableBatch = new DisableBatch($selectedSpots, $event);
                 $this->get('tactician.commandbus')->handle($disableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.disable.success');
             } elseif ($enableButton) {
-                $enableBatch = new EnableBatch($spotsToDelete, $event);
+                $enableBatch = new EnableBatch($selectedSpots, $event);
                 $this->get('tactician.commandbus')->handle($enableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.enable.success');
+            } elseif ($spotUnavailabilityButton) {
+                $this->get('session')->set('selectedSpots', $selectedSpots);
+
+                return $this->redirectToRoute('admin_spot_batch_unavailability', ['event' => $event->getId()]);
             }
         }
 
@@ -141,7 +148,8 @@ class SpotController extends Controller
 
                 return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
             } catch (UniqueReferenceViolationException $exception) {
-                $form->get('reference')->addError(new FormError($this->get('translator')->trans('validators.spot.reference.unique', [], 'validators')));
+                $form->get('reference')->addError(new FormError($this->get('translator')
+                    ->trans('validators.spot.reference.unique', [], 'validators')));
             }
         }
 
@@ -190,6 +198,38 @@ class SpotController extends Controller
      *
      * @return Response
      */
+    public function batchUnavailabilityAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $selectedSpots = $this->get('session')->get('selectedSpots');
+
+        $unavailabilityBatch = new UnavailabilityBatch($selectedSpots, $event);
+
+        $form = $this->createForm(BatchUnavailabilityType::class, $unavailabilityBatch, [
+            'event'  => $event,
+            'locale' => $request->getLocale(),
+        ]);
+
+        if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
+            $this->get('tactician.commandbus')->handle($unavailabilityBatch);
+            $this->addFlash('success', 'flash.admin.spot_batch.spotUnavailability.success');
+
+            return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Spot:batchUnavailability.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
     public function updateAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -214,7 +254,7 @@ class SpotController extends Controller
         return new JsonResponse([
             'id'       => $command->id,
             'property' => $command->property,
-            'value'    => $command->value
+            'value'    => $command->value,
         ]);
     }
 

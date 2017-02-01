@@ -41,6 +41,7 @@ class SpotViewQueryHandler
             $query->spot->getMeetingCapacity(),
             $query->spot->getSeatCapacity(),
             $query->spot->isActive(),
+            $query->spot->hasUnavailability(),
             $query->spot->getPriority(),
             $query->spot->isVisio()
         );

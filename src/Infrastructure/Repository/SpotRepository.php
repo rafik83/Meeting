@@ -34,7 +34,7 @@ class SpotRepository implements SpotRepositoryInterface
      */
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -65,12 +65,35 @@ class SpotRepository implements SpotRepositoryInterface
             ->select('spot')
             ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
-            ->setParameter('event', $event)
             ->andWhere('spot.id = :id')
+            ->setParameter('event', $event)
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Event $event
+     * @param array $ids
+     *
+     * @return Spot[]
+     */
+    public function findMany(Event $event, array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in('spot.id', $ids)
+        );
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -127,8 +150,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
     }
@@ -146,8 +168,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
     }
@@ -165,8 +186,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
     }

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 
 interface MeetingRepositoryInterface
 {
@@ -97,4 +98,12 @@ interface MeetingRepositoryInterface
      * @return bool
      */
     public function hasMeetingOnSlot(MeetingSlot $meetingSlot);
+
+    /**
+     * @param Spot        $spot
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return Meeting[]|null
+     */
+    public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
 }
