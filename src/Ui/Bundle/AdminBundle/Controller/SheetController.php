@@ -517,7 +517,7 @@ class SheetController extends Controller
     {
         $this->checkAccess($event);
 
-        $isVisio = in_array($request->request->get('isVisio'), ['true', 'false']);
+        $isVisio = (int) filter_var($request->request->get('isVisio'), FILTER_VALIDATE_BOOLEAN);
 
         if ($participant->getSheet()->getEvent() !== $event) {
             return new JsonResponse([
