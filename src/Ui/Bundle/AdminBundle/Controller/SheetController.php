@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
@@ -39,6 +40,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -178,11 +180,18 @@ class SheetController extends Controller
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
 
+                /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
-                $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
-                    '%count%' => $result->count,
-                ]));
+                if (empty($result->ignoredSheetsMessage)) {
+                    $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
+                        '%count%' => $result->count,
+                    ]));
+                } else {
+                    $this->addFlash('warning', new TranschoiceMessage($result->message, $result->count, [
+                        '%sheets%' => $result->ignoredSheetsMessage,
+                    ]));
+                }
             } else {
                 $this->addFlash('error', (string)$batchForm->getErrors(true));
             }
