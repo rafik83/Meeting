@@ -494,4 +494,12 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Request $request)
+    {
+        $this->entityManager->flush($request);
+    }
 }
