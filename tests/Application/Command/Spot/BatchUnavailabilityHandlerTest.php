@@ -47,6 +47,7 @@ class BatchUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->findMany($event, $spotIds)->shouldBeCalled()->willReturn($spots);
 
         foreach ($spots as $spot) {
+            $spotUnavailabilityRepository->remove($spot)->shouldBeCalled();
             $meetingRepository->findBySpotAndSlot($spot, $meetingSlot)->shouldBeCalled()->willReturn([]);
             $spotUnavailabilityRepository->add(Argument::that(function (SpotUnavailability $spotUnavailability) {
                 return $spotUnavailability;

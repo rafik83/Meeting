@@ -74,10 +74,7 @@ class SpotRepository implements SpotRepositoryInterface
     }
 
     /**
-     * @param Event $event
-     * @param array $ids
-     *
-     * @return Spot[]
+     * {@inheritdoc}
      */
     public function findMany(Event $event, array $ids)
     {

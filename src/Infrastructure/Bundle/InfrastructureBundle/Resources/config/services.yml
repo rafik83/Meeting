@@ -2598,6 +2598,12 @@ services:
             - '@query.meeting.message.message_meeting_request_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery }
+    query.spot.spot_unavailability_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery }
     query.spot.sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Spot\SheetViewQueryHandler
         arguments:
