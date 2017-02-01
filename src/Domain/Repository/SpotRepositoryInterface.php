@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 interface SpotRepositoryInterface
@@ -94,25 +95,33 @@ interface SpotRepositoryInterface
      * @param MeetingSlot  $slot
      * @param int          $participantsQuantity
      * @param Meeting|null $exceptMeeting
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
      *
      * @return Spot[]
      */
     public function getSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
-        Meeting $exceptMeeting = null
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
     );
 
     /**
      * @param MeetingSlot  $slot
      * @param int          $participantsQuantity
      * @param Meeting|null $exceptMeeting
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
      *
      * @return bool
      */
     public function hasSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
-        Meeting $exceptMeeting = null
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
     );
 }

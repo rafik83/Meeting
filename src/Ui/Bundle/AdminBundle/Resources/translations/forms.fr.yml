@@ -666,16 +666,28 @@ form.unavailability_mass_create.children.begin.label: Début
 form.unavailability_mass_create.children.blocking.label: Bloquant
 form.unavailability_mass_create.children.category.label: Catégorie
 form.unavailability_mass_create.children.end.label: Fin
+form.unavailability_mass_create.children.dispatch.label: Dispatch
 form.unavailability_mass_create.children.name.label: 'Nom backoffice'
 form.unavailability_mass_create.children.submit.label: Enregistrer
+form.unavailability_mass_create.children.timeSlots.label: Créneaux de dispatch
+form.unavailability_mass_create.children.timeSlots.label_add: Ajouter
+form.unavailability_mass_create.children.timeSlots.label_delete: Supprimer
+form.unavailability_mass_create.children.timeSlots.prototype.children.from.label: Début
+form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
 form.unavailability_mass_update.children.begin.label: Début
 form.unavailability_mass_update.children.blocking.label: Bloquant
 form.unavailability_mass_update.children.category.label: Catégorie
 form.unavailability_mass_update.children.end.label: Fin
+form.unavailability_mass_update.children.dispatch.label: Dispatch
 form.unavailability_mass_update.children.name.label: 'Nom backoffice'
 form.unavailability_mass_update.children.submit.label: Enregistrer
+form.unavailability_mass_update.children.timeSlots.label: Créneaux de dispatch
+form.unavailability_mass_update.children.timeSlots.label_add: Ajouter
+form.unavailability_mass_update.children.timeSlots.label_delete: Supprimer
+form.unavailability_mass_update.children.timeSlots.prototype.children.from.label: Début
+form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
 form.unavailability.mass.children.blocking.answer.false: Non

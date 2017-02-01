@@ -304,15 +304,19 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             } elseif ($timeEntity instanceof HappeningView) {
                 $formatted .= $timeEntity->title;
             } elseif ($timeEntity instanceof UnavailabilityView) {
-                $formatted .= $this
-                    ->translator
-                    ->trans(
-                        'admin.participant.export.fields.planning.unavailability',
-                        [],
-                        'messages',
-                        $participantLocale
-                    )
-                ;
+                if ($timeEntity->hasMessage()) {
+                    $formatted .= $timeEntity->message;
+                } else {
+                    $formatted .= $this
+                        ->translator
+                        ->trans(
+                            'admin.participant.export.fields.planning.unavailability',
+                            [],
+                            'messages',
+                            $participantLocale
+                        )
+                    ;
+                }
             }
 
             $formattedTimes[] = $formatted;

@@ -15,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
@@ -200,12 +201,16 @@ class SpotRepository implements SpotRepositoryInterface
     public function getSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
-        Meeting $exceptMeeting = null
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
     ) {
         $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
             $slot,
             $participantsQuantity,
-            $exceptMeeting
+            $exceptMeeting,
+            $fromSheet,
+            $toSheet
         );
 
         return $queryBuilder->getQuery()->getResult();
@@ -217,12 +222,16 @@ class SpotRepository implements SpotRepositoryInterface
     public function hasSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
-        Meeting $exceptMeeting = null
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
     ) {
         $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
             $slot,
             $participantsQuantity,
-            $exceptMeeting
+            $exceptMeeting,
+            $fromSheet,
+            $toSheet
         );
 
         $queryBuilder->setMaxResults(1);
@@ -234,13 +243,17 @@ class SpotRepository implements SpotRepositoryInterface
      * @param MeetingSlot  $slot
      * @param              $participantsQuantity
      * @param Meeting|null $exceptMeeting
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
      *
      * @return QueryBuilder
      */
     private function getSpotsForSlotAndParticipantsQuantityQueryBuilder(
         MeetingSlot $slot,
         $participantsQuantity,
-        Meeting $exceptMeeting = null
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
     ) {
         $queryBuilder = $this
             ->entityManager
@@ -282,14 +295,24 @@ class SpotRepository implements SpotRepositoryInterface
 
         if (null !== $exceptMeeting) {
             $queryBuilder
+                ->setParameter('exceptMeeting', $exceptMeeting)
+            ;
+
+            if ($fromSheet === null && $toSheet === null) {
+                $fromSheet = $exceptMeeting->getFromSheet();
+                $toSheet   = $exceptMeeting->getToSheet();
+            }
+        }
+
+        if ($fromSheet !== null && $toSheet !== null) {
+            $queryBuilder
                 // Get meeting sheets assigned to spot in order to sort Spots list by assigned spots then by shared spots
                 ->addSelect('sheetAssignedToSpot.id AS HIDDEN hasSheetAssignedFromMeeting')
                 ->leftJoin('spot.sheets', 'sheetAssignedToSpot', 'WITH', 'sheetAssignedToSpot IN (:fromSheetId, :toSheetId)')
                 // Exclude spots assigned to others sheet
                 ->andWhere('sheetAssignedToSpot IN (:fromSheetId, :toSheetId) OR NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
-                ->setParameter('fromSheetId', $exceptMeeting->getFromSheet()->getId())
-                ->setParameter('toSheetId', $exceptMeeting->getToSheet()->getId())
-                ->setParameter('exceptMeeting', $exceptMeeting)
+                ->setParameter('fromSheetId', $fromSheet->getId())
+                ->setParameter('toSheetId', $toSheet->getId())
                 ->addOrderBy('hasSheetAssignedFromMeeting', 'DESC');
         }
 
