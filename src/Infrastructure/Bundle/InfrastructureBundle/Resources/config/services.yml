@@ -2904,6 +2904,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
+            - '@order.merger'
         tags:
             - { name: serializer.normalizer }
 
@@ -2916,7 +2917,6 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
-            - '@order.merger'
         tags:
             - { name: serializer.normalizer }
 
