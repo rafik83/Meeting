@@ -44,6 +44,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 
 class MeetingRequestController extends Controller
 {
