@@ -1449,6 +1449,27 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate }
 
+    command.spot.action.un_visio_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\Action\UnVisioHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Action\UnVisio }
+
+    command.spot.action.visio_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\Action\VisioHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Action\Visio }
+
+    command.meeting.admin.delete_meeting_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeetingHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting }
+
     #
     # Security
     #
@@ -2603,6 +2624,14 @@ services:
         class: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQueryHandler
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQuery }
+
+    query.meeting.admin.details.meeting_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\Admin\Details\MeetingViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\Details\MeetingViewQuery }
 
     #
     # Elastic Transformer

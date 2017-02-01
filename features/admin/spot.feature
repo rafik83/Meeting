@@ -35,10 +35,13 @@ Feature: Spot feature
       | spot_create_size            | 3    |
       | spot_create_meetingCapacity | 6    |
       | spot_create_seatCapacity    | 2    |
+      | spot_create_priority        | 90   |
+      | spot_create_visio           | 1    |
     And I check "spot_create_active"
     And I press "form.spot_create.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/spot"
     And I should see "flash.admin.spot.create.success"
+    And I should see "90"
 
   Scenario: I can filter spots with active filter
     Given I am logged with "test@test.com" on admin

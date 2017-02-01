@@ -18,6 +18,8 @@ use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
  */
 class Spot
 {
+    const PRIORITY_ASSIGN    = 8;
+    const PRIORITY_MUTUALIZE = 12;
     /**
      * @var int
      */
@@ -54,6 +56,16 @@ class Spot
     private $active;
 
     /**
+     * @var int
+     */
+    private $priority = 12;
+
+    /**
+     * @var bool
+     */
+    private $visio;
+
+    /**
      * @var ArrayCollection
      */
     private $sheets;
@@ -72,6 +84,8 @@ class Spot
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
      * @param bool   $active
+     * @param int    $priority
+     * @param bool   $visio
      */
     public function __construct(
         $reference,
@@ -79,7 +93,9 @@ class Spot
         $size,
         $meetingCapacity,
         $seatCapacity,
-        $active
+        $active,
+        $priority = self::PRIORITY_MUTUALIZE,
+        $visio = false
     ) {
         $this->reference            = $reference;
         $this->event                = $event;
@@ -89,6 +105,8 @@ class Spot
         $this->active               = $active;
         $this->sheets               = new ArrayCollection();
         $this->spotUnavailabilities = new ArrayCollection();
+        $this->priority             = $priority;
+        $this->visio                = $visio;
     }
 
     /**
@@ -216,6 +234,14 @@ class Spot
     }
 
     /**
+     * @param Sheet $sheet
+     */
+    public function removeSheet(Sheet $sheet)
+    {
+        $this->sheets->removeElement($sheet);
+    }
+
+    /**
      * @return Sheet[]
      */
     public function getSheets()
@@ -232,10 +258,61 @@ class Spot
     }
 
     /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     *
+     * @return self
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function hasUnavailability()
     {
         return $this->spotUnavailabilities->count() > 0;
+    }
+    /**
+     * @return bool
+     */
+    public function isVisio()
+    {
+        return $this->visio;
+    }
+
+    /**
+     * Set visio to false
+     *
+     * @return self
+     */
+    public function unVisio()
+    {
+        $this->visio = false;
+
+        return $this;
+    }
+
+    /**
+     * Set visio to true
+     *
+     * @return self
+     */
+    public function goToVisio()
+    {
+        $this->visio = true;
+
+        return $this;
     }
 }

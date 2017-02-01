@@ -36,10 +36,10 @@ class SpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetView2 = new SheetView(2, $type, 3, 3);
         $sheetView3 = new SheetView(3, $type, 4, 4);
 
-        $spot = new Spot('ref1', $event, 2, 2, 2, true);
-        $spot2 = new Spot('ref2', $event, 3, 3, 3, true);
-        $spot3 = new Spot('ref3', $event, 4, 4, 4, true);
-        $spot4 = new Spot('ref4', $event, 5, 5, 5, true);
+        $spot = new Spot('ref1', $event, 2, 2, 2, true, 8);
+        $spot2 = new Spot('ref2', $event, 3, 3, 3, true, 8);
+        $spot3 = new Spot('ref3', $event, 4, 4, 4, true, 12);
+        $spot4 = new Spot('ref4', $event, 5, 5, 5, true, 12);
         $spot->addSheet($sheet);
         $spot2->addSheet($sheet2);
         $spot2->addSheet($sheet3);
@@ -74,8 +74,8 @@ class SpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $expected = [
             new SpotView(1, 'ref1', 2, 2, [$sheetView], 8),
             new SpotView(2, 'ref2', 3, 3, [$sheetView2, $sheetView3], 8),
-            new SpotView(3, 'ref3', 4, 4, [], 10),
-            new SpotView(4, 'ref4', 5, 5, [], 10),
+            new SpotView(3, 'ref3', 4, 4, [], 12),
+            new SpotView(4, 'ref4', 5, 5, [], 12),
         ];
 
         $this->assertEquals($expected, $result);

@@ -580,6 +580,7 @@ form.sheet.messaging_campaign.message.submit.label: Terminer
 form.sheet.messaging_campaign.recipients.submit.label: Valider
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
+form.spot_batch_create.children.priority.label: Priorité
 form.spot_batch_create.children.recipes.label: 'Identifiants du lot'
 form.spot_batch_create.children.recipes.label_add: Ajouter
 form.spot_batch_create.children.recipes.label_delete: Supprimer
@@ -589,15 +590,18 @@ form.spot_batch_create.children.recipes.prototype.children.start.label: Début
 form.spot_batch_create.children.seatCapacity.label: 'Capacité du nombre de places assises'
 form.spot_batch_create.children.size.label: 'Taille en m²'
 form.spot_batch_create.children.submit.label: Enregistrer
+form.spot_batch_create.children.visio.label: Visio
 form.spot_create.children.active.label: Actif
 form.spot_create.children.filters.all.label: Tous
 form.spot_create.children.filters.no.label: Non
 form.spot_create.children.filters.yes.label: Oui
 form.spot_create.children.meetingCapacity.label: 'Nombre de rendez-vous en simultané'
+form.spot_create.children.priority.label: 'Priorité'
 form.spot_create.children.reference.label: Identifiant
 form.spot_create.children.seatCapacity.label: 'Nombre de places assises'
 form.spot_create.children.size.label: 'Taille en m²'
 form.spot_create.children.submit.label: Enregistrer
+form.spot_create.children.visio.label: 'Visio'
 form.template_registration_update.children.submit.label: Enregistrer
 form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
@@ -662,16 +666,28 @@ form.unavailability_mass_create.children.begin.label: Début
 form.unavailability_mass_create.children.blocking.label: Bloquant
 form.unavailability_mass_create.children.category.label: Catégorie
 form.unavailability_mass_create.children.end.label: Fin
+form.unavailability_mass_create.children.dispatch.label: Dispatch
 form.unavailability_mass_create.children.name.label: 'Nom backoffice'
 form.unavailability_mass_create.children.submit.label: Enregistrer
+form.unavailability_mass_create.children.timeSlots.label: Créneaux de dispatch
+form.unavailability_mass_create.children.timeSlots.label_add: Ajouter
+form.unavailability_mass_create.children.timeSlots.label_delete: Supprimer
+form.unavailability_mass_create.children.timeSlots.prototype.children.from.label: Début
+form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
 form.unavailability_mass_update.children.begin.label: Début
 form.unavailability_mass_update.children.blocking.label: Bloquant
 form.unavailability_mass_update.children.category.label: Catégorie
 form.unavailability_mass_update.children.end.label: Fin
+form.unavailability_mass_update.children.dispatch.label: Dispatch
 form.unavailability_mass_update.children.name.label: 'Nom backoffice'
 form.unavailability_mass_update.children.submit.label: Enregistrer
+form.unavailability_mass_update.children.timeSlots.label: Créneaux de dispatch
+form.unavailability_mass_update.children.timeSlots.label_add: Ajouter
+form.unavailability_mass_update.children.timeSlots.label_delete: Supprimer
+form.unavailability_mass_update.children.timeSlots.prototype.children.from.label: Début
+form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
 form.unavailability.mass.children.blocking.answer.false: Non

@@ -80,6 +80,12 @@
                     <th>
                         {{ 'admin.spot.listSpot.seatCapacity'|trans }}
                     </th>
+                    <th>
+                        {{ 'admin.spot.listSpot.priority'|trans }}
+                    </th>
+                    <th>
+                        {{ 'admin.spot.listSpot.visio'|trans }}
+                    </th>
                     <th>{{ 'admin.spot.listSpot.sheet'|trans }}</th>
                     <th>{{ 'admin.spot.listSpot.hasUnavailability'|trans }}</th>
                     <th>
@@ -95,6 +101,30 @@
                         <td class="updatable" data-type="float" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'seatCapacity', 'value': spot.seatCapacity }|json_encode }}">{{ spot.seatCapacity }}</td>
+                        <td class="updatable" data-type="int" data-url="{{ update_url }}"  data-update="{{ { 'id': spot.id, 'property': 'priority', 'value': spot.priority }|json_encode }}">
+                            {{ spot.priority }}
+                        </td>
+                        <td>
+                            {% if spot.visio is defined and spot.visio == true %}
+                                <div class="btn-group" role="group" aria-label="visio">
+                                    <a href="#" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.visio'|trans }}">
+                                        <i class="glyphicon glyphicon-facetime-video"></i>
+                                    </a>
+                                    <a href="{{ path('admin_spot_update_un_visio', { 'event': event.id, 'spot': spot.id }) }}" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.un-visio'|trans }}">
+                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="btn-group" role="group" aria-label="visio">
+                                    <a href="{{ path('admin_spot_update_visio', { 'event': event.id, 'spot': spot.id }) }}" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.visio'|trans }}">
+                                        <i class="glyphicon glyphicon-facetime-video"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-info active" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.un-visio'|trans }}">
+                                        <i class="glyphicon glyphicon-map-marker"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </td>
                         <td>
                             <ul>
                             {% for sheet in spot.sheets %}

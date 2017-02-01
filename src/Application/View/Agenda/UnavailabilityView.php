@@ -23,20 +23,36 @@ class UnavailabilityView extends AbstractTimeEntityView
     public $timeZone;
 
     /**
+     * @var null|string
+     */
+    public $message;
+
+    /**
      * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string             $timeZone
+     * @param string|null        $message
      */
     public function __construct(
         $id,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $timeZone
+        $timeZone,
+        $message = null
     ) {
         $this->id       = $id;
         $this->begin    = $begin;
         $this->end      = $end;
         $this->timeZone = $timeZone;
+        $this->message  = $message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMessage()
+    {
+        return $this->message !== null;
     }
 }
