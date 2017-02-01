@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
-use Proximum\Vimeet\Application\Exception\Participant\ParticipantException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
@@ -525,7 +524,7 @@ class SheetController extends Controller
                 'error' => $this->get('translator')->trans('admin.sheet.participant.not_found'),
             ], 404);
         }
-        
+
         $command = new UpdateVisio($participant, $isVisio);
 
         $this->get('tactician.commandbus')->handle($command);
