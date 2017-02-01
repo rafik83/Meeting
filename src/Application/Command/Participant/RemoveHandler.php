@@ -14,7 +14,10 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RemoveHandler
@@ -35,22 +38,40 @@ class RemoveHandler
     private $eventDispatcher;
 
     /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * @param ParticipantRepositoryInterface $participantRepository
      * @param CartManager                    $cartManager
      * @param DelayedEventDispatcher         $eventDispatcher
+     * @param MeetingRepositoryInterface     $meetingRepository
+     * @param ParticipantInfoGuesser         $participantInfoGuesser
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         CartManager $cartManager,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        MeetingRepositoryInterface $meetingRepository,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
-        $this->participantRepository = $participantRepository;
-        $this->cartManager           = $cartManager;
-        $this->eventDispatcher       = $eventDispatcher;
+        $this->participantRepository  = $participantRepository;
+        $this->cartManager            = $cartManager;
+        $this->eventDispatcher        = $eventDispatcher;
+        $this->meetingRepository      = $meetingRepository;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
      * @param Remove $remove
+     *
+     * @return RemoveResult
      *
      * @throws CanNotRemoveAllParticipantsException
      */
@@ -60,9 +81,27 @@ class RemoveHandler
             throw new CanNotRemoveAllParticipantsException('All participants can not be selected to be remove');
         }
 
+        // Array of participant with meeting
+        $hasMeeting = [];
+        $toDelete   = [];
+
+        /** @var Participant $participant */
         foreach ($remove->participants as $participant) {
-            $remove->sheet->removeParticipant($participant);
-            $this->participantRepository->delete($participant);
+            $countmeeting = $this->meetingRepository->countByParticipant($participant);
+
+            if ($countmeeting !== 0) {
+                $hasMeeting[$participant->getId()] = $participant;
+            } else {
+                $toDelete[$participant->getId()] = $participant;
+            }
+        }
+
+        // Avoid delation if there is someone with the exception of meeting
+        if (empty($hasMeeting)) {
+            foreach ($toDelete as $participantToDelete) {
+                $remove->sheet->removeParticipant($participantToDelete);
+                $this->participantRepository->delete($participantToDelete);
+            }
         }
 
         // Update cart
@@ -70,5 +109,13 @@ class RemoveHandler
 
         $sheetUpdated = new SheetUpdatedEvent($remove->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
+
+        $participantNames = [];
+
+        foreach ($hasMeeting as $participantWithMeeting) {
+            $participantNames[] = $this->participantInfoGuesser->guessParticipantCompleteName($participantWithMeeting, $remove->locale);
+        }
+
+        return new RemoveResult($participantNames);
     }
 }

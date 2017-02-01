@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
+use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
@@ -320,8 +321,14 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object             = $templateData->getObject($key);
         $levelsArchitecture = [];
+
+        try {
+            $object = $templateData->getObject($key);
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
+        }
+
 
         if ($object instanceof Template\TemplateObject\Nomenclature) {
             $nomenclature = $object->getNomenclatureModel();
@@ -549,7 +556,7 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
         }
 
-        $remove = new Remove($sheet);
+        $remove = new Remove($sheet, $locale);
         $form   = $this->createForm(RemoveType::class, $remove, [
             'action' => $this->generateUrl(
                 'event_sheet_handle_remove_participant',
@@ -647,9 +654,34 @@ class SheetController extends Controller
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($remove);
+                /** @var RemoveResult $result */
+                $result = $this->get('tactician.commandbus')->handle($remove);
 
-                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                if (!$result->hasParticipantWithMeeting()) {
+                    return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                } else {
+                    $contactInfos = [
+                        $eventDomain->getEvent()->getOrganiserName(),
+                        $eventDomain->getEvent()->getConfiguration()->getContactFirstName(),
+                        $eventDomain->getEvent()->getConfiguration()->getContactLastName(),
+                        $eventDomain->getEvent()->getConfiguration()->getOrganiserPhone(),
+                        $eventDomain->getEvent()->getConfiguration()->getOrganiserWebsite(),
+                    ];
+
+                    // Array_filter remove the possible null entries
+                    $contactInfo = implode(', ', array_filter($contactInfos));
+
+                    $form->addError(
+                        new FormError(
+                            $this->get('translator')->transChoice(
+                                'validators.participant.remove.hasMeeting',
+                                $result->countParticipants(),
+                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => $contactInfo], 'validators'
+                            )
+                        )
+                    );
+                }
+
             } catch (CanNotRemoveAllParticipantsException $exception) {
                 $form->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
             }
