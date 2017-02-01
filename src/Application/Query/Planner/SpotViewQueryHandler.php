@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Planner;
 use Proximum\Vimeet\Application\Exception\Planner\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
 class SpotViewQueryHandler
@@ -26,6 +27,11 @@ class SpotViewQueryHandler
      * @var SheetView[]
      */
     private $sheets = [];
+
+    /**
+     * @var SlotView[]
+     */
+    private $slots = [];
 
     /**
      * @param SpotRepositoryInterface $spotRepository
@@ -55,6 +61,17 @@ class SpotViewQueryHandler
                 }
             }
 
+            $unavailabilities    = $spot->getSpotUnavailabilities();
+            $unavailabilityViews = [];
+
+            foreach ($unavailabilities as $unavailability) {
+                $slotView = $this->getSlotById($unavailability->getSlot()->getId());
+
+                if ($slotView !== null) {
+                    $unavailabilityViews[] = $slotView;
+                }
+            }
+
             $spotViews[] = new SpotView(
                 $spot->getId(),
                 $spot->getReference(),
@@ -62,7 +79,7 @@ class SpotViewQueryHandler
                 $spot->getMeetingCapacity(),
                 $sheetsList,
                 $spot->getPriority(),
-                [] // Coming spot unavailability
+                $unavailabilityViews
             );
         }
 
@@ -74,16 +91,20 @@ class SpotViewQueryHandler
      */
     private function setUp(SpotViewQuery $query)
     {
-        $this->indexSheetsById($query);
+        $this->indexById($query);
     }
 
     /**
      * @param SpotViewQuery $query
      */
-    private function indexSheetsById(SpotViewQuery $query)
+    private function indexById(SpotViewQuery $query)
     {
         foreach ($query->sheets as $sheet) {
             $this->sheets[$sheet->id] = $sheet;
+        }
+
+        foreach ($query->slots as $slot) {
+            $this->slots[$slot->id] = $slot;
         }
     }
 
@@ -101,5 +122,19 @@ class SpotViewQueryHandler
         }
 
         throw new SheetNotFoundException(sprintf('Sheet of id %s was not found', $id));
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return null|SlotView
+     */
+    private function getSlotById($id)
+    {
+        if (isset($this->slots[$id])) {
+            return $this->slots[$id];
+        }
+
+        return null;
     }
 }
