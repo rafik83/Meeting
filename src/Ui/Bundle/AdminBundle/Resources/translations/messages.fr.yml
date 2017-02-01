@@ -443,6 +443,7 @@ admin.schedule.slot.unlock: Débloquer
 admin.schedule.slot.unlocked: Débloqué
 admin.schedule.slots.generate.action: 'Générer des créneaux'
 admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
+admin.schedule.slots.generate.back: 'Retour à la liste des créneaux'
 admin.schedule.slots.table.begin: De
 admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à

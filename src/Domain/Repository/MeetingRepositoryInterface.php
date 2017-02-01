@@ -103,7 +103,7 @@ interface MeetingRepositoryInterface
      * @param Spot        $spot
      * @param MeetingSlot $meetingSlot
      *
-     * @return Meeting[]|null
+     * @return Meeting[]
      */
     public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
 }
