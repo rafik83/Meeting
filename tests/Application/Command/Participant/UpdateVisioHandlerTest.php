@@ -30,29 +30,30 @@ class UpdateVisioHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type($event);
 
         $sheet = new Sheet($event, $type, [], $user, $now);
-        $sheet->setRegistrationData([
-            "3ad4b72f" => ['text' => 'oldFoo'],
-            "9ef18c06" => ['url' => 'http://www.oldfoo.com'],
-            "93e093f"  => ['text' => '10 rue de la oldFoo'],
-            "de66af5d" => ['text' => '75002'],
-            "d224f0e7" => ['text' => 'oldFooVille'],
-            "e801edd4" => ['country' => 'EN'],
-        ]);
+
         $participant = new Participant(
             $sheet,
             $user,
             [],
-            true
+            false
         );
+
+        $expectedParticipant = new Participant(
+            $sheet,
+            $user,
+            [],
+            false
+        );
+        $expectedParticipant->setVisio(true);
 
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
-        $participantRepository->set($participant)->shouldBeCalled();
+        $command = new UpdateVisio($participant, true);
+
+        $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
         $handler = new UpdateVisioHandler($participantRepository->reveal());
-
-        $command = new UpdateVisio($participant, true);
 
         $handler->handle($command);
     }
