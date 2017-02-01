@@ -33,6 +33,7 @@ class MeetingSheetViewQueryHandler
      * @var SheetInfoGuesser
      */
     private $sheetInfoGuesser;
+
     /**
      * @var SheetGuesser
      */

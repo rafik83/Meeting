@@ -34,7 +34,7 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
     const COL_SHEET_ADDRESS         = 'sheet_address';
     const COL_SHEET_ZIPCODE         = 'sheet_zipcode';
     const COL_SHEET_CITY            = 'sheet_city';
-    const COl_SHEET_COUNTRY         = 'sheet_country';
+    const COL_SHEET_COUNTRY         = 'sheet_country';
 
     /**
      * {@inheritdoc}
@@ -152,7 +152,7 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_SHEET_ADDRESS         => $meetingSheetView->address,
             self::COL_SHEET_ZIPCODE         => $meetingSheetView->zipcode,
             self::COL_SHEET_CITY            => $meetingSheetView->city,
-            self::COl_SHEET_COUNTRY         => $meetingSheetView->country,
+            self::COL_SHEET_COUNTRY         => $meetingSheetView->country,
         ];
 
         return $input;
