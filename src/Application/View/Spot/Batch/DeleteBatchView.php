@@ -56,18 +56,4 @@ class DeleteBatchView
 
         return rtrim($errorString , '- ');
     }
-
-    /**
-     * @return $this
-     */
-    public function getSpotToDelete()
-    {
-        $this->deletedSpots = array_diff(
-            $this->deletedSpots,
-            $this->spotsWithMeetings,
-            $this->spotsWithSheets
-        );
-
-        return $this;
-    }
 }

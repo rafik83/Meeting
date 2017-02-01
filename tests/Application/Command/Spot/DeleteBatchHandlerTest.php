@@ -102,8 +102,6 @@ class DeleteBatchHandlerTest extends \PHPUnit_Framework_TestCase
 
         $spotRepository->getSpotsByIds($ids)->willReturn([$spot]);
 
-        $spotRepository->hasMeeting($spot)->shouldBeCalled()->willReturn(false);
-
         $spotRepository->removeBatchSpot([], $event)->shouldBeCalled();
 
         //Handler

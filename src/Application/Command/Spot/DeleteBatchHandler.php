@@ -44,17 +44,14 @@ class DeleteBatchHandler
         foreach($spots as $spot) {
             if ($spot->hasSheets() !== false) {
                 $deleteBatchView->spotsWithSheets[] = $spot->getReference();
-            }
-
-            if ($this->spotRepository->hasMeeting($spot) !== false) {
+            } else if ($this->spotRepository->hasMeeting($spot) !== false) {
                 $deleteBatchView->spotsWithMeetings[] = $spot->getReference();
+            } else {
+                $deleteBatchView->deletedSpots[] = $spot->getReference();
             }
 
-            $deleteBatchView->deletedSpots[] = $spot->getReference();
         }
 
-        $deleteBatchView = $deleteBatchView->getSpotToDelete();
-        
         $this->spotRepository->removeBatchSpot($deleteBatchView->deletedSpots, $deleteBatch->event);
 
         return $deleteBatchView;
