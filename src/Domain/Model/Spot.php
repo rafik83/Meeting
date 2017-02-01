@@ -18,6 +18,8 @@ use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
  */
 class Spot
 {
+    const PRIORITY_ASSIGN    = 8;
+    const PRIORITY_MUTUALIZE = 12;
     /**
      * @var int
      */
@@ -87,7 +89,7 @@ class Spot
         $meetingCapacity,
         $seatCapacity,
         $active,
-        $priority = 12,
+        $priority = self::PRIORITY_MUTUALIZE,
         $visio = false
     ) {
         $this->reference       = $reference;
@@ -226,6 +228,14 @@ class Spot
     }
 
     /**
+     * @param Sheet $sheet
+     */
+    public function removeSheet(Sheet $sheet)
+    {
+        $this->sheets->removeElement($sheet);
+    }
+
+    /**
      * @return Sheet[]
      */
     public function getSheets()
@@ -243,10 +253,14 @@ class Spot
 
     /**
      * @param int $priority
+     *
+     * @return self
      */
     public function setPriority($priority)
     {
         $this->priority = $priority;
+
+        return $this;
     }
 
     /**
