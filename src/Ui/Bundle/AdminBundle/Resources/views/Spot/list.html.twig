@@ -104,7 +104,7 @@
                         <td class="updatable" data-type="int" data-url="{{ update_url }}"  data-update="{{ { 'id': spot.id, 'property': 'priority', 'value': spot.priority }|json_encode }}">
                             {{ spot.priority }}
                         </td>
-                        <td>
+                        <td style="width: 100px;">
                             {% if spot.visio is defined and spot.visio == true %}
                                 <div class="btn-group" role="group" aria-label="visio">
                                     <a href="#" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.visio'|trans }}">
