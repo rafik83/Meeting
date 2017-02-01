@@ -243,6 +243,7 @@ admin.messaging.menu.title: Emailing
 admin.messaging.message.compose.links.activateAccount: 'Activation du compte'
 admin.messaging.message.compose.links.agenda: Agenda
 admin.messaging.message.compose.links.catalog: Catalogue
+admin.messaging.message.compose.links.exportMeetingSheet: "Télécharger mes contacts"
 admin.messaging.message.compose.links.label: 'Liens personnalisés'
 admin.messaging.message.compose.links.meetingRequest: 'Gestion RDV'
 admin.messaging.message.compose.links.orders: 'Liste des commandes'
