@@ -136,12 +136,12 @@ class SheetInfoGuesser
             $locale = $sheet->getEvent()->getFallback();
         }
 
-        $template = $sheet->getTypeSheetTemplate();
+        $template = $sheet->getType()->getRegistrationTemplate();
 
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirst(
                 $template,
-                $sheet->getData(),
+                $sheet->getRegistrationData(),
                 $tag,
                 $locale
             );
