@@ -55,7 +55,7 @@ class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetView        = new SheetView(1, $typeView, 2, 5);
         $participantView  = new ParticipantView(1, 'fullName', $sheetView, [$slotView]);
         $meetingView      = new MeetingView(1, [$sheetView], [$participantView]);
-        $spotView         = new SpotView(1, 'ref', 2, 3, [$sheetView], 1);
+        $spotView         = new SpotView(1, true, 'ref', 2, 3, [$sheetView], 1);
 
         // Mock
         $dayViewQueryHandler          = $this->prophesize(DayViewQueryHandler::class);
