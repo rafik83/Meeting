@@ -519,7 +519,7 @@ class SheetController extends Controller
 
         $visioParam = $request->request->get('isVisio');
 
-        if ($visioParam !== 'true' || $visioParam !== 'false') {
+        if ($visioParam !== 'true' && $visioParam !== 'false') {
             return new JsonResponse([
                 'error' => $this->get('translator')->trans('admin.sheet.participant.invalid-parameters')
             ], 404);
