@@ -46,6 +46,11 @@ class EnableDisableManager
 
         foreach ($requests as $request) {
 
+            /*
+             * Check on meeting sheet in case of adding to catalog :
+             * - If the sheet met isn't in catalog -> skip this request and do not enable request
+             * - If the sheet met is in catalog    -> set disabled to false
+             */
             if (self::ADDED_TO_CATALOG == $state && !$request->getSheetMet($sheet)->isInCatalog()) {
                 continue;
             }
