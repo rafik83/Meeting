@@ -591,17 +591,18 @@ form.spot_batch_create.children.seatCapacity.label: 'Capacité du nombre de plac
 form.spot_batch_create.children.size.label: 'Taille en m²'
 form.spot_batch_create.children.submit.label: Enregistrer
 form.spot_batch_create.children.visio.label: Visio
+form.spot_batch_unavailability.children.submit.label: 'Créer les indisponibilités'
 form.spot_create.children.active.label: Actif
 form.spot_create.children.filters.all.label: Tous
 form.spot_create.children.filters.no.label: Non
 form.spot_create.children.filters.yes.label: Oui
 form.spot_create.children.meetingCapacity.label: 'Nombre de rendez-vous en simultané'
-form.spot_create.children.priority.label: 'Priorité'
+form.spot_create.children.priority.label: Priorité
 form.spot_create.children.reference.label: Identifiant
 form.spot_create.children.seatCapacity.label: 'Nombre de places assises'
 form.spot_create.children.size.label: 'Taille en m²'
 form.spot_create.children.submit.label: Enregistrer
-form.spot_create.children.visio.label: 'Visio'
+form.spot_create.children.visio.label: Visio
 form.template_registration_update.children.submit.label: Enregistrer
 form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
@@ -665,11 +666,11 @@ form.unavailability_category_update.children.title.label: 'Titre de la catégori
 form.unavailability_mass_create.children.begin.label: Début
 form.unavailability_mass_create.children.blocking.label: Bloquant
 form.unavailability_mass_create.children.category.label: Catégorie
-form.unavailability_mass_create.children.end.label: Fin
 form.unavailability_mass_create.children.dispatch.label: Dispatch
+form.unavailability_mass_create.children.end.label: Fin
 form.unavailability_mass_create.children.name.label: 'Nom backoffice'
 form.unavailability_mass_create.children.submit.label: Enregistrer
-form.unavailability_mass_create.children.timeSlots.label: Créneaux de dispatch
+form.unavailability_mass_create.children.timeSlots.label: 'Créneaux de dispatch'
 form.unavailability_mass_create.children.timeSlots.label_add: Ajouter
 form.unavailability_mass_create.children.timeSlots.label_delete: Supprimer
 form.unavailability_mass_create.children.timeSlots.prototype.children.from.label: Début
@@ -679,11 +680,11 @@ form.unavailability_mass_create.children.translations.prototype.children.title.l
 form.unavailability_mass_update.children.begin.label: Début
 form.unavailability_mass_update.children.blocking.label: Bloquant
 form.unavailability_mass_update.children.category.label: Catégorie
-form.unavailability_mass_update.children.end.label: Fin
 form.unavailability_mass_update.children.dispatch.label: Dispatch
+form.unavailability_mass_update.children.end.label: Fin
 form.unavailability_mass_update.children.name.label: 'Nom backoffice'
 form.unavailability_mass_update.children.submit.label: Enregistrer
-form.unavailability_mass_update.children.timeSlots.label: Créneaux de dispatch
+form.unavailability_mass_update.children.timeSlots.label: 'Créneaux de dispatch'
 form.unavailability_mass_update.children.timeSlots.label_add: Ajouter
 form.unavailability_mass_update.children.timeSlots.label_delete: Supprimer
 form.unavailability_mass_update.children.timeSlots.prototype.children.from.label: Début
@@ -742,4 +743,3 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
-form.spot_batch_unavailability.children.submit.label: "Créer les indisponibilités"
