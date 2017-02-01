@@ -23,13 +23,13 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class EventParticipantsNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_SHEET_ID                     = 'sheet_id';
-    const COL_SHEET_NAME                   = 'sheet_name';
-    const COL_PARTICIPANT_TYPE             = 'participant_type';
-    const COL_PARTICIPANT_ID               = 'participant_id';
-    const COL_PARTICIPANT_EMAIL            = 'participant_email';
-    const COL_PARTICIPANT_CREATED_AT       = 'participant_created_at';
-    const COL_HAPPENING_SUBSCRIBER         = 'happening_subscriber';
+    const COL_SHEET_ID               = 'sheet_id';
+    const COL_SHEET_NAME             = 'sheet_name';
+    const COL_PARTICIPANT_TYPE       = 'participant_type';
+    const COL_PARTICIPANT_ID         = 'participant_id';
+    const COL_PARTICIPANT_EMAIL      = 'participant_email';
+    const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
+    const COL_HAPPENING_SUBSCRIBER   = 'happening_subscriber';
 
     /**
      * @var string
@@ -143,13 +143,13 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
 
         // 1. Common fields (sheet ID, participant ID, etc.)
         $rawData = [
-            self::COL_SHEET_ID                     => $sheet->getId(),
-            self::COL_PARTICIPANT_TYPE             => $sheet->getType()->getTitle($availableLocale),
-            self::COL_SHEET_NAME                   => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
-            self::COL_PARTICIPANT_ID               => $participant->getId(),
-            self::COL_PARTICIPANT_EMAIL            => $participant->getUser()->getEmail(),
-            self::COL_PARTICIPANT_CREATED_AT       => $timeFormatter->format($sheet->getCreatedAt()),
-            self::COL_HAPPENING_SUBSCRIBER         => $this->getHappeningSubscriberData($participant),
+            self::COL_SHEET_ID               => $sheet->getId(),
+            self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($availableLocale),
+            self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
+            self::COL_PARTICIPANT_ID         => $participant->getId(),
+            self::COL_PARTICIPANT_EMAIL      => $participant->getUser()->getEmail(),
+            self::COL_PARTICIPANT_CREATED_AT => $timeFormatter->format($sheet->getCreatedAt()),
+            self::COL_HAPPENING_SUBSCRIBER   => $this->getHappeningSubscriberData($participant),
         ];
 
         // 2. Registration data
