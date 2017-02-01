@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Spot\Action\UnVisio;
+use Proximum\Vimeet\Application\Command\Spot\Action\Visio;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Command\Spot\Update;
@@ -21,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
@@ -213,5 +216,55 @@ class SpotController extends Controller
             'property' => $command->property,
             'value'    => $command->value
         ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Spot  $spot
+     *
+     * @return RedirectResponse
+     */
+    public function visioAction(Event $event, Spot $spot)
+    {
+        return $this->handleAndRedirect($event, $spot, new Visio($spot));
+    }
+
+    /**
+     * @param Event $event
+     * @param Spot  $spot
+     *
+     * @return RedirectResponse
+     */
+    public function unVisioAction(Event $event, Spot $spot)
+    {
+        return $this->handleAndRedirect($event, $spot, new UnVisio($spot));
+    }
+
+    /**
+     * @param Event $event
+     * @param Spot  $spot
+     * @param mixed $command
+     *
+     * @return RedirectResponse
+     */
+    private function handleAndRedirect(Event $event, Spot $spot, $command)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessIfWrongEvent($event, $spot);
+
+        $this->get('tactician.commandbus')->handle($command);
+
+        return $this->redirectToRoute('admin_spot_list', ['event' => $spot->getEvent()->getId()]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Spot  $spot
+     */
+    private function denyAccessIfWrongEvent(Event $event, Spot $spot)
+    {
+        if ($spot->getEvent() !== $event) {
+            throw $this->createAccessDeniedException('This spot is not available for this event.');
+        }
     }
 }

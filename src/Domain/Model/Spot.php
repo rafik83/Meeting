@@ -54,6 +54,16 @@ class Spot
     private $active;
 
     /**
+     * @var int
+     */
+    private $priority = 12;
+
+    /**
+     * @var bool
+     */
+    private $visio;
+
+    /**
      * @var ArrayCollection
      */
     private $sheets;
@@ -67,6 +77,8 @@ class Spot
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
      * @param bool   $active
+     * @param int    $priority
+     * @param bool   $visio
      */
     public function __construct(
         $reference,
@@ -74,7 +86,9 @@ class Spot
         $size,
         $meetingCapacity,
         $seatCapacity,
-        $active
+        $active,
+        $priority = 12,
+        $visio = false
     ) {
         $this->reference       = $reference;
         $this->event           = $event;
@@ -83,6 +97,8 @@ class Spot
         $this->seatCapacity    = $seatCapacity;
         $this->active          = $active;
         $this->sheets          = new ArrayCollection();
+        $this->priority        = $priority;
+        $this->visio           = $visio;
     }
 
     /**
@@ -215,5 +231,53 @@ class Spot
     public function getSheets()
     {
         return $this->sheets->toArray();
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisio()
+    {
+        return $this->visio;
+    }
+
+    /**
+     * Set visio to false
+     *
+     * @return self
+     */
+    public function unVisio()
+    {
+        $this->visio = false;
+
+        return $this;
+    }
+
+    /**
+     * Set visio to true
+     *
+     * @return self
+     */
+    public function goToVisio()
+    {
+        $this->visio = true;
+
+        return $this;
     }
 }

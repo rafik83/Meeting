@@ -433,6 +433,22 @@ admin_spot_update:
     methods: [GET , POST]
     defaults: { _controller: AdminBundle:Spot:update }
 
+admin_spot_update_visio:
+    path: /event/{event}/spot/{spot}/update/visio
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot:visio }
+
+admin_spot_update_un_visio:
+    path: /event/{event}/spot/{spot}/update/un-visio
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot:unVisio }
+
 #
 # Meeting Request
 #
