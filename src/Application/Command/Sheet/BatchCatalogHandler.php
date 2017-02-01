@@ -117,7 +117,7 @@ class BatchCatalogHandler
         }
 
         if (count($ignoredSheets) > 0) {
-            $message = 'catalog.remove.failure';
+            $message = 'catalog.remove.warning';
 
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($command) {
