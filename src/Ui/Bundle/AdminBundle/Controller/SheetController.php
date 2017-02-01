@@ -525,7 +525,7 @@ class SheetController extends Controller
             ], 404);
         }
 
-        $isVisio = $visioParam !== true ? false : true;
+        $isVisio = $visioParam !== 'true' ? false : true;
 
         if ($participant->getSheet()->getEvent() !== $event) {
             return new JsonResponse([
