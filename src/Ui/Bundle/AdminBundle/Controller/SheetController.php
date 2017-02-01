@@ -517,7 +517,15 @@ class SheetController extends Controller
     {
         $this->checkAccess($event);
 
-        $isVisio = (int) filter_var($request->request->get('isVisio'), FILTER_VALIDATE_BOOLEAN);
+        $visioParam = $request->request->get('isVisio');
+
+        if ($visioParam !== 'true' || $visioParam !== 'false') {
+            return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.participant.invalid-parameters')
+            ], 404);
+        }
+
+        $isVisio = $visioParam !== true ? false : true;
 
         if ($participant->getSheet()->getEvent() !== $event) {
             return new JsonResponse([

@@ -526,6 +526,7 @@ admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.participant.not_found: 'Ce participant n''existe pas'
+admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
 admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
 admin.sheet.read: Voir
 admin.sheet.see_list: 'Voir liste des participations'

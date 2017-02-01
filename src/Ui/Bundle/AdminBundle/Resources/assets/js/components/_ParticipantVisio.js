@@ -5,7 +5,7 @@ function ParticipantVisio(element)
 {
     this.element = element;
     this.input = this.element.querySelector('input[name="is-visio"]');
-    this.action = this.element.dataset.action;
+    this.action = this.element.action;
 
     this.input.addEventListener('change', this.onChange.bind(this));
 }
