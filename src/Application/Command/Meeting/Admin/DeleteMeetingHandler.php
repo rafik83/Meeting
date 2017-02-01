@@ -15,6 +15,11 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 class DeleteMeetingHandler
 {
     /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
      * @param MeetingRepositoryInterface $meetingRepository
      */
     public function __construct(MeetingRepositoryInterface $meetingRepository)
