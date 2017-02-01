@@ -30,6 +30,7 @@
             <th>{{ 'admin.unavailability.mass.table.column.category'|trans }}</th>
             <th>{{ 'admin.unavailability.mass.table.column.begin'|trans }}</th>
             <th>{{ 'admin.unavailability.mass.table.column.end'|trans }}</th>
+            <th>{{ 'admin.unavailability.mass.table.column.dispatch'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -41,7 +42,8 @@
                 <td>{{ mass.category.title }}</td>
                 <td>{{ mass.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td>{{ mass.end|localizeddate('medium', 'short', app.request.locale) }}</td>
-                <td class="text-right">
+                <td>{{ mass.dispatch ? '✓' : '' }}</td>
+                <td class="text-right" style="width: 110px;">
                     <div class="btn-group">
                         <a href="{{ path('admin_unavailability_mass_update', {event: event.id, mass: mass.id}) }}" class="btn btn-default btn-sm">
                             {{ 'admin.unavailability.mass.table.content.update'|trans }}

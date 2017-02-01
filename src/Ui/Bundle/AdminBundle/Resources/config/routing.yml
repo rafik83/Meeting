@@ -288,6 +288,15 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_sheet_meeting_remove:
+    path: /event/{event}/agenda/meeting/{meeting}/remove
+    requirements:
+        event: \d+
+        sheet: \d+
+        meeting: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
+
 admin_agenda_export_participant_index:
     path: /event/{event}/agenda/export-participants
     requirements:
@@ -302,13 +311,53 @@ admin_agenda_export_participant_export:
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
 
-admin_agenda_meeting_update:
+admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
     requirements:
         event: \d+
         meeting: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Meeting:updateSpot }
+
+admin_agenda_meeting_update_spot_handler:
+    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleUpdateSpot }
+
+admin_agenda_meeting_update_slot:
+    path: /event/{event}/agenda/meeting/{meeting}/update-slot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateSlot }
+
+admin_agenda_meeting_update_slot_handler:
+    path: /event/{event}/agenda/meeting/{meeting}/update-slot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleUpdateSlot }
+
+admin_agenda_meeting_request_transform_into_meeting:
+    path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:transformRequestIntoMeeting }
+
+admin_agenda_meeting_request_transform_into_meeting_handler:
+    path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleTransformRequestIntoMeeting }
 
 #
 # Meeting
@@ -320,6 +369,22 @@ admin_meeting_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Meeting:list }
+
+admin_meeting_details:
+    path: /event/{event}/meeting/{meeting}/details
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Meeting:details }
+
+admin_meeting_delete:
+    path: /event/{event}/meeting/{meeting}/delete
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Meeting:deleteMeeting }
 
 admin_meeting_delete_all:
     path: /event/{event}/meeting/delete/all
@@ -360,6 +425,13 @@ admin_spot_batch_create:
     methods: [GET , POST]
     defaults: { _controller: AdminBundle:Spot:batchCreate }
 
+admin_spot_batch_unavailability:
+    path: /event/{event}/spot/unavailability/batch
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: AdminBundle:Spot:batchUnavailability }
+
 admin_spot_update:
     path: /event/{event}/spot/update
     requirements:
@@ -367,6 +439,22 @@ admin_spot_update:
         spot: \d+
     methods: [GET , POST]
     defaults: { _controller: AdminBundle:Spot:update }
+
+admin_spot_update_visio:
+    path: /event/{event}/spot/{spot}/update/visio
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot:visio }
+
+admin_spot_update_un_visio:
+    path: /event/{event}/spot/{spot}/update/un-visio
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot:unVisio }
 
 #
 # Meeting Request
@@ -378,13 +466,6 @@ admin_meeting_request_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
-
-admin_meeting_request_sheets_list:
-    path: /event/{event}/meeting-request/sheets
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
 
 admin_transform_requests_to_meetings:
     path: /event/{event}/meeting-request/transform-requests-to-meetings

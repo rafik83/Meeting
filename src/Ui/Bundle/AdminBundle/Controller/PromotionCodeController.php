@@ -61,12 +61,17 @@ class PromotionCodeController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
-            $this->addFlash('success', 'flash.promotion_code.create.success');
 
-            return $this->redirectToRoute('admin_promotion_code_list', [
-                'event' => $event->getId(),
-            ]);
+            try {
+                $this->get('tactician.commandbus')->handle($create);
+                $this->addFlash('success', 'flash.promotion_code.create.success');
+
+                return $this->redirectToRoute('admin_promotion_code_list', [
+                    'event' => $event->getId(),
+                ]);
+            } catch (NonUniqueCodeException $exception) {
+                $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
+            }
         }
 
         return $this->render('AdminBundle:PromotionCode:create.html.twig', [
@@ -103,7 +108,12 @@ class PromotionCodeController extends Controller
                     'event' => $event->getId(),
                 ]);
             } catch (NonUniqueCodeException $exception) {
-                $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
+                $form
+                    ->get('code')
+                    ->addError($this->createNonUniqueCodeError(
+                        $event->getAvailableLocale($request->getLocale())
+                    ))
+                ;
             }
         }
 

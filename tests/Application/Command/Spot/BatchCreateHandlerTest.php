@@ -34,6 +34,8 @@ class BatchCreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->active          = true;
         $command->seatCapacity    = 2;
         $command->meetingCapacity = 1;
+        $command->priority        = 10;
+        $command->visio           = true;
 
         //Mock
         $referenceFactory = $this->prophesize(ReferenceFactory::class);
@@ -48,7 +50,9 @@ class BatchCreateHandlerTest extends \PHPUnit_Framework_TestCase
                 $create->size === 3 &&
                 $create->meetingCapacity === 1 &&
                 $create->seatCapacity === 2 &&
-                $create->active === true;
+                $create->active === true &&
+                $create->visio === true &&
+                $create->priority === 10;
         }))->shouldBeCalled();
 
         //Handler

@@ -56,6 +56,8 @@ class BatchCreateHandler
                 $create->meetingCapacity = $batchCreate->meetingCapacity;
                 $create->seatCapacity    = $batchCreate->seatCapacity;
                 $create->active          = $batchCreate->active;
+                $create->priority        = $batchCreate->priority;
+                $create->visio           = $batchCreate->visio;
 
                 $this->createHandler->handle($create);
             } catch (UniqueReferenceViolationException $exception) {

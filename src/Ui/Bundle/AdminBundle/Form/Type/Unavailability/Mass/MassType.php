@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DataRangeType;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\ChoiceType as CategoryChoiceType;
 use Symfony\Component\Form\AbstractType as BaseAbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType as BaseChoiceType;
@@ -63,6 +65,24 @@ abstract class MassType extends BaseAbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,
                 'label'      => false,
+            ])
+            ->add('dispatch', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('timeSlots', CollectionType::class, [
+                'error_bubbling' => false,
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'entry_type'     => DataRangeType::class,
+                'entry_options'  => [
+                    'label'          => false,
+                    'entry_type'     => DateTimePickerType::class,
+                    'first_name'     => 'from',
+                    'second_name'    => 'to',
+                    'first_options'  => ['view_timezone' => $options['event']->getTimeZone()],
+                    'second_options' => ['view_timezone' => $options['event']->getTimeZone()],
+                    'message'        => 'validators.unavailability.mass.children.time_slots.range_error',
+                ],
             ])
         ;
     }

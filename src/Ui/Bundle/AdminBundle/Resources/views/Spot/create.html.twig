@@ -7,7 +7,9 @@
     {{ form_row(form.size, {widget_columns: 2}) }}
     {{ form_row(form.meetingCapacity, {widget_columns: 2}) }}
     {{ form_row(form.seatCapacity, {widget_columns: 2}) }}
+    {{ form_row(form.priority) }}
     {{ form_row(form.active) }}
+    {{ form_row(form.visio) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_spot_list', {'event': event.id}) %}

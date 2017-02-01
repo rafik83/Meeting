@@ -18,6 +18,10 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         schedulePublishDate:
             type: datetime
             nullable: true
+        meetingRequestUpdateLocked:
+            type: boolean
+            options:
+                default: false
         legalInfo:
             type: string
             nullable: true
@@ -44,16 +48,3 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         deposit:
             type: integer
             nullable: true
-        catalogOnlineDate:
-            type: datetime
-            nullable: true
-        happeningsOpenDate:
-            type: datetime
-            nullable: true
-        schedulePublishDate:
-            type: datetime
-            nullable: true
-        meetingRequestUpdateLocked:
-            type: boolean
-            options:
-                default: false
