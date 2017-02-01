@@ -31,7 +31,7 @@ class UpdateVisio
      * @param boolean       $visio
      */
     public function __construct(
-        Participant $participant = null,
+        Participant $participant,
         $visio
     ) {
         $this->participant = $participant;

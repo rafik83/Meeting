@@ -12,7 +12,7 @@ function ParticipantVisio(element)
 
 ParticipantVisio.prototype.onChange = function ()
 {
-    data = this.input.checked;
+    var data = this.input.checked;
 
     axio.post(this.action,
         querystring.stringify({

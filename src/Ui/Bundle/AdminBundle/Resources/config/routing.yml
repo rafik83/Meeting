@@ -558,10 +558,9 @@ admin_sheet_assign_spot:
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:assignSpot }
 admin_sheet_update_participant_visio:
-    path: /event/{event}/sheet/{sheet}/update-visio/{participant}
+    path: /event/{event}/update-visio/{participant}
     requirements:
-        events: \d+
-        sheet:  \d+
+        event: \d+
         participant: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:updateVisio }

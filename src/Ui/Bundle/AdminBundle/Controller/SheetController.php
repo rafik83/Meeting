@@ -518,23 +518,21 @@ class SheetController extends Controller
     {
         $this->checkAccess($event);
 
-        $isVisio = ($request->request->get('isVisio') === 'true') ? true : false;
+        $isVisio = in_array($request->request->get('isVisio'), ['true', 'false']);
 
-        try {
-            $command = new UpdateVisio($participant, $isVisio);
-
-            $this->get('tactician.commandbus')->handle($command);
-
+        if ($participant->getSheet()->getEvent() !== $event) {
             return new JsonResponse([
-                'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success')
-            ], 200);
-
-        } catch (ParticipantException $participantException) {
-            
-           return new JsonResponse([
                 'error' => $this->get('translator')->trans('admin.sheet.participant.not_found'),
             ], 404);
         }
+        
+        $command = new UpdateVisio($participant, $isVisio);
+
+        $this->get('tactician.commandbus')->handle($command);
+
+        return new JsonResponse([
+            'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success')
+        ], 200);
     }
 
     /**

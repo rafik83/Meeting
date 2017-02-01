@@ -22,6 +22,7 @@ class UpdateVisioHandler
 
     /**
      * VisioHandler constructor.
+     *
      * @param ParticipantRepositoryInterface $participantRepository
      */
     public function __construct(ParticipantRepositoryInterface $participantRepository)
@@ -37,10 +38,6 @@ class UpdateVisioHandler
     public function handle(UpdateVisio $updateVisio)
     {
         $participant = $updateVisio->participant;
-
-        if ($participant == null) {
-            throw new ParticipantException();
-        }
 
         $participant->setVisio($updateVisio->visio);
 

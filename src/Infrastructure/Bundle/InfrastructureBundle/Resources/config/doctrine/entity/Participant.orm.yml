@@ -20,6 +20,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: boolean
         visio:
             type: boolean
+            options:
+                default: false
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
