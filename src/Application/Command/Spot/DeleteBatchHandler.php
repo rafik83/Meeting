@@ -53,25 +53,9 @@ class DeleteBatchHandler
             $deleteBatchView->deletedSpots[] = $spot->getReference();
         }
 
-        $deleteBatchView = $this->getSpotToDelete($deleteBatchView);
+        $deleteBatchView = $deleteBatchView->getSpotToDelete();
         
         $this->spotRepository->removeBatchSpot($deleteBatchView->deletedSpots, $deleteBatch->event);
-
-        return $deleteBatchView;
-    }
-
-    /**
-     * @param DeleteBatchView $deleteBatchView
-     *
-     * @return DeleteBatchView
-     */
-    private function getSpotToDelete(DeleteBatchView $deleteBatchView)
-    {
-        $deleteBatchView->deletedSpots = array_diff(
-            $deleteBatchView->deletedSpots,
-            $deleteBatchView->spotsWithMeetings,
-            $deleteBatchView->spotsWithSheets
-        );
 
         return $deleteBatchView;
     }

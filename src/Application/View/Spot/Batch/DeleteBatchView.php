@@ -37,9 +37,9 @@ class DeleteBatchView
      */
     public function __construct(array $deletedSpots = [], array $spotsWithMeetings = [], array $spotsWithSheets = [])
     {
-        $this->deletedSpots = $deletedSpots;
+        $this->deletedSpots      = $deletedSpots;
         $this->spotsWithMeetings = $spotsWithMeetings;
-        $this->spotsWithSheets = $spotsWithSheets;
+        $this->spotsWithSheets   = $spotsWithSheets;
     }
 
     /**
@@ -51,8 +51,23 @@ class DeleteBatchView
     {
         $errorString = '';
         foreach($spotsIds as $val) {
-            $errorString.= $val . ' - ';
+            $errorString .= $val . ' - ';
         }
+
         return rtrim($errorString , '- ');
+    }
+
+    /**
+     * @return $this
+     */
+    public function getSpotToDelete()
+    {
+        $this->deletedSpots = array_diff(
+            $this->deletedSpots,
+            $this->spotsWithMeetings,
+            $this->spotsWithSheets
+        );
+
+        return $this;
     }
 }
