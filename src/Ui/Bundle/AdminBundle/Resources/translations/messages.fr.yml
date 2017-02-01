@@ -31,6 +31,14 @@ admin.agenda.export.omz: OMZ
 admin.agenda.export.participant_schedules.danger: 'Attention, si l''export est réalisé avant la date de publication des rendez-vous, les plannings ne comporteront pas les rendez-vous positionés'
 admin.agenda.export.participant_schedules.title: 'Export des participants et plannings'
 admin.agenda.export.title: 'Rendez-vous / Export'
+admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
+admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
+admin.agenda.filters.hasSentMeetingRequest.label: 'Pas de demande de rendez-vous'
+admin.agenda.filters.indicators.label: Indicateurs
+admin.agenda.filters.reset.label: Reset
+admin.agenda.filters.submit.label: 'Filtrer les fiches'
+admin.agenda.filters.title.label: 'Filtre fiche'
+admin.agenda.filters.type: 'Type de participation'
 admin.agenda.indicators-caption: 'Légende indicateurs'
 admin.agenda.indicators-help: 'Passer le curseur sur les icones'
 admin.agenda.link: 'Gestion des rendez-vous'
@@ -199,11 +207,14 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.action.deleteAll.confirm: 'Êtes vous sûr de vouloir supprimer l''ensemble des rendez-vous'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
+admin.meeting.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce rendez-vous?'
+admin.meeting.action.remove.link: Supprimer
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
 admin.meeting.list.column.head.slot: Créneau
 admin.meeting.list.column.head.to: À
+admin.meeting.list.details: Détails
 admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.title: 'RDV positionnés'
 admin.menu.link: Menu
@@ -431,6 +442,7 @@ admin.schedule.slot.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce cr�
 admin.schedule.slot.unlock: Débloquer
 admin.schedule.slot.unlocked: Débloqué
 admin.schedule.slots.generate.action: 'Générer des créneaux'
+admin.schedule.slots.generate.back: 'Retour à la liste des créneaux'
 admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
 admin.schedule.slots.table.begin: De
 admin.schedule.slots.table.duration: Durée
@@ -489,6 +501,7 @@ admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
 admin.sheet.export.fields.in_catalog: 'Ajouté au catalogue'
+admin.sheet.export.fields.order_promo_code: 'Codes promo'
 admin.sheet.export.fields.owner_email: 'Email propriétaire'
 admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
@@ -536,6 +549,7 @@ admin.sheet.validate: Valider
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
+admin.spot.batch_unavailability.title: 'Créer des indisponibilités de lieu'
 admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.delete: Supprimer
@@ -545,15 +559,21 @@ admin.spot.link: Lieux
 admin.spot.list.checkbox: 'Case à cocher'
 admin.spot.listSpot.active: Actif
 admin.spot.listSpot.add: 'Créer un lieu'
+admin.spot.listSpot.hasUnavailability: 'A des indisponibilités'
 admin.spot.listSpot.meetingCapacity: 'Nombre de rendez-vous en simultané'
 admin.spot.listSpot.no: Non
+admin.spot.listSpot.priority: Priorité
 admin.spot.listSpot.reference: Identifiant
 admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
 admin.spot.listSpot.sheet: 'Fiche(s) assignée(s)'
 admin.spot.listSpot.size: 'Taille (en m²)'
+admin.spot.listSpot.spot.un-visio: 'Non visio'
+admin.spot.listSpot.spot.visio: Visio
+admin.spot.listSpot.visio: Visio
 admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
+admin.spot.unavailability: 'Ajouter des indisponibilités'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'
@@ -632,6 +652,7 @@ admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
 admin.unavailability.mass.link: 'Indisponibilité de masse'
 admin.unavailability.mass.table.column.begin: Debut
 admin.unavailability.mass.table.column.category: Catégorie
+admin.unavailability.mass.table.column.dispatch: 'Créneaux de dispatchs'
 admin.unavailability.mass.table.column.end: Fin
 admin.unavailability.mass.table.column.name: 'Nom back office'
 admin.unavailability.mass.table.column.title: Titre
@@ -678,6 +699,9 @@ event.meeting.cancelRequest.label: 'De %fromName% pour %toName%'
 event.meeting.cancelRequest.title: 'Annuler la demande de rendez-vous'
 event.meeting.createRequest.destination: 'Pour %toName% avec la fiche %fromName%'
 event.meeting.createRequest.title: 'Demande de rendez-vous'
+event.meeting.details.createdAt: 'Création:'
+event.meeting.details.request: Demande
+event.meeting.details.title: 'Details du rendez-vous'
 event.meeting.editRequest.destination: 'Pour %toName% avec la fiche %fromName%'
 event.meeting.editRequest.title: 'Modifiez une demande de rendez-vous'
 event.meeting.listProposition.accept: Accepter
@@ -705,6 +729,15 @@ event.meeting.listRequest.title: 'Liste de vos demandes de rendez-vous'
 event.meeting.listRequest.to: 'A destination de'
 event.meeting.refusedRequest.label: 'De %fromName% pour %toName%'
 event.meeting.refusedRequest.title: 'Refuser la proposition de rendez vous'
+event.meeting.request.details.createdAt: Création
+event.meeting.request.details.from: 'Provenant de:'
+event.meeting.request.details.fromParticipant: 'Participants de la provenance:'
+event.meeting.request.details.message: 'Echange de messages:'
+event.meeting.request.details.state: Status
+event.meeting.request.details.title: 'Details de la demande de rendez-vous'
+event.meeting.request.details.to: 'A destination de:'
+event.meeting.request.details.toParticipant: 'Participant de la destination:'
+event.meeting.request.details.updatedAt: 'Changement de statut'
 event.meeting.request.state.from.approved: Accepté
 event.meeting.request.state.from.cancelled: Annulé
 event.meeting.request.state.from.refused: Refusé

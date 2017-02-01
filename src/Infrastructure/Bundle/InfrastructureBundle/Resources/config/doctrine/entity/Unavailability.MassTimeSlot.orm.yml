@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\Unavailability\MassTimeSlot:
+    type:  entity
+    table: mass_unavailability_timeslot
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        from:
+            type: datetime
+            column: from_date
+        to:
+            type: datetime
+            column: to_date
+    manyToOne:
+        mass:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Mass
+            inversedBy: timeSlots
+            joinColumn:
+                onDelete: CASCADE
+    uniqueConstraints:
+        date_unique_idx:
+            columns: [mass_id, from_date, to_date]

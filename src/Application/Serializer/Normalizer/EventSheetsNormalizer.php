@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
@@ -44,6 +45,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     const COL_STATUS            = 'status';
     const COL_FOLLOWING         = 'following';
     const COL_IN_CATALOG        = 'in_catalog';
+    const COL_ORDER_PROMO_CODE  = 'order_promo_code';
 
     protected $normalizerType = 'sheet';
 
@@ -68,14 +70,23 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private $registrationFields;
 
     /**
+     * Order merger
+     *
+     * @var Merger
+     */
+    private $merger;
+
+    /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param TemplateDataFactory      $templateDataFactory
      * @param TranslatorInterface      $translator
+     * @param Merger                   $merger
      */
     public function __construct(
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        Merger $merger
     ) {
         parent::__construct($translator);
 
@@ -83,6 +94,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         $this->templateDataFactory = $templateDataFactory;
         $this->sheetFields         = [];
         $this->registrationFields  = [];
+        $this->merger              = $merger;
     }
 
     /**
@@ -143,6 +155,16 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             $sheet->getType()->getCategories()->toArray()
         ));
 
+        $promotionCodes = [];
+
+        if ($sheet->hasNotCancelledOrders()) {
+            $order = $this->merger->merge($sheet->getNotCancelledOrders());
+
+            foreach($order->getPromotionCodes() as $orderPromotionCode) {
+                $promotionCodes[] = $orderPromotionCode->getPromotionCode()->getCode();
+            }
+        }
+
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
             self::COL_EVENT_ID          => $event->getId(),
@@ -157,6 +179,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             self::COL_STATUS            => $sheet->getValidationState(),
             self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
             self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
+            self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
         ];
 
         // 2. Registration data
@@ -276,6 +299,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             self::COL_STATUS,
             self::COL_FOLLOWING,
             self::COL_IN_CATALOG,
+            self::COL_ORDER_PROMO_CODE,
         ];
     }
 }

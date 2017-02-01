@@ -71,8 +71,12 @@ class TransformRequestIntoMeetingHandler
         // Get available spots for this slot and meeting
         $spots = $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $transformRequestIntoMeeting->slot,
-            $transformRequestIntoMeeting->meetingRequest->countParticipants()
+            $transformRequestIntoMeeting->meetingRequest->countParticipants(),
+            null,
+            $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
+            $transformRequestIntoMeeting->meetingRequest->getToSheet()
         );
+
 
         // If no spot available
         if (0 === count($spots)) {

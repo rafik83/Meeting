@@ -660,6 +660,57 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->handle($create);
     }
 
+    public function testHandleWithMessage()
+    {
+        $startTime   = new \DateTime('2016-10-12 08:00:00.000');
+        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
+        $event       = EventFactory::createEvent();
+        $day         = new Day($event, $startTime, $endTime);
+        $event->setDays([$day]);
+        $user        = UserFactory::create();
+        $sheet       = SheetFactory::create($event, $user);
+        $participant = ParticipantFactory::create($sheet, $user);
+        $create      = new Create($event, $sheet, $user, 'fr');
+        $create->participants = [$participant];
+        $create->message = 'Ceci est un message de test';
+
+        $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
+        $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
+
+        $create->time['begin']['hour']   = 10;
+        $create->time['begin']['minute'] = 30;
+
+        $create->time['end']['hour']     = 14;
+        $create->time['end']['minute']   = 00;
+
+        $unavailability = new Unavailability($participant, $expectedBegin, $expectedEnd, 'Ceci est un message de test');
+
+        $this->participantRepository
+            ->getParticipantsWithoutMeetingAndHappening([$participant], $expectedBegin, $expectedEnd)
+            ->shouldBeCalled()
+            ->willReturn([$participant]);
+
+        $this->unavailabilityRepository
+            ->getOverlapUnavailabilities($unavailability)
+            ->shouldBeCalled()
+            ->willReturn([]);
+
+        $this->unavailabilityRepository
+            ->remove($unavailability)
+            ->shouldNotBeCalled();
+
+        $this->unavailabilityRepository
+            ->add($unavailability)
+            ->shouldBeCalled();
+
+        $handler = new CreateHandler(
+            $this->unavailabilityRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->paticipantInfoGuesser->reveal()
+        );
+        $handler->handle($create);
+    }
+
     public function testHandleCorrectWithRemove()
     {
         $startTime   = new \DateTime('2016-10-12 08:00:00.000');

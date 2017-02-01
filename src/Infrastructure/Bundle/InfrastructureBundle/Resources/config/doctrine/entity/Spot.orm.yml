@@ -17,9 +17,20 @@ Proximum\Vimeet\Domain\Model\Spot:
             type: integer
         active:
             type: boolean
+        visio:
+            type: boolean
+            options:
+                default: false
+        priority:
+            type: integer
+            options:
+                default: 12
     oneToMany:
         sheets:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            mappedBy: spot
+        spotUnavailabilities:
+            targetEntity: Proximum\Vimeet\Domain\Model\SpotUnavailability
             mappedBy: spot
     manyToOne:
         event:

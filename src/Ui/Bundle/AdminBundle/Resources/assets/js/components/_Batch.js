@@ -28,15 +28,21 @@ function Batch(element)
 
     // Check row
     [].forEach.call(element.querySelectorAll('tbody tr'), function (item) {
-        item.addEventListener('click', function (event) {
-            if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') {
-                return;
-            }
 
+        // Stop propagation on a, button, input or stopPropagation class
+        [].forEach.call(item.querySelectorAll('a, button, input, .stopPropagation'), function (a) {
+            a.addEventListener('click', function (event) { event.stopPropagation(); });
+        });
+
+        item.addEventListener('click', function (event) {
             event.preventDefault();
             var checkbox = item.querySelector('input[type=checkbox]');
             checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change'));
+
+            var htmlEvent = document.createEvent('HTMLEvents');
+            htmlEvent.initEvent('change', true, true);
+
+            checkbox.dispatchEvent(htmlEvent);
         });
     });
 }

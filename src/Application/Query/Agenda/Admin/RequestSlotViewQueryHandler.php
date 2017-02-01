@@ -54,7 +54,10 @@ class RequestSlotViewQueryHandler
         foreach ($slots as $slot) {
             if (true === $this->spotRepository->hasSpotsForSlotAndParticipantsQuantity(
                 $slot,
-                $query->meetingRequest->countParticipants()
+                $query->meetingRequest->countParticipants(),
+                null,
+                $query->meetingRequest->getFromSheet(),
+                $query->meetingRequest->getToSheet()
             )) {
                 $availableSlotsId[] = $slot->getId();
             }

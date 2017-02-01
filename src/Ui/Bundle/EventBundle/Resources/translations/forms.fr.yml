@@ -29,10 +29,14 @@ form.change_password_user.children.plainPassword.children.first.label: 'Nouveau 
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.change_password_user.children.submit.label: Envoyer
 form.create_unavailability.children.day.label: Le
+form.create_unavailability.children.message.label: Commentaire
 form.create_unavailability.children.participants.label: 'Indisponible:'
 form.create_unavailability.children.submit.label: Ajouter
 form.create_unavailability.children.time.children.begin.label: de
 form.create_unavailability.children.time.children.end.label: à
+form.create_unavailability.data.maxLength.translations.plural: 'caractères restants'
+form.create_unavailability.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
+form.create_unavailability.data.maxLength.translations.singular: 'caractère restant'
 form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'

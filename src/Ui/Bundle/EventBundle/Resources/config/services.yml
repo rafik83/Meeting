@@ -208,6 +208,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType
         arguments:
             - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
 

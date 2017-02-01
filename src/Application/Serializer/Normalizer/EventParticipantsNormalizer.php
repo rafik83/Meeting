@@ -31,6 +31,9 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
     const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
     const COL_HAPPENING_SUBSCRIBER   = 'happening_subscriber';
 
+    /**
+     * @var string
+     */
     protected $normalizerType = 'participant';
 
     /**
@@ -99,7 +102,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
             $rawSheets[] = $this->getParticipantRawData($participant, $locale);
         }
 
-        $charset                = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
+        $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedParticipants = [];
 
         foreach ($rawSheets as $rawSheet) {
@@ -131,14 +134,12 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
         $fallbackLocale  = $event->getFallback();
         $sheet           = $participant->getSheet();
 
-
         $timeFormatter = \IntlDateFormatter::create(
             $availableLocale,
             \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
             $event->getTimeZone()
         );
-
 
         // 1. Common fields (sheet ID, participant ID, etc.)
         $rawData = [
@@ -158,10 +159,10 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
     }
 
     /**
-     * @param array  $rawData
+     * @param array       $rawData
      * @param Participant $participant
-     * @param string $availableLocale
-     * @param string $fallbackLocale
+     * @param string      $availableLocale
+     * @param string      $fallbackLocale
      */
     private function addRegistrationRawData(&$rawData, Participant $participant, $availableLocale, $fallbackLocale)
     {
@@ -178,6 +179,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
                         $availableLocale,
                         $fallbackLocale
                     );
+
                     $this->registrationFields[$key] = $fieldName;
                 }
 
