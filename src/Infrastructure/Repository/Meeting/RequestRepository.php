@@ -294,14 +294,35 @@ class RequestRepository implements RequestRepositoryInterface
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
                 $request->getState(),
                 $request->getCreatedAt(),
                 ''
             );
         }, $results), $page, $limit, $count);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllAcceptedByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request', 'request.id')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('fromSheet.participants', 'fromParticipants')
+            ->join('toSheet.participants', 'toParticipants')
+            ->where('request.state = :approved')
+            ->setParameter('event', $event)
+            ->setParameter('approved', Request::STATE_APPROVED);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

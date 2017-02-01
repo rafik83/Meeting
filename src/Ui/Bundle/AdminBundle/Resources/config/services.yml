@@ -196,6 +196,10 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: form.type }
+    form_type_participant.import_mapping_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType
+        tags:
+            - { name: form.type }
 
     form_type_messaging_message.create_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType
@@ -226,6 +230,12 @@ services:
             - '@router'
         tags:
             - { name: form.type }
+    form_type_spot.unavailability_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\UnavailabilityType }
 
     #
     # Helper

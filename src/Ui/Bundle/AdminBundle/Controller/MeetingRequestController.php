@@ -10,16 +10,15 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate;
 use Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\View\Meeting\AdminShowDetailsView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\LockMeetingRequestType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,6 +57,7 @@ class MeetingRequestController extends Controller
             ['state' => $request->query->get('state')]
         );
 
+        // The form is not valid because of the parameters page sent
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
             $filters  = $filterForm->getData();
             $filtered = true;
@@ -67,16 +67,11 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $locale, $filters);
 
-        $meetingRequestsAll = $this
-            ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->countAllByEvent($event);
-
         $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
-            'totalRequest'     => $meetingRequestsAll,
             'filter_form'      => $filterFormView,
             'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
             'filtered'         => $filtered,
@@ -92,7 +87,7 @@ class MeetingRequestController extends Controller
      */
     public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
-        $locale = $request->getLocale();
+        $locale = $event->getAvailableLocale($request->getLocale());
 
         $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
             ->getMessagesByMeetingRequest($meetingRequest);
@@ -101,10 +96,10 @@ class MeetingRequestController extends Controller
             $meetingRequest->getId(),
             $meetingRequest->getFromSheet()->getId(),
             $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-                ->guessSheetName($meetingRequest->getFromSheet(), $locale),
+                ->guessSheetTitle($meetingRequest->getFromSheet(), $locale),
             $meetingRequest->getToSheet()->getId(),
             $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-                ->guessSheetName($meetingRequest->getToSheet(), $locale),
+                ->guessSheetTitle($meetingRequest->getToSheet(), $locale),
             array_map(
                 function (Participant $participant) use ($locale) {
                     return $this->get('template.participant_info_guesser')
@@ -132,42 +127,6 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param Request        $request
-     * @param Event          $event
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return RedirectResponse|Response
-     */
-    public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        if (!$meetingRequest->isApproved()) {
-            throw $this->createAccessDeniedException('You can not position a not approved meeting request.');
-        }
-
-        $command = new PositionMeeting($meetingRequest, new \DateTime());
-        $form    = $this->createForm(PositionMeetingType::class, $command, [
-            'event'           => $event,
-            'meeting_request' => $meetingRequest,
-        ]);
-        $form->add('submit', SubmitType::class);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.meeting_request.position.success');
-
-            return $this->redirectToRoute('admin_meeting_request_list', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:MeetingRequest:position.html.twig', [
-            'event'           => $event,
-            'meeting_request' => $meetingRequest,
-            'form'            => $form->createView(),
-        ]);
-    }
-
-    /**
      * @param Request $request
      *
      * @return JsonResponse
@@ -184,33 +143,6 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function sheetListAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        $sheetMeetingsListViews = $this
-            ->get('sheet.sheet_meetings_list_view_factory')
-            ->findAll($event, $locale);
-
-        $meetingsMetrics = $this
-            ->get('sheet.meetings_metrics_view_factory')
-            ->getFromSheets($sheetMeetingsListViews);
-
-        return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
-            'event'            => $event,
-            'sheets'           => $sheetMeetingsListViews,
-            'meetings_metrics' => $meetingsMetrics,
-        ]);
-    }
-
-    /**
      * @param Event $event
      *
      * @return RedirectResponse
@@ -224,5 +156,37 @@ class MeetingRequestController extends Controller
         $this->addFlash('success', 'flash.admin.meeting_request.position.success');
 
         return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function lockMeetingRequestAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if (!$this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+            throw $this->createNotFoundException('Action not allowed for this user');
+        }
+
+        $lockMeetingRequest = new LockMeetingRequestUpdate($event);
+        $form               = $this->createForm(LockMeetingRequestType::class, $lockMeetingRequest, [
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($lockMeetingRequest);
+            $this->addFlash('success', 'flash.admin.meeting_request.lock.update.success');
+
+            return $this->redirectToRoute('admin_meeting_request_lock_update', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:MeetingRequest:lock.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
     }
 }

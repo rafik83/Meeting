@@ -71,8 +71,8 @@ class RequestViewBuilder
      */
     public function generate(Request $request, User $user, Sheet $sheet, $locale)
     {
-        $sheetNameFrom = $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale);
-        $sheetNameTo   = $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale);
+        $sheetNameFrom = $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale);
+        $sheetNameTo   = $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale);
 
         $requestView = new RequestView(
             $request->getId(),

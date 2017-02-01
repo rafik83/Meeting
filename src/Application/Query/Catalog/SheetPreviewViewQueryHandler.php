@@ -96,6 +96,8 @@ class SheetPreviewViewQueryHandler
         $meetingRequest   = $this->meetingRequestRepository->getRequestBetweenSheets($viewer, $sheet);
         $meetingPublished = $this->meetingPublishedAccessChecker->allowedToAccess($catalogSheetPreviewViewQuery->event);
 
+        $isMeetingRequestUpdateLocked = $catalogSheetPreviewViewQuery->event->getConfiguration()->isMeetingRequestUpdateLocked();
+
         return new CatalogSheetPreviewView(
             $sheet->getId(),
             $sheet,
@@ -104,7 +106,8 @@ class SheetPreviewViewQueryHandler
             $this->preview->getPreview($sheet, $locale, $rule),
             $meetingRequest,
             $viewer === $sheet,
-            $meetingPublished
+            $meetingPublished,
+            $isMeetingRequestUpdateLocked
         );
     }
 }

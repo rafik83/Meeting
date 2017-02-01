@@ -42,6 +42,11 @@ class Create
     public $time;
 
     /**
+     * @var string|null
+     */
+    public $message;
+
+    /**
      * @var string
      */
     public $locale;

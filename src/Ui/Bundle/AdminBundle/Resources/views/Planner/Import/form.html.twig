@@ -1,0 +1,9 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.planner.import.title'|trans %}
+
+{% block form_content %}
+    <div class="alert alert-danger" role="alert">{{ 'admin.planner.import.alert.meetingDelation'|trans }}</div>
+{% endblock form_content %}
+
+{% block goback_link path('admin_planner', {'event': event.id}) %}

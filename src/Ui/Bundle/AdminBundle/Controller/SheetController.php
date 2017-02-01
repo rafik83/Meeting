@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Import;
+use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -18,13 +20,18 @@ use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
+use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -71,6 +78,7 @@ class SheetController extends Controller
 
         if ($request->query->get('reset') !== null) {
             $this->get('filter.sheet_filter')->clear();
+
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
@@ -197,17 +205,17 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $charset    = Charset::WINDOWS_1252;
-        $serializer = $this->get('serializer');
+        $charset       = Charset::WINDOWS_1252;
+        $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($event, 'csv', [
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
             'charset' => $charset,
         ]);
 
         $response    = new Response($exportContent);
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_sheets_".date("Y_m_d_His").".csv"
+            "export_event_sheets_" . date("Y_m_d_His") . ".csv"
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
@@ -226,19 +234,19 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $charset    = Charset::WINDOWS_1252;
+        $charset        = Charset::WINDOWS_1252;
         $normaliserView = new EventParticipantsNormalizerView($event);
 
-        $serializer = $this->get('serializer');
+        $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($normaliserView, 'csv', [
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
             'charset' => $charset,
         ]);
 
         $response    = new Response($exportContent);
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_participant_".date("Y_m_d_His").".csv"
+            "export_event_participant_" . date("Y_m_d_His") . ".csv"
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
@@ -393,6 +401,111 @@ class SheetController extends Controller
                 'value' => $command->spotCode,
             ], $infos)
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function importAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        $import = new Import();
+
+        $form = $this->createForm(ImportType::class, $import, [
+            'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
+            'user'   => $this->getUser(),
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($import);
+
+            return $this->redirectToRoute('admin_sheet_import_mapping', [
+                'event' => $event->getId(),
+                'type'  => $import->type->getId(),
+            ]);
+        }
+
+        return $this->render('AdminBundle:Sheet:import.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Type    $type
+     *
+     * @return Response
+     */
+    public function importMappingAction(Request $request, Event $event, Type $type)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
+
+        $availableLocale = $event->getAvailableLocale($request->getLocale());
+
+        $query = new ImportMappingViewQuery($type, $availableLocale);
+
+        /** @var ImportMappingView $importMappingView */
+        $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+
+        $command = new ImportMapping(
+            $event,
+            $type,
+            $this->getUser(),
+            $availableLocale,
+            $importMappingView->fieldHeaders,
+            $importMappingView->registrationHeaders
+        );
+
+        $form = $this->createForm(ImportMappingType::class, $command, [
+            'locale'              => $availableLocale,
+            'registrationHeaders' => $importMappingView->registrationHeaders,
+            'csvHeaders'          => $importMappingView->fieldHeaders,
+            'submit'              => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+
+            return $this->redirectToRoute('admin_sheet_import_result', [
+                'event' => $event->getId(),
+                'type'  => $type->getId(),
+            ]);
+        }
+
+        return $this->render('AdminBundle:Sheet:importMapping.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Response
+     */
+    public function importResultAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        $participantDenormalizerView = $this->get('query.participant.import.import_result_view_query_handler')
+            ->handle();
+
+        return $this->render('AdminBundle:Sheet:importResult.html.twig', [
+            'event' => $event,
+            'view'  => $participantDenormalizerView,
+        ]);
     }
 
     /**

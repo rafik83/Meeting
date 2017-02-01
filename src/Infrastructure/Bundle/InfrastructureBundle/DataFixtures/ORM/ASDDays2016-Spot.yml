@@ -1,9 +1,34 @@
 Proximum\Vimeet\Domain\Model\Spot:
     asddays_spot_1:
-        __construct: false
-        reference: G0345
-        event: '@event_asddays_2016'
-        size: 6
-        meetingCapacity: 3
-        seatCapacity: 4
-        active: true
+        __construct:
+            - "G0345"
+            - '@event_asddays_2016'
+            - 6
+            - 3
+            - 4
+            - true
+            - 8
+    asddays_spot_2:
+        __construct:
+            - "A001"
+            - '@event_asddays_2016'
+            - 2
+            - 1
+            - 2
+            - true
+    asddays_spot_3:
+        __construct:
+            - "A002"
+            - '@event_asddays_2016'
+            - 2
+            - 1
+            - 2
+            - true
+    asddays_spot_4:
+        __construct:
+            - "A003"
+            - '@event_asddays_2016'
+            - 2
+            - 1
+            - 2
+            - true

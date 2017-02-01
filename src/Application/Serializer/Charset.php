@@ -1,0 +1,53 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum Vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Serializer;
+
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
+use Symfony\Component\Debug\Exception\ContextErrorException;
+
+final class Charset
+{
+    const UTF_8        = 'UTF-8';
+    const ISO_8859_1   = 'ISO-8859-1';
+    const WINDOWS_1252 = 'Windows-1252';
+
+    /**
+     * @param string      $inFilename
+     * @param string      $inCharset
+     * @param string      $outCharset
+     * @param string|null $outFilename
+     *
+     * @return null|string
+     * @throws BadCharsetException
+     */
+    public static function convert($inFilename, $inCharset, $outCharset, $outFilename = null)
+    {
+        if ($inCharset !== $outCharset) {
+            try {
+                $input       = file_get_contents($inFilename);
+                $outFilename = $outFilename ? : sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
+                try {
+                    $output = iconv($inCharset, $outCharset . "//TRANSLIT", $input);
+                } catch (\ErrorException  $exception) {
+                    $output = iconv($inCharset, $outCharset . "//IGNORE", $input);
+                }
+
+                file_put_contents($outFilename, $output);
+            } catch (ContextErrorException $exception) {
+                throw new BadCharsetException($exception->getMessage());
+            }
+
+            return $outFilename;
+        }
+
+        return $inFilename;
+    }
+}

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 

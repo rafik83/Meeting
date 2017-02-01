@@ -41,40 +41,62 @@
     background: #32b5fc;
   }
 
-  .meeting {
-    background: #32b5fc;
-  }
-
-  .meeting-common {
-    background: #ffe237;
-  }
-
   .slot {
     padding: 4px;
     height: 65px;
     width: 120px;
-  }
 
-  .slot-label {
-    width: 100px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+    &.meeting {
+      background: #32b5fc;
+    }
 
-  .slot-time {
-    font-size: 85%;
-    display: inline;
+    &.meeting-common {
+      background: #ffe237;
+    }
+
+    &.happening {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    &.unavailability {
+      background: #999999;
+      color: #ffffff;
+    }
+
+    &.mass-unavailability {
+      background: darkblue;
+      color: #ffffff;
+    }
+
+    &.available {
+      background: #75cb0b;
+    }
+
+    &.meeting-to-be-moved {
+      background: greenyellow;
+    }
+
+    .slot-label {
+      width: 100px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .slot-time {
+      font-size: 85%;
+      display: inline;
+    }
   }
 
   .sheets-list {
     position: fixed;
-    top: 50px;
-    left: 0px;
+    left: 0;
     height: calc(100vh - 300px);
     width: 17%;
     overflow-y: scroll;
-    padding: 10px 0 100px 10px;
+    padding: 0 0 100px 10px;
   }
 
   .sheet-title {
@@ -93,21 +115,6 @@
     span.glyphicon:before {
       content: "\e164";
     }
-  }
-
-  .happening {
-    background: #000000;
-    color: #ffffff;
-  }
-
-  .unavailability {
-    background: #999999;
-    color: #ffffff;
-  }
-
-  .mass-unavailability {
-    background: darkblue;
-    color: #ffffff;
   }
 
   .glyphicon {
@@ -129,5 +136,19 @@
       background-color: #fff;
       font-size: 85%;
     }
+
+    .request-to-be-placed {
+      background: greenyellow;
+    }
   }
+}
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
 }

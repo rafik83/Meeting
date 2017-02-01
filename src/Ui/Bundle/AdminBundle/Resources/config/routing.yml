@@ -288,6 +288,77 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_sheet_meeting_remove:
+    path: /event/{event}/agenda/meeting/{meeting}/remove
+    requirements:
+        event: \d+
+        sheet: \d+
+        meeting: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
+
+admin_agenda_export_participant_index:
+    path: /event/{event}/agenda/export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:index }
+
+admin_agenda_export_participant_export:
+    path: /event/{event}/agenda/do-export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
+
+admin_agenda_meeting_update_spot:
+    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateSpot }
+
+admin_agenda_meeting_update_spot_handler:
+    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleUpdateSpot }
+
+admin_agenda_meeting_update_slot:
+    path: /event/{event}/agenda/meeting/{meeting}/update-slot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateSlot }
+
+admin_agenda_meeting_update_slot_handler:
+    path: /event/{event}/agenda/meeting/{meeting}/update-slot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleUpdateSlot }
+
+admin_agenda_meeting_request_transform_into_meeting:
+    path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:transformRequestIntoMeeting }
+
+admin_agenda_meeting_request_transform_into_meeting_handler:
+    path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:handleTransformRequestIntoMeeting }
+
 #
 # Meeting
 #
@@ -298,6 +369,29 @@ admin_meeting_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Meeting:list }
+
+admin_meeting_details:
+    path: /event/{event}/meeting/{meeting}/details
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Meeting:details }
+
+admin_meeting_delete:
+    path: /event/{event}/meeting/{meeting}/delete
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Meeting:deleteMeeting }
+
+admin_meeting_delete_all:
+    path: /event/{event}/meeting/delete/all
+    requirements:
+        event: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Meeting:delete }
 
 #
 # Spot
@@ -331,6 +425,13 @@ admin_spot_batch_create:
     methods: [GET , POST]
     defaults: { _controller: AdminBundle:Spot:batchCreate }
 
+admin_spot_batch_unavailability:
+    path: /event/{event}/spot/unavailability/batch
+    requirements:
+        event: \d+
+    methods: [GET , POST]
+    defaults: { _controller: AdminBundle:Spot:batchUnavailability }
+
 admin_spot_update:
     path: /event/{event}/spot/update
     requirements:
@@ -338,6 +439,22 @@ admin_spot_update:
         spot: \d+
     methods: [GET , POST]
     defaults: { _controller: AdminBundle:Spot:update }
+
+admin_spot_update_visio:
+    path: /event/{event}/spot/{spot}/update/visio
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot:visio }
+
+admin_spot_update_un_visio:
+    path: /event/{event}/spot/{spot}/update/un-visio
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot:unVisio }
 
 #
 # Meeting Request
@@ -350,27 +467,12 @@ admin_meeting_request_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
 
-admin_meeting_request_sheets_list:
-    path: /event/{event}/meeting-request/sheets
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:MeetingRequest:sheetList }
-
 admin_transform_requests_to_meetings:
     path: /event/{event}/meeting-request/transform-requests-to-meetings
     requirements:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:transformRequestsToMeetings }
-
-admin_meeting_request_position:
-    path: /event/{event}/meeting-request/{meetingRequest}/position
-    requirements:
-        event: \d+
-        meetingRequest: \d+
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:MeetingRequest:position }
 
 admin_meeting_request_details:
     path: /event/{event}/meeting-request/{meetingRequest}/details
@@ -387,6 +489,13 @@ admin_meeting_request_slots:
         meetingRequest: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:slots }
+
+admin_meeting_request_lock_update:
+    path: /event/{event}/meeting-request/lock/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
 
 #
 # Sheet
@@ -422,6 +531,25 @@ admin_sheet_export_participant:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Sheet:exportParticipant }
+admin_sheet_import:
+    path: /event/{event}/sheet/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet:import }
+admin_sheet_import_mapping:
+    path: /event/{event}/sheet/{type}/import/mapping
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet:importMapping }
+admin_sheet_import_result:
+    path: /event/{event}/sheet/{type}/import/result
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet:importResult }
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot
     requirements:
@@ -820,6 +948,13 @@ admin_schedule_slot_unlock:
     requirements:
         event: \d+
         meetingSlot: \d+
+admin_schedule_slot_remove:
+    path: /event/{event}/schedule/slot/{meetingSlot}/remove
+    defaults: { _controller: AdminBundle:Schedule:remove }
+    methods: [DELETE]
+    requirements:
+        event: \d+
+        meetingSlot: \d+
 
 admin_schedule_days:
     path: /event/{event}/schedule/days
@@ -1025,3 +1160,27 @@ admin_messaging_campaign_send:
         campaign: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Messaging\Campaign:send }
+
+#
+# Planner
+#
+admin_planner:
+    path: /event/{event}/planner
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Planner:index }
+
+admin_export_planner_data:
+    path: /event/{event}/planner/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Export:export }
+
+admin_import_planner_data:
+    path: /event/{event}/planner/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Planner/Import:import }

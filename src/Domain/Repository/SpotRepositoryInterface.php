@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 interface SpotRepositoryInterface
@@ -26,12 +29,27 @@ interface SpotRepositoryInterface
     public function set(Spot $spot);
 
     /**
-     * @param Event $event
-     * @param integer $id
+     * @param Event     $event
+     * @param int|array $id
      *
-     * @return Spot
+     * @return Spot|null
      */
     public function find(Event $event, $id);
+
+    /**
+     * @param Event $event
+     * @param array $ids
+     *
+     * @return Spot[]
+     */
+    public function findMany(Event $event, array $ids);
+
+    /**
+     * @param Event $event
+     *
+     * @return Spot[]
+     */
+    public function getActiveByEvent(Event $event);
 
     /**
      * @param Event $event
@@ -66,4 +84,52 @@ interface SpotRepositoryInterface
      * @param Event $event
      */
     public function enableBatchSpot(array $ids, Event $event);
+
+    /**
+     * @param Meeting $meeting
+     *
+     * @return Spot[]
+     */
+    public function getSpotsForMeeting(Meeting $meeting);
+
+    /**
+     * @param Meeting $meeting
+     *
+     * @return bool
+     */
+    public function hasSpotsForMeeting(Meeting $meeting);
+
+    /**
+     * @param MeetingSlot  $slot
+     * @param int          $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
+     *
+     * @return Spot[]
+     */
+    public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
+    );
+
+    /**
+     * @param MeetingSlot  $slot
+     * @param int          $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
+     *
+     * @return bool
+     */
+    public function hasSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
+    );
 }

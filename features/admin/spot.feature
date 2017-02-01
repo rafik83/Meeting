@@ -13,6 +13,7 @@ Feature: Spot feature
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Spot.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-MeetingSlot.yml     |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event/1/spot"
@@ -34,10 +35,13 @@ Feature: Spot feature
       | spot_create_size            | 3    |
       | spot_create_meetingCapacity | 6    |
       | spot_create_seatCapacity    | 2    |
+      | spot_create_priority        | 90   |
+      | spot_create_visio           | 1    |
     And I check "spot_create_active"
     And I press "form.spot_create.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/spot"
     And I should see "flash.admin.spot.create.success"
+    And I should see "90"
 
   Scenario: I can filter spots with active filter
     Given I am logged with "test@test.com" on admin
@@ -101,6 +105,24 @@ Feature: Spot feature
     And I should see "G0345"
     And I should see "A008"
     And I should not see "B090"
+
+  Scenario: I can set spot unavailabilities
+    Given I am logged with "test@test.com" on admin
+    And I go to this page "/admin/fr/event/1/spot"
+    And I should see "A100"
+    And I should see "B090"
+    When I check "batch_checkbox_4"
+    And I check "batch_checkbox_3"
+    When I press "admin.spot.unavailability"
+    Then I should be on this page "/admin/fr/event/1/spot/unavailability/batch"
+    And I should see "admin.spot.batch_unavailability.title"
+    When I check "spot_batch_unavailability_meetingSlots_0"
+    And I check "spot_batch_unavailability_meetingSlots_1"
+    Then I press "form.spot_batch_unavailability.children.submit.label"
+    And I should be on this page "/admin/fr/event/1/spot"
+    And I should see "flash.admin.spot_batch.spotUnavailability.success"
+    And I should see "✓" in the "#spot-4" element
+    And I should see "✓" in the "#spot-3" element
 
   Scenario: I can delete spot in batch mode
     Given I am logged with "test@test.com" on admin

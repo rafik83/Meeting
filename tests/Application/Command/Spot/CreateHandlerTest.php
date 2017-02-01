@@ -30,9 +30,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->reference = 'test013';
         $command->size = 2;
         $command->seatCapacity = 5;
+        $command->visio = true;
+        $command->priority = 8;
 
         //Expected
-        $expectedSpot = new Spot('test013', $event, 2, 4, 5, true);
+        $expectedSpot = new Spot('test013', $event, 2, 4, 5, true, 8, true);
 
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $spotRepository->add($expectedSpot)->shouldBeCalled();

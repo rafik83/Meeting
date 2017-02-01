@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -132,6 +133,14 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getFromParticipantsArray()
+    {
+        return $this->fromParticipants->toArray();
+    }
+
+    /**
      * @return Sheet
      */
     public function getToSheet()
@@ -145,6 +154,14 @@ class Request implements MessageSubjectInterface
     public function getToParticipants()
     {
         return $this->toParticipants;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getToParticipantsArray()
+    {
+        return $this->toParticipants->toArray();
     }
 
     /**
@@ -440,6 +457,14 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isTransformableIntoMeeting()
+    {
+        return TransformableRequest::isTransformable($this);
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Sheet
@@ -458,18 +483,25 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * "Quand la demande de RDV n'a pas de participant de préférence et que la liste
+     *  des participants disponible est vide on utilise le seul participant de la fiche"
+     *
      * @param Sheet $sheet
      *
      * @return Participant[]
      */
     public function getParticipants(Sheet $sheet)
     {
+        if ($this->hasNoPreference($sheet) && $sheet->getParticipants()->count() === 1) {
+            return [$sheet->getParticipants()->first()];
+        }
+
         if ($this->isSender($sheet)) {
-            return $this->fromParticipants;
+            return $this->fromParticipants->toArray();
         }
 
         if ($this->isReceiver($sheet)) {
-            return $this->toParticipants;
+            return $this->toParticipants->toArray();
         }
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
@@ -481,5 +513,42 @@ class Request implements MessageSubjectInterface
     public function hasMeeting()
     {
         return $this->meeting !== null;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getAllParticipants()
+    {
+        return array_merge($this->getParticipants($this->from), $this->getParticipants($this->to));
+    }
+
+    /**
+     * @return int[] array of all participants id
+     */
+    public function getParticipantsId()
+    {
+        return array_map(
+            function (Participant $participant) {
+                return $participant->getId();
+            },
+            $this->getAllParticipants()
+        );
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->getFromSheet()->getEvent();
+    }
+
+    /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
     }
 }

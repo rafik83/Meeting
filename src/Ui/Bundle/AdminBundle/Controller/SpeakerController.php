@@ -107,7 +107,7 @@ class SpeakerController extends Controller
 
         $happenings = $this
             ->get('happening.happening_list_view_factory')
-            ->getListBySpeakerAndLocale($speaker, $request->getLocale());
+            ->getListBySpeakerAndLocale($speaker, $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('AdminBundle:Speaker:read.html.twig', [
             'event'      => $event,

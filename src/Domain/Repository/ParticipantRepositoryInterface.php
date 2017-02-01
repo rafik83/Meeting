@@ -32,6 +32,13 @@ interface ParticipantRepositoryInterface
     public function delete(Participant $participant);
 
     /**
+     * @param Event $event
+     *
+     * @return Participant[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
      * @param int $id
      *
      * @return Participant
@@ -154,6 +161,13 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
+
+    /**
+     * @param int $id
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsBySheetId($id);
 
     /**
      * @param Event  $event

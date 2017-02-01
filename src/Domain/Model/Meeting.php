@@ -70,6 +70,16 @@ class Meeting implements MessageSubjectInterface
     private $request;
 
     /**
+     * @var bool
+     */
+    private $blockedSpot = false;
+
+    /**
+     * @var bool
+     */
+    private $blockedSlot = false;
+
+    /**
      * Meeting constructor.
      *
      * @param Request            $request
@@ -80,6 +90,8 @@ class Meeting implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param Spot               $spot
+     * @param bool               $blockedSpot
+     * @param bool               $blockedSlot
      */
     public function __construct(
         Request $request,
@@ -89,7 +101,9 @@ class Meeting implements MessageSubjectInterface
         Sheet $toSheet,
         array $toParticipants,
         \DateTimeInterface $createdAt,
-        Spot $spot
+        Spot $spot,
+        $blockedSpot = false,
+        $blockedSlot = false
     ) {
         $this->request          = $request;
         $this->slot             = $slot;
@@ -99,6 +113,8 @@ class Meeting implements MessageSubjectInterface
         $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->createdAt        = $createdAt;
         $this->spot             = $spot;
+        $this->blockedSpot      = $blockedSpot;
+        $this->blockedSlot      = $blockedSlot;
     }
 
     /**
@@ -282,6 +298,52 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
+    }
+
+    /**
+     * @param Spot $spot
+     * @param bool $blockedSpot
+     * @param bool $blockedSlot
+     */
+    public function updateSpot(Spot $spot, $blockedSpot, $blockedSlot)
+    {
+        $this->spot        = $spot;
+        $this->blockedSpot = $blockedSpot;
+        $this->blockedSlot = $blockedSlot;
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param Spot        $spot
+     */
+    public function updateSlotAndSpot(MeetingSlot $slot, Spot $spot)
+    {
+        $this->slot = $slot;
+        $this->spot = $spot;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSpot()
+    {
+        return $this->blockedSpot;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSlot()
+    {
+        return $this->blockedSlot;
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Participant[]
@@ -295,5 +357,42 @@ class Meeting implements MessageSubjectInterface
         }
 
         return [];
+    }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return [$this->fromSheet, $this->toSheet];
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getAllParticipants()
+    {
+        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+    }
+
+    /**
+     * @return int[] array of all participants id
+     */
+    public function getParticipantsId()
+    {
+        return array_map(
+            function (Participant $participant) {
+                return $participant->getId();
+            },
+            $this->getAllParticipants()
+        );
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->slot->getEvent();
     }
 }

@@ -11,7 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
@@ -30,7 +34,7 @@ class SpotRepository implements SpotRepositoryInterface
      */
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -61,12 +65,43 @@ class SpotRepository implements SpotRepositoryInterface
             ->select('spot')
             ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
-            ->setParameter('event', $event)
             ->andWhere('spot.id = :id')
+            ->setParameter('event', $event)
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findMany(Event $event, array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in('spot.id', $ids)
+        );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getActiveByEvent(Event $event)
+    {
+        $queryBuilder = new FilteredQueryBuilder($this->entityManager);
+        $queryBuilder->hasEvent($event)->filter(['active' => true]);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -112,8 +147,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
     }
@@ -131,8 +165,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
     }
@@ -150,9 +183,158 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotsForMeeting(Meeting $meeting)
+    {
+        return $this->getSpotsForSlotAndParticipantsQuantity(
+            $meeting->getSlot(),
+            $meeting->countParticipants(),
+            $meeting
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSpotsForMeeting(Meeting $meeting)
+    {
+        return $this->hasSpotsForSlotAndParticipantsQuantity(
+            $meeting->getSlot(),
+            $meeting->countParticipants(),
+            $meeting
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
+    ) {
+        $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+            $slot,
+            $participantsQuantity,
+            $exceptMeeting,
+            $fromSheet,
+            $toSheet
+        );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
+    ) {
+        $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+            $slot,
+            $participantsQuantity,
+            $exceptMeeting,
+            $fromSheet,
+            $toSheet
+        );
+
+        $queryBuilder->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param MeetingSlot  $slot
+     * @param              $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
+     *
+     * @return QueryBuilder
+     */
+    private function getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null
+    ) {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
+            ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :eventId AND spot.active = true')
+            ->setParameter('eventId', $slot->getEvent()->getId());
+
+        // If meeting has a blocked spot, check only meeting's spot availability
+        if (null !== $exceptMeeting && $exceptMeeting->isBlockedSpot()) {
+            $queryBuilder
+                ->andWhere('spot.id = :spotId')
+                ->setParameter('spotId', $exceptMeeting->getSpot()->getId());
+        }
+
+        // Get meetings and participants count assigned to this spot on current slot
+        $queryBuilder
+            ->leftJoin(
+                Meeting::class,
+                'meeting',
+                'WITH',
+                sprintf(
+                    'meeting.spot = spot AND meeting.state = :state AND meeting.slot = :slot %s',
+                    // Exclude $exceptMeeting
+                    null !== $exceptMeeting ? 'AND meeting != :exceptMeeting' : ''
+                )
+            )
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setParameter('slot', $slot)
+            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
+            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->groupBy('spot.id')
+            ->andHaving('countMeetings < spot.meetingCapacity')
+            ->andHaving('(countParticipants + :participantsQuantity) <= spot.seatCapacity')
+            ->setParameter('participantsQuantity', $participantsQuantity);
+
+        if (null !== $exceptMeeting) {
+            $queryBuilder
+                ->setParameter('exceptMeeting', $exceptMeeting)
+            ;
+
+            if ($fromSheet === null && $toSheet === null) {
+                $fromSheet = $exceptMeeting->getFromSheet();
+                $toSheet   = $exceptMeeting->getToSheet();
+            }
+        }
+
+        if ($fromSheet !== null && $toSheet !== null) {
+            $queryBuilder
+                // Get meeting sheets assigned to spot in order to sort Spots list by assigned spots then by shared spots
+                ->addSelect('sheetAssignedToSpot.id AS HIDDEN hasSheetAssignedFromMeeting')
+                ->leftJoin('spot.sheets', 'sheetAssignedToSpot', 'WITH', 'sheetAssignedToSpot IN (:fromSheetId, :toSheetId)')
+                // Exclude spots assigned to others sheet
+                ->andWhere('sheetAssignedToSpot IN (:fromSheetId, :toSheetId) OR NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
+                ->setParameter('fromSheetId', $fromSheet->getId())
+                ->setParameter('toSheetId', $toSheet->getId())
+                ->addOrderBy('hasSheetAssignedFromMeeting', 'DESC');
+        }
+
+        $queryBuilder->addOrderBy('spot.reference');
+
+        return $queryBuilder;
     }
 }

@@ -11,7 +11,11 @@
 * [Vagrant 1.7.4+](http://www.vagrantup.com/downloads.html)
 * [VirtualBox 5.0.4+](https://www.virtualbox.org/wiki/Downloads)
 * [Ansible 1.9.3+](http://docs.ansible.com/intro_installation.html)
-* [Vagrant Landrush 0.18.0+](https://github.com/phinze/landrush) or [Vagrant Host Manager plugin 1.6.1+](https://github.com/smdahlen/vagrant-hostmanager)
+* [Vagrant Landrush 0.18.0+](https://github.com/phinze/landrush)
+
+To avoid trouble with vagrant 1.8.4 and landrush plugin, specify plugin version
+
+        $ vagrant plugin install landrush --plugin-version 0.18.0
 
 ### Setup
 

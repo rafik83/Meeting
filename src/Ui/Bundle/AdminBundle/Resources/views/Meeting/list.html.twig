@@ -1,34 +1,59 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+    <h2>
+        {{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <span class="pull-right">
+            {{ macro.delete_button(
+                path('admin_meeting_delete_all', {'event': event.id}),
+                'admin.meeting.action.deleteAll.title'|trans,
+                {'class': 'btn btn-danger', 'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans}
+            ) }}
+        </span>
+        {% endif %}
+    </h2>
 
-    <h2>Liste des RDV positionnés</h2>
-
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr>
-                <th>De</th>
-                <th>à</th>
-                <th>Slot</th>
-                <th>Créé le</th>
+                <th>{{ 'admin.meeting.list.column.head.from'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.slot'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.createdAt'|trans }}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for meeting in meetings.results %}
                 <tr>
-                    <td>{{ meeting.sheetNameFrom }}</td>
-                    <td>{{ meeting.sheetNameTo }}</td>
                     <td>
-                        {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale) }}
-                        {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale) }}
+                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
+
+                            {{ meeting.sheetNameFrom }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
+
+                            {{ meeting.sheetNameTo }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                        {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
                     </td>
                     <td>{{ meeting.createdAt|localizeddate('medium', 'none', app.request.locale) }}</td>
+                    <td>
+                        {{ macro.btnGroupAndRightMenuDropdown({('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id})}) }}
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">
-                        Aucun RDV positionné
+                    <td colspan="5" class="text-center">
+                         {{ 'admin.meeting.list.noResult'|trans }}
                     </td>
                 </tr>
             {% endfor %}

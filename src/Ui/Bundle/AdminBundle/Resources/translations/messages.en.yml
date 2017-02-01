@@ -24,6 +24,7 @@ admin.agenda.countRequest: 'Number of requests'
 admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
 admin.agenda.link: 'My meetings'
+admin.agenda.remove.confirm: 'Are you sure you want to delete this meeting ?'
 admin.agenda.requestsList.title: 'Validated meetings'
 admin.agenda.sheet.see: 'See the presentation sheet'
 admin.agenda.title: 'Meetings planner'
@@ -122,6 +123,10 @@ admin.order_edit.VAT: VAT
 admin.order.cancelled: Cancelled
 admin.order.title: 'Order list'
 admin.package.update: Modify
+admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
+admin.participant.export.fields.planning.unallocated_meetings: 'List of validated meeting requests which have not been planned due to availability conflicts.'
+admin.participant.export.fields.planning.unavailability: Unavailable
+admin.participant.export.fields.planning.warning: 'Please check the booth or table number for each appointment.'
 admin.participant.export.happening.subscriber.no: 'No'
 admin.participant.export.no: 'No'
 admin.plan.unitPrice: 'Unit price'
