@@ -1474,6 +1474,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting }
 
+    command.unavailability.mass.dispatcher_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DispatcherHandler
+        arguments:
+            - '@unavailability.time_slot_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
+
     #
     # Security
     #

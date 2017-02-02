@@ -83,6 +83,8 @@ class TimeSlotDispatcher
 
     /**
      * @param Event $event
+     *
+     * @throws UnableToDispatchException
      */
     public function dispatchAll(Event $event)
     {

@@ -10,6 +10,13 @@
     <h1 class="page-header">
         {{ 'admin.unavailability.mass.title'|trans }}
         <div class="pull-right">
+            {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <a class="btn btn-warning"
+               href="{{ path('admin_unavailability_mass_dispatch', {event: event.id}) }}"
+                data-confirm="{{ 'admin.unavailability.button.dispatch_confirm'|trans }}">
+                {{ 'admin.unavailability.button.dispatch'|trans }}
+            </a>
+            {% endif %}
             <a class="btn btn-info" href="{{ path('admin_unavailability_category_list', {event: event.id}) }}">
                 {{ 'admin.unavailability.button.category'|trans }}
             </a>
