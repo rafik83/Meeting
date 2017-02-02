@@ -47,13 +47,9 @@ class SpotViewQueryHandler
         $spots     = $this->spotRepository->getActiveByEvent($query->event);
 
         foreach ($spots as $spot) {
-            $priority   = 10;
             $sheetsList = [];
 
-            // Will have to be rewritten when priority will be placed on spot
             if ($spot->hasSheets()) {
-                $priority = 8;
-
                 foreach ($spot->getSheets() as $sheet) {
                     $sheetsList[] = $this->getSheetById($sheet->getId());
                 }
@@ -65,7 +61,7 @@ class SpotViewQueryHandler
                 $spot->getSeatCapacity(),
                 $spot->getMeetingCapacity(),
                 $sheetsList,
-                $priority
+                $spot->getPriority()
             );
         }
 

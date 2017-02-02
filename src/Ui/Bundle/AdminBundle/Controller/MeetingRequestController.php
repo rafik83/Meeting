@@ -143,33 +143,6 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function sheetListAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        $sheetMeetingsListViews = $this
-            ->get('sheet.sheet_meetings_list_view_factory')
-            ->findAll($event, $locale);
-
-        $meetingsMetrics = $this
-            ->get('sheet.meetings_metrics_view_factory')
-            ->getFromSheets($sheetMeetingsListViews);
-
-        return $this->render('AdminBundle:MeetingRequest:sheet_list.html.twig', [
-            'event'            => $event,
-            'sheets'           => $sheetMeetingsListViews,
-            'meetings_metrics' => $meetingsMetrics,
-        ]);
-    }
-
-    /**
      * @param Event $event
      *
      * @return RedirectResponse

@@ -28,6 +28,12 @@ function Batch(element)
 
     // Check row
     [].forEach.call(element.querySelectorAll('tbody tr'), function (item) {
+
+        // Stop propagation on a, button, input or stopPropagation class
+        [].forEach.call(item.querySelectorAll('.stopPropagation'), function (a) {
+            a.addEventListener('click', function (event) { event.stopPropagation(); });
+        });
+
         item.addEventListener('click', function (event) {
             if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') {
                 return;

@@ -45,6 +45,12 @@ class BatchCreateType extends AbstractType
             ->add('active', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('priority', IntegerType::class, [
+                'required' => true,
+            ])
+            ->add('visio', CheckBoxType::class, [
+                'required' => false,
+            ])
         ;
     }
 
