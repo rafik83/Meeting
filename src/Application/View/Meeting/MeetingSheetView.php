@@ -10,15 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-
 class MeetingSheetView
 {
-    /**
-     * @var Sheet
-     */
-    public $sheet;
-
     /**
      * @var string
      */
@@ -30,14 +23,14 @@ class MeetingSheetView
     public $category;
 
     /**
-     * @var int
+     * @var string
      */
-    public $turnover = 0;
+    public $turnover;
 
     /**
-     * @var int
+     * @var string
      */
-    public $employees = 0;
+    public $employees;
 
     /**
      * @var string
@@ -77,10 +70,9 @@ class MeetingSheetView
     /**
      * MeetingSheetView constructor.
      *
-     * @param Sheet                    $sheet
      * @param string                   $category
-     * @param int                      $turnover
-     * @param int                      $employees
+     * @param string                   $turnover
+     * @param string                   $employees
      * @param string                   $website
      * @param string                   $address
      * @param string                   $zipcode
@@ -90,7 +82,6 @@ class MeetingSheetView
      * @param MeetingParticipantView[] $participants
      */
     public function __construct(
-        Sheet $sheet,
         $category,
         $turnover,
         $employees,
@@ -102,7 +93,6 @@ class MeetingSheetView
         $type,
         array $participants
     ) {
-        $this->sheet        = $sheet;
         $this->participants = $participants;
         $this->category     = $category;
         $this->turnover     = $turnover;

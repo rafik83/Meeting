@@ -2804,6 +2804,10 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments: ['@datetime']
 
+    domain.key_dates.checker.event_open_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker
+        arguments: ['@datetime']
+
     domain.key_dates.checker.meeting_published_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
         arguments:

@@ -100,8 +100,7 @@ class MeetingRequestController extends Controller
             $template = 'EventBundle:MeetingRequest/Partials:catalog.html.twig';
         }
 
-        $today       = new \DateTime();
-        $isEventOpen = $event->getOpenDate() !== null && $event->getOpenDate() <= $today;
+        $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
         return $this->render($template, [
             'event'              => $event,
@@ -659,6 +658,7 @@ class MeetingRequestController extends Controller
     public function exportContactAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_OPEN_ACCESS', $eventDomain->getEvent());
 
         $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
             new MeetingSheetViewQuery(

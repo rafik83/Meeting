@@ -79,7 +79,6 @@ class MeetingSheetViewQueryHandler
             $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($metSheet, $query->locale);
 
             $meetingSheetViews[] = new MeetingSheetView(
-                $metSheet,
                 $sheetTags[Tag::SHEET_ORGANIZATION_CATEGORY],
                 $sheetTags[Tag::SHEET_ORGANIZATION_TURNOVER],
                 $sheetTags[Tag::SHEET_ORGANIZATION_STAFF],
