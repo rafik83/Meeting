@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
@@ -187,7 +187,7 @@ class MeetingController extends Controller
     public function transformRequestIntoMeetingAction(Request $request, Event $event, Meeting\Request $meetingRequest)
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
-        
+
         $isVisio = $this->checkVisio($meetingRequest);
 
         try {
@@ -328,9 +328,11 @@ class MeetingController extends Controller
     private function checkVisio(Meeting\Request $meetingRequest)
     {
         $visioGuesser = $this->get('domain.meeting.visio_guesser');
-        $isVisioRequestMeeting = $visioGuesser->hasMeetingRequestParticipantVisio($meetingRequest);
-        $isVisioMeeting = $visioGuesser->hasMeetingParticipantVisio($meetingRequest->getMeeting());
 
-        return ($isVisioMeeting === true && $isVisioRequestMeeting === true) ? true : false;
+        if ($meetingRequest->getMeeting() !== null) {
+            return $visioGuesser->hasMeetingParticipantVisio($meetingRequest->getMeeting());
+        }
+
+        return $visioGuesser->hasMeetingRequestParticipantVisio($meetingRequest);
     }
 }
