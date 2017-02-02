@@ -38,8 +38,7 @@ class MeetingUpdateSpotViewQueryHandler
         SpotRepositoryInterface $spotRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->spotRepository   = $spotRepository;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->translator       = $translator;

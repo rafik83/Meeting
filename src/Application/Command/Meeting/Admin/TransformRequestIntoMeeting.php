@@ -21,9 +21,7 @@ class TransformRequestIntoMeeting
     /** @var MeetingSlot */
     public $slot;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $visio;
 
     /**

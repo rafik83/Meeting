@@ -65,7 +65,7 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
-        $data    = json_decode($request->getContent());
+        $data = json_decode($request->getContent());
 
         if (!isset($data->spotId) || !isset($data->blockedSlot) || !isset($data->blockedSpot)) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.error');

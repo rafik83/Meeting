@@ -17,9 +17,7 @@ class RequestSlotViewQuery
     /** @var Meeting\Request */
     public $meetingRequest;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $visio;
 
     /**

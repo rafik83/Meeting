@@ -21,9 +21,7 @@ class UpdateSlot
     /** @var MeetingSlot */
     public $slot;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $visio;
 
     /**
