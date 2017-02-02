@@ -15,7 +15,8 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: datetime
         disabled:
             type: boolean
-            default: false
+            options:
+                default: false
     oneToOne:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
