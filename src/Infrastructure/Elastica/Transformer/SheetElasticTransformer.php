@@ -174,6 +174,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'event'                   => $sheet->getEvent()->getId(),
                 'owner'                   => $owner,
                 'remainingToPay'          => $this->orderBalance->getRemainingToPay($sheet),
+                'lastLoginAt'             => $sheet->getLastLoginAt()->format('c'),
                 'createdAt'               => $sheet->getCreatedAt()->format('c'),
                 'inCatalog'               => $sheet->isInCatalog(),
                 'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
@@ -356,6 +357,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                         $participant,
                         $locale
                     ),
+                    'imported' => $participant->isImported(),
                 ];
             },
             $sheet->getParticipants()->toArray()

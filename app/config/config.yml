@@ -196,10 +196,14 @@ fos_elastica:
                                 position:
                                     type: string
                                     index: "not_analyzed"
+                                imported:
+                                    type: boolean
                         event:
                             type: integer
                         owner:
                             type: integer
+                        lastLoginAt:
+                            type: date
                         createdAt:
                             type: date
                         remainingToPay:
