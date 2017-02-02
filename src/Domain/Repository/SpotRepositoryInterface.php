@@ -100,28 +100,31 @@ interface SpotRepositoryInterface
     public function hasSpotsForMeeting(Meeting $meeting);
 
     /**
-     * @param MeetingSlot  $slot
-     * @param int          $participantsQuantity
+     * @param MeetingSlot $slot
+     * @param int $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null   $fromSheet
-     * @param Sheet|null   $toSheet
-     *
-     * @return Spot[]
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
+     * 
+     * @return \Proximum\Vimeet\Domain\Model\Spot[]
      */
     public function getSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
         Meeting $exceptMeeting = null,
         Sheet $fromSheet = null,
-        Sheet $toSheet = null
+        Sheet $toSheet = null,
+        $visio = false
     );
 
     /**
-     * @param MeetingSlot  $slot
-     * @param int          $participantsQuantity
+     * @param MeetingSlot $slot
+     * @param int $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null   $fromSheet
-     * @param Sheet|null   $toSheet
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
      *
      * @return bool
      */
@@ -130,6 +133,7 @@ interface SpotRepositoryInterface
         $participantsQuantity,
         Meeting $exceptMeeting = null,
         Sheet $fromSheet = null,
-        Sheet $toSheet = null
+        Sheet $toSheet = null,
+        $visio = false
     );
 }
