@@ -39,6 +39,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -187,7 +188,7 @@ class SheetController extends Controller
                         '%count%' => $result->count,
                     ]));
                 } else {
-                    $this->addFlash('warning', new TranschoiceMessage($result->message, $result->count, [
+                    $this->addFlash('warning', new TransMessage($result->message, [
                         '%sheets%' => $result->ignoredSheetsMessage,
                     ]));
                 }
