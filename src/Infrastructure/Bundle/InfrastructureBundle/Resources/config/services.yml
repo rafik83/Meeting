@@ -695,6 +695,7 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
+
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
@@ -702,6 +703,10 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@command.sheet.batch_catalog_handler'
             - '@datetime'
+            - '@sheet.happening_participation.enable_disable_manager'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
     command.sheet.batch_catalog_handler:
@@ -1584,6 +1589,14 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.template_data_factory'
+
+    #
+    # Rule
+    #
+    sheet.happening_participation.enable_disable_manager:
+        class: Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     #
     # Rule
