@@ -7,10 +7,10 @@ Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment:
             generator:
                 strategy: AUTO
     fields:
-        from:
+        begin:
             type: datetime
             column: from_date
-        to:
+        end:
             type: datetime
             column: to_date
     manyToOne:
