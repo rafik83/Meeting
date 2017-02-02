@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
+use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -64,7 +65,7 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
-        $data = json_decode($request->getContent());
+        $data    = json_decode($request->getContent());
 
         if (!isset($data->spotId) || !isset($data->blockedSlot) || !isset($data->blockedSpot)) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.error');
@@ -72,7 +73,8 @@ class MeetingController extends Controller
 
         $spot = $this->get('vimeet_infrastructure.repository.spot_repository')->find(
             $event,
-            (int) $data->spotId
+            (int) $data->spotId,
+            $this->checkVisio($meeting->getRequest()) // find visio spot if meeting visio
         );
 
         if (null === $spot) {
@@ -80,7 +82,6 @@ class MeetingController extends Controller
         }
 
         $visio = $this->checkVisio($meeting->getRequest());
-        dump($visio);
 
         $updateSpot = new UpdateSpot(
             $meeting,
@@ -321,9 +322,13 @@ class MeetingController extends Controller
     }
 
     /**
+     * Check if meeting or meeting request has some participant in visio
+     *
      * @param Meeting\Request $meetingRequest
      *
      * @return bool
+     *
+     * @see VisioGuesser
      */
     private function checkVisio(Meeting\Request $meetingRequest)
     {

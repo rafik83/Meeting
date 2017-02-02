@@ -31,10 +31,11 @@ interface SpotRepositoryInterface
     /**
      * @param Event     $event
      * @param int|array $id
+     * @param bool      $visio
      *
-     * @return Spot|null
+     * @return null|Spot
      */
-    public function find(Event $event, $id);
+    public function find(Event $event, $id, $visio = false);
 
     /**
      * @param Event $event

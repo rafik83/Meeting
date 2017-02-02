@@ -57,7 +57,7 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, $id)
+    public function find(Event $event, $id, $visio = false)
     {
         $queryBuilder = $this
             ->entityManager
@@ -69,6 +69,12 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('id', $id)
             ->setMaxResults(1);
+
+        if ($visio === true) {
+            $queryBuilder
+                ->andWhere('spot.visio = :visio')
+                ->setParameter('visio', $visio);
+        }
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
