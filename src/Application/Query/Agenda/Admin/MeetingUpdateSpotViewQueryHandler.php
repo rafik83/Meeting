@@ -63,7 +63,7 @@ class MeetingUpdateSpotViewQueryHandler
                     $spot->getId(),
                     $label
                 );
-            }, $this->spotRepository->getSpotsForMeeting($meeting))
+            }, $this->spotRepository->getSpotsForMeeting($meeting, $query->visio))
         );
     }
 

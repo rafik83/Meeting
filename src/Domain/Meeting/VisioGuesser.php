@@ -23,6 +23,7 @@ class VisioGuesser
     public function hasMeetingParticipantVisio(Meeting $meeting)
     {
         $participants = $meeting->getAllParticipants();
+        
         return $this->isParticipantVisio($participants);
     }
 
@@ -34,6 +35,7 @@ class VisioGuesser
     public function hasMeetingRequestParticipantVisio(Request $request)
     {
         $participants = $request->getAllParticipants();
+
         return $this->isParticipantVisio($participants);
     }
 

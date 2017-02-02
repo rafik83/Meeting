@@ -18,10 +18,17 @@ class RequestSlotViewQuery
     public $meetingRequest;
 
     /**
-     * @param Meeting\Request $meetingRequest
+     * @var bool
      */
-    public function __construct(Meeting\Request $meetingRequest)
+    public $visio;
+
+    /**
+     * @param Meeting\Request $meetingRequest
+     * @param bool            $visio
+     */
+    public function __construct(Meeting\Request $meetingRequest, $visio = false)
     {
         $this->meetingRequest = $meetingRequest;
+        $this->visio          = $visio;
     }
 }

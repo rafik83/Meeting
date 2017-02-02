@@ -3178,6 +3178,12 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
 
     #
+    # Visio Guesser
+    #
+    domain.meeting.visio_guesser:
+          class: Proximum\Vimeet\Domain\Meeting\VisioGuesser
+
+    #
     # Form extension
     #
     form_extension.confirm_extension:

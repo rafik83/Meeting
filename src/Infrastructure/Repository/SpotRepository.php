@@ -197,6 +197,8 @@ class SpotRepository implements SpotRepositoryInterface
             $meeting->getSlot(),
             $meeting->countParticipants(),
             $meeting,
+            null,
+            null,
             $visio
         );
     }
@@ -210,6 +212,8 @@ class SpotRepository implements SpotRepositoryInterface
             $meeting->getSlot(),
             $meeting->countParticipants(),
             $meeting,
+            null,
+            null,
             $visio
         );
     }

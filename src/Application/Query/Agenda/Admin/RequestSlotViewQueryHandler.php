@@ -57,7 +57,8 @@ class RequestSlotViewQueryHandler
                 $query->meetingRequest->countParticipants(),
                 null,
                 $query->meetingRequest->getFromSheet(),
-                $query->meetingRequest->getToSheet()
+                $query->meetingRequest->getToSheet(),
+                $query->visio
             )) {
                 $availableSlotsId[] = $slot->getId();
             }
