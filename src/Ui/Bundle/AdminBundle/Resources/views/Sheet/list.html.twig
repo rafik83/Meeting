@@ -35,7 +35,7 @@
 
     </div>
 
-    {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
+    {{ form_start(batch_form, { 'attr': { 'data-batch': true, 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}
     {{ form_errors(batch_form) }}
 
     <div class="row filters">
