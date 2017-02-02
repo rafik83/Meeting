@@ -552,6 +552,12 @@ form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV eff
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
+form.sheet_filter.children.imported.all.label: Tous
+form.sheet_filter.children.imported.imported.label: Tous les importées
+form.sheet_filter.children.imported.imported_with_connection.label: Importées avec connexion
+form.sheet_filter.children.imported.imported_without_connection.label: Importées sans connexion
+form.sheet_filter.children.imported.label: 'Importé'
+form.sheet_filter.children.imported.not_imported.label: Pas importées
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'

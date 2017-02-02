@@ -80,9 +80,9 @@
                 {% if filter_form.boolean_filters is defined %}
                     {{ form_row(filter_form.boolean_filters) }}
                 {% endif %}
+                {{ form_row(filter_form.imported) }}
                 <div class="form-group">
-                    <div class="col-sm-3">&nbsp;</div>
-                    <div class="col-sm-9">{{ form_widget(filter_form.submit) }}</div>
+                    <div class="col-sm-offset-3 col-sm-9">{{ form_widget(filter_form.submit) }}</div>
                 </div>
             {{ form_end(filter_form) }}
         </div>
