@@ -96,7 +96,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $updateSlot = new UpdateSlot($meeting, $slot2);
+        $updateSlot = new UpdateSlot($meeting, $slot2, false);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),

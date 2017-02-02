@@ -62,13 +62,13 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository   = $this->prophesize(SpotRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
 
-        $spotRepository->getSpotsForMeeting($meeting)->shouldBeCalled()->willReturn([$spot1, $spot2]);
+        $spotRepository->getSpotsForMeeting($meeting, false)->shouldBeCalled()->willReturn([$spot1, $spot2]);
 
         // Assign 'Box002' spot to 'Whatever company name' Sheet
         $toSheet->setSpot($spot2);
         $sheetInfoGuesser->guessSheetTitle($toSheet)->shouldBeCalled()->willReturn('Whatever company name');
 
-        $meetingUpdateSpotViewQuery        = new MeetingUpdateSpotViewQuery($meeting);
+        $meetingUpdateSpotViewQuery        = new MeetingUpdateSpotViewQuery($meeting, false);
         $meetingUpdateSpotViewQueryHandler = new MeetingUpdateSpotViewQueryHandler(
             $spotRepository->reveal(),
             $sheetInfoGuesser->reveal()
