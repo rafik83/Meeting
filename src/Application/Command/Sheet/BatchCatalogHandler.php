@@ -118,12 +118,12 @@ class BatchCatalogHandler
 
         if (count($ignoredSheets) > 0) {
             $message = 'catalog.remove.warning';
-
+            $locale = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
             // Format sheets title to display them in flash warning message
-            $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($command) {
+            $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($locale) {
                 return $this->sheetInfoGuesser->guessSheetTitle(
                     $sheet,
-                    $sheet->getEvent()->getAvailableLocale($command->admin->getLocale())
+                    $locale
                 );
             }, $ignoredSheets));
         }

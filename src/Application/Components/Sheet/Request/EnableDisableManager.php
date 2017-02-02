@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class EnableDisableManager
 {
-    const ADDED_TO_CATALOG   = true;
+    const ADDED_TO_CATALOG = true;
 
     /**
      * @var RequestRepositoryInterface
@@ -51,7 +51,7 @@ class EnableDisableManager
              * - If the sheet met isn't in catalog -> skip this request and do not enable request
              * - If the sheet met is in catalog    -> set disabled to false
              */
-            if (self::ADDED_TO_CATALOG == $state && !$request->getSheetMet($sheet)->isInCatalog()) {
+            if (self::ADDED_TO_CATALOG === $state && !$request->getSheetMet($sheet)->isInCatalog()) {
                 continue;
             }
 
