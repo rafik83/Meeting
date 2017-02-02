@@ -15,21 +15,41 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class VisioGuesser
 {
+    /**
+     * @param Meeting $meeting
+     *
+     * @return bool
+     */
     public function hasMeetingParticipantVisio(Meeting $meeting)
     {
-        $participants = $meeting->getParticipants();
-        foreach($participants as $participant) {
-            if ($participant->)
-        }
+        $participants = $meeting->getAllParticipants();
+        return $this->isParticipantVisio($participants);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
     public function hasMeetingRequestParticipantVisio(Request $request)
     {
-
+        $participants = $request->getAllParticipants();
+        return $this->isParticipantVisio($participants);
     }
 
-    private function isVisio()
+    /**
+     * @param array $participants
+     *
+     * @return bool
+     */
+    private function isParticipantVisio(array $participants)
     {
+        foreach($participants as $participant) {
+            if ($participant->isVisio()) {
+                return true;
+            }
+        }
 
+        return false;
     }
 }
