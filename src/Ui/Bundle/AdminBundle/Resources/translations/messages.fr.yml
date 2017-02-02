@@ -60,6 +60,7 @@ admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'Le créneau sélectionn�
 admin.agenda.meeting.updateSpot.spot: Lieu
 admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
+admin.agenda.meeting.updateSpot.visio: 'Visio'
 admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
 admin.agenda.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce RDV ?'
