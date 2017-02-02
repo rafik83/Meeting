@@ -191,24 +191,26 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSpotsForMeeting(Meeting $meeting)
+    public function getSpotsForMeeting(Meeting $meeting, $visio = false)
     {
         return $this->getSpotsForSlotAndParticipantsQuantity(
             $meeting->getSlot(),
             $meeting->countParticipants(),
-            $meeting
+            $meeting,
+            $visio
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hasSpotsForMeeting(Meeting $meeting)
+    public function hasSpotsForMeeting(Meeting $meeting, $visio = false)
     {
         return $this->hasSpotsForSlotAndParticipantsQuantity(
             $meeting->getSlot(),
             $meeting->countParticipants(),
-            $meeting
+            $meeting,
+            $visio
         );
     }
 
