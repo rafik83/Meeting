@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use DateTime;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSpotView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SpotView;
@@ -61,6 +62,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $spotRepository   = $this->prophesize(SpotRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $translator       = $this->prophesize(TranslatorInterface::class);
 
         $spotRepository->getSpotsForMeeting($meeting, false)->shouldBeCalled()->willReturn([$spot1, $spot2]);
 
@@ -71,7 +73,8 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingUpdateSpotViewQuery        = new MeetingUpdateSpotViewQuery($meeting, false);
         $meetingUpdateSpotViewQueryHandler = new MeetingUpdateSpotViewQueryHandler(
             $spotRepository->reveal(),
-            $sheetInfoGuesser->reveal()
+            $sheetInfoGuesser->reveal(),
+            $translator->reveal()
         );
 
         $meetingUpdateSpotView = $meetingUpdateSpotViewQueryHandler->handle($meetingUpdateSpotViewQuery);
