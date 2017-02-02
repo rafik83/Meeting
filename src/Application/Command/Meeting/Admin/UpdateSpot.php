@@ -43,6 +43,7 @@ class UpdateSpot
         $this->spot        = $spot;
         $this->blockedSlot = $blockedSlot;
         $this->blockedSpot = $blockedSpot;
+        $this->visio       = $visio;
     }
 
     /**

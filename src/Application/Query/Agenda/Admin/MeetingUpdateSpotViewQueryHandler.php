@@ -54,9 +54,10 @@ class MeetingUpdateSpotViewQueryHandler
                 $label = null === $assignedSheetTitle
                     ? $spot->getReference()
                     : sprintf(
-                        '%s - %s',
+                        '%s - %s - %s',
                         $spot->getReference(),
-                        $assignedSheetTitle
+                        $assignedSheetTitle,
+                        $spot->isVisio()
                     );
 
                 return new SpotView(
