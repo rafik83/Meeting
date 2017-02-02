@@ -101,7 +101,7 @@ class MeetingUpdateSpotViewQueryHandler
         if ($spot->isVisio()) {
             $visioLabel = $this->translator->trans('admin.agenda.meeting.updateSpot.visio');
             $label = null === $assignedSheetTitle
-                ? $spot->getReference() . '-' . $visioLabel
+                ? $spot->getReference() . ' - ' . $visioLabel
                 : sprintf(
                     '%s - %s - %s',
                     $spot->getReference(),
