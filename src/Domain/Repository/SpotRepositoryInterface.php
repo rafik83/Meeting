@@ -60,6 +60,13 @@ interface SpotRepositoryInterface
     public function getSpotFilter(Event $event, array $filter = []);
 
     /**
+     * @param array $spotsIds
+     *
+     * @return Spot[]
+     */
+    public function getSpotsByIds(array $spotsIds = []);
+
+    /**
      * @param Event  $event
      * @param string $reference
      *
@@ -68,10 +75,10 @@ interface SpotRepositoryInterface
     public function findByReference(Event $event, $reference);
 
     /**
-     * @param array $ids
-     * @param Event $event
+     * @param Spot[] $spots
+     * @param Event  $event
      */
-    public function removeBatchSpot(array $ids, Event $event);
+    public function removeBatchSpot(array $spots, Event $event);
 
     /**
      * @param array $ids
@@ -91,6 +98,13 @@ interface SpotRepositoryInterface
      * @return Spot[]
      */
     public function getSpotsForMeeting(Meeting $meeting);
+
+    /**
+     * @param Spot $spot
+     *
+     * @return bool
+     */
+    public function hasMeeting(Spot $spot);
 
     /**
      * @param Meeting $meeting
