@@ -112,4 +112,12 @@ class MassAssignment
     {
         return $this->enabled;
     }
+
+    /**
+     * @return Mass
+     */
+    public function getMass()
+    {
+        return $this->mass;
+    }
 }
