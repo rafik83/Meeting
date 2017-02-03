@@ -14,7 +14,10 @@ use Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,6 +28,8 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $begin    = new \DateTime('2016-10-12 10:00:00');
         $end      = new \DateTime('2016-10-12 12:00:00');
         $mass     = new Unavailability\Mass($event, $category, 'name', $begin, $end, true);
+        $sheet       = SheetFactory::create();
+        $participant = ParticipantFactory::create($sheet);
         $mass->createTranslation('fr', 'titre', 'description');
 
         $reflection = new \ReflectionClass(Unavailability\Mass::class);
@@ -33,11 +38,13 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setValue($mass, 1);
         $property->setAccessible(false);
 
-        $handler = new MassUnavailabilityViewQueryHandler();
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $handler = new MassUnavailabilityViewQueryHandler($massAssignmentRepository->reveal());
 
         $result = $handler->handle(new MassUnavailabilityViewQuery(
             $mass,
             $event,
+            $participant,
             'fr'
         ));
 
