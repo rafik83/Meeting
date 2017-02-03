@@ -43,6 +43,7 @@ class CampaignAssembler
      * @var array
      */
     private static $filterLabels = [
+        'imported'         => 'form.sheet_filter.children.imported.label',
         'text'             => 'form.sheet_filter.children.text_search.label',
         'validationState'  => 'form.sheet_filter.children.validationState.label',
         'state'            => 'form.sheet_filter.children.state.label',
@@ -129,6 +130,9 @@ class CampaignAssembler
             $label = '';
             foreach ($values as $currentValue) {
                 switch ($key) {
+                    case 'imported':
+                        $currentValue = $this->translator->trans(sprintf('event.sheet.imported.%s.label', $currentValue));
+                        break;
                     case 'validationState':
                         $currentValue = $this->translator->trans(sprintf('event.sheet.validationState.%s', $currentValue));
                         break;
