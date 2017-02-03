@@ -779,7 +779,6 @@ event.sheet.completed.complete: Complète
 event.sheet.completed.incomplete: Incomplète
 event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active
-event.sheet.imported.all.label: Tous
 event.sheet.imported.imported.label: Tous les importées
 event.sheet.imported.imported_with_connection.label: Importées avec connexion
 event.sheet.imported.imported_without_connection.label: Importées sans connexion

@@ -22,7 +22,7 @@ class ImportedChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'placeholder'               => 'event.sheet.imported.all.label',
+            'placeholder'               => 'form.sheet_filter.children.imported.all.label',
             'choice_translation_domain' => 'messages',
             'choices'                   => [
                 'event.sheet.imported.imported.label'                    => 'imported',
