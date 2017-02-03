@@ -120,4 +120,20 @@ class MassAssignment
     {
         return $this->mass;
     }
+
+    /**
+     * Enable the mass assignment
+     */
+    public function enable()
+    {
+        $this->enabled = true;
+    }
+
+    /**
+     * Disable the mass assignment
+     */
+    public function disable()
+    {
+        $this->enabled = false;
+    }
 }

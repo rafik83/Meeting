@@ -13,6 +13,10 @@ Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment:
         end:
             type: datetime
             column: to_date
+        enabled:
+            type: boolean
+            options:
+                default: true
     manyToOne:
         mass:
             targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Mass

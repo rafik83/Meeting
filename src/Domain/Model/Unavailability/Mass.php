@@ -246,7 +246,7 @@ class Mass
     /**
      * Get dispatch
      *
-     * @return boolean
+     * @return bool
      */
     public function isDispatch()
     {
