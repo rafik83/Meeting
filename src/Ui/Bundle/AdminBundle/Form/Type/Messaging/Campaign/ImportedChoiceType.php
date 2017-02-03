@@ -22,12 +22,13 @@ class ImportedChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'placeholder' => 'form.sheet_filter.children.imported.all.label',
-            'choices' => [
-                'form.sheet_filter.children.imported.imported.label'                    => 'imported',
-                'form.sheet_filter.children.imported.imported_with_connection.label'    => 'imported_with_connection',
-                'form.sheet_filter.children.imported.imported_without_connection.label' => 'imported_without_connection',
-                'form.sheet_filter.children.imported.not_imported.label'                => 'not_imported',
+            'placeholder'               => 'event.sheet.imported.all.label',
+            'choice_translation_domain' => 'messages',
+            'choices'                   => [
+                'event.sheet.imported.imported.label'                    => 'imported',
+                'event.sheet.imported.imported_with_connection.label'    => 'imported_with_connection',
+                'event.sheet.imported.imported_without_connection.label' => 'imported_without_connection',
+                'event.sheet.imported.not_imported.label'                => 'not_imported',
             ],
         ]);
     }
