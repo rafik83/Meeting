@@ -130,6 +130,11 @@ class CampaignAssembler
             $label = '';
             foreach ($values as $currentValue) {
                 switch ($key) {
+                    case 'completed':
+                        $currentValue = $currentValue
+                            ? $this->translator->trans('event.sheet.completed.complete')
+                            : $this->translator->trans('event.sheet.completed.incomplete');
+                        break;
                     case 'imported':
                         $currentValue = $this->translator->trans(sprintf('event.sheet.imported.%s.label', $currentValue));
                         break;
@@ -172,7 +177,9 @@ class CampaignAssembler
                     case 'hasHappeningParticipation':
                     case 'hasNoMeetingRequest':
                     case 'hasPendingMeetingPropositions':
-                        $currentValue = $this->translator->trans('boolean.true');
+                        $currentValue = $currentValue
+                            ? $this->translator->trans('boolean.true')
+                            : $this->translator->trans('boolean.false');
                         break;
                 }
 
