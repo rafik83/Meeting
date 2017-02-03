@@ -10,7 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Elastica\Filter\BoolNot;
+use Elastica\Filter\Exists;
+use Elastica\Query\Bool;
 use Elastica\Query\BoolQuery;
+use Elastica\Query\Filtered;
 use Elastica\Query\Match;
 use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
@@ -159,6 +163,7 @@ class SheetSearchQueryBuilder
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
         $this->filterByHasHappeningParticipation($filters);
+        $this->filterByImported($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart();
@@ -708,4 +713,65 @@ class SheetSearchQueryBuilder
     {
         $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', true));
     }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByImported(array &$filters)
+    {
+        if (!isset($filters['imported'])) {
+            return;
+        }
+
+        $importedQuery = new BoolQuery();
+
+        if ($filters['imported'] === 'imported') {
+            $importedQuery->addMust($this->hasImportedParticipant());
+        }
+
+        if ($filters['imported'] === 'imported_with_connection') {
+            $importedQuery->addMust($this->hasImportedParticipant());
+            $importedQuery->addMust($this->hasConnectionFilter());
+        }
+
+        if ($filters['imported'] === 'imported_without_connection') {
+            $importedQuery->addMust($this->hasImportedParticipant());
+            $importedQuery->addMustNot($this->hasConnectionFilter());
+        }
+
+        if ($filters['imported'] === 'not_imported') {
+            $importedQuery->addMustNot($this->hasImportedParticipant());
+        }
+
+        $this->query->addMust($importedQuery);
+
+    }
+
+    /**
+     * Imported = at least one participant is imported
+     * Not imported = none of the participants are imported
+     *
+     * @return Nested
+     */
+    private function hasImportedParticipant()
+    {
+        // at least one participant is imported
+
+        $nestedParticipants = new Nested();
+        $nestedParticipants->setPath('participants');
+        $nestedParticipants->setQuery(
+            (new Filtered())->setFilter((new \Elastica\Filter\Term())->setTerm('participants.imported', true))
+        );
+
+        return $nestedParticipants;
+    }
+
+    /**
+     * @return Filtered
+     */
+    private function hasConnectionFilter()
+    {
+        return (new Filtered())->setFilter(new Exists('lastLoginAt'));
+    }
+
 }
