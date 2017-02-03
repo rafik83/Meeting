@@ -85,47 +85,16 @@ new Vue({
         'filter-modal': filterModal
     },
     data: {
-        /**
-         * Array of sheets
-         */
-        sheets: [],
-
-        /**
-         * opened sheet
-         */
-        agendas: [],
-
-        /**
-         * Sheet focused
-         */
-        focus: null,
-
-        /**
-         * Is meeting loading
-         */
-        isMeetingToUpdateLoading: false,
-
-        /**
-         * Meeting to update form
-         */
-        meetingToUpdate: null,
+        sheets: [], /** Array of sheets */
+        agendas: [], /** Opened sheet */
+        focus: null, /** Sheet focused */
+        isMeetingToUpdateLoading: false, /** Is meeting loading */
+        meetingToUpdate: null, /** Meeting to update form */
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
         hasUsedSheetFilter: false,
-
-        /**
-         * Meeting slot to update
-         */
         meetingSlotToUpdate: null,
-
-        /**
-         * Available slots for meeting
-         */
         availableSlotsForMeeting: [],
-
-        /**
-         * Meeting request to transform into meeting
-         */
         meetingRequestToTransformIntoMeeting: null
     },
 

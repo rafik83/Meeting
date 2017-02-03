@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+    <div v-bind:class="{ 'panel-heading': true, 'agenda-sheet-focus': sheet == focus }">
+        <a href="#" class="pull-right" v-on:click="close()"><span class="glyphicon glyphicon-remove"></span></a>
+        <a href="#" v-on:click="focus()">${ sheet.title }</a>
+    </div>
+    <div class="panel-body">
+        <table class="table-agenda table-condensed">
+            <tr>
+                <td v-for="participant in sheet.participants">
+                    <p class="text-center">${ participant.fullname }</p>
+                    <table class="table">
+                        <tr>
+                            <td v-for="day in participant.days" class="col-xs-6">
+                                <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day+1 }</div>
+                                <table class="table-agenda-day table table-bordered table-condensed">
+                                    <tr v-for="slot in day.slots">
+                                        <slot v-bind:slot="slot"></slot>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
