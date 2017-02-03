@@ -726,21 +726,21 @@ class SheetSearchQueryBuilder
         $importedQuery = new BoolQuery();
 
         if ($filters['imported'] === 'imported') {
-            $importedQuery->addMust($this->hasImportedParticipant());
+            $importedQuery->addMust($this->isImported(true));
         }
 
         if ($filters['imported'] === 'imported_with_connection') {
-            $importedQuery->addMust($this->hasImportedParticipant());
+            $importedQuery->addMust($this->isImported(true));
             $importedQuery->addMust($this->hasConnectionFilter());
         }
 
         if ($filters['imported'] === 'imported_without_connection') {
-            $importedQuery->addMust($this->hasImportedParticipant());
+            $importedQuery->addMust($this->isImported(true));
             $importedQuery->addMustNot($this->hasConnectionFilter());
         }
 
         if ($filters['imported'] === 'not_imported') {
-            $importedQuery->addMustNot($this->hasImportedParticipant());
+            $importedQuery->addMust($this->isImported(false));
         }
 
         $this->query->addMust($importedQuery);
@@ -748,22 +748,13 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * Imported = at least one participant is imported
-     * Not imported = none of the participants are imported
+     * @param bool $imported
      *
-     * @return Nested
+     * @return Term
      */
-    private function hasImportedParticipant()
+    private function isImported($imported)
     {
-        // at least one participant is imported
-
-        $nestedParticipants = new Nested();
-        $nestedParticipants->setPath('participants');
-        $nestedParticipants->setQuery(
-            (new Filtered())->setFilter((new \Elastica\Filter\Term())->setTerm('participants.imported', true))
-        );
-
-        return $nestedParticipants;
+        return (new Term())->setTerm('imported', $imported);
     }
 
     /**
@@ -773,5 +764,4 @@ class SheetSearchQueryBuilder
     {
         return (new Filtered())->setFilter(new Exists('lastLoginAt'));
     }
-
 }
