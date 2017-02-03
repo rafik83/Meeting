@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation;
 
-
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
