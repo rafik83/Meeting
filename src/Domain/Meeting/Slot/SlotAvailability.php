@@ -317,6 +317,8 @@ class SlotAvailability
                     if ($assignmentResult === self::ASSIGNMENT_FOUND) {
                         return $assignment;
                     }
+
+                    continue;
                 }
             }
 
@@ -347,7 +349,7 @@ class SlotAvailability
 
     const ASSIGNMENT_DISABLED  = 'disabled';
     const ASSIGNMENT_FOUND     = 'found';
-    const ASSIGNMENT_NOT_FOUND =  'not_found';
+    const ASSIGNMENT_NOT_FOUND = 'not_found';
 
     /**
      * @param MassAssignment $massAssignment
