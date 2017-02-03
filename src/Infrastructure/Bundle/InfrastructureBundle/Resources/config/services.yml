@@ -2287,6 +2287,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
     query.agenda.mass_unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
+        arguments:
+            - '@repository.unavailability.mass_assignment_repository'
     query.agenda.meeting.meeting_participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler
         arguments:

@@ -92,13 +92,18 @@ class DayViewQueryHandler
             if ($mass->getBegin() >= $query->day->getStartTime()
                 && $mass->getEnd() <= $query->day->getEndTime()
             ) {
-                $masses[] = $this->massHandler->handle(
+                $massView = $this->massHandler->handle(
                     new MassUnavailabilityViewQuery(
                         $mass,
                         $query->event,
+                        $query->participant,
                         $query->locale
                     )
                 );
+
+                if ($massView !== null) {
+                    $masses[] = $massView;
+                }
             }
         }
 

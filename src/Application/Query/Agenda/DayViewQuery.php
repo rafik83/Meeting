@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -34,6 +35,11 @@ class DayViewQuery
      * @var HappeningParticipation[]
      */
     public $happenings;
+
+    /**
+     * @var Participant
+     */
+    public $participant;
 
     /**
      * @var Unavailability[]
@@ -64,6 +70,7 @@ class DayViewQuery
      * @param Day                      $day
      * @param Sheet                    $currentSheet
      * @param Event                    $event
+     * @param Participant              $participant
      * @param string                   $locale
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
@@ -74,6 +81,7 @@ class DayViewQuery
         Day $day,
         Sheet $currentSheet,
         Event $event,
+        Participant $participant,
         $locale,
         array $happenings = [],
         array $unavailabilities = [],
@@ -83,6 +91,7 @@ class DayViewQuery
         $this->day              = $day;
         $this->currentSheet     = $currentSheet;
         $this->event            = $event;
+        $this->participant      = $participant;
         $this->locale           = $locale;
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;

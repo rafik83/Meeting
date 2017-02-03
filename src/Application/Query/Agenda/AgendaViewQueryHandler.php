@@ -132,6 +132,7 @@ class AgendaViewQueryHandler
                     $day,
                     $sheet,
                     $query->event,
+                    $participant,
                     $query->locale,
                     $happeningParticipations,
                     $unavailabilites,
