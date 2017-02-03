@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\SpotUnavailability;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
 
@@ -393,6 +394,20 @@ class SpotRepository implements SpotRepositoryInterface
                 ->andWhere('spot.visio = :visio')
                 ->setParameter('visio', $visio);
         }
+
+        $subquery = $this->entityManager
+            ->createQueryBuilder()
+            ->select('su.id')
+            ->from(SpotUnavailability::class, 'su')
+            ->where('su.slot = :slot')
+            ->andWhere('su.spot = spot')
+            ->setParameter('slot', $slot);
+        
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->not(
+                $queryBuilder->expr()->exists($subquery->getDQL())
+            )
+        );
 
         $queryBuilder->addOrderBy('spot.reference');
 
