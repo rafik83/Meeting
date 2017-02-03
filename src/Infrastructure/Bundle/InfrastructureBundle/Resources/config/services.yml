@@ -2801,13 +2801,6 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
-    domain.slot.slot_availability:
-        class: Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability
-        arguments:
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-            - '@repository.unavailability.mass_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
 
     #
     # Payment
@@ -3191,6 +3184,7 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@repository.unavailability.mass_assignment_repository'
 
     #
     # Form extension
