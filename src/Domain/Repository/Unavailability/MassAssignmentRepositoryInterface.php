@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Unavailability;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
 interface MassAssignmentRepositoryInterface
@@ -18,4 +21,19 @@ interface MassAssignmentRepositoryInterface
      * @param MassAssignment $massAssignment
      */
     public function add(MassAssignment $massAssignment);
+
+    /**
+     * @param Mass        $mass
+     * @param Participant $participant
+     *
+     * @return MassAssignment|null
+     */
+    public function find(Mass $mass, Participant $participant);
+
+    /**
+     * @param Event $event
+     *
+     * @return MassAssignment[]
+     */
+    public function findByEvent(Event $event);
 }
