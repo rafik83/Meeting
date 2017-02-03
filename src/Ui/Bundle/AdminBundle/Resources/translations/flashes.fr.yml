@@ -109,7 +109,7 @@ flash.meeting_request.cancelled.success: 'Vous avez bien annulé la demande de r
 flash.meeting_request.create.success: 'Votre demande de rendez-vous a bien été transmise'
 flash.meeting_request.edit.success: 'Vous avez bien modifié la demande de rendez-vous'
 flash.meeting_request.refused.success: 'Vous avez bien refusé la proposition de rendez-vous'
-flash.messaging.campaign.send.failure: 'Une erreur est intervenue durant l''envoi: %reason%'
+flash.messaging.campaign.send.failure: 'Une erreur est intervenue durant l''envoi : %reason%'
 flash.messaging.campaign.send.failure.invalid_csrf: 'Emailing "%title%" n''a pas pû être envoyé car le CSRF token est invalide, veuillez rafraîchir la page.'
 flash.messaging.campaign.send.failure.no_message: 'Emailing "%title%" ne peut pas être envoyé car il n''a pas de message.'
 flash.messaging.campaign.send.failure.no_recipient: 'Emailing "%title%" ne peut pas être envoyé car il n''a pas de récipient.'
