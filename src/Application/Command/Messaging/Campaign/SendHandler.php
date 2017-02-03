@@ -105,48 +105,56 @@ class SendHandler
 
         $event        = $message->getEvent();
         $locale       = $event->getAvailableLocale($message->getLocale());
-
         $receivers    = [];
-        $addReceivers = function (Sheet $sheet, $newReceivers) use (&$receivers, $message, $locale) {
-            if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
-                return;
-            }
-
-            $placeholders = $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent());
-
-            /* @var MailRecipientInterface */
-            foreach ($newReceivers as $receiver) {
-                $emailAddress = $receiver->getEmail();
-                $receiverView = new ReceiverView(
-                    $emailAddress,
-                    $this->substitutionsProvider->getSubstitutions($receiver, $sheet, $locale, $placeholders)
-                );
-
-                if (isset($receivers[$emailAddress])) {
-                    continue;
-                }
-
-                $receivers[$emailAddress] = $receiverView;
-            }
-        };
 
         foreach ($sheets as $sheet) {
             if (true === $sendToParticipants) {
-                $addReceivers($sheet, $sheet->getParticipants());
+                $this->addReceivers($sheet, $sheet->getParticipants(), $receivers, $message, $locale);
             }
 
             if (true === $sendToOwners) {
-                $addReceivers($sheet, [$sheet->getOwner()]);
+                $this->addReceivers($sheet, [$sheet->getOwner()], $receivers, $message, $locale);
             }
         }
 
         if (true === $sendToBillingContacts) {
             /* @var BillingInfo */
             foreach ($this->billingInfoRepository->getBySheets($sheets) as $billingInfo) {
-                $addReceivers($billingInfo->getSheet(), [$billingInfo]);
+                $this->addReceivers($billingInfo->getSheet(), [$billingInfo], $receivers, $message, $locale);
             }
         }
 
         return $receivers;
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $newReceivers
+     * @param array  $receivers
+     * @param string $message
+     * @param string $locale
+     */
+    private function addReceivers(Sheet $sheet, $newReceivers, array &$receivers, $message, $locale)
+    {
+        if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
+            return;
+        }
+
+        $placeholders = $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent());
+
+        /* @var MailRecipientInterface */
+        foreach ($newReceivers as $receiver) {
+            $emailAddress = $receiver->getEmail();
+            $receiverView = new ReceiverView(
+                $emailAddress,
+                $this->substitutionsProvider->getSubstitutions($receiver, $sheet, $locale, $placeholders)
+            );
+
+            if (isset($receivers[$emailAddress])) {
+                continue;
+            }
+
+            $receivers[$emailAddress] = $receiverView;
+        }
     }
 }

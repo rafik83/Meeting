@@ -60,9 +60,7 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-default'],
         ]);
 
-        $filterForm->handleRequest($request);
-        $filters = $filterForm->getData();
-
+        $filters        = $filterForm->handleRequest($request)->getData();
         $query          = new SheetListViewQuery($event, $filters, $locale);
         $sheets         = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
@@ -194,6 +192,7 @@ class CampaignController extends Controller
     /**
      * Sends a given messaging Campaign.
      *
+     * @param Request  $request
      * @param Event    $event
      * @param Campaign $campaign
      *
@@ -205,38 +204,56 @@ class CampaignController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
         $campaignListUrl = $this->generateUrl('admin_messaging_campaign_list', ['event' => $event->getId()]);
+        $token           = $request->request->get('_token');
 
-        $errorHandler = function ($reason = null, \Exception $exception = null) use ($campaignListUrl, $campaign) {
-            $translator = $this->get('vimeet_infrastructure.adapter.translator_adapter');
-            $message    = $translator->trans(
-                'flash.messaging.campaign.send.failure',
-                ['%reason%' => $translator->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
-                'flashes'
-            );
-
-            if (null !== $exception) {
-                $this->get('logger')->error($message, ['exception' => $exception]);
-            }
-
-            $this->addFlash('error', $message);
+        if (!$token || !$this->isTokenValid($token)) {
+            $this->handleError($campaign, 'flash.messaging.campaign.send.failure.invalid_csrf');
 
             return $this->redirect($campaignListUrl);
-        };
-
-        $token = $request->request->get('_token');
-
-        if (!$token || !$this->get('security.csrf.token_manager')->isTokenValid($token ? new CsrfToken('send_campaign', $token) : null)) {
-            return $errorHandler('flash.messaging.campaign.send.failure.invalid_csrf');
         }
 
         try {
             $this->get('tactician.commandbus')->handle(new Send($campaign));
-        } catch (CampaignSendingFailedException $e) {
-            return $errorHandler($e->getMessage(), $e);
+        } catch (CampaignSendingFailedException $exception) {
+            $this->handleError($campaign, $exception->getMessage(), $exception);
+
+            return $this->redirect($campaignListUrl);
         }
 
         $this->addFlash('success', 'flash.messaging.campaign.send.success');
 
         return $this->redirect($campaignListUrl);
+    }
+
+    /**
+     * Generate and add
+     *
+     * @param Campaign        $campaign
+     * @param string          $reason
+     * @param \Exception|null $exception
+     */
+    private function handleError(Campaign $campaign, $reason, \Exception $exception = null)
+    {
+        $message = $this->get('translator')->trans(
+            'flash.messaging.campaign.send.failure',
+            ['%reason%' => $this->get('translator')->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
+            'flashes'
+        );
+
+        if (null !== $exception) {
+            $this->get('logger')->error($message, ['exception' => $exception]);
+        }
+
+        $this->addFlash('error', $message);
+    }
+
+    /**
+     * @param $token
+     *
+     * @return bool
+     */
+    private function isTokenValid($token)
+    {
+        return $token ? $this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken('send_campaign', $token)) : false;
     }
 }
