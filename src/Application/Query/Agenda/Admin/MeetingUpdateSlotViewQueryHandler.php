@@ -54,7 +54,10 @@ class MeetingUpdateSlotViewQueryHandler
             if (true === $this->spotRepository->hasSpotsForSlotAndParticipantsQuantity(
                 $slot,
                 $query->meeting->countParticipants(),
-                $query->meeting
+                $query->meeting,
+                null,
+                null,
+                false
             )) {
                 $availableSlotsId[] = $slot->getId();
             }

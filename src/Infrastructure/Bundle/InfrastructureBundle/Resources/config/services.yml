@@ -1048,6 +1048,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
+    command.participant.update_visio_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateVisioHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateVisio }
     command.register.participant_step_handler:
         class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
         arguments:
@@ -2377,6 +2383,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     query.agenda.admin.meeting_update_slot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler
         arguments:
@@ -3170,6 +3177,12 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+
+    #
+    # Visio Guesser
+    #
+    domain.meeting.visio_guesser:
+          class: Proximum\Vimeet\Domain\Meeting\VisioGuesser
 
     #
     # Form extension
