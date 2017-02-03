@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -54,6 +55,11 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
      */
     private $meetingRepository;
 
+    /**
+     * @var MassAssignmentRepositoryInterface
+     */
+    private $massAssignmentRepository;
+
     /** @var Event */
     private $event;
 
@@ -72,6 +78,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->unavailabilityRepository         = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $this->massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $this->meetingRepository                = $this->prophesize(MeetingRepositoryInterface::class);
+        $this->massAssignmentRepository         = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $this->event                            = EventFactory::createEvent();
         $this->sheet                            = SheetFactory::create($this->event);
         $this->participant                      = ParticipantFactory::create($this->sheet);
@@ -86,12 +93,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -123,12 +132,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -160,12 +171,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -197,12 +210,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -234,12 +249,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -284,12 +301,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -325,12 +344,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -388,12 +409,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting2, $meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -411,19 +434,21 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     public function testIsAvailableTrueAsMassIsNotAtTheSameTime()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
-        $beginM   = new \DateTime();
-        $endM     = new \DateTime();
+        $beginM   = new \DateTime('2016-10-12 08:00:00.000');
+        $endM     = new \DateTime('2016-10-12 08:30:00.000');
         $mass     = new Mass($this->event, $category, 'name', $beginM, $endM, true);
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -451,12 +476,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -466,6 +493,83 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expected = new SlotAvailabilityView(SlotAvailability::MASS_UNAVAILABILITY);
+
+        // Assert
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Assert MASS_UNAVAILABILITY
+     */
+    public function testIsAvailableFalseAsParticipantHasMassAssingmentyInsideSlot()
+    {
+        $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
+        $beginM   = new \DateTime('2016-10-12 09:30:00.000');
+        $beginMa  = new \DateTime('2016-10-12 09:40:00.000');
+        $endM     = new \DateTime('2016-10-12 09:45:00.000');
+        $endMa    = new \DateTime('2016-10-12 09:42:00.000');
+        $mass       = new Mass($this->event, $category, 'name', $beginM, $endM, true, true);
+        $assignment = new Unavailability\MassAssignment($mass, $this->participant, $beginMa, $endMa);
+        $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([$assignment]);
+
+        $slotAvailability = new SlotAvailability(
+            $this->happeningParticipationRepository->reveal(),
+            $this->unavailabilityRepository->reveal(),
+            $this->massUnavailabilityRepository->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
+        );
+
+        $begin  = new \DateTime('2016-10-12 09:00:00.000');
+        $end    = new \DateTime('2016-10-12 10:00:00.000');
+        $slot   = new MeetingSlot($this->event, $begin, $end);
+        $result = $slotAvailability->isAvailable($slot, $this->participant);
+
+        // Expected
+        $expected = new SlotAvailabilityView(SlotAvailability::MASS_UNAVAILABILITY, null, $assignment);
+
+        // Assert
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Assert MASS_UNAVAILABILITY
+     */
+    public function testIsAvailableTrueAsParticipantHasMassAssingmentyInsideSlotButNotEnabled()
+    {
+        $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
+        $beginM   = new \DateTime('2016-10-12 09:30:00.000');
+        $beginMa  = new \DateTime('2016-10-12 09:40:00.000');
+        $endM     = new \DateTime('2016-10-12 09:45:00.000');
+        $endMa    = new \DateTime('2016-10-12 09:42:00.000');
+        $mass       = new Mass($this->event, $category, 'name', $beginM, $endM, true, true);
+        $assignment = new Unavailability\MassAssignment($mass, $this->participant, $beginMa, $endMa);
+        $assignment->disable();
+        $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([$assignment]);
+
+        $slotAvailability = new SlotAvailability(
+            $this->happeningParticipationRepository->reveal(),
+            $this->unavailabilityRepository->reveal(),
+            $this->massUnavailabilityRepository->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
+        );
+
+        $begin  = new \DateTime('2016-10-12 09:00:00.000');
+        $end    = new \DateTime('2016-10-12 10:00:00.000');
+        $slot   = new MeetingSlot($this->event, $begin, $end);
+        $result = $slotAvailability->isAvailable($slot, $this->participant);
+
+        // Expected
+        $expected = new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE, null, null);
 
         // Assert
         $this->assertEquals($expected, $result);
@@ -484,12 +588,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -516,12 +622,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -548,12 +656,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -580,12 +690,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -612,12 +724,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -663,12 +777,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
 
@@ -715,12 +831,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
 
@@ -766,12 +884,14 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
 
 
@@ -829,14 +949,15 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+        $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
         );
-
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 

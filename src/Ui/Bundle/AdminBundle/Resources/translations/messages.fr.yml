@@ -635,6 +635,8 @@ admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.button.dispatch: 'Dispatcher'
+admin.unavailability.button.dispatch_confirm: 'Êtes vous sûr de vouloir dispatcher les indisponbilités de masse?'
 admin.unavailability.button.mass: 'Indisponibilité de masse'
 admin.unavailability.category.add: Ajouter
 admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'

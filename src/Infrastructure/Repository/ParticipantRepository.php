@@ -18,6 +18,8 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -411,6 +413,28 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('sheet.event', 'event')
             ->where('sheet.event = :event')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.user', 'user')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.event', 'event')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.participant = participant AND m.mass = :mass)')
+            ->setParameter('mass', $mass)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

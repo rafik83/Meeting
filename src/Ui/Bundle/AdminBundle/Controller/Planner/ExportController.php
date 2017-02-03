@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\XmlFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +33,7 @@ class ExportController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         try {
+            $this->get('tactician.commandbus')->handle(new Dispatcher($event));
             $content  = $this->get('service_planner.exporter')->getXML($event, $request->getLocale());
             $response = new XmlFileResponse(
                 $content,
@@ -40,12 +43,12 @@ class ExportController extends Controller
             return $response;
         } catch(SlotNotConfiguredException $exception) {
             $this->addFlash('error', sprintf('flash.%s', $exception->getMessage()));
-
-            return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
         } catch(DayNotConfiguredException $exception) {
             $this->addFlash('error', sprintf('flash.%s', $exception->getMessage()));
-
-            return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
+        } catch (UnableToDispatchException $exception) {
+            $this->addFlash('error', sprintf('flash.%s', $exception->indication));
         }
+
+        return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
     }
 }

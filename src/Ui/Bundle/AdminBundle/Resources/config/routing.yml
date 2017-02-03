@@ -1048,6 +1048,13 @@ admin_unavailability_mass_list:
     requirements:
         event: \d+
 
+admin_unavailability_mass_dispatch:
+    path: /event/{event}/unavailability/mass/dispatch
+    defaults: { _controller: AdminBundle:Unavailability:dispatch }
+    methods: [GET]
+    requirements:
+        event: \d+
+
 admin_unavailability_mass_create:
     path: /event/{event}/unavailability/mass/create
     defaults: { _controller: AdminBundle:Unavailability:createMass }

@@ -35,6 +35,11 @@ interface MassRepositoryInterface
 
     /**
      * @param Event $event
+     */
+    public function findDispatchByEvent(Event $event);
+
+    /**
+     * @param Event $event
      *
      * @return Mass[]
      */
