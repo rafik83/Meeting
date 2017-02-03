@@ -71,7 +71,7 @@ class TimeSlotDispatcher
             throw new UnableToDispatchException('No time slot available on this mass unavailability.');
         }
 
-        $participants = $this->participantRepository->findByEvent($mass->getEvent());
+        $participants = $this->participantRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
 
         foreach ($participants as $index => $participant) {
             $timeSlot   = $timeSlots[$index % count($timeSlots)];
