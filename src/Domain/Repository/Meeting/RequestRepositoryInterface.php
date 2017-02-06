@@ -209,4 +209,11 @@ interface RequestRepositoryInterface
      * @param Request $request
      */
     public function update(Request $request);
+
+    /**
+     * @param $sheet
+     *
+     * @return Request[]
+     */
+    public function findAccepted(Sheet $sheet);
 }

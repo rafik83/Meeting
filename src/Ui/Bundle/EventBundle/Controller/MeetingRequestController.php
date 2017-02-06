@@ -18,14 +18,16 @@ use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
-use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
@@ -42,6 +44,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 
 class MeetingRequestController extends Controller
 {
@@ -89,13 +93,15 @@ class MeetingRequestController extends Controller
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
 
         /** @var StateListsView $stateListsView */
-        $stateListsView         = $this->get('tactician.commandbus.query')->handle($statusQuery);
+        $stateListsView = $this->get('tactician.commandbus.query')->handle($statusQuery);
 
         $template = 'EventBundle:MeetingRequest:listRequest.html.twig';
 
         if ($request->isXmlHttpRequest()) {
             $template = 'EventBundle:MeetingRequest/Partials:catalog.html.twig';
         }
+
+        $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
         return $this->render($template, [
             'event'              => $event,
@@ -105,6 +111,7 @@ class MeetingRequestController extends Controller
             'searchForm'         => $searchForm->createView(),
             'isCatalog'          => true, // set menu link visible,
             'isMeeting'          => true,
+            'isEventOpen'        => $isEventOpen,
             'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
         ]);
     }
@@ -641,6 +648,46 @@ class MeetingRequestController extends Controller
             'isProposition'  => $isProposition,
             'meetingRequest' => $meetingRequest,
         ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function exportContactAction(Request $request, EventDomain $eventDomain)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_OPEN_ACCESS', $eventDomain->getEvent());
+
+        try {
+            $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
+                new MeetingSheetViewQuery(
+                    $this->getUser(),
+                    $eventDomain->getEvent(),
+                    $request->getLocale()
+                )
+            );
+        } catch (SheetNotFoundException $exception) {
+            return $this->createNotFoundException('Sheet not found');
+        }
+
+        $charset       = Charset::WINDOWS_1252;
+        $exportContent = $this->get('serializer')->serialize($meetingSheetListView, 'csv', [
+            'charset' => $charset,
+        ]);
+
+        $response    = new Response($exportContent);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "export_contacts_" . date("Y_m_d_His") . ".csv"
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+
+        return $response;
     }
 
     /**
