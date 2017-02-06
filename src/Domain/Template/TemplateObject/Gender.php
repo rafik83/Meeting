@@ -98,6 +98,10 @@ class Gender extends EditableObject implements ContentObjectInterface, Exportabl
         }
 
         if (isset($taggedData[$this->getTag()])) {
+            if (is_array($taggedData[$this->getTag()])) {
+                return implode(', ', $taggedData[$this->getTag()]);
+            }
+
             return $taggedData[$this->getTag()];
         }
 

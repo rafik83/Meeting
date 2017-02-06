@@ -86,6 +86,10 @@ class Url extends EditableObject implements ContentObjectInterface, ExportableOb
         }
 
         if (isset($taggedData[$this->getTag()])) {
+            if (is_array($taggedData[$this->getTag()])) {
+                return implode(', ', $taggedData[$this->getTag()]);
+            }
+
             return $taggedData[$this->getTag()];
         }
 

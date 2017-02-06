@@ -202,6 +202,10 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         }
 
         if (isset($taggedData[$this->getTag()])) {
+            if (is_array($taggedData[$this->getTag()])) {
+                return implode(', ', $taggedData[$this->getTag()]);
+            }
+
             return $taggedData[$this->getTag()];
         }
 
