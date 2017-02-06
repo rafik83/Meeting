@@ -160,7 +160,7 @@ class SheetListView
         SheetParticipantView $owner,
         $follower,
         \DateTimeInterface $createdAt,
-        \DateTimeInterface $lastLoginAt,
+        \DateTimeInterface $lastLoginAt = null,
         $impersonationToken,
         $countParticipant,
         $spotReference = null,
