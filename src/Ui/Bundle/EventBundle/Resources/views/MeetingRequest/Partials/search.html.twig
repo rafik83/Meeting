@@ -3,7 +3,10 @@
 <div class="catalog__research">
     {% if isEventOpen == true %}
         <div style="margin-bottom: 15px">
-            <a href="{{ path('event_meeting_request_export_contact') }}" class="btn btn-primary">{{ 'event.meeting.listRequest.contact.export'|trans }}</a>
+            <a href="{{ path('event_meeting_request_export_contact') }}" class="btn btn-primary">
+                <i class="glyphicon glyphicon-download-alt"></i>
+                {{ 'event.meeting.listRequest.contact.export'|trans }}
+            </a>
         </div>
     {% endif %}
 
