@@ -1,0 +1,8 @@
+Proximum\Vimeet\Application\Command\Messaging\Message\Create:
+    properties:
+        name:
+            - NotBlank: ~
+        subject:
+            - NotBlank: ~
+        content:
+            - NotBlank: ~
