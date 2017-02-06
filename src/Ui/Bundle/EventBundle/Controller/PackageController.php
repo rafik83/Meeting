@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
+use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
@@ -246,23 +247,14 @@ class PackageController extends Controller
                 if (!$result->hasParticipantWithMeeting()) {
                     $redirect = true;
                 } else {
-                    $contactInfos = [
-                        $sheet->getEvent()->getOrganiserName(),
-                        $sheet->getEvent()->getConfiguration()->getContactFirstName(),
-                        $sheet->getEvent()->getConfiguration()->getContactLastName(),
-                        $sheet->getEvent()->getConfiguration()->getOrganiserPhone(),
-                        $sheet->getEvent()->getConfiguration()->getOrganiserWebsite(),
-                    ];
 
-                    // Array_filter remove the possible null entries
-                    $contactInfo = implode(', ', array_filter($contactInfos));
 
                     $form_remove->addError(
                         new FormError(
                             $this->get('translator')->transChoice(
                                 'validators.participant.remove.hasMeeting',
                                 $result->countParticipants(),
-                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => $contactInfo], 'validators'
+                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($sheet->getEvent())], 'validators'
                             )
                         )
                     );

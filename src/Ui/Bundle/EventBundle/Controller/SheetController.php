@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductView
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
+use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -660,23 +661,12 @@ class SheetController extends Controller
                 if (!$result->hasParticipantWithMeeting()) {
                     return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
                 } else {
-                    $contactInfos = [
-                        $eventDomain->getEvent()->getOrganiserName(),
-                        $eventDomain->getEvent()->getConfiguration()->getContactFirstName(),
-                        $eventDomain->getEvent()->getConfiguration()->getContactLastName(),
-                        $eventDomain->getEvent()->getConfiguration()->getOrganiserPhone(),
-                        $eventDomain->getEvent()->getConfiguration()->getOrganiserWebsite(),
-                    ];
-
-                    // Array_filter remove the possible null entries
-                    $contactInfo = implode(', ', array_filter($contactInfos));
-
                     $form->addError(
                         new FormError(
                             $this->get('translator')->transChoice(
                                 'validators.participant.remove.hasMeeting',
                                 $result->countParticipants(),
-                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => $contactInfo], 'validators'
+                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($eventDomain->getEvent())], 'validators'
                             )
                         )
                     );
