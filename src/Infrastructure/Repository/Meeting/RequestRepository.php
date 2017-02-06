@@ -227,7 +227,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->isEnabled()->count()->getIntResult();
     }
 
     /**
