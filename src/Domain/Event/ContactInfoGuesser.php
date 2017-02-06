@@ -27,6 +27,7 @@ class ContactInfoGuesser
             $event->getOrganiserName(),
             $event->getConfiguration()->getContactFirstName(),
             $event->getConfiguration()->getContactLastName(),
+            $event->getOrganiserEmail(),
             $event->getConfiguration()->getOrganiserPhone(),
             $event->getConfiguration()->getOrganiserWebsite(),
         ];
