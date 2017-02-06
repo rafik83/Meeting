@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
@@ -179,6 +180,7 @@ class SheetController extends Controller
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
 
+                /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
                 if (empty($result->ignoredSheetsMessage)) {

@@ -100,6 +100,15 @@ Feature: Edit participant status
     And I should see "form.sheet_filter.children.validationState.label"
     And I should see "form.sheet_filter.children.orderBy.label"
 
+  Scenario: I should see a warning message on remove from catalog batch when some sheets have scheduled meetings
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to "/admin/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
+    And I check "sheet_batch_ids_21"
+    And I press "form.sheet_batch.children.removeCatalog"
+    Then I should be on this page "/admin/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
+    And I should see "flash.admin.sheet_batch.catalog.remove.warning"
+
   Scenario: I should see a warning message on disable batch when some sheets have scheduled meetings
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"

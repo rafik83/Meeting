@@ -715,6 +715,10 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@sheet.request.enable_disable_manager'
+
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
     command.sheet.batch_draft_handler:
@@ -1589,6 +1593,13 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.template_data_factory'
+    #
+    # Sheet Request
+    #
+    sheet.request.enable_disable_manager:
+        class: Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     #
     # Rule

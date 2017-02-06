@@ -6,9 +6,9 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add disabled field in happening participation table
+ * Add disabled field to meeting_request table
  */
-class Version20170202101935 extends AbstractMigration
+class Version20170202101535 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -17,7 +17,7 @@ class Version20170202101935 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE happening_participation ADD disabled INT DEFAULT  NOT NULL');
+        $this->addSql('ALTER TABLE meeting_request ADD disabled TINYINT(1) DEFAULT \'0\' NOT NULL');
     }
 
     /**
@@ -27,6 +27,6 @@ class Version20170202101935 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE happening_participation DROP disabled');
+        $this->addSql('ALTER TABLE meeting_request DROP disabled');
     }
 }
