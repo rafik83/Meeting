@@ -13,7 +13,7 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
                 strategy: AUTO
     fields:
         disabled:
-            type: integer
+            type: boolean
             options:
                 default: false
     manyToOne:
