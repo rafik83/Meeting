@@ -90,6 +90,22 @@ class BatchCatalogHandler
         $message = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
 
         foreach ($sheets as $sheet) {
+            // If try to remove from catalog
+            if (!$command->state) {
+                if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
+                    $ignoredSheets[] = $sheet;
+
+                    continue;
+                }
+            }
+
+            $sheet->setInCatalog($command->state);
+
+            if ($command->state === true) {
+                $sheet->setInCatalogAt($this->datetime);
+            }
+            $this->enableDisableManager->update($sheet, $command->state);
+
             // trace state in catalog change only
             if ($sheet->isInCatalog() !== $command->state) {
                 $this->eventDispatcher->dispatch(
@@ -103,17 +119,7 @@ class BatchCatalogHandler
                 );
             }
 
-            if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
-                $ignoredSheets[] = $sheet;
-            } else {
-                $sheet->setInCatalog($command->state);
-
-                if ($command->state === true) {
-                    $sheet->setInCatalogAt($this->datetime);
-                }
-                $this->enableDisableManager->update($sheet, $command->state);
-                $this->sheetRepository->set($sheet);
-            }
+            $this->sheetRepository->set($sheet);
         }
 
         if (count($ignoredSheets) > 0) {

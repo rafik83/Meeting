@@ -99,12 +99,14 @@ class BatchEnableDisableHandler
 
         foreach ($sheets as $sheet) {
 
-            if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
+            if ($batchEnableDisable->state === false && $this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
                 $ignoredSheets[] = $sheet;
-            } else {
-                $this->enableDisableManager->update($sheet, $batchEnableDisable->state);
-                $this->sheetRepository->set($sheet->setEnable($batchEnableDisable->state));
+
+                continue;
             }
+
+            $this->enableDisableManager->update($sheet, $batchEnableDisable->state);
+            $this->sheetRepository->set($sheet->setEnable($batchEnableDisable->state));
 
             // remove sheet from catalog if sheet is disable
             if ($batchEnableDisable->state === false) {
