@@ -31,10 +31,11 @@ interface SpotRepositoryInterface
     /**
      * @param Event     $event
      * @param int|array $id
+     * @param bool      $visio
      *
-     * @return Spot|null
+     * @return null|Spot
      */
-    public function find(Event $event, $id);
+    public function find(Event $event, $id, $visio = false);
 
     /**
      * @param Event $event
@@ -94,10 +95,11 @@ interface SpotRepositoryInterface
 
     /**
      * @param Meeting $meeting
+     * @param bool $visio
      *
      * @return Spot[]
      */
-    public function getSpotsForMeeting(Meeting $meeting);
+    public function getSpotsForMeeting(Meeting $meeting, $visio = false);
 
     /**
      * @param Spot $spot
@@ -108,34 +110,38 @@ interface SpotRepositoryInterface
 
     /**
      * @param Meeting $meeting
+     * @param bool $visio
      *
      * @return bool
      */
-    public function hasSpotsForMeeting(Meeting $meeting);
+    public function hasSpotsForMeeting(Meeting $meeting, $visio = false);
 
     /**
-     * @param MeetingSlot  $slot
-     * @param int          $participantsQuantity
+     * @param MeetingSlot $slot
+     * @param int $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null   $fromSheet
-     * @param Sheet|null   $toSheet
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
      *
-     * @return Spot[]
+     * @return \Proximum\Vimeet\Domain\Model\Spot[]
      */
     public function getSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
         Meeting $exceptMeeting = null,
         Sheet $fromSheet = null,
-        Sheet $toSheet = null
+        Sheet $toSheet = null,
+        $visio = false
     );
 
     /**
-     * @param MeetingSlot  $slot
-     * @param int          $participantsQuantity
+     * @param MeetingSlot $slot
+     * @param int $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null   $fromSheet
-     * @param Sheet|null   $toSheet
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
      *
      * @return bool
      */
@@ -144,6 +150,7 @@ interface SpotRepositoryInterface
         $participantsQuantity,
         Meeting $exceptMeeting = null,
         Sheet $fromSheet = null,
-        Sheet $toSheet = null
+        Sheet $toSheet = null,
+        $visio = false
     );
 }

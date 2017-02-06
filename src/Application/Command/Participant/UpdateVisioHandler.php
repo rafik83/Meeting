@@ -15,9 +15,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class UpdateVisioHandler
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
     /**

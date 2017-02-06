@@ -21,13 +21,18 @@ class UpdateSlot
     /** @var MeetingSlot */
     public $slot;
 
+    /** @var bool */
+    public $visio;
+
     /**
      * @param Meeting     $meeting
      * @param MeetingSlot $slot
+     * @param bool        $visio
      */
-    public function __construct(Meeting $meeting, MeetingSlot $slot)
+    public function __construct(Meeting $meeting, MeetingSlot $slot, $visio = false)
     {
         $this->meeting = $meeting;
         $this->slot    = $slot;
+        $this->visio   = $visio;
     }
 }
