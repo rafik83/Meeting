@@ -115,6 +115,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
 
         $charset          = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedSheets = [];
+
         foreach ($rawSheets as $rawSheet) {
             $normalizedSheets[] = $this->normalizeSheetRawData($rawSheet, $charset);
         }
