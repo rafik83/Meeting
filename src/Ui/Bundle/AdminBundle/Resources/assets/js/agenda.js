@@ -1,6 +1,8 @@
 var Vue                = require('vue'),
     axios              = require('axios'),
     filterModal        = require('./agenda/filterModal'),
+    sheetAgenda        = require('./agenda/SheetAgenda'),
+    slotAgenda         = require('./agenda/SlotAgenda'),
     options            = require('./vueComponents/options'),
     AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
@@ -82,7 +84,9 @@ new Vue({
     el: '#agenda',
     delimiters: options.delimiters,
     components: {
-        'filter-modal': filterModal
+        'filter-modal': filterModal,
+        'slot-agenda': slotAgenda,
+        'sheet-agenda': sheetAgenda
     },
     data: {
         sheets: [], /** Array of sheets */

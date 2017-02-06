@@ -142,88 +142,7 @@
                 <ul>
                 {% set table = 1 %}
                     <li v-for="sheet in agendas">
-                        <div class="panel panel-default">
-                            <div v-bind:class="{ 'panel-heading': true, 'agenda-sheet-focus': sheet == focus }">
-                                <a href="#" class="pull-right" v-on:click="closeAgenda(sheet)"><span class="glyphicon glyphicon-remove"></span></a>
-                                <a href="#" v-on:click="focusAgenda(sheet)">${ sheet.title }</a>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table-agenda table-condensed">
-                                    <tr>
-                                        <td v-for="participant in sheet.participants">
-                                            <p class="text-center">${ participant.fullname }</p>
-                                            <table class="table">
-                                                <tr>
-                                                    <td v-for="day in participant.days" class="col-xs-6">
-                                                        <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day+1 }</div>
-                                                        <table class="table-agenda-day table table-bordered table-condensed">
-                                                            <tr v-for="slot in day.slots">
-                                                                <td>
-                                                                    <div v-bind:class="{ 'slot': true, 'empty-slot': true, 'available': isAvailableForMeeting(slot) }" v-if="slot.type === 'slot_available'">
-                                                                        <a href="#" v-on:click="selectSlot(slot)" class="pull-right" v-show="isAvailableForMeeting(slot)">
-                                                                            <span class="glyphicon glyphicon-ok"></span>
-                                                                        </a>
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                    </div>
-
-                                                                    <div class="slot unavailability" v-if="slot.type === 'unavailability'">
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                    </div>
-
-                                                                    <div class="slot happening" v-if="slot.type === 'happening_unavailability'">
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                    </div>
-
-                                                                    <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true, 'meeting-to-be-moved': isAvailableForMeeting(slot) }" v-if="slot.type === 'meeting_unavailability'">
-                                                                        <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right" v-on:click="loadMeetingUpdateSpot(sheet, slot)" v-show="isAvailableAction && !sheet.isAgendaLoading">
-                                                                            <span class="glyphicon glyphicon-cog"></span>
-                                                                        </a>
-
-                                                                        <a href="#" class="pull-right" v-show="isAvailableAction && !sheet.isAgendaLoading && !slot.blockedSlot" v-on:click="removeMeeting(sheet, slot, '{{ 'admin.agenda.remove.confirm'|trans }}')">
-                                                                            <span class="glyphicon glyphicon-remove"></span>
-                                                                        </a>
-
-                                                                        <a href="#" title="{{ 'admin.agenda.meeting.move'|trans }}" class="pull-right" v-on:click="loadSlotsForMeeting(sheet, participant, slot)" v-show="isAvailableAction && !sheet.isAgendaLoading && !slot.blockedSlot">
-                                                                            <span class="glyphicon glyphicon-move"></span>
-                                                                        </a>
-
-                                                                        <a href="#" title="{{ 'admin.agenda.meeting.selectSlot'|trans }}" class="pull-right" v-on:click="selectSlot(slot)" v-show="isAvailableForMeeting(slot) && !sheet.isAgendaLoading">
-                                                                            <span class="glyphicon glyphicon-ok"></span>
-                                                                        </a>
-
-                                                                        <div class="slot-label slot-time">
-                                                                            <span class="glyphicon glyphicon-lock" v-show="slot.blockedSlot === true"></span>
-                                                                            ${ slot.beginEndHour }
-                                                                        </div>
-
-                                                                        <div class="slot-label">
-                                                                            <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>
-                                                                            <a v-bind:title="slot.sheetMetTitle" v-on:click="showAgendaForSheetId(slot.sheetMetId)" href="#">${ slot.sheetMetTitle }</a>
-                                                                        </div>
-
-                                                                        <div class="slot-label">
-                                                                            <small>
-                                                                                <span class="glyphicon glyphicon-lock" v-show="slot.blockedSpot === true"></span>
-                                                                                <span class="glyphicon glyphicon-map-marker"></span>
-                                                                                ${ slot.spotReference }
-                                                                            </small>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="slot mass-unavailability" v-if="slot.type === 'mass_unavailability'">
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                        <sheet-agenda :sheet="sheet" v-on:close-sheet-agenda="closeAgenda" v-on:load-sheets="loadSheets"></sheet-agenda>
                     </li>
                 </ul>
             </div>
@@ -242,7 +161,7 @@
     {{ include('AdminBundle:Agenda/Components:filterModal.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:filterSheetForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sheetAgenda.html.twig') }}
-    {{ include('AdminBundle:Agenda/Components:slot.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:slotAgenda.html.twig') }}
 
     <!-- template for the Modal component -->
     <script type="x/template" id="modal-template">

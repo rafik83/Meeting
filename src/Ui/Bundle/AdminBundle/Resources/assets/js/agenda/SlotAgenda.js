@@ -1,8 +1,10 @@
-var vue = require('vue');
+var vue     = require('vue'),
+    options = require('../vueComponents/options');
 
 module.exports = {
-    template: '#slot',
-    props: ['slot', 'sheet', 'request'],
+    template: '#slot-agenda',
+    delimiters: options.delimiters,
+    props: ['slot-agenda', 'sheet', 'request'],
     methods: {
         select: function () {
 
@@ -12,7 +14,7 @@ module.exports = {
         },
         transformRequestIntoMeeting: function () {
             this.$http.post(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(this.request), {
-                slotId: this.slot.id
+                slotId: this.slot-agenda.id
             }).then(function () {
                 this.$emit('load-agenda', this.sheet);
             }.bind(this)).catch(function (error) {
