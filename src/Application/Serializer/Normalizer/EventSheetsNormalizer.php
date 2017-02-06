@@ -200,13 +200,16 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private function addPresentationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $presentationTemplateData = $this->templateDataFactory->createFromSheet($sheet, $availableLocale);
+
         foreach ($presentationTemplateData->getObjects() as $presentationObject) {
             if ($presentationObject instanceof ExportableObjectInterface) {
                 $key = $presentationObject->getKey();
+
                 if (!isset($this->sheetFields[$key])) {
                     $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
                     $this->sheetFields[$key] = $fieldName;
                 }
+
                 $rawData[$key] = $presentationObject->getExportableContent();
             }
         }
@@ -221,6 +224,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
+
         foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
