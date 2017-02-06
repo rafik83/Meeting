@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 
 class MassUnavailabilityViewQueryHandler
@@ -21,11 +22,20 @@ class MassUnavailabilityViewQueryHandler
     private $massAssignmentRepository;
 
     /**
-     * @param MassAssignmentRepositoryInterface $massAssignmentRepository
+     * @var MeetingPublishedAccessChecker
      */
-    public function __construct(MassAssignmentRepositoryInterface $massAssignmentRepository)
-    {
-        $this->massAssignmentRepository = $massAssignmentRepository;
+    private $meetingPublishedAccessChecker;
+
+    /**
+     * @param MassAssignmentRepositoryInterface $massAssignmentRepository
+     * @param MeetingPublishedAccessChecker     $meetingPublishedAccessChecker
+     */
+    public function __construct(
+        MassAssignmentRepositoryInterface $massAssignmentRepository,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+    ) {
+        $this->massAssignmentRepository      = $massAssignmentRepository;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
     /**
@@ -38,16 +48,18 @@ class MassUnavailabilityViewQueryHandler
         $begin = $query->mass->getBegin();
         $end   = $query->mass->getEnd();
 
-        if ($query->mass->isDispatch()) {
-            $assignment = $this->massAssignmentRepository->find($query->mass, $query->participant);
+        if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
+            if ($query->mass->isDispatch()) {
+                $assignment = $this->massAssignmentRepository->find($query->mass, $query->participant);
 
-            if ($assignment !== null) {
-                if (!$assignment->isEnabled()) {
-                    return null;
+                if ($assignment !== null) {
+                    if (!$assignment->isEnabled()) {
+                        return null;
+                    }
+
+                    $begin = $assignment->getBegin();
+                    $end   = $assignment->getEnd();
                 }
-
-                $begin = $assignment->getBegin();
-                $end    = $assignment->getEnd();
             }
         }
 
