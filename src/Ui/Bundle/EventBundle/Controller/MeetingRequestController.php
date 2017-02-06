@@ -670,7 +670,7 @@ class MeetingRequestController extends Controller
                 )
             );
         } catch (SheetNotFoundException $exception) {
-            return $this->createNotFoundException('Sheet not found');
+            throw $this->createNotFoundException('Sheet not found');
         }
 
         $charset       = Charset::WINDOWS_1252;
