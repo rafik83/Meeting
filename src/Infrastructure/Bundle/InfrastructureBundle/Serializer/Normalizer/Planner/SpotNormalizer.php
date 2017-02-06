@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner;
 
 use Proximum\Vimeet\Application\View\Planner\SheetView;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -22,13 +23,14 @@ class SpotNormalizer implements NormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         $data = [
-            '@id'             => $object->reference,
-            'id'              => $object->id,
-            'reference'       => $object->spotReference,
-            'seatCapacity'    => $object->seatCapacity,
-            'meetingCapacity' => $object->meetingCapacity,
-            'priority'        => $object->priority,
-            'sheetList'       => [],
+            '@id'                => $object->reference,
+            'id'                 => $object->id,
+            'reference'          => $object->spotReference,
+            'seatCapacity'       => $object->seatCapacity,
+            'meetingCapacity'    => $object->meetingCapacity,
+            'priority'           => $object->priority,
+            'sheetList'          => [],
+            'unavailabilityList' => [],
         ];
 
         if (!empty($object->sheetList)) {
@@ -37,6 +39,16 @@ class SpotNormalizer implements NormalizerInterface
                     function (SheetView $sheet) {
                         return  ['@reference' => $sheet->reference];
                     }, $object->sheetList
+                ),
+            ];
+        }
+
+        if (!empty($object->unavailabilityList)) {
+            $data['unavailabilityList'] = [
+                'Slot' => array_map(
+                    function (SlotView $slotView) {
+                        return  ['@reference' => $slotView->reference];
+                    }, $object->unavailabilityList
                 ),
             ];
         }
