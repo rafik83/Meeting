@@ -1048,6 +1048,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
+    command.participant.update_visio_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateVisioHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateVisio }
     command.register.participant_step_handler:
         class: Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler
         arguments:
