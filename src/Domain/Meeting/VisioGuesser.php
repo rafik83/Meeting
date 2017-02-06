@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 class VisioGuesser
 {
@@ -40,7 +41,7 @@ class VisioGuesser
     }
 
     /**
-     * @param array $participants
+     * @param Participant[] $participants
      *
      * @return bool
      */
