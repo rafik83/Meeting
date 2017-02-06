@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
+use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -52,6 +53,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participant1     = ParticipantFactory::create($sheet1);
         $participant2     = ParticipantFactory::create($sheet1);
         $participant3     = ParticipantFactory::create($sheet2);
+        $participant3->setVisio(true);
         $participant4     = ParticipantFactory::create($sheet3);
         $participant5     = ParticipantFactory::create($sheet3);
         $participantView  = new ParticipantView(1, 'fullName1', $sheetView, [$slotView]);
@@ -106,16 +108,21 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository->getAllAcceptedByEvent($event)->shouldBeCalled()->willReturn(
             [$request1, $request2, $request3, $request4]
         );
+        $visioGuesser = $this->prophesize(VisioGuesser::class);
+        $visioGuesser->hasMeetingRequestParticipantVisio($request1)->shouldBeCalled()->willReturn(true);
+        $visioGuesser->hasMeetingRequestParticipantVisio($request2)->shouldBeCalled()->willReturn(false);
+        $visioGuesser->hasMeetingRequestParticipantVisio($request3)->shouldBeCalled()->willReturn(true);
+        $visioGuesser->hasMeetingRequestParticipantVisio($request4)->shouldNotBeCalled();
 
         // Handler
-        $handler = new MeetingViewQueryHandler($requestRepository->reveal());
+        $handler = new MeetingViewQueryHandler($requestRepository->reveal(), $visioGuesser->reveal());
         $result  = $handler->handle(new MeetingViewQuery($event, $sheets, $participants, $slots));
 
         // Expected
         $expected = [
-            new MeetingView(1, [$sheetView, $sheetView2], [$participantView, $participantView2, $participantView3]),
-            new MeetingView(2, [$sheetView3, $sheetView], [$participantView4, $participantView]),
-            new MeetingView(3, [$sheetView2, $sheetView3], [$participantView3, $participantView4]),
+            new MeetingView(1, [$sheetView, $sheetView2], [$participantView, $participantView2, $participantView3], true),
+            new MeetingView(2, [$sheetView3, $sheetView], [$participantView4, $participantView], false),
+            new MeetingView(3, [$sheetView2, $sheetView3], [$participantView3, $participantView4], true),
         ];
 
         $this->assertEquals($expected, $result);
