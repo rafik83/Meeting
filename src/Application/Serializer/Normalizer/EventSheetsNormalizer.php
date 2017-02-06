@@ -192,6 +192,8 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     }
 
     /**
+     * This method formats all sheet_template fields
+     *
      * @param array  $rawData
      * @param Sheet  $sheet
      * @param string $availableLocale
@@ -200,6 +202,9 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private function addPresentationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $presentationTemplateData = $this->templateDataFactory->createFromSheet($sheet, $availableLocale);
+
+        // the tagged data are used in case of empty field
+        $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
 
         foreach ($presentationTemplateData->getObjects() as $presentationObject) {
             if ($presentationObject instanceof ExportableObjectInterface) {
@@ -210,12 +215,14 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
                     $this->sheetFields[$key] = $fieldName;
                 }
 
-                $rawData[$key] = $presentationObject->getExportableContent();
+                $rawData[$key] = $presentationObject->getExportableContent($taggedData);
             }
         }
     }
 
     /**
+     * This method formats all registration fields with the tag SHEET_DATA
+     *
      * @param array  $rawData
      * @param Sheet  $sheet
      * @param string $availableLocale
@@ -228,10 +235,12 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
+
                 if (!isset($this->registrationFields[$key])) {
                     $fieldName = $registrationObject->getExportableFieldname($availableLocale, $fallbackLocale);
                     $this->registrationFields[$key] = $fieldName;
                 }
+
                 $rawData[$key] = $registrationObject->getExportableContent();
             }
         }

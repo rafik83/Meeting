@@ -75,8 +75,18 @@ class Telephone extends EditableObject implements ContentObjectInterface, Export
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent()
+    public function getExportableContent(array $taggedData = [])
     {
-        return $this->getContentLabel();
+        $result = $this->getContentValue();
+
+        if (!empty($result)) {
+            return $result;
+        }
+
+        if (isset($taggedData[$this->getTag()])) {
+            return $taggedData[$this->getTag()];
+        }
+
+        return '';
     }
 }

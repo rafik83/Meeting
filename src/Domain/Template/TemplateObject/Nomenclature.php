@@ -327,7 +327,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent()
+    public function getExportableContent(array $taggedData = [])
     {
         if (empty($this->getItems())) {
             return '';
