@@ -15,7 +15,14 @@
                                     <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day+1 }</div>
                                     <table class="table-agenda-day table table-bordered table-condensed">
                                         <tr v-for="slot in day.slots">
-                                            <slot-agenda v-bind:slot-agenda="slot" v-bind:sheet="sheet"></slot-agenda>
+                                            <slot-agenda
+                                                    v-bind:agendaSlot="slot"
+                                                    v-bind:sheet="sheet"
+                                                    v-bind:participant="participant"
+                                                    v-bind:availableSlots="availableSlots"
+                                                    v-on:show-meeting-update-modal="showMeetingUpdateModal"
+                                                    v-on:load-agenda="loadAgenda">
+                                            </slot-agenda>
                                         </tr>
                                     </table>
                                 </td>

@@ -1,67 +1,65 @@
 <script type="x/template" id="slot-agenda">
     <td>
-        <div v-bind:class="{ 'slot': true, 'empty-slot': true, 'available': isAvailableForMeeting(slot) }"
-             v-if="slot-agenda.type === 'slot_available'">
-            <a href="#" v-on:click="selectSlot(slot-agenda)" class="pull-right" v-show="isAvailableForMeeting(slot-agenda)">
+        <div class="slot empty-slot" v-bind:class="{ 'available': isAvailableForMeeting }"
+             v-if="agendaSlot.type === 'slot_available'">
+            <a href="#" v-on:click="select()" class="pull-right" v-show="isAvailableForMeeting">
                 <span class="glyphicon glyphicon-ok"></span>
             </a>
-            <div class="slot-label slot-time">${ slot-agenda.beginEndHour }</div>
+            <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
         </div>
 
-        <div class="slot unavailability" v-if="slot-agenda.type === 'unavailability'">
-            <div class="slot-label slot-time">${ slot-agenda.beginEndHour }</div>
+        <div class="slot unavailability" v-if="agendaSlot.type === 'unavailability'">
+            <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
         </div>
 
-        <div class="slot happening" v-if="slot-agenda.type === 'happening_unavailability'">
-            <div class="slot-label slot-time">${ slot-agenda.beginEndHour }</div>
+        <div class="slot happening" v-if="agendaSlot.type === 'happening_unavailability'">
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
         </div>
 
-        <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot-agenda.highlight === true, 'meeting-to-be-moved': isAvailableForMeeting(slot-agenda) }"
-             v-if="slot-agenda.type === 'meeting_unavailability'">
-            <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right"
-               v-on:click="loadMeetingUpdateSpot(sheet, slot-agenda)" v-show="isAvailableAction && !sheet.isAgendaLoading">
+        <div class="slot meeting" v-bind:class="{ 'meeting-common': agendaSlot.highlight === true, 'meeting-to-be-moved': isAvailableForMeeting }"
+             v-if="agendaSlot.type === 'meeting_unavailability'">
+            <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right" v-on:click="loadMeetingUpdateSpot()">
                 <span class="glyphicon glyphicon-cog"></span>
             </a>
 
-            <a href="#" class="pull-right" v-show="isAvailableAction && !sheet.isAgendaLoading && !slot-agenda.blockedSlot"
-               v-on:click="removeMeeting(sheet, slot-agenda, '{{ 'admin.agenda.remove.confirm'|trans }}')">
+            <a href="#" class="pull-right" v-show="!agendaSlot.blockedSlot"
+               v-on:click="removeMeeting('{{ 'admin.agenda.remove.confirm'|trans }}')">
                 <span class="glyphicon glyphicon-remove"></span>
             </a>
 
             <a href="#" title="{{ 'admin.agenda.meeting.move'|trans }}" class="pull-right"
-               v-on:click="loadSlotsForMeeting(sheet, participant, slot-agenda)"
-               v-show="isAvailableAction && !sheet.isAgendaLoading && !slot-agenda.blockedSlot">
+               v-on:click="loadSlotsForMeeting(sheet, participant, agendaSlot)"
+               v-show="!agendaSlot.blockedSlot">
                 <span class="glyphicon glyphicon-move"></span>
             </a>
 
             <a href="#" title="{{ 'admin.agenda.meeting.selectSlot'|trans }}" class="pull-right"
-               v-on:click="selectSlot(slot-agenda)" v-show="isAvailableForMeeting(slot-agenda) && !sheet.isAgendaLoading">
+               v-on:click="selectSlot(agendaSlot)" v-show="isAvailableForMeeting">
                 <span class="glyphicon glyphicon-ok"></span>
             </a>
 
             <div class="slot-label slot-time">
-                <span class="glyphicon glyphicon-lock" v-show="slot-agenda.blockedSlot === true"></span>
-                ${ slot-agenda.beginEndHour }
+                <span class="glyphicon glyphicon-lock" v-show="agendaSlot.blockedSlot === true"></span>
+                ${ agendaSlot.beginEndHour }
             </div>
 
             <div class="slot-label">
                 <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}"
-                      v-show="slot-agenda.hasNoPreference === true"></span>
-                <a v-bind:title="slot-agenda.sheetMetTitle" v-on:click="showAgendaForSheetId(slot-agenda.sheetMetId)" href="#">${
-                    slot-agenda.sheetMetTitle }</a>
+                      v-show="agendaSlot.hasNoPreference === true"></span>
+                <a v-bind:title="agendaSlot.sheetMetTitle" v-on:click="showAgendaForSheetId(agendaSlot.sheetMetId)" href="#">${ agendaSlot.sheetMetTitle }</a>
             </div>
 
             <div class="slot-label">
                 <small>
-                    <span class="glyphicon glyphicon-lock" v-show="slot-agenda.blockedSpot === true"></span>
+                    <span class="glyphicon glyphicon-lock" v-show="agendaSlot.blockedSpot === true"></span>
                     <span class="glyphicon glyphicon-map-marker"></span>
-                    ${ slot-agenda.spotReference }
+                    ${ agendaSlot.spotReference }
                 </small>
             </div>
         </div>
 
-        <div class="slot mass-unavailability" v-if="slot-agenda.type === 'mass_unavailability'">
-            <div class="slot-label slot-time">${ slot-agenda.beginEndHour }</div>
+        <div class="slot mass-unavailability" v-if="agendaSlot.type === 'mass_unavailability'">
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
         </div>
     </td>
 </script>

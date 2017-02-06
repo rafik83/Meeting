@@ -1,32 +1,35 @@
-var vue           = require('vue'),
-    slotAgenda    = require('./SlotAgenda'),
-    options       = require('../vueComponents/options');
+var vue = require('vue'),
+    slotAgenda = require('./SlotAgenda'),
+    options = require('../vueComponents/options');
 
 module.exports = {
     template: '#sheet-agenda',
     delimiters: options.delimiters,
-    props: ['sheet'],
+    props: ['sheet', 'availableSlots'],
     components: {
         'slot-agenda': slotAgenda
-    },
-    datas: {
-        agendas: [] /** Opened sheets */
     },
     methods: {
         init: function () {
             this.$emit('load-sheets');
         },
         focus: function () {
-
+            this.$emit('focus-sheet', this.sheet);
         },
         close: function () {
             this.$emit('close-sheet-agenda', this.sheet);
         },
-        findSheetAgenda: function (sheet) {
-            return this.agendas.indexOf(sheet);
+        /**
+         * @param {Object} meetingToUpdate
+         */
+        showMeetingUpdateModal: function (meetingToUpdate) {
+            this.$emit('show-meeting-update-modal', meetingToUpdate);
         },
-        loadAgenda: function() {
-
-        },
+        /**
+         * @param {Object} sheet
+         */
+        loadAgenda: function (sheet) {
+            this.$emit('load-agenda', sheet)
+        }
     }
 };

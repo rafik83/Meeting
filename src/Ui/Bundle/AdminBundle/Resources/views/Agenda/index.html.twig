@@ -99,20 +99,24 @@
                     {{ 'admin.agenda.event.configuration.isMeetingRequestLocked'|trans }}
                 </div>
             {% endif %}
-            <div class="requests-list" v-if="focus">
+            <div class="requests-list" v-if="focusedSheet">
                 <p>
-                    <b>${ focus.title }</b>
+                    <b>${ focusedSheet.title }</b>
                     <br>{{ 'admin.agenda.requestsList.title'|trans }}
                 </p>
 
                 <div class="requests-list-scrollable">
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
-                        <tr v-show="focus.requests && focus.requests.length === 0">
+                        <tr v-show="focusedSheet.requests && focusedSheet.requests.length === 0">
                             <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
                         </tr>
-                        <tr v-for="request in focus.requests">
+                        <tr v-for="request in focusedSheet.requests">
                             <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request }">
-                                <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.label'|trans }}" v-on:click="loadSlotsForRequest(request)" class="pull-right" v-show="request.isTransformableIntoMeeting && !focus.isAgendaLoading && null === meetingRequestToTransformIntoMeeting">
+                                <a href="#"
+                                   title="{{ 'admin.agenda.request.transformIntoMeeting.label'|trans }}"
+                                   class="pull-right"
+                                   v-on:click="loadSlotsForRequest(request)"
+                                   v-show="request.isTransformableIntoMeeting && !focusedSheet.isAgendaLoading && null === meetingRequestToTransformIntoMeeting">
                                     <span class="glyphicon glyphicon-move"></span>
                                 </a>
 
@@ -141,8 +145,16 @@
             <div class="agenda-horizontal">
                 <ul>
                 {% set table = 1 %}
-                    <li v-for="sheet in agendas">
-                        <sheet-agenda :sheet="sheet" v-on:close-sheet-agenda="closeAgenda" v-on:load-sheets="loadSheets"></sheet-agenda>
+                    <li v-for="sheet in openedSheets">
+                        <sheet-agenda
+                                v-bind:sheet="sheet"
+                                v-bind:availableSlots="availableSlotsForMeeting"
+                                v-on:close-sheet-agenda="closeAgenda"
+                                v-on:load-sheets="loadSheets"
+                                v-on:focus-sheet="focusSheet"
+                                v-on:show-meeting-update-modal="showMeetingUpdateModal"
+                                v-on:load-agenda="loadAgenda">
+                        </sheet-agenda>
                     </li>
                 </ul>
             </div>
