@@ -494,4 +494,24 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function findAccepted(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.to = :sheet OR request.from = :sheet')
+            ->andWhere('request.state = :state')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', Request::STATE_APPROVED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
