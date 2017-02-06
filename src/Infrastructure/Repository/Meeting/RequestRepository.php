@@ -531,6 +531,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->andWhere('request.to = :sheet OR request.from = :sheet')
             ->andWhere('request.state = :state')
+            ->andWhere('request.disabled = false')
             ->setParameter('sheet', $sheet)
             ->setParameter('state', Request::STATE_APPROVED);
 
