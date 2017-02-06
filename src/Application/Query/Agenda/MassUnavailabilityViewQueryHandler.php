@@ -48,8 +48,8 @@ class MassUnavailabilityViewQueryHandler
         $begin = $query->mass->getBegin();
         $end   = $query->mass->getEnd();
 
-        if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
-            if ($query->mass->isDispatch()) {
+        if ($query->mass->isDispatch()) {
+            if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
                 $assignment = $this->massAssignmentRepository->find($query->mass, $query->participant);
 
                 if ($assignment !== null) {
