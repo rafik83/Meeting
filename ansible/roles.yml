@@ -106,7 +106,7 @@
 
 - src:     https://github.com/ElaoInfra/ansible-role-supervisor
   name:    elao.supervisor
-  version: origin/1.0
+  version: origin/2.0
 
 # MySQL
 

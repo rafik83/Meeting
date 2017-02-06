@@ -38,4 +38,6 @@
     # Elasticsearch
     - role: elao.java
     - role: elao.elasticsearch
+    # Supervisor
+    - role: elao.supervisor
     # App

@@ -252,3 +252,12 @@ elao_npm_packages:
 elao_elasticsearch_plugins:
   - name:       head
     repository: mobz/elasticsearch-head
+
+##############
+# Supervisor #
+##############
+
+supervisor_configs:
+  - file:     app.conf
+    template: configs/app_program.{{ env }}.j2
+    config:
