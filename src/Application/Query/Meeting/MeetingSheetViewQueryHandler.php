@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetView;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -63,6 +64,7 @@ class MeetingSheetViewQueryHandler
      * @param MeetingSheetViewQuery $query
      *
      * @return MeetingSheetListView
+     * @throws SheetNotFoundException
      */
     public function handle(MeetingSheetViewQuery $query)
     {
@@ -79,6 +81,7 @@ class MeetingSheetViewQueryHandler
             $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($metSheet, $query->locale);
 
             $meetingSheetViews[] = new MeetingSheetView(
+                $sheetTags[Tag::SHEET_TITLE],
                 $sheetTags[Tag::SHEET_ORGANIZATION_CATEGORY],
                 $sheetTags[Tag::SHEET_ORGANIZATION_TURNOVER],
                 $sheetTags[Tag::SHEET_ORGANIZATION_STAFF],

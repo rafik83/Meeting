@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
@@ -660,13 +661,17 @@ class MeetingRequestController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_OPEN_ACCESS', $eventDomain->getEvent());
 
-        $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
-            new MeetingSheetViewQuery(
-                $this->getUser(),
-                $eventDomain->getEvent(),
-                $request->getLocale()
-            )
-        );
+        try {
+            $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
+                new MeetingSheetViewQuery(
+                    $this->getUser(),
+                    $eventDomain->getEvent(),
+                    $request->getLocale()
+                )
+            );
+        } catch (SheetNotFoundException $exception) {
+            return $this->createNotFoundException('Sheet not found');
+        }
 
         $charset       = Charset::WINDOWS_1252;
         $exportContent = $this->get('serializer')->serialize($meetingSheetListView, 'csv', [

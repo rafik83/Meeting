@@ -70,6 +70,7 @@ class MeetingSheetView
     /**
      * MeetingSheetView constructor.
      *
+     * @param string                   $sheetName
      * @param string                   $category
      * @param string                   $turnover
      * @param string                   $employees
@@ -82,6 +83,7 @@ class MeetingSheetView
      * @param MeetingParticipantView[] $participants
      */
     public function __construct(
+        $sheetName,
         $category,
         $turnover,
         $employees,
@@ -93,6 +95,7 @@ class MeetingSheetView
         $type,
         array $participants
     ) {
+        $this->sheetName    = $sheetName;
         $this->participants = $participants;
         $this->category     = $category;
         $this->turnover     = $turnover;
