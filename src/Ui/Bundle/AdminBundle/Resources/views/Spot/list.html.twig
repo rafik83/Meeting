@@ -106,7 +106,7 @@
                         </td>
                         <td style="width: 100px;">
                             {% if spot.visio is defined and spot.visio == true %}
-                                <div class="btn-group" role="group" aria-label="visio">
+                                <div class="btn-group stopPropagation" role="group" aria-label="visio">
                                     <a href="#" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.visio'|trans }}">
                                         <i class="glyphicon glyphicon-facetime-video"></i>
                                     </a>
@@ -115,7 +115,7 @@
                                     </a>
                                 </div>
                             {% else %}
-                                <div class="btn-group" role="group" aria-label="visio">
+                                <div class="btn-group stopPropagation" role="group" aria-label="visio">
                                     <a href="{{ path('admin_spot_update_visio', { 'event': event.id, 'spot': spot.id }) }}" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.spot.listSpot.spot.visio'|trans }}">
                                         <i class="glyphicon glyphicon-facetime-video"></i>
                                     </a>

@@ -137,7 +137,24 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function removeBatchSpot(array $ids, Event $event)
+    public function getSpotsByIds(array $spotsIds = [])
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spots')
+            ->from(Spot::class, 'spots')
+            ->where('spots.id IN (:spotsIds)')
+            ->setParameter('spotsIds', $spotsIds)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeBatchSpot(array $spots, Event $event)
     {
         $queryBuilder = $this
             ->entityManager
@@ -147,7 +164,10 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids);
+            ->setParameter('ids', array_map(function (Spot $spot) {
+                    return $spot->getId();
+                }, $spots)
+            );
 
         $queryBuilder->getQuery()->execute();
     }
@@ -198,6 +218,23 @@ class SpotRepository implements SpotRepositoryInterface
             $meeting->countParticipants(),
             $meeting
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeeting(Spot $spot) {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.spot)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.spot = :spot_id')
+            ->setParameter('spot_id', $spot->getId())
+            ->groupBy('meeting.spot')
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult() === null ? false : true;
     }
 
     /**

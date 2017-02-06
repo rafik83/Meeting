@@ -66,6 +66,7 @@ class SendHandler
      */
     public function handle(Send $command)
     {
+        set_time_limit(60);
         $campaign = $command->getCampaign();
 
         if (!$sheets = $campaign->getSheets()) {

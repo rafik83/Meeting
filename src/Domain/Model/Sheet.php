@@ -799,6 +799,11 @@ class Sheet implements TraceableInterface
     {
         $this->imported = $imported;
 
+        // Imported sheet don't have last login yet
+        if ($imported) {
+            $this->lastLoginAt = null;
+        }
+
         return $this;
     }
 
