@@ -234,23 +234,6 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasMeeting(Spot $spot) {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('COUNT(meeting.spot)')
-            ->from(Meeting::class, 'meeting')
-            ->where('meeting.spot = :spot_id')
-            ->setParameter('spot_id', $spot->getId())
-            ->groupBy('meeting.spot')
-        ;
-
-        return $queryBuilder->getQuery()->getOneOrNullResult() === null ? false : true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function hasSpotsForMeeting(Meeting $meeting, $visio = false)
     {
         return $this->hasSpotsForSlotAndParticipantsQuantity(
@@ -261,6 +244,24 @@ class SpotRepository implements SpotRepositoryInterface
             null,
             $visio
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeeting(Spot $spot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.spot)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.spot = :spot_id')
+            ->setParameter('spot_id', $spot->getId())
+            ->groupBy('meeting.spot')
+        ;
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult() === 0 ? false : true;
     }
 
     /**
