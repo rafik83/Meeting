@@ -81,11 +81,13 @@ class HappeningParticipantViewQueryHandler
             $participations = $happening->getParticipations();
 
             foreach ($participations as $participation) {
-                $happeningParticipantViews[] = $this->buildView(
-                    $happening,
-                    $participation->getParticipant(),
-                    $query->locale
-                );
+                if (!$participation->isDisabled()) {
+                    $happeningParticipantViews[] = $this->buildView(
+                        $happening,
+                        $participation->getParticipant(),
+                        $query->locale
+                    );
+                }
             }
         }
 

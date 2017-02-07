@@ -90,6 +90,7 @@ class SearchType extends AbstractType
         $defaultFilters = [
             'orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL,
             'state'   => Meeting\Constant::FILTER_STATE_ALL,
+            'disabled' => false
         ];
 
         // Allow to filters by type if there are more than 1

@@ -64,6 +64,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->where('participation.happening = :happening')
             ->setParameter('happening', $happening)
             ->andWhere('participation.participant = :participant')
+            ->andWhere('participation.disabled = false')
             ->setParameter('participant', $participant)
             ->setMaxResults(1);
 
@@ -73,7 +74,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function findByParticipant(Participant $participant)
+    public function findByParticipant(Participant $participant, array $filters = [])
     {
         $queryBuilder = $this
             ->entityManager
@@ -85,6 +86,12 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('participant', $participant)
         ;
 
+        if (isset($filters['disabled'])) {
+            $queryBuilder
+                ->andWhere('participation.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled'])
+            ;
+        }
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -100,6 +107,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
             ->where('participation.participant = :participant')
+            ->andWhere('participation.disabled = false')
             ->setParameter('participant', $participant)
             ->setMaxResults(1)
         ;
@@ -119,6 +127,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('COUNT(participation)')
             ->from(HappeningParticipation::class, 'participation')
             ->where('participation.happening  = :happening')
+            ->andWhere('participation.disabled = false')
             ->setParameter('happening', $happening)
         ;
 
@@ -137,6 +146,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
             ->where('happening.event = :event')
+            ->andWhere('participation.disabled = false')
             ->setParameter('event', $event)
         ;
 
@@ -155,6 +165,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->createQueryBuilder()
             ->select('happening.id, COUNT(participation)')
             ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.disabled = false')
             ->join('participation.happening', 'happening', 'WITH', 'happening = participation.happening')
             ->join('happening.event', 'event', 'WITH', 'event = :event')
             ->setParameter('event', $event)
@@ -179,6 +190,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(participation.id)')
             ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.disabled = false')
             ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
         ;
@@ -204,6 +216,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->createQueryBuilder()
             ->select('participation')
             ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.disabled = false')
             ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
             ->join('participation.happening', 'happening', 'WITH', 'happening IN (:happenings)')
             ->setParameter('sheet', $sheet)
@@ -224,6 +237,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->createQueryBuilder()
             ->delete(HappeningParticipation::class, 'participation')
             ->where('participation.participant = :participant')
+            ->andWhere('participation.disabled = false')
             ->andWhere('participation.happening = :happening')
             ->setParameter('participant', $participant)
             ->setParameter('happening', $happening)
@@ -231,5 +245,13 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->execute();
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param HappeningParticipation $happeningParticipation
+     */
+    public function update(HappeningParticipation $happeningParticipation)
+    {
+        $this->entityManager->flush($happeningParticipation);
     }
 }

@@ -76,6 +76,7 @@ admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
+admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.cancel: Annuler
 admin.category.add: Ajouter
 admin.category.link: 'Catégories de participation'

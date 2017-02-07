@@ -90,7 +90,7 @@ class IndicatorCalculator
 
         $meetingRequestsCount = $this
             ->requestRepository
-            ->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
+            ->countSheetState($sheet, ['state' => Request::STATE_APPROVED, 'disabled' => false]);
 
         $slotUsables = [];
 
