@@ -75,6 +75,7 @@ admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
+admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler
@@ -247,6 +248,7 @@ admin.messaging.menu.title: Emailing
 admin.messaging.message.compose.links.activateAccount: 'Activation du compte'
 admin.messaging.message.compose.links.agenda: Agenda
 admin.messaging.message.compose.links.catalog: Catalogue
+admin.messaging.message.compose.links.exportMeetingSheet: 'Télécharger mes contacts'
 admin.messaging.message.compose.links.label: 'Liens personnalisés'
 admin.messaging.message.compose.links.meetingRequest: 'Gestion RDV'
 admin.messaging.message.compose.links.orders: 'Liste des commandes'
@@ -490,7 +492,7 @@ admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
 admin.sheet.details.participant.title: Participant
-admin.sheet.details.participant.visio: 'Visio'
+admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
@@ -527,9 +529,9 @@ admin.sheet.import.button.label: Importer
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
-admin.sheet.participant.not_found: 'Ce participant n''existe pas'
-admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
 admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
+admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
+admin.sheet.participant.not_found: 'Ce participant n''existe pas'
 admin.sheet.read: Voir
 admin.sheet.see_list: 'Voir liste des participations'
 admin.sheet.spot: Lieu

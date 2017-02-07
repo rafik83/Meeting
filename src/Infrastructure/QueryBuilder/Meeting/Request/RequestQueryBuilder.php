@@ -122,4 +122,14 @@ class RequestQueryBuilder extends QueryBuilder
 
         return $this;
     }
+
+    /**
+     * @return RequestQueryBuilder
+     */
+    public function isEnabled()
+    {
+        $this->andWhere('request.disabled = false');
+
+        return $this;
+    }
 }

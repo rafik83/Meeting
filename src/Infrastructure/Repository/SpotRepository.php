@@ -17,8 +17,10 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\SpotUnavailability;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\SpotQueryBuilder;
 
 class SpotRepository implements SpotRepositoryInterface
 {
@@ -318,7 +320,7 @@ class SpotRepository implements SpotRepositoryInterface
      * @param Sheet|null $toSheet
      * @param bool $visio
      *
-     * @return QueryBuilder
+     * @return SpotQueryBuilder
      */
     private function getSpotsForSlotAndParticipantsQuantityQueryBuilder(
         MeetingSlot $slot,
@@ -328,15 +330,13 @@ class SpotRepository implements SpotRepositoryInterface
         Sheet $toSheet = null,
         $visio = false
     ) {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('spot')
+        $queryBuilder = new SpotQueryBuilder($this->entityManager);
+
+        $queryBuilder
+            ->filterByEvent($slot->getEvent())
+            ->active()
             ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
-            ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants')
-            ->from(Spot::class, 'spot')
-            ->where('spot.event = :eventId AND spot.active = true')
-            ->setParameter('eventId', $slot->getEvent()->getId());
+            ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants');
 
         // If meeting has a blocked spot, check only meeting's spot availability
         if (null !== $exceptMeeting && $exceptMeeting->isBlockedSpot()) {
@@ -378,24 +378,14 @@ class SpotRepository implements SpotRepositoryInterface
         }
 
         if ($fromSheet !== null && $toSheet !== null) {
-            $queryBuilder
-                // Get meeting sheets assigned to spot in order to sort Spots list by assigned spots then by shared spots
-                ->addSelect('sheetAssignedToSpot.id AS HIDDEN hasSheetAssignedFromMeeting')
-                ->leftJoin('spot.sheets', 'sheetAssignedToSpot', 'WITH', 'sheetAssignedToSpot IN (:fromSheetId, :toSheetId)')
-                // Exclude spots assigned to others sheet
-                ->andWhere('sheetAssignedToSpot IN (:fromSheetId, :toSheetId) OR NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
-                ->setParameter('fromSheetId', $fromSheet->getId())
-                ->setParameter('toSheetId', $toSheet->getId())
-                ->addOrderBy('hasSheetAssignedFromMeeting', 'DESC');
+            $queryBuilder->meetingSheets($fromSheet, $toSheet);
         }
 
-        if ($visio === true) {
-            $queryBuilder
-                ->andWhere('spot.visio = :visio')
-                ->setParameter('visio', $visio);
-        }
-
-        $queryBuilder->addOrderBy('spot.reference');
+        $queryBuilder
+            ->visio($visio)
+            ->hasNotSpotUnavailability($slot)
+            ->addOrderBy('spot.reference')
+        ;
 
         return $queryBuilder;
     }

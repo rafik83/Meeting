@@ -144,6 +144,7 @@ class Converter
             $groupsData,
             $this->datetime
         );
+        $sheet->addOrder($order);
 
         foreach ($cart->getRows() as $cartRow) {
             $order->addRow($this->convertToRow($order, $cartRow));
