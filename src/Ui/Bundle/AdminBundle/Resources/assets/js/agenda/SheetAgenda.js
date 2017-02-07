@@ -28,17 +28,25 @@ module.exports = {
         /**
          * @param {Object} sheet
          */
-        loadAgenda: function (sheet) {
-            this.$emit('load-agenda', sheet)
+        refreshAgenda: function (sheet) {
+            this.$emit('refresh-agenda', sheet);
         },
         /**
-         *
          * Emit event to show agenda of given sheet id
          *
          * @param {int} sheetMetId
          */
         showAgendaForSheetId: function (sheetMetId) {
             this.$emit('show-agenda-for-sheet-id', sheetMetId);
+        },
+        /**
+         * @param {array} availableSlots
+         */
+        showAvailableSlotsForMeeting: function (availableSlots) {
+            console.log(availableSlots);
+        },
+        forceUpdate: function () {
+            this.$forceUpdate();
         }
     }
 };

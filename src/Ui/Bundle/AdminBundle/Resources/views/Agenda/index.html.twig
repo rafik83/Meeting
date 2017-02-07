@@ -147,13 +147,14 @@
                 {% set table = 1 %}
                     <li v-for="sheet in openedSheets">
                         <sheet-agenda
+                                ref="childSheetAgenda"
                                 v-bind:sheet="sheet"
                                 v-bind:availableSlots="availableSlotsForMeeting"
                                 v-on:close-sheet-agenda="closeAgenda"
                                 v-on:load-sheets="loadSheets"
                                 v-on:focus-sheet="focusSheet"
                                 v-on:show-meeting-update-modal="showMeetingUpdateModal"
-                                v-on:load-agenda="loadAgenda"
+                                v-on:refresh-agenda="loadAgenda"
                                 v-on:show-agenda-for-sheet-id="showAgendaForSheetId">
                         </sheet-agenda>
                     </li>

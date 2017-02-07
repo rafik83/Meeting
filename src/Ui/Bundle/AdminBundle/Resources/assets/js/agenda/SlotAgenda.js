@@ -133,7 +133,7 @@ module.exports = {
                 this.$http.delete(api.getRemoveMeetingEndpoint(this.agendaSlot))
                     .then(function () {
                         this.$emit('focus-sheet', this.sheet);
-                        this.$emit('load-agenda', this.sheet);
+                        this.$emit('refresh-agenda', this.sheet);
                     }.bind(this))
                     .catch(function (error) {
                         if (error.response) {
