@@ -30,6 +30,15 @@ module.exports = {
          */
         loadAgenda: function (sheet) {
             this.$emit('load-agenda', sheet)
+        },
+        /**
+         *
+         * Emit event to show agenda of given sheet id
+         *
+         * @param {int} sheetMetId
+         */
+        showAgendaForSheetId: function (sheetMetId) {
+            this.$emit('show-agenda-for-sheet-id', sheetMetId);
         }
     }
 };

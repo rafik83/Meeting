@@ -1,6 +1,7 @@
 var Vue                = require('vue'),
     axios              = require('axios'),
     filterModal        = require('./agenda/filterModal'),
+    MeetingUpdateModal = require('./agenda/MeetingUPdateModal'),
     sheetAgenda        = require('./agenda/SheetAgenda'),
     slotAgenda         = require('./agenda/SlotAgenda'),
     options            = require('./vueComponents/options'),
@@ -23,70 +24,14 @@ Vue.component('Modal', {
     }
 });
 
-Vue.component('MeetingUpdateModal', {
-    delimiters: options.delimiters,
-    template: '#meeting-update-modal-template',
-    props: {
-        meetingToUpdate: {
-            type: Object,
-            default: function () {
-                return {
-                    form: {
-                        meetingId: null,
-                        blockedSlot: false,
-                        blockedSpot: false,
-                        spotId: null,
-                        availableSpots: []
-                    }
-                }
-            }
-        }
-    },
-    data: function () {
-        return {
-            disabled: false
-        }
-    },
-    methods: {
-        reinit: function () {
-            this.disabled = false;
-        },
-        close: function () {
-            this.$emit('close-modal');
-            this.reinit();
-        },
-        save: function () {
-            this.disabled = true;
-
-            this.$http.post(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
-                blockedSlot: this.meetingToUpdate.form.blockedSlot,
-                blockedSpot: this.meetingToUpdate.form.blockedSpot,
-                spotId: this.meetingToUpdate.form.spotId
-            })
-            .then(function (response) {
-                this.$emit('meeting-updated');
-                this.close();
-            }.bind(this))
-            .catch(function (error) {
-                if (error.response) {
-                    alert(error.response.data);
-                } else {
-                    alert(error.message);
-                }
-
-                this.disabled = false;
-            }.bind(this));
-        }
-    }
-});
-
 new Vue({
     el: '#agenda',
     delimiters: options.delimiters,
     components: {
         'filter-modal': filterModal,
         'slot-agenda': slotAgenda,
-        'sheet-agenda': sheetAgenda
+        'sheet-agenda': sheetAgenda,
+        'MeetingUpdateModal': MeetingUpdateModal
     },
     data: {
         sheets: [], /** {array} Sheet */
@@ -260,7 +205,7 @@ new Vue({
             }.bind(this));
 
             this.openedSheets.push(sheet);
-            // this.highlightMeetingsInCommon(sheet, true);
+            this.highlightMeetingsInCommon(sheet, true);
             sheet.isAgendaLoading = false;
             this.$forceUpdate();
         },
@@ -287,7 +232,7 @@ new Vue({
             }
 
             // this.cancelSlotAction();
-            //this.highlightMeetingsInCommon(sheet, true);
+            this.highlightMeetingsInCommon(sheet, true);
             this.loadAgenda(sheet);
         },
 
