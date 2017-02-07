@@ -258,6 +258,6 @@ elao_elasticsearch_plugins:
 ##############
 
 supervisor_configs:
-  - file:     app.conf
+  - file:     supervisord.conf
     template: configs/app_program.{{ env }}.j2
     config:
