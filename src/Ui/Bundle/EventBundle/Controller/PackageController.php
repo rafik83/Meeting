@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
+use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
@@ -215,7 +216,7 @@ class PackageController extends Controller
             ]),
         ]);
 
-        $removeParticipant = new RemoveParticipant($sheet);
+        $removeParticipant = new RemoveParticipant($sheet, $locale);
         $form_remove       = $this->createForm(RemoveType::class, $removeParticipant, [
             'action'       => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
@@ -240,9 +241,24 @@ class PackageController extends Controller
 
         if ($form_remove->handleRequest($request)->isSubmitted() && $form_remove->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($removeParticipant);
+                /** @var RemoveResult $result */
+                $result = $this->get('tactician.commandbus')->handle($removeParticipant);
 
-                $redirect = true;
+                if (!$result->hasParticipantWithMeeting()) {
+                    $redirect = true;
+                } else {
+
+
+                    $form_remove->addError(
+                        new FormError(
+                            $this->get('translator')->transChoice(
+                                'validators.participant.remove.hasMeeting',
+                                $result->countParticipants(),
+                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($sheet->getEvent())], 'validators'
+                            )
+                        )
+                    );
+                }
             } catch (CanNotRemoveAllParticipantsException $exception) {
                 $form_remove->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
             }
@@ -332,7 +348,8 @@ class PackageController extends Controller
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
         }
 
-        $remove = new RemoveParticipant($sheet);
+        $locale = $request->getLocale();
+        $remove = new RemoveParticipant($sheet, $locale);
         $form   = $this->createForm(RemoveType::class, $remove, [
             'action'       => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
@@ -341,7 +358,6 @@ class PackageController extends Controller
             'participants' => $sheet->getParticipants(),
         ]);
 
-        $locale            = $request->getLocale();
         $label             = $sheet->getPackage()->getParticipant()->getTitle($locale);
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
         $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
