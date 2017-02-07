@@ -53,7 +53,10 @@ class UpdateSpotHandler
             $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
                 $updateSpot->meeting->getSlot(),
                 $updateSpot->meeting->countParticipants(),
-                $updateSpot->meeting
+                $updateSpot->meeting,
+                null,
+                null,
+                $updateSpot->visio
             )
         )) {
             throw new SpotNotAvailableForThisMeetingException();

@@ -14,14 +14,10 @@ use Proximum\Vimeet\Domain\Model\Participant;
 
 class UpdateVisio
 {
-    /**
-     * @var boolean
-     */
+    /** @var boolean */
     public $visio;
 
-    /**
-     * @var Participant
-     */
+    /** @var Participant */
     public $participant;
 
     /**

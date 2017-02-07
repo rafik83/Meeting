@@ -77,7 +77,10 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $slot2,
             2,
-            $meeting
+            $meeting,
+            null,
+            null,
+            false
         )->shouldBeCalled()->willReturn([$spot2]);
 
         $expectedMeeting = new Meeting(
@@ -93,7 +96,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $updateSlot = new UpdateSlot($meeting, $slot2);
+        $updateSlot = new UpdateSlot($meeting, $slot2, false);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
@@ -244,7 +247,10 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $slot2,
             2,
-            $meeting
+            $meeting,
+            null,
+            null,
+            false
         )->shouldBeCalled()->willReturn([]);
 
         $updateSlot = new UpdateSlot($meeting, $slot2);
@@ -304,7 +310,10 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $slot2,
             2,
-            $meeting
+            $meeting,
+            null,
+            null,
+            false
         )->shouldBeCalled()->willReturn([$spot2]);
 
         $updateSlot = new UpdateSlot($meeting, $slot2);
