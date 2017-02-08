@@ -36,6 +36,7 @@ class UpdateHandler
         $update->event
             ->getConfiguration()
             ->updatePaymentConditions(
+                $update->paymentModes,
                 $update->allowDeposit,
                 $update->depositUntil,
                 $update->minimumForDeposit,
