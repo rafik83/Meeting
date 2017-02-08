@@ -1,8 +1,9 @@
 <script type="x/template" id="sheet-agenda">
     <div class="panel panel-default">
-        <div v-bind:class="{ 'panel-heading': true, 'agenda-sheet-focus': sheet == focusedSheet }">
+        <div v-bind:class="{ 'agenda-sheet-focus': sheet == focusedSheet }" class="panel-heading">
             <a href="#" class="pull-right" v-on:click="close()"><span class="glyphicon glyphicon-remove"></span></a>
             <a href="#" v-on:click="focus()">${ sheet.title }</a>
+
         </div>
         <div class="panel-body">
             <table class="table-agenda table-condensed">
