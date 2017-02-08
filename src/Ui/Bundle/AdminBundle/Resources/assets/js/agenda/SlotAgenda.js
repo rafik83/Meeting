@@ -14,23 +14,8 @@ module.exports = {
         }
     },
     methods: {
-        select: function () {
-            return this.transformRequestIntoMeeting();
-        },
-
-        transformRequestIntoMeeting: function () {
-            this.$http.post(api.getTransformRequestIntoMeetingEndpoint(this.request), {
-                slotId: this.agendaSlot.id
-            }).then(function () {
-                this.$emit('refresh-agenda', this.sheet);
-            }.bind(this)).catch(function (error) {
-                this.$emit('refresh-agenda', this.sheet);
-                if (error.response) {
-                    alert(error.response.data);
-                } else {
-                    alert(error.message);
-                }
-            }.bind(this));
+        scheduleMeeting: function () {
+            this.$emit('schedule-meeting', this.agendaSlot);
         },
 
         /**
@@ -38,7 +23,6 @@ module.exports = {
          */
         loadSlotsForMeeting: function () {
             if (null == this.agendaSlot.meetingId) {
-
                 return;
             }
 

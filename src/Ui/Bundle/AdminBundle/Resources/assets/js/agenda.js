@@ -7,7 +7,7 @@ var Vue                = require('vue'),
     options            = require('./vueComponents/options'),
     AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
-var agendaApiEndpoints = new AgendaApiEndpoints();
+var api = new AgendaApiEndpoints();
 
 /**
  * Pass axios to Vue
@@ -43,8 +43,7 @@ new Vue({
         showFilterModal: false,
         hasUsedSheetFilter: false,
         meetingSlotToUpdate: null,
-        availableSlotsForMeeting: [],
-        meetingRequestToTransformIntoMeeting: null
+        meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
     },
 
     /**
@@ -123,7 +122,7 @@ new Vue({
          * Load sheets data
          */
         loadSheets: function () {
-            this.$http.get(agendaApiEndpoints.getSheetsEndpoint())
+            this.$http.get(api.getSheetsEndpoint())
                 .then(function (response) {
                     this.sheets = response.data;
                 }.bind(this))
@@ -172,7 +171,7 @@ new Vue({
 
             sheet.isAgendaLoading = true;
 
-            this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
+            this.$http.get(api.getSheetAgendaEndpoint(sheet))
                 .then(function (response) {
                     var participants = response.data.participants;
                     var requests     = response.data.requests;
@@ -330,7 +329,8 @@ new Vue({
          * Find Sheet or returns null
          *
          * @param {int} sheetId
-         * @returns null|sheet
+         *
+         * @returns null|{Object} sheet
          */
         findSheetBySheetId: function (sheetId) {
             for (var sheetIndex = 0; sheetIndex < this.sheets.length; sheetIndex++) {
@@ -346,9 +346,10 @@ new Vue({
          * Find Sheet in opened openedSheets or returns null
          *
          * @param {int} sheetId
-         * @returns null|sheet
+         *
+         * @returns null|{Object} sheet
          */
-        findSheetAgendaBySheetId: function (sheetId) {
+        findOpenedSheetById: function (sheetId) {
             for (var agendaIndex = 0; agendaIndex < this.openedSheets.length; agendaIndex++) {
                 if (this.openedSheets[agendaIndex].id === sheetId) {
                     return this.openedSheets[agendaIndex];
@@ -424,7 +425,7 @@ new Vue({
             var meetings = this.findMeetings(sheet);
 
             for (var meetingIndex = 0; meetingIndex < meetings.length; meetingIndex++) {
-                var sheetMet = this.findSheetAgendaBySheetId(meetings[meetingIndex].sheetMetId);
+                var sheetMet = this.findOpenedSheetById(meetings[meetingIndex].sheetMetId);
 
                 if (null !== sheetMet) {
                     var meetingsSheetMet = this.findMeetings(sheetMet);
@@ -465,25 +466,28 @@ new Vue({
         },
 
         /**
-         * Transform request into meeting
+         * Transform Meeting Request into Meeting and refresh sheet's agenda
          *
-         * @param slot
+         * @param {Object} slot
          */
         transformRequestIntoMeeting: function (slot) {
-            var sheet = this.focusedSheet;
-            var requestId = this.meetingRequestToTransformIntoMeeting.requestId;
+            var sheet      = this.focusedSheet;
+            var requestId  = this.meetingRequestToTransformIntoMeeting.requestId;
             var sheetMetId = this.meetingRequestToTransformIntoMeeting.sheetMetId;
-            this.cancelSlotAction();
+            var sheetMet   = this.findOpenedSheetById(sheetMetId);
 
-            this.$http.post(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(requestId), {
+
+            this.$http.post(api.getTransformRequestIntoMeetingEndpoint(requestId), {
                 slotId: slot.id
             })
             .then(function () {
-                this.loadAgenda(sheet);
-                this.loadAgenda(this.findSheetBySheetId(sheetMetId));
+                this.loadAgenda(sheet, true); // reload focused sheet agenda
+                if (sheetMet !== null) {
+                    this.loadAgenda(sheetMet, true); // reload sheet met agenda
+                }
             }.bind(this))
             .catch(function (error) {
-                this.loadAgenda(sheet);
+                this.loadAgenda(sheet, true);
                 if (error.response) {
                     alert(error.response.data);
                 } else {
@@ -509,17 +513,6 @@ new Vue({
         },
 
         /**
-         * Is given slot is available for meeting
-         *
-         * @param slot
-         * @returns {boolean}
-         */
-        isAvailableForMeeting: function (slot) {
-            return slot.isAvailableForMeeting === true
-                && (null !== this.meetingSlotToUpdate || null !== this.meetingRequestToTransformIntoMeeting);
-        },
-
-        /**
          * Load slots available for given meetingRequest
          *
          * @param {Object} meetingRequest
@@ -534,7 +527,7 @@ new Vue({
 
             this.meetingRequestToTransformIntoMeeting = meetingRequest;
 
-            this.$http.get(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
+            this.$http.get(api.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
                 .then(function (response) {
                     // check if this actions is still live
                     if (null !== this.meetingRequestToTransformIntoMeeting) {

@@ -30,6 +30,13 @@ module.exports = {
 
         /**
          * @param {Object} slot
+         */
+        scheduleMeeting: function (slot) {
+            this.$emit('schedule-meeting', slot);
+        },
+
+        /**
+         * @param {Object} slot
          * @returns {boolean}
          */
         isAvailableForMeeting: function(slot) {

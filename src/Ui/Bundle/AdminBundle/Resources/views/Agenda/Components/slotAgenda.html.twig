@@ -1,7 +1,7 @@
 <script type="x/template" id="slot-agenda">
     <td>
         <div class="slot empty-slot" v-bind:class="{ 'available': isAvailableForMeeting }" v-if="agendaSlot.type === 'slot_available'">
-            <a href="#" v-on:click="select()" class="pull-right" v-show="isAvailableForMeeting">
+            <a href="#" v-on:click="scheduleMeeting()" class="pull-right" v-show="isAvailableForMeeting">
                 <span class="glyphicon glyphicon-ok"></span>
             </a>
             <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
