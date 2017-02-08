@@ -66,28 +66,30 @@ module.exports = {
         },
         numericalSort: function(sheets) {
 
-            var ascSort = [
-                "requestAsc",
-                "pendingRequestAsc",
-                "acceptedRequestAsc",
-                "scheduledMeetingAsc"
-            ];
+            var ascSort = {
+                "requestAsc": "countRequest",
+                "pendingRequestAsc": "countPendingPropositions",
+                "acceptedRequestAsc": "countValidatedRequest",
+                "scheduledMeetingAsc": "countPlacedMeetings"
+            };
 
-            var descSort = [
-                "requestDesc",
-                "pendingRequestDesc",
-                "acceptedRequestDesc",
-                "scheduledMeetingDesc"
-            ];
+            var descSort = {
+                "requestDesc": "countRequest",
+                "pendingRequestDesc": "countPendingPropositions",
+                "acceptedRequestDesc": "countValidatedRequest",
+                "scheduledMeetingDesc": "countPlacedMeetings"
+            };
 
             sheets.sort(function (sheet1, sheet2) {
 
-                if (ascSort.indexOf(this.sort.selected) !== -1) {
-                    return sheet1.countRequest - sheet2.countRequest;
+                var calculatorIndex;
+
+                if (calculatorIndex = ascSort[this.sort.selected]) {
+                    return sheet1[calculatorIndex] - sheet2[calculatorIndex];
                 }
 
-                if (descSort.indexOf(this.sort.selected) !== -1) {
-                    return sheet2.countRequest - sheet1.countRequest;
+                if (calculatorIndex = descSort[this.sort.selected]) {
+                    return sheet2[calculatorIndex] - sheet1[calculatorIndex];
                 }
 
             }.bind(this));
