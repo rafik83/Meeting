@@ -5,7 +5,7 @@ var vue = require('vue'),
 module.exports = {
     template: '#sheet-agenda',
     delimiters: options.delimiters,
-    props: ['sheet', 'focusedSheet'],
+    props: ['sheet', 'focused-sheet'],
     components: {
         'slot-agenda': slotAgenda
     },
