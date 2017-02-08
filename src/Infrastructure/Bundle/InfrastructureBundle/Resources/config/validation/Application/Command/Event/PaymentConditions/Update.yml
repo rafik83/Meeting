@@ -3,6 +3,9 @@ Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update:
         - Expression:
             expression: "!this.allowDeposit or (null !== this.minimumForDeposit and null !== this.deposit and null !== this.depositUntil)"
             message: "validators.allowDepositMissingData"
+        - Expression:
+            expression: "this.isPaymentModesNotEmpty()"
+            message: "validators.paymentModesChoiceEmpty"
     properties:
         minimumForDeposit:
             - Range:
