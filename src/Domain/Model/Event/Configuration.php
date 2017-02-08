@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Event;
 
+use Proximum\Vimeet\Domain\Payment\Mode;
+
 class Configuration
 {
     /**
@@ -106,6 +108,11 @@ class Configuration
     private $meetingRequestUpdateLocked;
 
     /**
+     * @var array
+     */
+    private $paymentModes;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
@@ -116,6 +123,7 @@ class Configuration
         $this->rightColor                 = $rightColor;
         $this->textColor                  = $textColor;
         $this->meetingRequestUpdateLocked = false;
+        $this->paymentModes               = Mode::getPaymentModes();
     }
 
     /**
@@ -165,17 +173,20 @@ class Configuration
     }
 
     /**
+     * @param array                   $paymentModes
      * @param bool                    $allowDeposit
      * @param \DateTimeInterface|null $depositUntil
      * @param float|null              $minimumForDeposit
      * @param int|null                $deposit
      */
     public function updatePaymentConditions(
+        array $paymentModes,
         $allowDeposit,
         \DateTimeInterface $depositUntil = null,
         $minimumForDeposit = null,
         $deposit = null
     ) {
+        $this->paymentModes      = $paymentModes;
         $this->allowDeposit      = $allowDeposit;
         $this->depositUntil      = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
@@ -357,5 +368,13 @@ class Configuration
     public function setMeetingRequestUpdateLocked($meetingRequestUpdateLocked)
     {
         $this->meetingRequestUpdateLocked = $meetingRequestUpdateLocked;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPaymentModes()
+    {
+        return $this->paymentModes;
     }
 }
