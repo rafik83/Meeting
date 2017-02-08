@@ -3128,6 +3128,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@domain.meeting.visio_guesser'
 
     query.planner.spot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\SpotViewQueryHandler

@@ -74,6 +74,7 @@ class SpotViewQueryHandler
 
             $spotViews[] = new SpotView(
                 $spot->getId(),
+                $spot->isVisio(),
                 $spot->getReference(),
                 $spot->getSeatCapacity(),
                 $spot->getMeetingCapacity(),

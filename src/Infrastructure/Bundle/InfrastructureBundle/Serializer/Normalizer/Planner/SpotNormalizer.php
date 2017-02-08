@@ -25,6 +25,7 @@ class SpotNormalizer implements NormalizerInterface
         $data = [
             '@id'                => $object->reference,
             'id'                 => $object->id,
+            'isVisio'            => $object->isVisio,
             'reference'          => $object->spotReference,
             'seatCapacity'       => $object->seatCapacity,
             'meetingCapacity'    => $object->meetingCapacity,
