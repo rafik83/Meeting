@@ -83,10 +83,14 @@ class PaymentController extends Controller
 
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
-            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
+            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
+                'event' => $eventDomain->getEvent(),
+            ]);
         } else {
             $paymentChoice = new Choice($sheet, $this->getUser());
-            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
+            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
+                'event' => $eventDomain->getEvent(),
+            ]);
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

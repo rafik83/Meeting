@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractPaymentChoiceType extends AbstractType
 {
@@ -22,9 +24,12 @@ abstract class AbstractPaymentChoiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Event $event */
+        $event = $options['event'];
+
         $builder
             ->add('mode', ChoiceType::class, [
-                'choices'      => Mode::getPaymentModes(),
+                'choices'      => $event->getConfiguration()->getPaymentModes(),
                 'choice_label' => function ($value) {
                     return sprintf('form.payment_choice.children.paymentMode.%s', $value);
                 },
@@ -41,5 +46,14 @@ abstract class AbstractPaymentChoiceType extends AbstractType
                 },
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('event');
+        $resolver->setAllowedTypes('event', Event::class);
     }
 }
