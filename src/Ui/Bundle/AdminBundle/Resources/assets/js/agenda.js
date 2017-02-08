@@ -488,11 +488,11 @@ new Vue({
             }
 
             if (null !== this.meetingToUpdate.sheet) {
-                this.loadAgenda(this.meetingToUpdate.sheet);
+                this.loadAgenda(this.meetingToUpdate.sheet, true);
             }
 
             if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
-                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId));
+                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId), true);
             }
         },
 
