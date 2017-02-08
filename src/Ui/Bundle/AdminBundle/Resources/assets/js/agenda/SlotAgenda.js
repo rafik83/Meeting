@@ -7,16 +7,11 @@ var api = new AgendaApiEndpoints();
 module.exports = {
     template: '#slot-agenda',
     delimiters: options.delimiters,
-    props: ['agendaSlot', 'sheet', 'participant', 'availableSlots'],
-    watch: {
-        availableSlots: function (newAvailableSlots) {
-            console.log(newAvailableSlots);
-        }
-    },
+    props: ['agendaSlot', 'sheet', 'participant'],
     data: function () {
         return {
             isMeetingToUpdateLoading: false,
-            isAvailableForMeeting: false
+            isAvailableForMeeting: false,
         }
     },
     methods: {
@@ -44,17 +39,19 @@ module.exports = {
          */
         loadSlotsForMeeting: function () {
             if (null == this.agendaSlot.meetingId) {
+
                 return;
             }
 
             this.$http.get(api.getMeetingUpdateSlotEndpoint(this.agendaSlot.meetingId))
                 .then(function (response) {
                     this.availableSlotsForMeeting = response.data.availableSlotsId;
-                    this.setSlotsStateAvailable(this.sheet, this.participant);
+                    this.setSlotsStateAvailable();
+                    this.$emit('refresh-agenda', this.sheet);
                 }.bind(this))
                 .catch(function (error) {
                     // this.cancelSlotAction();
-                    this.$emit('load-agenda', this.sheet);
+                    this.$emit('refresh-agenda', this.sheet);
 
                     if (error.response) {
                         alert(error.response.data);
@@ -151,5 +148,63 @@ module.exports = {
         showAgendaForSheetId: function (sheetMetId) {
             this.$emit('show-agenda-for-sheet-id', sheetMetId);
         },
+        
+        /**
+         * Select slot
+         *
+         * @param slot
+         */
+        selectSlot: function (slot) {
+
+            if (false !== this.hasMeetingSlotToUpdate()) {
+
+                return this.updateMeetingSlot(slot)
+            }
+
+            // if (null !== this.meetingRequestToTransformIntoMeeting) {
+            //
+            //     return this.transformRequestIntoMeeting(slot);
+            // }
+
+            //this.cancelSlotAction();
+        },
+
+        /**
+         * Update meeting slot
+         *
+         * @param slot new selected slot
+         */
+        updateMeetingSlot: function (slot) {
+            if (false === this.hasMeetingSlotToUpdate()) {
+
+                return;
+            }
+
+            //this.cancelSlotAction();
+
+            this.$http.post(api.getMeetingUpdateSlotEndpoint(this.agendaSlot.meetingId), {
+                slotId: slot.id
+            })
+                .then(function () {
+                    this.$emit('refresh-agenda', this.sheet);
+                }.bind(this))
+                .catch(function (error) {
+                    this.$emit('refresh-agenda', this.sheet);
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                }.bind(this));
+        },
+
+        /**
+         * Has meeting slot to update
+         *
+         * @returns {boolean}
+         */
+        hasMeetingSlotToUpdate: function () {
+            return null !== this.agendaSlot && null !== this.sheet
+        }
     }
 };

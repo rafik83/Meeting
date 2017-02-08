@@ -227,6 +227,12 @@ new Vue({
             sheet.isAgendaLoading = false;
         },
 
+        /**
+         * Loop on <SheetAgenda> component instances and return the one associated
+         * to this Sheet
+         *
+         * @returns {Object}|{undefined}
+         */
         findFocusedSheetComponent: function () {
             var childs = this.$refs.childSheetAgenda;
             if (childs !== undefined) {
@@ -247,6 +253,7 @@ new Vue({
          */
         showAndFocusAgenda: function (sheet) {
             this.showAgenda(sheet);
+            this.focusedSheet = sheet;
         },
 
         /**
@@ -389,7 +396,7 @@ new Vue({
 
             return meetings;
         },
-        
+
         /**
          * Find Participant agenda
          *
@@ -526,56 +533,6 @@ new Vue({
 
             this.$forceUpdate();
         },
-
-        /**
-         * Select slot
-         *
-         * @param slot
-         */
-        selectSlot: function (slot) {
-            if (false !== this.hasMeetingSlotToUpdate()) {
-                return this.updateMeetingSlot(slot)
-            }
-
-            if (null !== this.meetingRequestToTransformIntoMeeting) {
-                return this.transformRequestIntoMeeting(slot);
-            }
-
-            this.cancelSlotAction();
-        },
-
-        /**
-         * Update meeting slot
-         *
-         * @param slot new selected slot
-         */
-        updateMeetingSlot: function (slot) {
-            if (false === this.hasMeetingSlotToUpdate()) {
-                return;
-            }
-
-            var meetingId = this.meetingSlotToUpdate.slot.meetingId;
-            var sheetMetId = this.meetingSlotToUpdate.slot.sheetMetId;
-            var sheet = this.meetingSlotToUpdate.sheet;
-            this.cancelSlotAction();
-
-            this.$http.post(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(meetingId), {
-                slotId: slot.id
-            })
-            .then(function () {
-                this.loadAgenda(sheet);
-                this.loadAgenda(this.findSheetBySheetId(sheetMetId));
-            }.bind(this))
-            .catch(function (error) {
-                this.loadAgenda(sheet);
-                if (error.response) {
-                    alert(error.response.data);
-                } else {
-                    alert(error.message);
-                }
-            }.bind(this));
-        },
-
         /**
          * Transform request into meeting
          *
@@ -603,20 +560,7 @@ new Vue({
                 }
             }.bind(this));
         },
-
-        /**
-         * Has meeting slot to update
-         *
-         * @returns {boolean}
-         */
-        hasMeetingSlotToUpdate: function () {
-            return null !== this.meetingSlotToUpdate
-                && null !== this.meetingSlotToUpdate.sheet
-                && null !== this.meetingSlotToUpdate.slot
-                && null !== this.meetingSlotToUpdate.slot.meetingId
-                && null !== this.meetingSlotToUpdate.slot.sheetMetId;
-        },
-
+        
         /**
          * Cancel update meeting slot
          */
@@ -638,32 +582,7 @@ new Vue({
                 && (null !== this.meetingSlotToUpdate || null !== this.meetingRequestToTransformIntoMeeting);
         },
 
-        /**
-         * Load slots available for given meetingRequest
-         *
-         * @param {Object} meetingRequest
-         */
-        loadSlotsForRequest: function (meetingRequest) {
-            this.cancelSlotAction();
-            this.meetingRequestToTransformIntoMeeting = meetingRequest;
-
-            this.$http.get(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
-                .then(function (response) {
-                    // check if this actions is still live
-                    if (null !== this.meetingRequestToTransformIntoMeeting) {
-                        this.availableSlotsForMeeting = response.data.availableSlotsId;
-
-                        this.showAvailableSlotsForRequest();
-                    }
-                }.bind(this))
-                .catch(function (error) {
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-                }.bind(this));
-        },
+        
 
         /**
          * Show available slots for request

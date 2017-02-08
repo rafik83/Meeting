@@ -2,6 +2,7 @@
     <td>
         <div class="slot empty-slot" v-bind:class="{ 'available': isAvailableForMeeting }"
              v-if="agendaSlot.type === 'slot_available'">
+            ${ isAvailableForMeeting }
             <a href="#" v-on:click="select()" class="pull-right" v-show="isAvailableForMeeting">
                 <span class="glyphicon glyphicon-ok"></span>
             </a>
@@ -28,7 +29,7 @@
             </a>
 
             <a href="#" title="{{ 'admin.agenda.meeting.move'|trans }}" class="pull-right"
-               v-on:click="loadSlotsForMeeting(sheet, participant, agendaSlot)"
+               v-on:click="loadSlotsForMeeting()"
                v-show="!agendaSlot.blockedSlot">
                 <span class="glyphicon glyphicon-move"></span>
             </a>
