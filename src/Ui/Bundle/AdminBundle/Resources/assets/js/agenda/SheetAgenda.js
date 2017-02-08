@@ -1,6 +1,9 @@
 var vue = require('vue'),
     slotAgenda = require('./SlotAgenda'),
-    options = require('../vueComponents/options');
+    options = require('../vueComponents/options'),
+    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
+
+var api = new AgendaApiEndpoints();
 
 module.exports = {
     template: '#sheet-agenda',
@@ -75,14 +78,20 @@ module.exports = {
         showAvailableSlotsForRequest: function (meetingRequest, availableSlots) {
             this.availableSlotsForMeeting = availableSlots;
 
-            if (this.sheet === null) {
-                return;
-            }
-
             for (var index = 0; index < meetingRequest.participants.length; index++) {
                 var participant = this.findParticipant(meetingRequest.participants[index]);
                 this.setSlotsStateAvailable(participant);
             }
+        },
+
+        /**
+         *
+         * @param participant
+         * @param availableSlots
+         */
+        showAvailableSlotsForMeeting: function (participant, availableSlots) {
+            this.availableSlotsForMeeting = availableSlots;
+            this.setSlotsStateAvailable(participant);
         },
 
         /**
@@ -148,6 +157,32 @@ module.exports = {
 
         forceUpdate: function () {
             this.$forceUpdate();
+        },
+
+        /**
+         * Load available slots for given meeting (slot) of participant and sheet
+         *
+         * @param {Object} event
+         */
+        loadSlotsForMeeting: function (event) {
+            if (null == event.slot.meetingId) {
+                return;
+            }
+
+            this.$http.get(api.getMeetingUpdateSlotEndpoint(event.slot.meetingId))
+                .then(function (response) {
+                    this.showAvailableSlotsForMeeting(
+                        event.participant,
+                        response.data.availableSlotsId
+                    );
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                }.bind(this));
         }
     }
 };

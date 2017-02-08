@@ -22,26 +22,10 @@ module.exports = {
          * Load available slots for given meeting (slot) of participant and sheet
          */
         loadSlotsForMeeting: function () {
-            if (null == this.agendaSlot.meetingId) {
-                return;
-            }
-
-            this.$http.get(api.getMeetingUpdateSlotEndpoint(this.agendaSlot.meetingId))
-                .then(function (response) {
-                    this.availableSlotsForMeeting = response.data.availableSlotsId;
-                    this.setSlotsStateAvailable();
-                    this.$emit('refresh-agenda', this.sheet);
-                }.bind(this))
-                .catch(function (error) {
-                    // this.cancelSlotAction();
-                    this.$emit('refresh-agenda', this.sheet);
-
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-                }.bind(this));
+            this.$emit('show-available-meeting-slot', {
+                slot: this.agendaSlot,
+                participant: this.participant
+            });
         },
 
         /**
