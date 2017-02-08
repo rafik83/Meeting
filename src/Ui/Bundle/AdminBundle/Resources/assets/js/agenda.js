@@ -183,24 +183,11 @@ new Vue({
 
         showSort: function () {
             this.showSortModal = true;
-            var child = this.$refs.sortModal;
-            if (typeof child !== 'undefined') {
-                child.setFormSort();
-            }
         },
 
         refreshList: function (filteredSheets) {
             this.hasUsedSheetFilter = true;
             this.filteredSheets = filteredSheets;
-        },
-
-        resetSheetSort: function () {
-            var child = this.$refs.sheetFilterModal;
-            if (typeof child !== 'undefined') {
-                child.reset();
-                this.hasUsedSheetFilter = false;
-                this.filteredSheets = [];
-            }
         },
 
         resetSheetFilter: function () {

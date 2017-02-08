@@ -32,26 +32,11 @@ module.exports = {
         },
         reset: function () {
             this.sort = {
-                selected: false,
-                alphabetical: false,
-                request: false,
-                pendingRequest: false,
-                acceptedRequest: false,
-                scheduledMeeting: false
+                selected: false
             };
-            this.formSort =  {
-                alphabetical: false,
-                request: false,
-                pendingRequest: false,
-                acceptedRequest: false,
-                scheduledMeeting: false
-            }
         },
         setUsedSort: function() {
             Object.assign(this.sort, this.formSort);
-        },
-        setFormSort: function () {
-            Object.assign(this.formSort, this.sort);
         },
         sortSheets: function (sheets) {
             var alphabeticalSort = [
