@@ -160,8 +160,16 @@ new Vue({
          * Load sheet agenda data
          *
          * @param {Object} sheet
+         * @param {boolean} force = false
          */
-        loadAgenda: function (sheet) {
+        loadAgenda: function (sheet, force) {
+            force = force || false;
+            
+            // prevent execute api request twice if sheet agenda already loaded
+            if (force === false && this.isOpenedSheet(sheet) !== -1) {
+                return;
+            }
+
             sheet.isAgendaLoading = true;
 
             this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
@@ -181,6 +189,15 @@ new Vue({
 
                     sheet.isAgendaLoading = false;
                 });
+        },
+
+        /**
+         * Event handler for refresh-agenda
+         *
+         * @param {Object} sheet
+         */
+        refreshAgenda: function (sheet) {
+            this.loadAgenda(sheet, true);
         },
 
         /**
