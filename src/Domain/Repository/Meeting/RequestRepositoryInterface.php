@@ -204,4 +204,16 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state);
+
+    /**
+     * @param Request $request
+     */
+    public function update(Request $request);
+
+    /**
+     * @param $sheet
+     *
+     * @return Request[]
+     */
+    public function findAccepted(Sheet $sheet);
 }

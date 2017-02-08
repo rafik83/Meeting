@@ -227,7 +227,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -239,7 +239,13 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
+            ->from(Request::class, 'request')
+        ;
+
+        if (!empty($filters) && isset($filters['disabled'])) {
+            $queryBuilder->where('request.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled']);
+        }
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -277,6 +283,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->where('request.disabled = FALSE')
             ->setParameter('event', $event)
             ->orderBy('request.createdAt', 'DESC');
 
@@ -319,6 +326,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('fromSheet.participants', 'fromParticipants')
             ->join('toSheet.participants', 'toParticipants')
             ->where('request.state = :approved')
+            ->andWhere('request.disabled = false')
             ->setParameter('event', $event)
             ->setParameter('approved', Request::STATE_APPROVED);
 
@@ -403,7 +411,13 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
+            ->from(Request::class, 'request')
+        ;
+
+        if (!empty($filters) && isset($filters['disabled'])) {
+            $queryBuilder->where('request.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled']);
+        }
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -493,5 +507,34 @@ class RequestRepository implements RequestRepositoryInterface
     private function requestsWithoutMeeting(QueryBuilder &$queryBuilder)
     {
         $queryBuilder->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Request $request)
+    {
+        $this->entityManager->flush($request);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function findAccepted(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.to = :sheet OR request.from = :sheet')
+            ->andWhere('request.state = :state')
+            ->andWhere('request.disabled = false')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', Request::STATE_APPROVED);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
