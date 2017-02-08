@@ -9,28 +9,47 @@ module.exports = {
     components: {
         'slot-agenda': slotAgenda
     },
+    data: function () {
+        return {
+            availableSlotsForMeeting: [],
+            currentAvailableSlotsForMeeting: []
+        }
+    },
     methods: {
         init: function () {
             this.$emit('load-sheets');
         },
+
         focus: function () {
             this.$emit('focus-sheet', this.sheet);
         },
+
         close: function () {
             this.$emit('close-sheet-agenda', this.sheet);
         },
+
+        /**
+         * @param {Object} slot
+         * @returns {boolean}
+         */
+        isAvailableForMeeting: function(slot) {
+            return slot.isAvailableForMeeting !== undefined ? slot.isAvailableForMeeting : false;
+        },
+
         /**
          * @param {Object} meetingToUpdate
          */
         showMeetingUpdateModal: function (meetingToUpdate) {
             this.$emit('show-meeting-update-modal', meetingToUpdate);
         },
+
         /**
          * @param {Object} sheet
          */
         refreshAgenda: function (sheet) {
             this.$emit('refresh-agenda', sheet);
         },
+
         /**
          * Emit event to show agenda of given sheet id
          *
@@ -39,12 +58,87 @@ module.exports = {
         showAgendaForSheetId: function (sheetMetId) {
             this.$emit('show-agenda-for-sheet-id', sheetMetId);
         },
+
         /**
+         * @param {Object} meetingRequest
          * @param {array} availableSlots
+         *
+         * @see loadSlotsForRequest
          */
-        showAvailableSlotsForMeeting: function (availableSlots) {
-            console.log(availableSlots);
+        showAvailableSlotsForRequest: function (meetingRequest, availableSlots) {
+            this.availableSlotsForMeeting = availableSlots;
+
+            if (this.sheet === null) {
+                return;
+            }
+
+            for (var index = 0; index < meetingRequest.participants.length; index++) {
+                var participant = this.findParticipant(meetingRequest.participants[index]);
+                this.setSlotsStateAvailable(participant);
+            }
         },
+
+        /**
+         * Change slots state of given participant and given sheet
+         *
+         * @param {Object} participant
+         */
+        setSlotsStateAvailable: function (participant)
+        {
+            if (participant === null || null === participant.days) {
+                return;
+            }
+
+            for (var dayIndex = 0; dayIndex < participant.days.length; dayIndex++) {
+                for (var slotIndex = 0; slotIndex < participant.days[dayIndex].slots.length; slotIndex++) {
+                    var currentSlot = participant.days[dayIndex].slots[slotIndex];
+
+                    for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
+                        if (this.availableSlotsForMeeting[availableSlotIndex] === currentSlot.id) {
+                            currentSlot.isAvailableForMeeting = true;
+                            this.currentAvailableSlotsForMeeting.push(currentSlot);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            this.$forceUpdate();
+        },
+
+        /**
+         * Clear available slots
+         */
+        clearAvailableSlots: function () {
+            this.currentAvailableSlotsForMeeting.forEach(function(slot) {
+                slot.isAvailableForMeeting = false;
+            });
+
+            this.currentAvailableSlotsForMeeting = [];
+            this.$forceUpdate();
+        },
+
+        /**
+         * Find Participant agenda
+         *
+         * @param {Object} participant
+         *
+         * @returns null|{Object} participant
+         */
+        findParticipant: function (participant) {
+            if (undefined === this.sheet.participants) {
+                return null;
+            }
+
+            for (var i = 0; i < this.sheet.participants.length; i++) {
+                if (this.sheet.participants[i].id === participant.id) {
+                    return this.sheet.participants[i];
+                }
+            }
+
+            return null;
+        },
+
         forceUpdate: function () {
             this.$forceUpdate();
         }

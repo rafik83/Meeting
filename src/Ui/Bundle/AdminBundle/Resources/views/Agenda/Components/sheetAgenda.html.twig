@@ -16,8 +16,10 @@
                                     <table class="table-agenda-day table table-bordered table-condensed">
                                         <tr v-for="slot in day.slots">
                                             <slot-agenda
+                                                    ref="childSlotAgenda"
                                                     v-bind:agendaSlot="slot"
                                                     v-bind:sheet="sheet"
+                                                    v-bind:isAvailableForMeeting="isAvailableForMeeting(slot)"
                                                     v-bind:participant="participant"
                                                     v-on:show-meeting-update-modal="showMeetingUpdateModal"
                                                     v-on:refresh-agenda="refreshAgenda"

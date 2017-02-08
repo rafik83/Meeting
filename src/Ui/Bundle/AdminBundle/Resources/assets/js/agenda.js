@@ -164,9 +164,9 @@ new Vue({
          */
         loadAgenda: function (sheet, force) {
             force = force || false;
-            
+
             // prevent execute api request twice if sheet agenda already loaded
-            if (force === false && this.isOpenedSheet(sheet) !== -1) {
+            if (force === false && (this.isOpenedSheet(sheet) !== -1 || sheet.isAgendaLoading === true)) {
                 return;
             }
 
@@ -240,7 +240,6 @@ new Vue({
             }
 
             this.highlightMeetingsInCommon(sheet, true);
-
             sheet.isAgendaLoading = false;
         },
 
@@ -269,6 +268,7 @@ new Vue({
          * @param {Object} sheet
          */
         showAndFocusAgenda: function (sheet) {
+            this.cancelSlotAction();
             this.showAgenda(sheet);
             this.focusedSheet = sheet;
         },
@@ -286,7 +286,7 @@ new Vue({
 
             // this.cancelSlotAction();
             this.highlightMeetingsInCommon(sheet, true);
-            this.loadAgenda(sheet);
+            this.loadAgenda(sheet, false);
         },
 
         /**
@@ -415,38 +415,6 @@ new Vue({
         },
 
         /**
-         * Find Participant agenda
-         *
-         * @param sheet
-         * @param participant
-         *
-         * @returns null|participant
-         */
-        findParticipantAgenda: function (sheet, participant) {
-            var sheetId = this.isOpenedSheet(sheet);
-
-            if (-1 === sheetId) {
-                return null;
-            }
-
-            if (undefined === this.openedSheets[sheetId]) {
-                return null;
-            }
-
-            if (undefined === this.openedSheets[sheetId].participants) {
-                return null;
-            }
-
-            var index = this.openedSheets[sheetId].participants.indexOf(participant);
-
-            if (-1 === index) {
-                return null;
-            }
-
-            return this.openedSheets[sheetId].participants[index];
-        },
-
-        /**
          * Highlight meetings in common in opened openedSheets with the given sheet
          *
          * @param sheet
@@ -488,68 +456,14 @@ new Vue({
             }
 
             if (null !== this.meetingToUpdate.sheet) {
-                this.loadAgenda(this.meetingToUpdate.sheet);
+                this.loadAgenda(this.meetingToUpdate.sheet, true);
             }
 
             if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
-                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId));
+                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId), true);
             }
         },
 
-        /**
-         * Clear available slots
-         */
-        clearAvailableSlots: function () {
-            for (var sheetIndex = 0; sheetIndex < this.openedSheets.length; sheetIndex++) {
-                var participants = this.openedSheets[sheetIndex].participants;
-
-                if (undefined === participants) {
-                    continue;
-                }
-
-                for (var participantIndex = 0; participantIndex < participants.length; participantIndex++) {
-                    for (var dayIndex = 0; dayIndex < participants[participantIndex].days.length; dayIndex++) {
-                        for (var slotIndex = 0; slotIndex < participants[participantIndex].days[dayIndex].slots.length; slotIndex++) {
-                            var slot                   = participants[participantIndex].days[dayIndex].slots[slotIndex];
-                            slot.isAvailableForMeeting = false;
-                        }
-                    }
-                }
-            }
-
-            this.availableSlotsForMeeting = [];
-            this.$forceUpdate();
-        },
-
-        /**
-         * Change slots state of given participant and given sheet
-         *
-         * @param sheet
-         * @param participant
-         */
-        setSlotsStateAvailable: function (sheet, participant)
-        {
-            var participantAgenda = this.findParticipantAgenda(sheet, participant);
-
-            if (null === participantAgenda || null === participantAgenda.days) {
-                return;
-            }
-
-            for (var dayIndex = 0; dayIndex < participantAgenda.days.length; dayIndex++) {
-                for (var slotIndex = 0; slotIndex < participantAgenda.days[dayIndex].slots.length; slotIndex++) {
-                    var currentSlot = participantAgenda.days[dayIndex].slots[slotIndex];
-
-                    for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
-                        if (this.availableSlotsForMeeting[availableSlotIndex] === currentSlot.id) {
-                            currentSlot.isAvailableForMeeting = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            this.$forceUpdate();
-        },
         /**
          * Transform request into meeting
          *
@@ -582,7 +496,13 @@ new Vue({
          * Cancel update meeting slot
          */
         cancelSlotAction: function () {
-            this.clearAvailableSlots();
+            var focusedSheetComponent = this.findFocusedSheetComponent();
+            if (focusedSheetComponent === undefined) {
+                return false;
+            }
+
+            focusedSheetComponent.clearAvailableSlots();
+
             this.isMeetingToUpdateLoading = false;
             this.meetingSlotToUpdate = null;
             this.meetingRequestToTransformIntoMeeting = null;
@@ -599,57 +519,38 @@ new Vue({
                 && (null !== this.meetingSlotToUpdate || null !== this.meetingRequestToTransformIntoMeeting);
         },
 
-        
-
         /**
-         * Show available slots for request
-         */
-        showAvailableSlotsForRequest: function () {
-            var sheet = this.focusedSheet;
-
-            if (null === this.meetingRequestToTransformIntoMeeting || null === sheet) {
-                return;
-            }
-
-            var requestParticipants = this.meetingRequestToTransformIntoMeeting.participants;
-
-            for (var index = 0; index < requestParticipants.length; index++) {
-                var participant = this.findParticipantById(sheet, requestParticipants[index].id);
-                this.setSlotsStateAvailable(sheet, participant);
-            }
-        },
-
-        /**
-         * Find participant agenda by participantId
+         * Load slots available for given meetingRequest
          *
-         * @param sheet
-         * @param participantId
-         * @returns null|participant
+         * @param {Object} meetingRequest
          */
-        findParticipantById: function (sheet, participantId) {
-            var sheetId = this.isOpenedSheet(sheet);
+        loadSlotsForRequest: function (meetingRequest) {
+            this.cancelSlotAction();
 
-            if (-1 === sheetId) {
-                return null;
+            var focusedComponent = this.findFocusedSheetComponent();
+            if (focusedComponent === undefined) {
+                return false;
             }
 
-            if (undefined === this.openedSheets[sheetId]) {
-                return null;
-            }
+            this.meetingRequestToTransformIntoMeeting = meetingRequest;
 
-            if (undefined === this.openedSheets[sheetId].participants) {
-                return null;
-            }
-
-            var participants = this.openedSheets[sheetId].participants;
-
-            for (var index = 0; index < participants.length; index++) {
-                if (participants[index].id === participantId) {
-                    return participants[index];
-                }
-            }
-
-            return null;
+            this.$http.get(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
+                .then(function (response) {
+                    // check if this actions is still live
+                    if (null !== this.meetingRequestToTransformIntoMeeting) {
+                        focusedComponent.showAvailableSlotsForRequest(
+                            meetingRequest,
+                            response.data.availableSlotsId
+                        );
+                    }
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                }.bind(this));
         }
     }
 });

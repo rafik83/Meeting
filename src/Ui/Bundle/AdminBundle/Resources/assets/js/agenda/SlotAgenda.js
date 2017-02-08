@@ -7,11 +7,10 @@ var api = new AgendaApiEndpoints();
 module.exports = {
     template: '#slot-agenda',
     delimiters: options.delimiters,
-    props: ['agendaSlot', 'sheet', 'participant'],
+    props: ['agendaSlot', 'sheet', 'participant', 'isAvailableForMeeting'],
     data: function () {
         return {
             isMeetingToUpdateLoading: false,
-            isAvailableForMeeting: false,
         }
     },
     methods: {
@@ -23,9 +22,9 @@ module.exports = {
             this.$http.post(api.getTransformRequestIntoMeetingEndpoint(this.request), {
                 slotId: this.agendaSlot.id
             }).then(function () {
-                this.$emit('load-agenda', this.sheet);
+                this.$emit('refresh-agenda', this.sheet);
             }.bind(this)).catch(function (error) {
-                this.$emit('load-agenda', this.sheet);
+                this.$emit('refresh-agenda', this.sheet);
                 if (error.response) {
                     alert(error.response.data);
                 } else {
@@ -94,30 +93,6 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
-        },
-
-        /**
-         * Change slots state of given participant and given sheet
-         */
-        setSlotsStateAvailable: function () {
-            if (null === this.participant.days) {
-                return;
-            }
-
-            for (var dayIndex = 0; dayIndex < this.participant.days.length; dayIndex++) {
-                for (var slotIndex = 0; slotIndex < this.participant.days[dayIndex].slots.length; slotIndex++) {
-                    var currentSlot = this.participant.days[dayIndex].slots[slotIndex];
-
-                    for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
-                        if (this.availableSlotsForMeeting[availableSlotIndex] === currentSlot.id) {
-                            this.isAvailableForMeeting = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            this.$forceUpdate();
         },
 
         /**
