@@ -252,11 +252,11 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(meeting.spot)')
+            ->select('COUNT(meeting)')
             ->from(Meeting::class, 'meeting')
             ->where('meeting.spot = :spot_id')
             ->setParameter('spot_id', $spot->getId())
-            ->groupBy('meeting.spot')
+            ->setMaxResults(1)
         ;
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult() === 0 ? false : true;
