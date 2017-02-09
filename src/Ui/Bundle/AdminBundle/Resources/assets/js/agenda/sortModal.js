@@ -94,11 +94,11 @@ module.exports = {
             if (valueToSort !== null) {
                 var way = sortConstant.asc;
 
-                if (sortAsc.indexOf(this.sort.selected) !== -1) {
+                if (ascConstant.indexOf(this.sort.selected) === -1) {
                     way = sortConstant.desc;
                 }
 
-                sheets.sort(function (sheet1, sheet2, valueToSort, way) {
+                sheets.sort(function (sheet1, sheet2) {
                     if (way === sortConstant.asc) {
                         return sheet1[valueToSort] - sheet2[valueToSort];
                     } else if (way === sortConstant.desc) {
