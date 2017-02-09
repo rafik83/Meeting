@@ -297,6 +297,22 @@ admin_agenda_sheet_meeting_remove:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
 
+admin_agenda_mass_assignment_detail:
+    path: /event/{event}/agenda/mass/{mass}/detail
+    requirements:
+        event: \d+
+        mass: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:massAssignmentDetail }
+
+admin_agenda_mass_assignment_update:
+    path: /event/{event}/agenda/mass/{mass}/update
+    requirements:
+        event: \d+
+        mass: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateMassAssignment }
+
 admin_agenda_export_participant_index:
     path: /event/{event}/agenda/export-participants
     requirements:
