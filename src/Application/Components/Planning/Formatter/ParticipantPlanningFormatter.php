@@ -180,7 +180,6 @@ class ParticipantPlanningFormatter
     {
         $formattedTimes = [];
         $timeFormatter  = new \IntlDateFormatter($participantLocale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
-        //$formatter->setPattern('HH:mm');
 
         foreach ($timeEntities as $timeEntity) {
             // Display the time of begin and end of the time entity
