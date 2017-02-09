@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
-use IntlDateFormatter;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
@@ -18,7 +17,6 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
