@@ -93,6 +93,19 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getRequest(Request $request)
+    {
+        $request = (new RequestQueryBuilder($this->entityManager))
+            ->where('request = :request')
+            ->setParameter('request', $request)
+        ;
+
+        return $request->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
