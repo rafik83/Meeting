@@ -17,6 +17,14 @@
 
         <div class="slot meeting" v-bind:class="{ 'meeting-common': highlight, 'meeting-to-be-moved': isAvailableForMeeting }"
              v-if="agendaSlot.type === 'meeting_unavailability'">
+
+            <a href="#"
+               title="{{ 'admin.agenda.meeting.mass_assignment.update'|trans }}"
+               class="pull-right"
+               v-on:click="showMassAssignment">
+                <span class="glyphicon glyphicon-grain"></span>
+            </a>
+
             <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right" v-on:click="loadMeetingUpdateSpot()">
                 <span class="glyphicon glyphicon-cog"></span>
             </a>

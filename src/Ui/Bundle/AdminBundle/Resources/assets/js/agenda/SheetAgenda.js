@@ -57,6 +57,10 @@ module.exports = {
             this.$emit('show-meeting-update-modal', meetingToUpdate);
         },
 
+        showMassAssignment: function () {
+            this.$emit('show-mass-assignment');
+        },
+
         /**
          * @param {Object} sheet
          */
