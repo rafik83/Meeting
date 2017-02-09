@@ -2420,6 +2420,20 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+    query.agenda.admin.request_sheets_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSheetsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.admin.request_sheet_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSheetsViewQuery }
+    query.agenda.admin.request_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSheetViewQuery }
 
     ##
     # Navigation builder
