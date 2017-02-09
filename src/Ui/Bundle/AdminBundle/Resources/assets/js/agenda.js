@@ -361,17 +361,6 @@ new Vue({
         },
 
         /**
-         * Find index of a sheet
-         *
-         * @param {Object} sheet
-         *
-         * @returns {Number}
-         */
-        findSheet: function (sheet) {
-            return this.sheets.indexOf(sheet);
-        },
-
-        /**
          * Check if sheet is already open
          *
          * @param {Object} sheet
@@ -433,7 +422,7 @@ new Vue({
         /**
          * Find meetings for the given sheet
          *
-         * @param sheet
+         * @param {Object} sheet
          * @returns {Array} of meeting slots
          */
         findMeetings: function (sheet) {
