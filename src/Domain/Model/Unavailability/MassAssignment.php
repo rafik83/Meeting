@@ -136,4 +136,16 @@ class MassAssignment
     {
         $this->enabled = false;
     }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param bool               $enabled
+     */
+    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, $enabled)
+    {
+        $this->begin   = $begin;
+        $this->end     = $end;
+        $this->enabled = $enabled;
+    }
 }

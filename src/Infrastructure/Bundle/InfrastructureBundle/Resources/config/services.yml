@@ -1379,6 +1379,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
 
+    command.unavailability.mass_assignment.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler
+        arguments:
+            - '@repository.unavailability.mass_assignment_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update }
+
     command.messaging.message.create_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler
         arguments:
@@ -2507,6 +2514,14 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
+
+    ##
+    # Mass Assignment query handler
+    ##
+    query.mass_assignement.mass_assignement_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MassAssignement\MassAssignementViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MassAssignement\MassAssignementViewQuery }
 
     ##
     # Notification query handler

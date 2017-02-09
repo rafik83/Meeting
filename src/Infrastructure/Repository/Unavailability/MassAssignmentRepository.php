@@ -78,4 +78,12 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(MassAssignment $massAssignment)
+    {
+        $this->entityManager->flush($massAssignment);
+    }
 }

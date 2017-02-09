@@ -1,0 +1,78 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Unavailability\Mass;
+
+class MassAssignementView
+{
+    /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var string
+     */
+    public $title;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $massBegin;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $massEnd;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $begin;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $end;
+
+    /**
+     * @var bool
+     */
+    public $enabled;
+
+    /**
+     * MassAssignementView constructor.
+     *
+     * @param int                $id
+     * @param                    $title
+     * @param \DateTimeInterface $massBegin
+     * @param \DateTimeInterface $massEnd
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param bool               $enabled
+     */
+    public function __construct(
+        $id,
+        $title,
+        \DateTimeInterface $massBegin,
+        \DateTimeInterface $massEnd,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        $enabled
+    ) {
+        $this->id        = $id;
+        $this->begin     = $begin;
+        $this->end       = $end;
+        $this->enabled   = $enabled;
+        $this->massBegin = $massBegin;
+        $this->massEnd   = $massEnd;
+        $this->title     = $title;
+    }
+}
