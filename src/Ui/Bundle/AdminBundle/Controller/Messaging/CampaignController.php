@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
+use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
-use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
-use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
@@ -198,6 +197,7 @@ class CampaignController extends Controller
     /**
      * Sends a given messaging Campaign.
      *
+     * @param Request  $request
      * @param Event    $event
      * @param Campaign $campaign
      *
@@ -208,41 +208,56 @@ class CampaignController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
-        $campaignListUrl = $this->generateUrl('admin_messaging_campaign_list', [
-            'event' => $event->getId(),
-        ]);
+        $url = $this->generateUrl('admin_messaging_campaign_list', ['event' => $event->getId(),]);
 
-        $errorHandler = function ($reason = null, \Exception $exception = null) use ($campaignListUrl, $campaign) {
-            $translator = $this->get('vimeet_infrastructure.adapter.translator_adapter');
-            $message    = $translator->trans(
-                'flash.messaging.campaign.send.failure',
-                ['%reason%' => $translator->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
-                'flashes'
-            );
+        // Validate CSRF token
+        if (!$this->isTokenValid($request)) {
+            $this->addFailureMessage($campaign, 'flash.messaging.campaign.send.failure.invalid_csrf');
 
-            if (null !== $exception) {
-                $this->get('logger')->error($message, ['exception' => $exception]);
-            }
-
-            $this->addFlash('error', $message);
-
-            return $this->redirect($campaignListUrl);
-        };
-
-        $token = $request->request->get('_token');
-
-        if (!$token || !$this->get('security.csrf.token_manager')->isTokenValid($token ? new CsrfToken('send_campaign', $token) : null)) {
-            return $errorHandler('flash.messaging.campaign.send.failure.invalid_csrf');
+            return $this->redirect($url);
         }
 
-        try {
-            $this->get('tactician.commandbus')->handle(new Send($campaign));
-        } catch (CampaignSendingFailedException $e) {
-            return $errorHandler($e->getMessage(), $e);
-        }
+        // Add job
+        $job = new Job('vimeet:campaign:send', [$campaign->getId()]);
+        $job->addRelatedEntity($campaign);
+        $this->getDoctrine()->getManager()->persist($job);
+        $this->getDoctrine()->getManager()->flush($job);
 
+        // Add flash
         $this->addFlash('success', 'flash.messaging.campaign.send.success');
 
-        return $this->redirect($campaignListUrl);
+        return $this->redirect($url);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isTokenValid(Request $request)
+    {
+        if (!$request->request->has('_token')) {
+            return false;
+        }
+
+        $token = new CsrfToken('send_campaign', $request->request->get('_token'));
+
+        return $this->get('security.csrf.token_manager')->isTokenValid($token);
+    }
+
+    /**
+     * @param Campaign $campaign
+     * @param          $reason
+     */
+    private function addFailureMessage(Campaign $campaign, $reason)
+    {
+        $translator = $this->get('vimeet_infrastructure.adapter.translator_adapter');
+        $message    = $translator->trans(
+            'flash.messaging.campaign.send.failure',
+            ['%reason%' => $translator->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
+            'flashes'
+        );
+
+        $this->addFlash('error', $message);
     }
 }

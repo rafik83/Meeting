@@ -2684,6 +2684,14 @@ services:
         tags:
             - { name: console.command }
 
+    command.send_campaign_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand
+        arguments:
+            - '@repository.messaging.campaign_repository'
+            - '@command.messaging.campaign.send_handler'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
