@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class SheetPlanningFormatter
 {
@@ -29,13 +30,16 @@ class SheetPlanningFormatter
     /**
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
      * @param UnallocatedFormatter         $unallocatedFormatter
+     * @param ParticipantInfoGuesser       $participantInfoGuesser
      */
     public function __construct(
         ParticipantPlanningFormatter $participantPlanningFormatter,
-        UnallocatedFormatter $unallocatedFormatter
+        UnallocatedFormatter $unallocatedFormatter,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->unallocatedFormatter         = $unallocatedFormatter;
+        $this->participantInfoGuesser       = $participantInfoGuesser;
     }
 
     /**
@@ -52,12 +56,7 @@ class SheetPlanningFormatter
         $planning = '';
 
         if ($firstParticipantToDisplay !== null) {
-            $planning .= MarkdownFormatter::newLine(
-                $this->participantPlanningFormatter->formatPlanningFromParticipant(
-                    $firstParticipantToDisplay,
-                    $locale
-                )
-            );
+            $planning .= $this->formatParticipantPlanning($firstParticipantToDisplay, $locale);
         }
 
         foreach ($sheet->getParticipants()->toArray() as $participant) {
@@ -65,10 +64,32 @@ class SheetPlanningFormatter
                 continue;
             }
 
-            $planning .= MarkdownFormatter::newLine(
-                $this->participantPlanningFormatter->formatPlanningFromParticipant($participant, $locale)
-            );
+            $planning .= $this->formatParticipantPlanning($participant, $locale);
         }
+
+        return $planning;
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return string
+     */
+    private function formatParticipantPlanning(Participant $participant, $locale)
+    {
+        // display participant name
+        $planning = MarkdownFormatter::newLine(
+            MarkdownFormatter::heading(
+                $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale),
+                2
+            )
+        );
+
+        // display participant planning
+        $planning .= MarkdownFormatter::newLine(
+            $this->participantPlanningFormatter->formatPlanningFromParticipant($participant, $locale)
+        );
 
         return $planning;
     }
