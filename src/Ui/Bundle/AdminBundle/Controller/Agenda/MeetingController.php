@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeeting
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
+use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
@@ -337,6 +338,8 @@ class MeetingController extends Controller
             );
         } catch (MassAssignmentOnMeetingException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot');
+        } catch (MassAssignmentOutOfMassSlotException $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.outOfMassSlot');
         }
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);

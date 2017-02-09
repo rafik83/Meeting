@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\MassAssignment;
 
+use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
+use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 
@@ -43,7 +45,7 @@ class UpdateHandler
     /**
      * @param Update $update
      *
-     * @throws MassAssignmentOnMeetingException
+     * @throws MassAssignmentException
      */
     public function handle(Update $update)
     {
@@ -55,6 +57,12 @@ class UpdateHandler
 
         if (count($hasMeetingOrHappening) > 0) {
             throw new MassAssignmentOnMeetingException();
+        }
+
+        if ($update->begin < $update->massAssignment->getMass()->getBegin()
+            || $update->end > $update->massAssignment->getMass()->getEnd()
+        ) {
+            throw new MassAssignmentOutOfMassSlotException();
         }
 
         $update->massAssignment->update(

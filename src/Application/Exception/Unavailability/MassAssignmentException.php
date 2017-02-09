@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Unavailability;
 
-class MassAssignmentOnMeetingException extends MassAssignmentException
+class MassAssignmentException extends \Exception
 {
 }
