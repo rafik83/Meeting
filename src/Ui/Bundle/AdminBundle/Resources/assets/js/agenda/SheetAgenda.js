@@ -14,7 +14,8 @@ module.exports = {
     data: function () {
         return {
             availableSlotsForMeeting: [],
-            currentAvailableSlotsForMeeting: []
+            currentAvailableSlotsForMeeting: [],
+            slotToBeMoved: null
         }
     },
     methods: {
@@ -26,6 +27,9 @@ module.exports = {
             this.$emit('focus-sheet', this.sheet);
         },
 
+        /**
+         * Event handler emit close-sheet-agenda event to close SheetAgenda
+         */
         close: function () {
             this.$emit('close-sheet-agenda', this.sheet);
         },
@@ -39,9 +43,10 @@ module.exports = {
 
         /**
          * @param {Object} slot
+         *
          * @returns {boolean}
          */
-        isAvailableForMeeting: function(slot) {
+        isAvailableForMeeting: function (slot) {
             return slot.isAvailableForMeeting !== undefined ? slot.isAvailableForMeeting : false;
         },
 
@@ -62,8 +67,13 @@ module.exports = {
         /**
          * @param {Object} event
          */
-        handleRemoveMeeting: function(event) {
+        handleRemoveMeeting: function (event) {
             this.$emit('remove-meeting', event);
+        },
+
+        handleMeetingMoved: function () {
+            this.slotToBeMoved = null;
+            this.refreshAgenda(this.sheet);
         },
 
         /**
@@ -105,8 +115,7 @@ module.exports = {
          *
          * @param {Object} participant
          */
-        setSlotsStateAvailable: function (participant)
-        {
+        setSlotsStateAvailable: function (participant) {
             if (participant === null || null === participant.days) {
                 return;
             }
@@ -132,7 +141,7 @@ module.exports = {
          * Clear available slots
          */
         clearAvailableSlots: function () {
-            this.currentAvailableSlotsForMeeting.forEach(function(slot) {
+            this.currentAvailableSlotsForMeeting.forEach(function (slot) {
                 slot.isAvailableForMeeting = false;
             });
 
@@ -177,6 +186,8 @@ module.exports = {
 
             this.$http.get(api.getMeetingUpdateSlotEndpoint(event.slot.meetingId))
                 .then(function (response) {
+                    this.slotToBeMoved = event.slot;
+
                     this.showAvailableSlotsForMeeting(
                         event.participant,
                         response.data.availableSlotsId

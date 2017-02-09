@@ -33,7 +33,7 @@
             </a>
 
             <a href="#" title="{{ 'admin.agenda.meeting.selectSlot'|trans }}" class="pull-right"
-               v-on:click="selectSlot(agendaSlot)" v-show="isAvailableForMeeting">
+               v-on:click="updateMeetingSlot()" v-show="isAvailableForMeeting">
                 <span class="glyphicon glyphicon-ok"></span>
             </a>
 

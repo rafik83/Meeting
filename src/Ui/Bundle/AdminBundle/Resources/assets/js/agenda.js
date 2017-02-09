@@ -245,7 +245,7 @@ new Vue({
             var sheetMet = this.findSheetBySheetId(event.sheetMetId);
             this.loadAgenda(event.sheet, true);
             if(sheetMet !== null) {
-                this.loadAgenda(sheetMet, true);
+                this.loadAgenda(sheetMet, false);
             }
         },
 

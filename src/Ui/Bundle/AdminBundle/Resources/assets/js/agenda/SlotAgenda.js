@@ -6,15 +6,22 @@ var api = new AgendaApiEndpoints();
 module.exports = {
     template: '#slot-agenda',
     delimiters: options.delimiters,
-    props: ['agendaSlot', 'sheet', 'participant', 'isAvailableForMeeting', 'highlight'],
+    props: ['agendaSlot', 'sheet', 'participant', 'isAvailableForMeeting', 'highlight', 'slotToBeMoved'],
     data: function () {
         return {
             isMeetingToUpdateLoading: false,
         }
     },
     methods: {
+        /**
+         * Move MeetingRequest or Meeting into available slot
+         */
         scheduleMeeting: function () {
-            this.$emit('schedule-meeting', this.agendaSlot);
+            if (this.slotToBeMoved !== null) {
+                this.updateMeetingSlot(); // move meeting
+            } else {
+                this.$emit('schedule-meeting', this.agendaSlot); // move meeting request
+            }
         },
 
         /**
@@ -52,8 +59,6 @@ module.exports = {
                 }.bind(this))
                 .catch(function (error) {
                     this.isMeetingToUpdateLoading = false;
-                    // this.loadAgenda(this.sheet);
-
                     if (error.response) {
                         alert(error.response.data);
                     } else {
@@ -95,40 +100,18 @@ module.exports = {
         },
 
         /**
-         * Select slot
-         *
-         * @param slot
+         * Move meeting from current slot to the selected available slot
          */
-        selectSlot: function (slot) {
-
-            if (false !== this.hasMeetingSlotToUpdate()) {
-
-                return this.updateMeetingSlot(slot)
+        updateMeetingSlot: function () {
+            if (this.slotToBeMoved === null) {
+                return false;
             }
 
-            // if (null !== this.meetingRequestToTransformIntoMeeting) {
-            //
-            //     return this.transformRequestIntoMeeting(slot);
-            // }
-
-            //this.cancelSlotAction();
-        },
-
-        /**
-         * Update meeting slot
-         *
-         * @param slot new selected slot
-         */
-        updateMeetingSlot: function (slot) {
-            if (false === this.hasMeetingSlotToUpdate()) {
-                return;
-            }
-
-            this.$http.post(api.getMeetingUpdateSlotEndpoint(this.agendaSlot.meetingId), {
-                slotId: slot.id
+            this.$http.post(api.getMeetingUpdateSlotEndpoint(this.slotToBeMoved.meetingId), {
+                slotId: this.agendaSlot.id
             })
                 .then(function () {
-                    this.$emit('refresh-agenda', this.sheet);
+                    this.$emit('meeting-moved', this.sheet);
                 }.bind(this))
                 .catch(function (error) {
                     this.$emit('refresh-agenda', this.sheet);
@@ -138,15 +121,6 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
-        },
-
-        /**
-         * Has meeting slot to update
-         *
-         * @returns {boolean}
-         */
-        hasMeetingSlotToUpdate: function () {
-            return null !== this.agendaSlot && null !== this.sheet
         }
     }
 };
