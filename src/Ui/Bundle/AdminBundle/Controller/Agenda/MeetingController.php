@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableExceptio
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSheetsViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -202,6 +203,24 @@ class MeetingController extends Controller
         }
 
         return new JsonResponse($requestSlotView);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function participantsAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $requestSheetsView = $this->get('tactician.commandbus.query')->handle(
+            new RequestSheetsViewQuery($meetingRequest, $event->getAvailableLocale($request->getLocale()))
+        );
+
+        return new JsonResponse($requestSheetsView);
     }
 
     /**
