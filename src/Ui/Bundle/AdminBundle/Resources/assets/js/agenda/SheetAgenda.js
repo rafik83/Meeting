@@ -1,5 +1,4 @@
-var vue = require('vue'),
-    slotAgenda = require('./SlotAgenda'),
+var slotAgenda = require('./SlotAgenda'),
     options = require('../vueComponents/options'),
     AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
 

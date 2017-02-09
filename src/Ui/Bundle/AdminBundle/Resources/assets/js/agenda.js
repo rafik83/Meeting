@@ -1,7 +1,7 @@
 var Vue                = require('vue'),
     axios              = require('axios'),
     filterModal        = require('./agenda/filterModal'),
-    MeetingUpdateModal = require('./agenda/MeetingUpdateModal'),
+    meetingUpdateModal = require('./agenda/MeetingUpdateModal'),
     sheetAgenda        = require('./agenda/SheetAgenda'),
     slotAgenda         = require('./agenda/SlotAgenda'),
     options            = require('./vueComponents/options'),
@@ -31,7 +31,7 @@ new Vue({
         'filter-modal': filterModal,
         'slot-agenda': slotAgenda,
         'sheet-agenda': sheetAgenda,
-        'MeetingUpdateModal': MeetingUpdateModal
+        'MeetingUpdateModal': meetingUpdateModal
     },
     data: {
         sheets: [], /** {array} Sheet */
@@ -87,6 +87,9 @@ new Vue({
             this.loadSheets();
         },
 
+        /**
+         * Filters - Show the filter Modal
+         */
         showSheetFilter: function () {
             this.showFilterModal = true;
             var child = this.$refs.sheetFilterModal;
@@ -96,19 +99,8 @@ new Vue({
         },
 
         /**
-         * Event trigger when click on meeting update button in order to show update modal
-         *
-         * @param {Object} meetingToUpdate
+         * Filters - Reset filteredSheet
          */
-        showMeetingUpdateModal: function (meetingToUpdate) {
-            this.meetingToUpdate = meetingToUpdate;
-        },
-
-        refreshList: function (filteredSheets) {
-            this.hasUsedSheetFilter = true;
-            this.filteredSheets = filteredSheets;
-        },
-
         resetSheetFilter: function () {
             var child = this.$refs.sheetFilterModal;
             if (typeof child !== 'undefined') {
@@ -116,6 +108,25 @@ new Vue({
                 this.hasUsedSheetFilter = false;
                 this.filteredSheets = [];
             }
+        },
+
+        /**
+         * Filters - refresh filteredSheets
+         *
+         * @param {array} filteredSheets
+         */
+        refreshList: function (filteredSheets) {
+            this.hasUsedSheetFilter = true;
+            this.filteredSheets = filteredSheets;
+        },
+
+        /**
+         * Event trigger when click on meeting update button in order to show update modal
+         *
+         * @param {Object} meetingToUpdate
+         */
+        showMeetingUpdateModal: function (meetingToUpdate) {
+            this.meetingToUpdate = meetingToUpdate;
         },
 
         /**
@@ -140,19 +151,45 @@ new Vue({
         },
 
         /**
-         * Clear sheet agenda participants and requests data
+         * Show and focus agenda of given sheet
          *
          * @param {Object} sheet
          */
-        clearAgenda: function (sheet) {
-            var sheetIndex = this.isOpenedSheet(sheet);
+        showAndFocusAgenda: function (sheet) {
+            this.cancelSlotAction();
+            this.showAgenda(sheet);
+            this.focusedSheet = sheet;
+        },
 
-            if (-1 >= sheetIndex) {
+        /**
+         * Show agenda of given sheet
+         *
+         * @param sheet
+         */
+        showAgenda: function (sheet) {
+            // check if sheet is already opened
+            if (-1 !== this.isOpenedSheet(sheet)) {
                 return;
             }
 
-            this.openedSheets[sheetIndex].participants = [];
-            this.openedSheets[sheetIndex].requests     = [];
+            // this.cancelSlotAction();
+            this.highlightMeetingsInCommon(sheet, true);
+            this.loadAgenda(sheet, false);
+        },
+
+        /**
+         * Show agenda of given sheet id
+         *
+         * @param {int} sheetMetId
+         */
+        showAgendaForSheetId: function (sheetMetId) {
+            var sheet = this.findSheetBySheetId(sheetMetId);
+
+            if (null === sheet) {
+                return;
+            }
+
+            this.showAgenda(sheet);
         },
 
         /**
@@ -243,6 +280,38 @@ new Vue({
         },
 
         /**
+         * Clear sheet agenda participants and requests data
+         *
+         * @param {Object} sheet
+         */
+        clearAgenda: function (sheet) {
+            var sheetIndex = this.isOpenedSheet(sheet);
+
+            if (-1 >= sheetIndex) {
+                return;
+            }
+
+            this.openedSheets[sheetIndex].participants = [];
+            this.openedSheets[sheetIndex].requests     = [];
+        },
+        
+        /**
+         * Close given sheet agenda
+         *
+         * @param {Object} sheet
+         */
+        closeAgenda: function (sheet) {
+            sheet.isAgendaLoading = false;
+            this.cancelSlotAction();
+            this.highlightMeetingsInCommon(sheet, false);
+            this.openedSheets.splice(this.isOpenedSheet(sheet), 1);
+
+            if (this.focusedSheet == sheet) {
+                this.focusedSheet = this.focusOnLastSheetOrNull();
+            }
+        },
+
+        /**
          * Loop on <SheetAgenda> component instances and return the one associated
          * to this Sheet
          *
@@ -259,48 +328,6 @@ new Vue({
             }
 
             return undefined;
-        },
-
-        /**
-         * Show and focus agenda of given sheet
-         *
-         * @param {Object} sheet
-         */
-        showAndFocusAgenda: function (sheet) {
-            this.cancelSlotAction();
-            this.showAgenda(sheet);
-            this.focusedSheet = sheet;
-        },
-
-        /**
-         * Show agenda of given sheet
-         *
-         * @param sheet
-         */
-        showAgenda: function (sheet) {
-            // check if sheet is already opened
-            if (-1 !== this.isOpenedSheet(sheet)) {
-                return;
-            }
-
-            // this.cancelSlotAction();
-            this.highlightMeetingsInCommon(sheet, true);
-            this.loadAgenda(sheet, false);
-        },
-
-        /**
-         * Show agenda of given sheet id
-         *
-         * @param {int} sheetMetId
-         */
-        showAgendaForSheetId: function (sheetMetId) {
-            var sheet = this.findSheetBySheetId(sheetMetId);
-
-            if (null === sheet) {
-                return;
-            }
-
-            this.showAgenda(sheet);
         },
 
         /**
@@ -357,22 +384,6 @@ new Vue({
             }
 
             return null;
-        },
-
-        /**
-         * Close given sheet agenda
-         *
-         * @param {Object} sheet
-         */
-        closeAgenda: function (sheet) {
-            sheet.isAgendaLoading = false;
-            this.cancelSlotAction();
-            this.highlightMeetingsInCommon(sheet, false);
-            this.openedSheets.splice(this.isOpenedSheet(sheet), 1);
-
-            if (this.focusedSheet == sheet) {
-                this.focusedSheet = this.focusOnLastSheetOrNull();
-            }
         },
 
         /**
