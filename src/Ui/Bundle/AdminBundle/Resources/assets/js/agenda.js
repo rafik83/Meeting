@@ -1,8 +1,9 @@
-var Vue                = require('vue'),
-    axios              = require('axios'),
-    filterModal        = require('./agenda/filterModal'),
-    options            = require('./vueComponents/options'),
-    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
+var Vue                    = require('vue'),
+    axios                  = require('axios'),
+    filterModal            = require('./agenda/filterModal'),
+    updateParticipantModal = require('./agenda/updateParticipantModal'),
+    options                = require('./vueComponents/options'),
+    AgendaApiEndpoints     = require('./components/_AgendaApiEndpoints');
 
 var agendaApiEndpoints = new AgendaApiEndpoints();
 
@@ -82,7 +83,8 @@ new Vue({
     el: '#agenda',
     delimiters: options.delimiters,
     components: {
-        'filter-modal': filterModal
+        'filter-modal': filterModal,
+        'update-participant-modal': updateParticipantModal
     },
     data: {
         /**
@@ -111,6 +113,7 @@ new Vue({
         meetingToUpdate: null,
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
+        showParticipantModal: false,
         hasUsedSheetFilter: false,
 
         /**
@@ -176,6 +179,27 @@ new Vue({
             if (typeof child !== 'undefined') {
                 child.setFormFilter();
             }
+        },
+
+        showParticipants: function (meetingRequest) {
+            this.$http.get(agendaApiEndpoints.getParticipantsEndpoint(meetingRequest.requestId))
+                .then(function (response) {
+                    var child = this.$refs.updateParticipantModal;
+                    if (typeof child !== 'undefined') {
+                        child.setFormData(response.data);
+                        child.setRequest(meetingRequest);
+                    }
+                    this.showParticipantModal = true;
+
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                });
+
         },
 
         refreshList: function (filteredSheets) {
