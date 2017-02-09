@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Meeting\Slot;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
 class SlotAvailabilityView
 {
@@ -20,20 +21,27 @@ class SlotAvailabilityView
     public $type;
 
     /**
-     * @var Meeting
+     * @var Meeting|null
      */
     public $meeting;
 
     /**
+     * @var MassAssignment|null
+     */
+    public $massAssignment;
+
+    /**
      * SlotAvailabilityView constructor.
      *
-     * @param string       $type
-     * @param Meeting|null $meeting
+     * @param string              $type
+     * @param Meeting|null        $meeting
+     * @param MassAssignment|null $massAssignment
      */
-    public function __construct($type, Meeting $meeting = null)
+    public function __construct($type, Meeting $meeting = null, MassAssignment $massAssignment = null)
     {
-        $this->type    = $type;
-        $this->meeting = $meeting;
+        $this->type           = $type;
+        $this->meeting        = $meeting;
+        $this->massAssignment = $massAssignment;
     }
 
     /**

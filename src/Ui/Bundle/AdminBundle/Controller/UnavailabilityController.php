@@ -14,10 +14,12 @@ use Proximum\Vimeet\Application\Command\Unavailability\Category\Create as Create
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Update as UpdateCategory;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create as CreateMass;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete;
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update as UpdateMass;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\CreateType as CreateCategoryType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\UpdateType as UpdateCategoryType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass\CreateType as CreateMassType;
@@ -48,6 +50,26 @@ class UnavailabilityController extends Controller
             'event'    => $event,
             'massList' => $massList,
         ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return RedirectResponse
+     */
+    public function dispatchAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        try {
+            $this->get('tactician.commandbus')->handle(new Dispatcher($event));
+            $this->addFlash('success', 'flash.admin.unavailability.mass.dispatch.success');
+        } catch (UnableToDispatchException $exception) {
+            $this->addFlash('error', $exception->indication);
+        }
+
+        return $this->redirectToRoute('admin_unavailability_mass_list', ['event' => $event->getId()]);
     }
 
     /**
