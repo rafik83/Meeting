@@ -72,4 +72,26 @@ AgendaApiEndpoints.prototype.getTransformRequestIntoMeetingEndpoint = function (
     return this.getPathname() + '/request/' + requestId + '/transform-into-meeting';
 };
 
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getParticipantsEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/participants';
+};
+
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.updateParticipantsEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/participants/update';
+};
+
 module.exports = AgendaApiEndpoints;
