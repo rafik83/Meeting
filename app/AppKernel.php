@@ -29,6 +29,10 @@ class AppKernel extends Kernel
             new League\Tactician\Bundle\TacticianBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new Payum\Bundle\PayumBundle\PayumBundle(),
+
+            // JMS Job Queue
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\AopBundle\JMSAopBundle(),
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
 
             // Vimeet

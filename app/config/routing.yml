@@ -27,6 +27,11 @@ payum_notify:
 payum_authorize:
     resource: "@PayumBundle/Resources/config/routing/authorize.xml"
 
+JMSJobQueueBundle:
+    resource: "@JMSJobQueueBundle/Controller/"
+    type: annotation
+    prefix: /admin/jobs
+
 #
 # Admin redirect
 #
