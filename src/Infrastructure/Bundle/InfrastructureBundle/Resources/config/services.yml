@@ -3272,11 +3272,20 @@ services:
             - '@adapter.event_url_generator'
             - '@template.participant_info_guesser'
             - '@components.token.user.activate_account_token_generator'
+            - '@query.sheet.planning.sheet_planning_view_query_handler'
+
+    #
+    # Emailing Query
+    #
+    query.sheet.planning.sheet_planning_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler
+        arguments:
+            - '@planning.displayer.sheet_planning_displayer'
 
     #
     # Planning
     #
-    ## Formatter
+    ###### Formatter
     planning.formatter.unallocated_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter
         arguments:
@@ -3294,3 +3303,11 @@ services:
         arguments:
             - '@planning.formatter.participant_planning_formatter'
             - '@planning.formatter.unallocated_formatter'
+            - '@template.participant_info_guesser'
+
+    ###### Displayer
+    planning.displayer.sheet_planning_displayer:
+        class: Proximum\Vimeet\Application\Components\Planning\Displayer\SheetPlanningDisplayer
+        arguments:
+            - '@planning.formatter.sheet_planning_formatter'
+            - '@markdown'
