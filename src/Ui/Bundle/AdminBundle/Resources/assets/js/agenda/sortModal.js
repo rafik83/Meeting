@@ -1,5 +1,32 @@
 var sortSheetForm = require('./sortSheetForm'),
-    options       = require('../vueComponents/options');
+    options       = require('../vueComponents/options'),
+    sortConstant  = {
+        asc: 'asc',
+        desc: 'desc',
+        alphabeticalAsc: "alphabeticalAsc",
+        alphabeticalDesc: "alphabeticalDesc",
+        requestAsc: "requestAsc",
+        pendingRequestAsc: "pendingRequestAsc",
+        acceptedRequestAsc: "acceptedRequestAsc",
+        scheduledMeetingAsc: "scheduledMeetingAsc",
+        requestDesc: "requestDesc",
+        pendingRequestDesc: "pendingRequestDesc",
+        acceptedRequestDesc: "acceptedRequestDesc",
+        scheduledMeetingDesc: "scheduledMeetingDesc"
+    },
+    ascConstant  = [
+        sortConstant.requestAsc,
+        sortConstant.pendingRequestAsc,
+        sortConstant.acceptedRequestAsc,
+        sortConstant.scheduledMeetingAsc
+    ],
+    descConstant = [
+        sortConstant.requestDesc,
+        sortConstant.pendingRequestDesc,
+        sortConstant.acceptedRequestDesc,
+        sortConstant.scheduledMeetingDesc
+    ]
+;
 
 module.exports = {
     template: '#sort-modal',
@@ -39,10 +66,7 @@ module.exports = {
             Object.assign(this.sort, this.formSort);
         },
         sortSheets: function (sheets) {
-            var alphabeticalSort = [
-                "alphabeticalAsc",
-                "alphabeticalDesc"
-            ];
+            var alphabeticalSort = [sortConstant.alphabeticalAsc, sortConstant.alphabeticalDesc];
 
             if (alphabeticalSort.indexOf(this.sort.selected) !== -1) {
                 return this.alphabeticalSort(sheets);
@@ -58,43 +82,53 @@ module.exports = {
                 return 0;
             });
 
-            if (this.sort.selected === "alphabeticalDesc") {
+            if (this.sort.selected === sortConstant.alphabeticalDesc) {
                 sheets.reverse();
             }
 
             return sheets
         },
         numericalSort: function(sheets) {
+            var valueToSort = this.getValueToSort(this.sort.selected);
 
-            var ascSort = {
-                "requestAsc": "countRequest",
-                "pendingRequestAsc": "countPendingPropositions",
-                "acceptedRequestAsc": "countValidatedRequest",
-                "scheduledMeetingAsc": "countPlacedMeetings"
-            };
+            if (valueToSort !== null) {
+                var way = sortConstant.asc;
 
-            var descSort = {
-                "requestDesc": "countRequest",
-                "pendingRequestDesc": "countPendingPropositions",
-                "acceptedRequestDesc": "countValidatedRequest",
-                "scheduledMeetingDesc": "countPlacedMeetings"
-            };
-
-            sheets.sort(function (sheet1, sheet2) {
-
-                var calculatorIndex;
-
-                if (calculatorIndex = ascSort[this.sort.selected]) {
-                    return sheet1[calculatorIndex] - sheet2[calculatorIndex];
+                if (sortAsc.indexOf(this.sort.selected) !== -1) {
+                    way = sortConstant.desc;
                 }
 
-                if (calculatorIndex = descSort[this.sort.selected]) {
-                    return sheet2[calculatorIndex] - sheet1[calculatorIndex];
-                }
-
-            }.bind(this));
+                sheets.sort(function (sheet1, sheet2, valueToSort, way) {
+                    if (way === sortConstant.asc) {
+                        return sheet1[valueToSort] - sheet2[valueToSort];
+                    } else if (way === sortConstant.desc) {
+                        return sheet2[valueToSort] - sheet1[valueToSort];
+                    }
+                }.bind(this));
+            }
 
             return sheets;
+        },
+        getValueToSort: function (valueSelected) {
+            if (valueSelected === sortConstant.requestAsc) {
+                return "countRequest";
+            } else if (valueSelected === sortConstant.pendingRequestAsc) {
+                return "countPendingPropositions";
+            } else if (valueSelected === sortConstant.acceptedRequestAsc) {
+                return "countValidatedRequest";
+            } else if (valueSelected === sortConstant.scheduledMeetingAsc) {
+                return "countPlacedMeetings";
+            } else if (valueSelected === sortConstant.requestDesc) {
+                return "countRequest";
+            } else if (valueSelected === sortConstant.pendingRequestDesc) {
+                return "countPendingPropositions";
+            } else if (valueSelected === sortConstant.acceptedRequestDesc) {
+                return "countValidatedRequest";
+            } else if (valueSelected === sortConstant.scheduledMeetingDesc) {
+                return "countPlacedMeetings";
+            }
+
+            return null;
         }
     },
     watch: {
