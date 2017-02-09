@@ -3028,8 +3028,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@query.agenda.agenda_view_query_handler'
+            - '@planning.formatter.participant_planning_formatter'
         tags:
             - { name: serializer.normalizer }
 
@@ -3273,3 +3272,25 @@ services:
             - '@adapter.event_url_generator'
             - '@template.participant_info_guesser'
             - '@components.token.user.activate_account_token_generator'
+
+    #
+    # Planning
+    #
+    ## Formatter
+    planning.formatter.unallocated_formatter:
+        class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    planning.formatter.participant_planning_formatter:
+        class: Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@planning.formatter.unallocated_formatter'
+            - '@query.agenda.agenda_view_query_handler'
+    planning.formatter.sheet_planning_formatter:
+        class: Proximum\Vimeet\Application\Components\Planning\Formatter\SheetPlanningFormatter
+        arguments:
+            - '@planning.formatter.participant_planning_formatter'
+            - '@planning.formatter.unallocated_formatter'
