@@ -121,6 +121,10 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+        showMassAssignment: function () {
+            this.$emit('show-mass-assignment');
         }
     }
 };

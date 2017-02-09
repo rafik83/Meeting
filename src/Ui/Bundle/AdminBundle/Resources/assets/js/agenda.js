@@ -1,11 +1,12 @@
-var Vue                = require('vue'),
-    axios              = require('axios'),
-    filterModal        = require('./agenda/filterModal'),
-    meetingUpdateModal = require('./agenda/MeetingUpdateModal'),
-    sheetAgenda        = require('./agenda/SheetAgenda'),
-    slotAgenda         = require('./agenda/SlotAgenda'),
-    options            = require('./vueComponents/options'),
-    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
+var Vue                 = require('vue'),
+    axios               = require('axios'),
+    filterModal         = require('./agenda/filterModal'),
+    meetingUpdateModal  = require('./agenda/MeetingUpdateModal'),
+    massAssignmentModal = require('./agenda/massAssignmentModal'),
+    sheetAgenda         = require('./agenda/SheetAgenda'),
+    slotAgenda          = require('./agenda/SlotAgenda'),
+    options             = require('./vueComponents/options'),
+    AgendaApiEndpoints  = require('./components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
 
@@ -31,7 +32,8 @@ new Vue({
         'filter-modal': filterModal,
         'slot-agenda': slotAgenda,
         'sheet-agenda': sheetAgenda,
-        'MeetingUpdateModal': meetingUpdateModal
+        'MeetingUpdateModal': meetingUpdateModal,
+        'mass-assignment-modal': massAssignmentModal,
     },
     data: {
         sheets: [], /** {array} Sheet */
@@ -41,6 +43,7 @@ new Vue({
         meetingToUpdate: null, /** Meeting to update form */
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
+        showMassAssignmentModal: false,
         hasUsedSheetFilter: false,
         meetingSlotToUpdate: null,
         meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
@@ -85,6 +88,10 @@ new Vue({
          */
         init: function () {
             this.loadSheets();
+        },
+
+        showMassAssignment: function () {
+            this.showMassAssignmentModal = true;
         },
 
         /**
