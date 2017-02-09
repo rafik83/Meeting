@@ -53,6 +53,11 @@ class SlotAvailability
     private $meetingRepositoryInterface;
 
     /**
+     * @var MassAssignmentRepositoryInterface
+     */
+    private $massAssignmentRepository;
+
+    /**
      * @var HappeningParticipation[]
      */
     private $happenings = null;
