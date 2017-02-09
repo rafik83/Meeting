@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-
 class RequestSheetsView
 {
     /**
