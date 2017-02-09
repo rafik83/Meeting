@@ -371,8 +371,22 @@ new Vue({
             this.openedSheets.splice(this.isOpenedSheet(sheet), 1);
 
             if (this.focusedSheet == sheet) {
-                this.focusedSheet = null;
+                this.focusedSheet = this.focusOnLastSheetOrNull();
             }
+        },
+
+        /**
+         * Get the first opened sheet
+         *
+         * @returns {Object|null}
+         */
+        focusOnLastSheetOrNull: function() {
+            for (var agendaIndex = 0; agendaIndex < this.openedSheets.length; agendaIndex++) {
+                if (this.openedSheets[agendaIndex].id !== null) {
+                    return this.focusedSheet = this.openedSheets[agendaIndex];
+                }
+            }
+            return null;
         },
 
         /**
