@@ -60,6 +60,13 @@ module.exports = {
         },
 
         /**
+         * @param {Object} event
+         */
+        handleRemoveMeeting: function(event) {
+            this.$emit('remove-meeting', event);
+        },
+
+        /**
          * Emit event to show agenda of given sheet id
          *
          * @param {int} sheetMetId

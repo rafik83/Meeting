@@ -164,7 +164,7 @@ new Vue({
         /**
          * Show agenda of given sheet
          *
-         * @param sheet
+         * @param {Object} sheet
          */
         showAgenda: function (sheet) {
             // check if sheet is already opened
@@ -189,6 +189,7 @@ new Vue({
                 return;
             }
 
+            this.focusedSheet = sheet;
             this.showAgenda(sheet);
         },
 
@@ -214,7 +215,6 @@ new Vue({
                     var requests     = response.data.requests;
 
                     this.populateSheetAgenda(sheet, participants, requests);
-                    this.focusedSheet = sheet;
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {
@@ -234,6 +234,19 @@ new Vue({
          */
         refreshAgenda: function (sheet) {
             this.loadAgenda(sheet, true);
+        },
+
+        /**
+         * Event handler for remove-meeting
+         *
+         * @param {Object} event
+         */
+        handleRemoveMeeting: function(event) {
+            var sheetMet = this.findSheetBySheetId(event.sheetMetId);
+            this.loadAgenda(event.sheet, true);
+            if(sheetMet !== null) {
+                this.loadAgenda(sheetMet, true);
+            }
         },
 
         /**
@@ -266,10 +279,10 @@ new Vue({
                 this.$set(this.openedSheets[openedSheetIndex], 'participants', sheet.participants);
                 this.$set(this.openedSheets[openedSheetIndex], 'requests', sheet.requests);
 
-                var sheetAgendaFocused = this.findFocusedSheetComponent();
+                var sheetComponent = this.findSheetComponent(sheet);
 
-                if(sheetAgendaFocused !== undefined) {
-                    sheetAgendaFocused.forceUpdate();
+                if(sheetComponent !== null) {
+                    sheetComponent.forceUpdate();
                 }
 
                 this.$forceUpdate();
@@ -328,6 +341,23 @@ new Vue({
             }
 
             return undefined;
+        },
+
+        /**
+         * @param {Object} sheet
+         * @returns {Object}|null
+         */
+        findSheetComponent: function (sheet) {
+            var childs = this.$refs.childSheetAgenda;
+            if (childs !== undefined) {
+                for (var i = 0; i < childs.length; i++) {
+                    if (childs[i].sheet.id === sheet.id) {
+                        return childs[i];
+                    }
+                }
+            }
+
+            return null;
         },
 
         /**

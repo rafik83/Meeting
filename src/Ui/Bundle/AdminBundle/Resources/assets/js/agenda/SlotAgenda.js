@@ -71,8 +71,11 @@ module.exports = {
             if (window.confirm(message)) {
                 this.$http.delete(api.getRemoveMeetingEndpoint(this.agendaSlot))
                     .then(function () {
+                        this.$emit('remove-meeting', {
+                            sheet: this.sheet,
+                            sheetMetId: this.agendaSlot.sheetMetId || null
+                        });
                         this.$emit('focus-sheet', this.sheet);
-                        this.$emit('refresh-agenda', this.sheet);
                     }.bind(this))
                     .catch(function (error) {
                         if (error.response) {
@@ -118,11 +121,8 @@ module.exports = {
          */
         updateMeetingSlot: function (slot) {
             if (false === this.hasMeetingSlotToUpdate()) {
-
                 return;
             }
-
-            //this.cancelSlotAction();
 
             this.$http.post(api.getMeetingUpdateSlotEndpoint(this.agendaSlot.meetingId), {
                 slotId: slot.id
