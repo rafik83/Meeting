@@ -540,6 +540,8 @@ new Vue({
                 if (sheetMet !== null) {
                     this.loadAgenda(sheetMet, true); // reload sheet met agenda
                 }
+
+                this.meetingRequestToTransformIntoMeeting = null;
             }.bind(this))
             .catch(function (error) {
                 this.loadAgenda(sheet, true);
