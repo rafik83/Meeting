@@ -1,0 +1,22 @@
+<script type="x/template" id="update-participant-form">
+    <form>
+        <div class="form-group">
+            <label for="selectedTypes">${ data.fromSheet.sheetTitle }</label>
+            <div class="checkbox" v-for="participant in data.fromSheet.participants">
+                <label>
+                    <input name="selectedTypes" type="checkbox" :checked="participant.participate">
+                    ${ participant.fullName }
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="selectedTypes">${ data.toSheet.sheetTitle }</label>
+            <div class="checkbox" v-for="participant in data.toSheet.participants">
+                <label>
+                    <input name="selectedTypes" type="checkbox" :checked="participant.participate">
+                    ${ participant.fullName }
+                </label>
+            </div>
+        </div>
+    </form>
+</script>
