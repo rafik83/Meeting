@@ -50,12 +50,12 @@ Proximum\Vimeet\Domain\Model\Address (local):
 Proximum\Vimeet\Domain\Model\Product:
     # plans
     product_plan_1_spanish_event:
-        __construct: { createPlan: ['@event_spanish', 'Formule B2B Meeting', '', 1690, '', ''] }
+        __construct: { createPlan: ['@event_spanish', 'Formule B2B Meeting', 0, 1690, 0, 0] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
     product_plan_2_spanish_event:
-        __construct: { createPlan: [ '@event_spanish', 'Formule Exposant', '', 2880, '', '' ] }
+        __construct: { createPlan: [ '@event_spanish', 'Formule Exposant', 0, 2880, 0, 0 ] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
@@ -76,15 +76,15 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # options
     product_option_1_spanish_event:
-        __construct: { createOption: ['@event_spanish', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
+        __construct: { createOption: ['@event_spanish', 'Option 4m² supplémentaires Fournisseur', 0, 990, 1, 0, 0, true, null] }
     product_option_2_spanish_event:
-        __construct: { createOption: ['@event_spanish', 'Option chaise', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_spanish', 'Option chaise', 0, 9, 10, 0, 0, true, null] }
     product_option_3_spanish_event:
-        __construct: { createOption: ['@event_spanish', 'Option A', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_spanish', 'Option A', 0, 9, 10, 0, 0, true, null] }
     product_option_4_spanish_event:
-        __construct: { createOption: ['@event_spanish', 'Option B', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_spanish', 'Option B', 0, 9, 10, 0, 0, true, null] }
     product_option_5_spanish_event:
-        __construct: { createOption: ['@event_spanish', 'Option C', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_spanish', 'Option C', 0, 9, 10, 0, 0, true, null] }
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_spanish_event_fr:
