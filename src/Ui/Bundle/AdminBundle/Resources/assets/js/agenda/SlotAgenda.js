@@ -7,7 +7,7 @@ var api = new AgendaApiEndpoints();
 module.exports = {
     template: '#slot-agenda',
     delimiters: options.delimiters,
-    props: ['agendaSlot', 'sheet', 'participant', 'isAvailableForMeeting'],
+    props: ['agendaSlot', 'sheet', 'participant', 'isAvailableForMeeting', 'highlight'],
     data: function () {
         return {
             isMeetingToUpdateLoading: false,
@@ -91,7 +91,7 @@ module.exports = {
         showAgendaForSheetId: function (sheetMetId) {
             this.$emit('show-agenda-for-sheet-id', sheetMetId);
         },
-        
+
         /**
          * Select slot
          *
