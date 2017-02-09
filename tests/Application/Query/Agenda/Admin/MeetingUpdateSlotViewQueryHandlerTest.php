@@ -85,12 +85,12 @@ class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$slot1, $slot2]);
 
         $spotRepository
-            ->hasSpotsForSlotAndParticipantsQuantity($slot1, 2, $meeting)
+            ->hasSpotsForSlotAndParticipantsQuantity($slot1, 2, $meeting, null, null, false)
             ->shouldBeCalled()
             ->willReturn(true);
 
         $spotRepository
-            ->hasSpotsForSlotAndParticipantsQuantity($slot2, 2, $meeting)
+            ->hasSpotsForSlotAndParticipantsQuantity($slot2, 2, $meeting, null, null, false)
             ->shouldBeCalled()
             ->willReturn(true);
 

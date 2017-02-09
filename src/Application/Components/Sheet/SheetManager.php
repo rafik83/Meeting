@@ -91,7 +91,7 @@ class SheetManager
         $allowedSheets = $sheets;
 
         foreach ($sheets as $givenSheetKey => $givenSheet) {
-            $requests = $this->requestRepository->getAllRequestBySheet($givenSheet);
+            $requests = $this->requestRepository->getAllRequestBySheet($givenSheet, ['disabled' => false]);
 
             foreach ($requests as $request) {
                 if (($request->getToSheet() === $sheet || $request->getFromSheet() === $sheet)

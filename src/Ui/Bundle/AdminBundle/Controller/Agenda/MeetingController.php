@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
+use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,8 +45,10 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
+        $isVisio = $this->checkVisio($meeting->getRequest());
+
         $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_spot_view_query_handler')->handle(
-            new MeetingUpdateSpotViewQuery($meeting)
+            new MeetingUpdateSpotViewQuery($meeting, $isVisio)
         );
 
         return new JsonResponse($meetingUpdateSpotView);
@@ -70,18 +73,22 @@ class MeetingController extends Controller
 
         $spot = $this->get('vimeet_infrastructure.repository.spot_repository')->find(
             $event,
-            (int) $data->spotId
+            (int) $data->spotId,
+            $this->checkVisio($meeting->getRequest()) // find visio spot if meeting visio
         );
 
         if (null === $spot) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.selectedSpotNotExists');
         }
 
+        $visio = $this->checkVisio($meeting->getRequest());
+
         $updateSpot = new UpdateSpot(
             $meeting,
             $spot,
             $data->blockedSlot,
-            $data->blockedSpot
+            $data->blockedSpot,
+            $visio
         );
 
         try {
@@ -98,13 +105,12 @@ class MeetingController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param Event   $event
      * @param Meeting $meeting
      *
      * @return JsonResponse
      */
-    public function updateSlotAction(Request $request, Event $event, Meeting $meeting)
+    public function updateSlotAction(Event $event, Meeting $meeting)
     {
         $this->checkAccess($event, $meeting);
 
@@ -141,7 +147,9 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.selectedSlotNotExists');
         }
 
-        $updateSlot = new UpdateSlot($meeting, $slot);
+        $visio = $this->checkVisio($meeting->getRequest());
+
+        $updateSlot = new UpdateSlot($meeting, $slot, $visio);
 
         try {
             $this->get('tactician.commandbus')->handle($updateSlot);
@@ -181,9 +189,11 @@ class MeetingController extends Controller
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
+        $isVisio = $this->checkVisio($meetingRequest);
+
         try {
             $requestSlotView = $this->get('query.agenda.admin.request_slot_view_query_handler')->handle(
-                new RequestSlotViewQuery($meetingRequest)
+                new RequestSlotViewQuery($meetingRequest, $isVisio)
             );
         } catch (NoSlotAvailableException $exception) {
             return $this->createErrorJsonResponse(
@@ -223,7 +233,9 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists');
         }
 
-        $transformRequestIntoMeeting = new TransformRequestIntoMeeting($meetingRequest, $slot);
+        $isVisio = $this->checkVisio($meetingRequest);
+
+        $transformRequestIntoMeeting = new TransformRequestIntoMeeting($meetingRequest, $slot, $isVisio);
 
         try {
             $this->get('tactician.commandbus')->handle($transformRequestIntoMeeting);
@@ -307,5 +319,25 @@ class MeetingController extends Controller
     private function createErrorJsonResponse($key)
     {
         return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * Check if meeting or meeting request has some participant in visio
+     *
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return bool
+     *
+     * @see VisioGuesser
+     */
+    private function checkVisio(Meeting\Request $meetingRequest)
+    {
+        $visioGuesser = $this->get('domain.meeting.visio_guesser');
+
+        if ($meetingRequest->getMeeting() !== null) {
+            return $visioGuesser->hasMeetingParticipantVisio($meetingRequest->getMeeting());
+        }
+
+        return $visioGuesser->hasMeetingRequestParticipantVisio($meetingRequest);
     }
 }

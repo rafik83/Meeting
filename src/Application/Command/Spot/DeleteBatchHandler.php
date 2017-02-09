@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
+use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
 class DeleteBatchHandler
@@ -31,9 +32,29 @@ class DeleteBatchHandler
 
     /**
      * @param DeleteBatch $deleteBatch
+     *
+     * @return DeleteBatchView
      */
     public function handle(DeleteBatch $deleteBatch)
     {
-        $this->spotRepository->removeBatchSpot($deleteBatch->ids, $deleteBatch->event);
+        $spots = $this->spotRepository->getSpotsByIds($deleteBatch->ids);
+
+        $deleteBatchView = new DeleteBatchView();
+        $toDelete        = [];
+        
+        foreach($spots as $spot) {
+            if ($spot->hasSheets() !== false) {
+                $deleteBatchView->addSpotWithSheets($spot);
+            } else if ($this->spotRepository->hasMeeting($spot) !== false) {
+                $deleteBatchView->addSpotWithMeeting($spot);
+            } else {
+                $deleteBatchView->addDeletedSpot($spot);
+                $toDelete[] = $spot;
+            }
+        }
+
+        $this->spotRepository->removeBatchSpot($toDelete, $deleteBatch->event);
+
+        return $deleteBatchView;
     }
 }

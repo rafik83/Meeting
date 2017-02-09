@@ -25,10 +25,17 @@ class Remove
     public $participants = [];
 
     /**
-     * @param Sheet $sheet
+     * @var string
      */
-    public function __construct(Sheet $sheet)
+    public $locale;
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     */
+    public function __construct(Sheet $sheet, $locale)
     {
-        $this->sheet = $sheet;
+        $this->sheet  = $sheet;
+        $this->locale = $locale;
     }
 }

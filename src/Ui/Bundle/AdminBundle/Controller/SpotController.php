@@ -26,13 +26,14 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
+use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -107,9 +108,32 @@ class SpotController extends Controller
 
         if (!empty($selectedSpots)) {
             if ($deleteButton) {
+
                 $deleteBatch = new DeleteBatch($selectedSpots, $event);
-                $this->get('tactician.commandbus')->handle($deleteBatch);
-                $this->addFlash('success', 'flash.admin.spot_batch.delete.success');
+
+                /** @var DeleteBatchView $deleteBatchView */
+                $deleteBatchView = $this->get('tactician.commandbus')->handle($deleteBatch);
+
+                if (!empty($deleteBatchView->spotsWithMeetings)) {
+                    $this->addFlash('error', new TransMessage(
+                        'flash.admin.spot_batch.delete.failure.meetings',
+                        ['%spots%' => $deleteBatchView->getSpotsWithMeetings()]
+                    ));
+                }
+                
+                if (!empty($deleteBatchView->spotsWithSheets)) {
+                    $this->addFlash('error', new TransMessage(
+                        'flash.admin.spot_batch.delete.failure.sheets',
+                        ['%spots%' => $deleteBatchView->getSpotsWithSheets()]
+                    ));
+                }
+
+                if (!empty($deleteBatchView->deletedSpots)) {
+                    $this->addFlash('success', new TransMessage(
+                        'flash.admin.spot_batch.delete.success',
+                        ['%spots%' => $deleteBatchView->getDeletedSpots()]
+                    ));
+                }
             } elseif ($disableButton) {
                 $disableBatch = new DisableBatch($selectedSpots, $event);
                 $this->get('tactician.commandbus')->handle($disableBatch);

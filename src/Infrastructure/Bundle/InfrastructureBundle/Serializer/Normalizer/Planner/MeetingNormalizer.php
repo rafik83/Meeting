@@ -25,6 +25,7 @@ class MeetingNormalizer implements NormalizerInterface
         return [
             '@id'             => $object->reference,
             'id'              => $object->id,
+            'isVisio'         => $object->isVisio,
             'sheetList'       => [
                 'Sheet' => array_map(function (SheetView $sheet) {
                     return ['@reference' => $sheet->reference];

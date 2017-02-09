@@ -12,8 +12,9 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
     AnchorFocuser           = require('./components/_AnchorFocuser'),
-    DateTimePicker          = require('./components/_DateTimePicker');
-    MessagingMessagePreview = require('./components/_MessagingMessagePreview');
+    DateTimePicker          = require('./components/_DateTimePicker'),
+    MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
+    ParticipantVisio        = require('./components/_ParticipantVisio');
 
 require('elao-form.js');
 require('select2');
@@ -155,6 +156,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-message-preview]'), function (element) {
         new MessagingMessagePreview(element, target.querySelector('#message_preview_iframe'), target.querySelector('#no_preview_text'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.form-participant-visio'), function (element) {
+        new ParticipantVisio(element);
     });
 }
 

@@ -81,6 +81,11 @@ class Request implements MessageSubjectInterface
     private $stateUpdatedAt;
 
     /**
+     * @var bool
+     */
+    private $disabled;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
@@ -89,6 +94,7 @@ class Request implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
+     * @param bool               $disabled
      */
     public function __construct(
         Sheet $from,
@@ -96,7 +102,8 @@ class Request implements MessageSubjectInterface
         Sheet $to,
         array $toParticipants,
         DateTimeInterface $createdAt,
-        User $creator
+        User $creator,
+        $disabled = false
     ) {
         $this->from             = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
@@ -106,6 +113,7 @@ class Request implements MessageSubjectInterface
         $this->createdAt        = $createdAt;
         $this->stateUpdatedAt   = $createdAt;
         $this->creator          = $creator;
+        $this->disabled         = $disabled;
     }
 
     /**
@@ -550,5 +558,21 @@ class Request implements MessageSubjectInterface
     public function countParticipants()
     {
         return count($this->fromParticipants) + count($this->toParticipants);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param bool $disabled
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = $disabled;
     }
 }

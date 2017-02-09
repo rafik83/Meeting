@@ -115,10 +115,12 @@ class AgendaViewQueryHandler
             return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants);
         }
 
-        $happeningParticipations = $this->happeningParticipationRepository->findByParticipant($participant);
         $unavailabilites         = $this->unavailabilityRepository->findByParticipant($participant);
         $masses                  = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
         $meetings                = [];
+        $happeningParticipations = $this
+            ->happeningParticipationRepository
+            ->findByParticipant($participant, ['disabled' => false]);
 
         if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
             $meetings = $this->meetingRepository->findByParticipant($participant);

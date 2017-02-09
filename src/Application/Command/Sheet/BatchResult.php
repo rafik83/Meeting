@@ -25,14 +25,21 @@ class BatchResult
     public $message;
 
     /**
+     * @var string
+     */
+    public $ignoredSheetsMessage;
+
+    /**
      * BatchResult constructor.
      *
      * @param int    $count
      * @param string $message
+     * @param string $ignoredSheetsMessage
      */
-    public function __construct($count, $message)
+    public function __construct($count, $message, $ignoredSheetsMessage = '')
     {
-        $this->count   = $count;
-        $this->message = $message;
+        $this->count                = $count;
+        $this->message              = $message;
+        $this->ignoredSheetsMessage = $ignoredSheetsMessage;
     }
 }

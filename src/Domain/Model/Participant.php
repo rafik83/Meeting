@@ -63,6 +63,11 @@ class Participant implements MailRecipientInterface
     private $imported = false;
 
     /**
+     * @var bool
+     */
+    private $visio = false; 
+
+    /**
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
@@ -240,6 +245,22 @@ class Participant implements MailRecipientInterface
         $this->imported = $imported;
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVisio()
+    {
+        return $this->visio;
+    }
+
+    /**
+     * @param boolean $visio
+     */
+    public function setVisio($visio)
+    {
+        $this->visio = $visio;
     }
 
     /**

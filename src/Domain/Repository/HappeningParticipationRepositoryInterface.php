@@ -38,10 +38,11 @@ interface HappeningParticipationRepositoryInterface
 
     /**
      * @param Participant $participant
+     * @param array       $filters
      *
      * @return HappeningParticipation[]
      */
-    public function findByParticipant(Participant $participant);
+    public function findByParticipant(Participant $participant, array $filters = []);
 
     /**
      * @param Happening $happening
@@ -77,7 +78,7 @@ interface HappeningParticipationRepositoryInterface
      * @return bool
      */
     public function hasParticipationsBySheet(Sheet $sheet);
-  
+
     /**
      * @param Sheet       $sheet
      * @param Happening[] $happenings
@@ -98,4 +99,9 @@ interface HappeningParticipationRepositoryInterface
      * @return null|int
      */
     public function checkAnyParticipation(Participant $participant);
+
+    /**
+     * @param HappeningParticipation $happeningParticipation
+     */
+    public function update(HappeningParticipation $happeningParticipation);
 }
