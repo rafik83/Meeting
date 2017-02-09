@@ -259,6 +259,7 @@ admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
 admin.messaging.message.compose.tags.participationType: 'Type de participation'
+admin.messaging.message.compose.tags.sheetPlanning: 'Planning de la participation'
 admin.messaging.message.content: Contenu
 admin.messaging.message.create.title: 'Créer un nouveau message'
 admin.messaging.message.createdAt: 'Créé le'
@@ -839,6 +840,10 @@ notification.meeting_request.refused.withMessage: 'Demande refusée par %sheetNa
 notification.meeting_request.refused.withoutMessage: 'Demande refusée par %sheetName%'
 notification.participant.added.action: 'Participant ajouté'
 notification.participant.removed.action: 'Participant retiré'
+planning.participant.meeting: '%spotRef% - %sheetMet%'
+planning.participant.time: '%beginHour% - %endHour% : '
+planning.participant.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
+planning.participant.unavailability: Indisponible
 register.email_already_exists: 'Un compte associé à cette adresse mail existe déjà'
 reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
