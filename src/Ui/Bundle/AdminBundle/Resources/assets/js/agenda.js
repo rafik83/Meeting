@@ -237,15 +237,16 @@ new Vue({
         },
 
         /**
-         * Event handler for remove-meeting
+         * Event handler for refresh-both-agenda
          *
          * @param {Object} event
          */
-        handleRemoveMeeting: function(event) {
+        handleRefreshBothAgenda: function(event) {
             var sheetMet = this.findSheetBySheetId(event.sheetMetId);
             this.loadAgenda(event.sheet, true);
-            if(sheetMet !== null) {
-                this.loadAgenda(sheetMet, false);
+            
+            if (sheetMet !== null) {
+                this.loadAgenda(sheetMet, true);
             }
         },
 
