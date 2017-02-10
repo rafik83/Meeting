@@ -46,7 +46,16 @@ app_patterns:
   #######
 
   ssh_config:
-    # Gateway
+
+    # Demo
+    - Host *.elao.ninja.local:
+      - User:                  deploy
+      - ProxyCommand:          ssh gateway@hv-1.elao.ninja "nc %h %p"
+      - ForwardAgent:          true
+      - StrictHostKeyChecking: false
+      - HashKnownHosts:        false
+
+    # Synalabs
     - Host proximum-gw:
       - Hostname: 163.172.194.152
       - User:     elao
@@ -121,7 +130,7 @@ app_patterns:
     - imagick
 
   php_applications:
-    - openl10n
+    - openl10n@v0.2.0
 
   php_configs:
     - file: app_opcache.ini

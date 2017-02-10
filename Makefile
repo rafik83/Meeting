@@ -38,23 +38,17 @@ setup@test: provision@test install@test
 #############
 
 ## Provision environment
-provision: provision-vagrant
+provision: export ANSIBLE_EXTRA_VARS = {"manala":{"update":false}}
+provision:
+	vagrant provision --provision-with app
 
-provision@test: provision-ansible@test
+## Provision nginx
+provision-nginx: export ANSIBLE_TAGS = manala_nginx
+provision-nginx: provision
 
-provision-services@test: provision-services-ansible@test
-
-provision-vagrant:
-	ansible-galaxy install -r ansible/roles.yml -p ansible/roles -f
-	vagrant up --no-provision
-	vagrant provision
-
-provision-ansible@test:
-	sudo ansible-galaxy install -r ansible/roles.yml -f
-	ansible-playbook -i ansible/hosts -l env_test,app -s -e "_user=${_ANSIBLE_USER}" --force-handlers ansible/playbook.yml
-
-provision-services-ansible@test:
-	ansible-playbook -i ansible/hosts -l env_test,app -s --tags=elao_services ansible/playbook.yml
+## Provision php
+provision-php: export ANSIBLE_TAGS = manala_php
+provision-php: provision
 
 ###########
 # Install #
@@ -140,6 +134,7 @@ watch: watch-assets
 
 watch-assets:
 	gulp watch --dev
+
 ################
 # Translations #
 ################
