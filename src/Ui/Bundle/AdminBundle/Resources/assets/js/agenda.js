@@ -279,12 +279,7 @@ new Vue({
                 this.$set(this.openedSheets[openedSheetIndex], 'participants', sheet.participants);
                 this.$set(this.openedSheets[openedSheetIndex], 'requests', sheet.requests);
 
-                var sheetComponent = this.findSheetComponent(sheet);
-
-                if(sheetComponent !== null) {
-                    sheetComponent.forceUpdate();
-                }
-
+                this.forceUpdateSheet(sheet);
                 this.$forceUpdate();
             }
 
@@ -480,7 +475,22 @@ new Vue({
                             meetingsSheetMet[meetingSheetMetIndex].highlight = state;
                         }
                     }
+
+                    this.forceUpdateSheet(sheetMet);
                 }
+            }
+        },
+
+        /**
+         * This method force update the sheetComponent of the given Sheet
+         *
+         * @param {Object} sheet
+         */
+        forceUpdateSheet: function (sheet) {
+            var sheetMetComponent = this.findSheetComponent(sheet);
+
+            if(sheetMetComponent !== null) {
+                sheetMetComponent.forceUpdate();
             }
         },
 
