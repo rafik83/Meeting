@@ -211,6 +211,9 @@ deploy-capifony@prod:
 # Custom #
 ##########
 
+migration@prod:
+	bin/console doctrine:migrations:migrate --no-interaction
+
 migrations:
 	bin/console doctrine:schema:drop --force
 	mysql -u root proximum_vimeet -e 'DROP TABLE IF EXISTS `migration_versions`'

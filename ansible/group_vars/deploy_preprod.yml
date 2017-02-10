@@ -4,16 +4,20 @@
 # Strategy #
 ############
 
-manala_deploy_strategy_git_version: prod
+manala_deploy_strategy_git_version: preprod
+
+############
+# Releases #
+############
+
+manala_deploy_releases: 1
 
 ###########
 # Removed #
 ###########
 
 manala_deploy_removed:
-  - web/app_dev.php
   - web/app_test.php
-
 
 #########
 # Tasks #
@@ -24,4 +28,4 @@ manala_deploy_tasks:
   - make: install@prod
   - make: migration@prod
   - make: build@prod
-  - command: sudo /usr/sbin/service php5-fpm reload
+  - command: sudo /usr/sbin/service php5.6-fpm reload

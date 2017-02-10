@@ -41,6 +41,43 @@ app_patterns:
     - APP_DATABASE_USER:           "{{ app.user }}"
     - APP_DATABASE_PASSWORD:       null
 
+  #######
+  # Ssh #
+  #######
+
+  ssh_config:
+    # Gateway
+    - Host proximum-gw:
+      - Hostname: 163.172.194.152
+      - User:     elao
+      - Port:     22
+
+    # Preprod
+    - Host proximum-vimeet-preprod:
+      - User:         www-data
+      - ProxyCommand: ssh proximum-gw nc vimeet-preprod %p
+
+    # Prod
+    - Host proximum-mysql-master:
+      - User:         www-data
+      - ProxyCommand: ssh proximum-gw nc mysql-master %p
+
+    - Host proximum-web-apache-01:
+      - User:         www-data
+      - ProxyCommand: ssh proximum-gw nc web-apache-01 %p
+
+    - Host proximum-web-apache-02:
+      - User:         www-data
+      - ProxyCommand: ssh proximum-gw nc web-apache-02 %p
+
+    - Host proximum-filer:
+      - User:         www-data
+      - ProxyCommand: ssh proximum-gw nc filer %p
+
+    - Host proximum-es-01:
+      - User:         www-data
+      - ProxyCommand: ssh proximum-gw nc es-01
+
   ########
   # Motd #
   ########
