@@ -83,10 +83,14 @@ class PaymentController extends Controller
 
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
-            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
+            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
+                'event' => $eventDomain->getEvent(),
+            ]);
         } else {
             $paymentChoice = new Choice($sheet, $this->getUser());
-            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
+            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
+                'event' => $eventDomain->getEvent(),
+            ]);
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -124,23 +128,19 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
      * @return RedirectResponse
      */
-    public function payRemainingAction(
-        Request $request,
-        EventDomain $eventDomain,
-        Sheet $sheet
-    ) {
+    public function payRemainingAction(EventDomain $eventDomain, Sheet $sheet)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 
-        if (0 >= $remainingToPay) {
+        if (0 >= $remainingToPay || !$eventDomain->getEvent()->getConfiguration()->isAllowedToPayRemaining()) {
             return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
         }
 

@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher;
 class DispatcherHandler
 {
     /**
+     * @var TimeSlotDispatcher
+     */
+    private $timeSlotDispatcher;
+
+    /**
      * @param TimeSlotDispatcher $timeSlotDispatcher
      */
     public function __construct(TimeSlotDispatcher $timeSlotDispatcher)

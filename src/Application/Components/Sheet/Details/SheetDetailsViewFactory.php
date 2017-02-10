@@ -108,7 +108,8 @@ class SheetDetailsViewFactory
                 return new ParticipantView(
                     $participant->getId(),
                     $templateDataFactory->createRegistrationFromParticipant($participant, $locale),
-                    $participant->isOwnerParticipant()
+                    $participant->isOwnerParticipant(),
+                    $participant->isVisio()
                 );
             }, $sheet->getParticipants()->toArray()),
             // Approved requests

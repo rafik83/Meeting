@@ -74,7 +74,10 @@ class UpdateSlotHandler
         $spots = $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $updateSlot->slot,
             $updateSlot->meeting->countParticipants(),
-            $updateSlot->meeting
+            $updateSlot->meeting,
+            null,
+            null,
+            $updateSlot->visio
         );
 
         // If no spot available

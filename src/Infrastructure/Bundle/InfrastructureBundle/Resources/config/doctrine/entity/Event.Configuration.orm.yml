@@ -48,3 +48,5 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         deposit:
             type: integer
             nullable: true
+        paymentModes:
+            type: json_array

@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
+use IntlDateFormatter;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
@@ -23,8 +24,8 @@ use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -32,7 +33,6 @@ use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use IntlDateFormatter;
 
 class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
@@ -144,11 +144,11 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      */
     private function getParticipantRawData(Participant $participant, Admin $user, $locale)
     {
-        $sheet           = $participant->getSheet();
-        $event           = $sheet->getEvent();
+        $sheet             = $participant->getSheet();
+        $event             = $sheet->getEvent();
         $participantLocale = $event->getAvailableLocale($participant->getUser()->getLocale());
-        $adminLocale     = $event->getAvailableLocale($user->getLocale());
-        $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
+        $adminLocale       = $event->getAvailableLocale($user->getLocale());
+        $participantInfo   = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
         $gender = isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $participantInfo[Tag::PARTICIPANT_GENDER] : null;
 

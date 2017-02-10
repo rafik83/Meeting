@@ -11,6 +11,11 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        disabled:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening

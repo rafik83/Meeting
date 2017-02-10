@@ -95,7 +95,7 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
             $this->createParticipant($mass->getEvent(), 'foobar3@test.com'),
         ];
 
-        $participantRepository->findByEvent($mass->getEvent())->shouldBeCalled()->willReturn($participants);
+        $participantRepository->findByEventWithoutDispatch($mass->getEvent(), $mass)->shouldBeCalled()->willReturn($participants);
         $massAssignmentRepository->add(new MassAssignment($mass, $participants[0], $timeSlots[0]['from'], $timeSlots[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($mass, $participants[1], $timeSlots[1]['from'], $timeSlots[1]['to']));
         $massAssignmentRepository->add(new MassAssignment($mass, $participants[2], $timeSlots[0]['from'], $timeSlots[0]['to']));
@@ -145,13 +145,13 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         // Assets
         $massRepository->findDispatchByEvent($event)->shouldBeCalled()->willReturn($masses);
 
-        $participantRepository->findByEvent($event)->shouldBeCalled()->willReturn($participants);
+        $participantRepository->findByEventWithoutDispatch($event, $masses[0])->shouldBeCalled()->willReturn($participants);
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[0], $timeSlots1[0]['from'], $timeSlots1[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[1], $timeSlots1[1]['from'], $timeSlots1[1]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[2], $timeSlots1[0]['from'], $timeSlots1[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[3], $timeSlots1[1]['from'], $timeSlots1[1]['to']));
 
-        $participantRepository->findByEvent($event)->shouldBeCalled()->willReturn($participants);
+        $participantRepository->findByEventWithoutDispatch($event, $masses[1])->shouldBeCalled()->willReturn($participants);
         $massAssignmentRepository->add(new MassAssignment($masses[1], $participants[0], $timeSlots2[0]['from'], $timeSlots2[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[1], $participants[1], $timeSlots2[1]['from'], $timeSlots2[1]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[1], $participants[2], $timeSlots2[2]['from'], $timeSlots2[2]['to']));

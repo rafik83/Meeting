@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSpotView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SpotView;
@@ -25,14 +26,22 @@ class MeetingUpdateSpotViewQueryHandler
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param SpotRepositoryInterface $spotRepository
-     * @param SheetInfoGuesser        $sheetInfoGuesser
+     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param TranslatorInterface $translator
      */
-    public function __construct(SpotRepositoryInterface $spotRepository, SheetInfoGuesser $sheetInfoGuesser)
-    {
+    public function __construct(
+        SpotRepositoryInterface $spotRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        TranslatorInterface $translator
+    ) {
         $this->spotRepository   = $spotRepository;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->translator       = $translator;
     }
 
     /**
@@ -50,20 +59,14 @@ class MeetingUpdateSpotViewQueryHandler
             $meeting->isBlockedSlot(),
             $meeting->isBlockedSpot(),
             array_map(function (Spot $spot) use ($meeting) {
-                $assignedSheetTitle = $this->getAssignedSheetTitle($spot, $meeting);
-                $label = null === $assignedSheetTitle
-                    ? $spot->getReference()
-                    : sprintf(
-                        '%s - %s',
-                        $spot->getReference(),
-                        $assignedSheetTitle
-                    );
+
+                $label = $this->getSpotLabel($spot, $meeting);
 
                 return new SpotView(
                     $spot->getId(),
                     $label
                 );
-            }, $this->spotRepository->getSpotsForMeeting($meeting))
+            }, $this->spotRepository->getSpotsForMeeting($meeting, $query->visio))
         );
     }
 
@@ -82,5 +85,38 @@ class MeetingUpdateSpotViewQueryHandler
         }
 
         return null;
+    }
+
+    /**
+     * @param Spot      $spot
+     * @param Meeting   $meeting
+     *
+     * @return string
+     */
+    private function getSpotLabel(Spot $spot, Meeting $meeting)
+    {
+        $assignedSheetTitle = $this->getAssignedSheetTitle($spot, $meeting);
+
+        if ($spot->isVisio()) {
+            $visioLabel = $this->translator->trans('admin.agenda.meeting.updateSpot.visio');
+            $label = null === $assignedSheetTitle
+                ? $spot->getReference() . ' - ' . $visioLabel
+                : sprintf(
+                    '%s - %s - %s',
+                    $spot->getReference(),
+                    $visioLabel,
+                    $assignedSheetTitle
+                );
+        } else {
+            $label = null === $assignedSheetTitle
+                ? $spot->getReference()
+                : sprintf(
+                    '%s - %s',
+                    $spot->getReference(),
+                    $assignedSheetTitle
+                );
+        }
+
+        return $label;
     }
 }

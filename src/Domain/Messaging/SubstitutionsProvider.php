@@ -119,7 +119,7 @@ class SubstitutionsProvider
 
         $event = $sheet->getEvent();
 
-        switch($placeholder) {
+        switch ($placeholder) {
             case Compose::TAG_EVENT_NAME:
                 return $event->getTitle();
             case Compose::TAG_PARTICIPATION_TYPE:
@@ -146,6 +146,8 @@ class SubstitutionsProvider
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', []);
             case Compose::LINK_SHEET:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet', []);
+            case Compose::LINK_EXPORT_MEETING_SHEET:
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', []);
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);

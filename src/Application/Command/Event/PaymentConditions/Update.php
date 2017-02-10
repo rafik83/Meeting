@@ -40,6 +40,11 @@ class Update
     public $deposit;
 
     /**
+     * @var array
+     */
+    public $paymentModes;
+
+    /**
      * Update constructor.
      * @param Event $event
      */
@@ -50,5 +55,14 @@ class Update
         $this->depositUntil      = $event->getConfiguration()->getDepositUntil();
         $this->deposit           = $event->getConfiguration()->getDeposit();
         $this->minimumForDeposit = $event->getConfiguration()->getMinimumForDeposit();
+        $this->paymentModes      = $event->getConfiguration()->getPaymentModes();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaymentModesNotEmpty()
+    {
+        return !empty($this->paymentModes);
     }
 }

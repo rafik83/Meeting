@@ -109,7 +109,7 @@ class ParticipantImportLogger
      */
     public function userImported(User $user)
     {
-        $this->emails[] = $user->getEmail();
+        $this->emails[] = mb_strtolower($user->getEmail());
         $this->createdUsers++;
     }
 
@@ -134,7 +134,7 @@ class ParticipantImportLogger
      */
     public function isImported($fileEmail)
     {
-        return in_array($fileEmail, $this->emails);
+        return in_array(mb_strtolower($fileEmail), $this->emails);
     }
 
     /**
