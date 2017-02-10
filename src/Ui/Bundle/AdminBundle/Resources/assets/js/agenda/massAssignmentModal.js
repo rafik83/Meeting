@@ -4,7 +4,7 @@ var options = require('../vueComponents/options'),
 module.exports = {
     template: '#mass-assignment-modal-template',
     delimiters: options.delimiters,
-    props: ['show'],
+    props: ['show', 'agendaSlot'],
     components: { 'mass-assignment-form': massAssignmentForm },
     data: function () {
         return  {}

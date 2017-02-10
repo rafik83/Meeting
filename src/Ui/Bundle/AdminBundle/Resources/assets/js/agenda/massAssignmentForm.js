@@ -1,5 +1,8 @@
 var options = require('../vueComponents/options'),
-    DateTimePicker = require('../components/_DateTimePicker');
+    DateTimePicker = require('../components/_DateTimePicker')
+AgendaApiEndPoints = require('../components/_AgendaApiEndPoints');
+
+var api = new AgendaApiEndPoints();
 
 require('moment/locale/fr');
 require('moment/locale/en-gb');
@@ -7,7 +10,7 @@ require('moment/locale/en-gb');
 module.exports = {
     template: '#mass-assignment-form',
     delimiters: options.delimiters,
-    props: [],
+    props: ['agendaSlot'],
     data: function () {
         return {}
     },
@@ -15,6 +18,18 @@ module.exports = {
         [].forEach.call(document.querySelectorAll('[data-datatimepicker]'), function (element) {
             new DateTimePicker(element);
         });
+
+        this.$http.get(api.getMassAssignmentDetailsEndPoint(this.agendaSlot.id)
+            .then(function (response) {
+
+            }.bind(this))
+            .catch(function (error) {
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert(error.message);
+                }
+            }.bind(this)));
     },
     methods: {}
 };

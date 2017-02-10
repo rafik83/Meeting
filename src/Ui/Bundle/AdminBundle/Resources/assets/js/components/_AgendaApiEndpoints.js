@@ -72,4 +72,19 @@ AgendaApiEndpoints.prototype.getTransformRequestIntoMeetingEndpoint = function (
     return this.getPathname() + '/request/' + requestId + '/transform-into-meeting';
 };
 
+/**
+ * Returns  /admin/fr/event/{event}/agenda/meeting/{meeting}/mass-details/{mass}
+ * or       /app_dev.php/admin/fr/event/{event}/agenda/meeting/{meeting}/mass-details/{mass}
+ *
+ * @param {int} slotId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getMassAssignmentDetailsEndPoint = function (slotId) {
+    return this.getPathname() + '/meeting/' + slot.meetingId + '/mass-details/' + massId
+};
+
+AgendaApiEndpoints.prototype.updateMassAssignmentDetailsEndPoint = function() {
+
+};
+
 module.exports = AgendaApiEndpoints;
