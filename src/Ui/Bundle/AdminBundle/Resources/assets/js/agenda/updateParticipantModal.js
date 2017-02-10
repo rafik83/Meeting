@@ -1,19 +1,19 @@
 var updateParticipantForm = require('./updateParticipantForm'),
     options               = require('../vueComponents/options'),
-    AgendaApiEndpoints    = require('./components/_AgendaApiEndpoints');
+    AgendaApiEndpoints    = require('../components/_AgendaApiEndpoints');
 
 var agendaApiEndpoints = new AgendaApiEndpoints();
 
 module.exports = {
     template: '#update-participant-modal',
     delimiters: options.delimiters,
-    props: ['sheets', 'show'],
+    props: ['show'],
     components: {
         'update-participant-form': updateParticipantForm
     },
     data: function () {
         return {
-            request: {},
+            meetingRequest: {},
             formData: {
                 fromSheet: {},
                 toSheet: {}
@@ -28,33 +28,32 @@ module.exports = {
         refreshList: function () {
             this.$emit('refresh-list', this.sheet);
         },
+        getParticipantIdOfParticipate: function(sheet) {
+            return sheet.participants
+                .filter(function (participant) {
+                    return participant.participate;
+                }).map(function (participant) {
+                    return participant.id;
+                });
+        },
         save: function () {
-            this.setUsedFilter();
+            this.setUsedParticipants();
 
-            agendaApiEndpoints.updateParticipantsEndpoint();
-            this.$http.post(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
-                blockedSlot: this.meetingToUpdate.form.blockedSlot,
-                blockedSpot: this.meetingToUpdate.form.blockedSpot,
-                spotId: this.meetingToUpdate.form.spotId
+            this.$http.post(agendaApiEndpoints.updateParticipantsOfRequestEndpoint(this.meetingRequest.requestId), {
+                fromParticipants: this.getParticipantIdOfParticipate(this.data.fromSheet),
+                toParticipants: this.getParticipantIdOfParticipate(this.data.toSheet)
             })
-                .then(function (response) {
-                    this.$emit('meeting-updated');
-                    this.close();
-                }.bind(this))
-                .catch(function (error) {
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-
-                    this.disabled = false;
-                }.bind(this));
-            // // var sheet = this.sheet;
-            //
-            // this.sheet = sheet;
-            // this.$emit('refresh-list', this.filteredSheets);
-            this.$emit('close-modal');
+            .then(function (response) {
+                //this.close();
+            }.bind(this))
+            .catch(function (error) {
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert(error.message);
+                }
+            }.bind(this));
+            //this.$emit('close-modal');
         },
         reset: function () {
             this.data = {
@@ -69,8 +68,11 @@ module.exports = {
         setFormData: function (formData) {
             Object.assign(this.formData, formData);
         },
-        setRequest: function (request) {
-            Object.assign(this.request, request);
+        setRequest: function (meetingRequest) {
+            Object.assign(this.meetingRequest, meetingRequest);
+        },
+        setUsedParticipants: function() {
+            Object.assign(this.data, this.formData);
         }
     }
 };

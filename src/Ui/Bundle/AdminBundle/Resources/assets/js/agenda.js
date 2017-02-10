@@ -182,13 +182,15 @@ new Vue({
         },
 
         showParticipants: function (meetingRequest) {
-            this.$http.get(agendaApiEndpoints.getParticipantsEndpoint(meetingRequest.requestId))
+            this.$http.get(agendaApiEndpoints.getParticipantsOfRequestEndpoint(meetingRequest.requestId))
                 .then(function (response) {
-                    var child = this.$refs.updateParticipantModal;
-                    if (typeof child !== 'undefined') {
-                        child.setFormData(response.data);
-                        child.setRequest(meetingRequest);
+                    var participantModalComponent = this.$refs.updateParticipantModal;
+
+                    if (typeof participantModalComponent !== 'undefined') {
+                        participantModalComponent.setFormData(response.data);
+                        participantModalComponent.setRequest(meetingRequest);
                     }
+
                     this.showParticipantModal = true;
 
                 }.bind(this))

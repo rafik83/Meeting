@@ -2,6 +2,6 @@ var options = require('../vueComponents/options');
 
 module.exports = {
     template: '#update-participant-form',
-    props: ['sheets', 'data'],
+    props: ['data'],
     delimiters: options.delimiters
 };
