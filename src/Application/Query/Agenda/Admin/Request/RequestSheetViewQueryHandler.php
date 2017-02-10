@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Request;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\View\Agenda\Admin\RequestParticipantView;
-use Proximum\Vimeet\Application\View\Agenda\Admin\RequestSheetView;
+use Proximum\Vimeet\Application\View\Agenda\Admin\Request\RequestParticipantView;
+use Proximum\Vimeet\Application\View\Agenda\Admin\Request\RequestSheetView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 

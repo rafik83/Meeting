@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Agenda\Admin;
+namespace Proximum\Vimeet\Application\View\Agenda\Admin\Request;
 
 class RequestSheetsView
 {

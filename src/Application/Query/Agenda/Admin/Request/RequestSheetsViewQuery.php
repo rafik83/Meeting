@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Request;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 

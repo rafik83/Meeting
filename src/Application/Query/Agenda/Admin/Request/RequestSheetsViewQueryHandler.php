@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Request;
 
-use Proximum\Vimeet\Application\View\Agenda\Admin\RequestSheetsView;
+use Proximum\Vimeet\Application\View\Agenda\Admin\Request\RequestSheetsView;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class RequestSheetsViewQueryHandler

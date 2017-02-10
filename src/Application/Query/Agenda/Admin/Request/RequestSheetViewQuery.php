@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Request;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -40,7 +40,7 @@ class RequestSheetViewQuery
     public function __construct(Sheet $sheet, Request $request, $locale)
     {
         $this->sheet   = $sheet;
-        $this->locale  = $locale;
         $this->request = $request;
+        $this->locale  = $locale;
     }
 }
