@@ -7,7 +7,7 @@
             <h4 class="modal-title" id="filterSheetModalLabel">{{ 'admin.agenda.request.updateParticipant.title.label'|trans }}</h4>
         </div>
         <div class="modal-body">
-            <update-participant-form :data="formData" :sheets="sheets"></update-participant-form>
+            <update-participant-form :data="formData"></update-participant-form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="$emit('close-modal')">
