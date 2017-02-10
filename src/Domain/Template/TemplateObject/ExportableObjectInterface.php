@@ -16,9 +16,11 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 interface ExportableObjectInterface
 {
     /**
+     * @param array $taggedData is used to return possible value from the taggedData if the field is empty
+     *
      * @return string
      */
-    public function getExportableContent();
+    public function getExportableContent(array $taggedData = []);
 
     /**
      * @param string $locale

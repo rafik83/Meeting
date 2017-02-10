@@ -115,7 +115,7 @@ class BooleanObject extends EditableObject implements ContentObjectInterface, Ex
      *
      * @return bool
      */
-    public function getExportableContent()
+    public function getExportableContent(array $taggedData = [])
     {
         return (bool) $this->getBoolean();
     }
