@@ -1,6 +1,6 @@
 var options = require('../vueComponents/options'),
     DateTimePicker = require('../components/_DateTimePicker'),
-    AgendaApiEndPoints = require('../components/_AgendaApiEndPoints');
+    AgendaApiEndPoints = require('../components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndPoints();
 
