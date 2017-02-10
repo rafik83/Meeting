@@ -244,7 +244,7 @@ new Vue({
         handleRefreshBothAgenda: function(event) {
             var sheetMet = this.findSheetBySheetId(event.sheetMetId);
             this.loadAgenda(event.sheet, true);
-            
+
             if (sheetMet !== null) {
                 this.loadAgenda(sheetMet, true);
             }
