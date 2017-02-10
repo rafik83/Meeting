@@ -14,17 +14,20 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\InvalidParticipantException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSheetsViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -206,13 +209,15 @@ class MeetingController extends Controller
     }
 
     /**
+     * This method returns the participants and sheet concerned by the given meeting request
+     *
      * @param Request $request
      * @param Event   $event
      * @param Meeting\Request $meetingRequest
      *
      * @return JsonResponse
      */
-    public function participantsAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    public function getParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest)
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
@@ -221,6 +226,40 @@ class MeetingController extends Controller
         );
 
         return new JsonResponse($requestSheetsView);
+    }
+
+    /**
+     * @param Request         $request
+     * @param Event           $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function updateParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['fromParticipants']) || !isset($data['toParticipants'])) {
+            return $this->createErrorJsonResponse('admin.agenda.request.updateParticipant.invalidArguments');
+        }
+
+        try {
+            $this->get('tactician.commandbus')->handle(
+                new UpdateParticipants($meetingRequest, $data['fromParticipants'], $data['toParticipants'])
+            );
+        } catch (InvalidParticipantException $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.request.updateParticipant.invalidArguments');
+        }
+
+        $meetingRequestListFrom = $this->get('tactician.commandbus.query')->handle(new MeetingRequestListViewQuery($meetingRequest->getFromSheet(), $event->getAvailableLocale($request->getLocale())));
+        $meetingRequestListTo   = $this->get('tactician.commandbus.query')->handle(new MeetingRequestListViewQuery($meetingRequest->getToSheet(), $event->getAvailableLocale($request->getLocale())));
+
+        return new JsonResponse([
+            $meetingRequestListFrom,
+            $meetingRequestListTo
+        ]);
     }
 
     /**
