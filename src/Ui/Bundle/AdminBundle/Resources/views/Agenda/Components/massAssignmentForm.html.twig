@@ -9,7 +9,8 @@
                     data-datatimepicker="fr"
                     autocomplete="off"
                     data-allow-hours="data-allow-hours"
-                    class="form-control">
+                    class="form-control"
+                    v-model="beginTime">
         </div>
         <div class="form-group">
             <label for="massAssignmentBegin">{{ 'admin.schedule.days.endTime'|trans }}</label>
@@ -20,12 +21,13 @@
                     data-datatimepicker="fr"
                     autocomplete="off"
                     data-allow-hours="data-allow-hours"
-                    class="form-control">
+                    class="form-control"
+                    v-model="endTime">
         </div>
         <div class="form-group">
-            <label for="deactivate">
-                <input type="checkbox" id="deactivate">
-                {{ 'admin.agenda.mass_assignment.deactivate.label'|trans }}
+            <label for="enabled">
+                <input type="checkbox" id="enabled" v-model="enabled">
+                {{ 'admin.agenda.mass_assignment.enabled.label'|trans }}
             </label>
         </div>
     </form>

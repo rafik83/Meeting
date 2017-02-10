@@ -1,8 +1,5 @@
 var options = require('../vueComponents/options'),
-    massAssignmentForm = require('./massAssignmentForm'),
-    AgendaApiEndPoints = require('../components/_AgendaApiEndpoints');
-
-var api = new AgendaApiEndPoints();
+    massAssignmentForm = require('./massAssignmentForm');
 
 module.exports = {
     template: '#mass-assignment-modal-template',
@@ -14,22 +11,13 @@ module.exports = {
     },
     methods: {
         /**
-         * Fetch Mass assignment details
-         *
          * @param {int} massId
          */
         init: function(massId) {
-            this.$http.get(api.getMassAssignmentDetailEndpoint(massId))
-                .then(function (response) {
-                    console.log(response);
-                }.bind(this))
-                .catch(function (error) {
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-                }.bind(this));
+            var child = this.$refs.massAssignmentForm;
+            if (typeof child !== 'undefined') {
+                child.init(massId);
+            }
         },
         save: function () {
             
