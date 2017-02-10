@@ -4,7 +4,7 @@
             <label for="selectedTypes">${ data.fromSheet.sheetTitle }</label>
             <div class="checkbox" v-for="participant in data.fromSheet.participants">
                 <label>
-                    <input name="fromParticipants[]" type="checkbox" v-model:value="participant.participate" v-bind:value="participant.id" :checked="participant.participate">
+                    <input name="fromParticipants[]" type="checkbox" v-model:value="participant.participate" v-bind:value="participant.id" v-bind:checked="participant.participate">
                     ${ participant.fullName }
                 </label>
             </div>
@@ -13,7 +13,7 @@
             <label for="selectedTypes">${ data.toSheet.sheetTitle }</label>
             <div class="checkbox" v-for="participant in data.toSheet.participants">
                 <label>
-                    <input name="toParticipants[]" type="checkbox" v-model:value="participant.participate" v-bind:value="participant.id" :checked="participant.participate">
+                    <input name="toParticipants[]" type="checkbox" v-model:value="participant.participate" v-bind:value="participant.id" v-bind:checked="participant.participate">
                     ${ participant.fullName }
                 </label>
             </div>
