@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 /**
- * Assignement of a time slot from a disptached mass unavailability to a participant.
+ * Assignement of a time slot from a dispatched mass unavailability to a participant.
  */
 class MassAssignment
 {

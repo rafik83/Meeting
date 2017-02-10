@@ -123,8 +123,11 @@ module.exports = {
                 }.bind(this));
         },
 
-        showMassAssignment: function () {
-            this.$emit('show-mass-assignment');
+        /**
+         * @param {Object} slot
+         */
+        showMassAssignment: function (slot) {
+            this.$emit('show-mass-assignment', slot);
         }
     }
 };
