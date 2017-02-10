@@ -120,6 +120,9 @@ app_patterns:
     # App
     - imagick
 
+  php_applications:
+    - openl10n
+
   php_configs:
     - file: app_opcache.ini
       template: configs/app_opcache.{{ env }}.j2
