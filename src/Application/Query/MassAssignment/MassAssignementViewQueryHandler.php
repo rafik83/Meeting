@@ -28,7 +28,9 @@ class MassAssignementViewQueryHandler
             $query->massAssignment->getMass()->getEnd(),
             $query->massAssignment->getBegin(),
             $query->massAssignment->getEnd(),
-            $query->massAssignment->isEnabled()
+            $query->massAssignment->isEnabled(),
+            $query->event->getTimeZone(),
+            date_default_timezone_get()
         );
     }
 }

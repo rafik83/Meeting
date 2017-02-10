@@ -48,15 +48,27 @@ class MassAssignementView
     public $enabled;
 
     /**
+     * @var string
+     */
+    public $eventTimezone;
+
+    /**
+     * @var string
+     */
+    public $serverTimezone;
+
+    /**
      * MassAssignementView constructor.
      *
      * @param int                $id
-     * @param                    $title
+     * @param string             $title
      * @param \DateTimeInterface $massBegin
      * @param \DateTimeInterface $massEnd
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param bool               $enabled
+     * @param string             $eventTimezone
+     * @param string             $serverTimezone
      */
     public function __construct(
         $id,
@@ -65,14 +77,18 @@ class MassAssignementView
         \DateTimeInterface $massEnd,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $enabled
+        $enabled,
+        $eventTimezone,
+        $serverTimezone
     ) {
-        $this->id        = $id;
-        $this->begin     = $begin;
-        $this->end       = $end;
-        $this->enabled   = $enabled;
-        $this->massBegin = $massBegin;
-        $this->massEnd   = $massEnd;
-        $this->title     = $title;
+        $this->id             = $id;
+        $this->begin          = $begin;
+        $this->end            = $end;
+        $this->enabled        = $enabled;
+        $this->massBegin      = $massBegin;
+        $this->massEnd        = $massEnd;
+        $this->title          = $title;
+        $this->eventTimezone  = $eventTimezone;
+        $this->serverTimezone = $serverTimezone;
     }
 }

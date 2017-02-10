@@ -305,6 +305,7 @@ class MeetingController extends Controller
         $massAssignmentView = $this->get('tactician.commandbus.query')->handle(
             new MassAssignmentViewQuery(
                 $massAssignment,
+                $event,
                 $event->getAvailableLocale($request->getLocale())
             )
         );
