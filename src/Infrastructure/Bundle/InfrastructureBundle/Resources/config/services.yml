@@ -2519,9 +2519,9 @@ services:
     # Mass Assignment query handler
     ##
     query.mass_assignement.mass_assignement_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\MassAssignement\MassAssignementViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\MassAssignment\MassAssignementViewQueryHandler
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MassAssignement\MassAssignementViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery }
 
     ##
     # Notification query handler

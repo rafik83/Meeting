@@ -298,18 +298,18 @@ admin_agenda_sheet_meeting_remove:
     defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
 
 admin_agenda_mass_assignment_detail:
-    path: /event/{event}/agenda/mass/{mass}/detail
+    path: /event/{event}/agenda/mass/{massAssignment}/detail
     requirements:
         event: \d+
-        mass: \d+
+        massAssignment: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Meeting:massAssignmentDetail }
 
 admin_agenda_mass_assignment_update:
-    path: /event/{event}/agenda/mass/{mass}/update
+    path: /event/{event}/agenda/mass/{massAssignment}/update
     requirements:
         event: \d+
-        mass: \d+
+        massAssignment: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Agenda/Meeting:updateMassAssignment }
 

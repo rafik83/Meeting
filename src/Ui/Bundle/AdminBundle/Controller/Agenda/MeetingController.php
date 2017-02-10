@@ -28,7 +28,7 @@ use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMass
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
-use Proximum\Vimeet\Application\Query\MassAssignement\MassAssignmentViewQuery;
+use Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;

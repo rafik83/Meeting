@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\MassAssignement;
+namespace Proximum\Vimeet\Application\Query\MassAssignment;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
