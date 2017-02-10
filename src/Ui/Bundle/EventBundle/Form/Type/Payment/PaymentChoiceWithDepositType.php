@@ -42,6 +42,8 @@ class PaymentChoiceWithDepositType extends AbstractPaymentChoiceType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => ChoiceWithDeposit::class,
         ]);

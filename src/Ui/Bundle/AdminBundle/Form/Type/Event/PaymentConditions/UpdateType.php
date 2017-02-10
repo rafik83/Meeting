@@ -50,6 +50,7 @@ class UpdateType extends AbstractType
                     'max' => 100,
                 ],
             ])
+            ->add('paymentModes', PaymentModeChoiceType::class)
         ;
     }
 
