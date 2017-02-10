@@ -7,7 +7,7 @@
             <h4 class="modal-title" id="massAssignmentModalLabel">{{ 'admin.agenda.mass_assignment.title.label'|trans }}</h4>
         </div>
         <div class="modal-body">
-            <mass-assignment-form v-bind:agendaSlot="agendaSlot"></mass-assignment-form>
+            <mass-assignment-form></mass-assignment-form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="$emit('close-modal')">

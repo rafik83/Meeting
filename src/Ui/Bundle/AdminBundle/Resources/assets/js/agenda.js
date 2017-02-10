@@ -44,7 +44,6 @@ new Vue({
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
         showMassAssignmentModal: false,
-        agendaSlot: null,
         hasUsedSheetFilter: false,
         meetingSlotToUpdate: null,
         meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
@@ -91,9 +90,15 @@ new Vue({
             this.loadSheets();
         },
 
-        showMassAssignment: function (agendaSlot) {
+        /**
+         * @param {int} massId
+         */
+        showMassAssignment: function (massId) {
             this.showMassAssignmentModal = true;
-            this.agendaSlot = agendaSlot;
+            var child = this.$refs.massAssignmentModal;
+            if (typeof child !== 'undefined') {
+                child.init(massId);
+            }
         },
 
         /**

@@ -59,11 +59,15 @@
         </div>
 
         <div class="slot mass-unavailability" v-if="agendaSlot.type === 'mass_unavailability'">
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
+        </div>
+
+        <div class="slot mass-unavailability" v-if="agendaSlot.type === 'mass_assignment_unavailability'">
             <a href="#"
                title="{{ 'admin.agenda.meeting.mass_assignment.update'|trans }}"
                class="pull-right"
-               v-on:click="showMassAssignment(agendaSlot)">
-                <span class="glyphicon glyphicon-grain"></span>
+               v-on:click="showMassAssignment(agendaSlot.massAssignmentId)">
+                <span class="glyphicon glyphicon-cog"></span>
             </a>
             <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
         </div>

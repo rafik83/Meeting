@@ -124,10 +124,10 @@ module.exports = {
         },
 
         /**
-         * @param {Object} slot
+         * @param {int} massId
          */
-        showMassAssignment: function (slot) {
-            this.$emit('show-mass-assignment', slot);
+        showMassAssignment: function (massId) {
+            this.$emit('show-mass-assignment', massId);
         }
     }
 };

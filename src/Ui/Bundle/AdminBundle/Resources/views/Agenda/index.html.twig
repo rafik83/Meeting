@@ -167,7 +167,7 @@
     </div>
 
     <filter-modal :sheets="sheets" :show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
-    <mass-assignment-modal v-bind:agendaSlot="agendaSlot" :show="showMassAssignmentModal" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
+    <mass-assignment-modal :show="showMassAssignmentModal" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
 </div>
 {% endblock %}
 
