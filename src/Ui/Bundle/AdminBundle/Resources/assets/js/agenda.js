@@ -1,11 +1,14 @@
-var Vue                    = require('vue'),
-    axios                  = require('axios'),
-    filterModal            = require('./agenda/filterModal'),
+var Vue                = require('vue'),
+    axios              = require('axios'),
+    filterModal        = require('./agenda/filterModal'),
+    meetingUpdateModal = require('./agenda/MeetingUpdateModal'),
     updateParticipantModal = require('./agenda/updateParticipantModal'),
-    options                = require('./vueComponents/options'),
-    AgendaApiEndpoints     = require('./components/_AgendaApiEndpoints');
+    sheetAgenda        = require('./agenda/SheetAgenda'),
+    slotAgenda         = require('./agenda/SlotAgenda'),
+    options            = require('./vueComponents/options'),
+    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
-var agendaApiEndpoints = new AgendaApiEndpoints();
+var api = new AgendaApiEndpoints();
 
 /**
  * Pass axios to Vue
@@ -22,114 +25,28 @@ Vue.component('Modal', {
     }
 });
 
-Vue.component('MeetingUpdateModal', {
-    delimiters: options.delimiters,
-    template: '#meeting-update-modal-template',
-    props: {
-        meetingToUpdate: {
-            type: Object,
-            default: function () {
-                return {
-                    form: {
-                        meetingId: null,
-                        blockedSlot: false,
-                        blockedSpot: false,
-                        spotId: null,
-                        availableSpots: []
-                    }
-                }
-            }
-        }
-    },
-    data: function () {
-        return {
-            disabled: false
-        }
-    },
-    methods: {
-        reinit: function () {
-            this.disabled = false;
-        },
-        close: function () {
-            this.$emit('close-modal');
-            this.reinit();
-        },
-        save: function () {
-            this.disabled = true;
-
-            this.$http.post(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
-                blockedSlot: this.meetingToUpdate.form.blockedSlot,
-                blockedSpot: this.meetingToUpdate.form.blockedSpot,
-                spotId: this.meetingToUpdate.form.spotId
-            })
-            .then(function (response) {
-                this.$emit('meeting-updated');
-                this.close();
-            }.bind(this))
-            .catch(function (error) {
-                if (error.response) {
-                    alert(error.response.data);
-                } else {
-                    alert(error.message);
-                }
-
-                this.disabled = false;
-            }.bind(this));
-        }
-    }
-});
-
 new Vue({
     el: '#agenda',
     delimiters: options.delimiters,
     components: {
         'filter-modal': filterModal,
-        'update-participant-modal': updateParticipantModal
+        'update-participant-modal': updateParticipantModal,
+        'slot-agenda': slotAgenda,
+        'sheet-agenda': sheetAgenda,
+        'MeetingUpdateModal': meetingUpdateModal
     },
     data: {
-        /**
-         * Array of sheets
-         */
-        sheets: [],
-
-        /**
-         * opened sheet
-         */
-        agendas: [],
-
-        /**
-         * Sheet focused
-         */
-        focus: null,
-
-        /**
-         * Is meeting loading
-         */
-        isMeetingToUpdateLoading: false,
-
-        /**
-         * Meeting to update form
-         */
-        meetingToUpdate: null,
+        sheets: [], /** {array} Sheet */
+        openedSheets: [], /** {array} Opened sheet */
+        focusedSheet: null, /** @param {Object} Sheet focused */
+        isMeetingToUpdateLoading: false, /** Is meeting loading */
+        meetingToUpdate: null, /** Meeting to update form */
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
         showParticipantModal: false,
         hasUsedSheetFilter: false,
-
-        /**
-         * Meeting slot to update
-         */
         meetingSlotToUpdate: null,
-
-        /**
-         * Available slots for meeting
-         */
-        availableSlotsForMeeting: [],
-
-        /**
-         * Meeting request to transform into meeting
-         */
-        meetingRequestToTransformIntoMeeting: null
+        meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
     },
 
     /**
@@ -173,6 +90,9 @@ new Vue({
             this.loadSheets();
         },
 
+        /**
+         * Filters - Show the filter Modal
+         */
         showSheetFilter: function () {
             this.showFilterModal = true;
             var child = this.$refs.sheetFilterModal;
@@ -182,7 +102,7 @@ new Vue({
         },
 
         showParticipants: function (meetingRequest) {
-            this.$http.get(agendaApiEndpoints.getParticipantsOfRequestEndpoint(meetingRequest.requestId))
+            this.$http.get(api.getParticipantsOfRequestEndpoint(meetingRequest.requestId))
                 .then(function (response) {
                     var participantModalComponent = this.$refs.updateParticipantModal;
 
@@ -204,11 +124,9 @@ new Vue({
 
         },
 
-        refreshList: function (filteredSheets) {
-            this.hasUsedSheetFilter = true;
-            this.filteredSheets = filteredSheets;
-        },
-
+        /**
+         * Filters - Reset filteredSheet
+         */
         resetSheetFilter: function () {
             var child = this.$refs.sheetFilterModal;
             if (typeof child !== 'undefined') {
@@ -219,10 +137,29 @@ new Vue({
         },
 
         /**
+         * Filters - refresh filteredSheets
+         *
+         * @param {array} filteredSheets
+         */
+        refreshList: function (filteredSheets) {
+            this.hasUsedSheetFilter = true;
+            this.filteredSheets = filteredSheets;
+        },
+
+        /**
+         * Event trigger when click on meeting update button in order to show update modal
+         *
+         * @param {Object} meetingToUpdate
+         */
+        showMeetingUpdateModal: function (meetingToUpdate) {
+            this.meetingToUpdate = meetingToUpdate;
+        },
+
+        /**
          * Load sheets data
          */
         loadSheets: function () {
-            this.$http.get(agendaApiEndpoints.getSheetsEndpoint())
+            this.$http.get(api.getSheetsEndpoint())
                 .then(function (response) {
                     this.sheets = response.data;
                 }.bind(this))
@@ -235,111 +172,35 @@ new Vue({
                 });
         },
 
-        /**
-         * Clear sheet agenda data
-         *
-         * @param sheet
-         */
-        clearAgenda: function (sheet) {
-            var sheetId = this.findSheetAgenda(sheet);
-
-            if (-1 >= sheetId) {
-                return;
-            }
-
-            this.agendas[sheetId].participants = [];
-            this.agendas[sheetId].requests     = [];
-        },
-
-        /**
-         * Load sheet agenda data
-         *
-         * @param sheet
-         */
-        loadAgenda: function (sheet) {
-            if (-1 === this.findSheetAgenda(sheet)) {
-                return;
-            }
-
-            if (true === sheet.isAgendaLoading) {
-                return;
-            }
-
-            sheet.isAgendaLoading = true;
-
-            this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
-                .then(function (response) {
-                    var participants = response.data.participants;
-                    var requests     = response.data.requests;
-                    this.updateAgendaAndRequests(sheet, participants, requests);
-                }.bind(this))
-                .catch(function (error) {
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-
-                    sheet.isAgendaLoading = false;
-                });
-        },
-
-        /**
-         * Update agenda and requests of  a given Sheet
-         *
-         * @param sheet
-         * @param participants
-         * @param requests
-         */
-        updateAgendaAndRequests: function(sheet, participants, requests) {
-            this.clearAgenda(sheet);
-            var sheetId = this.findSheetAgenda(sheet);
-
-            participants.forEach(function (participant) {
-                if (undefined !== this.agendas[sheetId] && undefined !== this.agendas[sheetId].participants) {
-                    this.agendas[sheetId].participants.push(participant);
-                }
-            }.bind(this));
-
-            requests.forEach(function (request) {
-                request.participantsName = request.participants.map(function (participant) {
-                    return participant.fullName;
-                }).join(', ');
-
-                if (undefined !== this.agendas[sheetId] && undefined !== this.agendas[sheetId].requests) {
-                    this.agendas[sheetId].requests.push(request);
-                }
-            }.bind(this));
-
-            this.highlightMeetingsInCommon(sheet, true);
-            sheet.isAgendaLoading = false;
-
-            this.$forceUpdate();
+        focusSheet: function (sheet) {
+            this.focusedSheet = sheet
         },
 
         /**
          * Show and focus agenda of given sheet
          *
-         * @param sheet
+         * @param {Object} sheet
          */
         showAndFocusAgenda: function (sheet) {
+            this.cancelSlotAction();
             this.showAgenda(sheet);
-            this.focusAgenda(sheet);
+            this.focusedSheet = sheet;
         },
 
         /**
          * Show agenda of given sheet
          *
-         * @param sheet
+         * @param {Object} sheet
          */
         showAgenda: function (sheet) {
-            if (-1 === this.findSheetAgenda(sheet)) {
-                this.agendas.push(sheet);
+            // check if sheet is already opened
+            if (-1 !== this.isOpenedSheet(sheet)) {
+                return;
             }
 
-            this.cancelSlotAction();
+            // this.cancelSlotAction();
             this.highlightMeetingsInCommon(sheet, true);
-            this.loadAgenda(sheet);
+            this.loadAgenda(sheet, false);
         },
 
         /**
@@ -354,34 +215,189 @@ new Vue({
                 return;
             }
 
+            this.focusedSheet = sheet;
             this.showAgenda(sheet);
         },
 
         /**
-         * Find index of a sheet
+         * Load sheet agenda data
          *
-         * @param sheet
-         * @returns {Number}
+         * @param {Object} sheet
+         * @param {boolean} force = false
          */
-        findSheet: function (sheet) {
-            return this.sheets.indexOf(sheet);
+        loadAgenda: function (sheet, force) {
+            force = force || false;
+
+            // prevent execute api request twice if sheet agenda already loaded
+            if (force === false && (this.isOpenedSheet(sheet) !== -1 || sheet.isAgendaLoading === true)) {
+                return;
+            }
+
+            sheet.isAgendaLoading = true;
+
+            this.$http.get(api.getSheetAgendaEndpoint(sheet))
+                .then(function (response) {
+                    var participants = response.data.participants;
+                    var requests     = response.data.requests;
+
+                    this.populateSheetAgenda(sheet, participants, requests);
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+
+                    sheet.isAgendaLoading = false;
+                });
         },
 
         /**
-         * Find index of sheet in agendas
+         * Event handler for refresh-agenda
          *
-         * @param sheet
+         * @param {Object} sheet
+         */
+        refreshAgenda: function (sheet) {
+            this.loadAgenda(sheet, true);
+        },
+
+        /**
+         * Event handler for remove-meeting
+         *
+         * @param {Object} event
+         */
+        handleRemoveMeeting: function(event) {
+            var sheetMet = this.findSheetBySheetId(event.sheetMetId);
+            this.loadAgenda(event.sheet, true);
+            if(sheetMet !== null) {
+                this.loadAgenda(sheetMet, false);
+            }
+        },
+
+        /**
+         * Update agenda and requests of a given Sheet
+         *
+         * @param {Object} sheet
+         * @param {array} participants
+         * @param {array} requests
+         */
+        populateSheetAgenda: function(sheet, participants, requests) {
+            this.clearAgenda(sheet);
+
+            sheet.participants = participants;
+            sheet.requests = [];
+
+            requests.forEach(function (request) {
+                request.participantsName = request.participants.map(function (participant) {
+                    return participant.fullName;
+                }).join(', ');
+
+                sheet.requests.push(request);
+            }.bind(this));
+
+            // check if sheet already opened
+            var openedSheetIndex = this.isOpenedSheet(sheet);
+
+            if (openedSheetIndex === -1) {
+                this.openedSheets.push(sheet); // add new opened sheet
+            } else {
+                this.$set(this.openedSheets[openedSheetIndex], 'participants', sheet.participants);
+                this.$set(this.openedSheets[openedSheetIndex], 'requests', sheet.requests);
+
+                this.forceUpdateSheet(sheet);
+                this.$forceUpdate();
+            }
+
+            this.highlightMeetingsInCommon(sheet, true);
+            sheet.isAgendaLoading = false;
+        },
+
+        /**
+         * Clear sheet agenda participants and requests data
+         *
+         * @param {Object} sheet
+         */
+        clearAgenda: function (sheet) {
+            var sheetIndex = this.isOpenedSheet(sheet);
+
+            if (-1 >= sheetIndex) {
+                return;
+            }
+
+            this.openedSheets[sheetIndex].participants = [];
+            this.openedSheets[sheetIndex].requests     = [];
+        },
+        
+        /**
+         * Close given sheet agenda
+         *
+         * @param {Object} sheet
+         */
+        closeAgenda: function (sheet) {
+            sheet.isAgendaLoading = false;
+            this.cancelSlotAction();
+            this.highlightMeetingsInCommon(sheet, false);
+            this.openedSheets.splice(this.isOpenedSheet(sheet), 1);
+
+            if (this.focusedSheet == sheet) {
+                this.focusedSheet = this.focusOnLastSheetOrNull();
+            }
+        },
+
+        /**
+         * Loop on <SheetAgenda> component instances and return the one associated
+         * to this Sheet
+         *
+         * @returns {Object}|{undefined}
+         */
+        findFocusedSheetComponent: function () {
+            var childs = this.$refs.childSheetAgenda;
+            if (childs !== undefined) {
+                for (var i = 0; i < childs.length; i++) {
+                    if (childs[i].sheet.id === this.focusedSheet.id) {
+                        return childs[i];
+                    }
+                }
+            }
+
+            return undefined;
+        },
+
+        /**
+         * @param {Object} sheet
+         * @returns {Object}|null
+         */
+        findSheetComponent: function (sheet) {
+            var childs = this.$refs.childSheetAgenda;
+            if (childs !== undefined) {
+                for (var i = 0; i < childs.length; i++) {
+                    if (childs[i].sheet.id === sheet.id) {
+                        return childs[i];
+                    }
+                }
+            }
+
+            return null;
+        },
+
+        /**
+         * Check if sheet is already open
+         *
+         * @param {Object} sheet
+         *
          * @returns {Number}
          */
-        findSheetAgenda: function (sheet) {
-            return this.agendas.indexOf(sheet);
+        isOpenedSheet: function (sheet) {
+            return this.openedSheets.indexOf(sheet);
         },
 
         /**
          * Find Sheet or returns null
          *
          * @param {int} sheetId
-         * @returns null|sheet
+         *
+         * @returns null|{Object} sheet
          */
         findSheetBySheetId: function (sheetId) {
             for (var sheetIndex = 0; sheetIndex < this.sheets.length; sheetIndex++) {
@@ -394,15 +410,16 @@ new Vue({
         },
 
         /**
-         * Find Sheet in opened Agendas or returns null
+         * Find Sheet in opened openedSheets or returns null
          *
          * @param {int} sheetId
-         * @returns null|sheet
+         *
+         * @returns null|{Object} sheet
          */
-        findSheetAgendaBySheetId: function (sheetId) {
-            for (var agendaIndex = 0; agendaIndex < this.agendas.length; agendaIndex++) {
-                if (this.agendas[agendaIndex].id === sheetId) {
-                    return this.agendas[agendaIndex];
+        findOpenedSheetById: function (sheetId) {
+            for (var agendaIndex = 0; agendaIndex < this.openedSheets.length; agendaIndex++) {
+                if (this.openedSheets[agendaIndex].id === sheetId) {
+                    return this.openedSheets[agendaIndex];
                 }
             }
 
@@ -410,55 +427,39 @@ new Vue({
         },
 
         /**
-         * Close given sheet agenda
+         * Get the first opened sheet
          *
-         * @param sheet
+         * @returns {Object|null}
          */
-        closeAgenda: function (sheet) {
-            sheet.isAgendaLoading = false;
-            this.cancelSlotAction();
-            this.highlightMeetingsInCommon(sheet, false);
-            this.agendas.splice(this.findSheetAgenda(sheet), 1);
-
-            if (this.focus == sheet) {
-                this.focus = null;
+        focusOnLastSheetOrNull: function() {
+            for (var agendaIndex = 0; agendaIndex < this.openedSheets.length; agendaIndex++) {
+                if (this.openedSheets[agendaIndex].id !== null) {
+                    return this.focusedSheet = this.openedSheets[agendaIndex];
+                }
             }
-        },
-
-        /**
-         * Focus to a given sheet agenda
-         *
-         * @param sheet
-         */
-        focusAgenda: function (sheet) {
-            if(-1 === this.findSheetAgenda(sheet)) {
-                return;
-            }
-
-            this.cancelSlotAction();
-            this.focus = sheet;
+            return null;
         },
 
         /**
          * Find meetings for the given sheet
          *
-         * @param sheet
+         * @param {Object} sheet
          * @returns {Array} of meeting slots
          */
         findMeetings: function (sheet) {
-            var sheetId = this.findSheetAgenda(sheet);
+            var sheetId = this.isOpenedSheet(sheet);
 
             if (-1 === sheetId) {
                 return [];
             }
 
-            if (undefined === this.agendas[sheetId]) {
+            if (undefined === this.openedSheets[sheetId]) {
                 return [];
             }
 
-            var participants = this.agendas[sheetId].participants;
+            var participants = this.openedSheets[sheetId].participants;
 
-            if (undefined === this.agendas[sheetId].participants) {
+            if (undefined === this.openedSheets[sheetId].participants) {
                 return [];
             }
 
@@ -480,66 +481,7 @@ new Vue({
         },
 
         /**
-         * Remove meeting from sheet (and sheet met) and reload agenda(s)
-         *
-         * @param {Object} sheet
-         * @param {Object} slot
-         * @param {string} message
-         */
-        removeMeeting: function(sheet, slot, message) {
-
-            if (window.confirm(message)) {
-
-                this.$http.delete(agendaApiEndpoints.getRemoveMeetingEndpoint(slot))
-                    .then(function () {
-
-                        this.focusAgenda(sheet);
-                        this.loadAgenda(sheet);
-                        this.loadAgenda(this.findSheetBySheetId(slot.sheetMetId));
-                    }.bind(this))
-                    .catch(function (error) {
-                        if (error.response) {
-                            window.alert(error.response.data);
-                        }
-                        console.log(error);
-                    });
-            }
-        },
-
-        /**
-         * Find Participant agenda
-         *
-         * @param sheet
-         * @param participant
-         *
-         * @returns null|participant
-         */
-        findParticipantAgenda: function (sheet, participant) {
-            var sheetId = this.findSheetAgenda(sheet);
-
-            if (-1 === sheetId) {
-                return null;
-            }
-
-            if (undefined === this.agendas[sheetId]) {
-                return null;
-            }
-
-            if (undefined === this.agendas[sheetId].participants) {
-                return null;
-            }
-
-            var index = this.agendas[sheetId].participants.indexOf(participant);
-
-            if (-1 === index) {
-                return null;
-            }
-
-            return this.agendas[sheetId].participants[index];
-        },
-
-        /**
-         * Highlight meetings in common in opened agendas with the given sheet
+         * Highlight meetings in common in opened openedSheets with the given sheet
          *
          * @param sheet
          * @param {boolean} state
@@ -548,7 +490,7 @@ new Vue({
             var meetings = this.findMeetings(sheet);
 
             for (var meetingIndex = 0; meetingIndex < meetings.length; meetingIndex++) {
-                var sheetMet = this.findSheetAgendaBySheetId(meetings[meetingIndex].sheetMetId);
+                var sheetMet = this.findOpenedSheetById(meetings[meetingIndex].sheetMetId);
 
                 if (null !== sheetMet) {
                     var meetingsSheetMet = this.findMeetings(sheetMet);
@@ -559,44 +501,23 @@ new Vue({
                             meetingsSheetMet[meetingSheetMetIndex].highlight = state;
                         }
                     }
+
+                    this.forceUpdateSheet(sheetMet);
                 }
             }
         },
 
         /**
-         * Load meeting data
+         * This method force update the sheetComponent of the given Sheet
          *
-         * @param sheet
-         * @param slot
+         * @param {Object} sheet
          */
-        loadMeetingUpdateSpot: function (sheet, slot) {
-            if (slot.meetingId === undefined) {
-                return;
+        forceUpdateSheet: function (sheet) {
+            var sheetMetComponent = this.findSheetComponent(sheet);
+
+            if(sheetMetComponent !== null) {
+                sheetMetComponent.forceUpdate();
             }
-
-            this.cancelSlotAction();
-
-            this.isMeetingToUpdateLoading = true;
-
-            this.$http.get(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(slot.meetingId))
-                .then(function (response) {
-                    this.meetingToUpdate = {
-                        sheet: sheet,
-                        slot: slot,
-                        form: response.data
-                    };
-                    this.isMeetingToUpdateLoading = false;
-                }.bind(this))
-                .catch(function (error) {
-                    this.isMeetingToUpdateLoading = false;
-                    this.loadAgenda(sheet);
-
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-                }.bind(this));
         },
 
         /**
@@ -616,176 +537,39 @@ new Vue({
             }
 
             if (null !== this.meetingToUpdate.sheet) {
-                this.loadAgenda(this.meetingToUpdate.sheet);
+                this.loadAgenda(this.meetingToUpdate.sheet, true);
             }
 
             if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
-                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId));
+                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId), true);
             }
         },
 
         /**
-         * Load available slots for given meeting (slot) of participant and sheet
+         * Transform Meeting Request into Meeting and refresh sheet's agenda
          *
-         * @param sheet
-         * @param participant
-         * @param slot
-         */
-        loadSlotsForMeeting: function (sheet, participant, slot) {
-            if (null == slot.meetingId) {
-                return;
-            }
-
-            this.cancelSlotAction();
-
-            this.meetingSlotToUpdate = {
-                sheet: sheet,
-                participant: participant,
-                slot: slot
-            };
-
-            this.$http.get(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(slot.meetingId))
-                .then(function (response) {
-                    this.availableSlotsForMeeting = response.data.availableSlotsId;
-                    this.setSlotsStateAvailable(sheet, participant);
-                }.bind(this))
-                .catch(function (error) {
-                    this.cancelSlotAction();
-                    this.loadAgenda(sheet);
-
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
-                }.bind(this));
-        },
-
-        /**
-         * Clear available slots
-         */
-        clearAvailableSlots: function () {
-            for (var sheetIndex = 0; sheetIndex < this.agendas.length; sheetIndex++) {
-                var participants = this.agendas[sheetIndex].participants;
-
-                if (undefined === participants) {
-                    continue;
-                }
-
-                for (var participantIndex = 0; participantIndex < participants.length; participantIndex++) {
-                    for (var dayIndex = 0; dayIndex < participants[participantIndex].days.length; dayIndex++) {
-                        for (var slotIndex = 0; slotIndex < participants[participantIndex].days[dayIndex].slots.length; slotIndex++) {
-                            var slot                   = participants[participantIndex].days[dayIndex].slots[slotIndex];
-                            slot.isAvailableForMeeting = false;
-                        }
-                    }
-                }
-            }
-
-            this.availableSlotsForMeeting = [];
-            this.$forceUpdate();
-        },
-
-        /**
-         * Change slots state of given participant and given sheet
-         *
-         * @param sheet
-         * @param participant
-         * @param {boolean} state
-         */
-        setSlotsStateAvailable: function (sheet, participant)
-        {
-            var participantAgenda = this.findParticipantAgenda(sheet, participant);
-
-            if (null === participantAgenda || null === participantAgenda.days) {
-                return;
-            }
-
-            for (var dayIndex = 0; dayIndex < participantAgenda.days.length; dayIndex++) {
-                for (var slotIndex = 0; slotIndex < participantAgenda.days[dayIndex].slots.length; slotIndex++) {
-                    var currentSlot = participantAgenda.days[dayIndex].slots[slotIndex];
-
-                    for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
-                        if (this.availableSlotsForMeeting[availableSlotIndex] === currentSlot.id) {
-                            currentSlot.isAvailableForMeeting = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            this.$forceUpdate();
-        },
-
-        /**
-         * Select slot
-         *
-         * @param slot
-         */
-        selectSlot: function (slot) {
-            if (false !== this.hasMeetingSlotToUpdate()) {
-                return this.updateMeetingSlot(slot)
-            }
-
-            if (null !== this.meetingRequestToTransformIntoMeeting) {
-                return this.transformRequestIntoMeeting(slot);
-            }
-
-            this.cancelSlotAction();
-        },
-
-        /**
-         * Update meeting slot
-         *
-         * @param slot new selected slot
-         */
-        updateMeetingSlot: function (slot) {
-            if (false === this.hasMeetingSlotToUpdate()) {
-                return;
-            }
-
-            var meetingId = this.meetingSlotToUpdate.slot.meetingId;
-            var sheetMetId = this.meetingSlotToUpdate.slot.sheetMetId;
-            var sheet = this.meetingSlotToUpdate.sheet;
-            this.cancelSlotAction();
-
-            this.$http.post(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(meetingId), {
-                slotId: slot.id
-            })
-            .then(function () {
-                this.loadAgenda(sheet);
-                this.loadAgenda(this.findSheetBySheetId(sheetMetId));
-            }.bind(this))
-            .catch(function (error) {
-                this.loadAgenda(sheet);
-                if (error.response) {
-                    alert(error.response.data);
-                } else {
-                    alert(error.message);
-                }
-            }.bind(this));
-        },
-
-        /**
-         * Transform request into meeting
-         *
-         * @param slot
+         * @param {Object} slot
          */
         transformRequestIntoMeeting: function (slot) {
-            var sheet = this.focus;
-            var requestId = this.meetingRequestToTransformIntoMeeting.requestId;
+            var sheet      = this.focusedSheet;
+            var requestId  = this.meetingRequestToTransformIntoMeeting.requestId;
             var sheetMetId = this.meetingRequestToTransformIntoMeeting.sheetMetId;
-            this.cancelSlotAction();
+            var sheetMet   = this.findOpenedSheetById(sheetMetId);
 
-            this.$http.post(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(requestId), {
+
+            this.$http.post(api.getTransformRequestIntoMeetingEndpoint(requestId), {
                 slotId: slot.id
             })
             .then(function () {
-                this.loadAgenda(sheet);
-                this.loadAgenda(this.findSheetBySheetId(sheetMetId));
+                this.loadAgenda(sheet, true); // reload focused sheet agenda
+                if (sheetMet !== null) {
+                    this.loadAgenda(sheetMet, true); // reload sheet met agenda
+                }
+
+                this.meetingRequestToTransformIntoMeeting = null;
             }.bind(this))
             .catch(function (error) {
-                this.loadAgenda(sheet);
+                this.loadAgenda(sheet, true);
                 if (error.response) {
                     alert(error.response.data);
                 } else {
@@ -793,56 +577,46 @@ new Vue({
                 }
             }.bind(this));
         },
-
-        /**
-         * Has meeting slot to update
-         *
-         * @returns {boolean}
-         */
-        hasMeetingSlotToUpdate: function () {
-            return null !== this.meetingSlotToUpdate
-                && null !== this.meetingSlotToUpdate.sheet
-                && null !== this.meetingSlotToUpdate.slot
-                && null !== this.meetingSlotToUpdate.slot.meetingId
-                && null !== this.meetingSlotToUpdate.slot.sheetMetId;
-        },
-
+        
         /**
          * Cancel update meeting slot
          */
         cancelSlotAction: function () {
-            this.clearAvailableSlots();
+            var focusedSheetComponent = this.findFocusedSheetComponent();
+            if (focusedSheetComponent === undefined) {
+                return false;
+            }
+
+            focusedSheetComponent.clearAvailableSlots();
+
             this.isMeetingToUpdateLoading = false;
             this.meetingSlotToUpdate = null;
             this.meetingRequestToTransformIntoMeeting = null;
         },
 
         /**
-         * Is given slot is available for meeting
-         *
-         * @param slot
-         * @returns {boolean}
-         */
-        isAvailableForMeeting: function (slot) {
-            return slot.isAvailableForMeeting === true
-                && (null !== this.meetingSlotToUpdate || null !== this.meetingRequestToTransformIntoMeeting);
-        },
-
-        /**
          * Load slots available for given meetingRequest
          *
-         * @param meetingRequest
+         * @param {Object} meetingRequest
          */
         loadSlotsForRequest: function (meetingRequest) {
             this.cancelSlotAction();
+
+            var focusedComponent = this.findFocusedSheetComponent();
+            if (focusedComponent === undefined) {
+                return false;
+            }
+
             this.meetingRequestToTransformIntoMeeting = meetingRequest;
 
-            this.$http.get(agendaApiEndpoints.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
+            this.$http.get(api.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
                 .then(function (response) {
                     // check if this actions is still live
                     if (null !== this.meetingRequestToTransformIntoMeeting) {
-                        this.availableSlotsForMeeting = response.data.availableSlotsId;
-                        this.showAvailableSlotsForRequest();
+                        focusedComponent.showAvailableSlotsForRequest(
+                            meetingRequest,
+                            response.data.availableSlotsId
+                        );
                     }
                 }.bind(this))
                 .catch(function (error) {
@@ -852,57 +626,6 @@ new Vue({
                         alert(error.message);
                     }
                 }.bind(this));
-        },
-
-        /**
-         * Show available slots for request
-         */
-        showAvailableSlotsForRequest: function () {
-            var sheet = this.focus;
-
-            if (null === this.meetingRequestToTransformIntoMeeting || null === sheet) {
-                return;
-            }
-
-            var requestParticipants = this.meetingRequestToTransformIntoMeeting.participants;
-
-            for (var index = 0; index < requestParticipants.length; index++) {
-                var participant = this.findParticipantById(sheet, requestParticipants[index].id);
-                this.setSlotsStateAvailable(sheet, participant);
-            }
-        },
-
-        /**
-         * Find participant agenda by participantId
-         *
-         * @param sheet
-         * @param participantId
-         * @returns null|participant
-         */
-        findParticipantById: function (sheet, participantId) {
-            var sheetId = this.findSheetAgenda(sheet);
-
-            if (-1 === sheetId) {
-                return null;
-            }
-
-            if (undefined === this.agendas[sheetId]) {
-                return null;
-            }
-
-            if (undefined === this.agendas[sheetId].participants) {
-                return null;
-            }
-
-            var participants = this.agendas[sheetId].participants;
-
-            for (var index = 0; index < participants.length; index++) {
-                if (participants[index].id === participantId) {
-                    return participants[index];
-                }
-            }
-
-            return null;
         }
     }
 });

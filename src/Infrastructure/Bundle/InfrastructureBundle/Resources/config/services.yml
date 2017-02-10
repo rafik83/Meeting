@@ -236,7 +236,11 @@ services:
     repository.unavailability.mass_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassRepository
         arguments:
-                - '@doctrine.orm.entity_manager'
+            - '@doctrine.orm.entity_manager'
+    repository.unavailability.mass_assignment_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassAssignmentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.messaging.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository
         arguments:
@@ -1494,6 +1498,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting }
 
+    command.unavailability.mass.dispatcher_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DispatcherHandler
+        arguments:
+            - '@unavailability.time_slot_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
+
     #
     # Security
     #
@@ -2315,6 +2326,9 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
     query.agenda.mass_unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
+        arguments:
+            - '@repository.unavailability.mass_assignment_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
     query.agenda.meeting.meeting_participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler
         arguments:
@@ -2867,13 +2881,6 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
-    domain.slot.slot_availability:
-        class: Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability
-        arguments:
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-            - '@repository.unavailability.mass_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
 
     #
     # Payment
@@ -3001,6 +3008,16 @@ services:
             - '%phantomjs_path%'
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
+
+    #
+    # Unavailability
+    #
+    unavailability.time_slot_dispatcher:
+        class: Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.unavailability.mass_repository'
+            - '@repository.unavailability.mass_assignment_repository'
 
     #
     # Filter
@@ -3260,6 +3277,7 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@repository.unavailability.mass_assignment_repository'
 
     #
     # Visio Guesser

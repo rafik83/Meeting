@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\ParticipantView;
 
@@ -37,6 +38,14 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     * @param Mass  $mass
+     *
+     * @return Participant[]
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass);
 
     /**
      * @param int $id

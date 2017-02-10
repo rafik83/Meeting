@@ -78,6 +78,23 @@ class MassRepository implements MassRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findDispatchByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('mass')
+            ->from(Mass::class, 'mass')
+            ->andWhere('mass.dispatch = TRUE')
+            ->andWhere('mass.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findBlockingByEvent(Event $event)
     {
         $queryBuilder = $this

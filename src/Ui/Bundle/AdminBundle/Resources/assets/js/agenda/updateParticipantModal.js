@@ -2,7 +2,7 @@ var updateParticipantForm = require('./updateParticipantForm'),
     options               = require('../vueComponents/options'),
     AgendaApiEndpoints    = require('../components/_AgendaApiEndpoints');
 
-var agendaApiEndpoints = new AgendaApiEndpoints();
+var api = new AgendaApiEndpoints();
 
 module.exports = {
     template: '#update-participant-modal',
@@ -39,12 +39,13 @@ module.exports = {
         save: function () {
             this.setUsedParticipants();
 
-            this.$http.post(agendaApiEndpoints.updateParticipantsOfRequestEndpoint(this.meetingRequest.requestId), {
+            this.$http.post(api.updateParticipantsOfRequestEndpoint(this.meetingRequest.requestId), {
                 fromParticipants: this.getParticipantIdOfParticipate(this.data.fromSheet),
                 toParticipants: this.getParticipantIdOfParticipate(this.data.toSheet)
             })
             .then(function (response) {
-                //this.close();
+                console.log(response);
+
             }.bind(this))
             .catch(function (error) {
                 if (error.response) {
