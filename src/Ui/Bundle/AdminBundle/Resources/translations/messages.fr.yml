@@ -71,6 +71,7 @@ admin.agenda.request.transformIntoMeeting.noSlotAvailable: 'Aucun créneau n''es
 admin.agenda.request.updateParticipant.label: 'Modifier les participants'
 admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d''une demande de RDV'
 admin.agenda.request.updateParticipant.submit.label: 'Modifier'
+admin.agenda.request.updateParticipant.invalidArguments: 'Les arguments envoyés ne sont pas complets'
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
