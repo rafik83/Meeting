@@ -1,7 +1,7 @@
-function AgendaApiEndpoints() {}
+function AgendaApiEndpoints() {
+}
 
-AgendaApiEndpoints.prototype.getPathname = function ()
-{
+AgendaApiEndpoints.prototype.getPathname = function () {
     return document.location.pathname;
 };
 
@@ -11,8 +11,7 @@ AgendaApiEndpoints.prototype.getPathname = function ()
  *
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getSheetsEndpoint = function ()
-{
+AgendaApiEndpoints.prototype.getSheetsEndpoint = function () {
     return this.getPathname() + '/sheets';
 };
 
@@ -23,8 +22,7 @@ AgendaApiEndpoints.prototype.getSheetsEndpoint = function ()
  * @param {int} sheet
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet)
-{
+AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet) {
     return this.getPathname() + '/sheet/' + sheet.id;
 };
 
@@ -70,6 +68,24 @@ AgendaApiEndpoints.prototype.getMeetingUpdateSlotEndpoint = function (meetingId)
  */
 AgendaApiEndpoints.prototype.getTransformRequestIntoMeetingEndpoint = function (requestId) {
     return this.getPathname() + '/request/' + requestId + '/transform-into-meeting';
+};
+
+/**
+ * @param {int} massId
+ * @return {string}
+ */
+AgendaApiEndpoints.prototype.getMassAssignmentDetailEndpoint = function (massId) {
+    return this.getPathname() + '/mass/' + massId + '/detail';
+};
+
+/**
+ * Return /event/{event}/agenda/mass/{mass}/update
+ *
+ * @param {int} massId
+ * @return {string}
+ */
+AgendaApiEndpoints.prototype.getUpdateMassAssignmentEndpoint = function (massId) {
+    return this.getPathname() + '/mass/' + massId + '/update';
 };
 
 module.exports = AgendaApiEndpoints;
