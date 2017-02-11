@@ -68,12 +68,15 @@ module.exports = {
          * @param {Object} event
          */
         handleRemoveMeeting: function (event) {
-            this.$emit('remove-meeting', event);
+            this.$emit('refresh-both-agenda', event);
         },
 
-        handleMeetingMoved: function () {
+        /**
+         * @param {Object} event
+         */
+        handleMeetingMoved: function (event) {
             this.slotToBeMoved = null;
-            this.refreshAgenda(this.sheet);
+            this.$emit('refresh-both-agenda', event);
         },
 
         /**
