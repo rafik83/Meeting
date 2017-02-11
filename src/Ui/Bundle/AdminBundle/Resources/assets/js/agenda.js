@@ -346,13 +346,29 @@ new Vue({
         },
 
         /**
+         * Refresh the requests list of the open Sheet
+         *
+         * @param {Object} event (object composed of sheetId and array of Request)
+         */
+        refreshRequestListOfSheet: function(event) {
+            if (typeof event.sheetId !== 'undefined' && typeof event.requests !== 'undefined') {
+                var openSheet = this.findOpenedSheetById(event.sheetId);
+
+                if (openSheet !== null) {
+                    openSheet.requests = event.requests;
+                }
+            }
+        },
+
+        /**
          * Loop on <SheetAgenda> component instances and return the one associated
          * to this Sheet
          *
-         * @returns {Object}|{undefined}
+         * @returns {Object}|null
          */
         findFocusedSheetComponent: function () {
             var childs = this.$refs.childSheetAgenda;
+
             if (childs !== undefined) {
                 for (var i = 0; i < childs.length; i++) {
                     if (childs[i].sheet.id === this.focusedSheet.id) {
@@ -361,7 +377,7 @@ new Vue({
                 }
             }
 
-            return undefined;
+            return null;
         },
 
         /**
@@ -370,6 +386,7 @@ new Vue({
          */
         findSheetComponent: function (sheet) {
             var childs = this.$refs.childSheetAgenda;
+
             if (childs !== undefined) {
                 for (var i = 0; i < childs.length; i++) {
                     if (childs[i].sheet.id === sheet.id) {
@@ -583,7 +600,8 @@ new Vue({
          */
         cancelSlotAction: function () {
             var focusedSheetComponent = this.findFocusedSheetComponent();
-            if (focusedSheetComponent === undefined) {
+
+            if (focusedSheetComponent === null) {
                 return false;
             }
 
@@ -603,7 +621,8 @@ new Vue({
             this.cancelSlotAction();
 
             var focusedComponent = this.findFocusedSheetComponent();
-            if (focusedComponent === undefined) {
+
+            if (focusedComponent === null) {
                 return false;
             }
 

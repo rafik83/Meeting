@@ -159,7 +159,9 @@
                             v-on:refresh-agenda="refreshAgenda"
                             v-on:remove-meeting="handleRemoveMeeting"
                             v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
-                            v-on:schedule-meeting="transformRequestIntoMeeting">
+                            v-on:schedule-meeting="transformRequestIntoMeeting"
+                            v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"
+                        >
                         </sheet-agenda>
                     </li>
                 </ul>
@@ -168,7 +170,7 @@
     </div>
 
     <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
-    <update-participant-modal v-show="showParticipantModal" v-on:refresh-list="refreshList" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal"></update-participant-modal>
+    <update-participant-modal v-show="showParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal"></update-participant-modal>
 </div>
 {% endblock %}
 

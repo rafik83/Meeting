@@ -44,8 +44,9 @@ module.exports = {
                 toParticipants: this.getParticipantIdOfParticipate(this.data.toSheet)
             })
             .then(function (response) {
-                console.log(response);
-
+                response.data.forEach(function (sheetList) {
+                    this.$emit('refresh-request-list-of-sheet', sheetList);
+                }.bind(this));
             }.bind(this))
             .catch(function (error) {
                 if (error.response) {
@@ -54,7 +55,8 @@ module.exports = {
                     alert(error.message);
                 }
             }.bind(this));
-            //this.$emit('close-modal');
+
+            this.$emit('close-modal');
         },
         reset: function () {
             this.data = {
