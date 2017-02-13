@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Elastica\Filter\BoolNot;
 use Elastica\Filter\Exists;
-use Elastica\Query\Bool;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Filtered;
 use Elastica\Query\Match;
@@ -719,27 +717,27 @@ class SheetSearchQueryBuilder
      */
     private function filterByImported(array &$filters)
     {
-        if (!isset($filters['imported'])) {
+        if (!isset($filters[Constant::FILTER_IMPORTED])) {
             return;
         }
 
         $importedQuery = new BoolQuery();
 
-        if ($filters['imported'] === 'imported') {
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED) {
             $importedQuery->addMust($this->isImported(true));
         }
 
-        if ($filters['imported'] === 'imported_with_connection') {
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED_WITH_CONNECTION) {
             $importedQuery->addMust($this->isImported(true));
             $importedQuery->addMust($this->hasConnectionFilter());
         }
 
-        if ($filters['imported'] === 'imported_without_connection') {
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED_WITHOUT_CONNECTION) {
             $importedQuery->addMust($this->isImported(true));
             $importedQuery->addMustNot($this->hasConnectionFilter());
         }
 
-        if ($filters['imported'] === 'not_imported') {
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::NOT_IMPORTED) {
             $importedQuery->addMust($this->isImported(false));
         }
 

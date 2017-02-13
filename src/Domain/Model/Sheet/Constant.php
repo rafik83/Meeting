@@ -21,4 +21,11 @@ final class Constant
     const ORDER_BY_DATE_ADDED_TO_CATALOG = 'dateAddedToCatalog';
     const ORDER_BY_CREATED_AT            = 'created_at';
     const ORDER_BY_RELEVANCE             = 'relevance';
+
+    const IMPORTED                    = 'imported';
+    const IMPORTED_WITHOUT_CONNECTION = 'imported_without_connection';
+    const IMPORTED_WITH_CONNECTION    = 'imported_with_connection';
+    const NOT_IMPORTED                = 'not_imported';
+
+    const FILTER_IMPORTED = 'imported';
 }
