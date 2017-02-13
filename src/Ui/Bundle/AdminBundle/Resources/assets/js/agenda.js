@@ -287,15 +287,7 @@ new Vue({
             this.clearAgenda(sheet);
 
             sheet.participants = participants;
-            sheet.requests = [];
-
-            requests.forEach(function (request) {
-                request.participantsName = request.participants.map(function (participant) {
-                    return participant.fullName;
-                }).join(', ');
-
-                sheet.requests.push(request);
-            }.bind(this));
+            this.populateRequestList(sheet, requests);
 
             // check if sheet already opened
             var openedSheetIndex = this.isOpenedSheet(sheet);
@@ -312,6 +304,18 @@ new Vue({
 
             this.highlightMeetingsInCommon(sheet, true);
             sheet.isAgendaLoading = false;
+        },
+
+        populateRequestList: function (sheet, requests) {
+            sheet.requests = [];
+
+            requests.forEach(function (request) {
+                request.participantsName = request.participants.map(function (participant) {
+                    return participant.fullName;
+                }).join(', ');
+
+                sheet.requests.push(request);
+            }.bind(this));
         },
 
         /**
@@ -356,7 +360,11 @@ new Vue({
                 var openSheet = this.findOpenedSheetById(event.sheetId);
 
                 if (openSheet !== null) {
-                    openSheet.requests = event.requests;
+                    this.populateRequestList(openSheet, event.requests);
+
+                    if (this.focusedSheet === openSheet) {
+                        this.$forceUpdate();
+                    }
                 }
             }
         },

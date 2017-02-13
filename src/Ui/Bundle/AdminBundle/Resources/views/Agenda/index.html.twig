@@ -99,7 +99,7 @@
                     {{ 'admin.agenda.event.configuration.isMeetingRequestLocked'|trans }}
                 </div>
             {% endif %}
-            <div class="requests-list" v-if="focusedSheet">
+            <div class="requests-list" v-if="focusedSheet" ref="focusedSheetRequestList">
                 <p>
                     <b>${ focusedSheet.title }</b>
                     <br>{{ 'admin.agenda.requestsList.title'|trans }}
@@ -158,20 +158,18 @@
                             v-on:show-meeting-update-modal="showMeetingUpdateModal"
                             v-on:refresh-agenda="refreshAgenda"
                             v-on:refresh-both-agenda="handleRefreshBothAgenda"
-                            v-on:remove-meeting="handleRemoveMeeting"
                             v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
                             v-on:schedule-meeting="transformRequestIntoMeeting"
-                            v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"
                         >
                         </sheet-agenda>
                     </li>
                 </ul>
             </div>
-        </div>
+        </div>z
     </div>
 
     <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
-    <update-participant-modal v-show="showParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal"></update-participant-modal>
+    <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
 </div>
 {% endblock %}
 
