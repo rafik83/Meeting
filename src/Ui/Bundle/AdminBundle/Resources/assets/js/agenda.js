@@ -5,6 +5,7 @@ var Vue                = require('vue'),
     updateParticipantModal = require('./agenda/updateParticipantModal'),
     sheetAgenda        = require('./agenda/SheetAgenda'),
     slotAgenda         = require('./agenda/SlotAgenda'),
+    sortModal          = require('./agenda/sortModal'),
     options            = require('./vueComponents/options'),
     AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
@@ -33,7 +34,8 @@ new Vue({
         'update-participant-modal': updateParticipantModal,
         'slot-agenda': slotAgenda,
         'sheet-agenda': sheetAgenda,
-        'MeetingUpdateModal': meetingUpdateModal
+        'MeetingUpdateModal': meetingUpdateModal,
+        'sort-modal': sortModal
     },
     data: {
         sheets: [], /** {array} Sheet */
@@ -45,6 +47,11 @@ new Vue({
         showFilterModal: false,
         showParticipantModal: false,
         hasUsedSheetFilter: false,
+        showSortModal: false,
+
+        /**
+         * Meeting slot to update
+         */
         meetingSlotToUpdate: null,
         meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
     },
@@ -101,6 +108,11 @@ new Vue({
             }
         },
 
+        /**
+         * Show the participants of the meeting request to update them
+         *
+         * @param {Object} meetingRequest
+         */
         showParticipants: function (meetingRequest) {
             this.$http.get(api.getParticipantsOfRequestEndpoint(meetingRequest.requestId))
                 .then(function (response) {
@@ -121,7 +133,10 @@ new Vue({
                         alert(error.message);
                     }
                 });
+        },
 
+        showSort: function () {
+            this.showSortModal = true;
         },
 
         /**

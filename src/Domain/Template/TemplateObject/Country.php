@@ -77,7 +77,7 @@ class Country extends EditableObject implements ContentObjectInterface, Exportab
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent()
+    public function getExportableContent(array $taggedData = [])
     {
         return $this->getContentLabel();
     }

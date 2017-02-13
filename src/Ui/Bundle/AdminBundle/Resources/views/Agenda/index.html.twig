@@ -19,6 +19,9 @@
                             <button class="btn btn-default btn-xs" v-on:click="resetSheetFilter">
                                 <i class="glyphicon glyphicon-remove"></i> {{ 'admin.agenda.filters.reset.label'|trans }}
                             </button>
+                            <button class="btn btn-default btn-xs" v-on:click="showSort">
+                                </i> {{ 'admin.agenda.sort.title.label'|trans }}
+                            </button>
                         </td>
                     </tr>
                     <tr>
@@ -168,6 +171,7 @@
         </div>z
     </div>
 
+    <sort-modal :sheets="sheets" :show="showSortModal" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
     <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
     <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
 </div>
@@ -184,6 +188,8 @@
     {{ include('AdminBundle:Agenda/Components:updateParticipantForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sheetAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:slotAgenda.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:sortModal.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:sortSheetForm.html.twig') }}
 
     <!-- template for the Modal component -->
     <script type="x/template" id="modal-template">
