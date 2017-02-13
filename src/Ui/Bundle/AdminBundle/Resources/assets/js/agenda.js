@@ -251,6 +251,13 @@ new Vue({
         },
 
         /**
+         * Event handler for Mass Assignment update
+         */
+        handleUpdateMassAssignment: function () {
+            this.loadAgenda(this.focusedSheet, true);
+        },
+
+        /**
          * Event handler for remove-meeting
          *
          * @param {Object} event

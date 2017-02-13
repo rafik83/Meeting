@@ -44,6 +44,7 @@ module.exports = {
                 })
             )
                 .then(function () {
+                    this.$emit('mass-assignment-updated');
                     this.close();
                 }.bind(this))
                 .catch(function (error) {
