@@ -130,7 +130,7 @@ app_patterns:
     - imagick
 
   php_applications:
-    - openl10n@v0.2.0
+    - openl10n@0.2.0
 
   php_configs:
     - file: app_opcache.ini
