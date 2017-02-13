@@ -15,9 +15,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetin
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
-use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
-use Proximum\Vimeet\Application\Exception\Meeting\DateFormatException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
