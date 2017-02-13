@@ -168,3 +168,11 @@ Se connecter à la prod et supprimer le fichier dumpé
 * [Liste des jobs](http://vimeet.proximum.dev/app_dev.php/admin/fr/jobs/)
 
 Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
+
+
+#### Ajouter un job
+
+Un job correspond une instance de l'entité `JMS\JobQueueBundle\Entity\Job`. Chaque job doit lancer une command console Symfony. 
+
+Pour ajouter un job, ajouter une méthode dans `Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter` et injecter la classe dans le service programmant le job.
+
