@@ -1,6 +1,6 @@
 account.change_password.link: 'Change the password'
 account.change_password.title: 'Change the password'
-account.profile.company: Company
+account.profile.company: 'Company / Organization'
 account.profile.contactInformation: 'Contact information'
 account.profile.profile: Profile
 account.profile.title: Profile
@@ -222,7 +222,7 @@ pro_forma.vatNumber.title: 'VAT number'
 program.title: Programme
 register.already_registered: 'Already registered?'
 register.finalize: Complete
-register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all\n- Easily identify individual planning"
+register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
 register.privacy_policies: 'Privacy protection: In accordance with the French law on Information Technology and Civil Liberties of January 6, 1978, amended in 2004, you have the right to access and correct personal data/information about you by sending us an e-mail at cnil @ Proximumgroup.com.'
 register.register: Registration
 register.register_as: 'Register as:'

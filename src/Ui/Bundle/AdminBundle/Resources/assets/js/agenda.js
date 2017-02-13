@@ -1,6 +1,7 @@
 var Vue                = require('vue'),
     axios              = require('axios'),
     filterModal        = require('./agenda/filterModal'),
+    sortModal          = require('./agenda/sortModal'),
     options            = require('./vueComponents/options'),
     AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
@@ -82,7 +83,8 @@ new Vue({
     el: '#agenda',
     delimiters: options.delimiters,
     components: {
-        'filter-modal': filterModal
+        'filter-modal': filterModal,
+        'sort-modal': sortModal
     },
     data: {
         /**
@@ -112,6 +114,7 @@ new Vue({
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
         hasUsedSheetFilter: false,
+        showSortModal: false,
 
         /**
          * Meeting slot to update
@@ -176,6 +179,10 @@ new Vue({
             if (typeof child !== 'undefined') {
                 child.setFormFilter();
             }
+        },
+
+        showSort: function () {
+            this.showSortModal = true;
         },
 
         refreshList: function (filteredSheets) {

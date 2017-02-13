@@ -28,15 +28,22 @@ class HappeningParticipation
     private $participant;
 
     /**
+     * @var bool
+     */
+    private $disabled = false;
+
+    /**
      * HappeningParticipation constructor.
      *
      * @param Happening   $happening
      * @param Participant $participant
+     * @param bool        $disabled
      */
-    public function __construct(Happening $happening, Participant $participant)
+    public function __construct(Happening $happening, Participant $participant, $disabled = false)
     {
         $this->happening   = $happening;
         $this->participant = $participant;
+        $this->disabled    = $disabled;
     }
 
     /**
@@ -67,5 +74,25 @@ class HappeningParticipation
     public function getParticipant()
     {
         return $this->participant;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param boolean $disabled
+     *
+     * @return HappeningParticipation
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = $disabled;
+
+        return $this;
     }
 }

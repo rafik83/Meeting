@@ -61,7 +61,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $spotRepository    = $this->prophesize(SpotRepositoryInterface::class);
 
         $expectedMeeting = new Meeting(
             $request,
@@ -81,7 +81,10 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $meeting->getSlot(),
             $meeting->countParticipants(),
-            $meeting
+            $meeting,
+            null,
+            null,
+            false
         )->shouldBeCalled()->willReturn([$spot1, $spot2]);
 
         // Change Spot and block slot and spot
@@ -169,7 +172,10 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $meeting->getSlot(),
             $meeting->countParticipants(),
-            $meeting
+            $meeting,
+            null,
+            null,
+            false
         )->shouldBeCalled()->willReturn([$spot1]); // $spot2 not returned
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();

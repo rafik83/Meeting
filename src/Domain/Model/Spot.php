@@ -258,6 +258,14 @@ class Spot
     }
 
     /**
+     * @param SpotUnavailability[] $spotUnavailabilities
+     */
+    public function addSpotUnavailability(array $spotUnavailabilities = [])
+    {
+        $this->spotUnavailabilities = new ArrayCollection($spotUnavailabilities);
+    }
+
+    /**
      * @return int
      */
     public function getPriority()

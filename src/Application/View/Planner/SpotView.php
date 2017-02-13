@@ -15,6 +15,9 @@ class SpotView
     /** @var int */
     public $id;
 
+    /** @var bool */
+    public $isVisio;
+
     /** @var string */
     public $spotReference;
 
@@ -33,29 +36,38 @@ class SpotView
     /** @var string */
     public $reference;
 
+    /** @var SlotView[] */
+    public $unavailabilityList;
+
     /**
      * @param int         $id
+     * @param bool        $isVisio
      * @param string      $spotReference
      * @param int         $seatCapacity
      * @param int         $meetingCapacity
      * @param SheetView[] $sheetList
      * @param int         $priority
+     * @param SlotView[]  $unavailabilityList
      */
     public function __construct(
         $id,
+        $isVisio,
         $spotReference,
         $seatCapacity,
         $meetingCapacity,
         array $sheetList = [],
-        $priority
+        $priority,
+        array $unavailabilityList = []
     ) {
-        $this->id              = $id;
-        $this->spotReference   = $spotReference;
-        $this->seatCapacity    = $seatCapacity;
-        $this->meetingCapacity = $meetingCapacity;
-        $this->sheetList       = $sheetList;
-        $this->priority        = $priority;
-        $this->reference       = sprintf('spot%s', $id);
+        $this->id                 = $id;
+        $this->isVisio            = $isVisio;
+        $this->spotReference      = $spotReference;
+        $this->seatCapacity       = $seatCapacity;
+        $this->meetingCapacity    = $meetingCapacity;
+        $this->sheetList          = $sheetList;
+        $this->priority           = $priority;
+        $this->reference          = sprintf('spot%s', $id);
+        $this->unavailabilityList = $unavailabilityList;
     }
 
     /**

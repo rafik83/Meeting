@@ -20,6 +20,8 @@ class PaymentChoiceType extends AbstractPaymentChoiceType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => Choice::class,
         ]);

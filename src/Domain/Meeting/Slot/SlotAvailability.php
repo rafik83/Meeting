@@ -17,8 +17,10 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
@@ -51,6 +53,11 @@ class SlotAvailability
     private $meetingRepositoryInterface;
 
     /**
+     * @var MassAssignmentRepositoryInterface
+     */
+    private $massAssignmentRepository;
+
+    /**
      * @var HappeningParticipation[]
      */
     private $happenings = null;
@@ -71,23 +78,31 @@ class SlotAvailability
     private $massUnavailability = null;
 
     /**
+     * @var MassAssignment[]
+     */
+    private $massAssignment = null;
+
+    /**
      * SlotAvailability constructor.
      *
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
      * @param MassRepositoryInterface                   $massUnavailabilityRepository
      * @param MeetingRepositoryInterface                $meetingRepositoryInterface
+     * @param MassAssignmentRepositoryInterface         $massAssignmentRepository
      */
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         MassRepositoryInterface $massUnavailabilityRepository,
-        MeetingRepositoryInterface $meetingRepositoryInterface
+        MeetingRepositoryInterface $meetingRepositoryInterface,
+        MassAssignmentRepositoryInterface $massAssignmentRepository
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
         $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
         $this->meetingRepositoryInterface       = $meetingRepositoryInterface;
+        $this->massAssignmentRepository         = $massAssignmentRepository;
     }
 
     /**
@@ -117,7 +132,7 @@ class SlotAvailability
     {
         $this->autoLoading($slot->getEvent());
 
-        return !$this->hasMassUnavailability($slot);
+        return !$this->isMassUnavailabilityNotUsable($slot);
     }
 
     /**
@@ -142,8 +157,13 @@ class SlotAvailability
             return new SlotAvailabilityView(self::HAPPENING_UNAVAILABILITY);
         }
 
-        if ($this->hasMassUnavailability($slot)) {
-            return new SlotAvailabilityView(self::MASS_UNAVAILABILITY);
+        if (($assignment = $this->hasMassUnavailability($slot, $participant)) !== false) {
+            // result can be true or MassAssignment, if true, change it to null to send it to the object
+            if (!$assignment instanceof MassAssignment) {
+                $assignment = null;
+            }
+
+            return new SlotAvailabilityView(self::MASS_UNAVAILABILITY, null, $assignment);
         }
 
         return new SlotAvailabilityView(self::SLOT_AVAILABLE);
@@ -181,6 +201,10 @@ class SlotAvailability
 
         if ($this->massUnavailability === null) {
             $this->massUnavailability = $this->massUnavailabilityRepository->findBlockingByEvent($event);
+        }
+
+        if ($this->massAssignment === null) {
+            $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
         }
     }
 
@@ -226,9 +250,80 @@ class SlotAvailability
      *
      * @return bool
      */
-    private function hasMassUnavailability(MeetingSlot $slot)
+    private function isMassUnavailabilityNotUsable(MeetingSlot $slot)
     {
         foreach ($this->massUnavailability as $mass) {
+            if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
+                return !$mass->isBlocking() || $mass->isDispatch();
+            }
+
+            if ($slot->getEnd() > $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
+                return !$mass->isBlocking() || $mass->isDispatch();
+            }
+
+            if ($slot->getBegin() >= $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
+                return !$mass->isBlocking() || $mass->isDispatch();
+            }
+
+            if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() < $slot->getEnd()) {
+                return !$mass->isBlocking() || $mass->isDispatch();
+            }
+
+            if ($mass->getEnd() > $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
+                return !$mass->isBlocking() || $mass->isDispatch();
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Participant $participant
+     * @param Mass        $mass
+     *
+     * @return null
+     */
+    private function getDispatch(Participant $participant, Mass $mass)
+    {
+        if ($this->massAssignment !== null) {
+            foreach ($this->massAssignment as $massAssignment) {
+                if ($massAssignment->getMass() === $mass && $massAssignment->getParticipant() === $participant) {
+                    return $massAssignment;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    private function hasMassUnavailability(MeetingSlot $slot, Participant $participant)
+    {
+        foreach ($this->massUnavailability as $mass) {
+            if ($mass->isDispatch()) {
+                $assignment = $this->getDispatch($participant, $mass);
+
+                if ($assignment !== null) {
+                    $assignmentResult = $this->hasDispatchUnavailability($assignment, $slot);
+
+                    if ($assignmentResult === self::ASSIGNMENT_DISABLED) {
+                        return false;
+                    }
+
+                    if ($assignmentResult === self::ASSIGNMENT_FOUND) {
+                        return $assignment;
+                    }
+
+                    continue;
+                }
+            }
+
+
             if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
                 return true;
             }
@@ -251,6 +346,41 @@ class SlotAvailability
         }
 
         return false;
+    }
+
+    const ASSIGNMENT_DISABLED  = 'disabled';
+    const ASSIGNMENT_FOUND     = 'found';
+    const ASSIGNMENT_NOT_FOUND = 'not_found';
+
+    /**
+     * @param MassAssignment $massAssignment
+     * @param MeetingSlot    $slot
+     *
+     * @return string
+     */
+    private function hasDispatchUnavailability(MassAssignment $massAssignment, MeetingSlot $slot)
+    {
+        if ($slot->getBegin() >= $massAssignment->getBegin() && $slot->getBegin() < $massAssignment->getEnd()) {
+            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
+        }
+
+        if ($slot->getEnd() > $massAssignment->getBegin() && $slot->getEnd() <= $massAssignment->getEnd()) {
+            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
+        }
+
+        if ($slot->getBegin() >= $massAssignment->getBegin() && $slot->getEnd() <= $massAssignment->getEnd()) {
+            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
+        }
+
+        if ($massAssignment->getBegin() >= $slot->getBegin() && $massAssignment->getBegin() < $slot->getEnd()) {
+            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
+        }
+
+        if ($massAssignment->getEnd() > $slot->getBegin() && $massAssignment->getEnd() <= $slot->getEnd()) {
+            return $massAssignment->isEnabled() ? self::ASSIGNMENT_DISABLED : self::ASSIGNMENT_DISABLED;
+        }
+
+        return self::ASSIGNMENT_NOT_FOUND;
     }
 
     /**
