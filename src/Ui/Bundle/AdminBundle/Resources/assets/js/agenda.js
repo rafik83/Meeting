@@ -297,6 +297,12 @@ new Vue({
             }
 
             this.highlightMeetingsInCommon(sheet, true);
+
+            var focusedComponent = this.findFocusedSheetComponent();
+            if (focusedComponent !== undefined) {
+                focusedComponent.setSlotActionButtonsState(true);
+            }
+
             sheet.isAgendaLoading = false;
         },
 

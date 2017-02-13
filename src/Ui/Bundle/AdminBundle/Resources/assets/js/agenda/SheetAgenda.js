@@ -100,17 +100,18 @@ module.exports = {
             for (var index = 0; index < meetingRequest.participants.length; index++) {
                 var participant = this.findParticipant(meetingRequest.participants[index]);
                 this.setSlotsStateAvailable(participant);
+                this.setSlotActionButtonsState(false); // disabled slot action buttons
             }
         },
 
         /**
-         *
-         * @param participant
-         * @param availableSlots
+         * @param {Object} participant
+         * @param {array} availableSlots
          */
         showAvailableSlotsForMeeting: function (participant, availableSlots) {
             this.availableSlotsForMeeting = availableSlots;
             this.setSlotsStateAvailable(participant);
+            this.setSlotActionButtonsState(false);
         },
 
         /**
@@ -149,6 +150,7 @@ module.exports = {
             });
 
             this.currentAvailableSlotsForMeeting = [];
+            this.setSlotActionButtonsState(true);
             this.$forceUpdate();
         },
 
@@ -203,6 +205,22 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+        /**
+         * Enable or Disable AgendaSlot action buttons
+         *
+         * @param {boolean} state
+         * @see SlotAgenda
+         */
+        setSlotActionButtonsState: function (state) {
+            var childs = this.$refs.childSlotAgenda;
+
+            if (childs !== undefined) {
+                for (var i = 0; i < childs.length; i++) {
+                    childs[i].isActionButtonsEnabled = state;
+                }
+            }
         }
     }
 };

@@ -10,6 +10,7 @@ module.exports = {
     data: function () {
         return {
             isMeetingToUpdateLoading: false,
+            isActionButtonsEnabled: true
         }
     },
     methods: {
