@@ -1383,6 +1383,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler
         arguments:
             - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update }
 

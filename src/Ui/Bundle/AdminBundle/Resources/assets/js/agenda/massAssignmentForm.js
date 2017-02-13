@@ -30,14 +30,12 @@ module.exports = {
          *
          * @param {int} massId
          */
-        init: function(massId) {
+        init: function (massId) {
             this.$http.get(api.getMassAssignmentDetailEndpoint(massId))
                 .then(function (response) {
-
                     this.beginTime = moment(response.data.begin.date).format('DD/MM/YYYY HH:mm');
                     this.endTime = moment(response.data.end.date).format('DD/MM/YYYY HH:mm');
                     this.enabled = response.data.enabled;
-
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {

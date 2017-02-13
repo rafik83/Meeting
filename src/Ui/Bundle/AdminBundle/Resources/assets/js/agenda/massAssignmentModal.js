@@ -1,26 +1,50 @@
 var options = require('../vueComponents/options'),
-    massAssignmentForm = require('./massAssignmentForm');
+    massAssignmentForm = require('./massAssignmentForm'),
+    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
+
+var api = new AgendaApiEndpoints();
 
 module.exports = {
     template: '#mass-assignment-modal-template',
     delimiters: options.delimiters,
     props: ['show'],
-    components: { 'mass-assignment-form': massAssignmentForm },
+    components: {'mass-assignment-form': massAssignmentForm},
     data: function () {
-        return  {}
+        return {
+            massId: null,
+            child: 'undefined',
+        }
     },
     methods: {
         /**
          * @param {int} massId
          */
-        init: function(massId) {
-            var child = this.$refs.massAssignmentForm;
-            if (typeof child !== 'undefined') {
-                child.init(massId);
+        init: function (massId) {
+            this.child = this.$refs.massAssignmentForm;
+            if (typeof this.child !== 'undefined') {
+                this.massId = massId;
+                this.child.init(massId);
             }
         },
         save: function () {
-            
-        }
+            this.$http.post(api.getUpdateMassAssignmentEndpoint(this.massId), {
+                begin: this.child.beginTime,
+                end: this.child.endTime,
+                enabled: this.child.enabled
+            })
+                .then(function (response) {
+                    this.close();
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                }.bind(this));
+        },
+        close: function () {
+            this.$emit('close-modal');
+        },
     }
 };

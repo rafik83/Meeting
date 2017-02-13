@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
+use Proximum\Vimeet\Application\Exception\Meeting\DateFormatException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
@@ -324,7 +325,9 @@ class MeetingController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        if ($request->request->has('begin') || $request->request->has('end') || $request->request->has('enabled')) {
+        $data = json_decode($request->getContent());
+
+        if (!isset($data->begin) || !isset($data->end) || !isset($data->enabled)) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.missingData');
         }
 
@@ -332,11 +335,13 @@ class MeetingController extends Controller
             $this->get('tactician.commandbus')->handle(
                 new Update(
                     $massAssignment,
-                    $request->request->get('begin'),
-                    $request->request->get('end'),
-                    $request->request->get('enabled')
+                    $data->begin,
+                    $data->end,
+                    $data->enabled
                 )
             );
+        } catch (DateFormatException $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.dateFormat');
         } catch (MassAssignmentOnMeetingException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot');
         } catch (MassAssignmentOutOfMassSlotException $exception) {

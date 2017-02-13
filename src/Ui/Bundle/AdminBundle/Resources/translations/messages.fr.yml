@@ -68,6 +68,7 @@ admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
 admin.agenda.meeting.updateMassAssignment.missingData: "Impossible de modifier l'indisponibilité de masse dispatché, données manquantes"
 admin.agenda.meeting.updateMassAssignment.outOfMassSlot: "Indisponibilité de masse dispatché en dehors de l'indisponibilité de masse"
 admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot: "Rendez-vous ou conférence sur le créneau"
+admin.agenda.meeting.updateMassAssignment.dateFormat: "Format de date incorrect"
 admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
 admin.agenda.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce RDV ?'
