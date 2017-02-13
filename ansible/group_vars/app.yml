@@ -227,4 +227,4 @@ app_patterns:
           - stdout_logfile: "{{ app.log_dir }}/supervisor.jms-job-queue.log"
           - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
           # Dev
-          #- autostart:       false
+          - autostart:       false
