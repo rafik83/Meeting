@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment;
 
-use Doctrine\DBAL\Types\BooleanType;
-use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
-use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -33,16 +32,15 @@ class UpdateType extends AbstractType
                 'format'        => 'd/m/Y H:i',
                 'display_date'  => false,
                 'required'      => true,
-                'view_timezone' => $event->getTimeZone()
+                'view_timezone' => $event->getTimeZone(),
             ])
             ->add('end', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
                 'display_date'  => false,
                 'required'      => true,
-                'view_timezone' => $event->getTimeZone()
+                'view_timezone' => $event->getTimeZone(),
             ])
-            ->add('enabled')
-        ;
+            ->add('enabled', CheckboxType::class);
     }
 
     /**

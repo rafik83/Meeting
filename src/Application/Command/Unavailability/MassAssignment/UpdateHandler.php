@@ -51,6 +51,14 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        // if set to disable, only update enabled state
+        if ($update->enabled === false) {
+            $update->massAssignment->disable();
+            $this->massAssignmentRepository->set($update->massAssignment);
+
+            return;
+        }
+
         $hasMeetingOrHappening = $this->participantRepository->getAvailableParticipants(
             [$update->massAssignment->getParticipant()],
             $update->begin,
@@ -60,7 +68,7 @@ class UpdateHandler
         if (count($hasMeetingOrHappening) > 0) {
             throw new MassAssignmentOnMeetingException();
         }
-        
+
         if ($update->begin < $update->massAssignment->getMass()->getBegin()
             || $update->end > $update->massAssignment->getMass()->getEnd()
         ) {

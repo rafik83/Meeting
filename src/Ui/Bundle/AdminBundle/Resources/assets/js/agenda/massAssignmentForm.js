@@ -27,6 +27,13 @@ module.exports = {
         });
     },
     methods: {
+        reset: function () {
+            this.beginTime = null;
+            this.endTime = null;
+            this.enabled = false;
+            this.boundedBegin = null;
+            this.boundedEnd = null;
+        },
         /**
          * Fetch Mass assignment details
          *

@@ -16,6 +16,14 @@ module.exports = {
             child: 'undefined',
         }
     },
+    watch: {
+        'show': function (newValue, oldValue) {
+            var child = this.$refs.massAssignmentForm;
+            if (typeof child !== 'undefined') {
+                child.reset();
+            }
+        }
+    },
     methods: {
         /**
          * @param {int} massId
