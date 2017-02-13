@@ -123,6 +123,9 @@ new Vue({
             this.showSortModal = true;
         },
 
+        /**
+         * Filters - Reset filteredSheet
+         */
         resetSheetFilter: function () {
             var child = this.$refs.sheetFilterModal;
             if (typeof child !== 'undefined') {
@@ -266,15 +269,17 @@ new Vue({
         },
 
         /**
-         * Event handler for remove-meeting
+         * Event handler for refresh-both-agenda
          *
          * @param {Object} event
          */
-        handleRemoveMeeting: function(event) {
+        handleRefreshBothAgenda: function(event) {
             var sheetMet = this.findSheetBySheetId(event.sheetMetId);
             this.loadAgenda(event.sheet, true);
-            if(sheetMet !== null) {
-                this.loadAgenda(sheetMet, false);
+
+            // reload sheet met agenda if opened
+            if (sheetMet !== null && this.isOpenedSheet(sheetMet) !== -1) {
+                this.loadAgenda(sheetMet, true);
             }
         },
 
@@ -308,16 +313,17 @@ new Vue({
                 this.$set(this.openedSheets[openedSheetIndex], 'participants', sheet.participants);
                 this.$set(this.openedSheets[openedSheetIndex], 'requests', sheet.requests);
 
-                var sheetComponent = this.findSheetComponent(sheet);
-
-                if(sheetComponent !== null) {
-                    sheetComponent.forceUpdate();
-                }
-
+                this.forceUpdateSheet(sheet);
                 this.$forceUpdate();
             }
 
             this.highlightMeetingsInCommon(sheet, true);
+
+            var focusedComponent = this.findFocusedSheetComponent();
+            if (focusedComponent !== undefined) {
+                focusedComponent.setSlotActionButtonsState(true);
+            }
+
             sheet.isAgendaLoading = false;
         },
 
@@ -509,7 +515,22 @@ new Vue({
                             meetingsSheetMet[meetingSheetMetIndex].highlight = state;
                         }
                     }
+
+                    this.forceUpdateSheet(sheetMet);
                 }
+            }
+        },
+
+        /**
+         * This method force update the sheetComponent of the given Sheet
+         *
+         * @param {Object} sheet
+         */
+        forceUpdateSheet: function (sheet) {
+            var sheetMetComponent = this.findSheetComponent(sheet);
+
+            if(sheetMetComponent !== null) {
+                sheetMetComponent.forceUpdate();
             }
         },
 

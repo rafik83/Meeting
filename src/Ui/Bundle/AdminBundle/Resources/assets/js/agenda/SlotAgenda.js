@@ -10,6 +10,7 @@ module.exports = {
     data: function () {
         return {
             isMeetingToUpdateLoading: false,
+            isActionButtonsEnabled: true
         }
     },
     methods: {
@@ -111,7 +112,10 @@ module.exports = {
                 slotId: this.agendaSlot.id
             })
                 .then(function () {
-                    this.$emit('meeting-moved', this.sheet);
+                    this.$emit('meeting-moved', {
+                        sheet: this.sheet,
+                        sheetMetId: this.slotToBeMoved.sheetMetId || null
+                    });
                 }.bind(this))
                 .catch(function (error) {
                     this.$emit('refresh-agenda', this.sheet);
