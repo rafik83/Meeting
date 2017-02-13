@@ -1,6 +1,7 @@
 var options = require('../vueComponents/options'),
     massAssignmentForm = require('./massAssignmentForm'),
-    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
+    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints'),
+    querystring = require('querystring');
 
 var api = new AgendaApiEndpoints();
 
@@ -27,12 +28,14 @@ module.exports = {
             }
         },
         save: function () {
-            this.$http.post(api.getUpdateMassAssignmentEndpoint(this.massId), {
-                begin: this.child.beginTime,
-                end: this.child.endTime,
-                enabled: this.child.enabled
-            })
-                .then(function (response) {
+            this.$http.post(api.getUpdateMassAssignmentEndpoint(this.massId),
+                querystring.stringify({
+                    begin: this.child.beginTime,
+                    end: this.child.endTime,
+                    enabled: this.child.enabled
+                })
+            )
+                .then(function () {
                     this.close();
                 }.bind(this))
                 .catch(function (error) {

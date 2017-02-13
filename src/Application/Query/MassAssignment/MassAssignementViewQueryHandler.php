@@ -24,10 +24,10 @@ class MassAssignementViewQueryHandler
         return new MassAssignementView(
             $query->massAssignment->getId(),
             $query->massAssignment->getMass()->getTitle($query->locale),
-            $query->massAssignment->getMass()->getBegin(),
-            $query->massAssignment->getMass()->getEnd(),
-            $query->massAssignment->getBegin(),
-            $query->massAssignment->getEnd(),
+            $query->massAssignment->getMass()->getBegin()->setTimeZone(new \DateTimeZone($query->event->getTimeZone())),
+            $query->massAssignment->getMass()->getEnd()->setTimeZone(new \DateTimeZone($query->event->getTimeZone())),
+            $query->massAssignment->getBegin()->setTimeZone(new \DateTimeZone($query->event->getTimeZone())),
+            $query->massAssignment->getEnd()->setTimeZone(new \DateTimeZone($query->event->getTimeZone())),
             $query->massAssignment->isEnabled(),
             $query->event->getTimeZone(),
             date_default_timezone_get()

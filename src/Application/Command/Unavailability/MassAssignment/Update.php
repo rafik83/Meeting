@@ -20,12 +20,12 @@ class Update
     public $massAssignment;
 
     /**
-     * @var string
+     * @var \DateTimeInterface
      */
     public $begin;
 
     /**
-     * @var string
+     * @var \DateTimeInterface
      */
     public $end;
 
@@ -37,20 +37,11 @@ class Update
     /**
      * Update constructor.
      *
-     * @param MassAssignment     $massAssignment
-     * @param string             $begin
-     * @param string             $end
-     * @param bool               $enabled
+     * @param MassAssignment $massAssignment
      */
     public function __construct(
-        MassAssignment $massAssignment,
-        $begin,
-        $end,
-        $enabled
+        MassAssignment $massAssignment
     ) {
         $this->massAssignment = $massAssignment;
-        $this->begin          = $begin;
-        $this->end            = $end;
-        $this->enabled        = $enabled;
     }
 }

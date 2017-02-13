@@ -17,6 +17,8 @@ module.exports = {
             beginTime: null,
             endTime: null,
             enabled: false,
+            boundedBegin: null,
+            boundedEnd: null,
         }
     },
     mounted: function () {
@@ -36,6 +38,8 @@ module.exports = {
                     this.beginTime = moment(response.data.begin.date).format('DD/MM/YYYY HH:mm');
                     this.endTime = moment(response.data.end.date).format('DD/MM/YYYY HH:mm');
                     this.enabled = response.data.enabled;
+                    this.boundedBegin = moment(response.data.massBegin.date).format('DD/MM/YYYY HH:mm');
+                    this.boundedEnd = moment(response.data.massEnd.date).format('DD/MM/YYYY HH:mm');
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {

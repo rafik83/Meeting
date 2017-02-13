@@ -1,0 +1,64 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment;
+
+use Doctrine\DBAL\Types\BooleanType;
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
+use Symfony\Component\Form\AbstractType;
+use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class UpdateType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        /** @var Event $event */
+        $event = $options['event'];
+
+        $builder
+            ->add('begin', DateTimePickerType::class, [
+                'format'        => 'd/m/Y H:i',
+                'display_date'  => false,
+                'required'      => true,
+                'view_timezone' => $event->getTimeZone()
+            ])
+            ->add('end', DateTimePickerType::class, [
+                'format'        => 'd/m/Y H:i',
+                'display_date'  => false,
+                'required'      => true,
+                'view_timezone' => $event->getTimeZone()
+            ])
+            ->add('enabled')
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('event');
+        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setDefaults([
+            'crsf_protection' => false,
+        ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'unavaibility_mass_assignment_update';
+    }
+}

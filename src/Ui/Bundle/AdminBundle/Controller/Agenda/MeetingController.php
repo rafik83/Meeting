@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetin
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
+use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\DateFormatException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
@@ -37,6 +38,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
 
 class MeetingController extends Controller
 {
@@ -325,23 +327,25 @@ class MeetingController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $data = json_decode($request->getContent());
-
-        if (!isset($data->begin) || !isset($data->end) || !isset($data->enabled)) {
+        if (!$request->request->has('begin') || !$request->request->has('end') || !$request->request->has('enabled')) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.missingData');
         }
 
+        $update = new Update($massAssignment);
+
+        $form = $this->createForm(UpdateType::class, $update, [
+            'method' => 'POST',
+            'event'  => $event
+        ]);
+
+        $form->handleRequest($request)->submit([
+            'begin' => $request->request->get('begin'),
+            'end' => $request->request->get('end'),
+            'enabled' => $request->request->get('enabled') === 'true',
+        ]);
+
         try {
-            $this->get('tactician.commandbus')->handle(
-                new Update(
-                    $massAssignment,
-                    $data->begin,
-                    $data->end,
-                    $data->enabled
-                )
-            );
-        } catch (DateFormatException $exception) {
-            return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.dateFormat');
+            $this->get('tactician.commandbus')->handle($update);
         } catch (MassAssignmentOnMeetingException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot');
         } catch (MassAssignmentOutOfMassSlotException $exception) {
