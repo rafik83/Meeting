@@ -28,7 +28,7 @@ class Event implements EventInterface, TraceableInterface
     /**
      * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
      */
-    const VAT_MODE_ET  = 'et';
+    const VAT_MODE_ET = 'et';
 
     /**
      * @var int
@@ -608,5 +608,17 @@ class Event implements EventInterface, TraceableInterface
         });
 
         return reset($days);
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getOpenDate()
+    {
+        try {
+            return $this->getFirstDay()->getStartTime();
+        } catch (DayNotDefinedException $exception) {
+            return null;
+        }
     }
 }

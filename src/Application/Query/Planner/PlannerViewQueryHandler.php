@@ -99,7 +99,7 @@ class PlannerViewQueryHandler
         $sheets         = $this->sheetViewQueryHandler->handle(new SheetViewQuery($event, $types));
         $participants   = $this->participantViewQueryHandler->handle(new ParticipantViewQuery($event, $sheets, $slots));
         $meetings       = $this->meetingViewQueryHandler->handle(new MeetingViewQuery($event, $sheets, $participants, $slots));
-        $spots          = $this->spotViewQueryHandler->handle(new SpotViewQuery($event, $sheets));
+        $spots          = $this->spotViewQueryHandler->handle(new SpotViewQuery($event, $sheets, $slots));
 
         return new PlannerView($days, $slots, $types, $typePriorities, $sheets, $participants, $meetings, $spots);
     }

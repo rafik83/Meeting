@@ -143,7 +143,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, $participant, 'fr'))->shouldBeCalled()->willReturn($massView);
         $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldBeCalled()->willReturn($unavailabilityView);
 
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
@@ -159,6 +159,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $eventDay,
             $sheet,
             $event,
+            $participant,
             'fr',
             [$participation1, $participation2],
             [$unavailability],
@@ -279,7 +280,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, $participant, 'fr'))->shouldBeCalled()->willReturn($massView);
         $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldBeCalled()->willReturn($unavailabilityView);
 
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
@@ -295,6 +296,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $eventDay,
             $sheet,
             $event,
+            $participant,
             'fr',
             [$participation1, $participation2],
             [$unavailability],

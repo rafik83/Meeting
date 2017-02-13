@@ -16,14 +16,15 @@ class Compose
     const TAG_PARTICIPANT        = '%participant%';
     const TAG_PARTICIPATION_TYPE = '%participationType%';
 
-    const LINK_SHEET             = '%sheetLink%';
-    const LINK_PACKAGE           = '%packageLink%';
-    const LINK_ORDERS            = '%ordersLink%';
-    const LINK_AGENDA            = '%agendaLink%';
-    const LINK_PROGRAM           = '%programLink%';
-    const LINK_CATALOG           = '%catalogLink%';
-    const LINK_MEETING_REQUEST   = '%meetingRequestLink%';
-    const LINK_ACTIVACTE_ACCOUNT = '%activateAccountLink%';
+    const LINK_SHEET                = '%sheetLink%';
+    const LINK_PACKAGE              = '%packageLink%';
+    const LINK_ORDERS               = '%ordersLink%';
+    const LINK_AGENDA               = '%agendaLink%';
+    const LINK_PROGRAM              = '%programLink%';
+    const LINK_CATALOG              = '%catalogLink%';
+    const LINK_MEETING_REQUEST      = '%meetingRequestLink%';
+    const LINK_ACTIVACTE_ACCOUNT    = '%activateAccountLink%';
+    const LINK_EXPORT_MEETING_SHEET = '%exportMeetingSheetLink%';
 
     /**
      * @return string[]
@@ -59,6 +60,7 @@ class Compose
             self::LINK_PACKAGE,
             self::LINK_PROGRAM,
             self::LINK_SHEET,
+            self::LINK_EXPORT_MEETING_SHEET,
         ];
     }
 }

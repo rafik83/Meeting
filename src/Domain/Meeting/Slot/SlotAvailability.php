@@ -54,6 +54,11 @@ class SlotAvailability
     private $meetingRepositoryInterface;
 
     /**
+     * @var MassAssignmentRepositoryInterface
+     */
+    private $massAssignmentRepository;
+
+    /**
      * @var HappeningParticipation[]
      */
     private $happenings = null;
@@ -249,28 +254,24 @@ class SlotAvailability
     private function isMassUnavailabilityNotUsable(MeetingSlot $slot)
     {
         foreach ($this->massUnavailability as $mass) {
-            if (!$mass->isBlocking() || $mass->isDispatch()) {
-                continue;
-            }
-
             if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
-                return true;
+                return !$mass->isBlocking() || $mass->isDispatch();
             }
 
             if ($slot->getEnd() > $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return true;
+                return !$mass->isBlocking() || $mass->isDispatch();
             }
 
             if ($slot->getBegin() >= $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return true;
+                return !$mass->isBlocking() || $mass->isDispatch();
             }
 
             if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() < $slot->getEnd()) {
-                return true;
+                return !$mass->isBlocking() || $mass->isDispatch();
             }
 
             if ($mass->getEnd() > $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
-                return true;
+                return !$mass->isBlocking() || $mass->isDispatch();
             }
         }
 
@@ -318,6 +319,8 @@ class SlotAvailability
                     if ($assignmentResult === self::ASSIGNMENT_FOUND) {
                         return $assignment;
                     }
+
+                    continue;
                 }
             }
 

@@ -12,10 +12,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
+use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
@@ -27,6 +29,7 @@ use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
@@ -38,6 +41,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -178,11 +182,18 @@ class SheetController extends Controller
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
 
+                /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
-                $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
-                    '%count%' => $result->count,
-                ]));
+                if (empty($result->ignoredSheetsMessage)) {
+                    $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
+                        '%count%' => $result->count,
+                    ]));
+                } else {
+                    $this->addFlash('warning', new TransMessage($result->message, [
+                        '%sheets%' => $result->ignoredSheetsMessage,
+                    ]));
+                }
             } else {
                 $this->addFlash('error', (string)$batchForm->getErrors(true));
             }
@@ -363,8 +374,7 @@ class SheetController extends Controller
      */
     public function assignSpotAction(Request $request, Event $event, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
 
         $data = json_decode($request->getContent(), true);
 
@@ -411,8 +421,7 @@ class SheetController extends Controller
      */
     public function importAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
 
         $import = new Import();
 
@@ -447,8 +456,7 @@ class SheetController extends Controller
      */
     public function importMappingAction(Request $request, Event $event, Type $type)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
         $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
 
         $availableLocale = $event->getAvailableLocale($request->getLocale());
@@ -496,8 +504,7 @@ class SheetController extends Controller
      */
     public function importResultAction(Event $event)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->checkAccess($event);
 
         $participantDenormalizerView = $this->get('query.participant.import.import_result_view_query_handler')
             ->handle();
@@ -506,6 +513,42 @@ class SheetController extends Controller
             'event' => $event,
             'view'  => $participantDenormalizerView,
         ]);
+    }
+
+    /**
+     * @param Request           $request
+     * @param Event             $event
+     * @param Participant       $participant
+     *
+     * @return JsonResponse
+     */
+    public function updateVisioAction(Request $request , Event $event, Participant $participant)
+    {
+        $this->checkAccess($event);
+
+        $visioParam = $request->request->get('isVisio');
+
+        if ($visioParam !== 'true' && $visioParam !== 'false') {
+            return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.participant.invalid-parameters')
+            ], 404);
+        }
+
+        $isVisio = $visioParam !== 'true' ? false : true;
+
+        if ($participant->getSheet()->getEvent() !== $event) {
+            return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.participant.not_found'),
+            ], 404);
+        }
+
+        $command = new UpdateVisio($participant, $isVisio);
+
+        $this->get('tactician.commandbus')->handle($command);
+
+        return new JsonResponse([
+            'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success')
+        ], 200);
     }
 
     /**
@@ -527,5 +570,14 @@ class SheetController extends Controller
         }
 
         return $filters;
+    }
+
+    /**
+     * @param Event $event
+     */
+    private function checkAccess(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
     }
 }

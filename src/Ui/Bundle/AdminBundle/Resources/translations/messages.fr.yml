@@ -37,7 +37,7 @@ admin.agenda.filters.hasSentMeetingRequest.label: 'Pas de demande de rendez-vous
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
-admin.agenda.filters.title.label: 'Filtre fiche'
+admin.agenda.filters.title.label: 'Filtre'
 admin.agenda.filters.type: 'Type de participation'
 admin.agenda.mass_assignment.title.label: 'Modifier l''indispo de masse dispatchée'
 admin.agenda.mass_assignment.begin.label: ''
@@ -69,6 +69,7 @@ admin.agenda.meeting.updateMassAssignment.missingData: "Impossible de modifier l
 admin.agenda.meeting.updateMassAssignment.outOfMassSlot: "Indisponibilité de masse dispatché en dehors de l'indisponibilité de masse"
 admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot: "Rendez-vous ou conférence sur le créneau"
 admin.agenda.meeting.updateMassAssignment.dateFormat: "Format de date incorrect"
+admin.agenda.meeting.updateSpot.visio: 'Visio'
 admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
 admin.agenda.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce RDV ?'
@@ -81,8 +82,18 @@ admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
+admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
+admin.agenda.sort.alphabetical.label: 'Alphabétique'
+admin.agenda.sort.asc.label: 'Croissant'
+admin.agenda.sort.desc.label: 'Décroissant'
+admin.agenda.sort.pending_request.label: 'Nombre de propositions en attente de validation'
+admin.agenda.sort.request.label: 'Nombre de demandes'
+admin.agenda.sort.title.label: Trier
+admin.agenda.sort.submit.label: 'Trier les fiches'
+admin.agenda.sort.scheduled_meeting.label: 'Nombre de RDV positionnés'
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
+admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler
@@ -255,6 +266,7 @@ admin.messaging.menu.title: Emailing
 admin.messaging.message.compose.links.activateAccount: 'Activation du compte'
 admin.messaging.message.compose.links.agenda: Agenda
 admin.messaging.message.compose.links.catalog: Catalogue
+admin.messaging.message.compose.links.exportMeetingSheet: 'Télécharger mes contacts'
 admin.messaging.message.compose.links.label: 'Liens personnalisés'
 admin.messaging.message.compose.links.meetingRequest: 'Gestion RDV'
 admin.messaging.message.compose.links.orders: 'Liste des commandes'
@@ -498,6 +510,7 @@ admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
 admin.sheet.details.participant.title: Participant
+admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
@@ -534,6 +547,9 @@ admin.sheet.import.button.label: Importer
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
+admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
+admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
+admin.sheet.participant.not_found: 'Ce participant n''existe pas'
 admin.sheet.read: Voir
 admin.sheet.see_list: 'Voir liste des participations'
 admin.sheet.spot: Lieu

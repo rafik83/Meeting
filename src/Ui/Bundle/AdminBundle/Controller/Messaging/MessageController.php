@@ -19,21 +19,20 @@ use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class MessageController extends Controller
 {
     /**
      * Displays a list of all emailing messages for a given event.
      *
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function listAction(Request $request, Event $event)
+    public function listAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 

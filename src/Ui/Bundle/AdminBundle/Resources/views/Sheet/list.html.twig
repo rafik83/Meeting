@@ -64,7 +64,7 @@
                     {% endif %}
 
                     {% if batch_form.disable is defined %}
-                        <li>{{ form_widget(batch_form.disable) }}</li>
+                        <li>{{ form_widget(batch_form.disable, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
                     {% endif %}
 
                     {% if batch_form.addCatalog is defined or batch_form.removeCatalog is defined %}
@@ -76,7 +76,7 @@
                     {% endif %}
 
                     {% if batch_form.removeCatalog is defined %}
-                        <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                        <li>{{ form_widget(batch_form.removeCatalog, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
                     {% endif %}
 
                     {% if batch_form.validationStateDraft is defined or batch_form.validationStateValidate is defined %}

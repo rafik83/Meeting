@@ -60,7 +60,10 @@ class TransformRequestIntoMeetingHandler
     {
         // Get available slots
         $meetingUpdateSlotView = $this->requestSlotViewQueryHandler->handle(
-            new RequestSlotViewQuery($transformRequestIntoMeeting->meetingRequest)
+            new RequestSlotViewQuery(
+                $transformRequestIntoMeeting->meetingRequest,
+                $transformRequestIntoMeeting->visio
+            )
         );
 
         // Check if selected slot is in available slots
@@ -74,7 +77,8 @@ class TransformRequestIntoMeetingHandler
             $transformRequestIntoMeeting->meetingRequest->countParticipants(),
             null,
             $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
-            $transformRequestIntoMeeting->meetingRequest->getToSheet()
+            $transformRequestIntoMeeting->meetingRequest->getToSheet(),
+            $transformRequestIntoMeeting->visio
         );
 
 
