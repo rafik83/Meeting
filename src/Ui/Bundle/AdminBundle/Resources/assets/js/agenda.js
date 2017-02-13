@@ -256,7 +256,8 @@ new Vue({
             var sheetMet = this.findSheetBySheetId(event.sheetMetId);
             this.loadAgenda(event.sheet, true);
 
-            if (sheetMet !== null) {
+            // reload sheet met agenda if opened
+            if (sheetMet !== null && this.isOpenedSheet(sheetMet) !== -1) {
                 this.loadAgenda(sheetMet, true);
             }
         },
