@@ -366,6 +366,8 @@ new Vue({
                         this.$forceUpdate();
                     }
                 }
+
+                this.cancelSlotAction();
             }
         },
 
