@@ -46,8 +46,7 @@
             <div class="slot-label">
                 <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}"
                       v-show="agendaSlot.hasNoPreference === true"></span>
-                <a v-bind:title="agendaSlot.sheetMetTitle" v-on:click="showAgendaForSheetId(agendaSlot.sheetMetId)" href="#">${
-                    agendaSlot.sheetMetTitle }</a>
+                <a v-bind:title="agendaSlot.sheetMetTitle" v-on:click="showAgendaForSheetId(agendaSlot.sheetMetId)" href="#">${ agendaSlot.sheetMetTitle }</a>
             </div>
 
             <div class="slot-label">
