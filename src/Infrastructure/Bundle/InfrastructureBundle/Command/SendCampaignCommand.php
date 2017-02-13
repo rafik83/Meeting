@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
 
-use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
-use Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler;
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\Process;
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,7 +28,7 @@ class SendCampaignCommand extends Command
     private $repository;
 
     /**
-     * @var SendHandler
+     * @var ProcessHandler
      */
     private $handler;
 
@@ -36,9 +36,9 @@ class SendCampaignCommand extends Command
      * SendCampaignCommand constructor.
      *
      * @param CampaignRepositoryInterface $repository
-     * @param SendHandler                 $handler
+     * @param ProcessHandler              $handler
      */
-    public function __construct(CampaignRepositoryInterface $repository, SendHandler $handler)
+    public function __construct(CampaignRepositoryInterface $repository, ProcessHandler $handler)
     {
         parent::__construct(self::NAME);
 
@@ -63,14 +63,12 @@ class SendCampaignCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return;
-
         $campaign = $this->repository->getById($input->getArgument('id'));
 
         if (null === $campaign) {
             throw new \Exception('Campaign not found.');
         }
 
-        $this->handler->handle(new Send($campaign));
+        $this->handler->handle(new Process($campaign));
     }
 }

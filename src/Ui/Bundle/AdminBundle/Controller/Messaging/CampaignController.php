@@ -14,6 +14,7 @@ use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
@@ -217,11 +218,7 @@ class CampaignController extends Controller
             return $this->redirect($url);
         }
 
-        // Add job
-        $job = new Job('vimeet:campaign:send', [$campaign->getId()]);
-        $job->addRelatedEntity($campaign);
-        $this->getDoctrine()->getManager()->persist($job);
-        $this->getDoctrine()->getManager()->flush($job);
+        $this->get('tactician.commandbus')->handle(new Send($campaign));
 
         // Add flash
         $this->addFlash('success', 'flash.messaging.campaign.send.success');

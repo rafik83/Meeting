@@ -217,23 +217,14 @@ app_patterns:
   ##############
 
   supervisor_configs:
-    - file:     jms_job_queue.conf
+    - file:     app.conf
       template: configs/app_program.{{ env }}.j2
       config:
         - jms-job-queue:
-          - command:                 "php bin/console jms-job-queue:run --verbose"
-          - directory:               "{{ app.dir }}{{ app.dir_release }}"
-          #- directory:               "/tmp"
-          - process_name:            "%(program_name)s"
-          - environment:             "SYMFONY_ENV=\"{{ app.env }}\""
-          - numprocs:                1
-          - autostart:               true
-          - autorestart:             true
-          - startsecs:               5
-          - startretries:            10
-          - user:                    "{{ app.user }}"
-          - redirect_stderr:         false
-          - stdout_logfile:          "{{ app.log_dir }}/supervisor.jms-job-queue.out.log"
-          - stdout_capture_maxbytes: 1MB
-          - stderr_logfile:          "{{ app.log_dir }}/supervisor.jms-job-queue.error.log"
-          - stderr_capture_maxbytes: 1MB
+          - command:        php bin/console jms-job-queue:run --no-interaction -vv
+          - directory:      "{{ app.dir }}{{ app.dir_release }}"
+          - user:           "{{ app.user }}"
+          - stdout_logfile: "{{ app.log_dir }}/supervisor.jms-job-queue.log"
+          - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
+          # Dev
+          #- autostart:       false

@@ -30,7 +30,7 @@ payum_authorize:
 JMSJobQueueBundle:
     resource: "@JMSJobQueueBundle/Controller/"
     type: annotation
-    prefix: /admin/jobs
+    prefix: /admin/{_locale}/jobs
 
 #
 # Admin redirect

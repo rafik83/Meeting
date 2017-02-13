@@ -51,6 +51,9 @@ class Campaign
     /** @var \DateTimeInterface|null */
     private $sentAt;
 
+    /** @var \DateTimeInterface|null */
+    private $processedAt;
+
     /**
      * @param Event              $event
      * @param string             $title
@@ -133,6 +136,16 @@ class Campaign
     }
 
     /**
+     * Get processedAt
+     *
+     * @return \DateTimeInterface|null
+     */
+    public function getProcessedAt()
+    {
+        return $this->processedAt;
+    }
+
+    /**
      * @param Sheet $sheet
      */
     public function addSheet(Sheet $sheet)
@@ -191,5 +204,10 @@ class Campaign
     public function markAsSent(\DateTimeInterface $sentAt = null)
     {
         $this->sentAt = $sentAt ?: new \DateTime();
+    }
+
+    public function markAsProcessed(\DateTimeInterface $processedAt = null)
+    {
+        $this->processedAt = $processedAt ?: new \DateTime();
     }
 }
