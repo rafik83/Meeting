@@ -17,7 +17,7 @@ module.exports = {
         }
     },
     watch: {
-        'show': function (newValue, oldValue) {
+        'show': function () {
             var child = this.$refs.massAssignmentForm;
             if (typeof child !== 'undefined') {
                 child.reset();
