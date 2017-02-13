@@ -167,4 +167,4 @@ Se connecter à la prod et supprimer le fichier dumpé
 * [Interface supervisord](http://vimeet.proximum.dev:9001/)
 * [Liste des jobs](http://vimeet.proximum.dev/app_dev.php/admin/fr/jobs/)
 
-Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue
+Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
