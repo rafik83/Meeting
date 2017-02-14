@@ -95,7 +95,9 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function getRequest(Request $request)
     {
-        $request = (new RequestQueryBuilder($this->entityManager))
+        $requestQueryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        $request = $requestQueryBuilder
             ->where('request = :request')
             ->setParameter('request', $request)
         ;
