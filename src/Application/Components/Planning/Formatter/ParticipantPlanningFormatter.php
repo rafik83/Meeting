@@ -201,9 +201,7 @@ class ParticipantPlanningFormatter
                     self::TRANSLATION_DOMAIN,
                     $participantLocale
                 );
-            } elseif ($timeEntity instanceof MassUnavailabilityView) {
-                $formatted .= $timeEntity->title;
-            } elseif ($timeEntity instanceof HappeningView) {
+            } elseif ($timeEntity instanceof MassUnavailabilityView || $timeEntity instanceof HappeningView) {
                 $formatted .= $timeEntity->title;
             } elseif ($timeEntity instanceof UnavailabilityView) {
                 if ($timeEntity->hasMessage()) {
