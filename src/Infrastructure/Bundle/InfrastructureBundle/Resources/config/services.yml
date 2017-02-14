@@ -1613,7 +1613,6 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@query.participant.card_view_query_handler'
-            - '@repository.rule_repository'
             - '@domain.rule.applyer'
     #
     # Sheet Request

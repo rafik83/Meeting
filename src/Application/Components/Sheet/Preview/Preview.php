@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -38,26 +37,18 @@ class Preview
     private $cardViewQueryHandler;
 
     /**
-     * @var RuleRepositoryInterface
-     */
-    private $ruleRepositoryInterface;
-
-    /**
      * @param TemplateDataFactory     $templateDataFactory
      * @param CardViewQueryHandler    $cardViewQueryHandler
-     * @param RuleRepositoryInterface $ruleRepositoryInterface
      * @param Applyer                 $applyer
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         CardViewQueryHandler $cardViewQueryHandler,
-        RuleRepositoryInterface $ruleRepositoryInterface,
         Applyer $applyer
     ) {
         $this->templateDataFactory     = $templateDataFactory;
         $this->applyer                 = $applyer;
         $this->cardViewQueryHandler    = $cardViewQueryHandler;
-        $this->ruleRepositoryInterface = $ruleRepositoryInterface;
     }
 
     /**
@@ -73,15 +64,12 @@ class Preview
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
         $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
-        $taggedData        = $this
-            ->templateDataFactory
-            ->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
+        $taggedData        = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
 
         foreach ($previewObjectKeys as $key) {
             $object = $templateData->getObject($key);
 
             if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
-                $rules              = $this->ruleRepositoryInterface->getByType($sheet->getType());
                 $participants       = $sheet->getParticipants()->toArray();
                 $numberParticipants = $object->getNumberOfParticipantShown();
 
@@ -89,7 +77,10 @@ class Preview
                 for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
                     $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
 
-                    $this->applyer->applyRuleForParticipantCard($cardView, $rules);
+                    if (null !== $composedRule && null !== $composedRule->rule) {
+                        $this->applyer->applyRuleForParticipantCard($cardView, [$composedRule->rule]);
+                    }
+
                     $cardViews[] = $cardView;
                 }
             }
