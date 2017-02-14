@@ -56,7 +56,7 @@ class PackageSubmenuButtonViewQueryHandler
 
             return new SubmenuButtonView(
                 Category::PACKAGE_ICON,
-                'package.title',
+                'navigation.category.package',
                 $this->navigationBuilder->getRoute($route, ['sheet' => $query->sheet->getId()]),
                 Route::isPackage($query->route),
                 $hasProductsInCart === true
