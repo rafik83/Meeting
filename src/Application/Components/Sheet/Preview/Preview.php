@@ -10,8 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
 
+use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
+use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -24,11 +28,36 @@ class Preview
     private $templateDataFactory;
 
     /**
-     * @param TemplateDataFactory $templateDataFactory
+     * @var Applyer
      */
-    public function __construct(TemplateDataFactory $templateDataFactory)
-    {
-        $this->templateDataFactory = $templateDataFactory;
+    private $applyer;
+
+    /**
+     * @var CardViewQueryHandler
+     */
+    private $cardViewQueryHandler;
+
+    /**
+     * @var RuleRepositoryInterface
+     */
+    private $ruleRepositoryInterface;
+
+    /**
+     * @param TemplateDataFactory     $templateDataFactory
+     * @param CardViewQueryHandler    $cardViewQueryHandler
+     * @param RuleRepositoryInterface $ruleRepositoryInterface
+     * @param Applyer                 $applyer
+     */
+    public function __construct(
+        TemplateDataFactory $templateDataFactory,
+        CardViewQueryHandler $cardViewQueryHandler,
+        RuleRepositoryInterface $ruleRepositoryInterface,
+        Applyer $applyer
+    ) {
+        $this->templateDataFactory     = $templateDataFactory;
+        $this->applyer                 = $applyer;
+        $this->cardViewQueryHandler    = $cardViewQueryHandler;
+        $this->ruleRepositoryInterface = $ruleRepositoryInterface;
     }
 
     /**
@@ -42,13 +71,29 @@ class Preview
     {
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
         $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
-        $taggedData        = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
-
-        $previewObjects = [];
+        $taggedData        =
+            $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
+        $cardViews         = [];
+        $previewObjects    = [];
 
         foreach ($previewObjectKeys as $key) {
-            $object      = $templateData->getObject($key);
-            $previewView = new PreviewView($object->getKey(), '', $object->getType());
+            $object = $templateData->getObject($key);
+
+            if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
+                $rules              = $this->ruleRepositoryInterface->getByType($sheet->getType());
+                $participants       = $sheet->getParticipants()->toArray();
+                $numberParticipants = $object->getNumberOfParticipantShown();
+
+                // Create card view for each participant limited by the number of participant shown
+                for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
+                    $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
+
+                    $this->applyer->applyRuleForParticipantCard($cardView, $rules);
+                    $cardViews[] = $cardView;
+                }
+            }
+
+            $previewView = new PreviewView($object->getKey(), '', $object->getType(), $cardViews);
 
             if ($object instanceof TemplateObject\ContentObjectInterface) {
                 if ($object instanceof TemplateObject\EditableText && $object->isTitle()) {
@@ -57,7 +102,6 @@ class Preview
 
                 if ($object->getContentValue() === ''
                     && $object->getTag() !== null
-                    && isset($taggedData[$object->getTag()])
                     && !empty($taggedData[$object->getTag()])
                     && $this->isTagVisible($object->getTag(), $composedRule)
                 ) {
