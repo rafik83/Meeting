@@ -69,12 +69,13 @@ class Preview
      */
     public function getPreview(Sheet $sheet, $locale, ComposedRule $composedRule = null)
     {
-        $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
-        $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
-        $taggedData        =
-            $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
         $cardViews         = [];
         $previewObjects    = [];
+        $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
+        $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
+        $taggedData        = $this
+            ->templateDataFactory
+            ->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
 
         foreach ($previewObjectKeys as $key) {
             $object = $templateData->getObject($key);
