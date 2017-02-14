@@ -52,6 +52,7 @@ class CatalogSubmenuViewQueryHandler
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
         if ($catalogOnlineDate !== null && $catalogOnlineDate <= $this->datetime && $query->sheet->isInCatalog()) {
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::CATALOG_ICON,
                 'navigation.category.catalog',

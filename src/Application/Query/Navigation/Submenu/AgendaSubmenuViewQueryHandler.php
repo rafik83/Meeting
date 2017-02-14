@@ -23,22 +23,13 @@ class AgendaSubmenuViewQueryHandler
     private $navigationBuilder;
 
     /**
-     * @var PackageSubmenuButtonViewQueryHandler
-     */
-    private $packageSubmenuButtonViewQueryHandler;
-
-    /**
      * CatalogSubmenuViewQueryHandler constructor.
      *
-     * @param NavigationBuilderInterface           $navigationBuilder
-     * @param PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
+     * @param NavigationBuilderInterface $navigationBuilder
      */
-    public function __construct(
-        NavigationBuilderInterface $navigationBuilder,
-        PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
-    ) {
-        $this->navigationBuilder                    = $navigationBuilder;
-        $this->packageSubmenuButtonViewQueryHandler = $packageSubmenuButtonViewQueryHandler;
+    public function __construct(NavigationBuilderInterface $navigationBuilder)
+    {
+        $this->navigationBuilder = $navigationBuilder;
     }
 
     /**
@@ -49,13 +40,6 @@ class AgendaSubmenuViewQueryHandler
     public function handle(AgendaSubmenuViewQuery $query)
     {
         $buttonViews = [];
-
-        $buttonViews[] = new SubmenuButtonView(
-            Category::SHEET_ICON,
-            'sheet.title',
-            $this->navigationBuilder->getRoute('event_sheet'),
-            Route::isSheet($query->route)
-        );
 
         $buttonViews[] = new SubmenuButtonView(
             Category::AGENDA_ICON,
@@ -70,15 +54,6 @@ class AgendaSubmenuViewQueryHandler
             $this->navigationBuilder->getRoute('happening_program'),
             Route::isProgram($query->route)
         );
-
-        // Package button
-        $packageSubmenuButtonView = $this->packageSubmenuButtonViewQueryHandler->handle(
-            new PackageSubmenuButtonViewQuery($query->sheet, $query->route)
-        );
-
-        if (null !== $packageSubmenuButtonView) {
-            $buttonViews[] = $packageSubmenuButtonView;
-        }
 
         return $buttonViews;
     }

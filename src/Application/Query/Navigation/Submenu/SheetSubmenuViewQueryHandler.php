@@ -35,28 +35,20 @@ class SheetSubmenuViewQueryHandler
     private $happeningsAccessChecker;
 
     /**
-     * @var PackageSubmenuButtonViewQueryHandler
-     */
-    private $packageSubmenuButtonViewQueryHandler;
-
-    /**
      * SheetSubmenuViewQueryHandler constructor.
      *
-     * @param NavigationBuilderInterface           $navigationBuilder
-     * @param PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
-     * @param CatalogAccessChecker                 $catalogAccessChecker
-     * @param HappeningsAccessChecker              $happeningsAccessChecker
+     * @param NavigationBuilderInterface $navigationBuilder
+     * @param CatalogAccessChecker       $catalogAccessChecker
+     * @param HappeningsAccessChecker    $happeningsAccessChecker
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler,
         CatalogAccessChecker $catalogAccessChecker,
         HappeningsAccessChecker $happeningsAccessChecker
     ) {
-        $this->navigationBuilder                    = $navigationBuilder;
-        $this->packageSubmenuButtonViewQueryHandler = $packageSubmenuButtonViewQueryHandler;
-        $this->catalogAccessChecker                 = $catalogAccessChecker;
-        $this->happeningsAccessChecker              = $happeningsAccessChecker;
+        $this->navigationBuilder       = $navigationBuilder;
+        $this->catalogAccessChecker    = $catalogAccessChecker;
+        $this->happeningsAccessChecker = $happeningsAccessChecker;
     }
 
     /**
@@ -74,35 +66,6 @@ class SheetSubmenuViewQueryHandler
             $this->navigationBuilder->getRoute('event_sheet'),
             Route::isSheet($query->route)
         );
-
-        // Catalog button
-        if ($query->sheet->isInCatalog() && $this->catalogAccessChecker->allowedToAccess($query->event)) {
-            $buttonViews[] = new SubmenuButtonView(
-                Category::CATALOG_ICON,
-                'catalog.title',
-                $this->navigationBuilder->getRoute('event_catalog_index'),
-                false
-            );
-        }
-
-        // Program button
-        if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
-            $buttonViews[] = new SubmenuButtonView(
-                Category::PLANNING_ICON,
-                'program.title',
-                $this->navigationBuilder->getRoute('happening_program'),
-                false
-            );
-        }
-
-        // Package button
-        $packageSubmenuButtonView = $this->packageSubmenuButtonViewQueryHandler->handle(
-            new PackageSubmenuButtonViewQuery($query->sheet, $query->route)
-        );
-
-        if (null !== $packageSubmenuButtonView) {
-            $buttonViews[] = $packageSubmenuButtonView;
-        }
 
         return $buttonViews;
     }
