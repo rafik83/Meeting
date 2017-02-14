@@ -17,8 +17,6 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInt
 
 class UpdateHandler
 {
-    const DATE_FORMAT = 'd/m/Y H:i';
-
     /**
      * @var MassAssignmentRepositoryInterface
      */

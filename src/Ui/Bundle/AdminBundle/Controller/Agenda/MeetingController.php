@@ -33,11 +33,11 @@ use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
 
 class MeetingController extends Controller
 {
@@ -349,8 +349,8 @@ class MeetingController extends Controller
         ]);
 
         $form->handleRequest($request)->submit([
-            'begin' => $request->request->get('begin'),
-            'end' => $request->request->get('end'),
+            'begin'   => $request->request->get('begin'),
+            'end'     => $request->request->get('end'),
             'enabled' => $request->request->get('enabled') === 'true',
         ]);
 

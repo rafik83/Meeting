@@ -36,7 +36,6 @@ module.exports = {
             this.reinit();
         },
         save: function () {
-
             this.disabled = true;
 
             this.$http.post(api.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {

@@ -39,9 +39,8 @@ class Update
      *
      * @param MassAssignment $massAssignment
      */
-    public function __construct(
-        MassAssignment $massAssignment
-    ) {
+    public function __construct(MassAssignment $massAssignment)
+    {
         $this->massAssignment = $massAssignment;
     }
 }
