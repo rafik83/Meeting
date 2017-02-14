@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class AgendaSubmenuViewQueryHandler
@@ -21,15 +22,24 @@ class AgendaSubmenuViewQueryHandler
      * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
+    
+    /**
+     * @var HappeningsAccessChecker
+     */
+    private $happeningsAccessChecker;
 
     /**
      * CatalogSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
+     * @param HappeningsAccessChecker    $happeningsAccessChecker
      */
-    public function __construct(NavigationBuilderInterface $navigationBuilder)
-    {
-        $this->navigationBuilder = $navigationBuilder;
+    public function __construct(
+        NavigationBuilderInterface $navigationBuilder,
+        HappeningsAccessChecker $happeningsAccessChecker
+    ) {
+        $this->navigationBuilder       = $navigationBuilder;
+        $this->happeningsAccessChecker = $happeningsAccessChecker;
     }
 
     /**
@@ -48,12 +58,14 @@ class AgendaSubmenuViewQueryHandler
             Route::isAgenda($query->route)
         );
 
-        $buttonViews[] = new SubmenuButtonView(
-            Category::PLANNING_ICON,
-            'program.title',
-            $this->navigationBuilder->getRoute('happening_program'),
-            Route::isProgram($query->route)
-        );
+        if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
+            $buttonViews[] = new SubmenuButtonView(
+                Category::PLANNING_ICON,
+                'program.title',
+                $this->navigationBuilder->getRoute('happening_program'),
+                Route::isProgram($query->route)
+            );
+        }
 
         return $buttonViews;
     }

@@ -45,10 +45,13 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
 
-        $handler = new PackageSubmenuButtonViewQueryHandler($navigationBuilder->reveal(), $cartRowRepository->reveal());
+        $handler = new PackageSubmenuButtonViewQueryHandler(
+            $navigationBuilder->reveal(),
+            $cartRowRepository->reveal()
+        );
 
         $navigationBuilder
-            ->getRoute('event_package')
+            ->getRoute('event_package', ["sheet" => null])
             ->shouldBeCalled()
             ->willReturn('event_package.link');
 
@@ -56,7 +59,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
 
         $expectedPackageSubmenuButtonView = new SubmenuButtonView(
             Category::PACKAGE_ICON,
-            'package.title',
+            'navigation.category.package',
             'event_package.link',
             true,
             false

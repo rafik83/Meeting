@@ -2531,8 +2531,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@domain.key_dates.checker.catalog_access_checker'
-            - '@domain.key_dates.checker.happenings_access_checker'
     query.navigation.agenda_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler
         arguments:

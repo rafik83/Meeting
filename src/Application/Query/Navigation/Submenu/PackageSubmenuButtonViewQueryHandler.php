@@ -50,7 +50,7 @@ class PackageSubmenuButtonViewQueryHandler
         if ($package !== null && $package->isPassable() === true) {
             $route = 'event_package';
 
-            if ($query->sheet->hasNotCancelledOrders() || !$hasProductsInCart) {
+            if ($query->sheet->hasNotCancelledOrders() && !$hasProductsInCart) {
                 $route = 'event_package_summary';
             }
 

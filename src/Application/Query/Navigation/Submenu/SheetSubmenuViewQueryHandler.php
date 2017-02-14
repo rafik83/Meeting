@@ -13,8 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
-use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
-use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class SheetSubmenuViewQueryHandler
@@ -23,32 +21,15 @@ class SheetSubmenuViewQueryHandler
      * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
-
-    /**
-     * @var CatalogAccessChecker
-     */
-    private $catalogAccessChecker;
-
-    /**
-     * @var HappeningsAccessChecker
-     */
-    private $happeningsAccessChecker;
-
+    
     /**
      * SheetSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
-     * @param CatalogAccessChecker       $catalogAccessChecker
-     * @param HappeningsAccessChecker    $happeningsAccessChecker
      */
-    public function __construct(
-        NavigationBuilderInterface $navigationBuilder,
-        CatalogAccessChecker $catalogAccessChecker,
-        HappeningsAccessChecker $happeningsAccessChecker
-    ) {
-        $this->navigationBuilder       = $navigationBuilder;
-        $this->catalogAccessChecker    = $catalogAccessChecker;
-        $this->happeningsAccessChecker = $happeningsAccessChecker;
+    public function __construct(NavigationBuilderInterface $navigationBuilder)
+    {
+        $this->navigationBuilder = $navigationBuilder;
     }
 
     /**

@@ -11,14 +11,13 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler;
-use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
-use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
-use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -104,53 +103,22 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 'sheet.title.link',
                 false
             ),
-            new SubmenuButtonView(
-                Category::PACKAGE_ICON,
-                'package.title',
-                'package.title.link',
-                false,
-                null
-            ),
         ];
 
         // Mock
-        $navigationBuilder                    = $this->prophesize(NavigationBuilderInterface::class);
-        $packageSubmenuButtonViewQueryHandler = $this->prophesize(PackageSubmenuButtonViewQueryHandler::class);
-
-        $catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
-        $catalogAccessChecker->allowedToAccess($event)->shouldNotBeCalled();
-        $happeningAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
-        $happeningAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
         $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
-        $packageSubmenuButtonViewQueryHandler
-            ->handle(new PackageSubmenuButtonViewQuery($sheet, $route))
-            ->shouldBeCalled()
-            ->willReturn(
-                new SubmenuButtonView(
-                    Category::PACKAGE_ICON,
-                    'package.title',
-                    'package.title.link',
-                    false,
-                    null
-                )
-            );
-
-        $handler = new SheetSubmenuViewQueryHandler(
-            $navigationBuilder->reveal(),
-            $packageSubmenuButtonViewQueryHandler->reveal(),
-            $catalogAccessChecker->reveal(),
-            $happeningAccessChecker->reveal()
-        );
+        $handler = new SheetSubmenuViewQueryHandler($navigationBuilder->reveal());
 
         $menuButtonViews = $handler->handle($query);
 
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
 
-    public function testSheetHandleWithProgram()
+    public function testAgendaHandle()
     {
         $datetime = new \DateTime();
         $event    = EventFactory::createEvent();
@@ -161,158 +129,42 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $type->setPackage($package);
 
         $locale = 'fr';
-        $route  = 'event_catalog_index';
+        $route  = 'event_agenda';
 
-        $query = new SheetSubmenuViewQuery($user, $event, $locale, $sheet, $route);
-
-        // Expected
-        $expectedSubmenuButtonViews = [
-            new SubmenuButtonView(
-                Category::SHEET_ICON,
-                'sheet.title',
-                'sheet.title.link',
-                false
-            ),
-            new SubmenuButtonView(
-                Category::PROGRAM_ICON,
-                'program.title',
-                'program.title.link',
-                false,
-                null
-            ),
-            new SubmenuButtonView(
-                Category::PACKAGE_ICON,
-                'package.title',
-                'package.title.link',
-                false,
-                null
-            ),
-        ];
-
-        // Mock
-        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-        $packageSubmenuButtonViewQueryHandler = $this->prophesize(PackageSubmenuButtonViewQueryHandler::class);
-
-        $catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
-        $catalogAccessChecker->allowedToAccess($event)->shouldNotBeCalled();
-        $happeningAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
-        $happeningAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-
-        $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
-            ->willReturn('sheet.title.link');
-
-        $navigationBuilder->getRoute('happening_program')->shouldBeCalled()
-            ->willReturn('program.title.link');
-
-        $packageSubmenuButtonViewQueryHandler
-            ->handle(new PackageSubmenuButtonViewQuery($sheet, $route))
-            ->shouldBeCalled()
-            ->willReturn(
-                new SubmenuButtonView(
-                    Category::PACKAGE_ICON,
-                    'package.title',
-                    'package.title.link',
-                    false,
-                    null
-                )
-            );
-
-        $handler = new SheetSubmenuViewQueryHandler(
-            $navigationBuilder->reveal(),
-            $packageSubmenuButtonViewQueryHandler->reveal(),
-            $catalogAccessChecker->reveal(),
-            $happeningAccessChecker->reveal()
-        );
-
-        $menuButtonViews = $handler->handle($query);
-
-        $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
-    }
-
-    public function testSheetHandleWithCatalogAndProgram()
-    {
-        $datetime = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $type     = new Type($event);
-        $user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
-        $sheet->setInCatalog(true);
-        $package  = new Package($event, 'package', $datetime);
-        $type->setPackage($package);
-
-        $locale = 'fr';
-        $route  = 'event_catalog_index';
-
-        $query = new SheetSubmenuViewQuery($user, $event, $locale, $sheet, $route);
+        $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet, $route);
 
         // Expected
         $expectedSubmenuButtonViews = [
             new SubmenuButtonView(
-                Category::SHEET_ICON,
-                'sheet.title',
-                'sheet.title.link',
-                false
+                Category::AGENDA_ICON,
+                'agenda.title',
+                'agenda.title.link',
+                true
             ),
             new SubmenuButtonView(
-                Category::CATALOG_ICON,
-                'catalog.title',
-                'catalog.title.link',
-                false,
-                null
-            ),
-            new SubmenuButtonView(
-                Category::PROGRAM_ICON,
+                Category::PLANNING_ICON,
                 'program.title',
                 'program.title.link',
-                false,
-                null
-            ),
-            new SubmenuButtonView(
-                Category::PACKAGE_ICON,
-                'package.title',
-                'package.title.link',
-                false,
-                null
+                false
             ),
         ];
 
         // Mock
-        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-        $packageSubmenuButtonViewQueryHandler = $this->prophesize(PackageSubmenuButtonViewQueryHandler::class);
-
-        $catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
-        $catalogAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $navigationBuilder      = $this->prophesize(NavigationBuilderInterface::class);
         $happeningAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
+
         $happeningAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
-        $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
-            ->willReturn('sheet.title.link');
-
-        $navigationBuilder->getRoute('event_catalog_index')->shouldBeCalled()
-            ->willReturn('catalog.title.link');
+        $navigationBuilder->getRoute('event_agenda')->shouldBeCalled()
+            ->willReturn('agenda.title.link');
 
         $navigationBuilder->getRoute('happening_program')->shouldBeCalled()
             ->willReturn('program.title.link');
 
-        $handler = new SheetSubmenuViewQueryHandler(
+        $handler = new AgendaSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $packageSubmenuButtonViewQueryHandler->reveal(),
-            $catalogAccessChecker->reveal(),
             $happeningAccessChecker->reveal()
         );
-
-        $packageSubmenuButtonViewQueryHandler
-            ->handle(new PackageSubmenuButtonViewQuery($sheet, $route))
-            ->shouldBeCalled()
-            ->willReturn(
-                new SubmenuButtonView(
-                    Category::PACKAGE_ICON,
-                    'package.title',
-                    'package.title.link',
-                    false,
-                    null
-                )
-            );
 
         $menuButtonViews = $handler->handle($query);
 
