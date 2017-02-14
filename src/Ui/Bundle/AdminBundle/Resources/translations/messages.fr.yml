@@ -37,7 +37,7 @@ admin.agenda.filters.hasSentMeetingRequest.label: 'Pas de demande de rendez-vous
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
-admin.agenda.filters.title.label: 'Filtre fiche'
+admin.agenda.filters.title.label: 'Filtre'
 admin.agenda.filters.type: 'Type de participation'
 admin.agenda.indicators-caption: 'Légende indicateurs'
 admin.agenda.indicators-help: 'Passer le curseur sur les icones'
@@ -73,6 +73,15 @@ admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
+admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
+admin.agenda.sort.alphabetical.label: 'Alphabétique'
+admin.agenda.sort.asc.label: 'Croissant'
+admin.agenda.sort.desc.label: 'Décroissant'
+admin.agenda.sort.pending_request.label: 'Nombre de propositions en attente de validation'
+admin.agenda.sort.request.label: 'Nombre de demandes'
+admin.agenda.sort.title.label: Trier
+admin.agenda.sort.submit.label: 'Trier les fiches'
+admin.agenda.sort.scheduled_meeting.label: 'Nombre de RDV positionnés'
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
@@ -643,6 +652,8 @@ admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.button.dispatch: 'Dispatcher'
+admin.unavailability.button.dispatch_confirm: 'Êtes vous sûr de vouloir dispatcher les indisponbilités de masse?'
 admin.unavailability.button.mass: 'Indisponibilité de masse'
 admin.unavailability.category.add: Ajouter
 admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'

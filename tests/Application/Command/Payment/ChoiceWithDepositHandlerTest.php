@@ -36,6 +36,7 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
 
         $event  = EventFactory::createEvent();
         $event->getConfiguration()->updatePaymentConditions(
+            [Mode::PAYMENT_BANK_CARD],
             true,
             new \DateTime('10/10/2020 10:10:10'),
             200,
@@ -104,6 +105,7 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
 
         $event  = EventFactory::createEvent();
         $event->getConfiguration()->updatePaymentConditions(
+            [Mode::PAYMENT_BANK_CARD],
             true,
             new \DateTime('10/10/2020 10:10:10'),
             200,

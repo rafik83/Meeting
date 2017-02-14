@@ -43,7 +43,7 @@ class MassTimeSlot
      */
     public function __construct(Mass $mass, \DateTimeInterface $from, \DateTimeInterface $to)
     {
-        if ($from > $to) {
+        if ($from >= $to) {
             throw new InvalidTimeSlotException('From date must be lesser than to date.');
         }
 

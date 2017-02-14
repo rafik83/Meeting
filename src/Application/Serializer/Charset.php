@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Serializer;
 
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
-use Symfony\Component\Debug\Exception\ContextErrorException;
 
 final class Charset
 {
@@ -41,7 +40,7 @@ final class Charset
                 }
 
                 file_put_contents($outFilename, $output);
-            } catch (ContextErrorException $exception) {
+            } catch (\ErrorException $exception) {
                 throw new BadCharsetException($exception->getMessage());
             }
 
