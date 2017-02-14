@@ -22,7 +22,7 @@ class AgendaSubmenuViewQueryHandler
      * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
-    
+
     /**
      * @var HappeningsAccessChecker
      */
@@ -51,14 +51,14 @@ class AgendaSubmenuViewQueryHandler
     {
         $buttonViews = [];
 
-        $buttonViews[] = new SubmenuButtonView(
-            Category::AGENDA_ICON,
-            'agenda.title',
-            $this->navigationBuilder->getRoute('event_agenda'),
-            Route::isAgenda($query->route)
-        );
-
         if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
+            $buttonViews[] = new SubmenuButtonView(
+                Category::AGENDA_ICON,
+                'agenda.title',
+                $this->navigationBuilder->getRoute('event_agenda'),
+                Route::isAgenda($query->route)
+            );
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::PLANNING_ICON,
                 'program.title',
