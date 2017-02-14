@@ -211,8 +211,8 @@ class MeetingController extends Controller
     /**
      * This method returns the participants and sheet concerned by the given meeting request
      *
-     * @param Request $request
-     * @param Event   $event
+     * @param Request         $request
+     * @param Event           $event
      * @param Meeting\Request $meetingRequest
      *
      * @return JsonResponse

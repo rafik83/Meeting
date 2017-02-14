@@ -25,7 +25,7 @@ class MeetingRequestListView
     public $requests;
 
     /**
-     * @param int   $sheetId
+     * @param int           $sheetId
      * @param RequestView[] $requests
      */
     public function __construct($sheetId, array $requests)
