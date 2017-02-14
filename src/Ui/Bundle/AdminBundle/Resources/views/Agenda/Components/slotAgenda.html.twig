@@ -59,6 +59,9 @@
         </div>
 
         <div class="slot mass-unavailability" v-if="agendaSlot.type === 'mass_unavailability'">
+            <a href="#" v-on:click="scheduleMeeting()" class="pull-right" v-show="isAvailableForMeeting">
+                <span class="glyphicon glyphicon-ok"></span>
+            </a>
             <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
         </div>
     </td>
