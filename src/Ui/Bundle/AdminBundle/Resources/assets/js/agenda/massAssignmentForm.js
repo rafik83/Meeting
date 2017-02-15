@@ -19,24 +19,9 @@ module.exports = {
             endTime: null,
             enabled: false,
             boundedBegin: null,
-            boundedEnd: null
+            boundedEnd: null,
+            enabledDate: null
         }
-    },
-    mounted: function () {
-        var self = this;
-        [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
-            new DateTimePicker(element);
-
-            var inputType = element.dataset.datetimepicker;
-
-            $(element).on('dp.change', function (event) {
-                if (inputType === 'beginTime') {
-                    self.beginTime = event.date.format('DD/MM/YYYY HH:mm');
-                } else if (inputType === 'endTime') {
-                    self.endTime = event.date.format('DD/MM/YYYY HH:mm');
-                }
-            });
-        });
     },
     methods: {
         reset: function () {
@@ -59,6 +44,7 @@ module.exports = {
                     this.enabled = response.data.enabled;
                     this.boundedBegin = moment(response.data.massBegin.date).format('DD/MM/YYYY HH:mm');
                     this.boundedEnd = moment(response.data.massEnd.date).format('DD/MM/YYYY HH:mm');
+                    this.setEnabledDates(this.boundedBegin, this.boundedEnd);
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {
@@ -67,6 +53,33 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+        /**
+         * @param {string} beginTime
+         * @param {string} endTime
+         */
+        setEnabledDates: function(beginTime, endTime) {
+            var self = this;
+
+            [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
+                new DateTimePicker(element, {
+                    'enabledDates': [
+                        beginTime,
+                        endTime
+                    ]
+                });
+
+                var inputType = element.dataset.datetimepicker;
+
+                $(element).on('dp.change', function (event) {
+                    if (inputType === 'beginTime') {
+                        self.beginTime = event.date.format('DD/MM/YYYY HH:mm');
+                    } else if (inputType === 'endTime') {
+                        self.endTime = event.date.format('DD/MM/YYYY HH:mm');
+                    }
+                });
+            });
         }
     }
 };

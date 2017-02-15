@@ -38,6 +38,7 @@ module.exports = {
          * @param {Object} slot
          */
         scheduleMeeting: function (slot) {
+            this.disableSlotsAction();
             this.$emit('schedule-meeting', slot);
         },
 
@@ -74,8 +75,22 @@ module.exports = {
         /**
          * @param {Object} event
          */
-        handleRemoveMeeting: function (event) {
+        handleMeetingRemoved: function (event) {
             this.$emit('refresh-both-agenda', event);
+        },
+
+        /**
+         * This method disable the slot action when the slot is being removed
+         */
+        handleMeetingRemoving: function () {
+            this.disableSlotsAction();
+        },
+
+        /**
+         * Reload the agenda on meeting removed error
+         */
+        handleMeetingRemovedError: function() {
+            this.$emit('refresh-agenda', sheet);
         },
 
         /**
@@ -84,6 +99,13 @@ module.exports = {
         handleMeetingMoved: function (event) {
             this.slotToBeMoved = null;
             this.$emit('refresh-both-agenda', event);
+        },
+
+        /**
+         * This method disable the slot action when the slot is moving
+         */
+        handleMeetingMoving: function () {
+            this.disableSlotsAction();
         },
 
         /**
@@ -148,15 +170,21 @@ module.exports = {
             this.$forceUpdate();
         },
 
-        /**
-         * Clear available slots
-         */
-        clearAvailableSlots: function () {
+        disableSlotsAction: function () {
             this.currentAvailableSlotsForMeeting.forEach(function (slot) {
                 slot.isAvailableForMeeting = false;
             });
 
             this.currentAvailableSlotsForMeeting = [];
+
+            this.setSlotActionButtonsState(false); // disabled slot action buttons
+        },
+
+        /**
+         * Clear available slots
+         */
+        clearAvailableSlots: function () {
+            this.disableSlotsAction();
             this.setSlotActionButtonsState(true);
             this.$forceUpdate();
         },
