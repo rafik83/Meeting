@@ -38,13 +38,13 @@ class SheetPlanningDisplayer
     }
 
     /**
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param Participant $currentParticipant
+     * @param Sheet            $sheet
+     * @param string           $locale
+     * @param Participant|null $currentParticipant
      *
      * @return string
      */
-    public function display(Sheet $sheet, $locale, Participant $currentParticipant)
+    public function display(Sheet $sheet, $locale, Participant $currentParticipant = null)
     {
         $planningMarkdown = $this->sheetPlanningFormatter->formatWithUnallocated($sheet, $locale, $currentParticipant);
 
