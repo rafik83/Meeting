@@ -249,6 +249,25 @@ module.exports = {
                     childs[i].isActionButtonsEnabled = state;
                 }
             }
+        },
+
+        /**
+         * Enable or Disable AgendaSlot action buttons for given slotId
+         *
+         * @param {boolean} state
+         * @param {Number}  slotId
+         * @see SlotAgenda
+         */
+        setSlotActionButtonsStateForSlotId: function (state, slotId) {
+            var childs = this.$refs.childSlotAgenda;
+
+            if (typeof childs !== 'undefined') {
+                for (var i = 0; i < childs.length; i++) {
+                    if (childs[i].getSlotId() === slotId) {
+                        childs[i].isActionButtonsEnabled = state;
+                    }
+                }
+            }
         }
     }
 };

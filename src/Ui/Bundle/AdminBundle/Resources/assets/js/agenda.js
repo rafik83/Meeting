@@ -578,7 +578,7 @@ new Vue({
          * @param {Object} sheet
          */
         forceUpdateSheet: function (sheet) {
-            var sheetMetComponent = this.findSheetComponent(sheet)
+            var sheetMetComponent = this.findSheetComponent(sheet);
 
             if (sheetMetComponent !== null) {
                 sheetMetComponent.forceUpdate();
@@ -627,22 +627,26 @@ new Vue({
 
             if (this.meetingToUpdate.slot !== null) {
                 var slot = this.meetingToUpdate.slot;
-                slot.isActionButtonsEnabled = false;
+                var sheetComponent = this.findSheetComponent(this.meetingToUpdate.sheet);
 
-                this.forceUpdateSheet(this.meetingToUpdate.sheet);
+                if (sheetComponent !== null) {
+                    sheetComponent.setSlotActionButtonsStateForSlotId(false, slot.id);
+                }
 
                 var sheetMet = this.findOpenedSheetById(slot.sheetMetId);
 
                 if (sheetMet !== null) {
-                    var meetingsSheetMet = this.findMeetings(sheetMet);
+                    var sheetMetComponent = this.findSheetComponent(sheetMet);
+                    var meetingsSheetMet  = this.findMeetings(sheetMet);
 
                     for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
                         if (meetingsSheetMet[meetingSheetMetIndex].meetingId === slot.meetingId) {
-                            meetingsSheetMet[meetingSheetMetIndex].isActionButtonsEnabled = false;
+                            if (sheetMetComponent !== null) {
+
+                                sheetMetComponent.setSlotActionButtonsStateForSlotId(false, meetingsSheetMet[meetingSheetMetIndex].id);
+                            }
                         }
                     }
-
-                    this.forceUpdateSheet(sheetMet);
                 }
             }
         },
