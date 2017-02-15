@@ -19,13 +19,14 @@ module.exports = {
             enabled: false,
             boundedBegin: null,
             boundedEnd: null,
+            enabledDate: null,
         }
     },
-    mounted: function () {
-        [].forEach.call(document.querySelectorAll('[data-datatimepicker]'), function (element) {
-            new DateTimePicker(element);
-        });
-    },
+    // mounted: function () {
+    //     [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
+    //         new DateTimePicker(element);
+    //     });
+    // },
     methods: {
         reset: function () {
             this.beginTime = null;
@@ -47,6 +48,7 @@ module.exports = {
                     this.enabled = response.data.enabled;
                     this.boundedBegin = moment(response.data.massBegin.date).format('DD/MM/YYYY HH:mm');
                     this.boundedEnd = moment(response.data.massEnd.date).format('DD/MM/YYYY HH:mm');
+                    this.setEnabledDates(this.boundedBegin, this.boundedEnd);
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {
@@ -55,6 +57,16 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+        setEnabledDates: function(beginTime, endTime) {
+            [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
+                new DateTimePicker(element, {
+                    'enabledDates': [
+                        beginTime,
+                        endTime,
+                    ]
+                });
+            });
         },
     }
 };
