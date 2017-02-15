@@ -17,18 +17,19 @@
 
         <div class="slot meeting" v-bind:class="{ 'meeting-common': highlight, 'meeting-to-be-moved': isAvailableForMeeting }"
              v-if="agendaSlot.type === 'meeting_unavailability'">
-            <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right" v-on:click="loadMeetingUpdateSpot()">
+            <a href="#" title="{{ 'admin.agenda.meeting.update'|trans }}" class="pull-right" v-on:click="loadMeetingUpdateSpot()" v-show="isActionButtonsEnabled">
                 <span class="glyphicon glyphicon-cog"></span>
             </a>
 
-            <a href="#" class="pull-right" v-show="!agendaSlot.blockedSlot"
+            <a href="#" class="pull-right"
+               v-show="!agendaSlot.blockedSlot && isActionButtonsEnabled"
                v-on:click="removeMeeting('{{ 'admin.agenda.remove.confirm'|trans }}')">
                 <span class="glyphicon glyphicon-remove"></span>
             </a>
 
             <a href="#" title="{{ 'admin.agenda.meeting.move'|trans }}" class="pull-right"
                v-on:click="loadSlotsForMeeting()"
-               v-show="!agendaSlot.blockedSlot">
+               v-show="!agendaSlot.blockedSlot && isActionButtonsEnabled">
                 <span class="glyphicon glyphicon-move"></span>
             </a>
 

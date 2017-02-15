@@ -188,7 +188,11 @@ new Vue({
         },
 
         focusSheet: function (sheet) {
-            this.focusedSheet = sheet
+            // Cancel action when the focus is changed
+            this.clearMeetingToUpdate();
+            this.cancelSlotAction();
+
+            this.focusedSheet = sheet;
         },
 
         /**
@@ -209,11 +213,10 @@ new Vue({
          */
         showAgenda: function (sheet) {
             // check if sheet is already opened
-            if (-1 !== this.isOpenedSheet(sheet)) {
+            if (this.isOpenedSheet(sheet)) {
                 return;
             }
 
-            // this.cancelSlotAction();
             this.highlightMeetingsInCommon(sheet, true);
             this.loadAgenda(sheet, false);
         },
@@ -238,13 +241,13 @@ new Vue({
          * Load sheet agenda data
          *
          * @param {Object} sheet
-         * @param {boolean} force = false
+         * @param {boolean} givenForce = false
          */
-        loadAgenda: function (sheet, force) {
-            force = force || false;
+        loadAgenda: function (sheet, givenForce) {
+            var force = givenForce || false;
 
             // prevent execute api request twice if sheet agenda already loaded
-            if (force === false && (this.isOpenedSheet(sheet) !== -1 || sheet.isAgendaLoading === true)) {
+            if (force === false && (this.isOpenedSheet(sheet) || sheet.isAgendaLoading === true)) {
                 return;
             }
 
@@ -286,7 +289,8 @@ new Vue({
             var sheetMet = this.findSheetBySheetId(event.sheetMetId);
             this.loadAgenda(event.sheet, true);
 
-            if (sheetMet !== null) {
+            // reload sheet met agenda if opened
+            if (sheetMet !== null && this.isOpenedSheet(sheetMet)) {
                 this.loadAgenda(sheetMet, true);
             }
         },
@@ -305,7 +309,7 @@ new Vue({
             this.populateRequestList(sheet, requests);
 
             // check if sheet already opened
-            var openedSheetIndex = this.isOpenedSheet(sheet);
+            var openedSheetIndex = this.getOpenedSheetIndex(sheet);
 
             if (openedSheetIndex === -1) {
                 this.openedSheets.push(sheet); // add new opened sheet
@@ -318,6 +322,12 @@ new Vue({
             }
 
             this.highlightMeetingsInCommon(sheet, true);
+
+            var focusedComponent = this.findFocusedSheetComponent();
+            if (focusedComponent !== undefined) {
+                focusedComponent.setSlotActionButtonsState(true);
+            }
+
             sheet.isAgendaLoading = false;
         },
 
@@ -339,7 +349,7 @@ new Vue({
          * @param {Object} sheet
          */
         clearAgenda: function (sheet) {
-            var sheetIndex = this.isOpenedSheet(sheet);
+            var sheetIndex = this.getOpenedSheetIndex(sheet);
 
             if (-1 >= sheetIndex) {
                 return;
@@ -358,7 +368,7 @@ new Vue({
             sheet.isAgendaLoading = false;
             this.cancelSlotAction();
             this.highlightMeetingsInCommon(sheet, false);
-            this.openedSheets.splice(this.isOpenedSheet(sheet), 1);
+            this.openedSheets.splice(this.getOpenedSheetIndex(sheet), 1);
 
             if (this.focusedSheet == sheet) {
                 this.focusedSheet = this.focusOnLastSheetOrNull();
@@ -429,9 +439,20 @@ new Vue({
          *
          * @param {Object} sheet
          *
-         * @returns {Number}
+         * @returns {boolean}
          */
         isOpenedSheet: function (sheet) {
+            return -1 !== this.openedSheets.indexOf(sheet);
+        },
+
+        /**
+         * get sheet index if it is open
+         *
+         * @param {Object} sheet
+         *
+         * @returns {Number}
+         */
+        getOpenedSheetIndex: function (sheet) {
             return this.openedSheets.indexOf(sheet);
         },
 
@@ -490,7 +511,7 @@ new Vue({
          * @returns {Array} of meeting slots
          */
         findMeetings: function (sheet) {
-            var sheetId = this.isOpenedSheet(sheet);
+            var sheetId = this.getOpenedSheetIndex(sheet);
 
             if (-1 === sheetId) {
                 return [];
@@ -556,9 +577,9 @@ new Vue({
          * @param {Object} sheet
          */
         forceUpdateSheet: function (sheet) {
-            var sheetMetComponent = this.findSheetComponent(sheet);
+            var sheetMetComponent = this.findSheetComponent(sheet)
 
-            if(sheetMetComponent !== null) {
+            if (sheetMetComponent !== null) {
                 sheetMetComponent.forceUpdate();
             }
         },
@@ -572,7 +593,7 @@ new Vue({
         },
 
         /**
-         * Listener for "meeting-update" event
+         * Listener for "meeting-updated" event
          */
         meetingUpdated: function () {
             if (null === this.meetingToUpdate) {
@@ -585,6 +606,43 @@ new Vue({
 
             if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
                 this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId), true);
+            }
+        },
+
+        /**
+         * Listener for "meeting-updated-error" event
+         */
+        handleMeetingUpdatedError: function () {
+            this.meetingUpdated();
+        },
+
+        /**
+         * Listener for "meeting-updating" event
+         */
+        handleMeetingUpdating: function () {
+            if (null === this.meetingToUpdate) {
+                return;
+            }
+
+            if (this.meetingToUpdate.slot !== null) {
+                var slot = this.meetingToUpdate.slot;
+                slot.isActionButtonsEnabled = false;
+
+                this.forceUpdateSheet(this.meetingToUpdate.sheet);
+
+                var sheetMet = this.findOpenedSheetById(slot.sheetMetId);
+
+                if (sheetMet !== null) {
+                    var meetingsSheetMet = this.findMeetings(sheetMet);
+
+                    for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
+                        if (meetingsSheetMet[meetingSheetMetIndex].meetingId === slot.meetingId) {
+                            meetingsSheetMet[meetingSheetMetIndex].isActionButtonsEnabled = false;
+                        }
+                    }
+
+                    this.forceUpdateSheet(sheetMet);
+                }
             }
         },
 
@@ -628,7 +686,7 @@ new Vue({
             var focusedSheetComponent = this.findFocusedSheetComponent();
 
             if (focusedSheetComponent === null) {
-                return false;
+                return;
             }
 
             focusedSheetComponent.clearAvailableSlots();

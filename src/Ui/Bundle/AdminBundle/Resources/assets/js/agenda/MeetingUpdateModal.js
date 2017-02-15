@@ -37,25 +37,27 @@ module.exports = {
         },
         save: function () {
             this.disabled = true;
+            this.$emit('meeting-updating');
 
             this.$http.post(api.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
                 blockedSlot: this.meetingToUpdate.form.blockedSlot,
                 blockedSpot: this.meetingToUpdate.form.blockedSpot,
                 spotId: this.meetingToUpdate.form.spotId
             })
-                .then(function () {
-                    this.$emit('meeting-updated');
-                    this.close();
-                }.bind(this))
-                .catch(function (error) {
-                    if (error.response) {
-                        alert(error.response.data);
-                    } else {
-                        alert(error.message);
-                    }
+            .then(function () {
+                this.$emit('meeting-updated');
+                this.close();
+            }.bind(this))
+            .catch(function (error) {
+                this.$emit('meeting-updated-error');
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert(error.message);
+                }
 
-                    this.disabled = false;
-                }.bind(this));
+                this.disabled = false;
+            }.bind(this));
         }
     }
 };
