@@ -324,7 +324,8 @@ new Vue({
             this.highlightMeetingsInCommon(sheet, true);
 
             var focusedComponent = this.findFocusedSheetComponent();
-            if (focusedComponent !== undefined) {
+
+            if (focusedComponent !== null) {
                 focusedComponent.setSlotActionButtonsState(true);
             }
 
@@ -712,7 +713,8 @@ new Vue({
 
             this.meetingRequestToTransformIntoMeeting = meetingRequest;
 
-            this.$http.get(api.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
+            this.$http
+                .get(api.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
                 .then(function (response) {
                     // check if this actions is still live
                     if (null !== this.meetingRequestToTransformIntoMeeting) {
@@ -723,6 +725,7 @@ new Vue({
                     }
                 }.bind(this))
                 .catch(function (error) {
+                    this.cancelSlotAction();
                     if (error.response) {
                         alert(error.response.data);
                     } else {
