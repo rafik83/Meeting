@@ -47,7 +47,8 @@ module.exports = {
 
             this.isMeetingToUpdateLoading = true;
 
-            this.$http.get(api.getMeetingUpdateSpotEndpoint(this.agendaSlot.meetingId))
+            this.$http
+                .get(api.getMeetingUpdateSpotEndpoint(this.agendaSlot.meetingId))
                 .then(function (response) {
                     var meetingToUpdate = {
                         sheet: this.sheet,
@@ -75,19 +76,24 @@ module.exports = {
          */
         removeMeeting: function (message) {
             if (window.confirm(message)) {
-                this.$http.delete(api.getRemoveMeetingEndpoint(this.agendaSlot))
+                this.$emit('meeting-removing');
+
+                this.$http
+                    .delete(api.getRemoveMeetingEndpoint(this.agendaSlot))
                     .then(function () {
-                        this.$emit('remove-meeting', {
+                        this.$emit('meeting-removed', {
                             sheet: this.sheet,
                             sheetMetId: this.agendaSlot.sheetMetId || null
                         });
                         this.$emit('focus-sheet', this.sheet);
                     }.bind(this))
                     .catch(function (error) {
+                        this.$emit('meeting-removed-error');
+
                         if (error.response) {
                             window.alert(error.response.data);
                         }
-                    });
+                    }.bind(this));
             }
         },
 
@@ -108,9 +114,12 @@ module.exports = {
                 return false;
             }
 
-            this.$http.post(api.getMeetingUpdateSlotEndpoint(this.slotToBeMoved.meetingId), {
-                slotId: this.agendaSlot.id
-            })
+            this.$emit('meeting-moving');
+
+            this.$http
+                .post(api.getMeetingUpdateSlotEndpoint(this.slotToBeMoved.meetingId), {
+                    slotId: this.agendaSlot.id
+                })
                 .then(function () {
                     this.$emit('meeting-moved', {
                         sheet: this.sheet,

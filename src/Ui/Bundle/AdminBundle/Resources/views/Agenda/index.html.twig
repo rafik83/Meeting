@@ -4,7 +4,14 @@
 
 {% block content %}
 <div id="agenda" class="agenda-container">
-    <meeting-update-modal v-bind:meeting-to-update="meetingToUpdate" v-on:close-modal="clearMeetingToUpdate()" v-on:meeting-updated="meetingUpdated()"></meeting-update-modal>
+    <meeting-update-modal
+        v-bind:meeting-to-update="meetingToUpdate"
+        v-on:close-modal="clearMeetingToUpdate"
+        v-on:meeting-updated="meetingUpdated"
+        v-on:meeting-updating="handleMeetingUpdating"
+        v-on:meeting-updated-error="handleMeetingUpdatedError"
+    >
+    </meeting-update-modal>
 
     <div class="row" v-cloak>
         <div class="col-xs-2" style="margin: 0; padding: 0;">
@@ -150,17 +157,18 @@
                 {% set table = 1 %}
                     <li v-for="sheet in openedSheets">
                         <sheet-agenda
-                                ref="childSheetAgenda"
-                                v-bind:sheet="sheet"
-                                v-bind:focused-sheet="focusedSheet"
-                                v-on:close-sheet-agenda="closeAgenda"
-                                v-on:load-sheets="loadSheets"
-                                v-on:focus-sheet="focusSheet"
-                                v-on:show-meeting-update-modal="showMeetingUpdateModal"
-                                v-on:refresh-agenda="refreshAgenda"
-                                v-on:refresh-both-agenda="handleRefreshBothAgenda"
-                                v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
-                                v-on:schedule-meeting="transformRequestIntoMeeting">
+                            ref="childSheetAgenda"
+                            v-bind:sheet="sheet"
+                            v-bind:focused-sheet="focusedSheet"
+                            v-on:close-sheet-agenda="closeAgenda"
+                            v-on:load-sheets="loadSheets"
+                            v-on:focus-sheet="focusSheet"
+                            v-on:show-meeting-update-modal="showMeetingUpdateModal"
+                            v-on:refresh-agenda="refreshAgenda"
+                            v-on:refresh-both-agenda="handleRefreshBothAgenda"
+                            v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
+                            v-on:schedule-meeting="transformRequestIntoMeeting"
+                        >
                         </sheet-agenda>
                     </li>
                 </ul>
