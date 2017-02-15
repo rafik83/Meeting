@@ -65,8 +65,8 @@ module.exports = {
             [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
                 new DateTimePicker(element, {
                     'enabledDates': [
-                        beginTime,
-                        endTime
+                        moment(beginTime, 'DD/MM/YYYY'),
+                        moment(endTime, 'DD/MM/YYYY'),
                     ]
                 });
 
