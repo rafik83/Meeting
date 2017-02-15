@@ -128,13 +128,13 @@ class SendHandler
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $newReceivers
-     * @param array  $receivers
-     * @param string $message
-     * @param string $locale
+     * @param Sheet   $sheet
+     * @param string  $newReceivers
+     * @param array   $receivers
+     * @param Message $message
+     * @param string  $locale
      */
-    private function addReceivers(Sheet $sheet, $newReceivers, array &$receivers, $message, $locale)
+    private function addReceivers(Sheet $sheet, $newReceivers, array &$receivers, Message $message, $locale)
     {
         if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
             return;
@@ -142,7 +142,7 @@ class SendHandler
 
         $placeholders = $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent());
 
-        /* @var MailRecipientInterface */
+        /* @var MailRecipientInterface $receiver */
         foreach ($newReceivers as $receiver) {
             $emailAddress = $receiver->getEmail();
             $receiverView = new ReceiverView(
