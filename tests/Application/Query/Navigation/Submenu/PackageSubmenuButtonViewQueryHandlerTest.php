@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\Model\Address;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -54,6 +56,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             ->getRoute('event_package', ["sheet" => null])
             ->shouldBeCalled()
             ->willReturn('event_package.link');
+        $cartRowRepository->hasProducts($sheet)->shouldBeCalled()->willReturn(false);
 
         $packageSubmenuButtonView = $handler->handle(new PackageSubmenuButtonViewQuery($sheet, $route));
 
@@ -63,6 +66,56 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             'event_package.link',
             true,
             false
+        );
+
+        $this->assertEquals($expectedPackageSubmenuButtonView, $packageSubmenuButtonView);
+    }
+
+    public function testHandleWithProductInCart()
+    {
+        $datetime = new \DateTime();
+        $event    = EventFactory::createEvent();
+        $type = new Type($event);
+
+        $sheet = new Sheet(
+            $event,
+            $type,
+            [],
+            new User('email@email.com', 'salt', 'password', 'fr'),
+            $datetime
+        );
+        $billingInfo = new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), '');
+        $order       = new Order($sheet, true, $billingInfo, '', new \DateTime());
+        $sheet->addOrder($order);
+
+        $package = new Package($event, 'Package', $datetime);
+        $package->enable(true, true, true);
+        $type->setPackage($package);
+
+        $route = 'event_order_summary_total';
+
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
+        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
+
+        $handler = new PackageSubmenuButtonViewQueryHandler(
+            $navigationBuilder->reveal(),
+            $cartRowRepository->reveal()
+        );
+
+        $navigationBuilder
+            ->getRoute('event_package', ["sheet" => null])
+            ->shouldBeCalled()
+            ->willReturn('event_package.link');
+        $cartRowRepository->hasProducts($sheet)->shouldBeCalled()->willReturn(true);
+
+        $packageSubmenuButtonView = $handler->handle(new PackageSubmenuButtonViewQuery($sheet, $route));
+
+        $expectedPackageSubmenuButtonView = new SubmenuButtonView(
+            Category::PACKAGE_ICON,
+            'navigation.category.package',
+            'event_package.link',
+            true,
+            true
         );
 
         $this->assertEquals($expectedPackageSubmenuButtonView, $packageSubmenuButtonView);
