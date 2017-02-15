@@ -51,7 +51,7 @@ class PackageSubmenuButtonViewQueryHandler
             $route = 'event_package';
 
             if ($query->sheet->hasNotCancelledOrders() && !$hasProductsInCart) {
-                $route = 'event_package_summary';
+                $route = 'event_order_summary_total';
             }
 
             return new SubmenuButtonView(
