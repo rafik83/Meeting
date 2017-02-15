@@ -36,13 +36,14 @@ module.exports = {
             }
         },
         save: function () {
-            this.$http.post(api.getUpdateMassAssignmentEndpoint(this.massId),
-                querystring.stringify({
-                    begin: this.child.beginTime,
-                    end: this.child.endTime,
-                    enabled: this.child.enabled
-                })
-            )
+            this.$http
+                .post(api.getUpdateMassAssignmentEndpoint(this.massId),
+                    querystring.stringify({
+                        begin: this.child.beginTime,
+                        end: this.child.endTime,
+                        enabled: this.child.enabled
+                    })
+                )
                 .then(function () {
                     this.$emit('mass-assignment-updated');
                     this.close();

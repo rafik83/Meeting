@@ -63,7 +63,7 @@ class UpdateHandler
             $update->end
         );
 
-        if (count($hasMeetingOrHappening) > 0) {
+        if (count($hasMeetingOrHappening) === 0) {
             throw new MassAssignmentOnMeetingException();
         }
 
