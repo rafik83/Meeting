@@ -1,7 +1,8 @@
 var options = require('../vueComponents/options'),
     DateTimePicker = require('../components/_DateTimePicker'),
     AgendaApiEndpoints = require('../components/_AgendaApiEndpoints'),
-    moment = require('moment');
+    moment = require('moment'),
+    $ = require('jquery');
 
 var api = new AgendaApiEndpoints();
 
@@ -18,12 +19,23 @@ module.exports = {
             endTime: null,
             enabled: false,
             boundedBegin: null,
-            boundedEnd: null,
+            boundedEnd: null
         }
     },
     mounted: function () {
-        [].forEach.call(document.querySelectorAll('[data-datatimepicker]'), function (element) {
+        var self = this;
+        [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
             new DateTimePicker(element);
+
+            var inputType = element.dataset.datetimepicker;
+
+            $(element).on('dp.change', function (event) {
+                if (inputType === 'beginTime') {
+                    self.beginTime = event.date.format('DD/MM/YYYY HH:mm');
+                } else if (inputType === 'endTime') {
+                    self.endTime = event.date.format('DD/MM/YYYY HH:mm');
+                }
+            });
         });
     },
     methods: {
@@ -55,6 +67,6 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
-        },
+        }
     }
 };
