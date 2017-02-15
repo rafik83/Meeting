@@ -22,11 +22,6 @@ module.exports = {
             enabledDate: null,
         }
     },
-    // mounted: function () {
-    //     [].forEach.call(document.querySelectorAll('[data-datetimepicker]'), function (element) {
-    //         new DateTimePicker(element);
-    //     });
-    // },
     methods: {
         reset: function () {
             this.beginTime = null;
