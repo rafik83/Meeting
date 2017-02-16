@@ -249,6 +249,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\CampaignRepository
         arguments:
              - '@doctrine.orm.entity_manager'
+    repository.invoice.prefix_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Invoice\PrefixRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1504,6 +1508,13 @@ services:
             - '@unavailability.time_slot_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
+
+    command.invoice.prefix.create_handler:
+        class: Proximum\Vimeet\Application\Command\InvoicePrefix\CreateHandler
+        arguments:
+            - '@repository.invoice.prefix_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\InvoicePrefix\Create }
 
     #
     # Security
