@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
-use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
@@ -43,23 +44,31 @@ class SubmenuViewQueryHandler
     private $agendaSubmenuViewQueryHandler;
 
     /**
+     * @var PackageSubmenuButtonViewQueryHandler
+     */
+    private $packageSubmenuButtonViewQueryHandler;
+
+    /**
      * SubmenuViewQueryHandler constructor.
      *
-     * @param SheetGuesser                   $sheetGuesser
-     * @param SheetSubmenuViewQueryHandler   $sheetSubmenuViewQueryHandler
-     * @param CatalogSubmenuViewQueryHandler $catalogSubmenuViewQueryHandler
-     * @param AgendaSubmenuViewQueryHandler  $agendaSubmenuViewQueryHandler
+     * @param SheetGuesser                         $sheetGuesser
+     * @param SheetSubmenuViewQueryHandler         $sheetSubmenuViewQueryHandler
+     * @param CatalogSubmenuViewQueryHandler       $catalogSubmenuViewQueryHandler
+     * @param AgendaSubmenuViewQueryHandler        $agendaSubmenuViewQueryHandler
+     * @param PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
      */
     public function __construct(
         SheetGuesser $sheetGuesser,
         SheetSubmenuViewQueryHandler $sheetSubmenuViewQueryHandler,
         CatalogSubmenuViewQueryHandler $catalogSubmenuViewQueryHandler,
-        AgendaSubmenuViewQueryHandler $agendaSubmenuViewQueryHandler
+        AgendaSubmenuViewQueryHandler $agendaSubmenuViewQueryHandler,
+        PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
     ) {
         $this->sheetGuesser                   = $sheetGuesser;
         $this->sheetSubmenuViewQueryHandler   = $sheetSubmenuViewQueryHandler;
         $this->catalogSubmenuViewQueryHandler = $catalogSubmenuViewQueryHandler;
         $this->agendaSubmenuViewQueryHandler  = $agendaSubmenuViewQueryHandler;
+        $this->packageSubmenuButtonViewQueryHandler = $packageSubmenuButtonViewQueryHandler;
     }
 
     /**
@@ -75,35 +84,9 @@ class SubmenuViewQueryHandler
             $query->locale
         );
 
-        if (Route::isCatalog($query->route) === true || Route::isMeetingRequest($query->route) === true) {
-            $buttonViews = $this->catalogSubmenuViewQueryHandler->handle(
-                new CatalogSubmenuViewQuery(
-                    $query->user,
-                    $query->event,
-                    $query->locale,
-                    $sheet,
-                    $query->route
-                )
-            );
+        $buttonsViews = [];
 
-            return new SubmenuView($buttonViews);
-        }
-
-        if (Route::isProgram($query->route) === true || Route::isAgenda($query->route) === true) {
-            $buttonViews = $this->agendaSubmenuViewQueryHandler->handle(
-                new AgendaSubmenuViewQuery(
-                    $query->user,
-                    $query->event,
-                    $query->locale,
-                    $sheet,
-                    $query->route
-                )
-            );
-
-            return new SubmenuView($buttonViews);
-        }
-
-        $buttonViews = $this->sheetSubmenuViewQueryHandler->handle(
+        $sheetButtonViews = $this->sheetSubmenuViewQueryHandler->handle(
             new SheetSubmenuViewQuery(
                 $query->user,
                 $query->event,
@@ -113,6 +96,41 @@ class SubmenuViewQueryHandler
             )
         );
 
-        return new SubmenuView($buttonViews);
+        $buttonsViews = array_merge($buttonsViews, $sheetButtonViews);
+
+        $catalogButtonViews = $this->catalogSubmenuViewQueryHandler->handle(
+            new CatalogSubmenuViewQuery(
+                $query->user,
+                $query->event,
+                $query->locale,
+                $sheet,
+                $query->route
+            )
+        );
+
+        $buttonsViews = array_merge($buttonsViews, $catalogButtonViews);
+
+        $agendaButtonViews = $this->agendaSubmenuViewQueryHandler->handle(
+            new AgendaSubmenuViewQuery(
+                $query->user,
+                $query->event,
+                $query->locale,
+                $sheet,
+                $query->route
+            )
+        );
+
+        $buttonsViews = array_merge($buttonsViews, $agendaButtonViews);
+
+        // Package button
+        $packageSubmenuButtonView = $this->packageSubmenuButtonViewQueryHandler->handle(
+            new PackageSubmenuButtonViewQuery($sheet, $query->route)
+        );
+
+        if (null !== $packageSubmenuButtonView) {
+            $buttonsViews[] = $packageSubmenuButtonView;
+        }
+
+        return new SubmenuView($buttonsViews);
     }
 }
