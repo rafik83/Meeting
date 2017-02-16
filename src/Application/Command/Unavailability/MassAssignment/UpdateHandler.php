@@ -67,8 +67,13 @@ class UpdateHandler
             throw new MassAssignmentOnMeetingException();
         }
 
-        if ($update->begin < $update->massAssignment->getMass()->getBegin()
-            || $update->end > $update->massAssignment->getMass()->getEnd()
+        if (($update->begin < $update->massAssignment->getMass()->getBegin()
+                || $update->begin > $update->massAssignment->getMass()->getEnd())
+            ||
+            ($update->end > $update->massAssignment->getMass()->getEnd()
+                || $update->end < $update->massAssignment->getMass()->getBegin())
+            ||
+            ($update->begin >= $update->end)
         ) {
             throw new MassAssignmentOutOfMassSlotException();
         }
