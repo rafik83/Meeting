@@ -45,8 +45,9 @@ class PrefixRepository implements PrefixRepositoryInterface
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('prefix')
-            ->from('Entity:Invoice\Prefix', 'prefix');
-        
-       return $queryBuilder->getQuery()->getResult();
+            ->from(Prefix::class, 'prefix')
+            ->orderBy('prefix.title');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

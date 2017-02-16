@@ -13,7 +13,7 @@ Proximum\Vimeet\Domain\Model\Invoice\Prefix:
             type: string
             nullable: true
     oneToMany:
-        event:
+        events:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             mappedBy: invoicePrefix
             cascade: ["all"]

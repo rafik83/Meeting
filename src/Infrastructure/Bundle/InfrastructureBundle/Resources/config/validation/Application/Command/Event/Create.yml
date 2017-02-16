@@ -46,3 +46,5 @@ Proximum\Vimeet\Application\Command\Event\Create:
                 message: validators.hexadecimal
         organiserName:
             - NotBlank: ~
+        invoicePrefix:
+            - NotBlank: ~
