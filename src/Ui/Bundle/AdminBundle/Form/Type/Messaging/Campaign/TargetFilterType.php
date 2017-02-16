@@ -101,6 +101,10 @@ class TargetFilterType extends AbstractType
                 'label'       => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
                 'required'    => false,
             ])
+            ->add('imported', ImportedChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.imported.label',
+                'required'    => false,
+            ])
         ;
 
         $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
