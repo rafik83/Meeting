@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractEvent
@@ -88,4 +89,9 @@ abstract class AbstractEvent
      * @var string|null
      */
     public $emailTeam;
+
+    /**
+     * @var null|Prefix
+     */
+    public $invoicePrefix;
 }
