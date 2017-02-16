@@ -29,4 +29,3 @@ Feature: Edit event billing configuration
     And I attach the file "dummy-image-test.jpg" to "event_billing_configuration[invoiceLogo]"
     And I press "form.event_billing_configuration.children.submit.label"
     Then the response status code should be 200
-    

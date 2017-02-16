@@ -416,6 +416,14 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getInvoiceLogoExtension()
+    {
+        return $this->invoiceLogoExtension;
+    }
+
+    /**
      * @return string|null
      */
     public function getEmailTeam()
