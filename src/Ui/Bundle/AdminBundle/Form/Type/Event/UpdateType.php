@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -52,7 +53,8 @@ class UpdateType extends AbstractEventType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setRequired(['locales']);
+        $resolver->setRequired(['locales', 'event']);
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Update::class,
         ]);

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Invoice;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class Prefix
@@ -30,9 +31,9 @@ class Prefix
     private $prefix;
 
     /**
-     * @var Event
+     * @var Event[]
      */
-    private $event;
+    private $events;
 
     /**
      * Prefix constructor.
@@ -44,6 +45,7 @@ class Prefix
     {
         $this->title  = $title;
         $this->prefix = $prefix;
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -68,5 +70,13 @@ class Prefix
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }
