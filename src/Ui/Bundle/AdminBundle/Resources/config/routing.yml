@@ -1198,3 +1198,16 @@ admin_import_planner_data:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Planner/Import:import }
+
+#
+# Invoicing
+#
+admin_invoice_globals_list:
+    path: /invoice/prefix
+    defaults: { _controller: AdminBundle:Invoicing:list }
+    methods: [GET]
+
+admin_invoice_globals_create:
+    path: /invoice/prefix/create
+    defaults: { _controller: AdminBundle:Invoicing:create }
+    methods: [GET, POST]
