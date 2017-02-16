@@ -530,6 +530,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting }
+    ommand.meeting_request.admin.update_participant_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipantsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants }
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
@@ -2434,6 +2441,27 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+    query.agenda.admin.request.request_sheets_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.admin.request.request_sheet_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQuery }
+    query.agenda.admin.request.request_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetViewQuery }
+    query.agenda.admin.request.meeting_request_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.request_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery }
 
     ##
     # Navigation builder

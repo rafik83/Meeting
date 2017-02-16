@@ -1,0 +1,49 @@
+<script type="x/template" id="sheet-agenda">
+    <div class="panel panel-default">
+        <div v-bind:class="{ 'agenda-sheet-focus': sheet == focusedSheet }" class="panel-heading">
+            <a v-bind:href="sheet.url" target="_blank" title="{{ 'admin.agenda.sheet.see'|trans }}" class="link-to-sheet"><span class="glyphicon"></span></a>
+            <a href="#" v-on:click="focus()">${ sheet.title }</a>
+            <a href="#" class="pull-right" v-on:click="close()"><span class="glyphicon glyphicon-remove"></span></a>
+        </div>
+        <div class="panel-body">
+            <table class="table-agenda table-condensed">
+                <tr>
+                    <td v-for="participant in sheet.participants">
+                        <p class="text-center">${ participant.fullname }</p>
+                        <table class="table">
+                            <tr>
+                                <td v-for="day in participant.days" class="col-xs-6">
+                                    <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day+1 }</div>
+                                    <table class="table-agenda-day table table-bordered table-condensed">
+                                        <tr v-for="slot in day.slots">
+                                            <slot-agenda
+                                                ref="childSlotAgenda"
+                                                v-bind:agendaSlot="slot"
+                                                v-bind:sheet="sheet"
+                                                v-bind:isAvailableForMeeting="isAvailableForMeeting(slot)"
+                                                v-bind:participant="participant"
+                                                v-bind:highlight="slot.highlight"
+                                                v-bind:slotToBeMoved="slotToBeMoved"
+                                                v-on:show-meeting-update-modal="showMeetingUpdateModal"
+                                                v-on:refresh-agenda="refreshAgenda"
+                                                v-on:meeting-removed="handleMeetingRemoved"
+                                                v-on:meeting-removing="handleMeetingRemoving"
+                                                v-on:meeting-moved="handleMeetingMoved"
+                                                v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
+                                                v-on:schedule-meeting="scheduleMeeting"
+                                                v-on:show-available-meeting-slot="loadSlotsForMeeting"
+                                                v-on:meeting-moving="handleMeetingMoving"
+                                                v-on:meeting-removed-error="handleMeetingRemovedError"
+                                            >
+                                            </slot-agenda>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</script>

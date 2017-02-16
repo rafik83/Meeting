@@ -351,6 +351,22 @@ admin_agenda_meeting_request_transform_into_meeting:
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Meeting:transformRequestIntoMeeting }
 
+admin_agenda_meeting_request_participants:
+    path: /event/{event}/agenda/request/{meetingRequest}/participants
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:getParticipantsOfRequest }
+
+admin_agenda_meeting_request_update_participants:
+    path: /event/{event}/agenda/request/{meetingRequest}/update/participants
+    requirements:
+        event: \d+
+        meetingRequest: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateParticipantsOfRequest }
+
 admin_agenda_meeting_request_transform_into_meeting_handler:
     path: /event/{event}/agenda/request/{meetingRequest}/transform-into-meeting
     requirements:
