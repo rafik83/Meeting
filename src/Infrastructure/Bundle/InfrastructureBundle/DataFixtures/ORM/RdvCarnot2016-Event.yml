@@ -80,3 +80,13 @@ Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
             contracts between us and our clients. Any differing conditions or terms of
             buyer are herewith objected to and shall not apply. Any agreement affecting
             the execution of this contract must be in writing.
+
+Proximum\Vimeet\Domain\Model\Invoice\Prefix:
+    prefix_1:
+        __construct:
+            - 'RdvCarnot'
+            - 'Rdv'
+    prefix_2:
+        __construct:
+            - 'Vimeet'
+            - 'Vi'
