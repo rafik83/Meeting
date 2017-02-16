@@ -59,7 +59,8 @@ class Prefiller
                     $templateData->getTaggedContentLabel(Tag::SHEET_ZIPCODE),
                     $templateData->getTaggedContentLabel(Tag::SHEET_CITY),
                     $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY)
-                )
+                ),
+                $templateData->getTaggedContentLabel(Tag::BILLING_REFERENCE)
             );
         }
     }
@@ -85,7 +86,8 @@ class Prefiller
                 $user->getAccount()->getZipCode(),
                 $user->getAccount()->getCity(),
                 $user->getAccount()->getCountry()
-            )
+            ),
+            $billingInfo->getReference()
         );
     }
 }
