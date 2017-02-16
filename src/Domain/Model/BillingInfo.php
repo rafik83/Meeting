@@ -91,6 +91,11 @@ class BillingInfo implements MailRecipientInterface
     private $gender;
 
     /**
+     * @var string
+     */
+    private $reference;
+
+    /**
      * BillingInfo constructor.
      *
      * @param Sheet $sheet
@@ -112,6 +117,7 @@ class BillingInfo implements MailRecipientInterface
      * @param string  $company
      * @param Address $address
      * @param string  $vatNumber
+     * @param string  $reference
      */
     public function update(
         $gender,
@@ -123,7 +129,8 @@ class BillingInfo implements MailRecipientInterface
         $email,
         $company,
         Address $address,
-        $vatNumber
+        $vatNumber,
+        $reference
     ) {
         $this->gender    = $gender;
         $this->lastname  = $lastname;
@@ -135,6 +142,7 @@ class BillingInfo implements MailRecipientInterface
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
+        $this->reference = $reference;
     }
 
     /**
@@ -272,6 +280,14 @@ class BillingInfo implements MailRecipientInterface
     }
 
     /**
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
      * @param string  $firstname
      * @param string  $lastname
      * @param string  $function
@@ -281,6 +297,7 @@ class BillingInfo implements MailRecipientInterface
      * @param string  $email
      * @param Address $address
      * @param string  $gender
+     * @param string  $reference
      *
      * @return BillingInfo
      */
@@ -293,7 +310,8 @@ class BillingInfo implements MailRecipientInterface
         $phone,
         $mobile,
         $email,
-        Address $address
+        Address $address,
+        $reference
     ) {
         $this->gender    = $gender;
         $this->firstname = $firstname;
@@ -304,6 +322,7 @@ class BillingInfo implements MailRecipientInterface
         $this->mobile    = $mobile;
         $this->email     = $email;
         $this->address   = $address;
+        $this->reference = $reference;
 
         return $this;
     }
