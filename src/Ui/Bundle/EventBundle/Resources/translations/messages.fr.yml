@@ -91,13 +91,13 @@ login.memberArea: 'Espace membre'
 modal.back: Retour
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
 navigation.category.billing: Facturation
-navigation.category.catalog: 'Catalogue'
-navigation.category.happening: 'Gestion RDV'
+navigation.category.catalog: 'Catalogue des participants'
+navigation.category.happening: 'Gestion de rdv'
 navigation.category.meeting: 'Gestion de rdv'
 navigation.category.member_space: 'Espace membre'
-navigation.category.package: 'Forfait'
-navigation.category.planning: 'Mon Agenda'
-navigation.category.program: 'Programme'
+navigation.category.package: 'Forfait de participation'
+navigation.category.planning: Agenda
+navigation.category.program: Programme
 navigation.category.sheet: 'Fiche de présentation'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
