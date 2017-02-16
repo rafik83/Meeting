@@ -1,0 +1,26 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.invoice.title'|trans }}</h1>
+
+    <a href="{{ path('admin_invoice_globals_create') }}" data-toggle="modal" class="btn btn-success">{{ 'admin.invoice.create.button'|trans }}</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.invoice.list.title'|trans }}</th>
+            <th>{{ 'admin.invoice.list.prefix'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for prefix in list %}
+            <tr>
+                <td>{{ prefix.title }}</td>
+                <td>{{ prefix.prefix }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
