@@ -88,4 +88,26 @@ AgendaApiEndpoints.prototype.getUpdateMassAssignmentEndpoint = function (massId)
     return this.getPathname() + '/mass/' + massId + '/update';
 };
 
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getParticipantsOfRequestEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/participants';
+};
+
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/update/participants
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/update/participants
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.updateParticipantsOfRequestEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/update/participants';
+};
+
 module.exports = AgendaApiEndpoints;

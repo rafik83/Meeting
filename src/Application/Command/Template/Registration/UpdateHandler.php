@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInt
 use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
-use Symfony\Component\Debug\Exception\ContextErrorException;
 
 class UpdateHandler
 {
@@ -65,7 +64,7 @@ class UpdateHandler
 
         try {
             $this->templateDataFactory->createFromTemplate($registrationTemplate);
-        } catch (ContextErrorException $exception) {
+        } catch (\ErrorException $exception) {
             throw new TemplateException($exception->getMessage());
         }
 

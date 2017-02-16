@@ -15,6 +15,13 @@ module.exports = {
     },
     methods: {
         /**
+         * @returns {Number|null}
+         */
+        getSlotId: function() {
+            return typeof this.agendaSlot.id !== 'undefined' ? this.agendaSlot.id : null;
+        },
+
+        /**
          * Move MeetingRequest or Meeting into available slot
          */
         scheduleMeeting: function () {

@@ -200,6 +200,10 @@ fos_elastica:
                             type: integer
                         owner:
                             type: integer
+                        lastLoginAt:
+                            type: date
+                        imported:
+                            type: boolean
                         createdAt:
                             type: date
                         remainingToPay:

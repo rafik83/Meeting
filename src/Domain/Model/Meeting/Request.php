@@ -391,6 +391,30 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param Participant[] $participants
+     */
+    public function updateFromParticipants(array $participants)
+    {
+        $this->fromParticipants->clear();
+
+        foreach ($participants as $participant) {
+            $this->fromParticipants->add($participant);
+        }
+    }
+
+    /**
+     * @param Participant[] $participants
+     */
+    public function updateToParticipants(array $participants)
+    {
+        $this->toParticipants->clear();
+
+        foreach ($participants as $participant) {
+            $this->toParticipants->add($participant);
+        }
+    }
+
+    /**
      * @return bool
      */
     public function isSent()

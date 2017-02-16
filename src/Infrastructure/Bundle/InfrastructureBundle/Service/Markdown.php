@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
-class Markdown
+use Proximum\Vimeet\Application\Adapter\MarkdownAdapterInterface;
+
+class Markdown implements MarkdownAdapterInterface
 {
     /**
      * @var \Parsedown

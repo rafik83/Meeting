@@ -10,26 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
-use IntlDateFormatter;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
-use Proximum\Vimeet\Application\View\Agenda\DayView;
-use Proximum\Vimeet\Application\View\Agenda\HappeningView;
-use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
-use Proximum\Vimeet\Application\View\Agenda\MeetingView;
-use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -67,38 +55,30 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     private $sheetInfoGuesser;
 
     /**
-     * @var RequestRepositoryInterface
+     * @var ParticipantPlanningFormatter
      */
-    private $requestRepository;
-
-    /**
-     * @var AgendaViewQueryHandler
-     */
-    private $agendaViewQueryHandler;
+    private $participantPlanningFormatter;
 
     /**
      * @param TranslatorInterface            $translator
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param SheetInfoGuesser               $sheetInfoGuesser
-     * @param RequestRepositoryInterface     $requestRepository
-     * @param AgendaViewQueryHandler         $agendaViewQueryHandler
+     * @param ParticipantPlanningFormatter   $participantPlanningFormatter
      */
     public function __construct(
         TranslatorInterface $translator,
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser,
-        RequestRepositoryInterface $requestRepository,
-        AgendaViewQueryHandler $agendaViewQueryHandler
+        ParticipantPlanningFormatter $participantPlanningFormatter
     ) {
         parent::__construct($translator);
 
-        $this->participantRepository  = $participantRepository;
-        $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->requestRepository      = $requestRepository;
-        $this->agendaViewQueryHandler = $agendaViewQueryHandler;
+        $this->participantRepository        = $participantRepository;
+        $this->participantInfoGuesser       = $participantInfoGuesser;
+        $this->sheetInfoGuesser             = $sheetInfoGuesser;
+        $this->participantPlanningFormatter = $participantPlanningFormatter;
     }
 
     /**
@@ -156,20 +136,8 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
-        $agenda   = $this->agendaViewQueryHandler->handle(
-            new AgendaViewQuery(
-                $event,
-                $sheet,
-                $participant,
-                $participantLocale
-            )
-        );
-
-        $planning = $this->formatPlanning($agenda->days, $participantLocale);
-
-        $planning .= $this->formatUnallocated(
-            $sheet,
-            $this->requestRepository->getUnassignedRequestsBySheetAndEvent($sheet, Request::STATE_APPROVED),
+        $planning = $this->participantPlanningFormatter->formatPlanningFromParticipantWithUnallocated(
+            $participant,
             $participantLocale
         );
 
@@ -215,140 +183,4 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         return $normalizedData;
     }
 
-    /**
-     * @param DayView[] $days
-     * @param string    $participantLocale
-     *
-     * @return string
-     */
-    private function formatPlanning(array $days, $participantLocale)
-    {
-        $formatted = '';
-
-        $formatter = new IntlDateFormatter(
-            $participantLocale,
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::NONE
-        );
-
-        foreach ($days as $day) {
-            $timeEntities = $this->sortChronologicalOrder($day->getTimeEntities());
-
-            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::bold(
-                ucfirst($formatter->format($day->getDay())))
-            );
-            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine(
-                $this->formatTimeEntities($timeEntities, $participantLocale)))
-            ;
-        }
-
-        return $formatted;
-    }
-
-    /**
-     * @param Sheet     $sheet
-     * @param Request[] $requests
-     * @param string    $participantLocale
-     *
-     * @return string
-     */
-    private function formatUnallocated(Sheet $sheet, array $requests, $participantLocale)
-    {
-        $translation = $this->translator->trans(
-            'admin.participant.export.fields.planning.unallocated_meetings',
-            [],
-            'messages',
-            $participantLocale
-        );
-
-        $formatted = (count($requests) > 0) ? MarkdownFormatter::newLine($translation) : '';
-
-        $formatted .= implode(', ', array_map(function (Request $request) use ($sheet) {
-            return $this->sheetInfoGuesser->guessSheetTitle($request->getSheetMet($sheet));
-        }, $requests));
-
-        return $formatted;
-    }
-
-    /**
-     * @param AbstractTimeEntityView[] $timeEntities
-     * @param string                   $participantLocale
-     *
-     * @return string
-     */
-    private function formatTimeEntities(array $timeEntities, $participantLocale)
-    {
-        $formattedTimes = [];
-        $formatter = new IntlDateFormatter(
-            $participantLocale,
-            IntlDateFormatter::NONE,
-            IntlDateFormatter::SHORT
-        );
-        $formatter->setPattern('HH:mm');
-
-        foreach ($timeEntities as $timeEntity) {
-            $formatted = $this->getFormattedDate($formatter, $timeEntity->begin) . ' - ' . $this->getFormattedDate($formatter, $timeEntity->end) . ' : ';
-
-            if ($timeEntity instanceof MeetingView) {
-                $formatted .= $this->translator->trans(
-                    'admin.participant.export.fields.planning.meeting',
-                    [
-                        '%sheetMet%' => $timeEntity->sheetMetTitle,
-                        '%spotRef%'  => $timeEntity->spotRef,
-                    ],
-                    'messages',
-                    $participantLocale
-                );
-            } elseif ($timeEntity instanceof MassUnavailabilityView) {
-                $formatted .= $timeEntity->title;
-            } elseif ($timeEntity instanceof HappeningView) {
-                $formatted .= $timeEntity->title;
-            } elseif ($timeEntity instanceof UnavailabilityView) {
-                if ($timeEntity->hasMessage()) {
-                    $formatted .= $timeEntity->message;
-                } else {
-                    $formatted .= $this
-                        ->translator
-                        ->trans(
-                            'admin.participant.export.fields.planning.unavailability',
-                            [],
-                            'messages',
-                            $participantLocale
-                        )
-                    ;
-                }
-            }
-
-            $formattedTimes[] = $formatted;
-        }
-
-        return MarkdownFormatter::lists($formattedTimes);
-    }
-
-    /**
-     * @param array $timeEntities
-     *
-     * @return array
-     */
-    private function sortChronologicalOrder(array $timeEntities)
-    {
-        usort($timeEntities, function(AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
-            return $first->begin > $second->begin;
-        });
-
-        return $timeEntities;
-    }
-
-    /**
-     * @param IntlDateFormatter  $formatter
-     * @param \DateTimeInterface $date
-     *
-     * @return string
-     */
-    private function getFormattedDate(\IntlDateFormatter $formatter, \DateTimeInterface $date)
-    {
-        $formatted = $formatter->format($date);
-
-        return !is_bool($formatted) ? $formatted : '';
-    }
 }

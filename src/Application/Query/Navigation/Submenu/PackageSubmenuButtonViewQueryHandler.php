@@ -47,14 +47,17 @@ class PackageSubmenuButtonViewQueryHandler
         $hasProductsInCart = $this->cartRowRepository->hasProducts($query->sheet);
 
         // Package button
-        if ((!$query->sheet->hasNotCancelledOrders() || $hasProductsInCart)
-            && $package !== null
-            && $package->isPassable() === true
-        ) {
+        if ($package !== null && $package->isPassable() === true) {
+            $route = 'event_package';
+
+            if ($query->sheet->hasNotCancelledOrders() && !$hasProductsInCart) {
+                $route = 'event_order_summary_total';
+            }
+
             return new SubmenuButtonView(
                 Category::PACKAGE_ICON,
-                'package.title',
-                $this->navigationBuilder->getRoute('event_package'),
+                'navigation.category.package',
+                $this->navigationBuilder->getRoute($route, ['sheet' => $query->sheet->getId()]),
                 Route::isPackage($query->route),
                 $hasProductsInCart === true
             );

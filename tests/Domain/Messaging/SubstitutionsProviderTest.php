@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Tests\Domain\Messaging;
 
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
+use Proximum\Vimeet\Application\View\Sheet\Planning\SheetPlanningView;
 use Proximum\Vimeet\Domain\Messaging\InvalidMessagePlaceholderException;
 use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -19,6 +22,10 @@ use Proximum\Vimeet\Domain\Model\Messaging\Compose;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,11 +46,13 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
         $this->eventUrlGenerator             = $this->prophesize(Event\EventUrlGeneratorInterface::class);
         $this->participantInfoGuesser        = $this->prophesize(ParticipantInfoGuesser::class);
         $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $this->sheetPlanningViewQueryHandler = $this->prophesize(SheetPlanningViewQueryHandler::class);
 
         $this->substitutionProvider = new SubstitutionsProvider(
             $this->eventUrlGenerator->reveal(),
             $this->participantInfoGuesser->reveal(),
-            $this->activateAccountTokenGenerator->reveal()
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->sheetPlanningViewQueryHandler->reveal()
         );
     }
 
@@ -103,6 +112,32 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
                 Compose::LINK_AGENDA     => 'url-to-event-agenda',
             ],
             $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
+        );
+    }
+
+    public function testGetSubstitutionsPlanning()
+    {
+        $event     = EventFactory::createEvent();
+        $sheet     = SheetFactory::create($event);
+        $user      = UserFactory::create('email@email.fr');
+        $recipient = ParticipantFactory::create($sheet, $user);
+        $locale    = 'fr';
+
+        $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_SHEET_PLANNING];
+        $this->participantInfoGuesser->guessParticipantCompleteName($recipient, $locale)->willReturn('Henri Désiré Landru');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', [])->willReturn('url-to-event-agenda');
+        $this->sheetPlanningViewQueryHandler
+            ->handle(new SheetPlanningViewQuery($sheet, $locale, $recipient))
+            ->shouldBeCalled()
+            ->willReturn(new SheetPlanningView('<p>PLANNING</p>'));
+
+        $this->assertEquals(
+            [
+                Compose::TAG_PARTICIPANT    => 'Henri Désiré Landru',
+                Compose::LINK_AGENDA        => 'url-to-event-agenda',
+                Compose::TAG_SHEET_PLANNING => '<p>PLANNING</p>'
+            ],
+            $this->substitutionProvider->getSubstitutions($recipient, $sheet, $locale, $placeholders)
         );
     }
 }

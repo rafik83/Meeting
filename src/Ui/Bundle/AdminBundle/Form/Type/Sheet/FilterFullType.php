@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -62,6 +63,9 @@ class FilterFullType extends AbstractType
             ])
             ->add('orderBy', SortChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.orderBy.label',
+            ])
+            ->add('imported', ImportedChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.imported.label',
             ])
         ;
     }
