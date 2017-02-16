@@ -109,7 +109,7 @@
                     {{ 'admin.agenda.event.configuration.isMeetingRequestLocked'|trans }}
                 </div>
             {% endif %}
-            <div class="requests-list" v-if="focusedSheet">
+            <div class="requests-list" v-if="focusedSheet" ref="focusedSheetRequestList">
                 <p>
                     <b>${ focusedSheet.title }</b>
                     <br>{{ 'admin.agenda.requestsList.title'|trans }}
@@ -122,6 +122,9 @@
                         </tr>
                         <tr v-for="request in focusedSheet.requests">
                             <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request }">
+                                <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" class="pull-right" v-on:click="showParticipants(request)">
+                                    <span class="glyphicon glyphicon-cog"></span>
+                                </a>
                                 <a href="#"
                                    title="{{ 'admin.agenda.request.transformIntoMeeting.label'|trans }}"
                                    class="pull-right"
@@ -133,7 +136,6 @@
                                 <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.cancel'|trans }}" v-on:click="cancelSlotAction()" class="pull-right" v-show="meetingRequestToTransformIntoMeeting === request">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
-                                {#<span class="glyphicon glyphicon-cog"></span>#}
 
                                 <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)">
                                     ${ request.sheetMetTitle }
@@ -182,6 +184,8 @@
     <mass-assignment-modal :show="showMassAssignmentModal" v-on:mass-assignment-updated="handleUpdateMassAssignment" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
 
     <sort-modal :sheets="sheets" :show="showSortModal" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
+    <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
+    <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
 </div>
 {% endblock %}
 
@@ -192,6 +196,8 @@
     {{ include('AdminBundle:Agenda:meetingUpdateModal.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:filterModal.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:filterSheetForm.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:updateParticipantModal.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:updateParticipantForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sheetAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:slotAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:massAssignmentModal.html.twig') }}

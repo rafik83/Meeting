@@ -55,6 +55,13 @@ interface ParticipantRepositoryInterface
     public function findById($id);
 
     /**
+     * @param array $ids array of participant ids
+     *
+     * @return Participant[]
+     */
+    public function findByIds(array $ids);
+
+    /**
      * @param Participant $participant
      */
     public function set(Participant $participant);

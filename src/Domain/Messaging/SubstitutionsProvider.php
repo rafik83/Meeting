@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Domain\Messaging;
 
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -41,19 +43,25 @@ class SubstitutionsProvider
     /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
+    /** @var SheetPlanningViewQueryHandler */
+    private $sheetPlanningViewQueryHandler;
+
     /**
      * @param EventUrlGeneratorInterface    $eventUrlGenerator             Event URL generator used to substitute event-related link placeholders
      * @param ParticipantInfoGuesser        $participantInfoGuesser        Service used to retrieve a participant complete name
      * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator Service used to generate tokens for inactive users who must activate their account
+     * @param SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler Service used to generate the sheet planning in html format
      */
     public function __construct(
         EventUrlGeneratorInterface $eventUrlGenerator,
         ParticipantInfoGuesser $participantInfoGuesser,
-        ActivateAccountTokenGenerator $activateAccountTokenGenerator
+        ActivateAccountTokenGenerator $activateAccountTokenGenerator,
+        SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler
     ) {
         $this->eventUrlGenerator             = $eventUrlGenerator;
         $this->participantInfoGuesser        = $participantInfoGuesser;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
+        $this->sheetPlanningViewQueryHandler = $sheetPlanningViewQueryHandler;
     }
 
     /**
@@ -130,6 +138,8 @@ class SubstitutionsProvider
                 }
 
                 return $recipient->getFullname();
+            case Compose::TAG_SHEET_PLANNING:
+                return $this->handleSheetPlanning($sheet, $locale, $recipient);
             case Compose::LINK_ACTIVACTE_ACCOUNT:
                 return $this->getActivateAccountUrl($recipient, $sheet);
             case Compose::LINK_AGENDA:
@@ -186,5 +196,29 @@ class SubstitutionsProvider
                 ['token' => $this->activateAccountTokenGenerator->generate($user, $sheet)->getToken()]
             )
         ;
+    }
+
+    /**
+     * @param Sheet                  $sheet
+     * @param string                 $locale
+     * @param MailRecipientInterface $recipient
+     *
+     * @return string
+     */
+    private function handleSheetPlanning(Sheet $sheet, $locale, MailRecipientInterface $recipient)
+    {
+        $participant = null;
+        $userLocale  = $locale;
+
+        if ($recipient instanceof Participant) {
+            $userLocale  = $recipient->getUser()->getLocale();
+            $participant = $recipient;
+        }
+
+        $sheetPlanning = $this->sheetPlanningViewQueryHandler->handle(
+            new SheetPlanningViewQuery($sheet, $userLocale, $participant)
+        );
+
+        return $sheetPlanning->planning;
     }
 }

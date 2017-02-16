@@ -15,18 +15,22 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetin
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\InvalidParticipantException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
@@ -207,6 +211,60 @@ class MeetingController extends Controller
         }
 
         return new JsonResponse($requestSlotView);
+    }
+
+    /**
+     * This method returns the participants and sheet concerned by the given meeting request
+     *
+     * @param Request         $request
+     * @param Event           $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function getParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $requestSheetsView = $this->get('tactician.commandbus.query')->handle(
+            new RequestSheetsViewQuery($meetingRequest, $event->getAvailableLocale($request->getLocale()))
+        );
+
+        return new JsonResponse($requestSheetsView);
+    }
+
+    /**
+     * @param Request         $request
+     * @param Event           $event
+     * @param Meeting\Request $meetingRequest
+     *
+     * @return JsonResponse
+     */
+    public function updateParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    {
+        $this->checkMeetingRequestAccess($event, $meetingRequest);
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['fromParticipants']) || !isset($data['toParticipants'])) {
+            return $this->createErrorJsonResponse('admin.agenda.request.updateParticipant.invalidArguments');
+        }
+
+        try {
+            $this->get('tactician.commandbus')->handle(
+                new UpdateParticipants($meetingRequest, $data['fromParticipants'], $data['toParticipants'])
+            );
+        } catch (InvalidParticipantException $exception) {
+            return $this->createErrorJsonResponse('admin.agenda.request.updateParticipant.invalidArguments');
+        }
+
+        $meetingRequestListFrom = $this->get('tactician.commandbus.query')->handle(new MeetingRequestListViewQuery($meetingRequest->getFromSheet(), $event->getAvailableLocale($request->getLocale())));
+        $meetingRequestListTo   = $this->get('tactician.commandbus.query')->handle(new MeetingRequestListViewQuery($meetingRequest->getToSheet(), $event->getAvailableLocale($request->getLocale())));
+
+        return new JsonResponse([
+            $meetingRequestListFrom,
+            $meetingRequestListTo
+        ]);
     }
 
     /**

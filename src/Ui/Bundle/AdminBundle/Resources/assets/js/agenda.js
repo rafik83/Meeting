@@ -1,13 +1,14 @@
-var Vue                 = require('vue'),
-    axios               = require('axios'),
-    filterModal         = require('./agenda/filterModal'),
-    meetingUpdateModal  = require('./agenda/MeetingUpdateModal'),
-    massAssignmentModal = require('./agenda/massAssignmentModal'),
-    sheetAgenda         = require('./agenda/SheetAgenda'),
-    slotAgenda          = require('./agenda/SlotAgenda'),
-    options             = require('./vueComponents/options'),
-    sortModal          = require('./agenda/sortModal'),
-    AgendaApiEndpoints  = require('./components/_AgendaApiEndpoints');
+var Vue                    = require('vue'),
+    axios                  = require('axios'),
+    filterModal            = require('./agenda/filterModal'),
+    meetingUpdateModal     = require('./agenda/MeetingUpdateModal'),
+    massAssignmentModal    = require('./agenda/massAssignmentModal'),
+    options                = require('./vueComponents/options'),
+    updateParticipantModal = require('./agenda/updateParticipantModal'),
+    sheetAgenda            = require('./agenda/SheetAgenda'),
+    slotAgenda             = require('./agenda/SlotAgenda'),
+    sortModal              = require('./agenda/sortModal'),
+    AgendaApiEndpoints     = require('./components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
 
@@ -31,6 +32,7 @@ new Vue({
     delimiters: options.delimiters,
     components: {
         'filter-modal': filterModal,
+        'update-participant-modal': updateParticipantModal,
         'slot-agenda': slotAgenda,
         'sheet-agenda': sheetAgenda,
         'MeetingUpdateModal': meetingUpdateModal,
@@ -46,6 +48,7 @@ new Vue({
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
         showMassAssignmentModal: false,
+        showParticipantModal: false,
         hasUsedSheetFilter: false,
         showSortModal: false,
 
@@ -117,6 +120,33 @@ new Vue({
             if (typeof child !== 'undefined') {
                 child.setFormFilter();
             }
+        },
+
+        /**
+         * Show the participants of the meeting request to update them
+         *
+         * @param {Object} meetingRequest
+         */
+        showParticipants: function (meetingRequest) {
+            this.$http.get(api.getParticipantsOfRequestEndpoint(meetingRequest.requestId))
+                .then(function (response) {
+                    var participantModalComponent = this.$refs.updateParticipantModal;
+
+                    if (typeof participantModalComponent !== 'undefined') {
+                        participantModalComponent.setFormData(response.data);
+                        participantModalComponent.setRequest(meetingRequest);
+                    }
+
+                    this.showParticipantModal = true;
+
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                });
         },
 
         showSort: function () {
@@ -297,15 +327,7 @@ new Vue({
             this.clearAgenda(sheet);
 
             sheet.participants = participants;
-            sheet.requests = [];
-
-            requests.forEach(function (request) {
-                request.participantsName = request.participants.map(function (participant) {
-                    return participant.fullName;
-                }).join(', ');
-
-                sheet.requests.push(request);
-            }.bind(this));
+            this.populateRequestList(sheet, requests);
 
             // check if sheet already opened
             var openedSheetIndex = this.getOpenedSheetIndex(sheet);
@@ -323,11 +345,24 @@ new Vue({
             this.highlightMeetingsInCommon(sheet, true);
 
             var focusedComponent = this.findFocusedSheetComponent();
-            if (focusedComponent !== undefined) {
+
+            if (focusedComponent !== null) {
                 focusedComponent.setSlotActionButtonsState(true);
             }
 
             sheet.isAgendaLoading = false;
+        },
+
+        populateRequestList: function (sheet, requests) {
+            sheet.requests = [];
+
+            requests.forEach(function (request) {
+                request.participantsName = request.participants.map(function (participant) {
+                    return participant.fullName;
+                }).join(', ');
+
+                sheet.requests.push(request);
+            }.bind(this));
         },
 
         /**
@@ -363,10 +398,31 @@ new Vue({
         },
 
         /**
+         * Refresh the requests list of the open Sheet
+         *
+         * @param {Object} event (object composed of sheetId and array of Request)
+         */
+        refreshRequestListOfSheet: function(event) {
+            if (typeof event.sheetId !== 'undefined' && typeof event.requests !== 'undefined') {
+                var openSheet = this.findOpenedSheetById(event.sheetId);
+
+                if (openSheet !== null) {
+                    this.populateRequestList(openSheet, event.requests);
+
+                    if (this.focusedSheet === openSheet) {
+                        this.$forceUpdate();
+                    }
+                }
+
+                this.cancelSlotAction();
+            }
+        },
+
+        /**
          * Loop on <SheetAgenda> component instances and return the one associated
          * to this Sheet
          *
-         * @returns {Object}|{undefined}
+         * @returns {Object}|null
          */
         findFocusedSheetComponent: function () {
             var childs = this.$refs.childSheetAgenda;
@@ -379,7 +435,7 @@ new Vue({
                 }
             }
 
-            return undefined;
+            return null;
         },
 
         /**
@@ -388,6 +444,7 @@ new Vue({
          */
         findSheetComponent: function (sheet) {
             var childs = this.$refs.childSheetAgenda;
+
             if (childs !== undefined) {
                 for (var i = 0; i < childs.length; i++) {
                     if (childs[i].sheet.id === sheet.id) {
@@ -542,7 +599,7 @@ new Vue({
          * @param {Object} sheet
          */
         forceUpdateSheet: function (sheet) {
-            var sheetMetComponent = this.findSheetComponent(sheet)
+            var sheetMetComponent = this.findSheetComponent(sheet);
 
             if (sheetMetComponent !== null) {
                 sheetMetComponent.forceUpdate();
@@ -591,22 +648,26 @@ new Vue({
 
             if (this.meetingToUpdate.slot !== null) {
                 var slot = this.meetingToUpdate.slot;
-                slot.isActionButtonsEnabled = false;
+                var sheetComponent = this.findSheetComponent(this.meetingToUpdate.sheet);
 
-                this.forceUpdateSheet(this.meetingToUpdate.sheet);
+                if (sheetComponent !== null) {
+                    sheetComponent.setSlotActionButtonsStateForSlotId(false, slot.id);
+                }
 
                 var sheetMet = this.findOpenedSheetById(slot.sheetMetId);
 
                 if (sheetMet !== null) {
-                    var meetingsSheetMet = this.findMeetings(sheetMet);
+                    var sheetMetComponent = this.findSheetComponent(sheetMet);
+                    var meetingsSheetMet  = this.findMeetings(sheetMet);
 
                     for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
                         if (meetingsSheetMet[meetingSheetMetIndex].meetingId === slot.meetingId) {
-                            meetingsSheetMet[meetingSheetMetIndex].isActionButtonsEnabled = false;
+                            if (sheetMetComponent !== null) {
+
+                                sheetMetComponent.setSlotActionButtonsStateForSlotId(false, meetingsSheetMet[meetingSheetMetIndex].id);
+                            }
                         }
                     }
-
-                    this.forceUpdateSheet(sheetMet);
                 }
             }
         },
@@ -650,7 +711,7 @@ new Vue({
         cancelSlotAction: function () {
             var focusedSheetComponent = this.findFocusedSheetComponent();
 
-            if (focusedSheetComponent === undefined) {
+            if (focusedSheetComponent === null) {
                 return;
             }
 
@@ -670,13 +731,15 @@ new Vue({
             this.cancelSlotAction();
 
             var focusedComponent = this.findFocusedSheetComponent();
-            if (focusedComponent === undefined) {
+
+            if (focusedComponent === null) {
                 return false;
             }
 
             this.meetingRequestToTransformIntoMeeting = meetingRequest;
 
-            this.$http.get(api.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
+            this.$http
+                .get(api.getTransformRequestIntoMeetingEndpoint(this.meetingRequestToTransformIntoMeeting.requestId))
                 .then(function (response) {
                     // check if this actions is still live
                     if (null !== this.meetingRequestToTransformIntoMeeting) {
@@ -687,6 +750,7 @@ new Vue({
                     }
                 }.bind(this))
                 .catch(function (error) {
+                    this.cancelSlotAction();
                     if (error.response) {
                         alert(error.response.data);
                     } else {

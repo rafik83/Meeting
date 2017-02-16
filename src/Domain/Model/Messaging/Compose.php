@@ -15,6 +15,7 @@ class Compose
     const TAG_EVENT_NAME         = '%event%';
     const TAG_PARTICIPANT        = '%participant%';
     const TAG_PARTICIPATION_TYPE = '%participationType%';
+    const TAG_SHEET_PLANNING     = '%sheetPlanning%';
 
     const LINK_SHEET                = '%sheetLink%';
     const LINK_PACKAGE              = '%packageLink%';
@@ -43,6 +44,7 @@ class Compose
             self::TAG_EVENT_NAME,
             self::TAG_PARTICIPANT,
             self::TAG_PARTICIPATION_TYPE,
+            self::TAG_SHEET_PLANNING,
         ];
     }
 
