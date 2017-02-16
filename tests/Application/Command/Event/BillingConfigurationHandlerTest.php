@@ -10,6 +10,7 @@
 
 namespace Application\Command\Event;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
@@ -27,6 +28,7 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', ''));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', ''));
         $event->setLogo('toto.jpg', 'jpg');
+        $event->setInvoiceLogo('toto.jpg', 'jpg');
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
@@ -35,6 +37,7 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent->getTranslations()->set('en',
             new EventTranslation($expectedEvent, 'en', '', 'FR14-000', 'billing address', 'condition', 'footers'));
         $expectedEvent->setLogo('toto.jpg', 'jpg');
+        $expectedEvent->setInvoiceLogo('toto.jpg', 'jpg');
 
         // Command
         $billingConfiguration               = new BillingConfiguration($event);
@@ -56,8 +59,9 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->add($expectedEvent)->shouldBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
 
-        $handler = new BillingConfigurationHandler($eventRepository->reveal());
+        $handler = new BillingConfigurationHandler($eventRepository->reveal(), $fileStorage->reveal());
         $handler->handle($billingConfiguration);
     }
 }
