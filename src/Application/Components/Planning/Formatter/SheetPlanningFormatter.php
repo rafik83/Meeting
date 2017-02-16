@@ -28,6 +28,11 @@ class SheetPlanningFormatter
     private $unallocatedFormatter;
 
     /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
      * @param UnallocatedFormatter         $unallocatedFormatter
      * @param ParticipantInfoGuesser       $participantInfoGuesser
