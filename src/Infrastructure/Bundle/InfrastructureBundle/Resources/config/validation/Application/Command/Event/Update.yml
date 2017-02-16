@@ -48,3 +48,4 @@ Proximum\Vimeet\Application\Command\Event\Update:
             - NotBlank: ~
         invoicePrefix:
             - NotBlank: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event\UpdateInvoicePrefixConstraint: ~
