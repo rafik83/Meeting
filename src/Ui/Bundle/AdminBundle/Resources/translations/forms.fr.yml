@@ -248,6 +248,9 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.invoice_prefix_create.children.title.label: 'Nom backoffice du préfixe'
+form.invoice_prefix_create.children.prefix.label: 'Préfixe'
+form.invoice_prefix_create.children.submit.label: Créer
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
