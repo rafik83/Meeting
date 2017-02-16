@@ -21,6 +21,7 @@ class Version20170215165810 extends AbstractMigration
         $this->addSql('ALTER TABLE event ADD invoice_prefix_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA739FABE62 FOREIGN KEY (invoice_prefix_id) REFERENCES invoice_prefix (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_3BAE0AA739FABE62 ON event (invoice_prefix_id)');
+        $this->addSql("INSERT INTO invoice_prefix VALUES (1, 'Vimeet', 'Vi')");
         $this->addSql('UPDATE event SET invoice_prefix_id = 1');
     }
 
