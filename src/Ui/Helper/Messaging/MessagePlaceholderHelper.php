@@ -83,6 +83,7 @@ class MessagePlaceholderHelper
             Compose::TAG_EVENT_NAME         => 'admin.messaging.message.compose.tags.eventName',
             Compose::TAG_PARTICIPANT        => 'admin.messaging.message.compose.tags.participant',
             Compose::TAG_PARTICIPATION_TYPE => 'admin.messaging.message.compose.tags.participationType',
+            Compose::TAG_SHEET_PLANNING     => 'admin.messaging.message.compose.tags.sheetPlanning',
         ];
     }
 
