@@ -30,6 +30,11 @@ class Prefix
     private $prefix;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * Prefix constructor.
      *
      * @param string $title
