@@ -106,7 +106,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             [$participant],
             $newBegin,
             $newEnd
-        )->shouldBeCalled();
+        )->shouldBeCalled()->willReturn([1,2,3,4]);
 
         $massAssignmentRepository->set($massAssignment)->shouldBeCalled();
 
@@ -144,7 +144,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             [$participant],
             $newBegin,
             $newEnd
-        )->shouldBeCalled();
+        )->shouldBeCalled()->willReturn([1,2,3,4]); // hasMeetingOrHappening
 
         $command          = new Update($massAssignment);
         $command->enabled = true;
@@ -180,7 +180,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             [$participant],
             $newBegin,
             $newEnd
-        )->shouldBeCalled()->willReturn([1,2,3,4]); // hasMeetingOrHappening
+        )->shouldBeCalled();
 
         $command          = new Update($massAssignment);
         $command->enabled = true;
