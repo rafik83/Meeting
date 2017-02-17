@@ -127,6 +127,7 @@ class ImportHandler
      */
     public function handle(Import $import)
     {
+        set_time_limit(60);
         // Remove all meeting of the event
         $this->meetingRepository->deleteAll($import->event);
 
