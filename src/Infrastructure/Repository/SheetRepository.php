@@ -90,6 +90,24 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participants')
+            ->where('sheet.event = :event')
+            ->andWhere('sheet.inCatalog = true')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheets(Event $event, $locale)
     {
         $queryBuilder = $this
