@@ -214,6 +214,7 @@ admin.meeting_request.details: Détail
 admin.meeting_request.from: De
 admin.meeting_request.link: 'Demandes de rendez-vous'
 admin.meeting_request.set_a_meeting: 'Placer un RDV'
+admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.state.approved: Accepté
 admin.meeting_request.state.cancelled: Annulé
 admin.meeting_request.state.refused: Refusé
@@ -840,6 +841,10 @@ event.sheet.update_product.title: 'Modifier un produit commandé'
 event.sheet.validationState.draft: Brouillon
 event.sheet.validationState.pending: 'Soumise à validation'
 event.sheet.validationState.validated: Validée
+meeting_request_filter.order_by.options.created_at_asc: 'Date de création croissante'
+meeting_request_filter.order_by.options.created_at_desc: 'Date de création décroissante'
+meeting_request_filter.order_by.options.state_updated_at_asc: 'Modification de statut croissant'
+meeting_request_filter.order_by.options.state_updated_at_desc: 'Modification de statut décroissant'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
 login.title: Connexion
