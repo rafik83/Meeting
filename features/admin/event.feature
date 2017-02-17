@@ -81,4 +81,4 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
-    And the "event_update_invoicePrefix" field should contain "0"
+    And the "event_update_invoicePrefix" field should contain "1"
