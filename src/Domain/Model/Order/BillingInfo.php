@@ -87,7 +87,7 @@ class BillingInfo
      * @param string $company
      * @param Address $address
      * @param string $vatNumber
-     * @param string $reference
+     * @param string|null $reference
      */
     public function __construct(
         $gender,
@@ -100,7 +100,7 @@ class BillingInfo
         $company,
         Address $address,
         $vatNumber,
-        $reference
+        $reference = null
     ) {
         $this->gender    = $gender;
         $this->lastName  = $lastName;

@@ -114,6 +114,7 @@ final class Tag
             self::BILLING_ORGANIZATION,
             self::BILLING_VAT_NUMBER,
             self::BILLING_EXTRA,
+            self::BILLING_REFERENCE,
         ];
     }
 
