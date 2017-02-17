@@ -10,6 +10,7 @@
         <tr>
             <th>{{ 'admin.invoice.list.title'|trans }}</th>
             <th>{{ 'admin.invoice.list.prefix'|trans }}</th>
+            <th>{{ 'admin.invoice.list.isDefault'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -18,6 +19,7 @@
             <tr>
                 <td>{{ prefix.title }}</td>
                 <td>{{ prefix.prefix }}</td>
+                <td>{{ prefix.isDefault ? '✓': '' }}</td>
             </tr>
         {% endfor %}
         </tbody>

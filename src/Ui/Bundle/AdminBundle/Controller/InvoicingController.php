@@ -19,11 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 class InvoicingController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return Response
+     *
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('AdminBundle:Invoicing:list.html.twig', [
             'list' => $this->get('repository.invoice.prefix_repository')->getAll(),

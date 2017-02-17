@@ -68,6 +68,3 @@ Proximum\Vimeet\Domain\Model\Event:
     manyToOne:
         invoicePrefix:
             targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
-            inversedBy: events
-            joinColumn:
-                onDelete: CASCADE
