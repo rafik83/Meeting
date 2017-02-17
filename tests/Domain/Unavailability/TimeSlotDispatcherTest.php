@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -95,7 +96,8 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
             $this->createParticipant($mass->getEvent(), 'foobar3@test.com'),
         ];
 
-        $participantRepository->findByEventWithoutDispatch($mass->getEvent(), $mass)->shouldBeCalled()->willReturn($participants);
+        $participantRepository->findByEventWithoutDispatch($mass->getEvent(), $mass)->shouldBeCalled()
+            ->willReturn($participants);
         $massAssignmentRepository->add(new MassAssignment($mass, $participants[0], $timeSlots[0]['from'], $timeSlots[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($mass, $participants[1], $timeSlots[1]['from'], $timeSlots[1]['to']));
         $massAssignmentRepository->add(new MassAssignment($mass, $participants[2], $timeSlots[0]['from'], $timeSlots[0]['to']));
@@ -145,13 +147,15 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         // Assets
         $massRepository->findDispatchByEvent($event)->shouldBeCalled()->willReturn($masses);
 
-        $participantRepository->findByEventWithoutDispatch($event, $masses[0])->shouldBeCalled()->willReturn($participants);
+        $participantRepository->findByEventWithoutDispatch($event, $masses[0])->shouldBeCalled()
+            ->willReturn($participants);
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[0], $timeSlots1[0]['from'], $timeSlots1[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[1], $timeSlots1[1]['from'], $timeSlots1[1]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[2], $timeSlots1[0]['from'], $timeSlots1[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[0], $participants[3], $timeSlots1[1]['from'], $timeSlots1[1]['to']));
 
-        $participantRepository->findByEventWithoutDispatch($event, $masses[1])->shouldBeCalled()->willReturn($participants);
+        $participantRepository->findByEventWithoutDispatch($event, $masses[1])->shouldBeCalled()
+            ->willReturn($participants);
         $massAssignmentRepository->add(new MassAssignment($masses[1], $participants[0], $timeSlots2[0]['from'], $timeSlots2[0]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[1], $participants[1], $timeSlots2[1]['from'], $timeSlots2[1]['to']));
         $massAssignmentRepository->add(new MassAssignment($masses[1], $participants[2], $timeSlots2[2]['from'], $timeSlots2[2]['to']));
@@ -166,12 +170,18 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
      * @param \DateTimeInterface $end
      * @param bool               $dispatch
      * @param array              $timeSlots
+     * @param Event|null         $event
      *
      * @return Mass
      */
-    private function createMass(\DateTimeInterface $begin, \DateTimeInterface $end, $dispatch, array $timeSlots, Event $event = null)
-    {
-        $event    = $event ? : $this->createEvent();
+    private function createMass(
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        $dispatch,
+        array $timeSlots,
+        Event $event = null
+    ) {
+        $event    = $event ?: $this->createEvent();
         $category = new Category($event, '', '', '', '');
 
         return new Mass($event, $category, '', $begin, $end, true, $dispatch, $timeSlots);
@@ -196,6 +206,8 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
      */
     private function createEvent()
     {
-        return new Event('event', 'fr', ['fr'], Event::VAT_MODE_ATI, 20.0, 'fr', 'EUR', 'Europe\Paris', '', '', '');
+        $prefix = new Prefix('Vimeet', 'Vi');
+
+        return new Event('event', 'fr', ['fr'], Event::VAT_MODE_ATI, 20.0, 'fr', 'EUR', 'Europe\Paris', '', '', '', $prefix);
     }
 }
