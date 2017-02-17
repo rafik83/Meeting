@@ -60,8 +60,8 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     Given I am logged with "test@test.com" on admin
     When I send a POST request to "admin/fr/event/1/agenda/mass/1/update" with parameters:
     | key     | value            |
-    | begin   | 12/10/2016 13:00 |
-    | end     | 12/10/2016 13:30 |
+    | begin   | 12/10/2016 13:30 |
+    | end     | 12/10/2016 13:45 |
     | enabled | true             |
     Then the response status code should be 204
     
@@ -84,7 +84,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     Then the response status code should be 422
     And the JSON should be equal to:
     """
-      "admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot"
+      "admin.agenda.meeting.updateMassAssignment.outOfMassSlot"
     """
 
   Scenario: I cannot update a dispatched mass assignment out of bounded mass
@@ -97,7 +97,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     Then the response status code should be 422
     And the JSON should be equal to:
     """
-      "admin.agenda.meeting.updateMassAssignment.outOfMassSlot"
+      "admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot"
     """
   Scenario: I cannot update a dispatched mass assignment without POST parameters:
     Given I am logged with "test@test.com" on admin
