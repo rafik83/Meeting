@@ -53,7 +53,7 @@ class SheetViewQueryHandler
     public function handle(SheetViewQuery $query)
     {
         $this->orderTypeById($query);
-        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event);
+        $sheets = $this->sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($query->event);
 
         $sheetViews = [];
 

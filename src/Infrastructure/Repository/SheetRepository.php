@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -100,6 +101,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('sheet.participants', 'participants')
             ->where('sheet.event = :event')
             ->andWhere('sheet.inCatalog = true')
+            ->andWhere('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE r.from = sheet OR r.to = sheet AND r.state = :approved)')
+            ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
