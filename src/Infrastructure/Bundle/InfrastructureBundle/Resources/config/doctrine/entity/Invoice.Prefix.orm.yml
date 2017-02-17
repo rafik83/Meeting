@@ -12,9 +12,6 @@ Proximum\Vimeet\Domain\Model\Invoice\Prefix:
         prefix:
             type: string
             nullable: true
-    oneToMany:
-        events:
-            targetEntity: Proximum\Vimeet\Domain\Model\Event
-            mappedBy: invoicePrefix
-            cascade: ["all"]
-            orphanRemoval: true
+        isDefault:
+            type: boolean
+            nullable: false

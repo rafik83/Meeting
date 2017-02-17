@@ -50,4 +50,18 @@ class PrefixRepository implements PrefixRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefault()
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('prefix')
+            ->from(Prefix::class, 'prefix')
+            ->where('prefix.isDefault = true')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

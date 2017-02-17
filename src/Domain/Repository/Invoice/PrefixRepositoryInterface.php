@@ -23,4 +23,9 @@ interface PrefixRepositoryInterface
      * @return array|null
      */
     public function getAll();
+
+    /**
+     * @return Prefix|null
+     */
+    public function getDefault();
 }

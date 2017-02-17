@@ -119,32 +119,49 @@ abstract class AbstractEventType extends AbstractType
                 'required' => false,
             ]);
 
+        // default invoicePrefix choice type options
         $invoicePrefixOptions = [
             'required'     => true,
             'expanded'     => false,
             'multiple'     => false,
-            'choice_label' => function ($prefix = null) {
-                if ($prefix instanceof Prefix) {
-                    return $prefix->getTitle();
-                }
-
-                return null;
-            },
         ];
 
-        if ($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN') || $this instanceof CreateType) {
-            $prefixes = $this->prefixRepository->getAll();
+        $isSuperAdmin = $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
+
+        // Show when admin OR when create new Event
+        if ($isSuperAdmin === true || $this instanceof CreateType) {
+            if (!$isSuperAdmin) {
+                $prefix   = $this->prefixRepository->getDefault();
+                $prefixes = $prefix !== null ? [$prefix] : [];
+                $invoicePrefixOptions['help'] = 'form.event.children.invoicePrefix.help.label';
+            } else {
+                $prefixes = $this->prefixRepository->getAll();
+            }
 
             $invoicePrefixOptions = array_merge($invoicePrefixOptions, [
-                'choices' => $prefixes,
+                'choices'      => $prefixes,
+                'choice_label' => function ($prefix = null) {
+                    if ($prefix instanceof Prefix) {
+                        return $prefix->getTitle();
+                    }
+
+                    return null;
+                },
             ]);
         } elseif ($event instanceof Event) {
             $invoicePrefix = $event->getInvoicePrefix();
 
             $invoicePrefixOptions = array_merge($invoicePrefixOptions, [
-                'disabled' => true,
-                'choices'  => $invoicePrefix !== null ? [$invoicePrefix] : [],
-                'help'     => 'form.event.children.invoicePrefix.help.label',
+                'disabled'     => true,
+                'choices'      => $invoicePrefix !== null ? [$invoicePrefix] : [],
+                'help'         => 'form.event.children.invoicePrefix.help.label',
+                'choice_label' => function ($prefix = null) {
+                    if ($prefix instanceof Prefix) {
+                        return $prefix->getTitle() . ' - ' . $prefix->getPrefix() . '2017-00001';
+                    }
+
+                    return null;
+                },
             ]);
         }
 
