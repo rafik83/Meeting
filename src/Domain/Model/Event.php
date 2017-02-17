@@ -162,7 +162,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
-     * @param null|Prefix $invoicePrefix
+     * @param Prefix $invoicePrefix
      */
     public function __construct(
         $title,
@@ -176,7 +176,7 @@ class Event implements EventInterface, TraceableInterface
         $domain,
         $organiserName,
         $emailTeam,
-        Prefix $invoicePrefix = null
+        Prefix $invoicePrefix
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -430,7 +430,7 @@ class Event implements EventInterface, TraceableInterface
         $domain,
         $organiserName,
         $emailTeam,
-        Prefix $invoicePrefix = null
+        Prefix $invoicePrefix
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
