@@ -334,17 +334,18 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('request, meeting')
+            ->select('request')
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true')
             ->join('fromSheet.participants', 'fromParticipants')
             ->join('toSheet.participants', 'toParticipants')
-            ->leftJoin('request.meeting', 'meeting')
             ->where('request.state = :approved')
             ->andWhere('request.disabled = false')
             ->setParameter('event', $event)
             ->setParameter('approved', Request::STATE_APPROVED);
+
+        // avoid returning requests already transformed into meeting?
 
         return $queryBuilder->getQuery()->getResult();
     }

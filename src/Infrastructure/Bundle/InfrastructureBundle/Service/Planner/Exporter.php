@@ -45,7 +45,8 @@ class Exporter
      */
     public function getXML(Event $event, $locale)
     {
-        set_time_limit(1000);
+        set_time_limit(60);
+
         $planner = $this->plannerHandler->handle(new PlannerViewQuery($event, $locale));
         $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => 'MeetingSchedule']);
 
