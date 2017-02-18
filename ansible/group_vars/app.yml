@@ -139,6 +139,8 @@ app_patterns:
       template: configs/app.{{ env }}.j2
       config:
         - date.timezone: UTC
+        - upload_max_filesize: 8M
+        - post_max_size: 8M
 
   #########
   # Nginx #
