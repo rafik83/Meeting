@@ -84,7 +84,7 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $sheetListViewQuery)
     {
-        set_time_limit(60);
+//        set_time_limit(0);
 
         $locale    = $sheetListViewQuery->locale;
         $sheetList = [];
