@@ -127,7 +127,8 @@ class ImportHandler
      */
     public function handle(Import $import)
     {
-        set_time_limit(60);
+        set_time_limit(0);
+
         // Remove all meeting of the event
         $this->meetingRepository->deleteAll($import->event);
 
@@ -161,8 +162,8 @@ class ImportHandler
                 $toFlush[] = $meeting;
             }
 
-            // Each 20 meetings, flush and clear to optimize the insertion
-            if (0 === ($index % 20)) {
+            // Each 1000 meetings, flush and clear to optimize the insertion
+            if (0 === ($index % 1000)) {
                 $this->entityManagerAdapter->flush();
 
                 /** @var Meeting $flush */
