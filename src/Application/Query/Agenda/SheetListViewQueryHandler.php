@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsView
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetListViewQueryHandler
