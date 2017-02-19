@@ -158,8 +158,8 @@ class SheetView
         $this->url                      = $url;
         $this->follower                 = $follower;
 
-        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot();
-        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest();
-        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove();
+        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
+        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
+        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
     }
 }

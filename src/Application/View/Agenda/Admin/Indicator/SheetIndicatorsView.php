@@ -48,6 +48,21 @@ class SheetIndicatorsView
     public $countPendingPropositions;
 
     /**
+     * @var bool
+     */
+    public $hasNotSentMeetingRequest;
+
+    /**
+     * @var bool
+     */
+    public $hasMeetingToApprove;
+
+    /**
+     * @var bool
+     */
+    public $hasNotEnoughAvailableSlot;
+
+    /**
      * @param int $countRequest
      * @param int $countProposition
      * @param int $countValidatedRequest
@@ -72,6 +87,10 @@ class SheetIndicatorsView
         $this->usableSlots              = $usableSlots;
         $this->countPlacedMeetings      = $countPlacedMeetings;
         $this->countPendingPropositions = $countPendingPropositions;
+        $this->hasNotSentMeetingRequest = $this->countRequest === 0;
+        $this->hasMeetingToApprove      = $this->countPendingPropositions > 0;
+
+        $this->hasNotEnoughAvailableSlot = $this->calculateHasNotEnoughAvailableSlot();
     }
 
 
@@ -80,29 +99,12 @@ class SheetIndicatorsView
      *
      * @return bool
      */
-    public function hasNotEnoughAvailableSlot()
+    private function calculateHasNotEnoughAvailableSlot()
     {
         if ($this->usableSlots === 0) {
             return true;
         }
 
         return (($this->countValidatedRequest - $this->countPlacedMeetings) / $this->usableSlots) > 1;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function hasNotSentMeetingRequest()
-    {
-        return $this->countRequest === 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasMeetingToApprove()
-    {
-        return $this->countPendingPropositions > 0;
     }
 }
