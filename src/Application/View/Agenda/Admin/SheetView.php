@@ -159,23 +159,7 @@ class SheetView
         $this->follower                 = $follower;
 
         $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot();
-        $this->hasNotSentMeetingRequest  = $this->hasNotSentMeetingRequest();
-        $this->hasMeetingToApprove       = $this->hasMeetingToApprove();
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasNotSentMeetingRequest()
-    {
-        return $this->countRequest === 0;
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasMeetingToApprove()
-    {
-        return $this->countPendingPropositions > 0;
+        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest();
+        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove();
     }
 }

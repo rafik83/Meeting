@@ -88,4 +88,21 @@ class SheetIndicatorsView
 
         return (($this->countValidatedRequest - $this->countPlacedMeetings) / $this->usableSlots) > 1;
     }
+
+
+    /**
+     * @return bool
+     */
+    public function hasNotSentMeetingRequest()
+    {
+        return $this->countRequest === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMeetingToApprove()
+    {
+        return $this->countPendingPropositions > 0;
+    }
 }
