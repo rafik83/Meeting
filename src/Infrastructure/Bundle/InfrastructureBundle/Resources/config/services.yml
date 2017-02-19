@@ -2383,6 +2383,13 @@ services:
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
+    query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery }
     query.agenda.agenda_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQueryHandler
         arguments:
