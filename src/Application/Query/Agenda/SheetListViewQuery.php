@@ -25,14 +25,21 @@ class SheetListViewQuery
     public $locale;
 
     /**
+     * @var bool
+     */
+    public $lazyLoadIndicators;
+
+    /**
      * SheetListViewQuery constructor.
      *
      * @param Event  $event
      * @param string $locale
+     * @param bool   $lazyLoadIndicators
      */
-    public function __construct(Event $event, $locale)
+    public function __construct(Event $event, $locale, $lazyLoadIndicators = true)
     {
-        $this->event  = $event;
-        $this->locale = $locale;
+        $this->event              = $event;
+        $this->locale             = $locale;
+        $this->lazyLoadIndicators = $lazyLoadIndicators;
     }
 }

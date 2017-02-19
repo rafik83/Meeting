@@ -89,13 +89,28 @@ class SheetListViewQueryHandler
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
         foreach ($sheets as $sheet) {
-            // Count the request per sheet
-            $request = $this->requestRepository->countRequestSentBySheet($sheet);
+            $request              = 0;
+            $propositions         = 0;
+            $meetingRequestsCount = 0;
+            $slotCount            = 0;
+            $usableSlots          = 0;
+            $pendingProposition   = 0;
+            $placedMeetingsNumber = 0;
 
-            // Count the proposition per sheet
-            $propositions = $this->requestRepository->countPropositionReceivedBySheet($sheet);
+            if (!$sheetListViewQuery->lazyLoadIndicators) {
+                // Count the request per sheet
+                $request = $this->requestRepository->countRequestSentBySheet($sheet);
 
-            $indicator = $this->indicatorCalculator->getIndicator($sheet);
+                // Count the proposition per sheet
+                $propositions = $this->requestRepository->countPropositionReceivedBySheet($sheet);
+
+                $indicator            = $this->indicatorCalculator->getIndicator($sheet);
+                $meetingRequestsCount = $indicator->meetingRequestsCount;
+                $slotCount            = $indicator->slotCount;
+                $usableSlots          = $indicator->usableSlots;
+                $pendingProposition   = $indicator->pendingPropositionCount;
+                $placedMeetingsNumber = $this->getPlacedMeetingsNumber($sheet);
+            }
 
             $sheetList[] = new SheetView(
                 $sheet->getId(),
@@ -104,11 +119,11 @@ class SheetListViewQueryHandler
                 count($sheet->getParticipants()),
                 $request,
                 $propositions,
-                $indicator->meetingRequestsCount,
-                $indicator->slotCount,
-                $indicator->usableSlots,
-                $this->getPlacedMeetingsNumber($sheet),
-                $indicator->pendingPropositionCount,
+                $meetingRequestsCount,
+                $slotCount,
+                $usableSlots,
+                $placedMeetingsNumber,
+                $pendingProposition,
                 null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
                 $this->router->generate(
                     'admin_sheet_details',
