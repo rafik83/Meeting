@@ -133,7 +133,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function getPropositionReceivedBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->receivedBy($sheet)->mostRecentFirst();
+        $queryBuilder->receivedBy($sheet)->isEnabled()->mostRecentFirst();
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -144,7 +144,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function getApprovedPropositionReceivedBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->receivedBy($sheet)->approved();
+        $queryBuilder->receivedBy($sheet)->approved()->isEnabled();
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -156,7 +156,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->sendBy($sheet)->approved()->count()->getIntResult();
+        return $queryBuilder->sendBy($sheet)->approved()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -166,7 +166,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->sendBy($sheet)->pending()->count()->getIntResult();
+        return $queryBuilder->sendBy($sheet)->pending()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -176,7 +176,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->sendBy($sheet)->refused()->count()->getIntResult();
+        return $queryBuilder->sendBy($sheet)->refused()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -186,7 +186,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->approved()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->approved()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -196,7 +196,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->refused()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->refused()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -206,7 +206,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->pending()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->count()->getIntResult();
     }
 
     /**
