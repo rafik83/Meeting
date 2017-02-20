@@ -265,8 +265,9 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet')
+            ->select('sheet, participant')
             ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant')
             ->where('sheet.id IN (:sheets)')
             ->setParameter('sheets', $sheetIds);
 
