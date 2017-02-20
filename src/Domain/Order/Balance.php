@@ -56,7 +56,11 @@ class Balance
      */
     public function loadAllTransactions(Event $event)
     {
-        $this->transactions[$event->getId()] = $this->transactionRepository->findByEvent($event);
+        $transactions = $this->transactionRepository->findByEvent($event);
+
+        foreach ($transactions as $transaction) {
+            $this->transactions[$event->getId()][$transaction->getSheet()->getId()][] = $transaction;
+        }
     }
 
     /**
@@ -67,8 +71,17 @@ class Balance
         $orders = $this->orderRepository->findByEvent($event);
 
         foreach ($orders as $order) {
-            $this->orders[$event->getId()][$order->getSheet()->getId()] = $order;
+            $this->orders[$event->getId()][$order->getSheet()->getId()][] = $order;
         }
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $orders
+     */
+    public function preloadOrdersForSheet(Sheet $sheet, array $orders)
+    {
+        $this->orders[$sheet->getEvent()->getId()][$sheet->getId()] = $orders;
     }
 
     /**
@@ -124,6 +137,20 @@ class Balance
 
         return array_reduce($orders, function ($carry, Order $order) {
             return $carry + $order->getTotal();
+        }, 0);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return float
+     */
+    public function getTotalWithoutVat(Sheet $sheet)
+    {
+        $orders = $this->getNotCancelledOrders($sheet);
+
+        return array_reduce($orders, function ($carry, Order $order) {
+            return $carry + $order->getTotalWithoutVat();
         }, 0);
     }
 
@@ -203,9 +230,17 @@ class Balance
             return [];
         }
 
-        return array_filter($this->orders[$event->getId()], function (Order $order) {
-            return !$order->isCancelled();
-        });
+        $notCancelledOrdersFromEvent = [];
+        foreach ($this->orders[$event->getId()] as $sheetOrders) {
+            $notCancelledOrdersFromEvent = array_merge(
+                $notCancelledOrdersFromEvent,
+                array_filter($sheetOrders, function (Order $order) {
+                    return !$order->isCancelled();
+                })
+            );
+        }
+
+        return $notCancelledOrdersFromEvent;
     }
 
     /**
@@ -217,9 +252,12 @@ class Balance
     {
         $totalPaid = 0;
 
-        foreach ($this->transactions[$event->getId()] as $transaction) {
-            if ($transaction->isPaid()) {
-                $totalPaid += $transaction->getAmount();
+        /** @var Transaction $transaction */
+        foreach ($this->transactions[$event->getId()] as $sheetTransactions) {
+            foreach ($sheetTransactions as $transaction) {
+                if ($transaction->isPaid()) {
+                    $totalPaid += $transaction->getAmount();
+                }
             }
         }
 
@@ -249,20 +287,26 @@ class Balance
     {
         $total = $this->getOrdersTotal($event);
 
-        return array_reduce($this->transactions[$event->getId()], function ($carry, Transaction $transaction) {
-            if ($carry < 0) {
-                return 0;
-            }
+        $totalRemaining = $total;
 
-            if (!$transaction->isPaid()) {
-                return $carry;
-            }
+        foreach ($this->transactions[$event->getId()] as $sheetTransaction) {
+            $totalRemaining = array_reduce($sheetTransaction, function ($carry, Transaction $transaction) {
+                if ($carry < 0) {
+                    return 0;
+                }
 
-            if (($carry - $transaction->getAmount()) < 0) {
-                return 0;
-            }
+                if (!$transaction->isPaid()) {
+                    return $carry;
+                }
 
-            return $carry - $transaction->getAmount();
-        }, $total);
+                if (($carry - $transaction->getAmount()) < 0) {
+                    return 0;
+                }
+
+                return $carry - $transaction->getAmount();
+            }, $totalRemaining);
+        }
+
+        return  $totalRemaining;
     }
 }

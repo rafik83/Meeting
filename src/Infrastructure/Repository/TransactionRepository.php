@@ -112,15 +112,13 @@ class TransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @param Event $event
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
-            ->select('transaction')
+            ->select('transaction, sheet')
             ->from(Transaction::class, 'transaction')
             ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.enable = true')
             ->where('sheet.event = :event')
