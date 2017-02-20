@@ -3019,6 +3019,13 @@ services:
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
 
+    sheet.infos_helper:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@query.participant.card_list_view_query_handler'
+            - '@template.template_data_factory'
+
     #
     # Unavailability
     #
