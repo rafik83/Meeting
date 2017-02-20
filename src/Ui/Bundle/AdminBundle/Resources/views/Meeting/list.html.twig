@@ -15,7 +15,7 @@
             ) }}
         </span>
         {% endif %}
-        <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET" class="pull-right" style="margin-left: 10px;">
+        <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET" class="pull-right">
             <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-sm btn-default"/>
         </form>
     </h2>
