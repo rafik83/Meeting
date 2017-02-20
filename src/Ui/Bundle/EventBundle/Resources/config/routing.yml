@@ -450,7 +450,7 @@ event_package_step:
 
 event_package_add_participant:
     path: /sheet/{sheet}/package/step/{step}/participant/add
-    defaults: { _controller: EventBundle:Package:addParticipant }
+    defaults: { _controller: EventBundle:PackageParticipant:addParticipant }
     requirements:
         sheet: \d+
         step: \d+
@@ -458,7 +458,7 @@ event_package_add_participant:
 
 event_package_remove_participant:
     path: /sheet/{sheet}/package/step/{step}/participant/remove
-    defaults: { _controller: EventBundle:Package:removeParticipant }
+    defaults: { _controller: EventBundle:PackageParticipant:removeParticipant }
     requirements:
         sheet: \d+
         step: \d+
