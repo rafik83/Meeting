@@ -53,4 +53,3 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         analyticsCode:
             type: string
             nullable: true
-            
