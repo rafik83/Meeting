@@ -174,59 +174,12 @@ new Vue({
         },
 
         /**
-         *
-         * @param {array} chunks
-         */
-        getIndicatorsByChunks: function (chunks) {
-            var sheets = _.first(chunks);
-
-            if (typeof sheets !== 'undefined') {
-                var remainingSheets = _.slice(chunks, 1, chunks.length);
-
-                this.$http.get(api.getSheetsIndicatorsEndpoint(), {
-                    params: {
-                        sheets: _.map(sheets, function (sheet) {
-                            return sheet.id
-                        })
-                    }
-                })
-                .then(function (responseIndicators) {
-                    _.forEach(responseIndicators.data, function (value, key) {
-                        _.forEach(this.sheets, function (sheet) {
-                            if (sheet.id == key) {
-                                sheet.countPendingPropositions  = value.countPendingPropositions;
-                                sheet.countPlacedMeetings       = value.countPlacedMeetings;
-                                sheet.countProposition          = value.countProposition;
-                                sheet.countRequest              = value.countRequest;
-                                sheet.countSlots                = value.countSlots;
-                                sheet.countValidatedRequest     = value.countValidatedRequest;
-                                sheet.usableSlots               = value.usableSlots;
-                                sheet.hasNotSentMeetingRequest  = value.hasNotSentMeetingRequest;
-                                sheet.hasMeetingToApprove       = value.hasMeetingToApprove;
-                                sheet.hasNotEnoughAvailableSlot = value.hasNotEnoughAvailableSlot;
-                            }
-                        })
-                    }.bind(this));
-
-                    // Do the call for the remaining chunks
-                    this.getIndicatorsByChunks(remainingSheets);
-                }.bind(this))
-            }
-        },
-
-        /**
          * Load sheets data
          */
         loadSheets: function () {
             this.$http.get(api.getSheetsEndpoint())
                 .then(function (response) {
                     this.sheets = response.data;
-
-                    if (urlParameterGuesser.get('indicators') !== 'no') {
-                        // Load the indicators afterward
-                        var chunksSheets = _.chunk(this.sheets, 50);
-                        this.getIndicatorsByChunks(chunksSheets);
-                    }
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {
