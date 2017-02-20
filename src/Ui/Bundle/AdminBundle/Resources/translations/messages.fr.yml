@@ -224,6 +224,15 @@ admin.meeting.action.deleteAll.confirm: 'Êtes vous sûr de vouloir supprimer l'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
 admin.meeting.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce rendez-vous?'
 admin.meeting.action.remove.link: Supprimer
+admin.meeting.export.fields.meeting_id: 'ID Meeting'
+admin.meeting.export.fields.sheet_requester_id: 'Id Requester'
+admin.meeting.export.fields.sheet_requester_name: 'Name Requester'
+admin.meeting.export.fields.sheet_requested_id: 'Id Requested'
+admin.meeting.export.fields.sheet_requested_name: 'Name Requested'
+admin.meeting.export.fields.day: 'Day'
+admin.meeting.export.fields.hour_begin: 'Begin hour'
+admin.meeting.export.fields.hour_end: 'End hour'
+admin.meeting.export.fields.spot: 'Spot'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
@@ -527,6 +536,7 @@ admin.sheet.export.fields.registration_date: 'Date inscription'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.type: Type
+admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
