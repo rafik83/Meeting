@@ -22,6 +22,7 @@ Feature: See and update practical information
       | event_practical_info_update_organiserWebsite | proximum-group.com |
       | event_practical_info_update_contactFirstName | jean               |
       | event_practical_info_update_contactLastName  | dupont             |
+      | event_practical_info_update_analyticsCode    | !-S33-U-4-3v3r     |
     And I press "event_practical_info_update_submit"
 
   Scenario: See practical information
@@ -35,3 +36,4 @@ Feature: See and update practical information
     And the "event_practical_info_update_organiserWebsite" field should contain "http://proximum-group.com"
     And the "event_practical_info_update_contactFirstName" field should contain "jean"
     And the "event_practical_info_update_contactLastName" field should contain "dupont"
+    And the "event_practical_info_update_analyticsCode" field should contain "!-S33-U-4-3v3r"
