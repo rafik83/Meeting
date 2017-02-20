@@ -178,8 +178,8 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         $totalOrder          = 0;
         $totalRemainingToPay = 0;
 
-        if ($sheet->hasNotCancelledOrders()) {
-            $orders = $sheet->getNotCancelledOrders();
+        if (!empty($notCancelledOrders = $this->balance->getNotCancelledOrders($sheet))) {
+            $orders = $notCancelledOrders;
             $order  = $this->merger->merge($orders);
 
             foreach($order->getPromotionCodes() as $orderPromotionCode) {
