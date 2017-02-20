@@ -10,6 +10,13 @@
         <div id="advancedFilters" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
                 {{ form_start(form) }}
+                <div class="col-md-12">
+                    <div class="form-group pull-right">
+                        <button type="submit" id="submit" name="submit" class=" btn btn-primary">
+                            {{ 'form.admin.sheet.filter.children.submit.label'|trans({}, 'forms') }}
+                        </button>
+                    </div>
+                </div>
                 <div class="col-md-6">
                     {{ form_row(form.text) }}
                     {{ form_row(form.validationState) }}
@@ -37,7 +44,9 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group pull-right">
-                        {{ form_widget(form.submit) }}
+                        <button type="submit" id="submit" name="submit" class=" btn btn-primary">
+                            {{ 'form.admin.sheet.filter.children.submit.label'|trans({}, 'forms') }}
+                        </button>
                     </div>
                 </div>
                 {{ form_end(form) }}

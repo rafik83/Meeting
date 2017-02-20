@@ -21,12 +21,8 @@
     <div class="row filters">
         {{ form_start(filter_part_form) }}
         <div class="col-md-offset-4 col-md-4">
-
-            <div class="input-group">
-                <div class="input-group-btn">
-                    {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
-                    {{ macro.choice_as_dropdown(filter_form.imported, true, false, true) }}
-                </div>
+            <div class="input-group col-md-12">
+                {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
                 {{ form_widget(filter_part_form.text) }}
             </div>
 
@@ -35,7 +31,6 @@
             {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
         </div>
         {{ form_end(filter_part_form) }}
-
     </div>
 
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
@@ -104,7 +99,7 @@
         </div>
     </div>
 
-    {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
+    {% set hasCategories = sheetFilter.category.vars.choices|length > 1 %}
 
     {{ include('AdminBundle:Sheet/Partial:filters.html.twig', { 'form': sheetFilter }) }}
 
@@ -114,35 +109,6 @@
             <th class="minwidth">
                 <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}"/>
             </th>
-            <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.enabled) }}
-            </th>
-
-            {% if hasCategories %}
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.category) }}
-                </th>
-            {% endif %}
-
-            <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.type) }}
-            </th>
-            <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.validationState) }}
-            </th>
-            <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.completed) }}
-            </th>
-            <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.state) }}
-            </th>
-            <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
-            <th>{{ 'admin.sheet.createdAt'|trans }}</th>
-            <th>{{ 'admin.sheet.spot'|trans }}</th>
-            <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.follower) }}
-            </th>
-            <th class="col-md-1"></th>
         </tr>
         </thead>
         <tbody>

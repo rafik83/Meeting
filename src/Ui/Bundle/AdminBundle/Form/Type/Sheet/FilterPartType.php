@@ -26,24 +26,7 @@ class FilterPartType extends AbstractType
             ->add('text', SheetTextSearchType::class, [
                 'placeholder' => 'form.sheet_filter.children.text_search.label',
             ])
-            ->add('enabled', HiddenType::class)
-            ->add('state', HiddenType::class)
-            ->add('completed', HiddenType::class)
-            ->add('category', HiddenType::class)
-            ->add('type', HiddenType::class)
-            ->add('follower', HiddenType::class)
-            ->add('predefined', HiddenType::class)
-            ->add('validationState', HiddenType::class)
-            ->add('orderBy', HiddenType::class)
         ;
-    }
-
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setRequired(['event', 'locale']);
     }
 
     /**

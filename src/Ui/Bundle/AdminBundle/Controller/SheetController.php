@@ -93,25 +93,21 @@ class SheetController extends Controller
             'event'  => $event,
             'locale' => $locale,
             'user'   => $this->getUser(),
-            'submit' => true
         ]);
 
         $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
             'event'  => $event,
-            'locale' => $locale,
-            'user'   => $this->getUser(),
         ]);
 
-        $filterPartForm = $this->createFilterForm(FilterPartType::class, [], [
-            'event'  => $event,
-            'locale' => $locale,
-        ]);
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, []);
 
         $filterPartForm->handleRequest(Request::create($request->getUri()));
-        $filtered = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
+//        $filtered = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
+
+        $filtered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
 
         if ($filtered) {
-            $filters = $filterFullForm->getData();
+            $filters = $sheetFilter->getData();
             // save filter into session
             $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
                 $filterFullForm,
