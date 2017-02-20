@@ -65,7 +65,7 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
         }
 
-        if ($object->getType() !== 'participant') {
+        if (!$object->isParticipant()) {
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
@@ -189,7 +189,7 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
         }
 
-        if ($object->getType() !== 'participant') {
+        if (!$object->isParticipant()) {
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
@@ -332,7 +332,7 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
         }
 
-        if ($object->getType() !== 'participant') {
+        if (!$object->isParticipant()) {
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
