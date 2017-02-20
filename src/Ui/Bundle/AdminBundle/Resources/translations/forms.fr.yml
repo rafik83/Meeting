@@ -164,6 +164,7 @@ form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d
 form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
 form.event_payment_conditions_update.children.paymentModes.label: 'Moyens de paiement'
 form.event_payment_conditions_update.children.submit.label: Enregistrer
+form.event_practical_info_update.children.analyticsCode.label: 'Code analytique'
 form.event_practical_info_update.children.contactFirstName.label: 'Prénom du contact'
 form.event_practical_info_update.children.contactLastName.label: 'Nom du contact'
 form.event_practical_info_update.children.organiserEmail.label: 'E-mail de contact'

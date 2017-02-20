@@ -45,6 +45,9 @@ class UpdateType extends AbstractType
             ->add('organiserWebsite', UrlType::class, [
                 'required' => false,
             ])
+            ->add('analyticsCode', TextType::class, [
+                'required' => false
+            ])
         ;
     }
 

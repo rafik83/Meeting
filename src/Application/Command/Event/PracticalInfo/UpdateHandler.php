@@ -42,6 +42,8 @@ class UpdateHandler
                 $update->organiserWebsite
             )
         ;
+        
+        $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);
 
         $update->event
             ->setOrganiserName($update->organiserName)

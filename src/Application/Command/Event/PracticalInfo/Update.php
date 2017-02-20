@@ -50,6 +50,11 @@ class Update
     public $organiserWebsite;
 
     /**
+     * @var null|string
+     */
+    public $analyticsCode = null;
+
+    /**
      * Update constructor.
      * @param Model\Event $event
      */
@@ -62,5 +67,6 @@ class Update
         $this->contactLastName  = $event->getConfiguration()->getContactLastName();
         $this->organiserPhone   = $event->getConfiguration()->getOrganiserPhone();
         $this->organiserWebsite = $event->getConfiguration()->getOrganiserWebsite();
+        $this->analyticsCode    = $event->getConfiguration()->getAnalyticsCode();
     }
 }
