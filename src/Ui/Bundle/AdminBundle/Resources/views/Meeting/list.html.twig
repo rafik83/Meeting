@@ -15,9 +15,11 @@
             ) }}
         </span>
         {% endif %}
-        <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET" class="pull-right">
-            <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-sm btn-default"/>
-        </form>
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET" class="pull-right">
+                <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-sm btn-default"/>
+            </form>
+        {% endif %}
     </h2>
 
     <table class="table table-hover">
