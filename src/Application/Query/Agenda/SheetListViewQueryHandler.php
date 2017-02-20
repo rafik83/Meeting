@@ -80,11 +80,19 @@ class SheetListViewQueryHandler
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
-        foreach ($sheets as $sheet) {
-            $sheetIndicatorsView = new SheetIndicatorsView(0, 0, 0, 0, 0, $this->meetingRepository->countMeetingsOfSheet($sheet));
+        $countMeetings = $this->meetingRepository->countMeetingsOfEvent($sheetListViewQuery->event);
 
+        foreach ($sheets as $sheet) {
             if (!$sheetListViewQuery->lazyLoadIndicators) {
                 $sheetIndicatorsView = $this->sheetIndicatorsViewQueryHandler->handle(new SheetIndicatorsViewQuery($sheet));
+            } else {
+                $countMeetingsOfSheet = 0;
+
+                if (isset($countMeetings[$sheet->getId()])) {
+                    $countMeetingsOfSheet = (int) $countMeetings[$sheet->getId()]['countMeetings'];
+                }
+
+                $sheetIndicatorsView = new SheetIndicatorsView(0, 0, 0, 0, 0, $countMeetingsOfSheet);
             }
 
             $sheetList[] = new SheetView(
