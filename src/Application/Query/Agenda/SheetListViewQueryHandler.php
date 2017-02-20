@@ -67,8 +67,6 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $sheetListViewQuery)
     {
-//        set_time_limit(0);
-
         $locale    = $sheetListViewQuery->locale;
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
