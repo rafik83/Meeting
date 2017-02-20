@@ -81,9 +81,29 @@ class SlotAvailability
      * @var MassAssignment[]
      */
     private $massAssignment = null;
+
+    /**
+     * Array of happeningParticipation [participantId][1 => happeningParticipation, 2 => happeningParticipation]
+     * @var array
+     */
     private $happeningsSortByParticipant = [];
+
+    /**
+     * Array of meeting [participantId][1 => meeting, 2 => meeting]
+     * @var array
+     */
     private $meetingsSortByParticipant = [];
+
+    /**
+     * Array of unavailability [participantId][1 => unavailability, 2 => unavailability]
+     * @var array
+     */
     private $unavailabilitySortByParticipant = [];
+
+    /**
+     * Array of mass assignment [participantId][1 => assignment, 2 => assignment]
+     * @var array
+     */
     private $massAssignmentSortByParticipant = [];
 
     /**
@@ -114,17 +134,66 @@ class SlotAvailability
      * @param Meeting[]                $meetings
      * @param Unavailability[]         $unavailability
      * @param Mass[]                   $massUnavailability
+     * @param MassAssignment[]         $massAssignments
      */
     public function preload(
         array $happenings = [],
         array $meetings = [],
         array $unavailability = [],
-        array $massUnavailability = []
+        array $massUnavailability = [],
+        array $massAssignments = []
     ) {
         $this->happenings         = $happenings;
         $this->meetings           = $meetings;
         $this->unavailability     = $unavailability;
         $this->massUnavailability = $massUnavailability;
+
+        $this->assignMeetingSortByParticipant($meetings);
+        $this->assignHappeningSortByParticipant($happenings);
+        $this->assignUnavailabilitySortByParticipant($unavailability);
+        $this->assingMassAssignmentSortByParticipant($massAssignments);
+    }
+
+    /**
+     * @param Meeting[] $meetings
+     */
+    private function assignMeetingSortByParticipant(array $meetings)
+    {
+        foreach ($meetings as $meeting) {
+            foreach ($meeting->getAllParticipants() as $participant) {
+                $this->meetingsSortByParticipant[$participant->getId()][] = $meeting;
+            }
+        }
+    }
+
+    /**
+     * @param HappeningParticipation[] $happenings
+     */
+    private function assignHappeningSortByParticipant(array $happenings)
+    {
+        foreach ($happenings as $happening) {
+            $this->happeningsSortByParticipant[$happening->getParticipant()->getId()][] = $happening;
+        }
+    }
+
+    /**
+     * @param Unavailability[] $unavailabilities
+     */
+    private function assignUnavailabilitySortByParticipant(array $unavailabilities)
+    {
+        foreach ($unavailabilities as $unavailability) {
+            $this->unavailabilitySortByParticipant[$unavailability->getParticipant()->getId()][] = $unavailability;
+        }
+    }
+
+    /**
+     * @param MassAssignment[] $massAssignments
+     */
+    private function assingMassAssignmentSortByParticipant(array $massAssignments)
+    {
+        foreach ($massAssignments as $assignment) {
+            $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()][] = $assignment;
+        }
     }
 
     /**
@@ -194,27 +263,19 @@ class SlotAvailability
         if ($this->happenings === null) {
             $this->happenings = $this->happeningParticipationRepository->getByEvent($event);
 
-            foreach ($this->happenings as $happenning) {
-                $this->happeningsSortByParticipant[$happenning->getParticipant()->getId()][] = $happenning;
-            }
+            $this->assignHappeningSortByParticipant($this->happenings);
         }
 
         if ($this->meetings === null) {
             $this->meetings = $this->meetingRepositoryInterface->getAllByEvent($event);
 
-            foreach ($this->meetings as $meeting) {
-                foreach ($meeting->getAllParticipants() as $participant) {
-                    $this->meetingsSortByParticipant[$participant->getId()][] = $meeting;
-                }
-            }
+            $this->assignMeetingSortByParticipant($this->meetings);
         }
 
         if ($this->unavailability === null) {
             $this->unavailability = $this->unavailabilityRepository->getByEvent($event);
 
-            foreach ($this->unavailability as $unavailability) {
-                $this->unavailabilitySortByParticipant[$unavailability->getParticipant()->getId()] = $unavailability;
-            }
+            $this->assignUnavailabilitySortByParticipant($this->unavailability);
         }
 
         if ($this->massUnavailability === null) {
@@ -224,9 +285,7 @@ class SlotAvailability
         if ($this->massAssignment === null) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
 
-            foreach ($this->massAssignment as $assignment) {
-                $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()] = $assignment;
-            }
+            $this->assingMassAssignmentSortByParticipant($this->massAssignment);
         }
     }
 
