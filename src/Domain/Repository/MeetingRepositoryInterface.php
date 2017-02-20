@@ -55,6 +55,13 @@ interface MeetingRepositoryInterface
     public function findByParticipant(Participant $participant);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Meeting[]
+     */
+    public function findBySheet(Sheet $sheet);
+
+    /**
      * @param Event $event
      */
     public function deleteAll(Event $event);

@@ -90,11 +90,11 @@ class AgendaSheetViewQueryHandler
      */
     public function handle(AgendaSheetViewQuery $query)
     {
-        $happeningParticipations = $this->happeningParticipationRepository->getByEvent($query->sheet->getEvent());
+        $masses                  = $this->massUnavailabilityRepository->findByEvent($query->sheet->getEvent(), $query->locale);
+        $meetings                = $this->meetingRepositoryInterface->findBySheet($query->sheet);
+        $happeningParticipations = $this->happeningParticipationRepository->findBySheet($query->sheet);
 
-        $unavailabilites = $this->unavailabilityRepository->getByEvent($query->sheet->getEvent());
-        $masses          = $this->massUnavailabilityRepository->findByEvent($query->sheet->getEvent(), $query->locale);
-        $meetings        = $this->meetingRepositoryInterface->getAllByEvent($query->sheet->getEvent());
+        $unavailabilites = $this->unavailabilityRepository->findBySheet($query->sheet);
 
         $participants = [];
         $requests     = [];
