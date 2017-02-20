@@ -81,6 +81,10 @@ class SlotAvailability
      * @var MassAssignment[]
      */
     private $massAssignment = null;
+    private $happeningsSortByParticipant = [];
+    private $meetingsSortByParticipant = [];
+    private $unavailabilitySortByParticipant = [];
+    private $massAssignmentSortByParticipant = [];
 
     /**
      * SlotAvailability constructor.
@@ -189,14 +193,28 @@ class SlotAvailability
     {
         if ($this->happenings === null) {
             $this->happenings = $this->happeningParticipationRepository->getByEvent($event);
+
+            foreach ($this->happenings as $happenning) {
+                $this->happeningsSortByParticipant[$happenning->getParticipant()->getId()][] = $happenning;
+            }
         }
 
         if ($this->meetings === null) {
             $this->meetings = $this->meetingRepositoryInterface->getAllByEvent($event);
+
+            foreach ($this->meetings as $meeting) {
+                foreach ($meeting->getAllParticipants() as $participant) {
+                    $this->meetingsSortByParticipant[$participant->getId()][] = $meeting;
+                }
+            }
         }
 
         if ($this->unavailability === null) {
             $this->unavailability = $this->unavailabilityRepository->getByEvent($event);
+
+            foreach ($this->unavailability as $unavailability) {
+                $this->unavailabilitySortByParticipant[$unavailability->getParticipant()->getId()] = $unavailability;
+            }
         }
 
         if ($this->massUnavailability === null) {
@@ -205,6 +223,10 @@ class SlotAvailability
 
         if ($this->massAssignment === null) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
+
+            foreach ($this->massAssignment as $assignment) {
+                $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()] = $assignment;
+            }
         }
     }
 
@@ -216,7 +238,11 @@ class SlotAvailability
      */
     private function hasUnavailability(MeetingSlot $slot, Participant $participant)
     {
-        foreach ($this->unavailability as $unavailability) {
+        if (!isset($this->unavailabilitySortByParticipant[$participant->getId()])) {
+            return false;
+        }
+
+        foreach ($this->unavailabilitySortByParticipant[$participant->getId()] as $unavailability) {
             if ($unavailability->getParticipant() !== $participant) {
                 continue;
             }
@@ -286,7 +312,11 @@ class SlotAvailability
     private function getDispatch(Participant $participant, Mass $mass)
     {
         if ($this->massAssignment !== null) {
-            foreach ($this->massAssignment as $massAssignment) {
+            if (!isset($this->massAssignmentSortByParticipant[$participant->getId()])) {
+                return null;
+            }
+
+            foreach ($this->massAssignmentSortByParticipant[$participant->getId()] as $massAssignment) {
                 if ($massAssignment->getMass() === $mass && $massAssignment->getParticipant() === $participant) {
                     return $massAssignment;
                 }
@@ -391,11 +421,11 @@ class SlotAvailability
      */
     private function hasMeeting(MeetingSlot $slot, Participant $participant)
     {
-        foreach ($this->meetings as $meeting) {
-            if (!$meeting->hasFromParticipant($participant) && !$meeting->hasToParticipant($participant)) {
-                continue;
-            }
+        if (!isset($this->meetingsSortByParticipant[$participant->getId()])) {
+            return false;
+        }
 
+        foreach ($this->meetingsSortByParticipant[$participant->getId()] as $meeting) {
             if ($meeting->getSlot() === $slot) {
                 return $meeting;
             }
@@ -412,7 +442,11 @@ class SlotAvailability
      */
     private function hasHappening(MeetingSlot $slot, Participant $participant)
     {
-        foreach ($this->happenings as $happening) {
+        if (!isset($this->happeningsSortByParticipant[$participant->getId()])) {
+            return false;
+        }
+
+        foreach ($this->happeningsSortByParticipant[$participant->getId()] as $happening) {
             $happeningBegin = $happening->getHappening()->getBegin();
             $happeningEnd   = $happening->getHappening()->getEnd();
 
