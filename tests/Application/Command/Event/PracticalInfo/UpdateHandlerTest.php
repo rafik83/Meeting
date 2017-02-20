@@ -32,12 +32,16 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->organiserWebsite = 'newWebsite';
         $update->contactLastName  = 'newContactLastName';
         $update->contactFirstName = 'newContactFirstName';
+        $update->analyticsCode    = 'google see you <3';
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->setOrganiserEmail('newOrganiserEmail')->setOrganiserName('newOrganiserName');
         $expectedEvent
             ->getConfiguration()
             ->updatePracticalInfo('newContactFirstName', 'newContactLastName', 'newPhone', 'newWebsite');
+        $expectedEvent
+            ->getConfiguration()
+            ->setAnalyticsCode('google see you <3');
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
