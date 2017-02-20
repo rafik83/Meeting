@@ -8,9 +8,11 @@ var Vue                = require('vue'),
     slotAgenda         = require('./agenda/SlotAgenda'),
     sortModal          = require('./agenda/sortModal'),
     options            = require('./vueComponents/options'),
-    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
+    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints'),
+    UrlParameterGuesser = require('./components/_UrlParameterGuesser');
 
 var api = new AgendaApiEndpoints();
+var urlParameterGuesser = new UrlParameterGuesser();
 
 /**
  * Pass axios to Vue
@@ -220,9 +222,11 @@ new Vue({
                 .then(function (response) {
                     this.sheets = response.data;
 
-                    // Load the indicators afterward
-                    var chunksSheets = _.chunk(this.sheets, 50);
-                    this.getIndicatorsByChunks(chunksSheets);
+                    if (urlParameterGuesser.get('indicators') !== 'no') {
+                        // Load the indicators afterward
+                        var chunksSheets = _.chunk(this.sheets, 50);
+                        this.getIndicatorsByChunks(chunksSheets);
+                    }
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {
