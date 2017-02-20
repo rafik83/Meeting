@@ -80,7 +80,11 @@ class SheetListViewQueryHandler
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
-        $countMeetings = $this->meetingRepository->countMeetingsOfEvent($sheetListViewQuery->event);
+        $countMeetings = [];
+
+        if ($sheetListViewQuery->lazyLoadIndicators === true) {
+            $countMeetings = $this->meetingRepository->countMeetingsOfEvent($sheetListViewQuery->event);
+        }
 
         foreach ($sheets as $sheet) {
             if (!$sheetListViewQuery->lazyLoadIndicators) {
