@@ -30,7 +30,6 @@ use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
@@ -141,13 +140,13 @@ class SheetController extends Controller
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
         ]);
 
-        $filterFormView = $filterFullForm->createView();
+        $sheetFilterView = $sheetFilter->createView();
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
             'sheets'           => $sheets,
-            'filter_form'      => $filterFormView,
-            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filter_form'      => $filterFullForm->createView(),
+            'filters_summary'  => $this->get('filter_summary')->getFilters($sheetFilterView, $filters, $locale),
             'filtered'         => $filtered,
             'batch_form'       => $batchForm->createView(),
             'filter_part_form' => $filterPartForm->createView(),
