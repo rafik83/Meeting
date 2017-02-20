@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Planner;
 
-use Proximum\Vimeet\Application\Exception\Planner\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
@@ -117,8 +116,6 @@ class SpotViewQueryHandler
      * @param int $id
      *
      * @return SheetView|null
-     *
-     * @throws SheetNotFoundException
      */
     private function getSheetById($id)
     {
@@ -127,8 +124,6 @@ class SpotViewQueryHandler
         }
 
         return null;
-
-        //throw new SheetNotFoundException(sprintf('Sheet of id %s was not found', $id));
     }
 
     /**
