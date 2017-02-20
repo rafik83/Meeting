@@ -416,6 +416,13 @@ admin_meeting_delete_all:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Meeting:delete }
 
+admin_meeting_export:
+    path: /event/{event}/meeting/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Meeting:export }
+
 #
 # Spot
 #
