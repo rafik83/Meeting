@@ -127,6 +127,13 @@ interface SheetRepositoryInterface
     public function findSheets(array $sheets);
 
     /**
+     * @param array $sheetIds
+     *
+     * @return Sheet[]
+     */
+    public function findByIds(array $sheetIds);
+
+    /**
      * @param array $sheets
      *
      * @return Sheet[]
