@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsView
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetListViewQueryHandler
@@ -41,22 +42,30 @@ class SheetListViewQueryHandler
     private $sheetIndicatorsViewQueryHandler;
 
     /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
      * SheetListViewQueryHandler constructor.
      *
-     * @param SheetRepositoryInterface        $sheetRepository
-     * @param SheetInfoGuesser                $sheetInfoGuesser
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param SheetInfoGuesser $sheetInfoGuesser
      * @param SheetIndicatorsViewQueryHandler $sheetIndicatorsViewQueryHandler
-     * @param RouterInterface                 $router
+     * @param MeetingRepositoryInterface $meetingRepository
+     * @param RouterInterface $router
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         SheetIndicatorsViewQueryHandler $sheetIndicatorsViewQueryHandler,
+        MeetingRepositoryInterface $meetingRepository,
         RouterInterface $router
     ) {
-        $this->sheetRepository     = $sheetRepository;
-        $this->sheetInfoGuesser    = $sheetInfoGuesser;
-        $this->router              = $router;
+        $this->sheetRepository   = $sheetRepository;
+        $this->sheetInfoGuesser  = $sheetInfoGuesser;
+        $this->meetingRepository = $meetingRepository;
+        $this->router            = $router;
         $this->sheetIndicatorsViewQueryHandler = $sheetIndicatorsViewQueryHandler;
     }
 
@@ -67,14 +76,12 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $sheetListViewQuery)
     {
-//        set_time_limit(0);
-
         $locale    = $sheetListViewQuery->locale;
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
         foreach ($sheets as $sheet) {
-            $sheetIndicatorsView = new SheetIndicatorsView();
+            $sheetIndicatorsView = new SheetIndicatorsView(0, 0, 0, 0, 0, $this->meetingRepository->countMeetingsOfSheet($sheet));
 
             if (!$sheetListViewQuery->lazyLoadIndicators) {
                 $sheetIndicatorsView = $this->sheetIndicatorsViewQueryHandler->handle(new SheetIndicatorsViewQuery($sheet));
