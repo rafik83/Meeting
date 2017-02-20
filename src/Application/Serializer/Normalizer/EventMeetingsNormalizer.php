@@ -176,7 +176,7 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         $normalizedData = [];
 
         foreach (self::getCommonFieldKeys() as $fieldKey) {
-            $translationKey = 'admin.meeting.export.fields.' . $fieldKey;
+            $translationKey = self::EXPORT_BASE_KEY . $fieldKey;
             $input          = $rawData[$fieldKey];
 
             $translatedFieldname = $this->convertCharset(
