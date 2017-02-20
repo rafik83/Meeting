@@ -18,6 +18,21 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 class SheetIndicatorsViewQueryHandler
 {
     /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
+     * @var RequestRepositoryInterface
+     */
+    private $requestRepository;
+
+    /**
+     * @var IndicatorCalculator
+     */
+    private $indicatorCalculator;
+
+    /**
      * @param MeetingRepositoryInterface $meetingRepository
      * @param RequestRepositoryInterface $requestRepository
      * @param IndicatorCalculator        $indicatorCalculator
