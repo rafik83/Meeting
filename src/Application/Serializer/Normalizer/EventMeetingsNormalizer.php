@@ -22,17 +22,18 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_MEETING_ID                   = 'meeting_id';
-    const COL_SHEET_REQUESTER_ID           = 'sheet_requester_id';
-    const COL_SHEET_REQUESTER_NAME         = 'sheet_requester_name';
-    const COL_SHEET_REQUESTER_PARTICIPANTS = 'sheet_requester_participants';
-    const COL_SHEET_REQUESTED_ID           = 'sheet_requested_id';
-    const COL_SHEET_REQUESTED_NAME         = 'sheet_requested_name';
-    const COL_SHEET_REQUESTED_PARTICIPANTS = 'sheet_requested_participants';
-    const COL_DAY                          = 'day';
-    const COL_HOUR_BEGIN                   = 'hour_begin';
-    const COL_HOUR_END                     = 'hour_end';
-    const COL_SPOT                         = 'spot';
+    const COL_MEETING_ID              = 'meeting_id';
+    const COL_FROM_SHEET_ID           = 'from_sheet_id';
+    const COL_FROM_SHEET_NAME         = 'from_sheet_name';
+    const COL_FROM_SHEET_PARTICIPANTS = 'from_sheet_participants';
+    const COL_TO_SHEET_ID             = 'to_sheet_id';
+    const COL_TO_SHEET_NAME           = 'to_sheet_name';
+    const COL_TO_SHEET_PARTICIPANTS   = 'to_sheet_participants';
+    const COL_DAY                     = 'day';
+    const COL_HOUR_BEGIN              = 'hour_begin';
+    const COL_HOUR_END                = 'hour_end';
+    const COL_SPOT                    = 'spot';
+    const EXPORT_BASE_KEY = 'admin.meeting.export.fields.';
 
     /**
      * @var string
@@ -123,40 +124,41 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
             $event->getTimeZone()
         );
 
-        $sheetRequesterName = $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet());
-        $sheetRequestedName = $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet());
+        $sheetRequesterName    = $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet());
+        $sheetRequestedName    = $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet());
+        $fromSheetParticipants = $meeting->getFromParticipants()->toArray();
+        $toSheetParticipants   = $meeting->getToParticipants()->toArray();
 
         $rawData = [
-            self::COL_MEETING_ID                   => $meeting->getId(),
-            self::COL_SHEET_REQUESTER_ID           => $meeting->getFromSheet()->getId(),
-            self::COL_SHEET_REQUESTER_NAME         => $sheetRequesterName,
-            self::COL_SHEET_REQUESTER_PARTICIPANTS => $this->getParticipantRawData($meeting, $meeting->getFromSheet()),
-            self::COL_SHEET_REQUESTED_ID           => $meeting->getToSheet()->getId(),
-            self::COL_SHEET_REQUESTED_NAME         => $sheetRequestedName,
-            self::COL_SHEET_REQUESTED_PARTICIPANTS => $this->getParticipantRawData($meeting, $meeting->getToSheet()),
-            self::COL_DAY                          => $dayFormatter->format($meeting->getSlot()->getBegin()),
-            self::COL_HOUR_BEGIN                   => $timeFormatter->format($meeting->getSlot()->getBegin()),
-            self::COL_HOUR_END                     => $timeFormatter->format($meeting->getSlot()->getEnd()),
-            self::COL_SPOT                         => $meeting->getSpot()->getReference(),
+            self::COL_MEETING_ID              => $meeting->getId(),
+            self::COL_FROM_SHEET_ID           => $meeting->getFromSheet()->getId(),
+            self::COL_FROM_SHEET_NAME         => $sheetRequesterName,
+            self::COL_FROM_SHEET_PARTICIPANTS => $this->getParticipantsRawData($fromSheetParticipants),
+            self::COL_TO_SHEET_ID             => $meeting->getToSheet()->getId(),
+            self::COL_TO_SHEET_NAME           => $sheetRequestedName,
+            self::COL_TO_SHEET_PARTICIPANTS   => $this->getParticipantsRawData($toSheetParticipants),
+            self::COL_DAY                     => $dayFormatter->format($meeting->getSlot()->getBegin()),
+            self::COL_HOUR_BEGIN              => $timeFormatter->format($meeting->getSlot()->getBegin()),
+            self::COL_HOUR_END                => $timeFormatter->format($meeting->getSlot()->getEnd()),
+            self::COL_SPOT                    => $meeting->getSpot()->getReference(),
         ];
 
         return $rawData;
     }
 
     /**
-     * @param Meeting $meeting
-     * @param Sheet   $sheet
+     * @param array $participants
      *
      * @return string
      */
-    public function getParticipantRawData(Meeting $meeting, Sheet $sheet)
+    public function getParticipantsRawData(array $participants)
     {
         return implode(',',
             array_map(
                 function (Participant $participant) {
                     return $participant->getId();
                 },
-                $meeting->getParticipants($sheet)
+                $participants
             )
         );
     }
@@ -200,12 +202,12 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     {
         return [
             self::COL_MEETING_ID,
-            self::COL_SHEET_REQUESTER_ID,
-            self::COL_SHEET_REQUESTER_NAME,
-            self::COL_SHEET_REQUESTER_PARTICIPANTS,
-            self::COL_SHEET_REQUESTED_ID,
-            self::COL_SHEET_REQUESTED_NAME,
-            self::COL_SHEET_REQUESTED_PARTICIPANTS,
+            self::COL_FROM_SHEET_ID,
+            self::COL_FROM_SHEET_NAME,
+            self::COL_FROM_SHEET_PARTICIPANTS,
+            self::COL_TO_SHEET_ID,
+            self::COL_TO_SHEET_NAME,
+            self::COL_TO_SHEET_PARTICIPANTS,
             self::COL_DAY,
             self::COL_HOUR_BEGIN,
             self::COL_HOUR_END,
