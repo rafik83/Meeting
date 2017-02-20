@@ -17,7 +17,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: boolean
             options:
                 default: false
-    oneToOne:
+    oneToMany:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
             mappedBy: request

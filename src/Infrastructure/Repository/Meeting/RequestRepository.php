@@ -336,14 +336,16 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true')
             ->join('fromSheet.participants', 'fromParticipants')
             ->join('toSheet.participants', 'toParticipants')
             ->where('request.state = :approved')
             ->andWhere('request.disabled = false')
             ->setParameter('event', $event)
             ->setParameter('approved', Request::STATE_APPROVED);
+
+        // avoid returning requests already transformed into meeting?
 
         return $queryBuilder->getQuery()->getResult();
     }

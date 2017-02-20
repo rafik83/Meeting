@@ -57,7 +57,11 @@ class SpotViewQueryHandler
 
             if ($spot->hasSheets()) {
                 foreach ($spot->getSheets() as $sheet) {
-                    $sheetsList[] = $this->getSheetById($sheet->getId());
+                    $sheetView = $this->getSheetById($sheet->getId());
+
+                    if ($sheetView !== null) {
+                        $sheetsList[] = $sheetView;
+                    }
                 }
             }
 
@@ -112,7 +116,7 @@ class SpotViewQueryHandler
     /**
      * @param int $id
      *
-     * @return SheetView
+     * @return SheetView|null
      *
      * @throws SheetNotFoundException
      */
@@ -122,7 +126,9 @@ class SpotViewQueryHandler
             return $this->sheets[$id];
         }
 
-        throw new SheetNotFoundException(sprintf('Sheet of id %s was not found', $id));
+        return null;
+
+        //throw new SheetNotFoundException(sprintf('Sheet of id %s was not found', $id));
     }
 
     /**
