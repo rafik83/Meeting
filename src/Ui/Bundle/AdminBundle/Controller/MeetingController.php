@@ -132,6 +132,7 @@ class MeetingController extends Controller
     public function exportAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $charset        = Charset::WINDOWS_1252;
         $normaliserView = new EventMeetingsNormalizerView($event);
