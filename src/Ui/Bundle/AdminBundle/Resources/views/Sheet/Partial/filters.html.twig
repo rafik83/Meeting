@@ -1,0 +1,47 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#advancedFilters" aria-expanded="true" aria-controls="advancedFilters">
+                    {{ 'admin.sheet.list.filters.label'|trans }}
+                </a>
+            </h4>
+        </div>
+        <div id="advancedFilters" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                {{ form_start(form) }}
+                <div class="col-md-6">
+                    {{ form_row(form.text) }}
+                    {{ form_row(form.validationState) }}
+                    {{ form_row(form.state) }}
+                    {{ form_row(form.completed) }}
+                    {{ form_row(form.inCatalog) }}
+                    {{ form_row(form.type) }}
+                    {% if form.category is defined %}
+                        {{ form_row(form.category) }}
+                    {% endif %}
+                    {{ form_row(form.registeredAt) }}
+                    {{ form_row(form.hasHappeningParticipation) }}
+                    {{ form_row(form.hasRemainingToPay) }}
+                    {{ form_row(form.hasNoMeetingRequest) }}
+                    {{ form_row(form.hasPendingMeetingPropositions) }}
+                    {{ form_row(form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::NO_ORDER')]) }}
+                    {{ form_row(form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')]) }}
+                    {% if form.boolean_filters is defined %}
+                        {{ form_row(form.boolean_filters) }}
+                    {% endif %}
+                    {{ form_row(form.imported) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.follower) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group pull-right">
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
