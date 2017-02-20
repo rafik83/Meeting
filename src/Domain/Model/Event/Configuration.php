@@ -113,9 +113,9 @@ class Configuration
     private $paymentModes;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $analyticsCode = null;
+    private $analyticsCode;
 
     /**
      * @param string $leftColor
