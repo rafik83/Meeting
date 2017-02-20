@@ -66,7 +66,7 @@ class Request implements MessageSubjectInterface
     private $meetingSlot;
 
     /**
-     * @var Meeting
+     * @var ArrayCollection
      */
     private $meeting;
 
@@ -114,6 +114,7 @@ class Request implements MessageSubjectInterface
         $this->stateUpdatedAt   = $createdAt;
         $this->creator          = $creator;
         $this->disabled         = $disabled;
+        $this->meeting          = new ArrayCollection();
     }
 
     /**
@@ -289,11 +290,17 @@ class Request implements MessageSubjectInterface
     /**
      * Get meeting
      *
-     * @return Meeting
+     * @return null|Meeting
      */
     public function getMeeting()
     {
-        return $this->meeting;
+        $meeting = $this->meeting->first();
+
+        if (false === $meeting) {
+            return null;
+        }
+
+        return $meeting;
     }
 
     /**
@@ -305,7 +312,7 @@ class Request implements MessageSubjectInterface
      */
     public function setMeeting(Meeting $meeting)
     {
-        $this->meeting = $meeting;
+        $this->meeting->add($meeting);
 
         return $this;
     }
@@ -544,7 +551,7 @@ class Request implements MessageSubjectInterface
      */
     public function hasMeeting()
     {
-        return $this->meeting !== null;
+        return $this->getMeeting() !== null;
     }
 
     /**

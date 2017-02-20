@@ -459,7 +459,7 @@ class MeetingController extends Controller
     {
         $visioGuesser = $this->get('domain.meeting.visio_guesser');
 
-        if ($meetingRequest->getMeeting() !== null) {
+        if ($meetingRequest->hasMeeting()) {
             return $visioGuesser->hasMeetingParticipantVisio($meetingRequest->getMeeting());
         }
 

@@ -280,6 +280,13 @@ admin_agenda_sheets_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheetsList }
 
+admin_agenda_sheets_indicators:
+    path: /event/{event}/agenda/sheets/indicators
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:indicators }
+
 admin_agenda_sheet:
     path: /event/{event}/agenda/sheet/{sheet}
     requirements:

@@ -19,14 +19,14 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: boolean
             options:
                 default: false
-    oneToOne:
+    manyToOne:
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
             inversedBy: meeting
             joinColumn:
                 nullable: false
+                unique: true
                 onDelete: CASCADE
-    manyToOne:
         slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
             joinColumn:

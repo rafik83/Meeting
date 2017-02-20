@@ -2376,17 +2376,28 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
+    query.agenda.admin.indicator.sheet_indicators_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@domain.planner.indicator_calculator'
     query.agenda.sheet_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@domain.planner.indicator_calculator'
+            - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
+    query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery }
     query.agenda.agenda_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQueryHandler
         arguments:
