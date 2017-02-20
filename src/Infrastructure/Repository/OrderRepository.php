@@ -85,7 +85,7 @@ class OrderRepository implements OrderRepositoryInterface
             ->createQueryBuilder()
             ->select('_order, row')
             ->from(Order::class, '_order', '_order.id')
-            ->join('_order.rows', 'row', 'WITH', 'row.order = _order.id')
+            ->join('_order.rows', 'row')
             ->where('_order.sheet = :sheet')
             ->andWhere('_order.cancelled = false')
             ->setParameter('sheet', $sheet)
