@@ -3059,6 +3059,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '@order.merger'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 
