@@ -68,6 +68,7 @@ admin.agenda.request.transformIntoMeeting.cancel: 'Annuler l''action de placer e
 admin.agenda.request.transformIntoMeeting.error: 'Impossible de placer cette demande de RDV'
 admin.agenda.request.transformIntoMeeting.label: 'Placer en RDV'
 admin.agenda.request.transformIntoMeeting.noSlotAvailable: 'Aucun créneau n''est disponible pour placer cette demande en RDV'
+admin.agenda.request.transformIntoMeeting.noSpotAvailable: 'Aucun lieu n''est disponible pour placer cette demande en RDV'
 admin.agenda.request.updateParticipant.invalidArguments: 'Les arguments envoyés ne sont pas complets'
 admin.agenda.request.updateParticipant.label: 'Modifier les participants'
 admin.agenda.request.updateParticipant.submit.label: Modifier

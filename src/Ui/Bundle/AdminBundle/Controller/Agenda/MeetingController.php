@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeeting
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\InvalidParticipantException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
@@ -202,6 +203,10 @@ class MeetingController extends Controller
         } catch (NoSlotAvailableException $exception) {
             return $this->createErrorJsonResponse(
                 'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
+            );
+        } catch (NoSpotAvailableException $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.request.transformIntoMeeting.noSpotAvailable'
             );
         }
 
