@@ -2388,6 +2388,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
@@ -2408,6 +2409,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.agenda.request_view_query_handler'
+            - '@repository.unavailability.mass_assignment_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery }
     query.agenda.remove_meeting_query_handler:

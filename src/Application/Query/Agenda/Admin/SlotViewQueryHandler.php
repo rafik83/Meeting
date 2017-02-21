@@ -68,7 +68,8 @@ class SlotViewQueryHandler
             $query->happenings,
             $query->meetings,
             $query->unavailabilities,
-            $query->masses
+            $query->masses,
+            $query->massAssignments
         );
 
         $slotViews = [];

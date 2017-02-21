@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository\Unavailability;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
@@ -41,4 +42,11 @@ interface MassAssignmentRepositoryInterface
      * @param MassAssignment $massAssignment
      */
     public function set(MassAssignment $massAssignment);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return MassAssignment[]
+     */
+    public function findBySheet(Sheet $sheet);
 }
