@@ -772,3 +772,5 @@ form.sheet_filter.children.hasRemainingToPay.yes.label: Oui
 form.sheet_filter.children.hasRemainingToPay.no.label: Non
 form.sheet.filter.children.template_filters.label: 'Filtres supplémentaires'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
+created_at: 'Date d''inscription'
+alphabetical: 'Alphabétique'

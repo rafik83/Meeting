@@ -19,18 +19,17 @@
     </h1>
 
     <div class="row filters">
-        {{ form_start(filter_part_form) }}
+        {{ form_start(filter_form) }}
         <div class="col-md-offset-4 col-md-4">
             <div class="input-group col-md-12">
-                {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
-                {{ form_widget(filter_part_form.text) }}
+                {{ form_widget(filter_form.text) }}
             </div>
 
         </div>
         <div class="col-md-4 text-right">
             {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
         </div>
-        {{ form_end(filter_part_form) }}
+        {{ form_end(filter_form, {'render_rest': false }) }}
     </div>
 
     <div class="row filters">

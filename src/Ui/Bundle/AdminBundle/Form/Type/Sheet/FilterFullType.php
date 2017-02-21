@@ -27,10 +27,6 @@ class FilterFullType extends AbstractType
             ->add('text', SheetTextSearchType::class, [
                 'label' => 'form.sheet_filter.children.text_search.label',
             ])
-            ->add('predefined', PredefinedFiltersChoiceType::class, [
-                'label' => 'form.filter.label',
-                'event' => $options['event'],
-            ])
             ->add('orderBy', SortChoiceType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
             ]);

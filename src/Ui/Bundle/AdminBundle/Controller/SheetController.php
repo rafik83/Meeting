@@ -30,7 +30,6 @@ use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
@@ -39,7 +38,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
@@ -99,12 +97,8 @@ class SheetController extends Controller
             'event'  => $event,
         ]);
 
-        $filterPartForm = $this->createFilterForm(FilterPartType::class, []);
-
-        $filterPartForm->handleRequest(Request::create($request->getUri()));
-//        $filtered = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
-
         $filtered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
+        $filterFullForm->handleRequest($request);
 
         if ($filtered) {
             $filters = $sheetFilter->getData();
@@ -150,7 +144,6 @@ class SheetController extends Controller
             'filters_summary'  => $this->get('filter_summary')->getFilters($sheetFilterView, $filters, $locale),
             'filtered'         => $filtered,
             'batch_form'       => $batchForm->createView(),
-            'filter_part_form' => $filterPartForm->createView(),
             'sheetFilter'      => $sheetFilter->createView(),
         ]);
     }
