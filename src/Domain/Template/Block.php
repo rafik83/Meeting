@@ -531,4 +531,22 @@ class Block extends AbstractChild
             }
         }
     }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getUserIdentityObjects()
+    {
+        $objects = [];
+
+        foreach ($this->getObjects() as $object) {
+            foreach (Tag::getParticipantIdentityTags() as $tag) {
+                if ($object->hasTag($tag)) {
+                    $objects[$tag] = $object;
+                }
+            }
+        }
+
+        return $objects;
+    }
 }

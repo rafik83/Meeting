@@ -69,10 +69,14 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
+
         $label = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $addParticipant = new Add($sheet, $locale, $this->getUser());
+
         $form           = $this->createForm(AddType::class, $addParticipant, [
+            'sheet'  => $sheet,
+            'locale' => $locale,
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
 
@@ -117,6 +121,8 @@ class SheetParticipantController extends Controller
 
         $addParticipant = new Add($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
+            'sheet'  => $sheet,
+            'locale' => $locale,
             'action' => $this->generateUrl('event_sheet_handle_participant', [
                 'locale' => $locale,
                 'key'    => $key

@@ -210,6 +210,8 @@ class PackageController extends Controller
 
         $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
+            'sheet'  => $sheet,
+            'locale' => $locale,
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
                 'step'  => $step,
