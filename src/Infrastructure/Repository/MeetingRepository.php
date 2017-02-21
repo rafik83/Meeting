@@ -128,6 +128,31 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getAllCompleteByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting, fromParticipant, toParticipant, slot, spot', 'fromSheet', 'toSheet', 'fromSheetType', 'toSheetType')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('fromSheet.type', 'fromSheetType')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('toSheet.type', 'toSheetType')
+            ->join('meeting.fromParticipants', 'fromParticipant')
+            ->join('meeting.toParticipants', 'toParticipant')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.spot', 'spot')
+            ->setParameter('event', $event)
+            ->where('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByParticipant(Participant $participant)
     {
         $queryBuilder = $this

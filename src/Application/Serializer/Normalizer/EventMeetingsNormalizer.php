@@ -77,7 +77,7 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         $rawMeetings        = [];
         $normalizedMeetings = [];
 
-        foreach ($this->meetingRepository->getAllByEvent($object->event) as $meeting) {
+        foreach ($this->meetingRepository->getAllCompleteByEvent($object->event) as $meeting) {
             $rawMeetings[] = $this->getMeetingRawData($meeting, $context['locale']);
         }
 
