@@ -133,7 +133,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting, fromParticipant, toParticipant, slot, spot, fromSheet ,toSheet ,fromSheetType, toSheetType')
+            ->select('meeting.id, fromParticipant, toParticipant, slot.begin, slot.end, spot.reference, fromSheet ,toSheet ,fromSheetType, toSheetType')
             ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('fromSheet.type', 'fromSheetType')
