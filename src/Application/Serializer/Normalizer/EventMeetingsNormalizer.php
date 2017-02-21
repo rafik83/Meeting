@@ -23,10 +23,8 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
 {
     const COL_MEETING_ID              = 'meeting_id';
     const COL_FROM_SHEET_ID           = 'from_sheet_id';
-    const COL_FROM_SHEET_NAME         = 'from_sheet_name';
     const COL_FROM_SHEET_PARTICIPANTS = 'from_sheet_participants';
     const COL_TO_SHEET_ID             = 'to_sheet_id';
-    const COL_TO_SHEET_NAME           = 'to_sheet_name';
     const COL_TO_SHEET_PARTICIPANTS   = 'to_sheet_participants';
     const COL_DAY                     = 'day';
     const COL_HOUR_BEGIN              = 'hour_begin';
@@ -48,6 +46,16 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
      * @var SheetInfoGuesser
      */
     private $sheetInfoGuesser;
+
+    /**
+     * @var \IntlDateFormatter
+     */
+    private $dayFormatter;
+
+    /**
+     * @var \IntlDateFormatter
+     */
+    private $timeFormatter;
 
     /**
      * @param TranslatorInterface        $translator
@@ -77,8 +85,24 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         $rawMeetings        = [];
         $normalizedMeetings = [];
 
+        $availableLocale = $object->event->getAvailableLocale($context['locale']);
+
+        $this->timeFormatter = \IntlDateFormatter::create(
+            $availableLocale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $object->event->getTimeZone()
+        );
+
+        $this->dayFormatter = \IntlDateFormatter::create(
+            $availableLocale,
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            $object->event->getTimeZone()
+        );
+
         foreach ($this->meetingRepository->getAllCompleteByEvent($object->event) as $meeting) {
-            $rawMeetings[] = $this->getMeetingRawData($meeting, $context['locale']);
+            $rawMeetings[] = $this->getMeetingRawData($meeting);
         }
 
         $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
@@ -100,46 +124,26 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
 
     /**
      * @param Meeting $meeting
-     * @param string  $locale
      *
      * @return array Raw data about meeting
      */
-    private function getMeetingRawData(Meeting $meeting, $locale)
+    private function getMeetingRawData($meeting)
     {
-        $event           = $meeting->getFromSheet()->getEvent();
-        $availableLocale = $event->getAvailableLocale($locale);
-
-        $timeFormatter = \IntlDateFormatter::create(
-            $availableLocale,
-            \IntlDateFormatter::NONE,
-            \IntlDateFormatter::SHORT,
-            $event->getTimeZone()
-        );
-
-        $dayFormatter = \IntlDateFormatter::create(
-            $availableLocale,
-            \IntlDateFormatter::FULL,
-            \IntlDateFormatter::NONE,
-            $event->getTimeZone()
-        );
-
-        $sheetRequesterName    = $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet());
-        $sheetRequestedName    = $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet());
-        $fromSheetParticipants = $meeting->getFromParticipants()->toArray();
-        $toSheetParticipants   = $meeting->getToParticipants()->toArray();
+        /** @var Meeting $rawMeeting */
+        $rawMeeting = $meeting['meeting'];
+        $fromSheetParticipants = $rawMeeting->getFromParticipants()->toArray();
+        $toSheetParticipants   = $rawMeeting->getToParticipants()->toArray();
 
         $rawData = [
-            self::COL_MEETING_ID              => $meeting->getId(),
-            self::COL_FROM_SHEET_ID           => $meeting->getFromSheet()->getId(),
-            self::COL_FROM_SHEET_NAME         => $sheetRequesterName,
+            self::COL_MEETING_ID              => $rawMeeting->getId(),
+            self::COL_FROM_SHEET_ID           => $rawMeeting->getFromSheet()->getId(),
             self::COL_FROM_SHEET_PARTICIPANTS => $this->getParticipantsRawData($fromSheetParticipants),
-            self::COL_TO_SHEET_ID             => $meeting->getToSheet()->getId(),
-            self::COL_TO_SHEET_NAME           => $sheetRequestedName,
+            self::COL_TO_SHEET_ID             => $rawMeeting->getToSheet()->getId(),
             self::COL_TO_SHEET_PARTICIPANTS   => $this->getParticipantsRawData($toSheetParticipants),
-            self::COL_DAY                     => $dayFormatter->format($meeting->getSlot()->getBegin()),
-            self::COL_HOUR_BEGIN              => $timeFormatter->format($meeting->getSlot()->getBegin()),
-            self::COL_HOUR_END                => $timeFormatter->format($meeting->getSlot()->getEnd()),
-            self::COL_SPOT                    => $meeting->getSpot()->getReference(),
+            self::COL_DAY                     => $this->dayFormatter->format($meeting['meetingBegin']),
+            self::COL_HOUR_BEGIN              => $this->timeFormatter->format($meeting['meetingBegin']),
+            self::COL_HOUR_END                => $this->timeFormatter->format($meeting['meetingEnd']),
+            self::COL_SPOT                    => $meeting['spotReference'],
         ];
 
         return $rawData;
@@ -202,10 +206,8 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         return [
             self::COL_MEETING_ID,
             self::COL_FROM_SHEET_ID,
-            self::COL_FROM_SHEET_NAME,
             self::COL_FROM_SHEET_PARTICIPANTS,
             self::COL_TO_SHEET_ID,
-            self::COL_TO_SHEET_NAME,
             self::COL_TO_SHEET_PARTICIPANTS,
             self::COL_DAY,
             self::COL_HOUR_BEGIN,

@@ -133,18 +133,23 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting.id, fromParticipant, toParticipant, slot.begin, slot.end, spot.reference, fromSheet ,toSheet ,fromSheetType, toSheetType')
-            ->from(Meeting::class, 'meeting', 'meeting.id')
-            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('fromSheet.type', 'fromSheetType')
-            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->join('toSheet.type', 'toSheetType')
-            ->join('meeting.fromParticipants', 'fromParticipant')
-            ->join('meeting.toParticipants', 'toParticipant')
-            ->join('meeting.slot', 'slot')
-            ->join('meeting.spot', 'spot')
+            ->select('
+                 m as meeting,
+                 fromParticipant,
+                 toParticipant,
+                 slot.begin as meetingBegin,
+                 slot.end as meetingEnd,
+                 spot.reference as spotReference
+             ')
+            ->from(Meeting::class, 'm', 'm.id')
+            ->join('m.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('m.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('m.fromParticipants', 'fromParticipant')
+            ->join('m.toParticipants', 'toParticipant')
+            ->join('m.slot', 'slot')
+            ->join('m.spot', 'spot')
+            ->where('m.state = :state')
             ->setParameter('event', $event)
-            ->where('meeting.state = :state')
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
