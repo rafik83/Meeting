@@ -27,10 +27,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractFilterType extends AbstractType
 {
     /** @var CategoryRepositoryInterface */
-    private $categoryRepository;
+    protected $categoryRepository;
 
     /** @var BooleanFiltersBuilder */
-    private $booleanFilterBuilder;
+    protected $booleanFilterBuilder;
 
     /**
      * @param CategoryRepositoryInterface $categoryRepository
@@ -88,10 +88,6 @@ abstract class AbstractFilterType extends AbstractType
                 'label'    => 'form.sheet_filter.children.hasHappeningParticipation.label',
                 'required' => false,
             ])
-            ->add('hasRemainingToPay', CheckboxType::class, [
-                'label'    => 'form.sheet_filter.children.hasRemainingToPay.label',
-                'required' => false,
-            ])
             ->add('hasNoMeetingRequest', CheckboxType::class, [
                 'label'    => 'form.sheet_filter.children.hasNoMeetingRequest.label',
                 'required' => false,
@@ -131,30 +127,7 @@ abstract class AbstractFilterType extends AbstractType
                 'label'                     => 'form.sheet_filter.children.creation_interval.label',
                 'required'                  => false,
                 'choice_translation_domain' => 'messages',
-            ])
-            ->add(Constant::NO_ORDER, CheckboxType::class, [
-                'label'              => 'admin.sheet.filter.no_order',
-                'required'           => false,
-                'translation_domain' => 'messages',
-            ])
-            ->add(Constant::HAS_CART, CheckboxType::class, [
-                'label'              => 'admin.sheet.filter.has_cart',
-                'required'           => false,
-                'translation_domain' => 'messages',
             ]);
-
-        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
-
-        if (!empty($booleanFilters)) {
-            $builder->add('boolean_filters', ChoiceType::class, [
-                'choices'            => array_flip($booleanFilters),
-                'label'              => 'admin.sheet.filter.template_filters',
-                'required'           => false,
-                'multiple'           => true,
-                'expanded'           => true,
-                'translation_domain' => 'messages',
-            ]);
-        }
     }
 
     /**
@@ -163,5 +136,6 @@ abstract class AbstractFilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event', 'locale', 'user']);
+        $resolver->setAllowedTypes('event', Event::class);
     }
 }

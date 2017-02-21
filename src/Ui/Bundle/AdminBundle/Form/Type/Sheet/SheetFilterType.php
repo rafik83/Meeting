@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,11 +25,63 @@ class SheetFilterType extends AbstractFilterType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('category', CategoryChoiceType::class, [
-            'label'  => 'form.sheet_filter.children.category.label',
-            'event'  => $options['event'],
-            'locale' => $options['locale'],
-        ]);
+        /** @var Event $event */
+        $event = $options['event'];
+
+        $builder
+            ->add('category', CategoryChoiceType::class, [
+                'label'  => 'form.sheet_filter.children.category.label',
+                'event'  => $options['event'],
+                'locale' => $options['locale'],
+            ])
+            ->add('enabledState', EnabledStateChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.enabledState.label',
+                'multiple' => false,
+                'expanded' => true,
+            ])
+            ->add('hasOrder', ChoiceType::class, [
+                'choices'  => [
+                    'form.sheet_filter.children.order.noPreference.label' => null,
+                    'form.sheet_filter.children.order.yes.label'          => true,
+                    'form.sheet_filter.children.order.no.label'           => false,
+                ],
+                'multiple' => false,
+                'expanded' => true,
+                'label'    => 'form.sheet_filter.children.hasOrder.label',
+            ])
+            ->add('hasCart', ChoiceType::class, [
+                'choices'  => [
+                    'form.sheet_filter.children.cart.noPreference.label' => null,
+                    'form.sheet_filter.children.cart.yes.label'          => true,
+                    'form.sheet_filter.children.cart.no.label'           => false,
+                ],
+                'multiple' => false,
+                'expanded' => true,
+                'label'    => 'form.sheet_filter.children.hasCart.label',
+            ])
+            ->add('hasRemainingToPay', ChoiceType::class, [
+                'choices'  => [
+                    'form.sheet_filter.children.hasRemainingToPay.noPreference.label' => null,
+                    'form.sheet_filter.children.hasRemainingToPay.yes.label'          => true,
+                    'form.sheet_filter.children.hasRemainingToPay.no.label'           => false,
+                ],
+                'label'    => 'form.sheet_filter.children.hasRemainingToPay.label',
+                'multiple' => false,
+                'expanded' => true,
+            ]);
+
+        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
+
+        if (!empty($booleanFilters)) {
+            $builder->add('boolean_filters', ChoiceType::class, [
+                'choices'  => array_merge([
+                    'form.sheet_filter.children.booleanFilters.noPreference.label' => null,
+                ], array_flip($booleanFilters)),
+                'label'    => 'form.sheet.filter.children.template_filters.label',
+                'multiple' => false,
+                'expanded' => true,
+            ]);
+        }
     }
 
     /**
@@ -45,6 +99,6 @@ class SheetFilterType extends AbstractFilterType
      */
     public function getBlockPrefix()
     {
-        return 'sheet_filter';
+        return 'hello';
     }
 }

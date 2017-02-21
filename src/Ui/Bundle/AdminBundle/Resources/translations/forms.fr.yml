@@ -750,3 +750,20 @@ form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
 form.admin.sheet.filter.children.submit.label: 'Filtrer la liste'
+form.sheet_filter.children.enabledState.label: 'Statut de la fiche'
+form.sheet_filter.children.enabledState.all.label: Toutes
+form.sheet_filter.children.enabledState.enabled.label: Active
+form.sheet_filter.children.enabledState.disabled.label: Non active
+form.sheet_filter.children.hasOrder.label: Commande
+form.sheet_filter.children.order.noPreference.label: 'Peu importe'
+form.sheet_filter.children.order.yes.label: Avec
+form.sheet_filter.children.order.no.label: Sans
+form.sheet_filter.children.hasCart.label: Panier
+form.sheet_filter.children.cart.noPreference.label: 'Peu importe'
+form.sheet_filter.children.cart.yes.label: Avec
+form.sheet_filter.children.cart.no.label: Sans
+form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'Peu importe'
+form.sheet_filter.children.hasRemainingToPay.yes.label: Oui
+form.sheet_filter.children.hasRemainingToPay.no.label: Non
+form.sheet.filter.children.template_filters.label: 'Filtres supplémentaires'
+form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
