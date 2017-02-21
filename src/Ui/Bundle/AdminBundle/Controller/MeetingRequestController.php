@@ -53,10 +53,10 @@ class MeetingRequestController extends Controller
 
         $filters    = [];
         $filtered   = false;
-        $filterForm = $this->createFilterForm(
-            FilterMeetingRequestType::class,
-            ['state' => $request->query->get('state'), 'orderBy' => RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC]
-        );
+        $filterForm = $this->createFilterForm(FilterMeetingRequestType::class, [
+            'state'   => $request->query->get('state'),
+            'orderBy' => RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC
+        ]);
 
         // The form is not valid because of the parameters page sent
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {

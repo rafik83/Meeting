@@ -310,7 +310,7 @@ class RequestRepository implements RequestRepositoryInterface
                     ->setParameter('state', $filter['state']);
             }
 
-            if (isset($filter['orderBy'])) {
+            if (!empty($filter['orderBy']) && in_array($filter['orderBy'], $this->getOrderBy())) {
                 if ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
                     $queryBuilder
                         ->orderBy('request.createdAt', 'ASC');
@@ -324,6 +324,9 @@ class RequestRepository implements RequestRepositoryInterface
                     $queryBuilder
                         ->orderBy('request.stateUpdatedAt', 'DESC');
                 }
+            } else {
+                $queryBuilder
+                    ->orderBy('request.stateUpdatedAt', 'DESC');
             }
         } else {
             $queryBuilder
@@ -573,5 +576,18 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('state', Request::STATE_APPROVED);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrderBy()
+    {
+        return [
+            RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC,
+            RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC,
+            RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC,
+            RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC,
+        ];
     }
 }
