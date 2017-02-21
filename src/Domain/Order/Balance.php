@@ -101,7 +101,7 @@ class Balance
     public function getOrders(Sheet $sheet)
     {
         if (!isset($this->orders[$sheet->getId()])) {
-            $this->orders[$sheet->getId()] = $this->orderRepository->findNotCancelledBySheet($sheet);
+            $this->orders[$sheet->getId()] = $this->orderRepository->findBySheet($sheet);
         }
 
         return $this->orders[$sheet->getId()];
@@ -129,7 +129,7 @@ class Balance
     public function getTransactions(Sheet $sheet)
     {
         if (!isset($this->transactions[$sheet->getId()])) {
-            $this->transactions[$sheet->getId()] = $this->transactionRepository->findPaid($sheet);
+            $this->transactions[$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
         }
 
         return $this->transactions[$sheet->getId()];
