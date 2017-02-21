@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
 class AgendaDayViewQuery
 {
@@ -66,6 +67,11 @@ class AgendaDayViewQuery
     public $participant;
 
     /**
+     * @var MassAssignment[]
+     */
+    public $massAssignments;
+
+    /**
      * @param Sheet                    $sheet
      * @param Day                      $day
      * @param int                      $dayNumber
@@ -74,7 +80,8 @@ class AgendaDayViewQuery
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
      * @param Mass[]                   $masses
-     * @param array                    $meetings
+     * @param Meeting[]                $meetings
+     * @param MassAssignment[]         $massAssigments
      */
     public function __construct(
         Sheet $sheet,
@@ -85,7 +92,8 @@ class AgendaDayViewQuery
         array $happenings = [],
         array $unavailabilities = [],
         array $masses = [],
-        array $meetings = []
+        array $meetings = [],
+        array $massAssigments = []
     ) {
         $this->day              = $day;
         $this->dayNumber        = $dayNumber;
@@ -96,5 +104,6 @@ class AgendaDayViewQuery
         $this->meetings         = $meetings;
         $this->sheet            = $sheet;
         $this->participant      = $participant;
+        $this->massAssignments  = $massAssigments;
     }
 }

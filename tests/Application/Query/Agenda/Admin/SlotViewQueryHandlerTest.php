@@ -45,6 +45,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailabilities = [];
         $masses           = [];
         $meetings         = [];
+        $massAssignments  = [];
 
         $slot = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
         $slotAvailabilityView = new SlotAvailabilityView(SlotAvailability::UNAVAILABILITY);
@@ -59,7 +60,8 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $happenings,
             $meetings,
             $unavailabilities,
-            $masses
+            $masses,
+            $massAssignments
         )->shouldBeCalled();
 
         $slotAvailability->isAvailable($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
@@ -80,7 +82,8 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $happenings,
             $unavailabilities,
             $masses,
-            $meetings
+            $meetings,
+            $massAssignments
         ));
 
         $expected = [new UnavailabilitySlotView(
@@ -136,6 +139,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailabilities = [];
         $masses           = [];
         $meetings         = [];
+        $massAssignments  = [];
 
         $slotAvailabilityView = new SlotAvailabilityView(SlotAvailability::MEETING_UNAVAILABILITY, $meeting);
 
@@ -149,7 +153,8 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $happenings,
             $meetings,
             $unavailabilities,
-            $masses
+            $masses,
+            $massAssignments
         )->shouldBeCalled();
 
         $slotAvailability->isAvailable($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
@@ -170,7 +175,8 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $happenings,
             $unavailabilities,
             $masses,
-            $meetings
+            $meetings,
+            $massAssignments
         ));
 
         $expected = [new MeetingSlotView(
