@@ -58,6 +58,11 @@ class AgendaSheetViewQueryHandler
     private $requestViewQueryHandler;
 
     /**
+     * @var MassAssignmentRepositoryInterface
+     */
+    private $massAssignmentRepository;
+
+    /**
      * @param AgendaParticipantViewQueryHandler         $agendaParticipantViewQueryHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
