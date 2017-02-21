@@ -1,0 +1,197 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Application\Command\Unavailability\MassAssignment;
+
+use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
+use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler;
+use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
+use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Category;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
+
+class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var Event */
+    public $event;
+
+    /** @var User */
+    public $user;
+
+    /** @var  Sheet */
+    public $sheet;
+
+    /** @var Category */
+    public $category;
+
+    /** @var \DateTime */
+    public $massBegin;
+
+    /** @var \DateTime */
+    public $massEnd;
+
+    /** @var Mass */
+    public $mass;
+
+    public function setUp()
+    {
+        $this->event    = EventFactory::createEvent();
+        $this->user     = UserFactory::create();
+        $this->sheet    = SheetFactory::create($this->event, $this->user);
+        $this->category = new Category($this->event, '', 'conference', '#000', '#fff');
+
+        $this->massBegin = new \DateTime('2016-01-01 12:00:00');
+        $this->massEnd   = new \DateTime('2016-01-01 14:00:00');
+        $this->mass      = new Mass($this->event, $this->category, 'conf', $this->massBegin, $this->massEnd, true);
+    }
+
+    public function testDisableMassAssignment()
+    {
+        $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
+        $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
+        $participant     = new Participant($this->sheet, $this->user, [], true);
+
+        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+
+        // Mock
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+
+        $massAssignmentRepository->set($massAssignment)->shouldBeCalled();
+
+        $command          = new Update($massAssignment);
+        $command->enabled = false;
+
+        $handler = new UpdateHandler(
+            $massAssignmentRepository->reveal(),
+            $participantRepository->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testUpdateDateMassAssignment()
+    {
+        $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
+        $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
+        $participant     = new Participant($this->sheet, $this->user, [], true);
+
+        $newBegin = new \DateTime('2016-01-01 13:00:00');
+        $newEnd   = new \DateTime('2016-01-01 13:30:00');
+
+        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+
+        // Mock
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+
+        $participantRepository->getAvailableParticipants(
+            [$participant],
+            $newBegin,
+            $newEnd
+        )->shouldBeCalled()->willReturn([1,2,3,4]);
+
+        $massAssignmentRepository->set($massAssignment)->shouldBeCalled();
+
+        $command          = new Update($massAssignment);
+        $command->enabled = true;
+        $command->begin   = $newBegin;
+        $command->end     = $newEnd;
+
+        $handler = new UpdateHandler(
+            $massAssignmentRepository->reveal(),
+            $participantRepository->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testMassAssignmentOutOfMass()
+    {
+        $this->expectException(MassAssignmentOutOfMassSlotException::class);
+
+        $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
+        $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
+        $participant     = new Participant($this->sheet, $this->user, [], true);
+
+        $newBegin = new \DateTime('2016-01-01 11:00:00');
+        $newEnd   = new \DateTime('2016-01-01 15:30:00');
+
+        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+
+        // Mock
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+
+        $participantRepository->getAvailableParticipants(
+            [$participant],
+            $newBegin,
+            $newEnd
+        )->shouldBeCalled()->willReturn([1,2,3,4]); // hasMeetingOrHappening
+
+        $command          = new Update($massAssignment);
+        $command->enabled = true;
+        $command->begin   = $newBegin;
+        $command->end     = $newEnd;
+
+        $handler = new UpdateHandler(
+            $massAssignmentRepository->reveal(),
+            $participantRepository->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testMassAssignmentOnMeeting()
+    {
+        $this->expectException(MassAssignmentOnMeetingException::class);
+
+        $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
+        $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
+        $participant     = new Participant($this->sheet, $this->user, [], true);
+
+        $newBegin = new \DateTime('2016-01-01 11:00:00');
+        $newEnd   = new \DateTime('2016-01-01 15:30:00');
+
+        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+
+        // Mock
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+
+        $participantRepository->getAvailableParticipants(
+            [$participant],
+            $newBegin,
+            $newEnd
+        )->shouldBeCalled();
+
+        $command          = new Update($massAssignment);
+        $command->enabled = true;
+        $command->begin   = $newBegin;
+        $command->end     = $newEnd;
+
+        $handler = new UpdateHandler(
+            $massAssignmentRepository->reveal(),
+            $participantRepository->reveal()
+        );
+
+        $handler->handle($command);
+    }
+}

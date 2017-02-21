@@ -1,0 +1,10 @@
+Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment\Update:
+    properties:
+        begin:
+            - NotNull: ~
+            - DateTime: ~
+        end:
+            - NotNull: ~
+            - DateTime: ~
+        enabled:
+            - NotNull: ~

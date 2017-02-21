@@ -39,6 +39,11 @@ interface MassAssignmentRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * @param MassAssignment $massAssignment
+     */
+    public function set(MassAssignment $massAssignment);
+
+    /**
      * @param Sheet $sheet
      *
      * @return MassAssignment[]

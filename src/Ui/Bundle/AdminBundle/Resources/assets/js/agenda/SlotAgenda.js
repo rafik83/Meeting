@@ -141,6 +141,13 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+        /**
+         * @param {int} massId
+         */
+        showMassAssignment: function (massId) {
+            this.$emit('show-mass-assignment', massId);
         }
     }
 };
