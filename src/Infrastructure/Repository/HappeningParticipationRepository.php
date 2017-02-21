@@ -98,6 +98,26 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
+    public function findBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation, happening')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->join('participation.participant', 'participant')
+            ->where('participation.disabled = false')
+            ->andWhere('participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkAnyParticipation(Participant $participant)
     {
         $queryBuilder = $this
