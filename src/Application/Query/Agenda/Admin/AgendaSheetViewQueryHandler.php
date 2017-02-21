@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
@@ -64,6 +65,7 @@ class AgendaSheetViewQueryHandler
      * @param MeetingRepositoryInterface                $meetingRepositoryInterface
      * @param RequestRepositoryInterface                $requestRepository
      * @param RequestViewQueryHandler                   $requestViewQueryHandler
+     * @param MassAssignmentRepositoryInterface         $massAssignmentRepository
      */
     public function __construct(
         AgendaParticipantViewQueryHandler $agendaParticipantViewQueryHandler,
@@ -72,7 +74,8 @@ class AgendaSheetViewQueryHandler
         MassRepositoryInterface $massUnavailabilityRepository,
         MeetingRepositoryInterface $meetingRepositoryInterface,
         RequestRepositoryInterface $requestRepository,
-        RequestViewQueryHandler $requestViewQueryHandler
+        RequestViewQueryHandler $requestViewQueryHandler,
+        MassAssignmentRepositoryInterface $massAssignmentRepository
     ) {
         $this->agendaParticipantViewQueryHandler = $agendaParticipantViewQueryHandler;
         $this->happeningParticipationRepository  = $happeningParticipationRepository;
@@ -81,6 +84,7 @@ class AgendaSheetViewQueryHandler
         $this->meetingRepositoryInterface        = $meetingRepositoryInterface;
         $this->requestRepository                 = $requestRepository;
         $this->requestViewQueryHandler           = $requestViewQueryHandler;
+        $this->massAssignmentRepository          = $massAssignmentRepository;
     }
 
     /**
@@ -90,11 +94,12 @@ class AgendaSheetViewQueryHandler
      */
     public function handle(AgendaSheetViewQuery $query)
     {
-        $happeningParticipations = $this->happeningParticipationRepository->getByEvent($query->sheet->getEvent());
+        $masses                  = $this->massUnavailabilityRepository->findByEvent($query->sheet->getEvent(), $query->locale);
+        $meetings                = $this->meetingRepositoryInterface->findBySheet($query->sheet);
+        $happeningParticipations = $this->happeningParticipationRepository->findBySheet($query->sheet);
+        $assignment              = $this->massAssignmentRepository->findBySheet($query->sheet);
 
-        $unavailabilites = $this->unavailabilityRepository->getByEvent($query->sheet->getEvent());
-        $masses          = $this->massUnavailabilityRepository->findByEvent($query->sheet->getEvent(), $query->locale);
-        $meetings        = $this->meetingRepositoryInterface->getAllByEvent($query->sheet->getEvent());
+        $unavailabilites = $this->unavailabilityRepository->findBySheet($query->sheet);
 
         $participants = [];
         $requests     = [];
@@ -109,7 +114,8 @@ class AgendaSheetViewQueryHandler
                     $happeningParticipations,
                     $unavailabilites,
                     $masses,
-                    $meetings
+                    $meetings,
+                    $assignment
                 )
             );
         }

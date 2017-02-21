@@ -48,7 +48,7 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheets = $this->get('tactician.commandbus.query')->handle(
-            new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()))
+            new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()), false)
         );
 
         return new JsonResponse($sheets);
@@ -88,12 +88,12 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        if (!$request->query->has('sheets')) {
+        if (!$request->query->has('s')) {
             return $this->createErrorJsonResponse('admin.agenda.sheet.indicators.error');
         }
 
         $indicators = $this->get('tactician.commandbus.query')->handle(
-            new SheetIndicatorsLazyLoadViewQuery($event, $request->query->get('sheets'))
+            new SheetIndicatorsLazyLoadViewQuery($event, $request->query->get('s'))
         );
 
         return new JsonResponse($indicators);
