@@ -59,7 +59,7 @@ class Balance
         $transactions = $this->transactionRepository->findByEvent($event);
 
         foreach ($transactions as $transaction) {
-            $this->transactions[$event->getId()][$transaction->getSheet()->getId()][] = $transaction;
+            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
         }
     }
 
@@ -71,8 +71,17 @@ class Balance
         $orders = $this->orderRepository->findByEvent($event);
 
         foreach ($orders as $order) {
-            $this->orders[$event->getId()][$order->getSheet()->getId()][] = $order;
+            $this->orders[$order->getSheet()->getId()][] = $order;
         }
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function loadAllForEvent(Event $event)
+    {
+        $this->loadAllOrders($event);
+        $this->loadAllTransactions($event);
     }
 
     /**
@@ -81,7 +90,7 @@ class Balance
      */
     public function preloadOrdersForSheet(Sheet $sheet, array $orders)
     {
-        $this->orders[$sheet->getEvent()->getId()][$sheet->getId()] = $orders;
+        $this->orders[$sheet->getId()] = $orders;
     }
 
     /**
@@ -91,11 +100,11 @@ class Balance
      */
     public function getOrders(Sheet $sheet)
     {
-        if (!isset($this->orders[$sheet->getEvent()->getId()][$sheet->getId()])) {
-            $this->orders[$sheet->getEvent()->getId()][$sheet->getId()] = $this->orderRepository->findBySheet($sheet);
+        if (!isset($this->orders[$sheet->getId()])) {
+            $this->orders[$sheet->getId()] = $this->orderRepository->findNotCancelledBySheet($sheet);
         }
 
-        return $this->orders[$sheet->getEvent()->getId()][$sheet->getId()];
+        return $this->orders[$sheet->getId()];
     }
 
     /**
@@ -119,11 +128,11 @@ class Balance
      */
     public function getTransactions(Sheet $sheet)
     {
-        if (!isset($this->transactions[$sheet->getEvent()->getId()][$sheet->getId()])) {
-            $this->transactions[$sheet->getEvent()->getId()][$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
+        if (!isset($this->transactions[$sheet->getId()])) {
+            $this->transactions[$sheet->getId()] = $this->transactionRepository->findPaid($sheet);
         }
 
-        return $this->transactions[$sheet->getEvent()->getId()][$sheet->getId()];
+        return $this->transactions[$sheet->getId()];
     }
 
     /**
@@ -220,40 +229,37 @@ class Balance
     }
 
     /**
-     * @param Event $event
-     *
-     * @return array
+     * @return Order[]
      */
-    public function getNotCancelledOrdersFromEvent(Event $event)
+    public function getNotCancelledOrdersFromEvent()
     {
-        if (!isset($this->orders[$event->getId()])) {
+        if (!isset($this->orders) || empty($this->orders)) {
             return [];
         }
 
         $notCancelledOrdersFromEvent = [];
-        foreach ($this->orders[$event->getId()] as $sheetOrders) {
-            $notCancelledOrdersFromEvent = array_merge(
-                $notCancelledOrdersFromEvent,
-                array_filter($sheetOrders, function (Order $order) {
-                    return !$order->isCancelled();
-                })
-            );
+
+        foreach ($this->orders as $sheetOrders) {
+            /** @var Order $order */
+            foreach ($sheetOrders as $order) {
+                if (!$order->isCancelled()) {
+                    $notCancelledOrdersFromEvent[] = $order;
+                }
+            }
         }
 
         return $notCancelledOrdersFromEvent;
     }
 
     /**
-     * @param Event $event
-     *
      * @return float
      */
-    public function getTransactionsTotalPaid(Event $event)
+    public function getTransactionsTotalPaidForEvent()
     {
         $totalPaid = 0;
 
-        /** @var Transaction $transaction */
-        foreach ($this->transactions[$event->getId()] as $sheetTransactions) {
+        foreach ($this->transactions as $sheetTransactions) {
+            /** @var Transaction $transaction */
             foreach ($sheetTransactions as $transaction) {
                 if ($transaction->isPaid()) {
                     $totalPaid += $transaction->getAmount();
@@ -265,13 +271,11 @@ class Balance
     }
 
     /**
-     * @param Event $event
-     *
      * @return float
      */
-    public function getOrdersTotal(Event $event)
+    public function getOrdersTotalForEvent()
     {
-        $orders = $this->getNotCancelledOrdersFromEvent($event);
+        $orders = $this->getNotCancelledOrdersFromEvent();
 
         return array_reduce($orders, function ($carry, Order $order) {
             return $carry + $order->getTotal();
@@ -279,17 +283,15 @@ class Balance
     }
 
     /**
-     * @param Event $event
-     *
      * @return float
      */
-    public function getOrdersTotalRemainingToPay(Event $event)
+    public function getOrdersTotalRemainingToPayForEvent()
     {
-        $total = $this->getOrdersTotal($event);
+        $total = $this->getOrdersTotalForEvent();
 
         $totalRemaining = $total;
 
-        foreach ($this->transactions[$event->getId()] as $sheetTransaction) {
+        foreach ($this->transactions as $sheetTransaction) {
             $totalRemaining = array_reduce($sheetTransaction, function ($carry, Transaction $transaction) {
                 if ($carry < 0) {
                     return 0;

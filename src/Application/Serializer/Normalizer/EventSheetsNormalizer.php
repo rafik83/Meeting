@@ -123,8 +123,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         $locale    = $context['locale'];
 
         // Preload transaction and order to avoid a query by sheet
-        $this->balance->loadAllTransactions($object);
-        $this->balance->loadAllOrders($object);
+        $this->balance->loadAllForEvent($object);
 
         foreach ($this->sheetRepository->getEnabledSheetsByEvent($object) as $sheet) {
             $rawSheets[] = $this->getSheetRawData($sheet, $locale);
@@ -176,8 +175,9 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         $promotionCodes      = [];
         $totalOrder          = 0;
         $totalRemainingToPay = 0;
+        $notCancelledOrders  = $this->balance->getNotCancelledOrders($sheet);
 
-        if (!empty($notCancelledOrders = $this->balance->getNotCancelledOrders($sheet))) {
+        if (!empty($notCancelledOrders)) {
             $orders = $notCancelledOrders;
             $order  = $this->merger->merge($orders);
 
