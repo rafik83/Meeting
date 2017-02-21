@@ -83,6 +83,20 @@ class SheetFilterType extends AbstractFilterType
                 'expanded' => true,
             ]);
         }
+
+        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
+
+        if (!empty($categories)) {
+            $builder->add('category', CategoryChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.category.label',
+                'event'    => $event,
+                'locale'   => $options['locale'],
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+                'data'     => null,
+            ]);
+        }
     }
 
     /**

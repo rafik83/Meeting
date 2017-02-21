@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\AbstractFilterType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -59,6 +60,19 @@ class TargetFilterType extends AbstractFilterType
                 'multiple'           => true,
                 'expanded'           => true,
                 'translation_domain' => 'messages',
+            ]);
+        }
+
+        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
+
+        if (!empty($categories)) {
+            $builder->add('category', CategoryChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.category.label',
+                'event'    => $event,
+                'locale'   => $options['locale'],
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
             ]);
         }
     }

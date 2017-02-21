@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\YesNoType;
@@ -98,19 +97,6 @@ abstract class AbstractFilterType extends AbstractType
                 'label'    => 'form.sheet_filter.children.imported.label',
                 'required' => false,
             ]);
-
-        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
-
-        if (!empty($categories)) {
-            $builder->add('category', CategoryChoiceType::class, [
-                'label'    => 'form.sheet_filter.children.category.label',
-                'event'    => $event,
-                'locale'   => $options['locale'],
-                'required' => false,
-                'expanded' => true,
-                'multiple' => true,
-            ]);
-        }
 
         $builder
             ->add('follower', FollowerChoiceType::class, [
