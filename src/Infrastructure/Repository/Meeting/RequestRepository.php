@@ -299,15 +299,38 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->where('request.disabled = FALSE')
-            ->setParameter('event', $event)
-            ->orderBy('request.createdAt', 'DESC');
+            ->setParameter('event', $event);
 
         $this->requestsWithoutMeeting($queryBuilder);
 
-        if (!empty($filter) && isset($filter['state'])) {
+        if (!empty($filter)) {
+            if (isset($filter['state'])) {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', $filter['state']);
+            }
+
+            if (!empty($filter['orderBy']) && in_array($filter['orderBy'], $this->getOrderBy())) {
+                if ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
+                    $queryBuilder
+                        ->orderBy('request.createdAt', 'ASC');
+                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
+                    $queryBuilder
+                        ->orderBy('request.createdAt', 'DESC');
+                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
+                    $queryBuilder
+                        ->orderBy('request.stateUpdatedAt', 'ASC');
+                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
+                    $queryBuilder
+                        ->orderBy('request.stateUpdatedAt', 'DESC');
+                }
+            } else {
+                $queryBuilder
+                    ->orderBy('request.stateUpdatedAt', 'DESC');
+            }
+        } else {
             $queryBuilder
-                ->andWhere('request.state = :state')
-                ->setParameter('state', $filter['state']);
+                ->orderBy('request.stateUpdatedAt', 'DESC');
         }
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
@@ -321,6 +344,7 @@ class RequestRepository implements RequestRepositoryInterface
                 $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
                 $request->getState(),
                 $request->getCreatedAt(),
+                $request->getStateUpdatedAt(),
                 ''
             );
         }, $results), $page, $limit, $count);
@@ -554,5 +578,18 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('state', Request::STATE_APPROVED);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrderBy()
+    {
+        return [
+            RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC,
+            RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC,
+            RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC,
+            RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC,
+        ];
     }
 }

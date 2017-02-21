@@ -265,6 +265,11 @@ form.meeting_request_create.children.description.label: 'Motiver votre demande'
 form.meeting_request_create.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
 form.meeting_request_create.children.submit.label: Envoyer
 form.meeting_request_filter.children.state.label: Statut
+form.meeting_request_filter.children.order_by.label: 'Trier par'
+form.meeting_request_filter.children.order_by.options.created_at_asc: 'Date de création croissante'
+form.meeting_request_filter.children.order_by.options.created_at_desc: 'Date de création décroissante'
+form.meeting_request_filter.children.order_by.options.state_updated_at_asc: 'Modification de statut croissant'
+form.meeting_request_filter.children.order_by.options.state_updated_at_desc: 'Modification de statut décroissant'
 form.meeting_request_message.children.message.label: 'Expliquer pourquoi'
 form.meeting_request_message.children.submit.label: Envoyer
 form.meeting_request_refuse.children.message.label: 'Expliquer pourquoi'

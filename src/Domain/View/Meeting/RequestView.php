@@ -90,6 +90,11 @@ class RequestView
     public $canApprove = false;
 
     /**
+     * @var \DateTimeInterface
+     */
+    public $stateUpdatedAt;
+
+    /**
      * @param int                $id
      * @param int                $sheetFromId
      * @param string             $sheetNameFrom
@@ -97,10 +102,20 @@ class RequestView
      * @param string             $sheetNameTo
      * @param string             $state
      * @param \DateTimeInterface $createdAt
+     * @param \DateTimeInterface $stateUpdatedAt
      * @param string             $message
      */
-    public function __construct($id, $sheetFromId, $sheetNameFrom, $sheetToId, $sheetNameTo, $state, \DateTimeInterface $createdAt, $message)
-    {
+    public function __construct(
+        $id,
+        $sheetFromId,
+        $sheetNameFrom,
+        $sheetToId,
+        $sheetNameTo,
+        $state,
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $stateUpdatedAt,
+        $message
+    ) {
         $this->id               = $id;
         $this->sheetFromId      = $sheetFromId;
         $this->sheetNameFrom    = $sheetNameFrom;
@@ -108,6 +123,7 @@ class RequestView
         $this->sheetNameTo      = $sheetNameTo;
         $this->state            = $state;
         $this->createdAt        = $createdAt;
+        $this->stateUpdatedAt   = $stateUpdatedAt;
         $this->fromParticipants = new ArrayCollection();
         $this->toParticipants   = new ArrayCollection();
         $this->message          = $message;
