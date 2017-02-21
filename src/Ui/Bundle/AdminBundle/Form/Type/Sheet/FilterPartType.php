@@ -11,9 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FilterPartType extends AbstractType
 {
@@ -25,8 +23,7 @@ class FilterPartType extends AbstractType
         $builder
             ->add('text', SheetTextSearchType::class, [
                 'placeholder' => 'form.sheet_filter.children.text_search.label',
-            ])
-        ;
+            ]);
     }
 
     /**
