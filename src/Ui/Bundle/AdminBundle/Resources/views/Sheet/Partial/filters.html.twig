@@ -7,7 +7,7 @@
                 </a>
             </h4>
         </div>
-        <div id="advancedFilters" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div id="advancedFilters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
                 {{ form_start(form) }}
                 <div class="col-md-12">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-md-6">
                     {{ form_row(form.text) }}
-                    {{ form_row(form.enabledState) }}
+                    {{ form_row(form.enabled) }}
                     {{ form_row(form.validationState) }}
                     {{ form_row(form.state) }}
                     {{ form_row(form.completed) }}
@@ -33,8 +33,8 @@
                     {{ form_row(form.hasRemainingToPay) }}
                     {{ form_row(form.hasNoMeetingRequest) }}
                     {{ form_row(form.hasPendingMeetingPropositions) }}
-                    {{ form_row(form.hasOrder) }}
-                    {{ form_row(form.hasCart) }}
+                    {{ form_row(form.has_order) }}
+                    {{ form_row(form.has_cart) }}
                     {{ form_row(form.imported) }}
                 </div>
                 <div class="col-md-6">

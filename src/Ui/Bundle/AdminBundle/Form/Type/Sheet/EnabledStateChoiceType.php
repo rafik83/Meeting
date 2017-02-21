@@ -24,8 +24,8 @@ class EnabledStateChoiceType extends AbstractType
         $resolver->setDefaults([
             'choices'                   => [
                 'form.sheet_filter.children.enabledState.all.label'      => null,
-                'form.sheet_filter.children.enabledState.enabled.label'  => 1,
-                'form.sheet_filter.children.enabledState.disabled.label' => 0,
+                'form.sheet_filter.children.enabledState.enabled.label'  => true,
+                'form.sheet_filter.children.enabledState.disabled.label' => false,
             ],
             'choice_translation_domain' => 'forms',
         ]);

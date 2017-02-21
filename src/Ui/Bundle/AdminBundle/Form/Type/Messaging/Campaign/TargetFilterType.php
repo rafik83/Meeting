@@ -29,7 +29,7 @@ class TargetFilterType extends AbstractFilterType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        
+
         /** @var Event $event */
         $event = $options['event'];
 

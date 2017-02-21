@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,22 +35,22 @@ class SheetFilterType extends AbstractFilterType
                 'event'  => $options['event'],
                 'locale' => $options['locale'],
             ])
-            ->add('enabledState', EnabledStateChoiceType::class, [
+            ->add('enabled', EnabledStateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.enabledState.label',
                 'multiple' => false,
                 'expanded' => true,
             ])
-            ->add('hasOrder', ChoiceType::class, [
+            ->add(Constant::HAS_ORDER, ChoiceType::class, [
                 'choices'  => [
                     'form.sheet_filter.children.order.noPreference.label' => null,
                     'form.sheet_filter.children.order.yes.label'          => true,
-                    'form.sheet_filter.children.order.no.label'           => false,
+                    'form.sheet_filter.children.order.no.label'          => false,
                 ],
                 'multiple' => false,
                 'expanded' => true,
                 'label'    => 'form.sheet_filter.children.hasOrder.label',
             ])
-            ->add('hasCart', ChoiceType::class, [
+            ->add(Constant::HAS_CART, ChoiceType::class, [
                 'choices'  => [
                     'form.sheet_filter.children.cart.noPreference.label' => null,
                     'form.sheet_filter.children.cart.yes.label'          => true,
