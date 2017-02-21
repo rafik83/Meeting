@@ -60,18 +60,19 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
 
-        $sheetRepository->getSheetsInCatalogByEvent($event)->shouldBeCalled()->willReturn([$sheet, $sheet2, $sheet3]);
+        $sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($event)->shouldBeCalled()->willReturn([$sheet, $sheet2, $sheet3]);
         $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn($indicator);
         $indicatorCalculator->getIndicator($sheet2)->shouldBeCalled()->willReturn($indicator2);
         $indicatorCalculator->getIndicator($sheet3)->shouldBeCalled()->willReturn($indicator3);
+
 
         // Handler
         $handler = new SheetViewQueryHandler($sheetRepository->reveal(), $indicatorCalculator->reveal());
         $result  = $handler->handle(new SheetViewQuery($event, [$typeView, $typeView2]));
 
         // Expected
+        // The first sheet should be excluded as the possible meeting quantity is 0
         $expected = [
-            new SheetView(1, $typeView, 1, 0),
             new SheetView(2, $typeView, 2, 2),
             new SheetView(3, $typeView2, 3, 3),
         ];

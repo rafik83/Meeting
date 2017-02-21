@@ -1,15 +1,19 @@
-var Vue                = require('vue'),
-    axios              = require('axios'),
-    filterModal        = require('./agenda/filterModal'),
-    meetingUpdateModal = require('./agenda/MeetingUpdateModal'),
+var Vue                    = require('vue'),
+    _                      = require('lodash'),
+    axios                  = require('axios'),
+    filterModal            = require('./agenda/filterModal'),
+    meetingUpdateModal     = require('./agenda/MeetingUpdateModal'),
+    massAssignmentModal    = require('./agenda/massAssignmentModal'),
+    options                = require('./vueComponents/options'),
     updateParticipantModal = require('./agenda/updateParticipantModal'),
-    sheetAgenda        = require('./agenda/SheetAgenda'),
-    slotAgenda         = require('./agenda/SlotAgenda'),
-    sortModal          = require('./agenda/sortModal'),
-    options            = require('./vueComponents/options'),
-    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
+    sheetAgenda            = require('./agenda/SheetAgenda'),
+    slotAgenda             = require('./agenda/SlotAgenda'),
+    sortModal              = require('./agenda/sortModal'),
+    UrlParameterGuesser = require('./components/_UrlParameterGuesser'),
+    AgendaApiEndpoints     = require('./components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
+var urlParameterGuesser = new UrlParameterGuesser();
 
 /**
  * Pass axios to Vue
@@ -35,6 +39,7 @@ new Vue({
         'slot-agenda': slotAgenda,
         'sheet-agenda': sheetAgenda,
         'MeetingUpdateModal': meetingUpdateModal,
+        'mass-assignment-modal': massAssignmentModal,
         'sort-modal': sortModal
     },
     data: {
@@ -45,6 +50,7 @@ new Vue({
         meetingToUpdate: null, /** Meeting to update form */
         filteredSheets: [], /** Sheet[] */
         showFilterModal: false,
+        showMassAssignmentModal: false,
         showParticipantModal: false,
         hasUsedSheetFilter: false,
         showSortModal: false,
@@ -95,6 +101,17 @@ new Vue({
          */
         init: function () {
             this.loadSheets();
+        },
+
+        /**
+         * @param {int} massId
+         */
+        showMassAssignment: function (massId) {
+            this.showMassAssignmentModal = true;
+            var child = this.$refs.massAssignmentModal;
+            if (typeof child !== 'undefined') {
+                child.init(massId);
+            }
         },
 
         /**
@@ -278,6 +295,13 @@ new Vue({
          */
         refreshAgenda: function (sheet) {
             this.loadAgenda(sheet, true);
+        },
+
+        /**
+         * Event handler for Mass Assignment update
+         */
+        handleUpdateMassAssignment: function () {
+            this.loadAgenda(this.focusedSheet, true);
         },
 
         /**

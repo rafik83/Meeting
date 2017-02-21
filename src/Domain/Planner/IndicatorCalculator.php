@@ -35,6 +35,11 @@ class IndicatorCalculator
     private $slots = null;
 
     /**
+     * @var null|MeetingSlot[]
+     */
+    private $slotsUsable = null;
+
+    /**
      * @var PlanningQuantityGuesser
      */
     private $planningQuantityGuesser;
@@ -92,16 +97,20 @@ class IndicatorCalculator
             ->requestRepository
             ->countSheetState($sheet, ['state' => Request::STATE_APPROVED, 'disabled' => false]);
 
-        $slotUsables = [];
+        if ($this->slotsUsable === null) {
+            $slotUsables = [];
 
-        foreach ($this->slots as $slot) {
-            if ($this->slotAvailability->isUsable($slot)) {
-                $slotUsables[] = $slot;
+            foreach ($this->slots as $slot) {
+                if ($this->slotAvailability->isUsable($slot)) {
+                    $slotUsables[] = $slot;
+                }
             }
+
+            $this->slotsUsable = $slotUsables;
         }
 
         foreach ($sheet->getParticipants()->toArray() as $participant) {
-            foreach ($slotUsables as $slotUsable) {
+            foreach ($this->slotsUsable as $slotUsable) {
                 $slotAvailability = $this->slotAvailability->getSlotAvailability($slotUsable, $participant);
 
                 if (!$slotAvailability->isAvailable()) {
@@ -113,7 +122,7 @@ class IndicatorCalculator
         $unavailabilitiesCount = count($unavailabilities);
 
         return new IndicatorView(
-            count($slotUsables),
+            count($this->slotsUsable),
             $participantsCount,
             $unavailabilitiesCount,
             $planningQuantity,

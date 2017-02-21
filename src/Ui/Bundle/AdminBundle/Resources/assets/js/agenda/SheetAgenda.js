@@ -59,6 +59,13 @@ module.exports = {
         },
 
         /**
+         * @param {int} massId
+         */
+        showMassAssignment: function (massId) {
+            this.$emit('show-mass-assignment', massId);
+        },
+
+        /**
          * @param {Object} sheet
          */
         refreshAgenda: function (sheet) {

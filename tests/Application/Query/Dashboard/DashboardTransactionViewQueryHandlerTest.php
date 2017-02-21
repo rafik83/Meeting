@@ -26,12 +26,11 @@ class DashboardTransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         // Mock
         $balance = $this->prophesize(Balance::class);
 
-        $balance->loadAllTransactions($event)->shouldBeCalled();
-        $balance->loadAllOrders($event)->shouldBeCalled();
+        $balance->loadAllForEvent($event)->shouldBeCalled();
 
-        $balance->getOrdersTotal($event)->shouldBeCalled()->willReturn(100);
-        $balance->getTransactionsTotalPaid($event)->shouldBeCalled()->willReturn(75);
-        $balance->getOrdersTotalRemainingToPay($event)->shouldBeCalled()->willReturn(25);
+        $balance->getOrdersTotalForEvent()->shouldBeCalled()->willReturn(100);
+        $balance->getTransactionsTotalPaidForEvent()->shouldBeCalled()->willReturn(75);
+        $balance->getOrdersTotalRemainingToPayForEvent()->shouldBeCalled()->willReturn(25);
 
         $handler = new DashboardTransactionViewQueryHandler($balance->reveal());
 
