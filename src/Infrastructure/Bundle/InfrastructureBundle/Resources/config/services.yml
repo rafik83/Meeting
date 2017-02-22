@@ -3117,7 +3117,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: serializer.normalizer }
 
