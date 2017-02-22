@@ -18,7 +18,7 @@ class Version20170215165810 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE invoice_prefix (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, prefix VARCHAR(255) DEFAULT NULL, is_default TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE event ADD invoice_prefix_id INT DEFAULT NOT NULL');
+        $this->addSql('ALTER TABLE event ADD invoice_prefix_id INT NOT NULL');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA739FABE62 FOREIGN KEY (invoice_prefix_id) REFERENCES invoice_prefix (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_3BAE0AA739FABE62 ON event (invoice_prefix_id)');
         $this->addSql("INSERT INTO invoice_prefix VALUES (1, 'Vimeet', 'Vi', 1)");
@@ -31,7 +31,6 @@ class Version20170215165810 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
         $this->addSql('ALTER TABLE event DROP FOREIGN KEY FK_3BAE0AA739FABE62');
         $this->addSql('DROP INDEX IDX_3BAE0AA739FABE62 ON event');
         $this->addSql('ALTER TABLE event DROP invoice_prefix_id');

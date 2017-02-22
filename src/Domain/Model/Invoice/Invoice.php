@@ -36,7 +36,17 @@ class Invoice
     /**
      * @var string
      */
-    private $number;
+    private $invoicePrefix;
+
+    /**
+     * @var string
+     */
+    private $invoiceYear;
+
+    /**
+     * @var string
+     */
+    private $invoiceNumber;
 
     /**
      * @var float
@@ -61,18 +71,22 @@ class Invoice
     /**
      * Invoice constructor.
      *
-     * @param Event     $event
-     * @param Sheet     $sheet
-     * @param string    $number
-     * @param float     $total
-     * @param float     $totalWithVat
-     * @param float     $vatAmount
+     * @param Event $event
+     * @param Sheet $sheet
+     * @param $invoicePrefix
+     * @param $invoiceYear
+     * @param $invoiceNumber
+     * @param float $total
+     * @param float $totalWithVat
+     * @param float $vatAmount
      * @param \DateTime $createdAt
      */
     public function __construct(
         Event $event,
         Sheet $sheet,
-        $number,
+        $invoicePrefix,
+        $invoiceYear,
+        $invoiceNumber,
         $total,
         $totalWithVat,
         $vatAmount,
@@ -80,7 +94,9 @@ class Invoice
     {
         $this->event            = $event;
         $this->sheet            = $sheet;
-        $this->number           = $number;
+        $this->invoicePrefix    = $invoicePrefix;
+        $this->invoiceYear      = $invoiceYear;
+        $this->invoiceNumber    = $invoiceNumber;
         $this->total            = $total;
         $this->totalWithVat     = $totalWithVat;
         $this->vatAmount        = $vatAmount;
@@ -109,14 +125,6 @@ class Invoice
     public function getSheet()
     {
         return $this->sheet;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNumber()
-    {
-        return $this->number;
     }
 
     /**
@@ -154,9 +162,17 @@ class Invoice
     /**
      * @return string
      */
+    public function getInvoicePrefix()
+    {
+        return $this->invoicePrefix;
+    }
+
+    /**
+     * @return string
+     */
     public function getInvoiceYear()
     {
-        return substr($this->getNumber(), 2, 4);
+        return $this->invoiceYear;
     }
 
     /**
@@ -164,6 +180,14 @@ class Invoice
      */
     public function getInvoiceNumber()
     {
-        return substr($this->getNumber(), -4);
+        return $this->invoiceNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . $this->getInvoiceNumber();
     }
 }
