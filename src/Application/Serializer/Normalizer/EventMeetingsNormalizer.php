@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -43,11 +42,6 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     private $meetingRepository;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * @var \IntlDateFormatter
      */
     private $dayFormatter;
@@ -60,17 +54,14 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     /**
      * @param TranslatorInterface        $translator
      * @param MeetingRepositoryInterface $meetingRepository
-     * @param SheetInfoGuesser           $sheetInfoGuesser
      */
     public function __construct(
         TranslatorInterface $translator,
-        MeetingRepositoryInterface $meetingRepository,
-        SheetInfoGuesser $sheetInfoGuesser
+        MeetingRepositoryInterface $meetingRepository
     ) {
         parent::__construct($translator);
 
         $this->meetingRepository = $meetingRepository;
-        $this->sheetInfoGuesser  = $sheetInfoGuesser;
     }
 
     /**
