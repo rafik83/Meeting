@@ -297,7 +297,6 @@ class BillingInfo implements MailRecipientInterface
      * @param string  $email
      * @param Address $address
      * @param string  $gender
-     * @param string  $reference
      *
      * @return BillingInfo
      */
@@ -310,8 +309,7 @@ class BillingInfo implements MailRecipientInterface
         $phone,
         $mobile,
         $email,
-        Address $address,
-        $reference
+        Address $address
     ) {
         $this->gender    = $gender;
         $this->firstname = $firstname;
@@ -322,7 +320,6 @@ class BillingInfo implements MailRecipientInterface
         $this->mobile    = $mobile;
         $this->email     = $email;
         $this->address   = $address;
-        $this->reference = $reference;
 
         return $this;
     }
