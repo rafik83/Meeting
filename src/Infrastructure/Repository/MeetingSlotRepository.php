@@ -221,6 +221,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                 JOIN assignment.mass massUnavailability
                 WHERE assignment.participant IN (:ids)
                 AND massUnavailability.blocking = true
+                AND assignment.enabled = true
                 AND (
                     slot.begin = assignment.begin
                     OR assignment.end = slot.end
