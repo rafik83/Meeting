@@ -56,8 +56,7 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
         $type        = new Type($this->event);
         $owner       = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet       = new Sheet($this->event, $type, [], $owner, $this->datetime);
-        $number      = "Vi" . date('Y') . "-0888";
-        $invoice     = new Invoice($this->event, $sheet, $number, 10, 10, 10, $this->datetime);
+        $invoice     = new Invoice($this->event, $sheet, 'Vi', date('Y'), '0888', 10, 10, 10, $this->datetime);
 
         $expectedInvoiceNumber = "Vi".date('Y')."-0889";
         $invoiceNumber = $this->invoiceNumberGenerator->generate($invoice);
@@ -71,7 +70,7 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
         $owner       = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet       = new Sheet($this->event, $type, [], $owner, $this->datetime);
         $number      = "Vi2016-0001";
-        $invoice     = new Invoice($this->event, $sheet, $number, 10, 10, 10, new \DateTime('2016-12-31'));
+        $invoice     = new Invoice($this->event, $sheet, 'Vi', '2016', '0001', 10, 10, 10, new \DateTime('2016-12-31'));
 
         $expectedInvoiceNumber = "Vi".date('Y')."-0001";
         $invoiceNumber = $this->invoiceNumberGenerator->generate($invoice);
