@@ -96,7 +96,7 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
 
         $this->dayFormatter = \IntlDateFormatter::create(
             $availableLocale,
-            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
             $object->event->getTimeZone()
         );
