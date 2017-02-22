@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
-use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
@@ -101,7 +100,7 @@ abstract class AbstractEventType extends AbstractType
                 'expanded' => true,
             ])
             ->add('vat', NumberType::class)
-            ->add('currency', CurrencyType::class, [
+            ->add('currency', ChoiceType::class, [
                 'placeholder'  => 'form.event_update.children.currency.placeholder',
                 'required'     => true,
                 'choices'      => $this->supportedCurrencies,

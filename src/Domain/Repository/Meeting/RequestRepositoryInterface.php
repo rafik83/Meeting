@@ -18,6 +18,11 @@ use Proximum\Vimeet\Domain\Model\User;
 
 interface RequestRepositoryInterface
 {
+    const ORDER_BY_CREATE_AT_ASC         = 'created_at_asc';
+    const ORDER_BY_CREATE_AT_DESC        = 'created_at_desc';
+    const ORDER_BY_STATE_UPDATED_AT_ASC  = 'state_updated_at_asc';
+    const ORDER_BY_STATE_UPDATED_AT_DESC = 'state_updated_at_desc';
+
     /**
      * @param Request $request
      */
@@ -32,6 +37,13 @@ interface RequestRepositoryInterface
      * @param Request $request
      */
     public function remove(Request $request);
+
+    /**
+     * @param Request $request
+     *
+     * @return Request
+     */
+    public function getRequest(Request $request);
 
     /**
      * @param Sheet $sheet

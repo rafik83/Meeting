@@ -271,6 +271,11 @@ form.meeting_request_create.children.description.label: 'Motiver votre demande'
 form.meeting_request_create.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
 form.meeting_request_create.children.submit.label: Envoyer
 form.meeting_request_filter.children.state.label: Statut
+form.meeting_request_filter.children.order_by.label: 'Trier par'
+form.meeting_request_filter.children.order_by.options.created_at_asc: 'Date de création croissante'
+form.meeting_request_filter.children.order_by.options.created_at_desc: 'Date de création décroissante'
+form.meeting_request_filter.children.order_by.options.state_updated_at_asc: 'Modification de statut croissant'
+form.meeting_request_filter.children.order_by.options.state_updated_at_desc: 'Modification de statut décroissant'
 form.meeting_request_message.children.message.label: 'Expliquer pourquoi'
 form.meeting_request_message.children.submit.label: Envoyer
 form.meeting_request_refuse.children.message.label: 'Expliquer pourquoi'
@@ -354,9 +359,6 @@ form.package_update.children.submit.label: Enregistrer
 form.package_update.children.templateData.children.blocks.prototype.children.enabled.label: 'Etape activée'
 form.package_update.children.templateData.children.blocks.prototype.label: 'Libellé de l''étape'
 form.package_update.children.title.label: 'Titre du template'
-form.payment_mode_choice.children.paymentMode.paypal: Paypal
-form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
-form.payment_mode_choice.children.paymentMode.bank_check: 'Chèque'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
 form.participant_import.children.charset.label: Encodage
@@ -369,6 +371,9 @@ form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
+form.payment_mode_choice.children.paymentMode.bank_check: Chèque
+form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
+form.payment_mode_choice.children.paymentMode.paypal: Paypal
 form.planner_import.children.file.label: 'Solution à importer'
 form.planner_import.children.submit.label: Importer
 form.planner_import.confirm.submit.label: 'L''import d''une nouvelle solution a pour effet de supprimer l''ensemble des rendez-vous positionnés de l''événement, êtes-vous sûr de vouloir réaliser cette action ?'
@@ -561,6 +566,8 @@ form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une 
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
+form.sheet_filter.children.imported.all.label: Tous
+form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat

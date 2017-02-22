@@ -523,17 +523,22 @@ class SheetController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
+        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+            new ParticipantProductViewQuery($sheet, $locale)
+        );
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'            => $eventDomain->getEvent(),
-            'sheet'            => $sheet,
-            'templateData'     => $templateData,
-            'locale'           => $locale,
-            'nomenclatures'    => $nomenclatures,
-            'taggedData'       => $taggedData,
-            'form_participant' => $form->createView(),
-            'label'            => $label,
-            'uid'              => $key,
-            'participants'     => $participants,
+            'event'                  => $eventDomain->getEvent(),
+            'sheet'                  => $sheet,
+            'templateData'           => $templateData,
+            'locale'                 => $locale,
+            'nomenclatures'          => $nomenclatures,
+            'taggedData'             => $taggedData,
+            'form_participant'       => $form->createView(),
+            'label'                  => $label,
+            'uid'                    => $key,
+            'participants'           => $participants,
+            'participantProductView' => $participantProductView,
         ]);
     }
 
