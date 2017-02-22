@@ -7,6 +7,12 @@
         {% else %}
             <h3>{{ title }}</h3>
         {% endif %}
+    {% elseif object.isParticipant %}
+        <div class="list list--users">
+            {% for participant in object.cardViews %}
+                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog}) }}
+            {% endfor %}
+        </div>
     {% else %}
         {% if object.isStrong %}
             <p><strong>{{ object.content }}</strong></p>

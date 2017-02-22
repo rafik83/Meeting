@@ -1254,6 +1254,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\BillingConfiguration }
     command.event.practical_info.update_handler:
@@ -1650,6 +1651,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.template_data_factory'
+            - '@query.participant.card_view_query_handler'
+            - '@domain.rule.applyer'
     #
     # Sheet Request
     #
@@ -2953,7 +2956,11 @@ services:
         class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
-
+    order.orders_to_invoice:
+        class: Proximum\Vimeet\Domain\Order\OrdersToInvoice
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@order.merger'
     #
     # KeyDates
     #

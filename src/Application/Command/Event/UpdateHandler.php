@@ -95,6 +95,8 @@ class UpdateHandler
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 
+        $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);
+
         if (null !== $update->logo) {
             $toRemove      = $event->getLogo();
             $logoExtension = $this->fileStorage->getExtension($update->logo);

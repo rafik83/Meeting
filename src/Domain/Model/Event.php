@@ -54,6 +54,16 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @var string
      */
+    private $invoiceLogo;
+
+    /**
+     * @var string
+     */
+    private $invoiceLogoExtension;
+
+    /**
+     * @var string
+     */
     private $timeZone;
 
     /**
@@ -397,6 +407,32 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getInvoiceLogo()
+    {
+        return $this->invoiceLogo;
+    }
+
+    /**
+     * @param string $invoiceLogo
+     * @param string $invoiceLogoExtension
+     */
+    public function setInvoiceLogo($invoiceLogo, $invoiceLogoExtension)
+    {
+        $this->invoiceLogo = $invoiceLogo;
+        $this->invoiceLogoExtension = $invoiceLogoExtension;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceLogoExtension()
+    {
+        return $this->invoiceLogoExtension;
+    }
+
+    /**
      * @return string|null
      */
     public function getEmailTeam()
@@ -520,6 +556,14 @@ class Event implements EventInterface, TraceableInterface
     public function getMode()
     {
         return $this->mode;
+    }
+
+    /**
+     * Set Vat mode to VAT_MODE_ET
+     */
+    public function setVatModeToExclusiveOfTaxes()
+    {
+        $this->mode = self::VAT_MODE_ET;
     }
 
     /**

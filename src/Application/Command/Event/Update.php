@@ -25,6 +25,11 @@ class Update extends AbstractEvent
     public $translations;
 
     /**
+     * @var null|string
+     */
+    public $analyticsCode = null;
+
+    /**
      * @param Model\Event $event
      */
     public function __construct(Model\Event $event)
@@ -46,6 +51,7 @@ class Update extends AbstractEvent
         $this->organiserName = $event->getOrganiserName();
         $this->emailTeam     = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
+        $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

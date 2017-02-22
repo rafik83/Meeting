@@ -38,7 +38,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent
             ->getConfiguration()
             ->updatePracticalInfo('newContactFirstName', 'newContactLastName', 'newPhone', 'newWebsite');
-
+       
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
 

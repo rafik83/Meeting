@@ -2,7 +2,7 @@
     <div class="catalog__item {#catalog__item--checked#}">
         {#<header></header>#}
         <div class="content__sheet-card">
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog }, false) }}
         </div>
         <footer>
             <div class="actions">

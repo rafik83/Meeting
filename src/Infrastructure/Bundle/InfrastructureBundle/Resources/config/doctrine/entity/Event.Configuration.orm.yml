@@ -50,3 +50,6 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             nullable: true
         paymentModes:
             type: json_array
+        analyticsCode:
+            type: string
+            nullable: true

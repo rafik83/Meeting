@@ -113,6 +113,11 @@ class Configuration
     private $paymentModes;
 
     /**
+     * @var string
+     */
+    private $analyticsCode;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
@@ -352,6 +357,22 @@ class Configuration
     public function getSchedulePublishDate()
     {
         return $this->schedulePublishDate;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAnalyticsCode()
+    {
+        return $this->analyticsCode;
+    }
+
+    /**
+     * @param null|string $analyticsCode
+     */
+    public function setAnalyticsCode($analyticsCode)
+    {
+        $this->analyticsCode = $analyticsCode;
     }
 
     /**
