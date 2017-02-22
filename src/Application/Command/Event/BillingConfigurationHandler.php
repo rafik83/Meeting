@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -21,11 +22,18 @@ class BillingConfigurationHandler
     private $eventRepository;
 
     /**
-     * @param EventRepositoryInterface $eventRepository
+     * @var FileStorageInterface
      */
-    public function __construct(EventRepositoryInterface $eventRepository)
+    private $fileStorage;
+
+    /**
+     * @param EventRepositoryInterface $eventRepository
+     * @param FileStorageInterface $fileStorage
+     */
+    public function __construct(EventRepositoryInterface $eventRepository, FileStorageInterface $fileStorage)
     {
         $this->eventRepository = $eventRepository;
+        $this->fileStorage     = $fileStorage;
     }
 
     /**
@@ -39,6 +47,12 @@ class BillingConfigurationHandler
             ->event
             ->getConfiguration()
             ->setLegalInfo($billingConfiguration->legalInfo);
+
+        if (null !== $billingConfiguration->invoiceLogo) {
+            $invoiceLogoExtension = $this->fileStorage->getExtension($billingConfiguration->invoiceLogo);
+            $invoiceLogoPath      = $this->fileStorage->upload($billingConfiguration->invoiceLogo);
+            $billingConfiguration->event->setInvoiceLogo($invoiceLogoPath, $invoiceLogoExtension);
+        }
 
         foreach ($billingConfiguration->event->getLocales() as $locale) {
             if (!$billingConfiguration->event->getTranslations()->get($locale)) {

@@ -1238,6 +1238,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\BillingConfiguration }
     command.event.practical_info.update_handler:
@@ -1627,6 +1628,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.template_data_factory'
+            - '@query.participant.card_view_query_handler'
+            - '@domain.rule.applyer'
     #
     # Sheet Request
     #
@@ -3102,6 +3105,16 @@ services:
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.event_meetings:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventMeetingsNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: serializer.normalizer }
 
