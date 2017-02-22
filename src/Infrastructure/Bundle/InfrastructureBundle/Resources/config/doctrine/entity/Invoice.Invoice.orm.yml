@@ -17,13 +17,8 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             type: string
         createdAt:
             type: datetime
-
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
-            joinColumn:
-                onDelete: CASCADE
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-            joinColumn:
-                onDelete: CASCADE

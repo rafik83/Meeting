@@ -61,19 +61,30 @@ class Invoice
     /**
      * Invoice constructor.
      *
-     * @param Event     $event
-     * @param Sheet     $sheet
-     * @param string    $number
-     * @param float     $total
+     * @param Event $event
+     * @param Sheet $sheet
+     * @param string $number
+     * @param float $total
+     * @param $totalWithVat
+     * @param $vatAmount
      * @param \DateTime $createdAt
      */
-    public function __construct(Event $event, Sheet $sheet, $number, $total, \DateTime $createdAt)
+    public function __construct(
+        Event $event,
+        Sheet $sheet,
+        $number,
+        $total,
+        $totalWithVat,
+        $vatAmount,
+        \DateTime $createdAt)
     {
-        $this->event = $event;
-        $this->sheet = $sheet;
-        $this->number = $number;
-        $this->total = $total;
-        $this->createdAt = $createdAt;
+        $this->event            = $event;
+        $this->sheet            = $sheet;
+        $this->number           = $number;
+        $this->total            = $total;
+        $this->totalWithVat     = $totalWithVat;
+        $this->vatAmount        = $vatAmount;
+        $this->createdAt        = $createdAt;
     }
 
     /**
