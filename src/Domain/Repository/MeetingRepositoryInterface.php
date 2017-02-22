@@ -120,4 +120,11 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasScheduledMeeting(Sheet $sheet);
 }

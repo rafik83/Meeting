@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Invoice;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 
 class InvoiceRepository implements InvoiceRepositoryInterface
@@ -28,5 +30,21 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasInvoice(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice.id')
+            ->from(Invoice::class, 'invoice')
+            ->where('invoice.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

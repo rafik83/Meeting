@@ -10,7 +10,14 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 interface InvoiceRepositoryInterface
 {
-    
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasInvoice(Sheet $sheet);
 }
