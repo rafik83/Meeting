@@ -76,4 +76,12 @@ class OrdersToInvoiceView
     {
         return $this->totalWithVat;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 }
