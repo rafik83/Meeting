@@ -82,6 +82,13 @@ class Batch extends AbstractBatch
     public $validationValidate;
 
     /**
+     * "Générer facture"
+     *
+     * @var bool
+     */
+    public $generateInvoice;
+
+    /**
      * @param Admin $admin
      */
     public function __construct(Admin $admin)

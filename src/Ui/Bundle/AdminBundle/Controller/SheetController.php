@@ -181,6 +181,10 @@ class SheetController extends Controller
                     $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
+                
+                if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+                    $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
+                }
 
                 /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);

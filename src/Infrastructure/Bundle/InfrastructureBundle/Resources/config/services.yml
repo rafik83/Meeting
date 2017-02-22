@@ -710,7 +710,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
-
+    command.sheet.batch_generate_invoice_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.invoice.invoice_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
@@ -846,6 +853,7 @@ services:
             - '@command.sheet.batch_catalog_handler'
             - '@command.sheet.batch_draft_handler'
             - '@command.sheet.batch_validation_validate_handler'
+            - '@command.sheet.batch_generate_invoice_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
     command.sheet.accept_handler:
