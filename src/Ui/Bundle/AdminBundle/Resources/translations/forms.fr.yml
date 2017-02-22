@@ -136,6 +136,7 @@ form.event_billing_configuration.children.translations.prototype.children.billin
 form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder: 'Exemple adresse, siret, capital ...'
+form.event_billing_configuration.children.invoiceLogo.label: 'Logo affiché sur pro forma et facture'
 form.event_configure_date.children.catalogOnlineDate.label: 'Mise en ligne du catalogue'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'

@@ -53,6 +53,16 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @var string
      */
+    private $invoiceLogo;
+
+    /**
+     * @var string
+     */
+    private $invoiceLogoExtension;
+
+    /**
+     * @var string
+     */
     private $timeZone;
 
     /**
@@ -385,6 +395,32 @@ class Event implements EventInterface, TraceableInterface
     {
         $this->logo          = $logo;
         $this->logoExtension = $logoExtension;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceLogo()
+    {
+        return $this->invoiceLogo;
+    }
+
+    /**
+     * @param string $invoiceLogo
+     * @param string $invoiceLogoExtension
+     */
+    public function setInvoiceLogo($invoiceLogo, $invoiceLogoExtension)
+    {
+        $this->invoiceLogo = $invoiceLogo;
+        $this->invoiceLogoExtension = $invoiceLogoExtension;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceLogoExtension()
+    {
+        return $this->invoiceLogoExtension;
     }
 
     /**
