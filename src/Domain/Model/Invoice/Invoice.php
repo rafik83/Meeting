@@ -61,12 +61,12 @@ class Invoice
     /**
      * Invoice constructor.
      *
-     * @param Event $event
-     * @param Sheet $sheet
-     * @param string $number
-     * @param float $total
-     * @param $totalWithVat
-     * @param $vatAmount
+     * @param Event     $event
+     * @param Sheet     $sheet
+     * @param string    $number
+     * @param float     $total
+     * @param float     $totalWithVat
+     * @param float     $vatAmount
      * @param \DateTime $createdAt
      */
     public function __construct(
