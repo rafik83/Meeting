@@ -29,5 +29,4 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     {
         $this->entityManager = $entityManager;
     }
-
 }
