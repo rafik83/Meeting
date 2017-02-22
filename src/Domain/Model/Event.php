@@ -547,6 +547,14 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * Set Vat mode to VAT_MODE_ET
+     */
+    public function setVatModeToExclusiveOfTaxes()
+    {
+        $this->mode = self::VAT_MODE_ET;
+    }
+
+    /**
      * @return float
      */
     public function getVat()

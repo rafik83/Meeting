@@ -2933,7 +2933,11 @@ services:
         class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
-
+    order.orders_to_invoice:
+        class: Proximum\Vimeet\Domain\Order\OrdersToInvoice
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@order.merger'
     #
     # KeyDates
     #
