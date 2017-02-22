@@ -61,7 +61,7 @@ class SheetFilterType extends AbstractFilterType
                 'expanded' => true,
                 'label'    => 'form.sheet_filter.children.hasCart.label',
             ])
-            ->add('hasRemainingToPay', ChoiceType::class, [
+            ->add(Constant::HAS_REMAINING_TO_PAY, ChoiceType::class, [
                 'choices'  => [
                     'form.sheet_filter.children.hasRemainingToPay.noPreference.label' => null,
                     'form.sheet_filter.children.hasRemainingToPay.yes.label'          => true,
@@ -79,7 +79,7 @@ class SheetFilterType extends AbstractFilterType
         $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
 
         if (!empty($booleanFilters)) {
-            $builder->add('boolean_filters', ChoiceType::class, [
+            $builder->add(Constant::BOOLEAN_FILTER, ChoiceType::class, [
                 'choices'  => array_merge([
                     'form.sheet_filter.children.booleanFilters.noPreference.label' => null,
                 ], array_flip($booleanFilters)),

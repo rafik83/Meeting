@@ -560,7 +560,7 @@ form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une 
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
-form.sheet_filter.children.imported.all.label: Tous
+form.sheet_filter.children.imported.all.label: 'Peu importe'
 form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
