@@ -45,7 +45,7 @@ class SheetFilterType extends AbstractFilterType
                 'choices'  => [
                     'form.sheet_filter.children.order.noPreference.label' => null,
                     'form.sheet_filter.children.order.yes.label'          => true,
-                    'form.sheet_filter.children.order.no.label'          => false,
+                    'form.sheet_filter.children.order.no.label'           => false,
                 ],
                 'multiple' => false,
                 'expanded' => true,
@@ -72,7 +72,7 @@ class SheetFilterType extends AbstractFilterType
                 'expanded' => true,
             ])
             ->add('orderBy', HiddenType::class, [
-                'label' => 'form.sheet_filter.children.orderBy.label'
+                'label' => 'form.sheet_filter.children.orderBy.label',
             ])
         ;
 
@@ -119,6 +119,6 @@ class SheetFilterType extends AbstractFilterType
      */
     public function getBlockPrefix()
     {
-        return 'hello';
+        return 'sheet_filter';
     }
 }
