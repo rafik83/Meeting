@@ -120,4 +120,12 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
+
+    /**
+     * @param Event $event
+     *
+     * @return mixed
+     *
+     */
+    public function getAllCompleteByEvent(Event $event);
 }

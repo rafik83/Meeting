@@ -3,16 +3,22 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
+
     <h2>
         {{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <span class="pull-right">
+        <span class="pull-right" style="margin-left: 10px;">
             {{ macro.delete_button(
                 path('admin_meeting_delete_all', {'event': event.id}),
                 'admin.meeting.action.deleteAll.title'|trans,
                 {'class': 'btn btn-danger', 'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans}
             ) }}
         </span>
+        {% endif %}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET" class="pull-right">
+                <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-sm btn-default"/>
+            </form>
         {% endif %}
     </h2>
 
