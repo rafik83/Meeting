@@ -249,10 +249,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\CampaignRepository
         arguments:
              - '@doctrine.orm.entity_manager'
-    #repository.invoice.invoice_repository:
-    #    class: Proximum\Vimeet\Infrastructure\Repository\Invoice\InvoiceRepository
-    #    arguments:
-    #         - '@doctrine.orm.entity_manager'
+    repository.invoice.invoice_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Invoice\InvoiceRepository
+        arguments:
+             - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -2774,6 +2774,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@template.template_data_factory'
             - '@order.balance'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@repository.invoice.invoice_repository'
 
     #
     # Product Transformer
