@@ -105,7 +105,7 @@ interface MeetingRepositoryInterface
      * @param Meeting $meeting
      */
     public function remove(Meeting $meeting);
-    
+
     /**
      * @param MeetingSlot $meetingSlot
      *
@@ -127,4 +127,12 @@ interface MeetingRepositoryInterface
      * @return bool
      */
     public function hasScheduledMeeting(Sheet $sheet);
+    
+    /**
+     * @param Event $event
+     *
+     * @return array
+     *
+     */
+    public function getAllCompleteByEvent(Event $event);
 }
