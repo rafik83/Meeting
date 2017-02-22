@@ -30,7 +30,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         // Actual event
-        $event = EventFactory::createEvent();
+        $event  = EventFactory::createEvent();
+        $prefix = EventFactory::createInvoicePrefix();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update(
             'foobar',
@@ -43,18 +44,19 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
             'oldProximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
         $event->setLogo('here.jpeg', 'jpeg');
 
         // Update command
-        $update               = new Update($event);
-        $update->title        = 'barfoo';
-        $update->locales      = ['fr', 'en'];
-        $update->fallback     = 'en';
-        $update->translations = [
+        $update                = new Update($event);
+        $update->title         = 'barfoo';
+        $update->locales       = ['fr', 'en'];
+        $update->fallback      = 'en';
+        $update->translations  = [
             'fr' => [
                 'description' => 'Salut',
             ],
@@ -75,9 +77,11 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
         $update->emailTeam     = 'team-event@example.net';
+        $update->invoicePrefix = $prefix;
 
         // Expected event
-        $expectedEvent = EventFactory::createEvent();
+        $expectedEvent  = EventFactory::createEvent();
+        $expectedPrefix = EventFactory::createInvoicePrefix();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update(
             'barfoo',
@@ -90,7 +94,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-event@example.net'
+            'team-event@example.net',
+            $expectedPrefix
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -126,7 +131,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleAddLocale()
     {
         // Actual event
-        $event = EventFactory::createEvent();
+        $event  = EventFactory::createEvent();
+        $prefix = EventFactory::createInvoicePrefix();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update(
             'foobar',
@@ -139,17 +145,18 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
             'oldProximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
         // Update command
-        $update               = new Update($event);
-        $update->title        = 'foobar';
-        $update->locales      = ['fr', 'en', 'de'];
-        $update->fallback     = 'fr';
-        $update->translations = [
+        $update                = new Update($event);
+        $update->title         = 'foobar';
+        $update->locales       = ['fr', 'en', 'de'];
+        $update->fallback      = 'fr';
+        $update->translations  = [
             'fr' => [
                 'description' => 'Bonjour',
             ],
@@ -165,6 +172,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
         $update->emailTeam     = 'team-event@example.net';
+        $update->invoicePrefix = $prefix;
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -180,7 +188,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-event@example.net'
+            'team-event@example.net',
+            $prefix
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -195,7 +204,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
 
         $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher    = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
 
         // Handle
@@ -211,7 +220,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleRemoveLocale()
     {
         // Actual event
-        $event = EventFactory::createEvent();
+        $event  = EventFactory::createEvent();
+        $prefix = EventFactory::createInvoicePrefix();
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $event->update(
             'foobar',
@@ -224,17 +234,18 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
             'oldProximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
         // Update command
-        $update               = new Update($event);
-        $update->title        = 'foobar';
-        $update->locales      = ['fr'];
-        $update->fallback     = 'fr';
-        $update->translations = [
+        $update                = new Update($event);
+        $update->title         = 'foobar';
+        $update->locales       = ['fr'];
+        $update->fallback      = 'fr';
+        $update->translations  = [
             'fr' => [
                 'description' => 'Bonjour',
             ],
@@ -250,6 +261,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
         $update->emailTeam     = 'team-event@example.net';
+        $update->invoicePrefix = $prefix;
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -265,7 +277,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-event@example.net'
+            'team-event@example.net',
+            $prefix
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
@@ -278,7 +291,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
 
         $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher    = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
 
         // Handle
@@ -295,7 +308,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(DomainAlreadyUsedException::class);
         // Actual event
-        $event = EventFactory::createEvent();
+        $event  = EventFactory::createEvent();
+        $prefix = EventFactory::createInvoicePrefix();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update(
             'foobar',
@@ -308,18 +322,19 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
             'oldProximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
         $event->setLogo('here.jpg', 'jpg');
 
         // Update command
-        $update               = new Update($event);
-        $update->title        = 'barfoo';
-        $update->locales      = ['fr', 'en'];
-        $update->fallback     = 'en';
-        $update->translations = [
+        $update                = new Update($event);
+        $update->title         = 'barfoo';
+        $update->locales       = ['fr', 'en'];
+        $update->fallback      = 'en';
+        $update->translations  = [
             'fr' => [
                 'description' => 'Salut',
             ],
@@ -336,6 +351,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
         $update->emailTeam     = 'team-event@example.net';
+        $update->invoicePrefix = $prefix;
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -351,7 +367,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-event@example.net'
+            'team-event@example.net',
+            $prefix
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -360,7 +377,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(EventFactory::createEvent());
+        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()
+            ->willReturn(EventFactory::createEvent());
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldNotBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
@@ -368,7 +386,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled();
 
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-
 
         // Handle
         $handler = new UpdateHandler(

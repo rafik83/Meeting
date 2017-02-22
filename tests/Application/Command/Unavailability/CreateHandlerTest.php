@@ -59,8 +59,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
 
-        $event  = EventFactory::createEvent();
-        $day    = new Day($event, $startTime, $endTime);
+        $event = EventFactory::createEvent();
+        $day   = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -72,10 +72,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $this->paticipantInfoGuesser->reveal()
         );
 
-        $begin = new \DateTime('2016-10-12 08:00:00.000');
-        $end   = new \DateTime('2016-10-12 09:00:00.000');
+        $begin      = new \DateTime('2016-10-12 08:00:00.000');
+        $end        = new \DateTime('2016-10-12 09:00:00.000');
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('checkTimeOutOfDay');
+        $method     = $reflection->getMethod('checkTimeOutOfDay');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, $begin, $end]);
     }
@@ -87,8 +87,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
 
-        $event  = EventFactory::createEvent();
-        $day    = new Day($event, $startTime, $endTime);
+        $event = EventFactory::createEvent();
+        $day   = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -100,10 +100,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $this->paticipantInfoGuesser->reveal()
         );
 
-        $begin = new \DateTime('2016-10-12 19:00:00.000');
-        $end   = new \DateTime('2016-10-12 20:00:00.000');
+        $begin      = new \DateTime('2016-10-12 19:00:00.000');
+        $end        = new \DateTime('2016-10-12 20:00:00.000');
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('checkTimeOutOfDay');
+        $method     = $reflection->getMethod('checkTimeOutOfDay');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, $begin, $end]);
     }
@@ -113,8 +113,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
 
-        $event  = EventFactory::createEvent();
-        $day    = new Day($event, $startTime, $endTime);
+        $event = EventFactory::createEvent();
+        $day   = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -126,10 +126,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $this->paticipantInfoGuesser->reveal()
         );
 
-        $begin = new \DateTime('2016-10-12 12:00:00.000');
-        $end   = new \DateTime('2016-10-12 14:00:00.000');
+        $begin      = new \DateTime('2016-10-12 12:00:00.000');
+        $end        = new \DateTime('2016-10-12 14:00:00.000');
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('checkTimeOutOfDay');
+        $method     = $reflection->getMethod('checkTimeOutOfDay');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, $begin, $end]);
 
@@ -140,18 +140,18 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(ParticipantsSelectedWithMeetingOrHappeningException::class);
 
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $participant = ParticipantFactory::create($sheet, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $participant          = ParticipantFactory::create($sheet, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
         $create->participants = [$participant];
-        $begin       = new \DateTime('2016-10-12 12:00:00.000');
-        $end         = new \DateTime('2016-10-12 14:00:00.000');
+        $begin                = new \DateTime('2016-10-12 12:00:00.000');
+        $end                  = new \DateTime('2016-10-12 14:00:00.000');
 
         $this->participantRepository
             ->getParticipantsWithoutMeetingAndHappening([$participant], $begin, $end)
@@ -165,25 +165,25 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('checkParticipantsConflict');
+        $method     = $reflection->getMethod('checkParticipantsConflict');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, $begin, $end, 'fr']);
     }
 
     public function testCheckParticipantsConflictWithoutConflict()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $participant = ParticipantFactory::create($sheet, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $participant          = ParticipantFactory::create($sheet, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
         $create->participants = [$participant];
-        $begin       = new \DateTime('2016-10-12 12:00:00.000');
-        $end         = new \DateTime('2016-10-12 14:00:00.000');
+        $begin                = new \DateTime('2016-10-12 12:00:00.000');
+        $end                  = new \DateTime('2016-10-12 14:00:00.000');
 
         $this->participantRepository
             ->getParticipantsWithoutMeetingAndHappening([$participant], $begin, $end)
@@ -197,7 +197,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('checkParticipantsConflict');
+        $method     = $reflection->getMethod('checkParticipantsConflict');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, $begin, $end, 'fr']);
 
@@ -206,17 +206,17 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTruncateOvertimeWithBeginOvertime()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
-        $begin       = new \DateTime('2016-10-12 09:00:00.000');
-        $end         = new \DateTime('2016-10-12 14:00:00.000');
-        $endCheck    = new \DateTime('2016-10-12 14:00:00.000');
+        $user     = UserFactory::create();
+        $sheet    = SheetFactory::create($event, $user);
+        $create   = new Create($event, $sheet, $user, 'fr');
+        $begin    = new \DateTime('2016-10-12 09:00:00.000');
+        $end      = new \DateTime('2016-10-12 14:00:00.000');
+        $endCheck = new \DateTime('2016-10-12 14:00:00.000');
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -225,7 +225,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('truncateOvertime');
+        $method     = $reflection->getMethod('truncateOvertime');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, &$begin, &$end]);
 
@@ -235,16 +235,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTruncateOvertimeWithEndAndBeginOvertime()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
-        $begin       = new \DateTime('2016-10-12 09:00:00.000');
-        $end         = new \DateTime('2016-10-12 19:00:00.000');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
+        $begin  = new \DateTime('2016-10-12 09:00:00.000');
+        $end    = new \DateTime('2016-10-12 19:00:00.000');
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -253,7 +253,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('truncateOvertime');
+        $method     = $reflection->getMethod('truncateOvertime');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, &$begin, &$end]);
 
@@ -263,18 +263,18 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTruncateOvertimeWithNoOvertime()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
-        $begin       = new \DateTime('2016-10-12 11:00:00.000');
-        $beginCheck  = new \DateTime('2016-10-12 11:00:00.000');
-        $end         = new \DateTime('2016-10-12 13:00:00.000');
-        $endCheck    = new \DateTime('2016-10-12 13:00:00.000');
+        $user       = UserFactory::create();
+        $sheet      = SheetFactory::create($event, $user);
+        $create     = new Create($event, $sheet, $user, 'fr');
+        $begin      = new \DateTime('2016-10-12 11:00:00.000');
+        $beginCheck = new \DateTime('2016-10-12 11:00:00.000');
+        $end        = new \DateTime('2016-10-12 13:00:00.000');
+        $endCheck   = new \DateTime('2016-10-12 13:00:00.000');
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -283,7 +283,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('truncateOvertime');
+        $method     = $reflection->getMethod('truncateOvertime');
         $method->setAccessible(true);
         $method->invokeArgs($handler, [$create, &$begin, &$end]);
 
@@ -293,14 +293,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEnd()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
@@ -308,8 +308,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = 10;
         $create->time['begin']['minute'] = 30;
 
-        $create->time['end']['hour']     = 14;
-        $create->time['end']['minute']   = 00;
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -318,7 +318,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -328,10 +328,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEndWithOtherTimeZoneNewYork()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $prefix    = EventFactory::createInvoicePrefix();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $event->update(
             $event->getTitle(),
@@ -344,11 +345,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'America/New_York', // -4 with UTC at that time
             $event->getDomain(),
             $event->getOrganiserName(),
-            $event->getEmailTeam()
+            $event->getEmailTeam(),
+            $prefix
         );
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-12 14:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 18:00:00.000');
@@ -356,8 +358,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = 10;
         $create->time['begin']['minute'] = 30;
 
-        $create->time['end']['hour']     = 14;
-        $create->time['end']['minute']   = 00;
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -366,7 +368,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -376,10 +378,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEndWithOtherTimeZoneLondon()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $prefix    = EventFactory::createInvoicePrefix();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $event->update(
             $event->getTitle(),
@@ -392,11 +395,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/London', // -1
             $event->getDomain(),
             $event->getOrganiserName(),
-            $event->getEmailTeam()
+            $event->getEmailTeam(),
+            $prefix
         );
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-12 09:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 13:00:00.000');
@@ -404,8 +408,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = 10;
         $create->time['begin']['minute'] = 30;
 
-        $create->time['end']['hour']     = 14;
-        $create->time['end']['minute']   = 00;
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -414,7 +418,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -424,14 +428,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEndWithString()
     {
-        $startTime   = new \DateTime('2016-10-12 10:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 10:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
@@ -439,8 +443,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = '10';
         $create->time['begin']['minute'] = '30';
 
-        $create->time['end']['hour']     = '14';
-        $create->time['end']['minute']   = '00';
+        $create->time['end']['hour']   = '14';
+        $create->time['end']['minute'] = '00';
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -449,7 +453,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -459,14 +463,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEndWithDifferentDayBegin()
     {
-        $startTime   = new \DateTime('2016-10-11 23:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-11 23:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-11 23:05:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 18:00:00.000');
@@ -474,8 +478,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = '1';
         $create->time['begin']['minute'] = '05';
 
-        $create->time['end']['hour']     = '20';
-        $create->time['end']['minute']   = '00';
+        $create->time['end']['hour']   = '20';
+        $create->time['end']['minute'] = '00';
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -484,7 +488,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -494,10 +498,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEndWithDifferentDayEnd()
     {
-        $startTime   = new \DateTime('2016-10-11 11:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 02:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-11 11:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 02:00:00.000');
+        $event     = EventFactory::createEvent();
+        $prefix    = EventFactory::createInvoicePrefix();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $event->update(
             $event->getTitle(),
@@ -510,11 +515,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'America/New_York', // -4 with UTC at that time
             $event->getDomain(),
             $event->getOrganiserName(),
-            $event->getEmailTeam()
+            $event->getEmailTeam(),
+            $prefix
         );
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-11 11:05:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 01:00:00.000');
@@ -522,8 +528,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = '07';
         $create->time['begin']['minute'] = '05';
 
-        $create->time['end']['hour']     = '21';
-        $create->time['end']['minute']   = '00';
+        $create->time['end']['hour']   = '21';
+        $create->time['end']['minute'] = '00';
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -532,7 +538,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -542,10 +548,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareBeginAndEndWithDifferentDayEndAndLargeTimeZone()
     {
-        $startTime   = new \DateTime('2016-10-11 18:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 04:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-11 18:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 04:00:00.000');
+        $event     = EventFactory::createEvent();
+        $prefix    = EventFactory::createInvoicePrefix();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
         $event->update(
             $event->getTitle(),
@@ -558,11 +565,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'America/Los_Angeles', // -7 with UTC at that time
             $event->getDomain(),
             $event->getOrganiserName(),
-            $event->getEmailTeam()
+            $event->getEmailTeam(),
+            $prefix
         );
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr');
 
         $expectedBegin = new \DateTime('2016-10-11 18:05:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 01:00:00.000');
@@ -570,8 +578,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = '11';
         $create->time['begin']['minute'] = '05';
 
-        $create->time['end']['hour']     = '18';
-        $create->time['end']['minute']   = '00';
+        $create->time['end']['hour']   = '18';
+        $create->time['end']['minute'] = '00';
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -580,7 +588,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
-        $method = $reflection->getMethod('prepareBeginAndEnd');
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
         list ($begin, $end) = $method->invokeArgs($handler, [$create]);
 
@@ -592,14 +600,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(NoParticipantSelectedException::class);
 
-        $startTime   = new \DateTime('2016-10-11 18:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 04:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-11 18:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 04:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
         $create->participants = [];
 
         $handler = new CreateHandler(
@@ -612,15 +620,15 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleCorrect()
     {
-        $startTime   = new \DateTime('2016-10-12 08:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 08:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $participant = ParticipantFactory::create($sheet, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $participant          = ParticipantFactory::create($sheet, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
         $create->participants = [$participant];
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
@@ -629,8 +637,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = 10;
         $create->time['begin']['minute'] = 30;
 
-        $create->time['end']['hour']     = 14;
-        $create->time['end']['minute']   = 00;
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
 
         $unavailability = new Unavailability($participant, $expectedBegin, $expectedEnd);
 
@@ -662,17 +670,17 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithMessage()
     {
-        $startTime   = new \DateTime('2016-10-12 08:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 08:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $participant = ParticipantFactory::create($sheet, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $participant          = ParticipantFactory::create($sheet, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
         $create->participants = [$participant];
-        $create->message = 'Ceci est un message de test';
+        $create->message      = 'Ceci est un message de test';
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
@@ -680,8 +688,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = 10;
         $create->time['begin']['minute'] = 30;
 
-        $create->time['end']['hour']     = 14;
-        $create->time['end']['minute']   = 00;
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
 
         $unavailability = new Unavailability($participant, $expectedBegin, $expectedEnd, 'Ceci est un message de test');
 
@@ -713,15 +721,15 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleCorrectWithRemove()
     {
-        $startTime   = new \DateTime('2016-10-12 08:00:00.000');
-        $endTime     = new \DateTime('2016-10-12 18:00:00.000');
-        $event       = EventFactory::createEvent();
-        $day         = new Day($event, $startTime, $endTime);
+        $startTime = new \DateTime('2016-10-12 08:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
         $event->setDays([$day]);
-        $user        = UserFactory::create();
-        $sheet       = SheetFactory::create($event, $user);
-        $participant = ParticipantFactory::create($sheet, $user);
-        $create      = new Create($event, $sheet, $user, 'fr');
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $participant          = ParticipantFactory::create($sheet, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
         $create->participants = [$participant];
 
         $expectedBegin  = new \DateTime('2016-10-12 08:30:00.000');
@@ -732,11 +740,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['begin']['hour']   = 10;
         $create->time['begin']['minute'] = 30;
 
-        $create->time['end']['hour']     = 14;
-        $create->time['end']['minute']   = 00;
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
 
-        $unavailability  = new Unavailability($participant, $expectedBegin, $expectedEnd);
-        $unavailability2 = new Unavailability($participant, $expectedBegin2, $expectedEnd2);
+        $unavailability         = new Unavailability($participant, $expectedBegin, $expectedEnd);
+        $unavailability2        = new Unavailability($participant, $expectedBegin2, $expectedEnd2);
         $expectedUnavailability = new Unavailability($participant, $expectedBegin, $expectedEnd2);
 
         $this->participantRepository

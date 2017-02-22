@@ -1,3 +1,10 @@
+Proximum\Vimeet\Domain\Model\Invoice\Prefix:
+    prefix_spanish:
+        __construct:
+            - 'Spanish'
+            - 'Spa'
+            - true
+
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
         __construct:
@@ -12,6 +19,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - spanish-event.<domain()>   #domain
             - "PROXIMUM"                 #organiserName
             - 'team-project@example.net' #emailTeam
+            - '@prefix_spanish'
         locales: [es]
         assetPath: ''
         paymentAddress: '@payment_address_event_spanish'

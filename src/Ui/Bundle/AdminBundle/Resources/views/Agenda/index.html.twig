@@ -170,6 +170,7 @@
                             v-on:refresh-both-agenda="handleRefreshBothAgenda"
                             v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
                             v-on:schedule-meeting="transformRequestIntoMeeting"
+                            v-on:show-mass-assignment="showMassAssignment">
                         >
                         </sheet-agenda>
                     </li>
@@ -177,6 +178,10 @@
             </div>
         </div>
     </div>
+
+    <filter-modal :sheets="sheets" :show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
+
+    <mass-assignment-modal :show="showMassAssignmentModal" v-on:mass-assignment-updated="handleUpdateMassAssignment" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
 
     <sort-modal :sheets="sheets" :show="showSortModal" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
     <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
@@ -195,6 +200,8 @@
     {{ include('AdminBundle:Agenda/Components:updateParticipantForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sheetAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:slotAgenda.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:massAssignmentModal.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components:massAssignmentForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sortModal.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sortSheetForm.html.twig') }}
 

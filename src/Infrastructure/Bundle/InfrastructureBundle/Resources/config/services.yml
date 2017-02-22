@@ -253,6 +253,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Invoice\InvoiceRepository
         arguments:
              - '@doctrine.orm.entity_manager'
+    repository.invoice.prefix_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Invoice\PrefixRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1415,6 +1419,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
 
+    command.unavailability.mass_assignment.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler
+        arguments:
+            - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update }
+
     command.messaging.message.create_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler
         arguments:
@@ -1516,6 +1528,13 @@ services:
             - '@unavailability.time_slot_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
+
+    command.invoice.prefix.create_handler:
+        class: Proximum\Vimeet\Application\Command\InvoicePrefix\CreateHandler
+        arguments:
+            - '@repository.invoice.prefix_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\InvoicePrefix\Create }
 
     #
     # Security
@@ -2596,6 +2615,14 @@ services:
             - '@repository.cart_row_repository'
 
     ##
+    # Mass Assignment query handler
+    ##
+    query.mass_assignement.mass_assignement_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MassAssignment\MassAssignementViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery }
+
+    ##
     # Notification query handler
     ##
     query.notification.abstract_notification_view_query_handler:
@@ -3073,6 +3100,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '@order.merger'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 
@@ -3097,6 +3125,16 @@ services:
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.event_meetings:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventMeetingsNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: serializer.normalizer }
 

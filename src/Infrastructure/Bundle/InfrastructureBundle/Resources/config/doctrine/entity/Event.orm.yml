@@ -65,3 +65,6 @@ Proximum\Vimeet\Domain\Model\Event:
             mappedBy: event
             cascade: ["all"]
             orphanRemoval: true
+    manyToOne:
+        invoicePrefix:
+            targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix

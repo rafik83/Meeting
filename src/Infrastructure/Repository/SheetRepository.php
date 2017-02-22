@@ -364,7 +364,9 @@ class SheetRepository implements SheetRepositoryInterface
     {
         $queryBuilder = $this->queryEnabledSheetsByEvent($event);
 
-        $queryBuilder->select('sheet');
+        $queryBuilder->select('sheet, owner, type');
+        $queryBuilder->join('sheet.owner', 'owner');
+        $queryBuilder->join('sheet.type', 'type');
 
         return $queryBuilder->getQuery()->getResult();
     }

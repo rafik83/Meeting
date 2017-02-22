@@ -132,9 +132,29 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order')
+            ->select('_order, sheet, row')
             ->from(Order::class, '_order', '_order.id')
             ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
+            ->join('_order.rows', 'row')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findNotCancelledByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order, sheet, row')
+            ->from(Order::class, '_order', '_order.id')
+            ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
+            ->join('_order.rows', 'row')
+            ->where('_order.cancelled = false')
             ->setParameter('event', $event)
         ;
 
