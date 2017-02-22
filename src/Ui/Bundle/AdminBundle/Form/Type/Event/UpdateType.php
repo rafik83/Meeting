@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -31,6 +32,9 @@ class UpdateType extends AbstractEventType
             ->add('translations', CollectionType::class, [
                 'entry_type' => UpdateTranslationType::class,
                 'label'      => false,
+            ])
+            ->add('analyticsCode', TextType::class, [
+                'required' => false
             ])
         ;
     }

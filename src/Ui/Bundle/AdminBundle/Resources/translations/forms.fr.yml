@@ -164,7 +164,6 @@ form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d
 form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
 form.event_payment_conditions_update.children.paymentModes.label: 'Moyens de paiement'
 form.event_payment_conditions_update.children.submit.label: Enregistrer
-form.event_practical_info_update.children.analyticsCode.label: 'Code analytique'
 form.event_practical_info_update.children.contactFirstName.label: 'Prénom du contact'
 form.event_practical_info_update.children.contactLastName.label: 'Nom du contact'
 form.event_practical_info_update.children.organiserEmail.label: 'E-mail de contact'
@@ -172,6 +171,7 @@ form.event_practical_info_update.children.organiserName.label: Organisateur
 form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de contact'
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
+form.event_update.children.analyticsCode.label: 'Code analytique'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
