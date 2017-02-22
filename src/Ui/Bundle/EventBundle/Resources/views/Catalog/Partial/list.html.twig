@@ -3,7 +3,8 @@
         {% for catalogSheetPreviewView in paginatedResult.results %}
             {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', {
                 catalogSheetPreviewView: catalogSheetPreviewView,
-                'viewer': viewer
+                'viewer': viewer,
+                isCatalog: isCatalog
             }) }}
         {% if loop.index % 3 == 0 %}
     </div>
