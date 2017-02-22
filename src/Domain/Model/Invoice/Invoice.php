@@ -150,4 +150,20 @@ class Invoice
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceYear()
+    {
+        return substr($this->getNumber(), 2, 4);
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceNumber()
+    {
+        return substr($this->getNumber(), -4);
+    }
 }
