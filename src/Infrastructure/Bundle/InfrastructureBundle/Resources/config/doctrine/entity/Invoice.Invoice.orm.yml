@@ -9,6 +9,10 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
     fields:
         total:
             type: float
+        totalWithVat:
+            type: float
+        vatAmount:
+            type: float
         number:
             type: string
         createdAt:

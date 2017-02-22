@@ -44,6 +44,16 @@ class Invoice
     private $total;
 
     /**
+     * @var float
+     */
+    private $totalWithVat;
+
+    /**
+     * @var float
+     */
+    private $vatAmount;
+
+    /**
      * @var \DateTime
      */
     private $createdAt;
@@ -83,27 +93,11 @@ class Invoice
     }
 
     /**
-     * @param Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
      * @return Sheet
      */
     public function getSheet()
     {
         return $this->sheet;
-    }
-
-    /**
-     * @param Sheet $sheet
-     */
-    public function setSheet($sheet)
-    {
-        $this->sheet = $sheet;
     }
 
     /**
@@ -115,14 +109,6 @@ class Invoice
     }
 
     /**
-     * @param string $number
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-    }
-
-    /**
      * @return float
      */
     public function getTotal()
@@ -131,11 +117,19 @@ class Invoice
     }
 
     /**
-     * @param float $total
+     * @return float
      */
-    public function setTotal($total)
+    public function getTotalWithVat()
     {
-        $this->total = $total;
+        return $this->totalWithVat;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVatAmount()
+    {
+        return $this->vatAmount;
     }
 
     /**
@@ -144,13 +138,5 @@ class Invoice
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
     }
 }
