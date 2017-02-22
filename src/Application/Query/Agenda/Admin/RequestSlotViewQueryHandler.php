@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestSlotView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
@@ -40,6 +41,7 @@ class RequestSlotViewQueryHandler
      *
      * @return RequestSlotView
      * @throws NoSlotAvailableException
+     * @throws NoSpotAvailableException
      */
     public function handle(RequestSlotViewQuery $query)
     {
@@ -48,6 +50,10 @@ class RequestSlotViewQueryHandler
             $query->meetingRequest->getParticipantsId(),
             false
         );
+
+        if (0 === count($slots)) {
+            throw new NoSlotAvailableException();
+        }
 
         $availableSlotsId = [];
 
@@ -65,7 +71,7 @@ class RequestSlotViewQueryHandler
         }
 
         if (0 === count($availableSlotsId)) {
-            throw new NoSlotAvailableException();
+            throw new NoSpotAvailableException();
         }
 
         return new RequestSlotView($availableSlotsId);

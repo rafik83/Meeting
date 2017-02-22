@@ -83,6 +83,14 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(MassAssignment $massAssignment)
+    {
+        $this->entityManager->flush($massAssignment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this

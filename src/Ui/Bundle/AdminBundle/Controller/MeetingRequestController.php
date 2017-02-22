@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate;
 use Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -52,10 +53,10 @@ class MeetingRequestController extends Controller
 
         $filters    = [];
         $filtered   = false;
-        $filterForm = $this->createFilterForm(
-            FilterMeetingRequestType::class,
-            ['state' => $request->query->get('state')]
-        );
+        $filterForm = $this->createFilterForm(FilterMeetingRequestType::class, [
+            'state'   => $request->query->get('state'),
+            'orderBy' => RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC
+        ]);
 
         // The form is not valid because of the parameters page sent
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {

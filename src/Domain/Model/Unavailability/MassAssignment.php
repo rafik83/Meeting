@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 /**
- * Assignement of a time slot from a disptached mass unavailability to a participant.
+ * Assignement of a time slot from a dispatched mass unavailability to a participant.
  */
 class MassAssignment
 {
@@ -135,5 +135,17 @@ class MassAssignment
     public function disable()
     {
         $this->enabled = false;
+    }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param bool               $enabled
+     */
+    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, $enabled)
+    {
+        $this->begin   = $begin;
+        $this->end     = $end;
+        $this->enabled = $enabled;
     }
 }
