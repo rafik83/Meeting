@@ -60,6 +60,8 @@ class CampaignAssembler
         'hasHappeningParticipation'     => 'form.sheet_filter.children.hasHappeningParticipation.label',
         'hasNoMeetingRequest'           => 'form.sheet_filter.children.hasNoMeetingRequest.label',
         'hasPendingMeetingPropositions' => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
+        'hasScheduledMeeting' => 'form.sheet_filter.children.hasScheduledMeeting.label',
+        'hasInvoice' => 'form.sheet_filter.children.hasInvoice.label',
     ];
 
     /**
@@ -177,6 +179,8 @@ class CampaignAssembler
                     case 'hasHappeningParticipation':
                     case 'hasNoMeetingRequest':
                     case 'hasPendingMeetingPropositions':
+                    case 'hasScheduledMeeting':
+                    case 'hasInvoice':
                         $currentValue = $currentValue
                             ? $this->translator->trans('boolean.true')
                             : $this->translator->trans('boolean.false');
