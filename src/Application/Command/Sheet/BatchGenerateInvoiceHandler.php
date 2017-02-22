@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Invoice\Create;
+use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -26,6 +28,11 @@ class BatchGenerateInvoiceHandler
     private $invoiceRepository;
 
     /**
+     * @var OrdersToInvoice
+     */
+    private $ordersToInvoice;
+
+    /**
      * @var \DateTimeInterface
      */
     private $datetime;
@@ -35,16 +42,19 @@ class BatchGenerateInvoiceHandler
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param OrdersToInvoice $ordersToInvoice
      * @param \DateTimeInterface $dateTime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
         InvoiceRepositoryInterface $invoiceRepository,
+        OrdersToInvoice            $ordersToInvoice,
         \DateTimeInterface         $dateTime
     )
     {
         $this->sheetRepository   = $sheetRepository;
         $this->invoiceRepository = $invoiceRepository;
+        $this->ordersToInvoice   = $ordersToInvoice;
         $this->datetime          = $dateTime;
     }
 
@@ -56,12 +66,8 @@ class BatchGenerateInvoiceHandler
 
         foreach ($sheets as $sheet) {
             if ($sheet->hasOrders()) {
-
-                foreach ($sheet->getOrders() as $order) {
-                    if (!$order->isCancelled() && $order->getTotal() > 0) {
-                        $generatedInvoice[] = $order;
-                    }
-                }
+                $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
+                $create = new Create();
             }
         }
         return new BatchResult(count($generatedInvoice), $batchGenerateInvoice->getMessage() . 'generateInvoice.success');

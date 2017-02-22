@@ -35,6 +35,15 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Invoice $invoice)
+    {
+        $this->entityManager->persist($invoice);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLastInvoiceForEventPrefix($invoicePrefix)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()

@@ -15,6 +15,11 @@ use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 interface InvoiceRepositoryInterface
 {
     /**
+     * @return Invoice $invoice
+     */
+    public function add(Invoice $invoice);
+
+    /**
      * Get last generated invoice for given event invoice prefix
      *
      * @param $invoicePrefix
