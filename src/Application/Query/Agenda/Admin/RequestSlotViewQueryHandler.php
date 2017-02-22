@@ -41,6 +41,7 @@ class RequestSlotViewQueryHandler
      *
      * @return RequestSlotView
      * @throws NoSlotAvailableException
+     * @throws NoSpotAvailableException
      */
     public function handle(RequestSlotViewQuery $query)
     {
