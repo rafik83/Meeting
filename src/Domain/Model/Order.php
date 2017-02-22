@@ -295,7 +295,7 @@ class Order
             $total += $promotionCode->getPrice();
         }
 
-        return $this->fixAmount($total);
+        return $total;
     }
 
     /**
@@ -306,7 +306,7 @@ class Order
         $total = $this->getTotalWithoutVat();
 
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            return $this->fixAmount($total * $this->vatRate / 100);
+            return $total * $this->vatRate / 100;
         }
 
         return 0;
@@ -331,7 +331,7 @@ class Order
      */
     public function getTotal()
     {
-        return $this->fixAmount($this->getTotalWithVat());
+        return $this->getTotalWithVat();
     }
 
     /**
@@ -622,15 +622,5 @@ class Order
             [],
             $dateTime
         );
-    }
-
-    /**
-     * @param float|int $amount
-     *
-     * @return float|int
-     */
-    private function fixAmount($amount)
-    {
-        return ((int) round(100 * $amount)) / 100;
     }
 }
