@@ -557,9 +557,11 @@ form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
+form.sheet_filter.children.hasInvoice.label: 'A au moins une facture'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
+form.sheet_filter.children.hasScheduledMeeting.label: 'A au moins un RDV planifié'
 form.sheet_filter.children.imported.all.label: Tous
 form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
