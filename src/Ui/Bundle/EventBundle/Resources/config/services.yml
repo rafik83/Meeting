@@ -218,6 +218,13 @@ services:
         tags:
             - { name: form.type }
 
+    form_type.participant.add:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType
+        arguments:
+            - '@template.template_data_factory'
+        tags:
+            - { name: form.type }
+
     #
     # Event Listener
     #
@@ -411,5 +418,11 @@ services:
             - '@datetime'
             - '@order.merger'
             - '@cart_manager'
+        tags:
+            - { name: validator.constraint_validator }
+    validator_constraint_event.update_invoice_prefix_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event\UpdateInvoicePrefixValidator
+        arguments:
+            - '@security.authorization_checker'
         tags:
             - { name: validator.constraint_validator }

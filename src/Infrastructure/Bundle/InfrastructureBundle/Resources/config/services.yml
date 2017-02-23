@@ -253,6 +253,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Invoice\InvoiceRepository
         arguments:
              - '@doctrine.orm.entity_manager'
+    repository.invoice.prefix_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Invoice\PrefixRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1242,6 +1246,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\BillingConfiguration }
     command.event.practical_info.update_handler:
@@ -1517,6 +1522,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
 
+    command.invoice.prefix.create_handler:
+        class: Proximum\Vimeet\Application\Command\InvoicePrefix\CreateHandler
+        arguments:
+            - '@repository.invoice.prefix_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\InvoicePrefix\Create }
+
     #
     # Security
     #
@@ -1631,6 +1643,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.template_data_factory'
+            - '@query.participant.card_view_query_handler'
+            - '@domain.rule.applyer'
     #
     # Sheet Request
     #
@@ -3041,6 +3055,13 @@ services:
             - '%phantomjs_path%'
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
+
+    sheet.infos_helper:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@query.participant.card_list_view_query_handler'
+            - '@template.template_data_factory'
 
     #
     # Unavailability
