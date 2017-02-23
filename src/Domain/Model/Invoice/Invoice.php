@@ -44,27 +44,27 @@ class Invoice
     private $invoicePrefix;
 
     /**
-     * @var string
+     * @var int
      */
     private $invoiceYear;
 
     /**
-     * @var string
+     * @var int
      */
     private $invoiceIncrement;
 
     /**
-     * @var float
+     * @var int
      */
     private $total;
 
     /**
-     * @var float
+     * @var int
      */
     private $totalWithVat;
 
     /**
-     * @var float
+     * @var int
      */
     private $vatAmount;
 
@@ -76,15 +76,15 @@ class Invoice
     /**
      * Invoice constructor.
      *
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param Prefix $prefix
-     * @param string $invoicePrefix
-     * @param string $invoiceYear
-     * @param string $invoiceIncrement
-     * @param float  $total
-     * @param float  $totalWithVat
-     * @param float  $vatAmount
+     * @param Event     $event
+     * @param Sheet     $sheet
+     * @param Prefix    $prefix
+     * @param string    $invoicePrefix
+     * @param int       $invoiceYear
+     * @param int       $invoiceIncrement
+     * @param int       $total
+     * @param int       $totalWithVat
+     * @param int       $vatAmount
      * @param \DateTime $createdAt
      */
     public function __construct(
@@ -144,7 +144,7 @@ class Invoice
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getTotal()
     {
@@ -152,7 +152,7 @@ class Invoice
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getTotalWithVat()
     {
@@ -160,7 +160,7 @@ class Invoice
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getVatAmount()
     {
@@ -184,7 +184,7 @@ class Invoice
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getInvoiceYear()
     {
@@ -192,7 +192,7 @@ class Invoice
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getInvoiceIncrement()
     {
@@ -204,6 +204,6 @@ class Invoice
      */
     public function getNumber()
     {
-        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . $this->getInvoiceIncrement();
+        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT);
     }
 }
