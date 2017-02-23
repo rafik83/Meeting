@@ -1244,3 +1244,12 @@ admin_import_planner_data:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Planner/Import:import }
+
+#
+# Invoice
+#
+admin_invoice_export:
+    path: /event/invoice/export
+    methods: [GET]
+    requirements:
+    defaults: { _controller: AdminBundle:Invoice:export }
