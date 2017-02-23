@@ -59,6 +59,13 @@ interface HappeningParticipationRepositoryInterface
     public function getByEvent(Event $event);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findBySheet(Sheet $sheet);
+
+    /**
      * @param Event $event
      *
      * @return array

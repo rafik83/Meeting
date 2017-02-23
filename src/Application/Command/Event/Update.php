@@ -25,6 +25,11 @@ class Update extends AbstractEvent
     public $translations;
 
     /**
+     * @var null|string
+     */
+    public $analyticsCode = null;
+
+    /**
      * @param Model\Event $event
      */
     public function __construct(Model\Event $event)
@@ -45,6 +50,7 @@ class Update extends AbstractEvent
         $this->textColor     = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
         $this->emailTeam     = $event->getEmailTeam();
+        $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

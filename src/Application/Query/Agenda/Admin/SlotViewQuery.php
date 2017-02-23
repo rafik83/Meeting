@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
 class SlotViewQuery
 {
@@ -62,16 +63,22 @@ class SlotViewQuery
     public $participant;
 
     /**
+     * @var MassAssignment[]
+     */
+    public $massAssignments;
+
+    /**
      * SlotViewQuery constructor.
      *
-     * @param Event       $event
-     * @param Day         $day
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     * @param array       $happenings
-     * @param array       $unavailabilities
-     * @param array       $masses
-     * @param array       $meetings
+     * @param Event                    $event
+     * @param Day                      $day
+     * @param Sheet                    $sheet
+     * @param Participant              $participant
+     * @param HappeningParticipation[] $happenings
+     * @param Unavailability[]         $unavailabilities
+     * @param Mass[]                   $masses
+     * @param Meeting[]                $meetings
+     * @param MassAssignment[]         $massAssignments
      */
     public function __construct(
         Event $event,
@@ -81,7 +88,8 @@ class SlotViewQuery
         array $happenings,
         array $unavailabilities,
         array $masses,
-        array $meetings
+        array $meetings,
+        array $massAssignments
     ) {
         $this->day              = $day;
         $this->event            = $event;
@@ -91,5 +99,6 @@ class SlotViewQuery
         $this->meetings         = $meetings;
         $this->sheet            = $sheet;
         $this->participant      = $participant;
+        $this->massAssignments  = $massAssignments;
     }
 }

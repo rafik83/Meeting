@@ -67,7 +67,8 @@ class AgendaParticipantViewQueryHandler
                     $query->happeningParticipations,
                     $query->unavailabilites,
                     $query->masses,
-                    $query->meetings
+                    $query->meetings,
+                    $query->massAssignments
                 )
             );
         }

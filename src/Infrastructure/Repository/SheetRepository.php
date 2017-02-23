@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -82,6 +83,26 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('sheet.participants', 'participants')
             ->where('sheet.event = :event')
             ->andWhere('sheet.inCatalog = true')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participants')
+            ->where('sheet.event = :event')
+            ->andWhere('sheet.inCatalog = true')
+            ->andWhere('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE r.from = sheet OR r.to = sheet AND r.state = :approved)')
+            ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -260,6 +281,23 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByIds(array $sheetIds)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participant')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant')
+            ->where('sheet.id IN (:sheets)')
+            ->setParameter('sheets', $sheetIds);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findFullSheets(array $sheets)
     {
         $queryBuilder = $this
@@ -326,7 +364,9 @@ class SheetRepository implements SheetRepositoryInterface
     {
         $queryBuilder = $this->queryEnabledSheetsByEvent($event);
 
-        $queryBuilder->select('sheet');
+        $queryBuilder->select('sheet, owner, type');
+        $queryBuilder->join('sheet.owner', 'owner');
+        $queryBuilder->join('sheet.type', 'type');
 
         return $queryBuilder->getQuery()->getResult();
     }

@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Elastica\Filter\Exists;
 use Elastica\Query\BoolQuery;
+use Elastica\Query\Filtered;
 use Elastica\Query\Match;
 use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
@@ -159,6 +161,7 @@ class SheetSearchQueryBuilder
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
         $this->filterByHasHappeningParticipation($filters);
+        $this->filterByImported($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart();
@@ -707,5 +710,56 @@ class SheetSearchQueryBuilder
     private function filterByHasPendingMeetingProposition()
     {
         $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', true));
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByImported(array &$filters)
+    {
+        if (!isset($filters[Constant::FILTER_IMPORTED])) {
+            return;
+        }
+
+        $importedQuery = new BoolQuery();
+
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED) {
+            $importedQuery->addMust($this->isImported(true));
+        }
+
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED_WITH_CONNECTION) {
+            $importedQuery->addMust($this->isImported(true));
+            $importedQuery->addMust($this->hasConnectionFilter());
+        }
+
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED_WITHOUT_CONNECTION) {
+            $importedQuery->addMust($this->isImported(true));
+            $importedQuery->addMustNot($this->hasConnectionFilter());
+        }
+
+        if ($filters[Constant::FILTER_IMPORTED] === Constant::NOT_IMPORTED) {
+            $importedQuery->addMust($this->isImported(false));
+        }
+
+        $this->query->addMust($importedQuery);
+
+    }
+
+    /**
+     * @param bool $imported
+     *
+     * @return Term
+     */
+    private function isImported($imported)
+    {
+        return (new Term())->setTerm('imported', $imported);
+    }
+
+    /**
+     * @return Filtered
+     */
+    private function hasConnectionFilter()
+    {
+        return (new Filtered())->setFilter(new Exists('lastLoginAt'));
     }
 }

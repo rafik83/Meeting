@@ -39,7 +39,8 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $campaign = new Campaign($command->event, $command->name, array_filter($command->filters), new \DateTimeImmutable());
+        $filter   = function ($value) { return $value !== null && $value !== ''; };
+        $campaign = new Campaign($command->event, $command->name, array_filter($command->filters, $filter), new \DateTimeImmutable());
 
         foreach ($this->sheetRepository->getSheetsById($command->sheetIds) as $sheet) {
             $campaign->addSheet($sheet);

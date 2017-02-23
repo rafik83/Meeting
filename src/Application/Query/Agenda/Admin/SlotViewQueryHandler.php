@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AbstractSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\EmptySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\HappeningUnavailabilitySlotView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\MassAssignmentUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\UnavailabilitySlotView;
@@ -67,7 +68,8 @@ class SlotViewQueryHandler
             $query->happenings,
             $query->meetings,
             $query->unavailabilities,
-            $query->masses
+            $query->masses,
+            $query->massAssignments
         );
 
         $slotViews = [];
@@ -109,7 +111,15 @@ class SlotViewQueryHandler
             }
 
             if ($slotAvailabilityView->type === SlotAvailability::MASS_UNAVAILABILITY) {
-                $slotViews[] = new MassUnavailabilitySlotView($slot, $slotAvailabilityView->type);
+                if ($slotAvailabilityView->massAssignment !== null) {
+                    $slotViews[] = new MassAssignmentUnavailabilitySlotView(
+                        $slot,
+                        SlotAvailability::MASS_ASSIGNMENT_UNAVAILABILITY,
+                        $slotAvailabilityView->massAssignment->getId()
+                    );
+                } else {
+                    $slotViews[] = new MassUnavailabilitySlotView($slot, $slotAvailabilityView->type);
+                }
 
                 continue;
             }

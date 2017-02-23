@@ -58,4 +58,11 @@ interface TransactionRepositoryInterface
      * @return Transaction[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Transaction[]
+     */
+    public function findPaidByEvent(Event $event);
 }

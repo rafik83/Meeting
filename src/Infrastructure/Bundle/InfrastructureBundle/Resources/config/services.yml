@@ -530,6 +530,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting }
+    ommand.meeting_request.admin.update_participant_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipantsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants }
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
@@ -1231,6 +1238,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\BillingConfiguration }
     command.event.practical_info.update_handler:
@@ -1395,6 +1403,14 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
+
+    command.unavailability.mass_assignment.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler
+        arguments:
+            - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update }
 
     command.messaging.message.create_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler
@@ -1612,6 +1628,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.template_data_factory'
+            - '@query.participant.card_view_query_handler'
+            - '@domain.rule.applyer'
     #
     # Sheet Request
     #
@@ -2361,17 +2379,29 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
+    query.agenda.admin.indicator.sheet_indicators_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@domain.planner.indicator_calculator'
     query.agenda.sheet_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@domain.planner.indicator_calculator'
+            - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
+    query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery }
     query.agenda.agenda_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQueryHandler
         arguments:
@@ -2382,6 +2412,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.agenda.request_view_query_handler'
+            - '@repository.unavailability.mass_assignment_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery }
     query.agenda.remove_meeting_query_handler:
@@ -2434,6 +2465,27 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+    query.agenda.admin.request.request_sheets_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.admin.request.request_sheet_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQuery }
+    query.agenda.admin.request.request_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetViewQuery }
+    query.agenda.admin.request.meeting_request_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.request_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery }
 
     ##
     # Navigation builder
@@ -2468,6 +2520,7 @@ services:
             - '@query.navigation.sheet_submenu_view_query_handler'
             - '@query.navigation.catalog_submenu_view_query_handler'
             - '@query.navigation.agenda_submenu_view_query_handler'
+            - '@query.navigation.package_submenu_button_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery }
     query.navigation.category_view_query_handler:
@@ -2530,19 +2583,24 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@query.navigation.package_submenu_button_view_query_handler'
-            - '@domain.key_dates.checker.catalog_access_checker'
-            - '@domain.key_dates.checker.happenings_access_checker'
     query.navigation.agenda_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@query.navigation.package_submenu_button_view_query_handler'
+            - '@domain.key_dates.checker.happenings_access_checker'
     query.navigation.package_submenu_button_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
+
+    ##
+    # Mass Assignment query handler
+    ##
+    query.mass_assignement.mass_assignement_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MassAssignment\MassAssignementViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery }
 
     ##
     # Notification query handler
@@ -2981,6 +3039,13 @@ services:
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
 
+    sheet.infos_helper:
+        class: Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@query.participant.card_list_view_query_handler'
+            - '@template.template_data_factory'
+
     #
     # Unavailability
     #
@@ -3022,6 +3087,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '@order.merger'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 
@@ -3045,8 +3111,16 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@query.agenda.agenda_view_query_handler'
+            - '@planning.formatter.participant_planning_formatter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.event_meetings:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventMeetingsNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: serializer.normalizer }
 
@@ -3291,3 +3365,42 @@ services:
             - '@adapter.event_url_generator'
             - '@template.participant_info_guesser'
             - '@components.token.user.activate_account_token_generator'
+            - '@query.sheet.planning.sheet_planning_view_query_handler'
+
+    #
+    # Emailing Query
+    #
+    query.sheet.planning.sheet_planning_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler
+        arguments:
+            - '@planning.displayer.sheet_planning_displayer'
+
+    #
+    # Planning
+    #
+    ###### Formatter
+    planning.formatter.unallocated_formatter:
+        class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    planning.formatter.participant_planning_formatter:
+        class: Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@planning.formatter.unallocated_formatter'
+            - '@query.agenda.agenda_view_query_handler'
+    planning.formatter.sheet_planning_formatter:
+        class: Proximum\Vimeet\Application\Components\Planning\Formatter\SheetPlanningFormatter
+        arguments:
+            - '@planning.formatter.participant_planning_formatter'
+            - '@planning.formatter.unallocated_formatter'
+            - '@template.participant_info_guesser'
+
+    ###### Displayer
+    planning.displayer.sheet_planning_displayer:
+        class: Proximum\Vimeet\Application\Components\Planning\Displayer\SheetPlanningDisplayer
+        arguments:
+            - '@planning.formatter.sheet_planning_formatter'
+            - '@markdown'

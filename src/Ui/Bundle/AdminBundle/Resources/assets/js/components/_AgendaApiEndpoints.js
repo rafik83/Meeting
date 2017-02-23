@@ -1,7 +1,7 @@
-function AgendaApiEndpoints() {}
+function AgendaApiEndpoints() {
+}
 
-AgendaApiEndpoints.prototype.getPathname = function ()
-{
+AgendaApiEndpoints.prototype.getPathname = function () {
     return document.location.pathname;
 };
 
@@ -11,8 +11,7 @@ AgendaApiEndpoints.prototype.getPathname = function ()
  *
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getSheetsEndpoint = function ()
-{
+AgendaApiEndpoints.prototype.getSheetsEndpoint = function () {
     return this.getPathname() + '/sheets';
 };
 
@@ -23,9 +22,19 @@ AgendaApiEndpoints.prototype.getSheetsEndpoint = function ()
  * @param {int} sheet
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet)
-{
+AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet) {
     return this.getPathname() + '/sheet/' + sheet.id;
+};
+
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/sheets/indicators
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheets/indicators
+ *
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getSheetsIndicatorsEndpoint = function ()
+{
+    return this.getPathname() + '/sheets/indicators';
 };
 
 /**
@@ -70,6 +79,46 @@ AgendaApiEndpoints.prototype.getMeetingUpdateSlotEndpoint = function (meetingId)
  */
 AgendaApiEndpoints.prototype.getTransformRequestIntoMeetingEndpoint = function (requestId) {
     return this.getPathname() + '/request/' + requestId + '/transform-into-meeting';
+};
+
+/**
+ * @param {int} massId
+ * @return {string}
+ */
+AgendaApiEndpoints.prototype.getMassAssignmentDetailEndpoint = function (massId) {
+    return this.getPathname() + '/mass/' + massId + '/detail';
+};
+
+/**
+ * Return /event/{event}/agenda/mass/{mass}/update
+ *
+ * @param {int} massId
+ * @return {string}
+ */
+AgendaApiEndpoints.prototype.getUpdateMassAssignmentEndpoint = function (massId) {
+    return this.getPathname() + '/mass/' + massId + '/update';
+};
+
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/participants
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getParticipantsOfRequestEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/participants';
+};
+
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/request/{requestId}/update/participants
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/request/{requestId}/update/participants
+ *
+ * @param {int} requestId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.updateParticipantsOfRequestEndpoint = function (requestId) {
+    return this.getPathname() + '/request/' + requestId + '/update/participants';
 };
 
 module.exports = AgendaApiEndpoints;

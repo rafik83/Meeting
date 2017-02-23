@@ -23,7 +23,10 @@
         <div class="col-md-offset-4 col-md-4">
 
             <div class="input-group">
-                {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                <div class="input-group-btn">
+                    {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                    {{ macro.choice_as_dropdown(filter_form.imported, true, false, true) }}
+                </div>
                 {{ form_widget(filter_part_form.text) }}
             </div>
 

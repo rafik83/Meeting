@@ -39,6 +39,10 @@ admin.agenda.filters.reset.label: Reset
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
 admin.agenda.filters.title.label: 'Filtre'
 admin.agenda.filters.type: 'Type de participation'
+admin.agenda.mass_assignment.title.label: 'Modifier l''indispo de masse dispatchée'
+admin.agenda.mass_assignment.begin.label: ''
+admin.agenda.mass_assignment.submit.label: 'Valider'
+admin.agenda.mass_assignment.enabled.label: 'Activé'
 admin.agenda.indicators-caption: 'Légende indicateurs'
 admin.agenda.indicators-help: 'Passer le curseur sur les icones'
 admin.agenda.link: 'Gestion des rendez-vous'
@@ -46,6 +50,7 @@ admin.agenda.meeting.move: 'Déplacer le RDV'
 admin.agenda.meeting.selectSlot: 'Sélectionner ce créneau'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.meeting.update: 'Modifier le RDV'
+admin.agenda.meeting.mass_assignment.update: 'Modifier l''indisponibilité de masse dispacthée'
 admin.agenda.meeting.updateSlot.blockedSpotNotAvailableForThisMeetingAndSlot: 'Ce rendez-vous a un lieu bloqué et ce lieu n''est pas disponible pour le créneau sélectionné'
 admin.agenda.meeting.updateSlot.error: 'Impossible de modifier le créneau ce rendez-vous'
 admin.agenda.meeting.updateSlot.meetingIsBlockedSlot: 'Impossible de déplacer ce rendez-vous : il a un créneau bloqué.'
@@ -60,7 +65,11 @@ admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'Le créneau sélectionn�
 admin.agenda.meeting.updateSpot.spot: Lieu
 admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
-admin.agenda.meeting.updateSpot.visio: 'Visio'
+admin.agenda.meeting.updateMassAssignment.missingData: "Impossible de modifier l'indisponibilité de masse dispatché, données manquantes"
+admin.agenda.meeting.updateMassAssignment.outOfMassSlot: "Indisponibilité de masse dispatché en dehors de l'indisponibilité de masse"
+admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot: "Rendez-vous ou conférence sur le créneau"
+admin.agenda.meeting.updateMassAssignment.dateFormat: "Format de date incorrect"
+admin.agenda.meeting.updateSpot.visio: Visio
 admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
 admin.agenda.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce RDV ?'
@@ -68,20 +77,25 @@ admin.agenda.request.transformIntoMeeting.cancel: 'Annuler l''action de placer e
 admin.agenda.request.transformIntoMeeting.error: 'Impossible de placer cette demande de RDV'
 admin.agenda.request.transformIntoMeeting.label: 'Placer en RDV'
 admin.agenda.request.transformIntoMeeting.noSlotAvailable: 'Aucun créneau n''est disponible pour placer cette demande en RDV'
+admin.agenda.request.transformIntoMeeting.noSpotAvailable: 'Aucun lieu n''est disponible pour placer cette demande en RDV'
+admin.agenda.request.updateParticipant.invalidArguments: 'Les arguments envoyés ne sont pas complets'
+admin.agenda.request.updateParticipant.label: 'Modifier les participants'
+admin.agenda.request.updateParticipant.submit.label: Modifier
+admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d''une demande de RDV'
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
-admin.agenda.sort.alphabetical.label: 'Alphabétique'
-admin.agenda.sort.asc.label: 'Croissant'
-admin.agenda.sort.desc.label: 'Décroissant'
+admin.agenda.sort.alphabetical.label: Alphabétique
+admin.agenda.sort.asc.label: Croissant
+admin.agenda.sort.desc.label: Décroissant
 admin.agenda.sort.pending_request.label: 'Nombre de propositions en attente de validation'
 admin.agenda.sort.request.label: 'Nombre de demandes'
-admin.agenda.sort.title.label: Trier
-admin.agenda.sort.submit.label: 'Trier les fiches'
 admin.agenda.sort.scheduled_meeting.label: 'Nombre de RDV positionnés'
+admin.agenda.sort.submit.label: 'Trier les fiches'
+admin.agenda.sort.title.label: Trier
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
@@ -210,6 +224,7 @@ admin.meeting_request.details: Détail
 admin.meeting_request.from: De
 admin.meeting_request.link: 'Demandes de rendez-vous'
 admin.meeting_request.set_a_meeting: 'Placer un RDV'
+admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.state.approved: Accepté
 admin.meeting_request.state.cancelled: Annulé
 admin.meeting_request.state.refused: Refusé
@@ -220,6 +235,17 @@ admin.meeting.action.deleteAll.confirm: 'Êtes vous sûr de vouloir supprimer l'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
 admin.meeting.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce rendez-vous?'
 admin.meeting.action.remove.link: Supprimer
+admin.meeting.export.fields.meeting_id: 'ID RDV'
+admin.meeting.export.fields.from_sheet_id: 'ID demandeur'
+admin.meeting.export.fields.from_sheet_name: 'Nom fiche demandeur'
+admin.meeting.export.fields.from_sheet_participants: 'Participants demandeur'
+admin.meeting.export.fields.to_sheet_id: 'ID demandé'
+admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
+admin.meeting.export.fields.to_sheet_participants: 'Participants demandé'
+admin.meeting.export.fields.day: 'Jour'
+admin.meeting.export.fields.hour_begin: 'Heure début'
+admin.meeting.export.fields.hour_end: 'Heure fin'
+admin.meeting.export.fields.spot: 'Lieu'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
@@ -268,6 +294,7 @@ admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
 admin.messaging.message.compose.tags.participationType: 'Type de participation'
+admin.messaging.message.compose.tags.sheetPlanning: 'Planning de la participation'
 admin.messaging.message.content: Contenu
 admin.messaging.message.create.title: 'Créer un nouveau message'
 admin.messaging.message.createdAt: 'Créé le'
@@ -519,9 +546,13 @@ admin.sheet.export.fields.owner_email: 'Email propriétaire'
 admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
 admin.sheet.export.fields.registration_date: 'Date inscription'
+admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
+admin.sheet.export.fields.sheet_state: 'Etat'
 admin.sheet.export.fields.status: 'Statut fiche'
+admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
+admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
@@ -651,7 +682,7 @@ admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
-admin.unavailability.button.dispatch: 'Dispatcher'
+admin.unavailability.button.dispatch: Dispatcher
 admin.unavailability.button.dispatch_confirm: 'Êtes vous sûr de vouloir dispatcher les indisponbilités de masse?'
 admin.unavailability.button.mass: 'Indisponibilité de masse'
 admin.unavailability.category.add: Ajouter
@@ -797,6 +828,10 @@ event.sheet.completed.complete: Complète
 event.sheet.completed.incomplete: Incomplète
 event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active
+event.sheet.imported.imported_with_connection.label: 'Importées avec connexion'
+event.sheet.imported.imported_without_connection.label: 'Importées sans connexion'
+event.sheet.imported.imported.label: 'Tous les importées'
+event.sheet.imported.not_imported.label: 'Pas importées'
 event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
 event.sheet.listOrders.title: 'Liste de vos commandes'
 event.sheet.order.alphabetic: Alphabétique
@@ -831,6 +866,10 @@ event.sheet.update_product.title: 'Modifier un produit commandé'
 event.sheet.validationState.draft: Brouillon
 event.sheet.validationState.pending: 'Soumise à validation'
 event.sheet.validationState.validated: Validée
+meeting_request_filter.order_by.options.created_at_asc: 'Date de création croissante'
+meeting_request_filter.order_by.options.created_at_desc: 'Date de création décroissante'
+meeting_request_filter.order_by.options.state_updated_at_asc: 'Modification de statut croissant'
+meeting_request_filter.order_by.options.state_updated_at_desc: 'Modification de statut décroissant'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
 login.title: Connexion
@@ -850,6 +889,10 @@ notification.meeting_request.refused.withMessage: 'Demande refusée par %sheetNa
 notification.meeting_request.refused.withoutMessage: 'Demande refusée par %sheetName%'
 notification.participant.added.action: 'Participant ajouté'
 notification.participant.removed.action: 'Participant retiré'
+planning.participant.meeting: '%spotRef% - %sheetMet%'
+planning.participant.time: '%beginHour% - %endHour% : '
+planning.participant.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
+planning.participant.unavailability: Indisponible
 register.email_already_exists: 'Un compte associé à cette adresse mail existe déjà'
 reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'

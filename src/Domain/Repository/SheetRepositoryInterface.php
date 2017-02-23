@@ -44,6 +44,13 @@ interface SheetRepositoryInterface
     public function getSheetsInCatalogByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
+
+    /**
      * @param Type $type
      *
      * @return bool
@@ -118,6 +125,13 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function findSheets(array $sheets);
+
+    /**
+     * @param array $sheetIds
+     *
+     * @return Sheet[]
+     */
+    public function findByIds(array $sheetIds);
 
     /**
      * @param array $sheets
