@@ -47,10 +47,11 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function getLastInvoiceForEventPrefix($invoicePrefix)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('number')
+            ->select('invoice_number')
             ->from(Invoice::class, 'invoice')
-            ->leftJoin(Event::class, 'event', 'ON', 'invoice.event = event')
+            ->join('invoice.event', 'event')
             ->where('event.invoice_prefix = :invoice_prefix')
+            ->orderBy('createdAt', 'DESC')
             ->setParameter('invoice_prefix', $invoicePrefix)
             ->setMaxResults(1);
 
