@@ -69,23 +69,23 @@ class Invoice
     private $vatAmount;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
      * Invoice constructor.
      *
-     * @param Event     $event
-     * @param Sheet     $sheet
-     * @param Prefix    $prefix
-     * @param string    $invoicePrefix
-     * @param int       $invoiceYear
-     * @param int       $invoiceIncrement
-     * @param int       $total
-     * @param int       $totalWithVat
-     * @param int       $vatAmount
-     * @param \DateTime $createdAt
+     * @param Event              $event
+     * @param Sheet              $sheet
+     * @param Prefix             $prefix
+     * @param string             $invoicePrefix
+     * @param int                $invoiceYear
+     * @param int                $invoiceIncrement
+     * @param int                $total
+     * @param int                $totalWithVat
+     * @param int                $vatAmount
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Event $event,
@@ -97,7 +97,7 @@ class Invoice
         $total,
         $totalWithVat,
         $vatAmount,
-        \DateTime $createdAt)
+        \DateTimeInterface $createdAt)
     {
         $this->event            = $event;
         $this->sheet            = $sheet;

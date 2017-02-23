@@ -38,43 +38,37 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->datetime    = new \DateTime();
-        $this->event       = EventFactory::createEvent();
-        $this->invoiceNumberGenerator = new InvoiceNumberGenerator($this->event, $this->datetime);
+        $this->datetime = new \DateTime();
+        $this->event = EventFactory::createEvent();
+        $this->invoiceNumberGenerator = new InvoiceNumberGenerator();
     }
 
     public function testIncrementInvoiceNumberWithoutExistingInvoice()
     {
         $invoiceNumber = $this->invoiceNumberGenerator->generate();
-
-        $expectedInvoiceNumber = "Vi" . date('Y') . '-' . '0001';
-        $this->assertEquals($expectedInvoiceNumber, $invoiceNumber, "Invoice number should be :" . $expectedInvoiceNumber);
+        $expectedInvoiceIncrement = '0001';
+        $this->assertEquals($expectedInvoiceIncrement, $invoiceNumber, "Invoice increment should be :" . $expectedInvoiceIncrement);
     }
 
     public function testIncrementInvoiceNumberWithExistingInvoices()
     {
-        $type        = new Type($this->event);
-        $owner       = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet       = new Sheet($this->event, $type, [], $owner, $this->datetime);
-        $invoice     = new Invoice($this->event, $sheet, 'Vi', date('Y'), '0888', 10, 10, 10, $this->datetime);
-
-        $expectedInvoiceNumber = "Vi".date('Y')."-0889";
-        $invoiceNumber = $this->invoiceNumberGenerator->generate($invoice);
-
-        $this->assertEquals($expectedInvoiceNumber, $invoiceNumber, "Invoice number should be :"  . $expectedInvoiceNumber);
+        $type = new Type($this->event);
+        $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
+        $sheet = new Sheet($this->event, $type, [], $owner, $this->datetime);
+        $invoice = new Invoice($this->event, $sheet, $this->event->getInvoicePrefix(), 'Vi', date('Y'), '0888', 10, 10, 10, $this->datetime);
+        $expectedInvoiceIncrement = "0889";
+        $invoiceIncrement = $this->invoiceNumberGenerator->generate($invoice);
+        $this->assertEquals($expectedInvoiceIncrement, $invoiceIncrement, "Invoice increment should be :" . $expectedInvoiceIncrement);
     }
 
     public function testIncrementDate()
     {
-        $type        = new Type($this->event);
-        $owner       = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet       = new Sheet($this->event, $type, [], $owner, $this->datetime);
-        $number      = "Vi2016-0001";
-        $invoice     = new Invoice($this->event, $sheet, 'Vi', '2016', '0001', 10, 10, 10, new \DateTime('2016-12-31'));
-
-        $expectedInvoiceNumber = "Vi".date('Y')."-0001";
+        $type = new Type($this->event);
+        $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
+        $sheet = new Sheet($this->event, $type, [], $owner, $this->datetime);
+        $invoice = new Invoice($this->event, $sheet, $this->event->getInvoicePrefix(), 'Vi', '2016', '0001', 10, 10, 10, new \DateTime('2016-12-31'));
+        $expectedInvoiceIncrement = "0001";
         $invoiceNumber = $this->invoiceNumberGenerator->generate($invoice);
-
-        $this->assertEquals($expectedInvoiceNumber, $invoiceNumber, "Invoice number should be :"  . $expectedInvoiceNumber);
+        $this->assertEquals($expectedInvoiceIncrement, $invoiceNumber, "Invoice number should be :" . $expectedInvoiceIncrement);
     }
 }

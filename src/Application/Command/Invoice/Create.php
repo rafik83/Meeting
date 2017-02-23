@@ -37,32 +37,71 @@ class Create
     public $invoicePrefix;
 
     /**
-     * @var string
+     * @var int
      */
     public $invoiceYear;
 
     /**
-     * @var string
+     * @var int
      */
     public $invoiceNumber;
 
     /**
-     * @var float
+     * @var int
      */
     public $total;
 
     /**
-     * @var float
+     * @var int
      */
     public $totalWithVat;
 
     /**
-     * @var float
+     * @var int
      */
     public $vatAmount;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     public $createdAt;
+
+    /**
+     * Create constructor.
+     *
+     * @param Event              $event
+     * @param Sheet              $sheet
+     * @param Prefix             $prefix
+     * @param string             $invoicePrefix
+     * @param string             $invoiceYear
+     * @param string             $invoiceNumber
+     * @param float              $total
+     * @param float              $totalWithVat
+     * @param float              $vatAmount
+     * @param \DateTimeInterface $createdAt
+     */
+    public function __construct(
+        Event $event,
+        Sheet $sheet,
+        Prefix $prefix,
+        $invoicePrefix,
+        $invoiceYear,
+        $invoiceNumber,
+        $total,
+        $totalWithVat,
+        $vatAmount,
+        \DateTimeInterface $createdAt
+    )
+    {
+        $this->event         = $event;
+        $this->sheet         = $sheet;
+        $this->prefix        = $prefix;
+        $this->invoicePrefix = $invoicePrefix;
+        $this->invoiceYear   = $invoiceYear;
+        $this->invoiceNumber = $invoiceNumber;
+        $this->total         = $total;
+        $this->totalWithVat  = $totalWithVat;
+        $this->vatAmount     = $vatAmount;
+        $this->createdAt     = $createdAt;
+    }
 }

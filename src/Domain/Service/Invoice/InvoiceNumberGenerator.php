@@ -16,21 +16,6 @@ use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 class InvoiceNumberGenerator
 {
     /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * InvoiceNumberGenerator constructor.
-     *
-     * @param Event $event
-     */
-    public function __construct(Event $event)
-    {
-        $this->event = $event;
-    }
-
-    /**
      * Generate Invoice Number
      *
      * @param Invoice $invoice|null
@@ -54,7 +39,7 @@ class InvoiceNumberGenerator
         }
 
         if ($invoice->getInvoiceYear() === date('Y')) {
-            return $this->incrementInvoiceNumber($invoice->getInvoiceNumber());
+            return $this->incrementInvoiceNumber($invoice->getInvoiceIncrement());
         }
 
         return 1;
