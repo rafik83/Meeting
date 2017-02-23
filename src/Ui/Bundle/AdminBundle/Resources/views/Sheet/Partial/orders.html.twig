@@ -30,9 +30,11 @@
                             {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
                         </td>
                         <td class="text-right">
-                            <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: order.id }) }}" class="btn btn-default btn-sm">
-                                {{ 'admin.order_edit.link'|trans }}
-                            </a>
+                            {% if order.invoice is null %}
+                                <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: order.id }) }}" class="btn btn-default btn-sm">
+                                    {{ 'admin.order_edit.link'|trans }}
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
