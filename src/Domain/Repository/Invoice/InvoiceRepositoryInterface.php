@@ -10,7 +10,14 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 interface InvoiceRepositoryInterface
 {
-    
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function getAllByEvent(Event $event)
 }
