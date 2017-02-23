@@ -16,9 +16,9 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
         invoicePrefix:
             type: string
         invoiceYear:
-            type: string
+            type: integer
         invoiceIncrement:
-            type: string
+            type: integer
         createdAt:
             type: datetime
     manyToOne:
