@@ -8,22 +8,26 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
                 strategy: AUTO
     fields:
         total:
-            type: float
+            type: integer
         totalWithVat:
-            type: float
+            type: integer
         vatAmount:
-            type: float
-        number:
+            type: integer
+        invoicePrefix:
             type: string
+        invoiceYear:
+            type: integer
+        invoiceIncrement:
+            type: integer
         createdAt:
             type: datetime
-
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
-            joinColumn:
-                onDelete: CASCADE
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-            joinColumn:
-                onDelete: CASCADE
+        prefix:
+            targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+    uniqueConstraints:
+        invoice_number:
+            columns: invoice_prefix, invoice_year, invoice_increment

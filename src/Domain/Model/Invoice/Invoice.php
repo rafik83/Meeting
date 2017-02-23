@@ -34,22 +34,37 @@ class Invoice
     private $sheet;
 
     /**
-     * @var string
+     * @var Prefix
      */
-    private $number;
+    private $prefix;
 
     /**
-     * @var float
+     * @var string
+     */
+    private $invoicePrefix;
+
+    /**
+     * @var int
+     */
+    private $invoiceYear;
+
+    /**
+     * @var int
+     */
+    private $invoiceIncrement;
+
+    /**
+     * @var int
      */
     private $total;
 
     /**
-     * @var float
+     * @var int
      */
     private $totalWithVat;
 
     /**
-     * @var float
+     * @var int
      */
     private $vatAmount;
 
@@ -63,17 +78,37 @@ class Invoice
      *
      * @param Event     $event
      * @param Sheet     $sheet
-     * @param string    $number
-     * @param float     $total
+     * @param Prefix    $prefix
+     * @param string    $invoicePrefix
+     * @param int       $invoiceYear
+     * @param int       $invoiceIncrement
+     * @param int       $total
+     * @param int       $totalWithVat
+     * @param int       $vatAmount
      * @param \DateTime $createdAt
      */
-    public function __construct(Event $event, Sheet $sheet, $number, $total, \DateTime $createdAt)
+    public function __construct(
+        Event $event,
+        Sheet $sheet,
+        Prefix $prefix,
+        $invoicePrefix,
+        $invoiceYear,
+        $invoiceIncrement,
+        $total,
+        $totalWithVat,
+        $vatAmount,
+        \DateTime $createdAt)
     {
-        $this->event = $event;
-        $this->sheet = $sheet;
-        $this->number = $number;
-        $this->total = $total;
-        $this->createdAt = $createdAt;
+        $this->event            = $event;
+        $this->sheet            = $sheet;
+        $this->prefix           = $prefix;
+        $this->invoicePrefix    = $invoicePrefix;
+        $this->invoiceYear      = $invoiceYear;
+        $this->invoiceIncrement = $invoiceIncrement;
+        $this->total            = $total;
+        $this->totalWithVat     = $totalWithVat;
+        $this->vatAmount        = $vatAmount;
+        $this->createdAt        = $createdAt;
     }
 
     /**
@@ -101,15 +136,15 @@ class Invoice
     }
 
     /**
-     * @return string
+     * @return Prefix
      */
-    public function getNumber()
+    public function getPrefix()
     {
-        return $this->number;
+        return $this->prefix;
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getTotal()
     {
@@ -117,7 +152,7 @@ class Invoice
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getTotalWithVat()
     {
@@ -125,7 +160,7 @@ class Invoice
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getVatAmount()
     {
@@ -138,5 +173,37 @@ class Invoice
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoicePrefix()
+    {
+        return $this->invoicePrefix;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInvoiceYear()
+    {
+        return $this->invoiceYear;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInvoiceIncrement()
+    {
+        return $this->invoiceIncrement;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT);
     }
 }
