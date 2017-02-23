@@ -21,25 +21,17 @@ class InvoiceNumberGenerator
     private $event;
 
     /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
-
-    /**
      * InvoiceNumberGenerator constructor.
      *
      * @param Event $event
-     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(Event $event, \DateTimeInterface $dateTime)
+    public function __construct(Event $event)
     {
-        $this->event    = $event;
-        $this->datetime = $dateTime;
+        $this->event = $event;
     }
 
     /**
-     * Generate Invoice Number based on format : [Prefix][Year]-[Number]
-     * Example : "Vi2017-0001"
+     * Generate Invoice Number
      *
      * @param Invoice $invoice|null
      *
@@ -47,12 +39,7 @@ class InvoiceNumberGenerator
      */
     public function generate(Invoice $invoice = null)
     {
-        return sprintf(
-          '%s%s-%s',
-            $this->event->getInvoicePrefix()->getPrefix(),
-            $this->datetime->format('Y'),
-            str_pad($this->getIncrementalInvoiceNumber($invoice), 4, "0", STR_PAD_LEFT)
-        );
+        return str_pad($this->getIncrementalInvoiceNumber($invoice), 4, "0", STR_PAD_LEFT);
     }
 
     /**
