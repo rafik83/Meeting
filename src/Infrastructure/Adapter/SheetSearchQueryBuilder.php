@@ -283,13 +283,15 @@ class SheetSearchQueryBuilder
         /** @var array|string $filters ['state'] */
         if (isset($filters['state'])) {
             // Cast into array:
-            $states        = (array)$filters['state'];
+            $states        = (array) $filters['state'];
             $filterByState = new BoolQuery();
+
             foreach ($states as $state) {
                 if (in_array($state, Sheet::getAllStates())) {
                     $filterByState->addShould((new Term())->setTerm('state', $state));
                 }
             }
+
             $this->query->addMust($filterByState);
         }
     }
@@ -301,7 +303,7 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['validationState'])) {
             // Cast validationState into array:
-            $validationStates        = (array)$filters['validationState'];
+            $validationStates        = (array) $filters['validationState'];
             $filterByValidationState = new BoolQuery();
             foreach ($validationStates as $validationState) {
                 if (in_array($validationState, Sheet::getAllValidationStates())) {
@@ -589,7 +591,7 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $booleanFilters = (array)$booleanFilters;
+        $booleanFilters = (array) $booleanFilters;
 
         $nested    = new Nested();
         $boolQuery = new BoolQuery();
