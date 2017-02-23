@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BillingConfiguration
 {
@@ -28,6 +29,11 @@ class BillingConfiguration
      * @var array
      */
     public $translations = [];
+
+    /**
+     * @var UploadedFile
+     */
+    public $invoiceLogo;
 
     /**
      * BillingConfiguration constructor.
