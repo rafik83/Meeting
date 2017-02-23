@@ -71,7 +71,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Meeting/ASDDays2016-Meeting.yml',
             __DIR__ . '/Admin.yml',
             __DIR__ . '/AdminWithType.yml',
-            __DIR__ . '/ASDDays2016-Invoice.yml'
+            __DIR__ . '/ASDDays2016-Invoice.yml',
         ];
 
         $options = [
