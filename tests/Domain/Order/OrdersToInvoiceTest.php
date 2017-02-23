@@ -65,7 +65,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
 
-        $orderRepository->findNotCancelledBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
+        $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
 
         $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
@@ -89,7 +89,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
 
-        $orderRepository->findNotCancelledBySheet($sheet)->shouldBeCalled()->willReturn([]);
+        $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([]);
 
         $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
@@ -130,7 +130,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
 
-        $orderRepository->findNotCancelledBySheet($sheet)->shouldBeCalled()->willReturn([$orderNegative]);
+        $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderNegative]);
 
         $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
