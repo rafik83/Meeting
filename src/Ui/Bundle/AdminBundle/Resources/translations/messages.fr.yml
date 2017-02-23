@@ -123,6 +123,7 @@ admin.event.languages: Langues
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
 admin.event.page.orderFinder.title: 'Recherche commande'
+admin.event.page.invoice.title: 'Factures'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
@@ -552,6 +553,7 @@ admin.sheet.export.fields.sheet_state: 'Etat'
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
+admin.sheet.export.invoice.button.label: 'Exporter factures'
 admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
