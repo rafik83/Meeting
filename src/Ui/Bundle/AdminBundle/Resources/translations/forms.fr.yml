@@ -159,6 +159,8 @@ form.event_create.children.textColor.label: 'Couleur du texte'
 form.event_create.children.timeZone.label: 'Fuseau horaire'
 form.event_create.children.title.label: Titre
 form.event_create.children.vat.label: TVA
+form.event_create.children.invoicePrefix.label: "Préfixe de facturation"
+form.event.children.invoicePrefix.help.label: "Changer de préfixe ? Nous contacter"
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -191,6 +193,7 @@ form.event_update.children.timeZone.label: 'Fuseau horaire'
 form.event_update.children.title.label: Titre
 form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
 form.event_update.children.vat.label: TVA
+form.event_update.children.invoicePrefix.label: "Préfixe de facturation"
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
@@ -250,6 +253,9 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.invoice_prefix_create.children.title.label: 'Nom backoffice du préfixe'
+form.invoice_prefix_create.children.prefix.label: 'Préfixe'
+form.invoice_prefix_create.children.submit.label: Créer
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer

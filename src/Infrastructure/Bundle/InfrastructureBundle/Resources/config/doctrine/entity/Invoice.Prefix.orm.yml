@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Invoice\Prefix:
+    type:  entity
+    table: invoice_prefix
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        prefix:
+            type: string
+            nullable: true
+        isDefault:
+            type: boolean
+            nullable: false

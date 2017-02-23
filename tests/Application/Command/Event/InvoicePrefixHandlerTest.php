@@ -1,0 +1,35 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Application\Command\Event;
+
+use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
+use Proximum\Vimeet\Application\Command\InvoicePrefix\CreateHandler;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
+use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
+
+class InvoicePrefixHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testCreateHandler()
+    {
+        $prefix         = new Prefix('Vimeet', 'Vi');
+        $create         = new Create();
+        $create->title  = 'Vimeet';
+        $create->prefix = 'Vi';
+
+        // Mock
+        $prefixRepository = $this->prophesize(PrefixRepositoryInterface::class);
+
+        $prefixRepository->add($prefix)->shouldBeCalled();
+
+        $handler = new CreateHandler($prefixRepository->reveal());
+        $handler->handle($create);
+    }
+}
