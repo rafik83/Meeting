@@ -20,7 +20,7 @@ class CreateHandler
      * @var InvoiceRepositoryInterface
      */
     private $invoiceRepository;
-
+    
     /**
      * CreateHandler constructor.
      *
@@ -30,13 +30,15 @@ class CreateHandler
     {
         $this->invoiceRepository = $invoiceRepository;
     }
-
+    
     /**
      * @param Create $create
+     *
+     * @return Invoice
      */
     public function handle(Create $create)
     {
-        $this->invoiceRepository->add(new Invoice(
+        return $this->invoiceRepository->add(new Invoice(
             $create->event,
             $create->sheet,
             $create->prefix,

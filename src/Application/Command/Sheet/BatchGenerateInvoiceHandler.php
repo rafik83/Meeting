@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
@@ -36,6 +37,11 @@ class BatchGenerateInvoiceHandler
     private $ordersToInvoice;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
      * @var \DateTimeInterface
      */
     private $datetime;
@@ -43,27 +49,29 @@ class BatchGenerateInvoiceHandler
     /**
      * BatchGenerateInvoiceHandler constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param OrdersToInvoice $ordersToInvoice
-     * @param \DateTimeInterface $dateTime
+     * @param SheetRepositoryInterface      $sheetRepository
+     * @param InvoiceRepositoryInterface    $invoiceRepository
+     * @param OrdersToInvoice               $ordersToInvoice
+     * @param OrderRepositoryInterface      $orderRepository
+     * @param \DateTimeInterface            $dateTime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
         InvoiceRepositoryInterface $invoiceRepository,
         OrdersToInvoice            $ordersToInvoice,
+        OrderRepositoryInterface   $orderRepository,
         \DateTimeInterface         $dateTime
     )
     {
         $this->sheetRepository   = $sheetRepository;
         $this->invoiceRepository = $invoiceRepository;
         $this->ordersToInvoice   = $ordersToInvoice;
+        $this->orderRepository   = $orderRepository;
         $this->datetime          = $dateTime;
     }
 
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
-        // Get sheets
         $sheets         = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
         $createHandler  = new CreateHandler($this->invoiceRepository);
         $invoiceGeneratedCounter = 0;
@@ -88,7 +96,15 @@ class BatchGenerateInvoiceHandler
                     $ordersToInvoiceView->getVatAmount(),
                     $this->datetime
                 );
-                $createHandler->handle($create);
+
+                $invoice = $createHandler->handle($create);
+                
+                // Flag Order with generated Invoice
+                foreach($ordersToInvoiceView->getOrders() as $order) {
+                    $order->setInvoice($invoice);
+                    $this->orderRepository->set($order);
+                }
+                
                 $invoiceGeneratedCounter++;
             }
         }
