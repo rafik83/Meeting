@@ -1,0 +1,27 @@
+---
+
+############
+# Strategy #
+############
+
+manala_deploy_strategy_git_version: prod
+
+###########
+# Removed #
+###########
+
+manala_deploy_removed:
+  - web/app_dev.php
+  - web/app_test.php
+
+
+#########
+# Tasks #
+#########
+
+manala_deploy_tasks:
+  - symfony_assets_version
+  - make: install@prod
+  - make: migration@prod
+  - make: build@prod
+  - command: sudo /usr/sbin/service php5-fpm reload
