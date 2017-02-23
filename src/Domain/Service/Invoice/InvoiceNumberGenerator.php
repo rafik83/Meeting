@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Service\Invoice;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 
 class InvoiceNumberGenerator
