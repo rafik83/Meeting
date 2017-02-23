@@ -19,5 +19,5 @@ interface InvoiceRepositoryInterface
      *
      * @return array
      */
-    public function getAllByEvent(Event $event)
+    public function getAllByEvent(Event $event);
 }

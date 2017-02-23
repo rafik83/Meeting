@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
@@ -109,7 +108,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
         $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
 
         foreach ($rawInvoices as $rawInvoice) {
-            $normalizedMeetings[] = $this->normalizeInvoiceRawData($rawInvoice, $charset);
+            $normalizedInvoices[] = $this->normalizeInvoiceRawData($rawInvoice, $charset);
         }
 
         return $normalizedInvoices;
@@ -127,7 +126,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
      * @param Invoice $invoice
      * @param string  $adminLocale
      *
-     * @return array Raw data about meeting
+     * @return array Raw data about invoice
      */
     private function getInvoiceRawData(Invoice $invoice, $adminLocale)
     {
@@ -155,7 +154,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     }
 
     /**
-     * Returns an array of normalized data from a meeting's raw data
+     * Returns an array of normalized data from an invoice's raw data
      *
      * @param array  $rawData
      * @param string $charset

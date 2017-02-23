@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Normalizer\InvoicesNormalizerView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
