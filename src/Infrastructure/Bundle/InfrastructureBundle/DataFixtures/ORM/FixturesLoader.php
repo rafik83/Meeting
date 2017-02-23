@@ -48,7 +48,6 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Happening/RdvCarnot2016-Category.yml',
             __DIR__ . '/RdvCarnot2016-Schedule.yml',
             __DIR__ . '/ASDDays2016-Event.yml',
-            __DIR__ . '/ASDDays2016-Invoice.yml',
             __DIR__ . '/ASDDays2016-Nomenclature.yml',
             __DIR__ . '/ASDDays2016-Product.yml',
             __DIR__ . '/ASDDays2016-Template.yml',
@@ -71,7 +70,8 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Meeting/RdvCarnot2016-Message.yml',
             __DIR__ . '/Meeting/ASDDays2016-Meeting.yml',
             __DIR__ . '/Admin.yml',
-            __DIR__ . '/AdminWithType.yml'
+            __DIR__ . '/AdminWithType.yml',
+            __DIR__ . '/ASDDays2016-Invoice.yml'
         ];
 
         $options = [

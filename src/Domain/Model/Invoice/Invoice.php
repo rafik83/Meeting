@@ -34,6 +34,11 @@ class Invoice
     private $sheet;
 
     /**
+     * @var Prefix
+     */
+    private $prefix;
+
+    /**
      * @var string
      */
     private $invoicePrefix;
@@ -73,6 +78,7 @@ class Invoice
      *
      * @param Event  $event
      * @param Sheet  $sheet
+     * @param Prefix $prefix
      * @param string $invoicePrefix
      * @param string $invoiceYear
      * @param string $invoiceIncrement
@@ -84,6 +90,7 @@ class Invoice
     public function __construct(
         Event $event,
         Sheet $sheet,
+        Prefix $prefix,
         $invoicePrefix,
         $invoiceYear,
         $invoiceIncrement,
@@ -94,6 +101,7 @@ class Invoice
     {
         $this->event            = $event;
         $this->sheet            = $sheet;
+        $this->prefix           = $prefix;
         $this->invoicePrefix    = $invoicePrefix;
         $this->invoiceYear      = $invoiceYear;
         $this->invoiceIncrement = $invoiceIncrement;
@@ -125,6 +133,14 @@ class Invoice
     public function getSheet()
     {
         return $this->sheet;
+    }
+
+    /**
+     * @return Prefix
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 
     /**

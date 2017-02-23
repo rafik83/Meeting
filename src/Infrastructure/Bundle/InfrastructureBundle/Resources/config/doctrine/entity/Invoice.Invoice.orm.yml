@@ -17,7 +17,7 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             type: string
         invoiceYear:
             type: string
-        invoiceNumber:
+        invoiceIncrement:
             type: string
         createdAt:
             type: datetime
@@ -26,6 +26,8 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        prefix:
+            targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
     uniqueConstraints:
         invoice_number:
-            columns: invoice_prefix, invoice_year, invoice_number
+            columns: invoice_prefix, invoice_year, invoice_increment

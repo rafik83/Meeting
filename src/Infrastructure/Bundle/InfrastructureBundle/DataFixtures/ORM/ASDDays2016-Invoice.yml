@@ -3,6 +3,7 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
         __construct:
             - '@event_asddays_2016'
             - '@sheet_asddays_1'
+            - '@prefix_asddays'
             - 'As'
             - '2016'
             - '0001'
