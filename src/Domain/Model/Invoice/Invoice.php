@@ -44,12 +44,12 @@ class Invoice
     private $invoicePrefix;
 
     /**
-     * @var string
+     * @var int
      */
     private $invoiceYear;
 
     /**
-     * @var string
+     * @var int
      */
     private $invoiceIncrement;
 
@@ -80,8 +80,8 @@ class Invoice
      * @param Sheet     $sheet
      * @param Prefix    $prefix
      * @param string    $invoicePrefix
-     * @param string    $invoiceYear
-     * @param string    $invoiceIncrement
+     * @param int       $invoiceYear
+     * @param int       $invoiceIncrement
      * @param int       $total
      * @param int       $totalWithVat
      * @param int       $vatAmount
@@ -184,7 +184,7 @@ class Invoice
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getInvoiceYear()
     {
@@ -192,7 +192,7 @@ class Invoice
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getInvoiceIncrement()
     {
@@ -204,6 +204,6 @@ class Invoice
      */
     public function getNumber()
     {
-        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . $this->getInvoiceIncrement();
+        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT);
     }
 }
