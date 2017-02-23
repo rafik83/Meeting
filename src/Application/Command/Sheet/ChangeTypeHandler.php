@@ -16,9 +16,11 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ChangeTypeHandler
 {
@@ -70,6 +72,7 @@ class ChangeTypeHandler
      */
     public function handle(ChangeType $changeType)
     {
+        $this->denyAccessIfAtLeastOneOrderIsInvoiced($changeType->sheet);
         $previousType = $changeType->sheet->getType();
 
         if (null === $changeType->type || $changeType->type === $previousType) {
@@ -125,5 +128,15 @@ class ChangeTypeHandler
         // trigger event to generate must select package notification if user has no order
         $ordersUpdated = new MustSelectPackageEvent($changeType->sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $ordersUpdated);
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet)
+    {
+        if ($sheet->isAtLeastOneOrderInvoiced()) {
+            throw new AccessDeniedException('Access denied.');
+        }
     }
 }

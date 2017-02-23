@@ -816,4 +816,18 @@ class Sheet implements TraceableInterface
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAtLeastOneOrderInvoiced()
+    {
+        foreach ($this->orders as $order) {
+            if ($order->getInvoice() !== null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
