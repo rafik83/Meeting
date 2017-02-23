@@ -54,6 +54,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->from(Invoice::class, 'invoice')
             ->where('invoice.event = :event')
             ->setParameter('event', $event)
+            ->orderBy('invoice.id', 'DESC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -69,6 +70,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->from(Invoice::class, 'invoice')
             ->where('invoice.sheet = :sheet')
             ->setParameter('sheet', $sheet)
+            ->orderBy('invoice.id', 'DESC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
