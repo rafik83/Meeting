@@ -3119,6 +3119,15 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.invoices:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\InvoiceNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.invoice.invoice_repository'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'
