@@ -3134,6 +3134,9 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 
