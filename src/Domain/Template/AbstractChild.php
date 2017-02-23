@@ -91,6 +91,14 @@ abstract class AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function isParticipant()
+    {
+        return 'participant' === $this->type;
+    }
+
+    /**
      * @return string
      */
     public function getLocale()
