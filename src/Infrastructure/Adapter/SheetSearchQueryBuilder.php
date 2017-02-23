@@ -703,7 +703,7 @@ class SheetSearchQueryBuilder
     private function filterByHasScheduledMeeting(array &$filters)
     {
         if (isset($filters['hasScheduledMeeting'])) {
-            $this->query->addMust((new Term())->setTerm('hasScheduledMeeting', (bool)$filters['hasScheduledMeeting']));
+            $this->query->addMust((new Term())->setTerm('hasScheduledMeeting', (bool) $filters['hasScheduledMeeting']));
         }
     }
 
@@ -713,7 +713,7 @@ class SheetSearchQueryBuilder
     private function filterByHasInvoice(array &$filters)
     {
         if (isset($filters['hasInvoice'])) {
-            $this->query->addMust((new Term())->setTerm('hasInvoice', (bool)$filters['hasInvoice']));
+            $this->query->addMust((new Term())->setTerm('hasInvoice', (bool) $filters['hasInvoice']));
         }
     }
 
