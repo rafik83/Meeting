@@ -23,6 +23,13 @@
                         </a>
                     </li>
                 {% endif %}
+                {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                    <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
+                        <a href="#invoice" aria-controls="profile" role="tab" data-toggle="tab">
+                            {{ 'admin.event.page.invoice.title'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane {% if not orderTabActive %}active{% endif %}" id="eventList">
@@ -83,6 +90,13 @@
                         {{ form_end(orderForm) }}
                     </div>
                 {% endif %}
+                <div role="tabpanel" class="tab-pane" id="invoice">
+                    {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                        <form action="{{ path('admin_invoice_export') }}" method="GET">
+                            <input type="submit" value="{{ 'admin.sheet.export.invoice.button.label'|trans }}" class="btn btn-sm btn-default"/>
+                        </form>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
