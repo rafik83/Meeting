@@ -72,4 +72,11 @@ interface OrderRepositoryInterface
      * @return Order[]
      */
     public function findNotCancelledByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet);
 }

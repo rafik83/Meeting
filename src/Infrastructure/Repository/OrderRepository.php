@@ -182,4 +182,23 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(Order::class, '_order', '_order.id')
+            ->where('_order.sheet = :sheet')
+            ->andWhere('_order.invoice is NULL')
+            ->andWhere('_order.cancelled = false')
+            ->setParameter('sheet', $sheet)
+            ->orderBy('_order.createdAt', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
