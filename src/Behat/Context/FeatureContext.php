@@ -47,6 +47,18 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * Convert "vimeet" string to Vimeet sender mail
+     *
+     * @param string $mail
+     *
+     * @return string
+     */
+    protected function evaluateMail($mail)
+    {
+        return $mail === 'vimeet' ? $this->kernel->getContainer()->getParameter('mailer_sender') : $mail;
+    }
+
+    /**
      * We need to purge the spool between each scenario
      *
      * @BeforeScenario
@@ -122,6 +134,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     private function checkMailSendToRecipient($type, $email, $recipient, $senderEmail)
     {
+        $email       = $this->evaluateMail($email);
+        $senderEmail = $this->evaluateMail($senderEmail);
+
         $spoolDir = $this->getSpoolDir();
 
         $filesystem = new Filesystem();

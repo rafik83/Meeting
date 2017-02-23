@@ -693,8 +693,8 @@ class Product
             $image,
             $unitPrice,
             1,
-            $availabilityCurrent,
-            $availabilityMax,
+            (int) $availabilityCurrent,
+            (int) $availabilityMax,
             false,
             null
         );
@@ -835,8 +835,8 @@ class Product
             $image,
             $unitPrice,
             $quantityMax,
-            $availabilityCurrent,
-            $availabilityMax,
+            (int) $availabilityCurrent,
+            (int) $availabilityMax,
             $updatable,
             $deletableUntil,
             $subjectedToValidation,
