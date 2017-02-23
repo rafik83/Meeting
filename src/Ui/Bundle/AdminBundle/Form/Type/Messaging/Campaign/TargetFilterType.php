@@ -34,22 +34,6 @@ class TargetFilterType extends AbstractFilterType
         /** @var Event $event */
         $event = $options['event'];
 
-        $builder
-            ->add('hasRemainingToPay', CheckboxType::class, [
-                'label'    => 'form.sheet_filter.children.hasRemainingToPay.label',
-                'required' => false,
-            ])
-            ->add(Constant::NO_ORDER, CheckboxType::class, [
-                'label'              => 'admin.sheet.filter.no_order',
-                'required'           => false,
-                'translation_domain' => 'messages',
-            ])
-            ->add(Constant::HAS_CART, CheckboxType::class, [
-                'label'              => 'admin.sheet.filter.has_cart',
-                'required'           => false,
-                'translation_domain' => 'messages',
-            ]);
-
         $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
 
         if (!empty($booleanFilters)) {

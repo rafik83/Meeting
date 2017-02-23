@@ -30,11 +30,11 @@
                     {% endif %}
                     {{ form_row(form.registeredAt) }}
                     {{ form_row(form.hasHappeningParticipation) }}
-                    {{ form_row(form.hasRemainingToPay) }}
+                    {{ form_row(form.hasRemainingToPay, {'inline': true}) }}
                     {{ form_row(form.hasNoMeetingRequest) }}
                     {{ form_row(form.hasPendingMeetingPropositions) }}
-                    {{ form_row(form.has_order) }}
-                    {{ form_row(form.has_cart) }}
+                    {{ form_row(form.has_order, {'inline': true}) }}
+                    {{ form_row(form.has_cart, {'inline': true}) }}
                     {{ form_row(form.imported) }}
                 </div>
                 <div class="col-md-6">

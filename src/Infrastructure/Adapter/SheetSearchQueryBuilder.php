@@ -417,10 +417,6 @@ class SheetSearchQueryBuilder
                 $this->filterCreatedToday();
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
-            } elseif ($filters['predefined'] === Constant::NO_ORDER) {
-                $this->filterHasOrder(false);
-            } elseif ($filters['predefined'] === Constant::HAS_CART) {
-                $this->filterHasCart(true);
             } else {
                 $this->filterByBooleanFilter($filters['predefined']);
             }

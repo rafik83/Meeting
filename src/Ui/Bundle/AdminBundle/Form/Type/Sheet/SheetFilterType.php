@@ -32,49 +32,20 @@ class SheetFilterType extends AbstractFilterType
 
         $builder
             ->add('category', CategoryChoiceType::class, [
-                'label'  => 'form.sheet_filter.children.category.label',
-                'event'  => $options['event'],
-                'locale' => $options['locale'],
+                'label'    => 'form.sheet_filter.children.category.label',
+                'event'    => $options['event'],
+                'locale'   => $options['locale'],
+                'multiple' => true,
+                'expanded' => true
             ])
             ->add('enabled', EnabledStateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.enabledState.label',
                 'multiple' => false,
                 'expanded' => true,
             ])
-            ->add(Constant::HAS_ORDER, ChoiceType::class, [
-                'choices'  => [
-                    'form.sheet_filter.children.order.noPreference.label' => null,
-                    'form.sheet_filter.children.order.yes.label'          => true,
-                    'form.sheet_filter.children.order.no.label'           => false,
-                ],
-                'multiple' => false,
-                'expanded' => true,
-                'label'    => 'form.sheet_filter.children.hasOrder.label',
-            ])
-            ->add(Constant::HAS_CART, ChoiceType::class, [
-                'choices'  => [
-                    'form.sheet_filter.children.cart.noPreference.label' => null,
-                    'form.sheet_filter.children.cart.yes.label'          => true,
-                    'form.sheet_filter.children.cart.no.label'           => false,
-                ],
-                'multiple' => false,
-                'expanded' => true,
-                'label'    => 'form.sheet_filter.children.hasCart.label',
-            ])
-            ->add(Constant::HAS_REMAINING_TO_PAY, ChoiceType::class, [
-                'choices'  => [
-                    'form.sheet_filter.children.hasRemainingToPay.noPreference.label' => null,
-                    'form.sheet_filter.children.hasRemainingToPay.yes.label'          => true,
-                    'form.sheet_filter.children.hasRemainingToPay.no.label'           => false,
-                ],
-                'label'    => 'form.sheet_filter.children.hasRemainingToPay.label',
-                'multiple' => false,
-                'expanded' => true,
-            ])
             ->add('orderBy', HiddenType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
-            ])
-        ;
+            ]);
 
         $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
 
