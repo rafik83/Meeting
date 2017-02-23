@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,18 +30,11 @@ class SheetFilterType extends AbstractFilterType
         $event = $options['event'];
 
         $builder
-            ->add('category', CategoryChoiceType::class, [
-                'label'    => 'form.sheet_filter.children.category.label',
-                'event'    => $options['event'],
-                'locale'   => $options['locale'],
-                'multiple' => true,
-                'expanded' => true
-            ])
             ->add('enabled', EnabledStateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.enabledState.label',
                 'multiple' => false,
                 'expanded' => true,
-                'required' => false
+                'required' => false,
             ])
             ->add('orderBy', HiddenType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
@@ -51,13 +43,9 @@ class SheetFilterType extends AbstractFilterType
         $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
 
         if (!empty($booleanFilters)) {
-            $builder->add(Constant::BOOLEAN_FILTER, ChoiceType::class, [
-                'choices'  => array_merge([
-                    'form.sheet_filter.children.booleanFilters.noPreference.label' => null,
-                ], array_flip($booleanFilters)),
-                'label'    => 'form.sheet.filter.children.template_filters.label',
-                'multiple' => false,
-                'expanded' => true,
+            $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
+                'booleanFilters' => $booleanFilters,
+                'label'          => false
             ]);
         }
 

@@ -86,7 +86,7 @@ form.change_password.children.submit.label: Envoyer
 form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
-form.common.choices.all: 'Tout sélectionner'
+form.common.choices.all: 'Peu importe'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements

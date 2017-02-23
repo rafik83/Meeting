@@ -58,9 +58,8 @@ class FilterFullType extends AbstractType
     public static function getDefaultFilters()
     {
         return [
-            'enabled'                      => true,
-            'orderBy'                      => Constant::ORDER_BY_CREATED_AT,
-            Constant::BOOLEAN_FILTER       => 0,
+            'enabled' => true,
+            'orderBy' => Constant::ORDER_BY_CREATED_AT,
         ];
     }
 }

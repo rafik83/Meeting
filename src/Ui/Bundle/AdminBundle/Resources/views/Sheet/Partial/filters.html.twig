@@ -25,7 +25,7 @@
                     {{ form_row(form.completed, {'inline': true}) }}
                     {{ form_row(form.inCatalog, {'inline': true}) }}
                     {{ form_row(form.type) }}
-                    {% if form.category is not empty %}
+                    {% if form.category is defined %}
                         {{ form_row(form.category) }}
                     {% endif %}
                     {{ form_row(form.registeredAt, {'inline': true}) }}
@@ -40,7 +40,7 @@
                 <div class="col-md-6">
                     {{ form_row(form.follower) }}
                     {% if form.boolean_filters is defined %}
-                        {{ form_row(form.boolean_filters) }}
+                        {{ form_row(form.boolean_filters, {'inline': true}) }}
                     {% endif %}
                 </div>
                 <div class="col-md-12">

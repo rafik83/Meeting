@@ -53,36 +53,65 @@ class FilterSummary
             }
 
             $field = $formView->children[$filter];
-            $isCheckbox = isset($field->vars['checked']);
 
-            // Ignore unchecked checkboxes:
-            if ($isCheckbox && false === $field->vars['checked']) {
-                continue;
-            }
-
-            $value = $field->vars['value'];
-
-            if (isset($field->vars['choices'])) {
-                $values = (array) $value;
-                $value = '';
-                foreach ($field->vars['choices'] as $choice) {
-                    foreach ($values as $currentValue) {
-                        if ($choice->value === $currentValue) {
-                            $value .= ($value !== '' ? ', ' : '') . $this->translator->trans($choice->label, [], null, $locale);
-                        }
+            if (count($field->children) > 0) {
+                foreach ($field->children as $childrenRow) {
+                    try {
+                        list($label, $value) = $this->handleFormRow($childrenRow, $locale);
+                        $selectedFilters[$label] = $value;
+                    } catch (\Exception $exception) {
+                        continue;
                     }
                 }
+            } else {
+                try {
+                    list($label, $value) = $this->handleFormRow($field, $locale);
+                    $selectedFilters[$label] = $value;
+                } catch (\Exception $exception) {
+                    continue;
+                }
             }
-
-            if ($isCheckbox) {
-                $value = $this->translator->trans('boolean.yes');
-            }
-
-            $label = $this->translator->trans($field->vars['label'], [], $field->vars['translation_domain'], $locale);
-
-            $selectedFilters[$label] = $value;
         }
 
         return $selectedFilters;
+    }
+
+    /**
+     * @param FormView $field
+     * @param string   $locale
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function handleFormRow(FormView $field, $locale)
+    {
+        $isCheckbox = isset($field->vars['checked']);
+
+        // Ignore unchecked checkboxes:
+        if ($isCheckbox && false === $field->vars['checked']) {
+            throw new \Exception();
+        }
+
+        $value = $field->vars['value'];
+
+        if (isset($field->vars['choices'])) {
+            $values = (array)$value;
+            $value  = '';
+            foreach ($field->vars['choices'] as $choice) {
+                foreach ($values as $currentValue) {
+                    if ($choice->value === $currentValue) {
+                        $value .= ($value !== '' ? ', ' : '') . $this->translator->trans($choice->label, [], null, $locale);
+                    }
+                }
+            }
+        }
+
+        if ($isCheckbox) {
+            $value = $this->translator->trans('boolean.yes');
+        }
+
+        $label = $this->translator->trans($field->vars['label'], [], $field->vars['translation_domain'], $locale);
+
+        return [$label, $value];
     }
 }

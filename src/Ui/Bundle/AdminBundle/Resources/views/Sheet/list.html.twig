@@ -103,7 +103,7 @@
         </div>
     </div>
 
-    {% set hasCategories = sheetFilter.category.vars.choices|length > 1 %}
+    {% set hasCategories = sheetFilter.category is defined ? sheetFilter.category.vars.choices|length > 1 : false %}
 
     <table class="table table-hover selectable-row filterable">
         <thead>
