@@ -33,7 +33,7 @@
     </div>
 
     <div class="row filters">
-        <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-12 text-center">
             {{ include('AdminBundle:Common:filters_summary.html.twig', {
                 filters:   filters_summary,
                 resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })

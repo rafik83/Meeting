@@ -42,6 +42,7 @@ class SheetFilterType extends AbstractFilterType
                 'label'    => 'form.sheet_filter.children.enabledState.label',
                 'multiple' => false,
                 'expanded' => true,
+                'required' => false
             ])
             ->add('orderBy', HiddenType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
@@ -62,7 +63,7 @@ class SheetFilterType extends AbstractFilterType
 
         $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
 
-        if (!empty($categories)) {
+        if (count($categories) > 0) {
             $builder->add('category', CategoryChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.category.label',
                 'event'    => $event,

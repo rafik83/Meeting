@@ -488,7 +488,9 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
+admin.sheet.registeredAt.all: 'Peu importe'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
+admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
@@ -560,7 +562,7 @@ admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.filter.template_filters: 'Filtres supplémentaires'
-admin.sheet.list.filters.label: 'Filters avancés'
+admin.sheet.list.filters.label: 'Filtres avancés'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
@@ -826,6 +828,7 @@ event.sheet.cart.label.totalPrice: Total
 event.sheet.cart.title: 'Récapitulatif de votre panier'
 event.sheet.cart.totalWithoutTaxes: 'Total HT'
 event.sheet.completed.complete: Complète
+event.sheet.completed.all: 'Peu importe'
 event.sheet.completed.incomplete: Incomplète
 event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active

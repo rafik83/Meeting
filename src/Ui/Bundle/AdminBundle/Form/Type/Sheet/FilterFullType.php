@@ -60,9 +60,6 @@ class FilterFullType extends AbstractType
         return [
             'enabled'                      => true,
             'orderBy'                      => Constant::ORDER_BY_CREATED_AT,
-            Constant::HAS_CART             => 0,
-            Constant::HAS_ORDER            => 0,
-            Constant::HAS_REMAINING_TO_PAY => 0,
             Constant::BOOLEAN_FILTER       => 0,
         ];
     }

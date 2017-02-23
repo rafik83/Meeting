@@ -19,16 +19,16 @@
                 </div>
                 <div class="col-md-6">
                     {{ form_row(form.text) }}
-                    {{ form_row(form.enabled) }}
-                    {{ form_row(form.validationState) }}
-                    {{ form_row(form.state) }}
-                    {{ form_row(form.completed) }}
-                    {{ form_row(form.inCatalog) }}
+                    {{ form_row(form.enabled, {'inline': true}) }}
+                    {{ form_row(form.validationState, {'inline': true}) }}
+                    {{ form_row(form.state, {'inline': true}) }}
+                    {{ form_row(form.completed, {'inline': true}) }}
+                    {{ form_row(form.inCatalog, {'inline': true}) }}
                     {{ form_row(form.type) }}
-                    {% if form.category is defined %}
+                    {% if form.category is not empty %}
                         {{ form_row(form.category) }}
                     {% endif %}
-                    {{ form_row(form.registeredAt) }}
+                    {{ form_row(form.registeredAt, {'inline': true}) }}
                     {{ form_row(form.hasHappeningParticipation) }}
                     {{ form_row(form.hasRemainingToPay, {'inline': true}) }}
                     {{ form_row(form.hasNoMeetingRequest) }}

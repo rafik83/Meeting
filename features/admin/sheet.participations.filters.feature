@@ -80,12 +80,12 @@ Feature: Sheet participations list filters
     Given I am logged with "test@test.com" on admin
     And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
-    And I select "event.sheet.completed.incomplete" from "completed"
+    And I check the "event.sheet.completed.incomplete" radio
     When I press "form.admin.sheet.filter.children.submit.label"
     Then I should see "Hello World Company"
     And I should see "World Company Inc"
     And I should see "Aanera"
-    When I select "event.sheet.completed.complete" from "completed"
+    When I check the "event.sheet.completed.complete" radio
     And I press "form.admin.sheet.filter.children.submit.label"
     Then I should not see "Hello World Company"
     And I should not see "World Company Inc"
@@ -95,14 +95,14 @@ Feature: Sheet participations list filters
     Given I am logged with "test@test.com" on admin
     And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
-    And I select "boolean.yes" from "inCatalog"
+    And I check the "boolean.yes" radio
     When I press "form.admin.sheet.filter.children.submit.label"
     Then I should see "Hello World Company"
     And I should see "World Company Inc"
     And I should see "Aanera"
-    When I select "boolean.no" from "inCatalog"
+    When I check the "boolean.no" radio
     And I press "form.admin.sheet.filter.children.submit.label"
-    Then I should not see "Hello World Company"
+    And I should not see "Hello World Company"
     And I should not see "World Company Inc"
     And I should not see "Aanera"
 

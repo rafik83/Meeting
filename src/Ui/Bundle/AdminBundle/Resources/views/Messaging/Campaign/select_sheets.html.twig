@@ -61,16 +61,16 @@
         <div class="col-md-6 well">
             {{ form_start(filter_form) }}
                 {{ form_row(filter_form.text) }}
-                {{ form_row(filter_form.validationState) }}
-                {{ form_row(filter_form.state) }}
-                {{ form_row(filter_form.completed) }}
-                {{ form_row(filter_form.inCatalog) }}
+                {{ form_row(filter_form.validationState, {'inline': true}) }}
+                {{ form_row(filter_form.state, {'inline': true}) }}
+                {{ form_row(filter_form.completed, {'inline': true}) }}
+                {{ form_row(filter_form.inCatalog, {'inline': true}) }}
                 {{ form_row(filter_form.type) }}
                 {% if filter_form.category is defined %}
                     {{ form_row(filter_form.category) }}
                 {% endif %}
                 {{ form_row(filter_form.follower) }}
-                {{ form_row(filter_form.registeredAt) }}
+                {{ form_row(filter_form.registeredAt, {'inline': true}) }}
                 {{ form_row(filter_form.hasHappeningParticipation) }}
                 {{ form_row(filter_form.hasRemainingToPay, {'inline': true}) }}
                 {{ form_row(filter_form.hasNoMeetingRequest) }}

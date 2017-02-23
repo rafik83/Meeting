@@ -54,8 +54,8 @@ abstract class AbstractFilterType extends AbstractType
         $builder
             ->add('text', SheetTextSearchType::class, [
                 'label' => 'form.sheet_filter.children.text_search.label',
-                'attr' => [
-                    'placeholder' => 'form.sheet_filter.children.text_search.label'
+                'attr'  => [
+                    'placeholder' => 'form.sheet_filter.children.text_search.label',
                 ],
             ])
             ->add('validationState', ValidationStateChoiceType::class, [
@@ -72,10 +72,14 @@ abstract class AbstractFilterType extends AbstractType
             ->add('inCatalog', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.inCatalog.label',
                 'required' => false,
+                'multiple' => false,
+                'expanded' => true,
             ])
             ->add('completed', CompletedChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.completed.label',
                 'required' => false,
+                'multiple' => false,
+                'expanded' => true,
             ])
             ->add('type', TypeChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.type.label',
@@ -101,38 +105,41 @@ abstract class AbstractFilterType extends AbstractType
             ->add('imported', ImportedChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.imported.label',
                 'required' => false,
+                'expanded' => true
             ])
             ->add(Constant::HAS_ORDER, ChoiceType::class, [
-                'choices'  => [
-                    'form.sheet_filter.children.order.noPreference.label' => null,
-                    'form.sheet_filter.children.order.yes.label'          => true,
-                    'form.sheet_filter.children.order.no.label'           => false,
+                'choices'     => [
+                    'form.sheet_filter.children.order.yes.label' => true,
+                    'form.sheet_filter.children.order.no.label'  => false,
                 ],
-                'multiple' => false,
-                'expanded' => true,
-                'label'    => 'form.sheet_filter.children.hasOrder.label',
+                'multiple'    => false,
+                'expanded'    => true,
+                'label'       => 'form.sheet_filter.children.hasOrder.label',
+                'required'    => false,
+                'placeholder' => 'form.sheet_filter.children.order.noPreference.label',
             ])
             ->add(Constant::HAS_CART, ChoiceType::class, [
-                'choices'  => [
-                    'form.sheet_filter.children.cart.noPreference.label' => null,
-                    'form.sheet_filter.children.cart.yes.label'          => true,
-                    'form.sheet_filter.children.cart.no.label'           => false,
+                'choices'     => [
+                    'form.sheet_filter.children.cart.yes.label' => true,
+                    'form.sheet_filter.children.cart.no.label'  => false,
                 ],
-                'multiple' => false,
-                'expanded' => true,
-                'label'    => 'form.sheet_filter.children.hasCart.label',
+                'required'    => false,
+                'multiple'    => false,
+                'expanded'    => true,
+                'label'       => 'form.sheet_filter.children.hasCart.label',
+                'placeholder' => 'form.sheet_filter.children.cart.noPreference.label',
             ])
             ->add(Constant::HAS_REMAINING_TO_PAY, ChoiceType::class, [
-                'choices'  => [
-                    'form.sheet_filter.children.hasRemainingToPay.noPreference.label' => null,
-                    'form.sheet_filter.children.hasRemainingToPay.yes.label'          => true,
-                    'form.sheet_filter.children.hasRemainingToPay.no.label'           => false,
+                'choices'     => [
+                    'form.sheet_filter.children.hasRemainingToPay.yes.label' => true,
+                    'form.sheet_filter.children.hasRemainingToPay.no.label'  => false,
                 ],
-                'label'    => 'form.sheet_filter.children.hasRemainingToPay.label',
-                'multiple' => false,
-                'expanded' => true,
-            ])
-        ;
+                'placeholder' => 'form.sheet_filter.children.hasRemainingToPay.noPreference.label',
+                'label'       => 'form.sheet_filter.children.hasRemainingToPay.label',
+                'multiple'    => false,
+                'expanded'    => true,
+                'required'    => false,
+            ]);
 
         $builder
             ->add('follower', FollowerChoiceType::class, [
@@ -147,6 +154,8 @@ abstract class AbstractFilterType extends AbstractType
                 'label'                     => 'form.sheet_filter.children.creation_interval.label',
                 'required'                  => false,
                 'choice_translation_domain' => 'messages',
+                'expanded'                  => true,
+                'multiple'                  => false,
             ]);
     }
 
