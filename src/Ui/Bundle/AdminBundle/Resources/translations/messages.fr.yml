@@ -216,7 +216,12 @@ admin.happening.menu.link: Programme
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
-admin.invoice.link: 'Facturation'
+admin.transaction.column.date: Date
+admin.invoice.column.number: 'Numéro de facture'
+admin.invoice.column.date: 'Date de création'
+admin.invoice.column.total: 'Total HT'
+admin.invoice.column.link: 'Lien'
+admin.invoice.pdf: 'Voir la facture'
 admin.invoice.list.title: 'Nom backoffice'
 admin.invoice.list.prefix: 'Prefix'
 admin.invoice.list.isDefault: 'Par défaut'
@@ -519,6 +524,7 @@ admin.sheet.details.company.title: Société
 admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
+admin.sheet.details.invoices: 'Factures'
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
 admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'

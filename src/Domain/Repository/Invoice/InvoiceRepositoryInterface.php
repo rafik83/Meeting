@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface InvoiceRepositoryInterface
 {
@@ -18,6 +20,20 @@ interface InvoiceRepositoryInterface
      * @return Invoice $invoice
      */
     public function add(Invoice $invoice);
+
+    /**
+     * @param Event $event
+     *
+     * @return Invoice[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Invoice[]
+     */
+    public function findBySheet(Sheet $sheet);
 
     /**
      * Get last generated invoice for given event invoice prefix

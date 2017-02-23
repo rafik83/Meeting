@@ -2954,6 +2954,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.transaction'
+            - '@repository.invoice.invoice_repository'
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:

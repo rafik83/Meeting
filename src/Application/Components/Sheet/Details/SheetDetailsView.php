@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
@@ -110,6 +111,11 @@ class SheetDetailsView
     public $transactions;
 
     /**
+     * @var Invoice[]
+     */
+    public $invoices;
+
+    /**
      * @var float
      */
     public $total;
@@ -129,27 +135,29 @@ class SheetDetailsView
      */
     public $companyObjects;
 
+
     /**
      * SheetDetailsView constructor.
      *
-     * @param string            $title
-     * @param string            $state
-     * @param OwnerView         $owner
+     * @param string $title
+     * @param string $state
+     * @param OwnerView $owner
      * @param ParticipantView[] $participants
-     * @param int               $approvedRequests
-     * @param int               $pendingRequests
-     * @param int               $refusedRequests
-     * @param int               $approvedPropositions
-     * @param int               $pendingPropositions
-     * @param int               $refusedPropositions
-     * @param Comment[]         $comments
-     * @param Trace[]           $traces
-     * @param Order[]           $orders
-     * @param Transaction[]     $transactions
-     * @param float             $total
-     * @param float             $remainingToPay
-     * @param int               $completeness
-     * @param TemplateObject[]  $companyObjects
+     * @param int $approvedRequests
+     * @param int $pendingRequests
+     * @param int $refusedRequests
+     * @param int $approvedPropositions
+     * @param int $pendingPropositions
+     * @param int $refusedPropositions
+     * @param Comment[] $comments
+     * @param Trace[] $traces
+     * @param Order[] $orders
+     * @param Transaction[] $transactions
+     * @param Invoice[] $invoices
+     * @param float $total
+     * @param float $remainingToPay
+     * @param int $completeness
+     * @param TemplateObject[] $companyObjects
      */
     public function __construct(
         $title,
@@ -166,6 +174,7 @@ class SheetDetailsView
         array $traces,
         array $orders,
         array $transactions,
+        array $invoices,
         $total,
         $remainingToPay,
         $completeness,
@@ -185,6 +194,7 @@ class SheetDetailsView
         $this->traces               = $traces;
         $this->orders               = $orders;
         $this->transactions         = $transactions;
+        $this->invoices             = $invoices;
         $this->total                = $total;
         $this->remainingToPay       = $remainingToPay;
         $this->completeness         = $completeness;

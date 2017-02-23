@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
@@ -30,6 +32,11 @@ class Balance
     private $transactionRepository;
 
     /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
      * @var array
      */
     private $transactions = [];
@@ -40,15 +47,23 @@ class Balance
     private $orders = [];
 
     /**
-     * @param OrderRepositoryInterface       $orderRepository
+     * @var array
+     */
+    private $invoices = [];
+
+    /**
+     * @param OrderRepositoryInterface $orderRepository
      * @param TransactionRepositoryInterface $transactionRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        TransactionRepositoryInterface $transactionRepository
+        TransactionRepositoryInterface $transactionRepository,
+        InvoiceRepositoryInterface $invoiceRepository
     ) {
         $this->orderRepository        = $orderRepository;
         $this->transactionRepository  = $transactionRepository;
+        $this->invoiceRepository      = $invoiceRepository;
     }
 
     /**
@@ -78,10 +93,23 @@ class Balance
     /**
      * @param Event $event
      */
+    public function loadAllInvoices(Event $event)
+    {
+        $invoices = $this->invoiceRepository->findByEvent($event);
+
+        foreach ($invoices as $invoice) {
+            $this->invoices[$invoice->getSheet()->getId()][] = $invoice;
+        }
+    }
+
+    /**
+     * @param Event $event
+     */
     public function loadAllForEvent(Event $event)
     {
         $this->loadAllOrders($event);
         $this->loadAllTransactions($event);
+        $this->loadAllInvoices($event);
     }
 
     /**
@@ -133,6 +161,20 @@ class Balance
         }
 
         return $this->transactions[$sheet->getId()];
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Invoice[]
+     */
+    public function getInvoices(Sheet $sheet)
+    {
+        if (!isset($this->invoices[$sheet->getId()])) {
+            $this->invoices[$sheet->getId()] = $this->invoiceRepository->findBySheet($sheet);
+        }
+
+        return $this->invoices[$sheet->getId()];
     }
 
     /**

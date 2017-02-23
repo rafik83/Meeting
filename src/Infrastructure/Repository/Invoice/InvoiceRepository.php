@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Invoice;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 
 class InvoiceRepository implements InvoiceRepositoryInterface
@@ -40,6 +42,36 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         $this->entityManager->flush();
         
         return $invoice;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice')
+            ->from(Invoice::class, 'invoice')
+            ->where('invoice.event = :event')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice')
+            ->from(Invoice::class, 'invoice')
+            ->where('invoice.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
