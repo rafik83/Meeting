@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Order\Row;
@@ -80,6 +81,11 @@ class Order
      * @var boolean
      */
     private $cancelled = false;
+
+    /**
+     * @var Invoice
+     */
+    private $invoice;
 
     /**
      * @param Sheet             $sheet
@@ -605,6 +611,22 @@ class Order
     public function cancel()
     {
         $this->cancelled = true;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * @param Invoice $invoice
+     */
+    public function setInvoice(Invoice $invoice)
+    {
+        $this->invoice = $invoice;
     }
 
     /**
