@@ -105,7 +105,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             ->getConfiguration()
             ->setAnalyticsCode('analyticsCode');
 
-
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
