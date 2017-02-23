@@ -8,11 +8,11 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
                 strategy: AUTO
     fields:
         total:
-            type: float
+            type: integer
         totalWithVat:
-            type: float
+            type: integer
         vatAmount:
-            type: float
+            type: integer
         invoicePrefix:
             type: string
         invoiceYear:
