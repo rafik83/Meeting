@@ -13,7 +13,11 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             type: float
         vatAmount:
             type: float
-        number:
+        invoicePrefix:
+            type: string
+        invoiceYear:
+            type: string
+        invoiceIncrement:
             type: string
         createdAt:
             type: datetime
@@ -25,5 +29,8 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
                 onDelete: CASCADE
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-            joinColumn:
-                onDelete: CASCADE
+        prefix:
+            targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+    uniqueConstraints:
+        invoice_number:
+            columns: invoice_prefix, invoice_year, invoice_increment
