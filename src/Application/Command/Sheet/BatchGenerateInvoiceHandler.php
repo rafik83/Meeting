@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
 
 class BatchGenerateInvoiceHandler
 {
@@ -62,14 +63,25 @@ class BatchGenerateInvoiceHandler
     {
         // Get sheets
         $sheets = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
-        $generatedInvoice = [];
+        $invoiceGeneratedCounter = 0;
 
         foreach ($sheets as $sheet) {
-            if ($sheet->hasOrders()) {
-                $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
-                $create = new Create();
-            }
+
+            $ordersToInvoiceView    = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
+            $invoiceNumberGenerator = new InvoiceNumberGenerator($sheet->getEvent());
+            $create                 = new Create();
+            $create->event          = $sheet->getEvent();
+            $create->sheet          = $sheet;
+            $create->prefix         = $sheet->getEvent()->getInvoicePrefix();
+            $create->total          = $ordersToInvoiceView->getTotal();
+            $create->totalWithVat   = $ordersToInvoiceView->getTotalWithVat();
+            $create->vatAmount      = $ordersToInvoiceView->getVatAmount();
+            $create->createdAt      = $this->datetime;
+            $create->invoicePrefix  = $create->prefix->getPrefix();
+            $create->invoiceYear    = $this->datetime->format('Y');
+            $create->invoiceNumber  = $invoiceNumberGenerator->generate();
+            $invoiceGeneratedCounter++;
         }
-        return new BatchResult(count($generatedInvoice), $batchGenerateInvoice->getMessage() . 'generateInvoice.success');
+        return new BatchResult($invoiceGeneratedCounter, $batchGenerateInvoice->getMessage() . 'generateInvoice.success');
     }
 }

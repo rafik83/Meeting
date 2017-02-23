@@ -39,7 +39,10 @@ class CreateHandler
         $this->invoiceRepository->add(new Invoice(
             $create->event,
             $create->sheet,
-            $create->number,
+            $create->prefix,
+            $create->invoicePrefix,
+            $create->invoiceYear,
+            $create->invoiceNumber,
             $create->total,
             $create->totalWithVat,
             $create->vatAmount,

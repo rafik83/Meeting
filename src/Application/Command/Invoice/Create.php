@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Create
@@ -26,9 +27,24 @@ class Create
     public $sheet;
 
     /**
+     * @var Prefix
+     */
+    public $prefix;
+
+    /**
      * @var string
      */
-    public $number;
+    public $invoicePrefix;
+
+    /**
+     * @var string
+     */
+    public $invoiceYear;
+
+    /**
+     * @var string
+     */
+    public $invoiceNumber;
 
     /**
      * @var float
