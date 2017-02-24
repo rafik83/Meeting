@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Invoice;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 
@@ -62,15 +63,14 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastInvoiceForEventPrefix($invoicePrefix)
+    public function getLastInvoiceForEventPrefix(Prefix $prefix)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('invoice_number')
+            ->select('invoice')
             ->from(Invoice::class, 'invoice')
-            ->join('invoice.event', 'event')
-            ->where('event.invoice_prefix = :invoice_prefix')
-            ->orderBy('createdAt', 'DESC')
-            ->setParameter('invoice_prefix', $invoicePrefix)
+            ->where('invoice.prefix = :prefix')
+            ->orderBy('invoice.id', 'DESC')
+            ->setParameter('prefix', $prefix)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();

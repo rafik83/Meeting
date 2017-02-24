@@ -37,10 +37,10 @@ class InvoiceNumberGenerator
             return 1;
         }
 
-        if ($invoice->getInvoiceYear() === date('Y')) {
+        if ($invoice->getInvoiceYear() == date('Y')) {
             return self::incrementInvoiceNumber($invoice->getInvoiceIncrement());
         }
-
+        
         return 1;
     }
 
@@ -53,6 +53,6 @@ class InvoiceNumberGenerator
      */
     private static function incrementInvoiceNumber($number)
     {
-        return (int) $number + 1;
+        return $number + 1;
     }
 }

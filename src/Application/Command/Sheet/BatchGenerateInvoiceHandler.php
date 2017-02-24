@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
+use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
@@ -36,10 +37,14 @@ class BatchGenerateInvoiceHandler
     private $orderRepository;
 
     /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
      * @var CreateHandler
      */
     private $createHandler;
-
     /**
      * @var \DateTimeInterface
      */
@@ -51,6 +56,7 @@ class BatchGenerateInvoiceHandler
      * @param SheetRepositoryInterface $sheetRepository
      * @param OrdersToInvoice $ordersToInvoice
      * @param OrderRepositoryInterface $orderRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
      * @param CreateHandler $createHandler
      * @param \DateTimeInterface $dateTime
      */
@@ -58,12 +64,14 @@ class BatchGenerateInvoiceHandler
         SheetRepositoryInterface   $sheetRepository,
         OrdersToInvoice            $ordersToInvoice,
         OrderRepositoryInterface   $orderRepository,
+        InvoiceRepositoryInterface $invoiceRepository,
         CreateHandler              $createHandler,
         \DateTimeInterface         $dateTime
     ) {
         $this->sheetRepository   = $sheetRepository;
         $this->ordersToInvoice   = $ordersToInvoice;
         $this->orderRepository   = $orderRepository;
+        $this->invoiceRepository = $invoiceRepository;
         $this->createHandler     = $createHandler;
         $this->datetime          = $dateTime;
     }
@@ -76,6 +84,7 @@ class BatchGenerateInvoiceHandler
         foreach ($sheets as $sheet) {
 
             $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
+            $invoice = $this->invoiceRepository->getLastInvoiceForEventPrefix($sheet->getEvent()->getInvoicePrefix());
 
             if ($ordersToInvoiceView instanceof OrdersToInvoiceView) {
 
@@ -85,7 +94,7 @@ class BatchGenerateInvoiceHandler
                     $sheet->getEvent()->getInvoicePrefix(),
                     $sheet->getEvent()->getInvoicePrefix()->getPrefix(),
                     $this->datetime->format('Y'),
-                    InvoiceNumberGenerator::generate(), // todo pass last Invoice generated for event's prefix
+                    InvoiceNumberGenerator::generate($invoice),
                     $ordersToInvoiceView->getTotal(),
                     $ordersToInvoiceView->getTotalWithVat(),
                     $ordersToInvoiceView->getVatAmount(),

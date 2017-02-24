@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface InvoiceRepositoryInterface
@@ -32,11 +33,9 @@ interface InvoiceRepositoryInterface
     /**
      * Get last generated invoice for given event invoice prefix
      *
-     * @param $invoicePrefix
+     * @param Prefix $prefix
      *
-     * @return Invoice|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return null|Invoice
      */
-    public function getLastInvoiceForEventPrefix($invoicePrefix);
+    public function getLastInvoiceForEventPrefix(Prefix $prefix);
 }
