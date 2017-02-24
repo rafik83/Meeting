@@ -37,7 +37,6 @@ final class Tag
     const BILLING_ORGANIZATION        = 'billing_organization';
     const BILLING_VAT_NUMBER          = 'billing_vat_number';
     const BILLING_EXTRA               = 'billing_extra';
-    const BILLING_REFERENCE           = 'billing_reference';
     const SHEET_TITLE                 = 'sheet_title';
     const SHEET_ORGANIZATION          = 'sheet_organization';
     const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
@@ -114,7 +113,6 @@ final class Tag
             self::BILLING_ORGANIZATION,
             self::BILLING_VAT_NUMBER,
             self::BILLING_EXTRA,
-            self::BILLING_REFERENCE,
         ];
     }
 
