@@ -233,4 +233,11 @@ migrations:
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
 
+##################################
+# Remote tasks on Vimeet Preprod #
+##################################
+
+init-db@vimeet-preprod:
+	ssh proximum-vimeet-preprod "cd ~/proximum-vimeet.project.local/htdocs/current && make init-db"
+
 endif
