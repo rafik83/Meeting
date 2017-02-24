@@ -3,7 +3,7 @@ Proximum\Vimeet\Domain\Model\Invoice\Prefix:
         __construct:
             - 'Asddays'
             - 'As'
-            - true
+            - false
 
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
