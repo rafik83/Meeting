@@ -34,19 +34,6 @@ class TargetFilterType extends AbstractFilterType
         /** @var Event $event */
         $event = $options['event'];
 
-        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
-
-        if (!empty($booleanFilters)) {
-            $builder->add('boolean_filters', ChoiceType::class, [
-                'choices'            => array_flip($booleanFilters),
-                'label'              => 'admin.sheet.filter.template_filters',
-                'required'           => false,
-                'multiple'           => true,
-                'expanded'           => true,
-                'translation_domain' => 'messages',
-            ]);
-        }
-
         $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
 
         if (!empty($categories)) {

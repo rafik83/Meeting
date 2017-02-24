@@ -141,6 +141,15 @@ abstract class AbstractFilterType extends AbstractType
                 'required'    => false,
             ]);
 
+        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
+
+        if (!empty($booleanFilters)) {
+            $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
+                'booleanFilters' => $booleanFilters,
+                'label'          => false
+            ]);
+        }
+
         $builder
             ->add('follower', FollowerChoiceType::class, [
                 'label'      => 'form.sheet_filter.children.follower.label',

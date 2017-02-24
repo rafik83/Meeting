@@ -417,8 +417,6 @@ class SheetSearchQueryBuilder
                 $this->filterCreatedToday();
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
-            } else {
-                $this->filterByBooleanFilter($filters['predefined']);
             }
         }
     }
@@ -587,19 +585,33 @@ class SheetSearchQueryBuilder
             return;
         }
 
+        $filterAdded    = false;
         $booleanFilters = (array) $booleanFilters;
 
-        $nested    = new Nested();
-        $boolQuery = new BoolQuery();
+        $nested       = new Nested();
+        $boolQuery    = new BoolQuery();
 
-        foreach ($booleanFilters as $filter) {
+        foreach ($booleanFilters as $key => $filter) {
+            if ($filter === null) {
+                continue;
+            }
+
             $matchQuery = new Match();
-            $matchQuery->setField('booleanFilter.key', $filter);
-            $boolQuery->addShould($matchQuery);
+            $matchQuery->setField('booleanFilter.key', $key);
+
+            if ($filter === true) {
+                $boolQuery->addShould($matchQuery);
+            } elseif ($filter === false) {
+                //TODO: handle when filter is state false
+            }
+
+            $filterAdded = true;
         }
 
-        $nested->setQuery($boolQuery)->setPath('booleanFilter');
-        $this->query->addMust($nested);
+        if ($filterAdded) {
+            $nested->setQuery($boolQuery)->setPath('booleanFilter');
+            $this->query->addMust($nested);
+        }
     }
 
     /**

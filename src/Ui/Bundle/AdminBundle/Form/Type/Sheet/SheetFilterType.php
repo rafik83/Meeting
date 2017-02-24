@@ -39,16 +39,7 @@ class SheetFilterType extends AbstractFilterType
             ->add('orderBy', HiddenType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
             ]);
-
-        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
-
-        if (!empty($booleanFilters)) {
-            $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
-                'booleanFilters' => $booleanFilters,
-                'label'          => false
-            ]);
-        }
-
+        
         $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
 
         if (count($categories) > 0) {
