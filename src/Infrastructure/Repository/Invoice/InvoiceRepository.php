@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Invoice;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
@@ -43,7 +42,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         
         return $invoice;
     }
-    
+
     /**
      * {@inheritdoc}
      */

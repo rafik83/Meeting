@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 

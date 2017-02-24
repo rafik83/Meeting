@@ -718,9 +718,9 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@repository.invoice.invoice_repository'
             - '@order.orders_to_invoice'
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@command.invoice.create_handler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }

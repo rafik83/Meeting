@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
-use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
@@ -25,11 +24,6 @@ class BatchGenerateInvoiceHandler
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
 
     /**
      * @var OrdersToInvoice
@@ -55,7 +49,6 @@ class BatchGenerateInvoiceHandler
      * BatchGenerateInvoiceHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
      * @param OrdersToInvoice $ordersToInvoice
      * @param OrderRepositoryInterface $orderRepository
      * @param CreateHandler $createHandler
@@ -63,14 +56,12 @@ class BatchGenerateInvoiceHandler
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
         OrdersToInvoice            $ordersToInvoice,
         OrderRepositoryInterface   $orderRepository,
         CreateHandler              $createHandler,
         \DateTimeInterface         $dateTime
     ) {
         $this->sheetRepository   = $sheetRepository;
-        $this->invoiceRepository = $invoiceRepository;
         $this->ordersToInvoice   = $ordersToInvoice;
         $this->orderRepository   = $orderRepository;
         $this->createHandler     = $createHandler;
@@ -79,7 +70,7 @@ class BatchGenerateInvoiceHandler
 
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
-        $sheets         = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
+        $sheets = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
         $invoiceGeneratedCounter = 0;
 
         foreach ($sheets as $sheet) {
