@@ -6,6 +6,17 @@ COLOR_RESET   = \033[0m
 COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
+HOST = $(shell hostname)
+IS_PROD = no
+
+ifeq ($(HOST), web-apache-01.proximum.local)
+	IS_PROD = yes
+endif
+
+ifeq ($(HOST), web-apache-02.proximum.local)
+	IS_PROD = yes
+endif
+
 ## Help
 help:
 	printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"
@@ -20,6 +31,13 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+
+## Show current host
+show-host:
+	printf "HOST ? ${HOST} ; IS_PROD ? ${IS_PROD}\n"
+
+# Do no allow targets in production
+ifeq ($(IS_PROD), no)
 
 #########
 # Setup #
@@ -214,3 +232,5 @@ migrations:
 	mysql -u root proximum_vimeet -e 'DROP TABLE IF EXISTS `migration_versions`'
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
+
+endif
