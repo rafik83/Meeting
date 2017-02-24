@@ -10,8 +10,14 @@
         <div class="inputs">
             {{ form_errors(form) }}
 
-            {{ form_row(form.firstName) }}
-            {{ form_row(form.lastName) }}
+            {% if form.firstName is defined %}
+                {{ form_row(form.firstName) }}
+            {% endif %}
+
+            {% if form.lastName is defined %}
+                {{ form_row(form.lastName) }}
+            {% endif %}
+
             {{ form_row(form.email) }}
 
             {% if participantProductView is not null %}
