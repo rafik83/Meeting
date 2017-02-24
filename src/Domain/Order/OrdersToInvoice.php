@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
@@ -57,9 +58,9 @@ class OrdersToInvoice
         return new OrdersToInvoiceView(
             $orders,
             [], // todo : inject merged orders data
-            $orderMerged->getTotalWithoutVat(),
-            round($orderMerged->getVatAmount(), 2),
-            round($orderMerged->getTotalWithVat(), 2)
+            AmountFormatter::decimalToCentimesAmount($orderMerged->getTotalWithoutVat()),
+            AmountFormatter::decimalToCentimesAmount($orderMerged->getVatAmount()),
+            AmountFormatter::decimalToCentimesAmount($orderMerged->getTotalWithVat())
         );
     }
 }
