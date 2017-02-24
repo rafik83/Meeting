@@ -11,4 +11,3 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             - '1020'
             - '20'
             - <(new DateTime('12-10-2016 08:00:00.000'))>
-
