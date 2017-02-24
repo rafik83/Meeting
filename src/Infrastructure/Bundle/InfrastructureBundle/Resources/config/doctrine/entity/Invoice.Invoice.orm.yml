@@ -15,10 +15,13 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             type: integer
         invoicePrefix:
             type: string
+            column: invoice_prefix
         invoiceYear:
             type: integer
+            column: invoice_year
         invoiceIncrement:
             type: integer
+            column: invoice_increment
         createdAt:
             type: datetime
     manyToOne:
@@ -30,4 +33,4 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
     uniqueConstraints:
         invoice_number:
-            columns: invoice_prefix, invoice_year, invoice_increment
+            columns: prefix_id, invoice_prefix, invoice_year, invoice_increment
