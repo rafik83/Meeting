@@ -94,8 +94,12 @@ class FilterSummary
 
         $value = $field->vars['value'];
 
+        if (empty($value)) {
+            throw new \Exception();
+        }
+
         if (isset($field->vars['choices'])) {
-            $values = (array)$value;
+            $values = (array) $value;
             $value  = '';
             foreach ($field->vars['choices'] as $choice) {
                 foreach ($values as $currentValue) {
