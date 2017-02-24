@@ -73,11 +73,11 @@ class Create
      * @param Sheet              $sheet
      * @param Prefix             $prefix
      * @param string             $invoicePrefix
-     * @param string             $invoiceYear
-     * @param string             $invoiceNumber
-     * @param float              $total
-     * @param float              $totalWithVat
-     * @param float              $vatAmount
+     * @param int                $invoiceYear
+     * @param int                $invoiceNumber
+     * @param int                $total
+     * @param int                $totalWithVat
+     * @param int                $vatAmount
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
@@ -91,8 +91,7 @@ class Create
         $totalWithVat,
         $vatAmount,
         \DateTimeInterface $createdAt
-    )
-    {
+    ) {
         $this->event         = $event;
         $this->sheet         = $sheet;
         $this->prefix        = $prefix;

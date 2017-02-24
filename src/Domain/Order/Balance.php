@@ -109,7 +109,6 @@ class Balance
     {
         $this->loadAllOrders($event);
         $this->loadAllTransactions($event);
-        $this->loadAllInvoices($event);
     }
 
     /**
@@ -170,11 +169,7 @@ class Balance
      */
     public function getInvoices(Sheet $sheet)
     {
-        if (!isset($this->invoices[$sheet->getId()])) {
-            $this->invoices[$sheet->getId()] = $this->invoiceRepository->findBySheet($sheet);
-        }
-
-        return $this->invoices[$sheet->getId()];
+        return $this->invoiceRepository->findBySheet($sheet);
     }
 
     /**

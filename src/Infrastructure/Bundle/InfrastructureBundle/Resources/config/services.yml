@@ -1539,6 +1539,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\InvoicePrefix\Create }
 
+    command.invoice.create_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\CreateHandler
+        arguments:
+            - '@repository.invoice.invoice_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }
+
     #
     # Security
     #

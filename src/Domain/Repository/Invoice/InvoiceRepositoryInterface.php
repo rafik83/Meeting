@@ -17,17 +17,12 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 interface InvoiceRepositoryInterface
 {
     /**
+     * @param Invoice $invoice
+     *
      * @return Invoice $invoice
      */
     public function add(Invoice $invoice);
-
-    /**
-     * @param Event $event
-     *
-     * @return Invoice[]
-     */
-    public function findByEvent(Event $event);
-
+    
     /**
      * @param Sheet $sheet
      *

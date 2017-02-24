@@ -21,9 +21,9 @@ class InvoiceNumberGenerator
      *
      * @return string
      */
-    public function generate(Invoice $invoice = null)
+    public static function generate(Invoice $invoice = null)
     {
-        return str_pad($this->getIncrementalInvoiceNumber($invoice), 4, "0", STR_PAD_LEFT);
+        return self::getIncrementalInvoiceNumber($invoice);
     }
 
     /**
@@ -31,14 +31,14 @@ class InvoiceNumberGenerator
      *
      * @return int
      */
-    private function getIncrementalInvoiceNumber(Invoice $invoice = null)
+    private static function getIncrementalInvoiceNumber(Invoice $invoice = null)
     {
         if ($invoice === null) {
             return 1;
         }
 
         if ($invoice->getInvoiceYear() === date('Y')) {
-            return $this->incrementInvoiceNumber($invoice->getInvoiceIncrement());
+            return self::incrementInvoiceNumber($invoice->getInvoiceIncrement());
         }
 
         return 1;
@@ -51,7 +51,7 @@ class InvoiceNumberGenerator
      *
      * @return int
      */
-    private function incrementInvoiceNumber($number)
+    private static function incrementInvoiceNumber($number)
     {
         return (int) $number + 1;
     }

@@ -42,6 +42,11 @@ class BatchGenerateInvoiceHandler
     private $orderRepository;
 
     /**
+     * @var CreateHandler
+     */
+    private $createHandler;
+
+    /**
      * @var \DateTimeInterface
      */
     private $datetime;
@@ -49,31 +54,32 @@ class BatchGenerateInvoiceHandler
     /**
      * BatchGenerateInvoiceHandler constructor.
      *
-     * @param SheetRepositoryInterface      $sheetRepository
-     * @param InvoiceRepositoryInterface    $invoiceRepository
-     * @param OrdersToInvoice               $ordersToInvoice
-     * @param OrderRepositoryInterface      $orderRepository
-     * @param \DateTimeInterface            $dateTime
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param OrdersToInvoice $ordersToInvoice
+     * @param OrderRepositoryInterface $orderRepository
+     * @param CreateHandler $createHandler
+     * @param \DateTimeInterface $dateTime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
         InvoiceRepositoryInterface $invoiceRepository,
         OrdersToInvoice            $ordersToInvoice,
         OrderRepositoryInterface   $orderRepository,
+        CreateHandler              $createHandler,
         \DateTimeInterface         $dateTime
-    )
-    {
+    ) {
         $this->sheetRepository   = $sheetRepository;
         $this->invoiceRepository = $invoiceRepository;
         $this->ordersToInvoice   = $ordersToInvoice;
         $this->orderRepository   = $orderRepository;
+        $this->createHandler     = $createHandler;
         $this->datetime          = $dateTime;
     }
 
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
         $sheets         = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
-        $createHandler  = new CreateHandler($this->invoiceRepository);
         $invoiceGeneratedCounter = 0;
 
         foreach ($sheets as $sheet) {
@@ -82,22 +88,20 @@ class BatchGenerateInvoiceHandler
 
             if ($ordersToInvoiceView instanceof OrdersToInvoiceView) {
 
-                $invoiceNumberGenerator = new InvoiceNumberGenerator();
-
                 $create = new Create(
                     $sheet->getEvent(),
                     $sheet,
                     $sheet->getEvent()->getInvoicePrefix(),
                     $sheet->getEvent()->getInvoicePrefix()->getPrefix(),
                     $this->datetime->format('Y'),
-                    $invoiceNumberGenerator->generate(),
+                    InvoiceNumberGenerator::generate(), // todo pass last Invoice generated for event's prefix
                     $ordersToInvoiceView->getTotal(),
                     $ordersToInvoiceView->getTotalWithVat(),
                     $ordersToInvoiceView->getVatAmount(),
                     $this->datetime
                 );
 
-                $invoice = $createHandler->handle($create);
+                $invoice = $this->createHandler->handle($create);
                 
                 // Flag Order with generated Invoice
                 foreach($ordersToInvoiceView->getOrders() as $order) {

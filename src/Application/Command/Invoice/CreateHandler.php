@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
-
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 

@@ -43,23 +43,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         
         return $invoice;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findByEvent(Event $event)
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('invoice')
-            ->from(Invoice::class, 'invoice')
-            ->where('invoice.event = :event')
-            ->setParameter('event', $event)
-            ->orderBy('invoice.id', 'DESC')
-        ;
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
+    
     /**
      * {@inheritdoc}
      */

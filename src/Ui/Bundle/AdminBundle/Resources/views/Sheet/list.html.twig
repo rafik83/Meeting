@@ -95,6 +95,7 @@
                     {% endif %}
 
                     {% if batch_form.generateInvoice is defined %}
+                        <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.generateInvoice) }}</li>
                     {% endif %}
                 {% endblock actions %}
