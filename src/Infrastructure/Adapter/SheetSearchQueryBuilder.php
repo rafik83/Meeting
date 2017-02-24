@@ -18,6 +18,7 @@ use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
+use Elastica\Query\Terms;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -589,28 +590,34 @@ class SheetSearchQueryBuilder
         $booleanFilters = (array) $booleanFilters;
 
         $nested       = new Nested();
-        $boolQuery    = new BoolQuery();
+        $nestedNot    = new Nested();
+
+        $includeTerms = [];
+        $excludeTerms = [];
 
         foreach ($booleanFilters as $key => $filter) {
             if ($filter === null) {
                 continue;
             }
 
-            $matchQuery = new Match();
-            $matchQuery->setField('booleanFilter.key', $key);
-
             if ($filter === true) {
-                $boolQuery->addShould($matchQuery);
+                $includeTerms[] = $key;
             } elseif ($filter === false) {
-                //TODO: handle when filter is state false
+                $excludeTerms[] = $key;
             }
 
             $filterAdded = true;
         }
 
+        $termsQuery    = new Terms('booleanFilter.key', $includeTerms);
+        $termsNotQuery = new Terms('booleanFilter.key', $excludeTerms);
+
         if ($filterAdded) {
-            $nested->setQuery($boolQuery)->setPath('booleanFilter');
+            $nested->setQuery($termsQuery)->setPath('booleanFilter');
+            $nestedNot->setQuery($termsNotQuery)->setPath('booleanFilter');
+
             $this->query->addMust($nested);
+            $this->query->addMustNot($nestedNot);
         }
     }
 
