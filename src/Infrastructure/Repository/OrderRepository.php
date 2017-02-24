@@ -97,6 +97,27 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order, row')
+            ->from(Order::class, '_order', '_order.id')
+            ->join('_order.rows', 'row')
+            ->where('_order.sheet = :sheet')
+            ->andWhere('_order.cancelled = false')
+            // Todo : uncomment the next line when _order.invoice feature is ready
+            // ->andWhere('_order.invoice IS NULL')
+            ->setParameter('sheet', $sheet)
+            ->orderBy('_order.createdAt', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findAndPaginateByEvent(Event $event, array $filters, $page, $limit)
     {
         $queryBuilder = $this

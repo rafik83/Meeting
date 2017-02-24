@@ -42,8 +42,7 @@ class OrdersToInvoice
      */
     public function getOrdersToInvoiceViewForSheet(Sheet $sheet)
     {
-        // todo : Add invoice in Order and create a repo method to get only order.invoice IS NULL
-        $orders = $this->orderRepository->findNotCancelledBySheet($sheet);
+        $orders = $this->orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet);
 
         if (0 === count($orders)) {
             return null;
