@@ -10,7 +10,6 @@
                     <th>{{ 'admin.invoice.column.number'|trans }}</th>
                     <th>{{ 'admin.invoice.column.date'|trans }}</th>
                     <th class="text-right">{{ 'admin.invoice.column.total'|trans }}</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -18,12 +17,7 @@
                     <tr>
                         <td>{{ invoice.number }}</td>
                         <td nowrap="nowrap">{{ invoice.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                        <td class="text-right">{{ invoice.total }}</td>
-                        <td class="text-right col-md-2" nowrap="nowrap">
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-default btn-sm">{{ 'admin.invoice.pdf'|trans }}</a>
-                            </div>
-                        </td>
+                        <td class="text-right">{{ invoice.total|format_currency }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
