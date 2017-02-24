@@ -8,14 +8,9 @@
 
 ### Requirements
 
-* [Vagrant 1.7.4+](http://www.vagrantup.com/downloads.html)
+* [Vagrant 1.8.4](http://www.vagrantup.com/downloads.html)
 * [VirtualBox 5.0.4+](https://www.virtualbox.org/wiki/Downloads)
-* [Ansible 1.9.3+](http://docs.ansible.com/intro_installation.html)
-* [Vagrant Landrush 0.18.0+](https://github.com/phinze/landrush)
-
-To avoid trouble with vagrant 1.8.4 and landrush plugin, specify plugin version
-
-        $ vagrant plugin install landrush --plugin-version 0.18.0
+* [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
 
 ### Setup
 
