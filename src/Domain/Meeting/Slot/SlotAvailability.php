@@ -26,11 +26,12 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class SlotAvailability
 {
-    const HAPPENING_UNAVAILABILITY = 'happening_unavailability';
-    const UNAVAILABILITY           = 'unavailability';
-    const MEETING_UNAVAILABILITY   = 'meeting_unavailability';
-    const MASS_UNAVAILABILITY      = 'mass_unavailability';
-    const SLOT_AVAILABLE           = 'slot_available';
+    const HAPPENING_UNAVAILABILITY       = 'happening_unavailability';
+    const UNAVAILABILITY                 = 'unavailability';
+    const MEETING_UNAVAILABILITY         = 'meeting_unavailability';
+    const MASS_UNAVAILABILITY            = 'mass_unavailability';
+    const SLOT_AVAILABLE                 = 'slot_available';
+    const MASS_ASSIGNMENT_UNAVAILABILITY = 'mass_assignment_unavailability';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -411,7 +412,6 @@ class SlotAvailability
                     continue;
                 }
             }
-
 
             if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
                 return true;

@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 
 /**
  * "Evènement".
@@ -49,6 +50,16 @@ class Event implements EventInterface, TraceableInterface
      * @var string
      */
     private $logo;
+
+    /**
+     * @var string
+     */
+    private $invoiceLogo;
+
+    /**
+     * @var string
+     */
+    private $invoiceLogoExtension;
 
     /**
      * @var string
@@ -145,6 +156,11 @@ class Event implements EventInterface, TraceableInterface
     private $days;
 
     /**
+     * @var null|Prefix
+     */
+    private $invoicePrefix;
+
+    /**
      * @param string      $title
      * @param string      $fallback
      * @param array       $locales
@@ -156,6 +172,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
+     * @param Prefix $invoicePrefix
      */
     public function __construct(
         $title,
@@ -168,7 +185,8 @@ class Event implements EventInterface, TraceableInterface
         $timeZone,
         $domain,
         $organiserName,
-        $emailTeam
+        $emailTeam,
+        Prefix $invoicePrefix
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -185,6 +203,7 @@ class Event implements EventInterface, TraceableInterface
         $this->domain         = $domain;
         $this->organiserName  = $organiserName;
         $this->emailTeam      = $emailTeam;
+        $this->invoicePrefix  = $invoicePrefix;
     }
 
     /**
@@ -388,6 +407,32 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getInvoiceLogo()
+    {
+        return $this->invoiceLogo;
+    }
+
+    /**
+     * @param string $invoiceLogo
+     * @param string $invoiceLogoExtension
+     */
+    public function setInvoiceLogo($invoiceLogo, $invoiceLogoExtension)
+    {
+        $this->invoiceLogo = $invoiceLogo;
+        $this->invoiceLogoExtension = $invoiceLogoExtension;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceLogoExtension()
+    {
+        return $this->invoiceLogoExtension;
+    }
+
+    /**
      * @return string|null
      */
     public function getEmailTeam()
@@ -407,6 +452,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
+     * @param null|Prefix $invoicePrefix
      */
     public function update(
         $title,
@@ -419,7 +465,8 @@ class Event implements EventInterface, TraceableInterface
         $timeZone,
         $domain,
         $organiserName,
-        $emailTeam
+        $emailTeam,
+        Prefix $invoicePrefix
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
@@ -432,6 +479,7 @@ class Event implements EventInterface, TraceableInterface
         $this->domain        = $domain;
         $this->organiserName = $organiserName;
         $this->emailTeam     = $emailTeam;
+        $this->invoicePrefix = $invoicePrefix;
     }
 
     /**
@@ -532,6 +580,14 @@ class Event implements EventInterface, TraceableInterface
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * @return null|Prefix
+     */
+    public function getInvoicePrefix()
+    {
+        return $this->invoicePrefix;
     }
 
     /**

@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -30,6 +31,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         // Actual user
+        $prefix   = new Prefix('Vimeet', 'Vi');
         $dateTime = new \DateTime();
         $user     = new Admin(
             'email@email.fr',
@@ -51,6 +53,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->leftColor     = '#FFFFFF';
         $create->rightColor    = '#000000';
         $create->textColor     = '#CCCCCC';
+        $create->invoicePrefix = $prefix;
         // It mocks the creation of an UploadedFile
         $create->logo          = $this
             ->getMockBuilder(UploadedFile::class)
@@ -74,7 +77,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -133,6 +137,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithOrganizer()
     {
         // Actual user
+        $prefix   = new Prefix('Vimeet', 'Vi');
         $dateTime = new \DateTime();
         $user     = new Admin(
             'email@email.fr',
@@ -146,22 +151,23 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         // Update command
-        $create             = new Create($user);
-        $create->title      = 'barfoo';
-        $create->locales    = ['fr', 'en'];
-        $create->fallback   = 'en';
-        $create->currency   = 'USD';
-        $create->leftColor  = '#FFFFFF';
-        $create->rightColor = '#000000';
-        $create->textColor  = '#CCCCCC';
-        $create->logo       = $this
+        $create                = new Create($user);
+        $create->title         = 'barfoo';
+        $create->locales       = ['fr', 'en'];
+        $create->fallback      = 'en';
+        $create->currency      = 'USD';
+        $create->leftColor     = '#FFFFFF';
+        $create->rightColor    = '#000000';
+        $create->textColor     = '#CCCCCC';
+        $create->invoicePrefix = $prefix;
+        $create->logo          = $this
             ->getMockBuilder(UploadedFile::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain     = 'hello.vimeet.proximum.dev';
-        $create->timeZone   = 'Europe/Paris';
-        $create->emailTeam  = 'team-project@example.net';
+        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->timeZone      = 'Europe/Paris';
+        $create->emailTeam     = 'team-project@example.net';
 
         // Expected event
         $expectedEvent = new Event(
@@ -175,7 +181,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -243,8 +250,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(DomainAlreadyUsedException::class);
 
         // Actual user
+        $prefix   = new Prefix('Vimeet', 'Vi');
         $dateTime = new \DateTime();
-        $user = new Admin(
+        $user     = new Admin(
             'email@email.fr',
             'salt',
             'password',
@@ -264,6 +272,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->leftColor     = '#FFFFFF';
         $create->rightColor    = '#000000';
         $create->textColor     = '#CCCCCC';
+        $create->invoicePrefix = $prefix;
         $create->logo          = $this
             ->getMockBuilder(UploadedFile::class)
             ->enableOriginalConstructor()
@@ -285,7 +294,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-project@example.net'
+            'team-project@example.net',
+            $prefix
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -310,7 +320,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(EventFactory::createEvent());
+        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()
+            ->willReturn(EventFactory::createEvent());
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();

@@ -114,8 +114,6 @@ Feature: Update meeting spot and slot in agenda via the API
               1,
               3,
               4,
-              7,
-              8,
               9,
               10,
               11,

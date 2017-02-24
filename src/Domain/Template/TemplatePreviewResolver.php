@@ -50,7 +50,6 @@ class TemplatePreviewResolver
         $templateData = $this->templateDataFactory->createFromTemplate($sheetTemplate);
         $previews     = $sheetTemplate->getPreview();
 
-
         foreach ($previews as $key => $objectKey) {
             try {
                 $templateData->getObject($objectKey);

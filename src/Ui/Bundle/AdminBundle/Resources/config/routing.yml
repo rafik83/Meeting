@@ -304,6 +304,22 @@ admin_agenda_sheet_meeting_remove:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
 
+admin_agenda_mass_assignment_detail:
+    path: /event/{event}/agenda/mass/{massAssignment}/detail
+    requirements:
+        event: \d+
+        massAssignment: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:massAssignmentDetail }
+
+admin_agenda_mass_assignment_update:
+    path: /event/{event}/agenda/mass/{massAssignment}/update
+    requirements:
+        event: \d+
+        massAssignment: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateMassAssignment }
+
 admin_agenda_export_participant_index:
     path: /event/{event}/agenda/export-participants
     requirements:
@@ -415,6 +431,13 @@ admin_meeting_delete_all:
         event: \d+
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Meeting:delete }
+
+admin_meeting_export:
+    path: /event/{event}/meeting/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Meeting:export }
 
 #
 # Spot
@@ -1221,3 +1244,16 @@ admin_import_planner_data:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Planner/Import:import }
+
+#
+# Invoicing
+#
+admin_invoice_globals_list:
+    path: /invoice/prefix
+    defaults: { _controller: AdminBundle:Invoicing:list }
+    methods: [GET]
+
+admin_invoice_globals_create:
+    path: /invoice/prefix/create
+    defaults: { _controller: AdminBundle:Invoicing:create }
+    methods: [GET, POST]

@@ -79,6 +79,17 @@ final class Tag
     /**
      * @return array
      */
+    public static function getParticipantIdentityTags()
+    {
+        return [
+            self::PARTICIPANT_FIRSTNAME,
+            self::PARTICIPANT_LASTNAME,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public static function getParticipantTags()
     {
         return [

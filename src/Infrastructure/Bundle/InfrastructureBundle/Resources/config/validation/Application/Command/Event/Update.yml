@@ -46,3 +46,6 @@ Proximum\Vimeet\Application\Command\Event\Update:
                 message: validators.hexadecimal
         organiserName:
             - NotBlank: ~
+        invoicePrefix:
+            - NotBlank: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event\UpdateInvoicePrefixConstraint: ~

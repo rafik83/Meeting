@@ -44,6 +44,7 @@ class Add
      * @var bool
      */
     public $owner;
+
     /**
      * @var User
      */

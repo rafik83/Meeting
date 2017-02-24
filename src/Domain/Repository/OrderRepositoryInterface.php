@@ -65,4 +65,11 @@ interface OrderRepositoryInterface
      * @return Order[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledByEvent(Event $event);
 }
