@@ -112,20 +112,6 @@ install-db-fixtures@test:
 install-dep:
 	npm --no-spin install
 
-init-db:
-	bin/console doctrine:schema:drop --force
-	bin/console doctrine:schema:create
-	bin/console doctrine:fixtures:load -n
-	bin/console fos:elastica:populate
-	bin/console vimeet:event:build-guideline-asset
-
-init-db@test:
-	bin/console doctrine:schema:drop --force --env=test
-	bin/console doctrine:schema:create --env=test
-	bin/console doctrine:fixtures:load -n --env=test
-	bin/console cache:clear --env=test
-	bin/console fos:elastica:populate --env=test
-
 #########
 # Build #
 #########
@@ -223,6 +209,23 @@ deploy-capifony@prod:
 ##########
 # Custom #
 ##########
+
+init-db:
+	read -p "You are about to ini db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  bin/console doctrine:schema:drop --force; \
+	  bin/console doctrine:schema:create; \
+	  bin/console doctrine:fixtures:load -n; \
+	  bin/console fos:elastica:populate; \
+	  bin/console vimeet:event:build-guideline-asset; \
+	fi
+
+init-db@test:
+	bin/console doctrine:schema:drop --force --env=test
+	bin/console doctrine:schema:create --env=test
+	bin/console doctrine:fixtures:load -n --env=test
+	bin/console cache:clear --env=test
+	bin/console fos:elastica:populate --env=test
 
 migration@prod:
 	bin/console doctrine:migrations:migrate --no-interaction
