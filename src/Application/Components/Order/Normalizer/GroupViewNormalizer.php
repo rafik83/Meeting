@@ -29,10 +29,11 @@ class GroupViewNormalizer implements NormalizerInterface, NormalizerAwareInterfa
     public function normalize($object, $format = null, array $context = [])
     {
         return [
-            'groupId'  => $object->groupId,
-            'label'    => $object->label,
-            'type'     => $object->type,
-            'products' => $this->normalizer->normalize($object->products, $format, $context),
+            'groupId'    => $object->groupId,
+            'label'      => $object->label,
+            'type'       => $object->type,
+            'products'   => $this->normalizer->normalize($object->products, $format, $context),
+            'customRows' => $this->normalizer->normalize($object->customRows, $format, $context),
         ];
     }
 

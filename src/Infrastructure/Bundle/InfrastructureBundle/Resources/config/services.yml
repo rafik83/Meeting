@@ -2972,6 +2972,21 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    order.promotion_codes_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\PromotionCodesViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.promotion_code_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\PromotionCodeViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.promotion_product_row_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\PromotionProductRowViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     #
     # KeyDates
     #

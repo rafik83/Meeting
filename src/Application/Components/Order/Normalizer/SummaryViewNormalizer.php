@@ -20,12 +20,19 @@ class SummaryViewNormalizer implements NormalizerInterface, NormalizerAwareInter
     use NormalizerAwareTrait;
 
     /**
-     * {@inheritdoc}
+     * @param SummaryView $object
+     * @param string      $format
+     * @param array       $context
+     *
+     * @return array
      */
     public function normalize($object, $format = null, array $context = [])
     {
         return [
-            'groups' => $this->normalizer->normalize($object->groups, $format, $context),
+            'groups'         => $this->normalizer->normalize($object->groups, $format, $context),
+            'promotionCodes' => $this->normalizer->normalize($object->promotionCodes, $format, $context),
+            'vatMode'        => $object->vatMode,
+            'currency'       => $object->currency,
         ];
     }
 
