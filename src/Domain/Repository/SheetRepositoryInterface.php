@@ -168,4 +168,11 @@ interface SheetRepositoryInterface
      * @return array
      */
     public function countEnabledSheetsTypeByEvent(Event $event, $locale);
+
+    /**
+     * @param User $user
+     *
+     * @return Sheet[]
+     */
+    public function getByUser(User $user);
 }
