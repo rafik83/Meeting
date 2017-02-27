@@ -2939,7 +2939,38 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@query.order.summary_query_handler'
+            - '@package.specification.vat_applicable'
             - '@adapter.serializer_adapter'
+
+    order.summary_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\SummaryViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.groups_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\GroupsViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.group_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\GroupViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.row_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\RowViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.included_product_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\IncludedProductViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    order.custom_row_view_normalizer:
+        class: Proximum\Vimeet\Application\Components\Order\Normalizer\CustomRowViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
 
     #
     # KeyDates

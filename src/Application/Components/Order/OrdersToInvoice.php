@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
@@ -33,22 +34,28 @@ class OrdersToInvoice
     /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
+    /** @var VatApplicable */
+    private $vatApplicable;
+
     /**
      * @param OrderRepositoryInterface   $orderRepository
      * @param Merger                     $orderMerger
      * @param SummaryQueryHandler        $summaryQueryHandler
+     * @param VatApplicable              $vatApplicable
      * @param SerializerAdapterInterface $serializerAdapter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         Merger $orderMerger,
         SummaryQueryHandler $summaryQueryHandler,
+        VatApplicable $vatApplicable,
         SerializerAdapterInterface $serializerAdapter
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderMerger = $orderMerger;
         $this->summaryQueryHandler = $summaryQueryHandler;
         $this->serializerAdapter = $serializerAdapter;
+        $this->vatApplicable = $vatApplicable;
     }
 
     /**
@@ -71,19 +78,29 @@ class OrdersToInvoice
         }
 
         $view = $this->summaryQueryHandler->handle(new SummaryQuery(
-            $sheet,
+            $orderMerged->getSheet(),
             $orderMerged,
-            $sheet->getEvent()->getFallback()
+            $orderMerged->getSheet()->getEvent()->getFallback()
         ));
+
+        $vatToPay = 0;
+        $mustPayVat = $this->vatApplicable->onSheet($sheet);
+
+        $total = AmountFormatter::decimalToCentimesAmount($orderMerged->getTotalWithoutVat());
+        $vatRate = $sheet->getEvent()->getVat();
+
+        if ($mustPayVat) {
+            $vatToPay = (int) ($total * $vatRate / 100);
+        }
 
         $data = $this->serializerAdapter->serialize($view, 'json');
 
         return new OrdersToInvoiceView(
             $orders,
-            [], // todo : inject merged orders data
-            AmountFormatter::decimalToCentimesAmount($orderMerged->getTotalWithoutVat()),
-            AmountFormatter::decimalToCentimesAmount($orderMerged->getVatAmount()),
-            AmountFormatter::decimalToCentimesAmount($orderMerged->getTotalWithVat())
+            $data,
+            $total,
+            $vatToPay,
+            $total + $vatToPay
         );
     }
 }

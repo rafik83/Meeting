@@ -26,17 +26,17 @@ class OrdersToInvoiceView
     /** @var int amount in centimes */
     private $totalWithVat;
 
-    /** @var array */
+    /** @var string */
     private $data;
 
     /**
-     * @param array $orders
-     * @param array $data
-     * @param int   $total
-     * @param int   $vatAmount
-     * @param int   $totalWithVat
+     * @param array  $orders
+     * @param string $data
+     * @param int    $total
+     * @param int    $vatAmount
+     * @param int    $totalWithVat
      */
-    public function __construct(array $orders, array $data, $total, $vatAmount, $totalWithVat)
+    public function __construct(array $orders, $data, $total, $vatAmount, $totalWithVat)
     {
         $this->orders = $orders;
         $this->total = $total;
@@ -78,7 +78,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getData()
     {

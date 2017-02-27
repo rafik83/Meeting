@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -72,16 +73,20 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
 
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
+
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
             new Merger(),
             $summaryQueryHandler->reveal(),
+            $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
         );
 
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
-        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], [], 256400, 51280, 307680);
+        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], null, 256400, 51280, 307680);
 
         $this->assertEquals($expectedOrdersToInvoiceView, $ordersToInvoiceView);
     }
@@ -103,10 +108,13 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
 
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
             new Merger(),
             $summaryQueryHandler->reveal(),
+            $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
         );
 
@@ -151,10 +159,13 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
 
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
             new Merger(),
             $summaryQueryHandler->reveal(),
+            $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
         );
 
@@ -217,15 +228,19 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
 
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
+
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
             new Merger(),
             $summaryQueryHandler->reveal(),
+            $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
         );
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
-        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], [], 246400, 49280, 295680);
+        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], null, 246400, 49280, 295680);
 
         $this->assertEquals($expectedOrdersToInvoiceView, $ordersToInvoiceView);
     }
