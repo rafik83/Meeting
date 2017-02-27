@@ -201,4 +201,21 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function hasInvoice(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(ORder::class, '_order', '_order.id')
+            ->where('_order.sheet = :sheet')
+            ->andWhere('_order.invoice IS NOT NULL')
+            ->setParameter('sheet', $sheet);
+        
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

@@ -79,4 +79,11 @@ interface OrderRepositoryInterface
      * @return Order[]
      */
     public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet);
+    
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Order|null
+     */
+    public function hasInvoice(Sheet $sheet);
 }

@@ -135,7 +135,7 @@ class ChangeTypeHandler
      */
     private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet)
     {
-        if ($sheet->isAtLeastOneOrderInvoiced()) {
+        if ($this->orderRepository->hasInvoice($sheet) === null) {
             throw new AccessDeniedException('Access denied.');
         }
     }
