@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 
@@ -52,9 +53,11 @@ class FilterSummary
                 continue;
             }
 
+            /** @var FormView $field */
             $field = $formView->children[$filter];
 
-            if (count($field->children) > 0) {
+            // If field has nested form type inside of type BooleanFilterType
+            if ($field->vars['name'] === Constant::BOOLEAN_FILTER) {
                 foreach ($field->children as $childrenRow) {
                     try {
                         list($label, $value) = $this->handleFormRow($childrenRow, $locale);
