@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\User\UserListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
@@ -93,6 +94,8 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $events = [];
+
         $userEvent = $this
             ->get('vimeet_infrastructure.repository.user_event_repository')
             ->getUserEvent($user, $event);
@@ -107,9 +110,19 @@ class UserController extends Controller
             );
         }
 
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getByUser($user);
+
+        /** @var Sheet $sheet */
+        foreach ($sheets as $sheet) {
+            $events[$sheet->getEvent()->getTitle()] = $sheet->getEvent()->getTitle();
+        }
+
         return $this->render('AdminBundle:User:show.html.twig', [
             'event'  => $event,
             'user'   => $user,
+            'events' => $events
         ]);
     }
 
