@@ -23,6 +23,7 @@ class AmountFormatter
      */
     public static function decimalToCentimesAmount($amount)
     {
-        return (int) 100 * $amount;
+        // (int) always rounds the number down, it is fixed by round() method
+        return (int) round(100 * $amount);
     }
 }

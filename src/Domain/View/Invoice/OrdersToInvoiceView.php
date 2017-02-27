@@ -17,13 +17,13 @@ class OrdersToInvoiceView
     /** @var Order[] */
     private $orders;
 
-    /** @var float */
+    /** @var int amount in centimes */
     private $total;
 
-    /** @var float */
+    /** @var int amount in centimes */
     private $vatAmount;
 
-    /** @var float */
+    /** @var int amount in centimes */
     private $totalWithVat;
 
     /** @var array */
@@ -32,9 +32,9 @@ class OrdersToInvoiceView
     /**
      * @param array $orders
      * @param array $data
-     * @param float $total
-     * @param float $vatAmount
-     * @param float $totalWithVat
+     * @param int   $total
+     * @param int   $vatAmount
+     * @param int   $totalWithVat
      */
     public function __construct(array $orders, array $data, $total, $vatAmount, $totalWithVat)
     {
@@ -54,7 +54,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getTotal()
     {
@@ -62,7 +62,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getVatAmount()
     {
@@ -70,7 +70,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getTotalWithVat()
     {
