@@ -210,12 +210,12 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order')
+            ->select('_order.id')
             ->from(ORder::class, '_order', '_order.id')
             ->where('_order.sheet = :sheet')
             ->andWhere('_order.invoice IS NOT NULL')
             ->setParameter('sheet', $sheet);
         
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return ($queryBuilder->getQuery()->getOneOrNullResult() === null) ? false : true;
     }
 }

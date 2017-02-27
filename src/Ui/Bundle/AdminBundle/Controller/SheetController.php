@@ -315,7 +315,7 @@ class SheetController extends Controller
         $changeTypeForm = null;
 
         if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
-            && $this->get('vimeet_infrastructure.repository.order_repository')->hasInvoice($sheet) === null) {
+            && $this->get('vimeet_infrastructure.repository.order_repository')->hasInvoice($sheet) === false) {
             $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
 
             $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [

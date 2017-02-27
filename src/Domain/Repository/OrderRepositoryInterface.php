@@ -83,7 +83,7 @@ interface OrderRepositoryInterface
     /**
      * @param Sheet $sheet
      *
-     * @return Order|null
+     * @return bool
      */
     public function hasInvoice(Sheet $sheet);
 }
