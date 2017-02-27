@@ -37,7 +37,7 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        return $this->invoiceRepository->add(new Invoice(
+        $invoice = new Invoice(
             $create->event,
             $create->sheet,
             $create->prefix,
@@ -48,6 +48,10 @@ class CreateHandler
             $create->totalWithVat,
             $create->vatAmount,
             $create->createdAt
-        ));
+        );
+        
+        $this->invoiceRepository->add($invoice);
+        
+        return $invoice;
     }
 }

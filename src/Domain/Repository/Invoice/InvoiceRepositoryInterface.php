@@ -18,8 +18,6 @@ interface InvoiceRepositoryInterface
 {
     /**
      * @param Invoice $invoice
-     *
-     * @return Invoice $invoice
      */
     public function add(Invoice $invoice);
     

@@ -40,8 +40,6 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     {
         $this->entityManager->persist($invoice);
         $this->entityManager->flush();
-        
-        return $invoice;
     }
 
     /**
