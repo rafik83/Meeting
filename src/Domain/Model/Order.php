@@ -628,6 +628,14 @@ class Order
     {
         $this->invoice = $invoice;
     }
+    
+    /**
+     * @return bool
+     */
+    public function hasInvoice()
+    {
+        return $this->getInvoice() === null ? false : true;
+    }
 
     /**
      * @param Sheet             $sheet

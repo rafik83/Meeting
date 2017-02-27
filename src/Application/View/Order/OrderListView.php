@@ -61,18 +61,24 @@ class OrderListView
      * @var string
      */
     public $currency;
-
+    
     /**
-     * @param int                $id
-     * @param string             $numero
-     * @param int                $sheetId
-     * @param string             $sheetTitle
-     * @param string             $sheetType
-     * @param string             $follower
+     * @var bool
+     */
+    public $isInvoiced;
+    
+    /**
+     * @param int $id
+     * @param string $numero
+     * @param int $sheetId
+     * @param string $sheetTitle
+     * @param string $sheetType
+     * @param string $follower
      * @param \DateTimeInterface $createdAt
-     * @param float              $total
-     * @param string             $vatMode
-     * @param string             $currency
+     * @param float $total
+     * @param string $vatMode
+     * @param string $currency
+     * @param $isInvoiced
      */
     public function __construct(
         $id,
@@ -84,7 +90,8 @@ class OrderListView
         \DateTimeInterface $createdAt,
         $total,
         $vatMode,
-        $currency
+        $currency,
+        $isInvoiced
     ) {
         $this->id         = $id;
         $this->numero     = $numero;
@@ -96,5 +103,6 @@ class OrderListView
         $this->total      = $total;
         $this->vatMode    = $vatMode;
         $this->currency   = $currency;
+        $this->isInvoiced = $isInvoiced;
     }
 }
