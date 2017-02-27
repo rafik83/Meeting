@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Preview;
 
+use Proximum\Vimeet\Application\View\Participant\CardView;
+
 class PreviewView
 {
     /**
@@ -33,11 +35,24 @@ class PreviewView
     public $strong = false;
 
     /**
+     * @var array|CardView[]
+     */
+    public $cardViews;
+
+    /**
      * @return bool
      */
     public function isImage()
     {
         return $this->type === 'image';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParticipant()
+    {
+        return $this->type === 'participant';
     }
 
     /**
@@ -49,14 +64,16 @@ class PreviewView
     }
 
     /**
-     * @param string $id
-     * @param string $content
-     * @param string $type
+     * @param string     $id
+     * @param string     $content
+     * @param string     $type
+     * @param CardView[] $cardViews
      */
-    public function __construct($id, $content, $type)
+    public function __construct($id, $content, $type, array $cardViews = [])
     {
-        $this->id      = $id;
-        $this->content = $content;
-        $this->type    = $type;
+        $this->id        = $id;
+        $this->content   = $content;
+        $this->type      = $type;
+        $this->cardViews = $cardViews;
     }
 }

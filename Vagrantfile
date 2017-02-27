@@ -5,15 +5,12 @@ app = {
   :name        => 'vimeet.proximum',
   :box         => 'manala/app-dev-debian',
   :box_version => '~> 2.0.0',
-  :box_memory  => 4096
+  :box_memory  => 2048
 }
 
 Vagrant.require_version '>= 1.8.4'
 
 Vagrant.configure(2) do |config|
-
-  # Force vagrant to use virtualbox provider
-  config.vm.provider "virtualbox"
 
   # Ssh
   config.ssh.username      = 'app'
@@ -30,6 +27,7 @@ Vagrant.configure(2) do |config|
     mount_options: ['nolock', 'actimeo=1', 'fsc']
 
   # Vm - Provider - Virtualbox
+  config.vm.provider 'virtualbox' # Force provider
   config.vm.provider :virtualbox do |virtualbox|
     virtualbox.name   = app[:name]
     virtualbox.memory = app[:box_memory]

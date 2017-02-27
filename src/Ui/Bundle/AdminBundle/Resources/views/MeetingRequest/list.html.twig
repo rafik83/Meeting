@@ -2,6 +2,10 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.meeting_request.link'|trans }}
+{% endblock %}
+
 {% block content %}
     <h1 class="page-header">
         {{ 'admin.meeting_request.title'|transchoice(meeting_requests.total, {'%count%': meeting_requests.total}) }}
@@ -17,11 +21,16 @@
         resetLink: path('admin_meeting_request_list', { 'event': event.id })
     }) }}
 
+    <div class="col-md-offset-8 col-md-4 text-right">
+        {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
+    </div>
+
     <table class="table table-hover filterable">
         <thead>
         <tr>
             <th>{{ 'admin.meeting_request.from'|trans }}</th>
             <th>{{ 'admin.meeting_request.to'|trans }}</th>
+            <th>{{ 'admin.meeting_request.stateUpdatedAt'|trans }}</th>
             <th>{{ 'admin.meeting_request.createdAt'|trans }}</th>
             <th>{{ macro.choice_as_dropdown(filter_form.state) }}</th>
             <th></th>
@@ -40,6 +49,7 @@
                         {{ meeting_request.sheetNameTo }}
                     </a>
                 </td>
+                <td>{{ meeting_request.stateUpdatedAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>{{ meeting_request.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>
                     {{ macro.state_label(

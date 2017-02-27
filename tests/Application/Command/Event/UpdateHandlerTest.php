@@ -75,6 +75,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
         $update->emailTeam     = 'team-event@example.net';
+        $update->analyticsCode = 'analyticsCode';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -95,6 +96,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
+        $expectedEvent
+            ->getConfiguration()
+            ->setAnalyticsCode('analyticsCode');
+
 
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);

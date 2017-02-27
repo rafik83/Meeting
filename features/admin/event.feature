@@ -56,13 +56,15 @@ Feature: See, create and update event
       | event_update_title                       | Other event                                                                    |
       | event_update_translations_fr_description | LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE                                  |
       | event_update_translations_en_description | In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion. |
-      | event_update_emailTeam                   | team-event@example.net                                                        |
+      | event_update_emailTeam                   | team-event@example.net                                                         |
+      | event_update_analyticsCode               | analyticsCode                                                                  |
     And I select "fr" from "event_update_fallback"
     And I select "EUR" from "event_update_currency"
     And I press "form.event_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
     And the "event_update_emailTeam" field should contain "team-event@example.net"
+    And the "event_update_analyticsCode" field should contain "analyticsCode"
     When I go to "/admin/fr/event"
     Then I should see "Other event"
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr"

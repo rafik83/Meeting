@@ -223,7 +223,9 @@ class Block extends AbstractChild
     public function getPreviewAvailableObjects()
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return $object instanceof TemplateObject\Image || $object instanceof TemplateObject\EditableText;
+            return $object instanceof TemplateObject\Image
+                   || $object instanceof TemplateObject\EditableText
+                   || $object instanceof TemplateObject\Participant;
         });
     }
 
@@ -530,5 +532,23 @@ class Block extends AbstractChild
                 $object->setOption($fieldName, $emptyValue);
             }
         }
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getUserIdentityObjects()
+    {
+        $objects = [];
+
+        foreach ($this->getObjects() as $object) {
+            foreach (Tag::getParticipantIdentityTags() as $tag) {
+                if ($object->hasTag($tag)) {
+                    $objects[$tag] = $object;
+                }
+            }
+        }
+
+        return $objects;
     }
 }

@@ -73,12 +73,30 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->where('participant.id = :id')
+            ->join('participant.sheet', 'sheet')
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByIds(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet')
+            ->where('participant.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

@@ -53,7 +53,7 @@ class SheetViewQueryHandler
     public function handle(SheetViewQuery $query)
     {
         $this->orderTypeById($query);
-        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event);
+        $sheets = $this->sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($query->event);
 
         $sheetViews = [];
 
@@ -61,12 +61,14 @@ class SheetViewQueryHandler
         foreach ($sheets as $sheet) {
             $indicator = $this->indicatorCalculator->getIndicator($sheet);
 
-            $sheetViews[] = new SheetView(
-                $sheet->getId(),
-                $this->types[$sheet->getType()->getId()],
-                $indicator->sheetsPlanningQuantity,
-                $indicator->possibleMeetingsQuantity
-            );
+            if ($indicator->possibleMeetingsQuantity > 0) {
+                $sheetViews[] = new SheetView(
+                    $sheet->getId(),
+                    $this->types[$sheet->getType()->getId()],
+                    $indicator->sheetsPlanningQuantity,
+                    $indicator->possibleMeetingsQuantity
+                );
+            }
         }
 
         return $sheetViews;

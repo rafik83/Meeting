@@ -80,7 +80,7 @@ class ProcessHandler
             throw new CampaignSendingFailedException('flash.messaging.campaign.send.failure.no_recipient');
         }
 
-        //$this->mailer->send($message, $this->getReceivers($sheets, $recipients, $campaign->getMessage()));
+        $this->mailer->send($message, $this->getReceivers($sheets, $recipients, $campaign->getMessage()));
 
         $campaign->markAsProcessed();
         $this->campaignRepository->set($campaign);
@@ -98,9 +98,6 @@ class ProcessHandler
      */
     private function getReceivers(array $sheets, array $recipients, Message $message)
     {
-        return ['maxime.colin@elao.com'];
-
-
         $sendToParticipants    = in_array(Campaign::RECIPIENT_PARTICIPANTS, $recipients, true);
         $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
         $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);

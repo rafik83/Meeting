@@ -204,6 +204,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->andWhere('NOT EXISTS (
                 SELECT mass.id FROM Entity:Unavailability\Mass mass
                 WHERE mass.blocking = true
+                AND mass.dispatch = false
                 AND (
                     slot.begin = mass.begin
                     OR mass.end = slot.end
@@ -212,6 +213,23 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                     OR slot.begin < mass.begin AND mass.begin < slot.end
                 )
             )');
+
+        // Mass Assignment not blocking
+        $queryBuilder
+            ->andWhere('NOT EXISTS (
+                SELECT assignment.id FROM Entity:Unavailability\MassAssignment assignment
+                JOIN assignment.mass massUnavailability
+                WHERE assignment.participant IN (:ids)
+                AND massUnavailability.blocking = true
+                AND assignment.enabled = true
+                AND (
+                    slot.begin = assignment.begin
+                    OR assignment.end = slot.end
+                    OR assignment.begin < slot.begin AND slot.begin < assignment.end
+                    OR assignment.begin < slot.end AND slot.end < assignment.end
+                    OR slot.begin < assignment.begin AND assignment.begin < slot.end
+                )
+        )');
 
         $queryBuilder->setParameter('ids', $participantsId);
 

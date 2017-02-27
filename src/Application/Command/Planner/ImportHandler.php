@@ -160,8 +160,8 @@ class ImportHandler
                 $toFlush[] = $meeting;
             }
 
-            // Each 20 meetings, flush and clear to optimize the insertion
-            if (0 === ($index % 20)) {
+            // Each 1000 meetings, flush and clear to optimize the insertion
+            if (0 === ($index % 1000)) {
                 $this->entityManagerAdapter->flush();
 
                 /** @var Meeting $flush */

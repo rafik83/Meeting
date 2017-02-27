@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
-use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
@@ -60,32 +59,26 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-default'],
         ]);
 
-        $filterForm->handleRequest($request);
-        $filters = $filterForm->getData();
-
+        $filters        = $filterForm->handleRequest($request)->getData();
         $query          = new SheetListViewQuery($event, $filters, $locale);
         $sheets         = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
 
-        $createCampaignForm = $this->createForm(CreateCampaignType::class, new Create($event, $request->get($filterForm->getName(), [])), [
-            'sheet_ids' => array_map(function (SheetListView $sheet) {
-                return $sheet->id;
-            }, $sheets),
-            'action'    => $this->generateUrl('admin_messaging_campaign_select_sheets', ['event' => $event->getId()]) . '?' . $request->getQueryString(),
+        $createCampaignCommand = new Create($event, $request->get($filterForm->getName(), []));
+        $createCampaignForm    = $this->createForm(CreateCampaignType::class, $createCampaignCommand, [
+            'sheet_ids' => array_map(function (SheetListView $sheet) { return $sheet->id; }, $sheets),
+            'action'    => $this->generateUrl('admin_messaging_campaign_select_sheets', array_merge(['event' => $event->getId()], $request->query->all())),
         ]);
 
-        if ('POST' == $request->getMethod()) {
-            $createCampaignForm->handleRequest($request);
+        if ($createCampaignForm->handleRequest($request)->isSubmitted() && $createCampaignForm->isValid()) {
+            /** @var Campaign $campaign */
+            $campaign = $this->get('tactician.commandbus')->handle($createCampaignCommand);
+            $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
 
-            if ($createCampaignForm->isValid()) {
-                $campaign = $this->get('tactician.commandbus')->handle($createCampaignForm->getData());
-                $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
-
-                return $this->redirectToRoute('admin_messaging_campaign_select_recipients', [
-                    'event'    => $event->getId(),
-                    'campaign' => $campaign->getId(),
-                ]);
-            }
+            return $this->redirectToRoute('admin_messaging_campaign_select_recipients', [
+                'event'    => $event->getId(),
+                'campaign' => $campaign->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:Messaging\Campaign:select_sheets.html.twig', [
@@ -117,7 +110,7 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-primary'],
         ]);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($form->getData());
             $this->addFlash('success', 'flash.admin.messaging.campaign.recipients.success');
 
@@ -159,7 +152,7 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-primary'],
         ]);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($selectMessage);
             $this->addFlash('success', 'flash.admin.messaging.campaign.message.success');
 

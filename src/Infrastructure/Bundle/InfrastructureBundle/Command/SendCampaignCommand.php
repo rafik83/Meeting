@@ -53,7 +53,7 @@ class SendCampaignCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Build guideline asset for the events')
+            ->setDescription('Send campaign')
             ->addArgument('id', InputArgument::REQUIRED, 'Campaign id')
         ;
     }

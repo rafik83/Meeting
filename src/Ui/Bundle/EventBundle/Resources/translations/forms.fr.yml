@@ -95,7 +95,7 @@ form.sheet_editable_text_data.children.submit.label: Enregistrer
 form.sheet_editable_text_data.data.maxLength.translations.plural: 'caractères restants'
 form.sheet_editable_text_data.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
 form.sheet_editable_text_data.data.maxLength.translations.singular: 'caractère restant'
-form.sheet_image_data.children.selectedProduct.label: 'Produits liées'
+form.sheet_image_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_image_data.children.submit.label: Enregistrer
 form.sheet_item_collection_data.children.items.label_add: Ajouter
 form.sheet_item_collection_data.children.items.label_delete: '&times;'
@@ -106,7 +106,7 @@ form.sheet_media_collection_data.children.medias.label_delete: '&times;'
 form.sheet_media_collection_data.children.medias.prototype.children.title.label: Titre
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
-form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liées'
+form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_media_collection_data.children.submit.label: Enregistrer
 gender.man: Monsieur
 gender.woman: Madame
