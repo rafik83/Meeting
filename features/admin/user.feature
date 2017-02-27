@@ -102,3 +102,4 @@ Feature:
     And I should see "Julie Martin"
     And I should see "Community Manager"
     And I should see "user_asddays_3@proximum.com"
+    And I should see "ASD Days" in the ".eventElement" element
