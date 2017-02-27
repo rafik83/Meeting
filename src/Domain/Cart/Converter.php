@@ -139,7 +139,7 @@ class Converter
 
         $order = new Order(
             $sheet,
-            $this->vatApplicable->onCart($cart),
+            $this->vatApplicable->onSheet($sheet),
             $orderBillingInfo,
             $groupsData,
             $this->datetime

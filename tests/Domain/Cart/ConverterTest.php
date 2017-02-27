@@ -114,7 +114,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotal() == $order->getTotal() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
         }))->shouldBeCalled();
         $billingInfoRepository->getBySheet($sheet)->shouldBeCalled()->willReturn($billingInfo);
-        $vatApplicable->onCart($cart)->shouldBeCalled()->willReturn(true);
+        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
         $cartRowRepository->deleteForSheet($sheet)->shouldBeCalled();
         $cartStepRepository->deleteForSheet($sheet)->shouldBeCalled();
         $promotionCodeRowRepository->deleteForSheet($sheet)->shouldBeCalled();
