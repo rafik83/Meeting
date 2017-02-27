@@ -26,15 +26,25 @@ class SendHandler
     private $jobQueue;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $date;
+
+    /**
      * SendHandler constructor.
      *
      * @param CampaignRepositoryInterface $campaignRepository
      * @param JobQueueInterface           $jobQueue
+     * @param \DateTimeInterface          $date
      */
-    public function __construct(CampaignRepositoryInterface $campaignRepository, JobQueueInterface $jobQueue)
-    {
+    public function __construct(
+        CampaignRepositoryInterface $campaignRepository,
+        JobQueueInterface $jobQueue,
+        \DateTimeInterface $date
+    ) {
         $this->campaignRepository = $campaignRepository;
         $this->jobQueue           = $jobQueue;
+        $this->date               = $date;
     }
 
     /**
@@ -48,7 +58,7 @@ class SendHandler
         $this->jobQueue->sendCampaign($campaign);
 
         // Mark campaign as sent
-        $campaign->markAsSent(new \DateTime());
+        $campaign->markAsSent($this->date);
         $this->campaignRepository->set($campaign);
     }
 }
