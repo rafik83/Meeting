@@ -116,7 +116,7 @@ class UserController extends Controller
 
         /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
-            $events[$sheet->getEvent()->getTitle()] = $sheet->getEvent()->getTitle();
+            $events[$sheet->getEvent()->getId()] = $sheet->getEvent()->getTitle();
         }
 
         return $this->render('AdminBundle:User:show.html.twig', [

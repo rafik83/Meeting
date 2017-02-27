@@ -54,9 +54,9 @@
 
     <h4>{{ 'admin.user.events'|trans }}</h4>
     <ul>
-        {% for eventElement in events %}
+        {% for key, eventElement in events %}
             <li>
-                <a class="eventElement" href="{{ path('admin_sheet', {'event': event.id }) }}">
+                <a class="eventElement" href="{{ path('admin_sheet', {'event': key }) }}">
                     {{ eventElement }}
                 </a>
             </li>
