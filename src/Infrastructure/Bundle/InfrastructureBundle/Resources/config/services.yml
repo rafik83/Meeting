@@ -2934,10 +2934,13 @@ services:
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
     order.orders_to_invoice:
-        class: Proximum\Vimeet\Domain\Order\OrdersToInvoice
+        class: Proximum\Vimeet\Application\Components\Order\OrdersToInvoice
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
+            - '@query.order.summary_query_handler'
+            - '@adapter.serializer_adapter'
+
     #
     # KeyDates
     #

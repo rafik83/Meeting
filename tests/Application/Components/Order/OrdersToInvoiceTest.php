@@ -8,8 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Order;
+namespace Proximum\Vimeet\Tests\Application\Components\Order;
 
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Components\Order\OrdersToInvoice;
+use Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -17,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -64,10 +68,17 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $sheet->addOrder($orderTwo);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
 
-        $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
+        $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
+
+        $orderToInvoice = new OrdersToInvoice(
+            $orderRepository->reveal(),
+            new Merger(),
+            $summaryQueryHandler->reveal(),
+            $this->prophesize(SerializerAdapterInterface::class)->reveal()
+        );
+
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
         $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], [], 256400, 51280, 307680);
@@ -88,10 +99,17 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([]);
 
-        $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
+        $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
+
+        $orderToInvoice = new OrdersToInvoice(
+            $orderRepository->reveal(),
+            new Merger(),
+            $summaryQueryHandler->reveal(),
+            $this->prophesize(SerializerAdapterInterface::class)->reveal()
+        );
+
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
         $this->assertNull($ordersToInvoiceView);
@@ -129,10 +147,17 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $sheet->addOrder($orderNegative);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderNegative]);
 
-        $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
+        $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
+
+        $orderToInvoice = new OrdersToInvoice(
+            $orderRepository->reveal(),
+            new Merger(),
+            $summaryQueryHandler->reveal(),
+            $this->prophesize(SerializerAdapterInterface::class)->reveal()
+        );
+
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
         $this->assertNull($ordersToInvoiceView);
@@ -188,10 +213,16 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $sheet->addOrder($orderTwo);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
 
-        $orderToInvoice = new OrdersToInvoice($orderRepository->reveal(), new Merger());
+        $summaryQueryHandler = $this->prophesize(SummaryQueryHandler::class);
+
+        $orderToInvoice = new OrdersToInvoice(
+            $orderRepository->reveal(),
+            new Merger(),
+            $summaryQueryHandler->reveal(),
+            $this->prophesize(SerializerAdapterInterface::class)->reveal()
+        );
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
         $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], [], 246400, 49280, 295680);

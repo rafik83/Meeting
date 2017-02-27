@@ -102,6 +102,11 @@ class OrderController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+
+        // debug
+        $this->get('order.orders_to_invoice')->getOrdersToInvoiceViewForSheet($sheet);
+
+
         $orders = $sheet->getNotCancelledOrders();
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()

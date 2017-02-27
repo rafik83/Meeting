@@ -8,10 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Order;
+namespace Proximum\Vimeet\Application\Components\Order;
 
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
+use Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
@@ -23,16 +27,28 @@ class OrdersToInvoice
     /** @var Merger */
     private $orderMerger;
 
+    /** @var SummaryQueryHandler */
+    private $summaryQueryHandler;
+
+    /** @var SerializerAdapterInterface */
+    private $serializerAdapter;
+
     /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param Merger                   $orderMerger
+     * @param OrderRepositoryInterface   $orderRepository
+     * @param Merger                     $orderMerger
+     * @param SummaryQueryHandler        $summaryQueryHandler
+     * @param SerializerAdapterInterface $serializerAdapter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        Merger $orderMerger
+        Merger $orderMerger,
+        SummaryQueryHandler $summaryQueryHandler,
+        SerializerAdapterInterface $serializerAdapter
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderMerger = $orderMerger;
+        $this->summaryQueryHandler = $summaryQueryHandler;
+        $this->serializerAdapter = $serializerAdapter;
     }
 
     /**
@@ -53,6 +69,14 @@ class OrdersToInvoice
         if ($orderMerged->getTotal() <= 0) {
             return null;
         }
+
+        $view = $this->summaryQueryHandler->handle(new SummaryQuery(
+            $sheet,
+            $orderMerged,
+            $sheet->getEvent()->getFallback()
+        ));
+
+        $data = $this->serializerAdapter->serialize($view, 'json');
 
         return new OrdersToInvoiceView(
             $orders,
