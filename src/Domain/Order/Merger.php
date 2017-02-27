@@ -55,12 +55,26 @@ class Merger
      */
     private function mergeProduct(Order $orderMerged, Order $order)
     {
-        foreach ($order->getRows() as $row) {
+        foreach ($order->getRowsWithoutParent() as $row) {
             if (null !== ($orderMergedRow = $orderMerged->getRowForProduct($row->getProduct()))) {
                 $orderMergedRow->setQuantity($orderMergedRow->getQuantity() + $row->getQuantity());
             } else {
                 $cloneRow = clone $row;
-                $orderMerged->addRow($cloneRow->setOrder($orderMerged));
+                $cloneRow->setOrder($orderMerged);
+                $orderMerged->addRow($cloneRow);
+            }
+        }
+
+        foreach ($order->getRowsWithParent() as $row) {
+            if (null !== ($parentRow = $orderMerged->getRowForProduct($row->getParentRow()->getProduct()))) {
+                $cloneRow = Order\Row::createCustomRowToProduct(
+                    $orderMerged,
+                    $parentRow,
+                    $row->getLabel(),
+                    $row->getQuantity(),
+                    $row->getPrice()
+                );
+                $orderMerged->addRow($cloneRow);
             }
         }
     }

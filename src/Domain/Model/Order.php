@@ -211,7 +211,7 @@ class Order
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getGroupsData()
     {
@@ -417,7 +417,27 @@ class Order
     public function getCustomRowsForProduct(Row $parentRow)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
-            return !$row->isProduct() && $parentRow === $row->getParentRow();
+            return !$row->isProduct() && null !== $row->getParentRow() && $parentRow->getId() === $row->getParentRow()->getId();
+        });
+    }
+
+    /**
+     * @return false|Order\Row[]
+     */
+    public function getRowsWithoutParent()
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+            return !$row->hasParentRow();
+        });
+    }
+
+    /**
+     * @return false|Order\Row[]
+     */
+    public function getRowsWithParent()
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+            return $row->hasParentRow();
         });
     }
 
@@ -433,8 +453,7 @@ class Order
         }
 
         foreach ($this->rows as $row) {
-            if (null !== $row->getProduct()
-              && $row->getProduct() === $product) {
+            if (null !== $row->getProduct() && $row->getProduct() === $product) {
                 return $row;
             }
         }
