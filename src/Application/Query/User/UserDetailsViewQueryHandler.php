@@ -54,7 +54,7 @@ class UserDetailsViewQueryHandler
      */
     public function handle(UserDetailsViewQuery $query)
     {
-        $userSheetListView =  null;
+        $userSheetListView = [];
 
         $userEvent = $this->userEventRepository->getUserEvent($query->user, $query->event);
 
