@@ -15,12 +15,12 @@ use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Exception\Sheet\InvoicedSheetException;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ChangeTypeHandler
 {
@@ -129,16 +129,19 @@ class ChangeTypeHandler
         $ordersUpdated = new MustSelectPackageEvent($changeType->sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $ordersUpdated);
     }
-
+    
     /**
+     * Throw exception if current sheet has at least one order invoiced
+     * When user attempt to change sheet type
+     *
      * @param Sheet $sheet
+     *
+     * @throws InvoicedSheetException
      */
     private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet)
     {
-        
-        //todo : custom exception
         if ($this->orderRepository->hasInvoice($sheet) === true) {
-            throw new AccessDeniedException('Access denied.');
+            throw new InvoicedSheetException('Sheet type cannot be changed');
         }
     }
 }
