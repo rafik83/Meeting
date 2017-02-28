@@ -25,22 +25,35 @@
                     {{ form_row(form.completed, {'inline': true}) }}
                     {{ form_row(form.inCatalog, {'inline': true}) }}
                     {{ form_row(form.type) }}
+
                     {% if form.category is defined %}
                         {{ form_row(form.category) }}
                     {% endif %}
+
                     {{ form_row(form.registeredAt, {'inline': true}) }}
+                    {{ form_row(form.imported) }}
                     {{ form_row(form.hasHappeningParticipation) }}
+
+                    <hr>
+
                     {{ form_row(form.hasRemainingToPay, {'inline': true}) }}
-                    {{ form_row(form.hasNoMeetingRequest) }}
-                    {{ form_row(form.hasPendingMeetingPropositions) }}
                     {{ form_row(form.has_order, {'inline': true}) }}
                     {{ form_row(form.has_cart, {'inline': true}) }}
-                    {{ form_row(form.imported) }}
+
+                    <hr>
+
+                    {{ form_row(form.hasPendingMeetingPropositions) }}
+                    {{ form_row(form.hasNoMeetingRequest) }}
                 </div>
                 <div class="col-md-6">
                     {{ form_row(form.follower) }}
+
+                    <hr>
+
                     {% if form.boolean_filters is defined %}
-                        {{ form_row(form.boolean_filters, {'inline': true}) }}
+                        {% for boolean_filter in form.boolean_filters.children %}
+                            {{ form_row(boolean_filter, {'inline': true}) }}
+                        {% endfor %}
                     {% endif %}
                 </div>
                 <div class="col-md-12">
