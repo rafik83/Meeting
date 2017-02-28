@@ -433,7 +433,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
-            ->where('sheet.owner = :user OR EXISTS (SELECT p.id FROM Entity:Participant p WHERE p.user = :user AND p.sheet = sheet)')
+            ->leftJoin('sheet.participants', 'participant')
+            ->andWhere('sheet.owner = :user OR participant.user = :user')
             ->setParameter('user', $user)
         ;
 
