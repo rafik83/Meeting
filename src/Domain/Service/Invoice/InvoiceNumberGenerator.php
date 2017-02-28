@@ -23,7 +23,7 @@ class InvoiceNumberGenerator
      */
     public static function generate(Invoice $invoice = null)
     {
-        if ($invoice instanceof Invoice) {
+        if (null !== $invoice) {
             return $invoice->getInvoiceIncrement() + 1;
         }
     
