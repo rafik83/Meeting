@@ -2263,6 +2263,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
+    query.user.user_details_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery }
+
     query.user.user_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserListViewQueryHandler
         arguments:
