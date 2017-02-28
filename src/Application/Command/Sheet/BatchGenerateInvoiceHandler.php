@@ -66,14 +66,20 @@ class BatchGenerateInvoiceHandler
      */
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
-        $sheets                  = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
+        $sheets = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
+        
+        if (count($sheets) === 0) {
+            return $this->getBatchResult($batchGenerateInvoice, 0);
+        }
+        
+        $prefix = $sheets[0]->getEvent()->getInvoicePrefix();
         $invoiceGeneratedCounter = 0;
-
+        
         foreach ($sheets as $sheet) {
             $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
             
             if ($ordersToInvoiceView instanceof OrdersToInvoiceView) {
-                $create = new Create($sheet, $ordersToInvoiceView);
+                $create = new Create($sheet, $prefix, $ordersToInvoiceView);
                 
                 $invoice = $this->createHandler->handle($create);
                 
@@ -86,7 +92,18 @@ class BatchGenerateInvoiceHandler
                 $invoiceGeneratedCounter++;
             }
         }
-
-        return new BatchResult($invoiceGeneratedCounter, $batchGenerateInvoice->getMessage() . 'generateInvoice.success');
+        
+        return $this->getBatchResult($batchGenerateInvoice, $invoiceGeneratedCounter);
+    }
+    
+    /**
+     * @param BatchGenerateInvoice $batchGenerateInvoice
+     * @param $count
+     *
+     * @return BatchResult
+     */
+    private function getBatchResult(BatchGenerateInvoice $batchGenerateInvoice, $count)
+    {
+        return new BatchResult($count, $batchGenerateInvoice->getMessage() . 'generateInvoice.success');
     }
 }

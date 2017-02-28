@@ -28,7 +28,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchGenerateInvoiceTest extends \PHPUnit_Framework_TestCase
+class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -58,6 +58,7 @@ class BatchGenerateInvoiceTest extends \PHPUnit_Framework_TestCase
     
         $create = new Create(
             $sheet,
+            $prefix,
             $orderToInvoiceView
         );
         

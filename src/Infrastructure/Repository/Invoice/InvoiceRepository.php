@@ -67,9 +67,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->select('invoice')
             ->from(Invoice::class, 'invoice')
             ->where('invoice.prefix = :prefix')
-            ->andWhere('invoice.invoice_prefix = :invoice_prefix')
-            ->andWhere('invoice.invoice_year = :invoice_year')
-            ->orderBy('invoice.invoice_increment', 'DESC')
+            ->andWhere('invoice.invoicePrefix = :invoice_prefix')
+            ->andWhere('invoice.invoiceYear = :invoice_year')
+            ->orderBy('invoice.invoiceIncrement', 'DESC')
             ->setParameters([
                 'prefix'         => $prefix,
                 'invoice_prefix' => $prefix->getPrefix(),
@@ -77,7 +77,6 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ])
             ->setMaxResults(1);
 
-        
-        var_dump($queryBuilder->getQuery()->getOneOrNullResult());die;
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

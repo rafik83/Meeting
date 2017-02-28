@@ -46,7 +46,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         
         $invoiceRepository->add($invoice)->shouldBeCalled()->willReturn($invoice);
         
-        $create = new Create($sheet, $orderToInvoiceView);
+        $create = new Create($sheet, $prefix, $orderToInvoiceView);
         
         $handler = new CreateHandler($invoiceRepository->reveal(), $date);
         
