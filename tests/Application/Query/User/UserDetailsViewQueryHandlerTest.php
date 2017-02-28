@@ -30,17 +30,27 @@ class UserDetailsViewQueryHandlerTest extends PHPUnit_Framework_TestCase
 
         $mockedEvent1 = $this->prophesize(Event::class);
         $mockedEvent1->getId()->willReturn(1);
+        $mockedEvent1->getTitle()->willReturn('event one');
+
         $mockedEvent2 = $this->prophesize(Event::class);
         $mockedEvent2->getId()->willReturn(2);
+        $mockedEvent2->getTitle()->willReturn('event two');
+
         $mockedEvent3 = $this->prophesize(Event::class);
         $mockedEvent3->getId()->willReturn(3);
+        $mockedEvent3->getTitle()->willReturn('event three');
 
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->getEvent()->willReturn($mockedEvent1);
+        $sheet1->getId()->willReturn(1);
+
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet2->getEvent()->willReturn($mockedEvent2);
+        $sheet2->getId()->willReturn(2);
+
         $sheet3 = $this->prophesize(Sheet::class);
         $sheet3->getEvent()->willReturn($mockedEvent3);
+        $sheet3->getId()->willReturn(3);
 
         $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -60,7 +70,8 @@ class UserDetailsViewQueryHandlerTest extends PHPUnit_Framework_TestCase
 
         $this->assertCount(3, $view->userSheetView);
 
-        $this->assertEquals(2, $view->userSheetView[2]->sheet->getEvent()->getId());
+        $this->assertEquals(2, $view->userSheetView[1]->eventId);
+        $this->assertEquals('event three', $view->userSheetView[2]->eventTitle);
     }
 
     public function testUserEventMissingException()
