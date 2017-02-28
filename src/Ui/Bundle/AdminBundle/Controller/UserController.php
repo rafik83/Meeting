@@ -10,10 +10,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
+use Proximum\Vimeet\Application\Query\User\UserDetailViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -93,36 +97,25 @@ class UserController extends Controller
     public function showAction(Event $event, User $user)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $view = null;
 
-        $events = [];
+        try {
+            $view = $this
+                ->get('query.user.user_details_view_query_handler')
+                ->handle(new UserDetailsViewQuery($user, $event))
+            ;
 
-        $userEvent = $this
-            ->get('vimeet_infrastructure.repository.user_event_repository')
-            ->getUserEvent($user, $event);
-
-        if (null === $userEvent) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'This user %s is not on this event %s',
-                    $user->getId(),
-                    $event->getId()
-                )
-            );
-        }
-
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getByUser($user);
-
-        /** @var Sheet $sheet */
-        foreach ($sheets as $sheet) {
-            $events[$sheet->getEvent()->getId()] = $sheet->getEvent()->getTitle();
+        } catch (UserEventMissingException $userEventMissingException) {
+            throw $this->createNotFoundException($userEventMissingException->getMessage());
+        } catch (SheetNotFoundException $sheetNotFoundException) {
+            throw $this->createNotFoundException($sheetNotFoundException->getMessage());
         }
 
         return $this->render('AdminBundle:User:show.html.twig', [
-            'event'  => $event,
-            'user'   => $user,
-            'events' => $events
+            'event'  => $view->event,
+            'user'   => $view->user,
+            'events' => $view->events,
+            'sheet'  => $view->sheet
         ]);
     }
 
