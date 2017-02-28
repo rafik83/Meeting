@@ -35,8 +35,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
-        $package = new Package($event, 'package', $datetime);
-        $type->setPackage($package);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
@@ -98,8 +96,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
-        $package = new Package($event, 'package', $datetime);
-        $type->setPackage($package);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
@@ -130,8 +126,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
-        $package = new Package($event, 'package', $datetime);
-        $type->setPackage($package);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
@@ -181,8 +175,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
-        $package = new Package($event, 'package', $datetime);
-        $type->setPackage($package);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
@@ -202,24 +194,37 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
         $participant = Product::createParticipant($event, 'participant', 1789, 20);
         $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
-        $package->setPlans([$plan]);
-        $package->setParticipant($participant);
 
-        $orderOne = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-5 day'));
+        $groupId = 99;
+        $groupsData = json_encode(
+            [
+                $groupId => [
+                    'rank' => 1,
+                    'translations' => [
+                        'en' => ['label' => 'English label'],
+                        'fr' => ['label' => 'French label'],
+                    ]
+                ]
+            ]
+        );
+
+        $orderOne = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $option));
+        $orderOne->addRow(new Order\Row($orderOne, 1, $option, $groupId));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
 
-        $optionRow = new Order\Row($orderTwo, 3, $option);
+        $optionRow = new Order\Row($orderTwo, 3, $option, $groupId);
         $orderTwo->addRow($optionRow);
 
-        $package->setGroups([1 => [$option]], [1 => ['fr' => 'French label']]);
+        // Add custom row attached to parent row
+        $orderTwo->addRow(new Order\Row($orderTwo, 1, null, $groupId, 'Remise', -100, $optionRow));
 
-        $orderTwo->addRow(new Order\Row($orderTwo, 1, null, null, 'Remise', '-100', $optionRow));
+        // Add custom row only attached to groupId
+        $orderTwo->addRow(new Order\Row($orderTwo, 1, null, $groupId, 'Product XYZ', 239));
 
         $sheet->addOrder($orderTwo);
 
@@ -240,7 +245,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         );
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
-        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], null, 246400, 49280, 295680);
+        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], null, 270300, 54060, 324360);
 
         $this->assertEquals($expectedOrdersToInvoiceView, $ordersToInvoiceView);
     }
