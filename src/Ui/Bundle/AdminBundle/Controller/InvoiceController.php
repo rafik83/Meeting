@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class InvoicingController extends Controller
+class InvoiceController extends Controller
 {
     /**
      * @return Response
@@ -24,7 +24,7 @@ class InvoicingController extends Controller
      */
     public function listAction()
     {
-        return $this->render('AdminBundle:Invoicing:list.html.twig', [
+        return $this->render('AdminBundle:Invoice:list.html.twig', [
             'list' => $this->get('repository.invoice.prefix_repository')->getAll(),
         ]);
     }
@@ -38,7 +38,7 @@ class InvoicingController extends Controller
     {
         $create = new Create();
 
-        $form = $this->createForm(CreateType::class, $create, ['method' => 'POST']);
+        $form = $this->createForm(CreateType::class, $create);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
@@ -47,7 +47,7 @@ class InvoicingController extends Controller
             return $this->redirectToRoute('admin_invoice_globals_list');
         }
 
-        return $this->render('AdminBundle:Invoicing:create.html.twig', [
+        return $this->render('AdminBundle:Invoice:create.html.twig', [
             'form' => $form->createView(),
         ]);
     }

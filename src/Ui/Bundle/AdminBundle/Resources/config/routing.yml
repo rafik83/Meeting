@@ -1246,14 +1246,14 @@ admin_import_planner_data:
     defaults: { _controller: AdminBundle:Planner/Import:import }
 
 #
-# Invoicing
+# Invoice
 #
 admin_invoice_globals_list:
     path: /invoice/prefix
-    defaults: { _controller: AdminBundle:Invoicing:list }
+    defaults: { _controller: AdminBundle:Invoice:list }
     methods: [GET]
 
 admin_invoice_globals_create:
     path: /invoice/prefix/create
-    defaults: { _controller: AdminBundle:Invoicing:create }
+    defaults: { _controller: AdminBundle:Invoice:create }
     methods: [GET, POST]
