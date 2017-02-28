@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Factory;
+namespace Proximum\Vimeet\Tests\Factory;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -27,10 +27,10 @@ class ProductFactory
             'type',
             'productName',
             'image',
-            25.0,
-            5,
-            2,
-            5,
+            25.0, // unitPrice
+            5, // quantityMax
+            5, // availabilityCurrent
+            2, // availabilityMax
             true
         );
     }
