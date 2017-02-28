@@ -16,15 +16,17 @@ use Proximum\Vimeet\Domain\Model\Product;
 class ProductFactory
 {
     /**
-     * @param Event $event
+     * @param Event  $event
+     *
+     * @param string $type
      *
      * @return Product
      */
-    public static function create(Event $event)
+    public static function create(Event $event, $type = null)
     {
         return new Product(
             $event,
-            'type',
+            $type !== null ? $type : 'option',
             'productName',
             'image',
             25.0, // unitPrice
