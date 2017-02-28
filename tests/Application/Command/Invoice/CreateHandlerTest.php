@@ -31,7 +31,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event       = EventFactory::createEvent();
         $date        = new \DateTime();
-        $admin       = new Admin('email@email.com', 'test', 'test', 'fr', 'test', 'test', 'ROLE_SUPER_ADMIN', $date);
         $type        = new Type($event);
         $user        = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet       = new Sheet($event, $type, [], $user, $date);
@@ -39,16 +38,18 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $billingInfo = new BillingInfo('test', 'test', 'test','test', '0', '0', 'test@test.com', 'test', $address, 'FR42');
         $order       = new Order($sheet, true, $billingInfo, 'test', $date);
         $prefix      = new Prefix('Vimeet', 'Vi');
-        $invoice     = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, 1000, 200, 1200, $date);
-        $orderToInvoiceView = new OrdersToInvoiceView([$order], [], 4200, 504, 4704);
+        $invoice     = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, 1000, 1200, 200, $date);
+        $orderToInvoiceView = new OrdersToInvoiceView([$order], [], 1000, 200, 1200);
     
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
+    
+        $invoiceRepository->getLastInvoiceForEventPrefix($prefix)->shouldBeCalled();
         
         $invoiceRepository->add($invoice)->shouldBeCalled()->willReturn($invoice);
         
-        $create = new Create($event, $sheet, $prefix, 'Vi', 2017, 1, 1000, 200, 1200, $date);
+        $create = new Create($sheet, $prefix, $orderToInvoiceView);
         
-        $handler = new CreateHandler($invoiceRepository->reveal());
+        $handler = new CreateHandler($invoiceRepository->reveal(), $date);
         
         $handler->handle($create);
     }

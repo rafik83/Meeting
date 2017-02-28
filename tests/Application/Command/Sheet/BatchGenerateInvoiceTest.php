@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -56,22 +55,13 @@ class BatchGenerateInvoiceTest extends \PHPUnit_Framework_TestCase
         $sheetRepository->getSheetsById([1])->shouldBeCalled()->willReturn([$sheet]);
         
         $ordersToInvoiceView->getOrdersToInvoiceViewForSheet($sheet)->shouldBeCalled()->willReturn($orderToInvoiceView);
-    
-        $invoiceRepository->getLastInvoiceForEventPrefix($sheet->getEvent()->getInvoicePrefix())->shouldBeCalled();
         
         $orderRepository->set($order)->shouldBeCalled();
     
         $create = new Create(
-            $sheet->getEvent(),
             $sheet,
             $sheet->getEvent()->getInvoicePrefix(),
-            $sheet->getEvent()->getInvoicePrefix()->getPrefix(),
-            2017,
-            1,
-            $orderToInvoiceView->getTotal(),
-            $orderToInvoiceView->getTotalWithVat(),
-            $orderToInvoiceView->getVatAmount(),
-            $date
+            $orderToInvoiceView
         );
         
         $createHandler->handle($create)->shouldBeCalled()->willReturn($invoice);

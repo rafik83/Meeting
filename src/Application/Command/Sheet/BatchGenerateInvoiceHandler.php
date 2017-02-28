@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
-use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
@@ -34,20 +33,11 @@ class BatchGenerateInvoiceHandler
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
-
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
-
+    
     /**
      * @var CreateHandler
      */
     private $createHandler;
-    /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
 
     /**
      * BatchGenerateInvoiceHandler constructor.
@@ -55,24 +45,18 @@ class BatchGenerateInvoiceHandler
      * @param SheetRepositoryInterface   $sheetRepository
      * @param OrdersToInvoice            $ordersToInvoice
      * @param OrderRepositoryInterface   $orderRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
      * @param CreateHandler              $createHandler
-     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
         OrdersToInvoice            $ordersToInvoice,
         OrderRepositoryInterface   $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
-        CreateHandler              $createHandler,
-        \DateTimeInterface         $dateTime
+        CreateHandler              $createHandler
     ) {
         $this->sheetRepository   = $sheetRepository;
         $this->ordersToInvoice   = $ordersToInvoice;
         $this->orderRepository   = $orderRepository;
-        $this->invoiceRepository = $invoiceRepository;
         $this->createHandler     = $createHandler;
-        $this->datetime          = $dateTime;
     }
 
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)

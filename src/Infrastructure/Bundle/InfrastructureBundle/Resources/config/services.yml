@@ -720,9 +720,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@order.orders_to_invoice'
             - '@vimeet_infrastructure.repository.order_repository'
-            - '@repository.invoice.invoice_repository'
             - '@command.invoice.create_handler'
-            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
     command.sheet.batch_enable_disable_handler:

@@ -69,9 +69,7 @@ Feature: See sheet details
     And the ".label-sheet-type" element should contain "Investisseur"
     And I should see "admin.sheet.trace.changed_type"
 
-  Scenario: I cant change a sheet type
-    and I can see generated invoice, and cannot edit order 
-    when sheet has at least one invoiced order
+  Scenario: I cant change a sheet type and I can see generated invoice, and cannot edit order when sheet has at least one invoiced order
     Given I am logged with "test@test.com" on admin
     Then I go to this page "/admin/fr/event/1/sheet/21"
     And I should not see "form.change_type.children.submit.label"
