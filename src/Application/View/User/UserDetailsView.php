@@ -27,17 +27,7 @@ class UserDetailsView
     public $user;
 
     /**
-     * @var array
-     */
-    public $events;
-
-    /**
-     * @var Sheet
-     */
-    public $sheet;
-
-    /**
-     * @var UserSheetView
+     * @var UserSheetView[]
      */
     public $userSheetView;
 

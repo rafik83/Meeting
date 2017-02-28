@@ -70,9 +70,8 @@ class UserDetailsViewQueryHandler
 
         $sheets = $this->sheetRepository->getByUser($query->user);
 
-        /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
-            $userSheetListView[$sheet->getEvent()->getId()] = new UserSheetView($sheet);
+            $userSheetListView[] = new UserSheetView($sheet);
         }
 
 

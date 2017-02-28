@@ -54,10 +54,10 @@
 
     <h4>{{ 'admin.user.events'|trans }}</h4>
     <ul>
-        {% for eventId, userSheetView in userSheetList %}
+        {% for userSheetView in userSheetList %}
             <li>
-                <a class="eventElement" href="{{ path('admin_sheet_details', {'event': eventId, 'sheet': userSheetView.sheet.id }) }}">
-                    {{ userSheetView.sheet.event.title }}
+                <a class="eventElement" href="{{ path('admin_sheet_details', {'event': userSheetView.eventId, 'sheet': userSheetView.sheetId }) }}">
+                    {{ userSheetView.eventTitle }}
                 </a>
             </li>
         {% endfor %}

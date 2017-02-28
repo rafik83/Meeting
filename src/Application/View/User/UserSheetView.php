@@ -10,20 +10,33 @@
 
 namespace Proximum\Vimeet\Application\View\User;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class UserSheetView
 {
     /**
-     * @var Sheet
+     * @var int
      */
-    public $sheet;
+    public $sheetId;
+
+    /**
+     * @var string
+     */
+    public $eventTitle;
+
+    /**
+     * @var int
+     */
+    public $eventId;
 
     /**
      * @param Sheet $sheet
      */
     public function __construct(Sheet $sheet)
     {
-        $this->sheet = $sheet;
+        $this->sheetId    = $sheet->getId();
+        $this->eventId    = $sheet->getEvent()->getId();
+        $this->eventTitle = $sheet->getEvent()->getTitle();
     }
 }
