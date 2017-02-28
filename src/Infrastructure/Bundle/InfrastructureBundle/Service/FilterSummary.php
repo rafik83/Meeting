@@ -98,7 +98,7 @@ class FilterSummary
         $value = $field->vars['value'];
 
         if (empty($value)) {
-            throw new \Exception();
+            throw new \InvalidArgumentException('Missing value');
         }
 
         if (isset($field->vars['choices'])) {
