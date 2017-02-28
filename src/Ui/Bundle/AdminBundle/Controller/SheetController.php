@@ -106,7 +106,7 @@ class SheetController extends Controller
 
             // save filter into session
             $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
-                $filterFullForm,
+                $sheetFilter,
                 $request->query->all()
             ));
         }
