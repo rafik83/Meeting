@@ -110,10 +110,9 @@ class UserController extends Controller
         }
 
         return $this->render('AdminBundle:User:show.html.twig', [
-            'event'  => $view->event,
-            'user'   => $view->user,
-            'events' => $view->events,
-            'sheet'  => $view->sheet
+            'event'         => $view->event,
+            'user'          => $view->user,
+            'userSheetList' => $view->userSheetView,
         ]);
     }
 
