@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Invoice;
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Address;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -43,11 +42,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
     
-        $invoiceRepository->getLastInvoiceForEventPrefix($prefix)->shouldBeCalled();
+        $invoiceRepository->getLastInvoiceForEventPrefix($prefix, $date->format('Y'))->shouldBeCalled();
         
         $invoiceRepository->add($invoice)->shouldBeCalled()->willReturn($invoice);
         
-        $create = new Create($sheet, $prefix, $orderToInvoiceView);
+        $create = new Create($sheet, $orderToInvoiceView);
         
         $handler = new CreateHandler($invoiceRepository->reveal(), $date);
         

@@ -58,24 +58,27 @@ class BatchGenerateInvoiceHandler
         $this->orderRepository   = $orderRepository;
         $this->createHandler     = $createHandler;
     }
-
+    
+    /**
+     * @param BatchGenerateInvoice $batchGenerateInvoice
+     *
+     * @return BatchResult
+     */
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
         $sheets                  = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
         $invoiceGeneratedCounter = 0;
 
         foreach ($sheets as $sheet) {
-
             $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
-
+            
             if ($ordersToInvoiceView instanceof OrdersToInvoiceView) {
+                $create = new Create($sheet, $ordersToInvoiceView);
                 
-                $create = new Create($sheet, $sheet->getEvent()->getInvoicePrefix(), $ordersToInvoiceView);
-
                 $invoice = $this->createHandler->handle($create);
                 
                 // Flag Order with generated Invoice
-                foreach($ordersToInvoiceView->getOrders() as $order) {
+                foreach ($ordersToInvoiceView->getOrders() as $order) {
                     $order->setInvoice($invoice);
                     $this->orderRepository->set($order);
                 }

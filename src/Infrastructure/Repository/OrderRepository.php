@@ -214,7 +214,8 @@ class OrderRepository implements OrderRepositoryInterface
             ->from(ORder::class, '_order', '_order.id')
             ->where('_order.sheet = :sheet')
             ->andWhere('_order.invoice IS NOT NULL')
-            ->setParameter('sheet', $sheet);
+            ->setParameter('sheet', $sheet)
+            ->setMaxResults(1);
         
         return ($queryBuilder->getQuery()->getOneOrNullResult() === null) ? false : true;
     }

@@ -61,16 +61,23 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastInvoiceForEventPrefix(Prefix $prefix)
+    public function getLastInvoiceForEventPrefix(Prefix $prefix, $year)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('invoice')
             ->from(Invoice::class, 'invoice')
             ->where('invoice.prefix = :prefix')
-            ->orderBy('invoice.id', 'DESC')
-            ->setParameter('prefix', $prefix)
+            ->andWhere('invoice.invoice_prefix = :invoice_prefix')
+            ->andWhere('invoice.invoice_year = :invoice_year')
+            ->orderBy('invoice.invoice_increment', 'DESC')
+            ->setParameters([
+                'prefix'         => $prefix,
+                'invoice_prefix' => $prefix->getPrefix(),
+                'invoice_year'   => $year
+            ])
             ->setMaxResults(1);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        
+        var_dump($queryBuilder->getQuery()->getOneOrNullResult());die;
     }
 }

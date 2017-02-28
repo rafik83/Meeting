@@ -23,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
-use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
@@ -48,7 +47,6 @@ class BatchGenerateInvoiceTest extends \PHPUnit_Framework_TestCase
         
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-        $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
         $ordersToInvoiceView = $this->prophesize(OrdersToInvoice::class);
         $createHandler = $this->prophesize(CreateHandler::class);
         
@@ -60,7 +58,6 @@ class BatchGenerateInvoiceTest extends \PHPUnit_Framework_TestCase
     
         $create = new Create(
             $sheet,
-            $sheet->getEvent()->getInvoicePrefix(),
             $orderToInvoiceView
         );
         
@@ -72,9 +69,7 @@ class BatchGenerateInvoiceTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $ordersToInvoiceView->reveal(),
             $orderRepository->reveal(),
-            $invoiceRepository->reveal(),
-            $createHandler->reveal(),
-            $date
+            $createHandler->reveal()
         );
         
         $result = $handler->handle($command);

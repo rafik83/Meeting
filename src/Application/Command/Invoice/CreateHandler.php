@@ -30,7 +30,7 @@ class CreateHandler
      * CreateHandler constructor.
      *
      * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param \DateTimeInterface $dateTime
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(InvoiceRepositoryInterface $invoiceRepository, \DateTimeInterface $dateTime)
     {
@@ -45,7 +45,10 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $lastInvoiceForSheet = $this->invoiceRepository->getLastInvoiceForEventPrefix($create->sheet->getEvent()->getInvoicePrefix());
+        $lastInvoiceForSheet = $this->invoiceRepository->getLastInvoiceForEventPrefix(
+            $create->prefix,
+            $this->dateTime->format('Y')
+        );
         $invoiceIncrement = InvoiceNumberGenerator::generate($lastInvoiceForSheet);
         
         $invoice = new Invoice(

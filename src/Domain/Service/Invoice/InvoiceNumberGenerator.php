@@ -23,36 +23,10 @@ class InvoiceNumberGenerator
      */
     public static function generate(Invoice $invoice = null)
     {
-        return self::getIncrementalInvoiceNumber($invoice);
-    }
-
-    /**
-     * @param Invoice $invoice|null
-     *
-     * @return int
-     */
-    private static function getIncrementalInvoiceNumber(Invoice $invoice = null)
-    {
-        if ($invoice === null) {
-            return 1;
+        if ($invoice instanceof Invoice) {
+            return $invoice->getInvoiceIncrement() + 1;
         }
-
-        if ($invoice->getInvoiceYear() == date('Y')) {
-            return self::incrementInvoiceNumber($invoice->getInvoiceIncrement());
-        }
-        
+    
         return 1;
-    }
-
-    /**
-     * Increment a given number
-     *
-     * @param int $number
-     *
-     * @return int
-     */
-    private static function incrementInvoiceNumber($number)
-    {
-        return $number + 1;
     }
 }
