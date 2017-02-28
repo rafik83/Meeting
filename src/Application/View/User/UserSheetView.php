@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\User;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class UserSheetView
