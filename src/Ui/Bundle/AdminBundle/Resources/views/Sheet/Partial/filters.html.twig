@@ -18,7 +18,6 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    {{ form_row(form.text) }}
                     {{ form_row(form.enabled, {'inline': true}) }}
                     {{ form_row(form.validationState, {'inline': true}) }}
                     {{ form_row(form.state, {'inline': true}) }}
@@ -63,7 +62,7 @@
                         </button>
                     </div>
                 </div>
-                {{ form_end(form) }}
+                {{ form_end(form, {'render_rest': false}) }}
             </div>
         </div>
     </div>

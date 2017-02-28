@@ -616,8 +616,13 @@ class SheetSearchQueryBuilder
             $nested->setQuery($termsQuery)->setPath('booleanFilter');
             $nestedNot->setQuery($termsNotQuery)->setPath('booleanFilter');
 
-            $this->query->addMust($nested);
-            $this->query->addMustNot($nestedNot);
+            if (count($includeTerms) > 0) {
+                $this->query->addMust($nested);
+            }
+
+            if (count($excludeTerms) > 0) {
+                $this->query->addMustNot($nestedNot);
+            }
         }
     }
 

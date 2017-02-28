@@ -97,7 +97,7 @@ class FilterSummary
 
         $value = $field->vars['value'];
 
-        if (empty($value)) {
+        if ($value === '') {
             throw new \InvalidArgumentException('Missing value');
         }
 
