@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\User;
 
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\User\UserDetailsView;
+use Proximum\Vimeet\Application\View\User\UserEventSheetView;
+use Proximum\Vimeet\Application\View\User\UserSheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
@@ -53,8 +55,7 @@ class UserDetailsViewQueryHandler
      */
     public function handle(UserDetailsViewQuery $query)
     {
-        $events = [];
-        $participation = null;
+        $userSheetListView =  null;
 
         $userEvent = $this->userEventRepository->getUserEvent($query->user, $query->event);
 
@@ -72,22 +73,10 @@ class UserDetailsViewQueryHandler
 
         /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
-            if ($sheet->getEvent() === $query->event) {
-                $participation = $sheet;
-            }
-            $events[$sheet->getEvent()->getId()] = $sheet->getEvent()->getTitle();
+            $userSheetListView[$sheet->getEvent()->getId()] = new UserSheetView($sheet);
         }
 
-        if (null === $participation) {
-            throw new SheetNotFoundException(
-                sprintf(
-                    'This user %s has no sheet on this event %s',
-                    $query->user->getId(),
-                    $query->event->getId()
-                )
-            );
-        }
 
-        return new UserDetailsView($query->event, $query->user, $participation, $events);
+        return new UserDetailsView($query->event, $query->user, $userSheetListView);
     }
 }
