@@ -37,18 +37,19 @@ class UserDetailsView
     public $sheet;
 
     /**
-     * UserDetailsView constructor.
-     *
-     * @param Event $event
-     * @param User  $user
-     * @param Sheet $sheet
-     * @param array $events
+     * @var UserSheetView
      */
-    public function __construct(Event $event, User $user, Sheet $sheet, array $events)
+    public $userSheetView;
+
+    /**
+     * @param Event           $event
+     * @param User            $user
+     * @param UserSheetView[] $userSheetView
+     */
+    public function __construct(Event $event, User $user, array $userSheetView)
     {
-        $this->event  = $event;
-        $this->user   = $user;
-        $this->events = $events;
-        $this->sheet  = $sheet;
+        $this->event         = $event;
+        $this->user          = $user;
+        $this->userSheetView = $userSheetView;
     }
 }
