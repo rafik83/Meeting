@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Invoice;
 
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
 
 class CreateHandler
 {
@@ -21,13 +22,20 @@ class CreateHandler
     private $invoiceRepository;
     
     /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+    
+    /**
      * CreateHandler constructor.
      *
      * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(InvoiceRepositoryInterface $invoiceRepository)
+    public function __construct(InvoiceRepositoryInterface $invoiceRepository, \DateTimeInterface $dateTime)
     {
         $this->invoiceRepository = $invoiceRepository;
+        $this->dateTime          = $dateTime;
     }
     
     /**
@@ -37,17 +45,20 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
+        $lastInvoiceForSheet = $this->invoiceRepository->getLastInvoiceForEventPrefix($create->sheet->getEvent()->getInvoicePrefix());
+        $invoiceIncrement = InvoiceNumberGenerator::generate($lastInvoiceForSheet);
+        
         $invoice = new Invoice(
-            $create->event,
+            $create->sheet->getEvent(),
             $create->sheet,
             $create->prefix,
-            $create->invoicePrefix,
-            $create->invoiceYear,
-            $create->invoiceNumber,
+            $create->prefix->getPrefix(),
+            $this->dateTime->format('Y'),
+            $invoiceIncrement,
             $create->total,
             $create->totalWithVat,
             $create->vatAmount,
-            $create->createdAt
+            $this->dateTime
         );
         
         $this->invoiceRepository->add($invoice);

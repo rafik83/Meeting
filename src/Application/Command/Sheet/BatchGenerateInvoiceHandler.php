@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
 class BatchGenerateInvoiceHandler
@@ -53,12 +52,12 @@ class BatchGenerateInvoiceHandler
     /**
      * BatchGenerateInvoiceHandler constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param OrdersToInvoice $ordersToInvoice
-     * @param OrderRepositoryInterface $orderRepository
+     * @param SheetRepositoryInterface   $sheetRepository
+     * @param OrdersToInvoice            $ordersToInvoice
+     * @param OrderRepositoryInterface   $orderRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param CreateHandler $createHandler
-     * @param \DateTimeInterface $dateTime
+     * @param CreateHandler              $createHandler
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
@@ -78,28 +77,16 @@ class BatchGenerateInvoiceHandler
 
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
-        $sheets = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
+        $sheets                  = $this->sheetRepository->getSheetsById($batchGenerateInvoice->ids);
         $invoiceGeneratedCounter = 0;
 
         foreach ($sheets as $sheet) {
 
             $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
-            $invoice = $this->invoiceRepository->getLastInvoiceForEventPrefix($sheet->getEvent()->getInvoicePrefix());
 
             if ($ordersToInvoiceView instanceof OrdersToInvoiceView) {
-
-                $create = new Create(
-                    $sheet->getEvent(),
-                    $sheet,
-                    $sheet->getEvent()->getInvoicePrefix(),
-                    $sheet->getEvent()->getInvoicePrefix()->getPrefix(),
-                    $this->datetime->format('Y'),
-                    InvoiceNumberGenerator::generate($invoice),
-                    $ordersToInvoiceView->getTotal(),
-                    $ordersToInvoiceView->getTotalWithVat(),
-                    $ordersToInvoiceView->getVatAmount(),
-                    $this->datetime
-                );
+                
+                $create = new Create($sheet, $sheet->getEvent()->getInvoicePrefix(), $ordersToInvoiceView);
 
                 $invoice = $this->createHandler->handle($create);
                 

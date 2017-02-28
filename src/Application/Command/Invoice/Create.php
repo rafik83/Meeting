@@ -10,17 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
 class Create
 {
-    /**
-     * @var Event
-     */
-    public $event;
-
     /**
      * @var Sheet
      */
@@ -30,22 +25,7 @@ class Create
      * @var Prefix
      */
     public $prefix;
-
-    /**
-     * @var string
-     */
-    public $invoicePrefix;
-
-    /**
-     * @var int
-     */
-    public $invoiceYear;
-
-    /**
-     * @var int
-     */
-    public $invoiceNumber;
-
+    
     /**
      * @var int
      */
@@ -62,45 +42,21 @@ class Create
     public $vatAmount;
 
     /**
-     * @var \DateTimeInterface
-     */
-    public $createdAt;
-
-    /**
      * Create constructor.
      *
-     * @param Event              $event
-     * @param Sheet              $sheet
-     * @param Prefix             $prefix
-     * @param string             $invoicePrefix
-     * @param int                $invoiceYear
-     * @param int                $invoiceNumber
-     * @param int                $total
-     * @param int                $totalWithVat
-     * @param int                $vatAmount
-     * @param \DateTimeInterface $createdAt
+     * @param Sheet               $sheet
+     * @param Prefix              $prefix
+     * @param OrdersToInvoiceView $ordersToInvoiceView
      */
     public function __construct(
-        Event $event,
         Sheet $sheet,
         Prefix $prefix,
-        $invoicePrefix,
-        $invoiceYear,
-        $invoiceNumber,
-        $total,
-        $totalWithVat,
-        $vatAmount,
-        \DateTimeInterface $createdAt
+        OrdersToInvoiceView $ordersToInvoiceView
     ) {
-        $this->event         = $event;
         $this->sheet         = $sheet;
         $this->prefix        = $prefix;
-        $this->invoicePrefix = $invoicePrefix;
-        $this->invoiceYear   = $invoiceYear;
-        $this->invoiceNumber = $invoiceNumber;
-        $this->total         = $total;
-        $this->totalWithVat  = $totalWithVat;
-        $this->vatAmount     = $vatAmount;
-        $this->createdAt     = $createdAt;
+        $this->total         = $ordersToInvoiceView->getTotal();
+        $this->totalWithVat  = $ordersToInvoiceView->getTotalWithVat();
+        $this->vatAmount     = $ordersToInvoiceView->getVatAmount();
     }
 }
