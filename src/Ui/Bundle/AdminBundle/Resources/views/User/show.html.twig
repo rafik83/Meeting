@@ -56,7 +56,7 @@
     <ul>
         {% for eventId, eventTitle in events %}
             <li>
-                <a class="eventElement" href="{{ path('admin_sheet', {'event': eventId }) }}">
+                <a class="eventElement" href="{{ path('admin_sheet_details', {'event': eventId, 'sheet': sheet.id }) }}">
                     {{ eventTitle }}
                 </a>
             </li>
