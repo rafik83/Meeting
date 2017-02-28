@@ -77,12 +77,6 @@ class OrdersToInvoice
             return null;
         }
 
-        $view = $this->summaryQueryHandler->handle(new SummaryQuery(
-            $orderMerged->getSheet(),
-            $orderMerged,
-            $orderMerged->getSheet()->getEvent()->getFallback()
-        ));
-
         $vatToPay = 0;
         $isVatApplicable = $this->vatApplicable->onSheet($sheet);
 
@@ -92,6 +86,12 @@ class OrdersToInvoice
         if (true === $isVatApplicable) {
             $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
         }
+
+        $view = $this->summaryQueryHandler->handle(new SummaryQuery(
+            $orderMerged->getSheet(),
+            $orderMerged,
+            $orderMerged->getSheet()->getEvent()->getFallback()
+        ));
 
         $data = $this->serializerAdapter->serialize($view, 'json');
 
