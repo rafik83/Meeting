@@ -21,9 +21,20 @@ class AmountFormatter
      *
      * @return int
      */
-    public static function decimalToCentimesAmount($amount)
+    public static function decimalToCentsAmount($amount)
     {
         // (int) always rounds the number down, it is fixed by round() method
         return (int) round(100 * $amount);
+    }
+
+    /**
+     * @param int   $amount in centimes
+     * @param float $rate
+     *
+     * @return int
+     */
+    public static function calculateRateAmount($amount, $rate)
+    {
+        return (int) ($amount * $rate / 100);
     }
 }

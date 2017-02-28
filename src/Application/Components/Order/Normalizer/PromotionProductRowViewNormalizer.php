@@ -34,7 +34,7 @@ class PromotionProductRowViewNormalizer implements NormalizerInterface, Normaliz
             'product'       => $object->product,
             'promotionType' => $object->promotionType,
             'discountValue' => Promotion::isTypeValueOff($object->promotionType)
-                ? AmountFormatter::decimalToCentimesAmount($object->discountValue)
+                ? AmountFormatter::decimalToCentsAmount($object->discountValue)
                 : $object->discountValue,
             'quantity'      => $object->quantity,
         ];

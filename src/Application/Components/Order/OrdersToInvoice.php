@@ -84,13 +84,13 @@ class OrdersToInvoice
         ));
 
         $vatToPay = 0;
-        $mustPayVat = $this->vatApplicable->onSheet($sheet);
+        $isVatApplicable = $this->vatApplicable->onSheet($sheet);
 
-        $total = AmountFormatter::decimalToCentimesAmount($orderMerged->getTotalWithoutVat());
+        $total = AmountFormatter::decimalToCentsAmount($orderMerged->getTotalWithoutVat());
         $vatRate = $sheet->getEvent()->getVat();
 
-        if ($mustPayVat) {
-            $vatToPay = (int) ($total * $vatRate / 100);
+        if (true === $isVatApplicable) {
+            $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
         }
 
         $data = $this->serializerAdapter->serialize($view, 'json');

@@ -32,8 +32,8 @@ class CustomRowViewNormalizer implements NormalizerInterface, NormalizerAwareInt
         return [
             'label'    => $object->label,
             'quantity' => $object->quantity,
-            'price'    => AmountFormatter::decimalToCentimesAmount($object->price),
-            'total'    => AmountFormatter::decimalToCentimesAmount($object->total),
+            'price'    => AmountFormatter::decimalToCentsAmount($object->price),
+            'total'    => AmountFormatter::decimalToCentsAmount($object->total),
         ];
     }
 

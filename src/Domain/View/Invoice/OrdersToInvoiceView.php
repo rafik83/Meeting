@@ -17,32 +17,32 @@ class OrdersToInvoiceView
     /** @var Order[] */
     private $orders;
 
-    /** @var int amount in centimes */
+    /** @var int amount in cents */
     private $total;
 
-    /** @var int amount in centimes */
+    /** @var int amount in cents */
     private $vatAmount;
 
-    /** @var int amount in centimes */
+    /** @var int amount in cents */
     private $totalWithVat;
 
-    /** @var string */
+    /** @var string Order\SummaryView serialized in json */
     private $data;
 
     /**
      * @param array  $orders
-     * @param string $data
-     * @param int    $total
-     * @param int    $vatAmount
-     * @param int    $totalWithVat
+     * @param string $data Order\SummaryView serialized in json
+     * @param int    $total amount in cents
+     * @param int    $vatAmount amount in cents
+     * @param int    $totalWithVat amount in cents
      */
     public function __construct(array $orders, $data, $total, $vatAmount, $totalWithVat)
     {
-        $this->orders = $orders;
-        $this->total = $total;
-        $this->vatAmount = $vatAmount;
+        $this->orders       = $orders;
+        $this->total        = $total;
+        $this->vatAmount    = $vatAmount;
         $this->totalWithVat = $totalWithVat;
-        $this->data = $data;
+        $this->data         = $data;
     }
 
     /**
@@ -54,7 +54,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return int
+     * @return int amount in cents
      */
     public function getTotal()
     {
@@ -62,7 +62,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return int
+     * @return int amount in cents
      */
     public function getVatAmount()
     {
@@ -70,7 +70,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return int
+     * @return int amount in cents
      */
     public function getTotalWithVat()
     {
@@ -78,7 +78,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return string
+     * @return string Order\SummaryView serialized in json
      */
     public function getData()
     {

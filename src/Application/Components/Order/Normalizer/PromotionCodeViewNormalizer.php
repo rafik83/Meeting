@@ -33,7 +33,7 @@ class PromotionCodeViewNormalizer implements NormalizerInterface, NormalizerAwar
             'label'                    => $object->label,
             'description'              => $object->description,
             'quantity'                 => $object->quantity,
-            'total'                    => AmountFormatter::decimalToCentimesAmount($object->total),
+            'total'                    => AmountFormatter::decimalToCentsAmount($object->total),
             'promotionProductRowViews' => $this->normalizer->normalize($object->promotionProductRowViews, $format, $context),
         ];
     }

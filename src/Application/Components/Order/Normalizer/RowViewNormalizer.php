@@ -32,8 +32,8 @@ class RowViewNormalizer implements NormalizerInterface, NormalizerAwareInterface
         return [
             'label'            => $object->label,
             'quantity'         => $object->quantity,
-            'price'            => AmountFormatter::decimalToCentimesAmount($object->price),
-            'total'            => AmountFormatter::decimalToCentimesAmount($object->total),
+            'price'            => AmountFormatter::decimalToCentsAmount($object->price),
+            'total'            => AmountFormatter::decimalToCentsAmount($object->total),
             'productId'        => $object->productId,
             'customRows'       => $this->normalizer->normalize($object->customRows, $format, $context),
             'includedProducts' => $this->normalizer->normalize($object->includedProducts, $format, $context),
