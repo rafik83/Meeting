@@ -1,14 +1,14 @@
 Proximum\Vimeet\Domain\Model\Invoice\Prefix:
-    prefix_rdvcarnot_1:
-        __construct:
-            - 'RdvCarnot'
-            - 'Rdv'
-            - false
-    prefix_rdvcarnot_2:
+    prefix_default:
         __construct:
             - 'Vimeet'
             - 'Vi'
             - true
+    prefix_rdvcarnot:
+        __construct:
+            - 'RdvCarnot'
+            - 'Rdv'
+            - false
 
 Proximum\Vimeet\Domain\Model\Address (local):
     event_rdv_carnot_2016_payment_address_event:
@@ -44,7 +44,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - rdv-carnot-2016.<domain()>    #domain
             - "PROXIMUM"                    #organiserName
             - 'team-project@example.net'    #emailTeam
-            - '@prefix_rdvcarnot_1'
+            - '@prefix_rdvcarnot'
         assetPath: ''
         configuration: '@event_rdv_carnot_2016_configuration'
         paymentAddress: '@event_rdv_carnot_2016_payment_address_event'
