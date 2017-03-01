@@ -95,7 +95,6 @@ class UserController extends Controller
     public function showAction(Event $event, User $user)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $view = null;
 
         try {
             $view = $this
