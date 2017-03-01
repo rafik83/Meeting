@@ -49,8 +49,6 @@ class DateTimePickerType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        date_default_timezone_set('Europe/Paris');
-
         $resolver->setDefaults([
             'locale'         => 'fr',
             'format'         => 'd/m/Y H:i',
