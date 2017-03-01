@@ -37,4 +37,13 @@ interface InvoiceRepositoryInterface
      * @return null|Invoice
      */
     public function getLastInvoiceForEventPrefix(Prefix $prefix, $year);
+    
+    /**
+     * Check if given sheet has invoice, return null if not
+     *
+     * @param Sheet $sheet
+     *
+     * @return int|null
+     */
+    public function isSheetInvoiced(Sheet $sheet);
 }

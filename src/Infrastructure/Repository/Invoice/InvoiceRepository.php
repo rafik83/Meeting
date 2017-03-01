@@ -79,4 +79,19 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function isSheetInvoiced(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice.id')
+            ->from(Invoice::class, 'invoice')
+            ->where('invoice.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->setMaxResults(1);
+        
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

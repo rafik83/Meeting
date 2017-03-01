@@ -39,9 +39,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $prefix      = new Prefix('Vimeet', 'Vi');
         $invoice     = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, 1000, 1200, 200, $date);
         $orderToInvoiceView = new OrdersToInvoiceView([$order], [], 1000, 200, 1200);
-    
+        
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
-    
+        
         $invoiceRepository->getLastInvoiceForEventPrefix($prefix, $date->format('Y'))->shouldBeCalled();
         
         $invoiceRepository->add($invoice)->shouldBeCalled()->willReturn($invoice);
