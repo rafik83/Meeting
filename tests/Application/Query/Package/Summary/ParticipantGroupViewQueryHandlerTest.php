@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Package\Summary;
+namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQuery;
@@ -36,7 +36,7 @@ class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $type     = new Type($event);
         $package  = new Package($event, 'Package1', $datetime);
         $package->enable(false, true, false);
-        $sheet    = SheetFactory::create($event, null, $datetime, $type);
+        $sheet   = SheetFactory::create($event, null, $datetime, $type);
         $product = ProductFactory::create($event, 'participant');
 
         $package->setParticipant($product);
@@ -72,5 +72,38 @@ class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participantGroupView = $handler->handle($query);
 
         $this->assertEquals($participantGroupView, $expectedParticipantGroupView);
+    }
+
+    public function testParticipantNotEnabledException()
+    {
+        $this->expectException(\Exception::class);
+
+        $datetime = new \DateTime();
+        $locale   = 'fr';
+        $event    = EventFactory::createEvent();
+        $type     = new Type($event);
+        $package  = new Package($event, 'Package1', $datetime);
+        $package->enable(false, false, false);
+        $sheet   = SheetFactory::create($event, null, $datetime, $type);
+        $product = ProductFactory::create($event, 'other_than_participant');
+
+        $package->setParticipant($product);
+        $type->setPackage($package);
+
+        $cart = new Cart($sheet, [], []);
+
+        $planGroupView = new PlanGroupView('label', [], 0.0);
+
+        // Mock
+        $productViewQueryHandler = $this->prophesize(ProductViewQueryHandler::class);
+
+        $productViewQueryHandler->handle(Argument::that(function (ProductViewQuery $query) {
+            return true;
+        }))->shouldNotBeCalled();
+
+        $handler              = new ParticipantGroupViewQueryHandler($productViewQueryHandler->reveal());
+        $query                = new ParticipantGroupViewQuery($sheet, $cart, $locale, $planGroupView);
+
+        $handler->handle($query);
     }
 }

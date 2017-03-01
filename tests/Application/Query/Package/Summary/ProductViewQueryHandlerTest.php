@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Package\Summary;
+namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
 use Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler;
