@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
@@ -45,10 +46,11 @@ class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
         $invoice     = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, 4200, 4704, 504, $date);
         $orderToInvoiceView = new OrdersToInvoiceView([$order], [], 4200, 504, 4704);
         
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
+        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
+        $orderRepository     = $this->prophesize(OrderRepositoryInterface::class);
         $ordersToInvoiceView = $this->prophesize(OrdersToInvoice::class);
-        $createHandler = $this->prophesize(CreateHandler::class);
+        $createHandler       = $this->prophesize(CreateHandler::class);
+        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
         
         $sheetRepository->getSheetsById([1])->shouldBeCalled()->willReturn([$sheet]);
         
@@ -64,13 +66,14 @@ class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
         
         $createHandler->handle($create)->shouldBeCalled()->willReturn($invoice);
         
-        
         $command = new BatchGenerateInvoice([1], $admin);
         $handler = new BatchGenerateInvoiceHandler(
             $sheetRepository->reveal(),
             $ordersToInvoiceView->reveal(),
             $orderRepository->reveal(),
-            $createHandler->reveal()
+            $createHandler->reveal(),
+            $eventDispatcher->reveal(),
+            $date
         );
         
         $result = $handler->handle($command);
