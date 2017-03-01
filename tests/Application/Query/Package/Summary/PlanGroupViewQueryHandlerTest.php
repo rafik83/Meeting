@@ -57,9 +57,7 @@ class PlanGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $productViewQueryHandler = $this->prophesize(ProductViewQueryHandler::class);
 
-        $productViewQueryHandler->handle(Argument::that(function (ProductViewQuery $query) {
-            return true;
-        }))->shouldBeCalled()->willReturn($productView);
+        $productViewQueryHandler->handle(Argument::type(ProductViewQuery::class))->shouldBeCalled()->willReturn($productView);
 
         // Expected
         $expectedPlanGroupView = new PlanGroupView(
@@ -88,22 +86,10 @@ class PlanGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $cart   = new Cart($sheet, [], []);
         $locale = 'fr';
 
-        $productView = new ProductView(
-            1,
-            'Product1',
-            25,
-            1, // quantity
-            25, // total
-            $event->getMode(),
-            $event->getCurrency()
-        );
-
         // Mock
         $productViewQueryHandler = $this->prophesize(ProductViewQueryHandler::class);
 
-        $productViewQueryHandler->handle(Argument::that(function (ProductViewQuery $query) {
-            return true;
-        }))->shouldNotBeCalled();
+        $productViewQueryHandler->handle(Argument::type(ProductViewQuery::class))->shouldNotBeCalled();
 
         $query   = new PlanGroupViewQuery($sheet, $cart, $locale);
         $handler = new PlanGroupViewQueryHandler($productViewQueryHandler->reveal());

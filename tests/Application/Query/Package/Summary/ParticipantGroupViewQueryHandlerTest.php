@@ -63,9 +63,7 @@ class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $productViewQueryHandler = $this->prophesize(ProductViewQueryHandler::class);
 
-        $productViewQueryHandler->handle(Argument::that(function (ProductViewQuery $query) {
-            return true;
-        }))->shouldBeCalled()->willReturn($productView);
+        $productViewQueryHandler->handle(Argument::type(ProductViewQuery::class))->shouldBeCalled()->willReturn($productView);
 
         $handler              = new ParticipantGroupViewQueryHandler($productViewQueryHandler->reveal());
         $query                = new ParticipantGroupViewQuery($sheet, $cart, $locale, $planGroupView);
@@ -97,9 +95,7 @@ class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $productViewQueryHandler = $this->prophesize(ProductViewQueryHandler::class);
 
-        $productViewQueryHandler->handle(Argument::that(function (ProductViewQuery $query) {
-            return true;
-        }))->shouldNotBeCalled();
+        $productViewQueryHandler->handle(Argument::type(ProductViewQuery::class))->shouldNotBeCalled();
 
         $handler              = new ParticipantGroupViewQueryHandler($productViewQueryHandler->reveal());
         $query                = new ParticipantGroupViewQuery($sheet, $cart, $locale, $planGroupView);
