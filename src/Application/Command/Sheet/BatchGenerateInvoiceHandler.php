@@ -12,10 +12,13 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetInvoicedEvent;
 use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchGenerateInvoiceHandler
 {
@@ -38,25 +41,46 @@ class BatchGenerateInvoiceHandler
      * @var CreateHandler
      */
     private $createHandler;
-
+    
+    /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+    
+    /**
+     * @var Sheet[]
+     */
+    private $sheetsInvoiced;
+    
+    /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+    
     /**
      * BatchGenerateInvoiceHandler constructor.
      *
-     * @param SheetRepositoryInterface   $sheetRepository
-     * @param OrdersToInvoice            $ordersToInvoice
-     * @param OrderRepositoryInterface   $orderRepository
-     * @param CreateHandler              $createHandler
+     * @param SheetRepositoryInterface  $sheetRepository
+     * @param OrdersToInvoice           $ordersToInvoice
+     * @param OrderRepositoryInterface  $orderRepository
+     * @param CreateHandler             $createHandler
+     * @param DelayedEventDispatcher    $eventDispatcher
+     * @param \DateTimeInterface        $datetime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
         OrdersToInvoice            $ordersToInvoice,
         OrderRepositoryInterface   $orderRepository,
-        CreateHandler              $createHandler
+        CreateHandler              $createHandler,
+        DelayedEventDispatcher     $eventDispatcher,
+        \DateTimeInterface         $datetime
     ) {
         $this->sheetRepository   = $sheetRepository;
         $this->ordersToInvoice   = $ordersToInvoice;
         $this->orderRepository   = $orderRepository;
         $this->createHandler     = $createHandler;
+        $this->eventDispatcher   = $eventDispatcher;
+        $this->datetime          = $datetime;
     }
     
     /**
@@ -73,7 +97,7 @@ class BatchGenerateInvoiceHandler
         }
         
         $prefix = $sheets[0]->getEvent()->getInvoicePrefix();
-        $invoiceGeneratedCounter = 0;
+        $event  = $sheets[0]->getEvent();
         
         foreach ($sheets as $sheet) {
             $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
@@ -89,11 +113,21 @@ class BatchGenerateInvoiceHandler
                     $this->orderRepository->set($order);
                 }
                 
-                $invoiceGeneratedCounter++;
+                $this->sheetsInvoiced[] = $sheet;
             }
         }
+    
+        $this->eventDispatcher->dispatch(
+            Events::SHEET_INVOICED,
+            new SheetInvoicedEvent(
+                $batchGenerateInvoice->admin,
+                $event,
+                $this->datetime,
+                $this->sheetsInvoiced
+            )
+        );
         
-        return $this->getBatchResult($batchGenerateInvoice, $invoiceGeneratedCounter);
+        return $this->getBatchResult($batchGenerateInvoice, count($this->sheetsInvoiced));
     }
     
     /**

@@ -721,6 +721,8 @@ services:
             - '@order.orders_to_invoice'
             - '@vimeet_infrastructure.repository.order_repository'
             - '@command.invoice.create_handler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
     command.sheet.batch_enable_disable_handler:
