@@ -30,7 +30,7 @@ class HoursOnSameDayValidator extends ConstraintValidator
             $endTime = new \DateTime($day['endTime']->format('Y-m-d H:i:s'));
             $endTime->setTimezone(new DateTimeZone($update->event->getTimeZone()));
 
-            if ($startTime->format('Y-m-d') != $endTime->format('Y-m-d')) {
+            if ($startTime->format('Y-m-d') !== $endTime->format('Y-m-d')) {
                 $this
                     ->context
                     ->buildViolation('validators.schedule_day.shouldBeTheSameDay')
