@@ -1,15 +1,3 @@
-Proximum\Vimeet\Domain\Model\Invoice\Prefix:
-    prefix_default:
-        __construct:
-            - 'Vimeet'
-            - 'Vi'
-            - true
-    prefix_rdvcarnot:
-        __construct:
-            - 'RdvCarnot'
-            - 'Rdv'
-            - false
-
 Proximum\Vimeet\Domain\Model\Address (local):
     event_rdv_carnot_2016_payment_address_event:
         __construct:

@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\MeetingRequest\RequestIntoMeetingEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
@@ -117,8 +117,8 @@ class TransformRequestIntoMeetingHandler
         );
 
         $this->eventDispatcher->dispatch(
-            Events::REQUEST_INTO_MEETING,
-            new RequestIntoMeetingEvent([$fromSheet, $toSheet])
+            Events::MEETING_CREATED,
+            new MeetingCreatedEvent([$fromSheet, $toSheet])
         );
     }
 }

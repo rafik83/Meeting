@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\RequestIntoMeetingEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnRefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
@@ -69,7 +69,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::MEETING_REQUEST_UNAPPROVED => 'onMeetingRequestUnapproved',
             Events::MEETING_REQUEST_UNREFUSED  => 'onMeetingRequestUnrefused',
             Events::PARTICIPANT_IMPORTED       => 'onParticipantImported',
-            Events::REQUEST_INTO_MEETING       => 'onRequestIntoMeeting',
+            Events::MEETING_CREATED            => 'onMeetingCreated',
             Events::MEETING_REMOVED            => 'onMeetingRemoved'
         ];
     }
@@ -203,9 +203,9 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param RequestIntoMeetingEvent $event
+     * @param MeetingCreatedEvent $event
      */
-    public function onRequestIntoMeeting(RequestIntoMeetingEvent $event)
+    public function onMeetingCreated(MeetingCreatedEvent $event)
     {
         $this->updateSheetIndexation($event->getSheets());
     }
