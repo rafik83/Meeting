@@ -149,6 +149,7 @@ admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
 admin.filters.reset: 'Réinitialiser les filtres'
 admin.global_nomenclature.title: 'Nomenclatures globales'
+admin.global_settings.title: 'Paramètres globaux'
 admin.goback.link: Retour
 admin.happening_category.add: Ajouter
 admin.happening_category.addTitle: 'Ajouter une catégorie de conférences'
@@ -220,7 +221,7 @@ admin.invoice.create.button: 'Nouveau préfixe'
 admin.invoice.create.title: 'Ajouter un nouveau préfixe'
 admin.invoice.link: Facturation
 admin.invoice.list.isDefault: 'Par défaut'
-admin.invoice.list.prefix: Prefix
+admin.invoice.list.prefix: Préfixe
 admin.invoice.list.title: 'Nom backoffice'
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
