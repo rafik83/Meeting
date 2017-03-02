@@ -3,7 +3,7 @@ Proximum\Vimeet\Domain\Model\Invoice\Prefix:
         __construct:
             - 'Spanish'
             - 'Spa'
-            - true
+            - false
 
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
