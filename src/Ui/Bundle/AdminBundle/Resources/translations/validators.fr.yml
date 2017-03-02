@@ -62,3 +62,4 @@ validators.unavailability.participants.count.min: 'Vous devez choisir au moins {
 validators.unavailability.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
 validators.unavailability.timeSlotsExceedRange: 'Les créneaux de dispatch doivent être entre la date de début et la date de fin de l''indisponibilité de masse.'
 validators.whitespace: 'Ce champ ne doit pas contenir d''espace'
+validators.event.update.invoicePrefix.disabled.label: "Vous ne pouvez pas éditer le prefixe de facturation"

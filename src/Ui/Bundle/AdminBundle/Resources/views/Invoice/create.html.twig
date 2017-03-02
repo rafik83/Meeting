@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.invoice.create.title'|trans %}
+
+{% block form_title 'admin.invoice.create.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.title, {widget_columns: 3}) }}
+    {{ form_row(form.prefix, {widget_columns: 3}) }}
+{% endblock %}
+
+{% block goback_link path('admin_invoice_globals_list') %}

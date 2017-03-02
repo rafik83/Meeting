@@ -1,3 +1,10 @@
+Proximum\Vimeet\Domain\Model\Invoice\Prefix:
+    prefix_asddays:
+        __construct:
+            - 'Asddays'
+            - 'As'
+            - false
+
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
         __construct:
@@ -12,6 +19,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - asddays-2016.<domain()>  #domain
             - "PROXIMUM"               #organiserName
             - 'team-project@example.net'   #emailTeam
+            - '@prefix_asddays'
         setLogo: ['assets/images/asddays-logo.png', 'png']
         assetPath: ''
         paymentAddress: '@payment_address_event_asddays_2016'
