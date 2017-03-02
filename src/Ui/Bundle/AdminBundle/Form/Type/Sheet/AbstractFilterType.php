@@ -93,6 +93,7 @@ abstract class AbstractFilterType extends AbstractType
             ->add('hasHappeningParticipation', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.hasHappeningParticipation.label',
                 'required' => false,
+                'expanded' => true,
             ])
             ->add('hasNoMeetingRequest', CheckboxType::class, [
                 'label'    => 'form.sheet_filter.children.hasNoMeetingRequest.label',
