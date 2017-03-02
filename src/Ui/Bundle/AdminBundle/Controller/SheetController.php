@@ -85,7 +85,7 @@ class SheetController extends Controller
         if ($request->query->get('reset') !== null) {
             $this->get('filter.sheet_filter')->clear();
 
-            return $this->redirectToRoute('admin_sheet', ['event' => $event->getId(), 'page' => $selectedSheetsPage]);
+            return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
         $filters = FilterFullType::getDefaultFilters();
@@ -132,7 +132,7 @@ class SheetController extends Controller
         }
 
         // Batch
-        $batch     = new Batch($this->getUser(), $request->query->getInt('page', 1));
+        $batch     = new Batch($this->getUser());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
@@ -165,7 +165,7 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
-        $batch              = new Batch($this->getUser(), $selectedSheetsPage);
+        $batch              = new Batch($this->getUser());
         $batchForm          = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
