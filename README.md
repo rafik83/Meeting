@@ -86,6 +86,20 @@ Remarks :
 
 ### Deployment
 
+To deploy to preprod and prod, you need to be connected to VPN with this  ~/.ssh/config :
+
+        Host vimeet-preprod
+                User www-data
+                Hostname 10.11.0.83
+
+        Host vimeet-prod1
+                User www-data
+                Hostname 10.11.0.31
+
+        Host vimeet-prod2
+                User www-data
+                Hostname 10.11.0.32
+
 There are two branches and two command to deploy for each environment:
 
 - `preprod`
