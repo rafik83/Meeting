@@ -1,5 +1,5 @@
-set :front1,    "proximum-web-apache-01"
-set :front2,    "proximum-web-apache-02"
+set :front1,    "vimeet-prod1"
+set :front2,    "vimeet-prod2"
 set :deploy_to, "/var/www/proximum-vimeet.project.local/htdocs"
 set :user,      "www-data"
 
