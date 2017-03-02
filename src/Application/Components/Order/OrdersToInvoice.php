@@ -11,12 +11,13 @@
 namespace Proximum\Vimeet\Application\Components\Order;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
-use Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler;
+use Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery;
+use Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
+use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
@@ -24,38 +25,44 @@ class OrdersToInvoice
 {
     /** @var OrderRepositoryInterface */
     private $orderRepository;
+    
+    /** @var  BillingInfoRepositoryInterface */
+    private $billingInfosRepository;
 
     /** @var Merger */
     private $orderMerger;
 
-    /** @var SummaryQueryHandler */
-    private $summaryQueryHandler;
+    /** @var InvoiceDataQueryHandler */
+    private $invoiceDataQueryHandler;
 
     /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
     /** @var VatApplicable */
     private $vatApplicable;
-
+    
     /**
-     * @param OrderRepositoryInterface   $orderRepository
-     * @param Merger                     $orderMerger
-     * @param SummaryQueryHandler        $summaryQueryHandler
-     * @param VatApplicable              $vatApplicable
-     * @param SerializerAdapterInterface $serializerAdapter
+     * @param OrderRepositoryInterface       $orderRepository
+     * @param BillingInfoRepositoryInterface $billingInfosRepository
+     * @param Merger                         $orderMerger
+     * @param InvoiceDataQueryHandler        $invoiceDataQueryHandler
+     * @param VatApplicable                  $vatApplicable
+     * @param SerializerAdapterInterface     $serializerAdapter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
+        BillingInfoRepositoryInterface $billingInfosRepository,
         Merger $orderMerger,
-        SummaryQueryHandler $summaryQueryHandler,
+        InvoiceDataQueryHandler $invoiceDataQueryHandler,
         VatApplicable $vatApplicable,
         SerializerAdapterInterface $serializerAdapter
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderMerger = $orderMerger;
-        $this->summaryQueryHandler = $summaryQueryHandler;
-        $this->serializerAdapter = $serializerAdapter;
-        $this->vatApplicable = $vatApplicable;
+        $this->orderRepository          = $orderRepository;
+        $this->billingInfosRepository   = $billingInfosRepository;
+        $this->orderMerger              = $orderMerger;
+        $this->invoiceDataQueryHandler  = $invoiceDataQueryHandler;
+        $this->serializerAdapter        = $serializerAdapter;
+        $this->vatApplicable            = $vatApplicable;
     }
 
     /**
@@ -87,11 +94,14 @@ class OrdersToInvoice
             $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
         }
 
-        $view = $this->summaryQueryHandler->handle(new SummaryQuery(
-            $orderMerged->getSheet(),
-            $orderMerged,
-            $orderMerged->getSheet()->getEvent()->getFallback()
-        ));
+        $view = $this->invoiceDataQueryHandler->handle(
+            new InvoiceDataQuery(
+                $this->billingInfosRepository->getBySheet($sheet),
+                $orderMerged->getSheet(),
+                $orderMerged,
+                $orderMerged->getSheet()->getEvent()->getFallback()
+            )
+        );
 
         $data = $this->serializerAdapter->serialize($view, 'json');
 

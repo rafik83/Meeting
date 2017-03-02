@@ -2937,6 +2937,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Order\OrdersToInvoice
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@repository.billing_info_repository'
             - '@order.merger'
             - '@query.order.summary_query_handler'
             - '@package.specification.vat_applicable'
