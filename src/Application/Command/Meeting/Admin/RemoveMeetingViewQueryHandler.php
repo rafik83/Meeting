@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RemoveMeetingViewQueryHandler
 {
@@ -27,17 +30,25 @@ class RemoveMeetingViewQueryHandler
     private $translator;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * RemoveMeetingViewQueryHandler constructor.
      *
      * @param MeetingRepositoryInterface $meetingRepository
      * @param TranslatorInterface        $translator
+     * @param EventDispatcherInterface   $eventDispatcher
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->translator        = $translator;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     /**
@@ -56,5 +67,13 @@ class RemoveMeetingViewQueryHandler
             ));
         }
         $this->meetingRepository->remove($query->meeting);
+
+        $this->eventDispatcher->dispatch(
+            Events::MEETING_REMOVED,
+            new MeetingRemovedEvent([
+                $query->meeting->getFromSheet(),
+                $query->meeting->getToSheet()
+            ])
+        );
     }
 }

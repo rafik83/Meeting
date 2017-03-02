@@ -536,6 +536,7 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@query.agenda.admin.request_slot_view_query_handler'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting }
     ommand.meeting_request.admin.update_participant_handler:
@@ -2435,6 +2436,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery }
     query.agenda.request_view_query_handler:

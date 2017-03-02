@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\MeetingRequest\RequestIntoMeetingEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
@@ -17,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TransformRequestIntoMeetingHandler
 {
@@ -33,21 +36,29 @@ class TransformRequestIntoMeetingHandler
     private $dateTime;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param MeetingRepositoryInterface  $meetingRepository
      * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
      * @param \DateTimeInterface          $dateTime
+     * @param EventDispatcherInterface    $eventDispatcher
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->meetingRepository           = $meetingRepository;
         $this->spotRepository              = $spotRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->dateTime                    = $dateTime;
+        $this->eventDispatcher             = $eventDispatcher;
     }
 
     /**
@@ -81,7 +92,6 @@ class TransformRequestIntoMeetingHandler
             $transformRequestIntoMeeting->visio
         );
 
-
         // If no spot available
         if (0 === count($spots)) {
             throw new NoSpotsAvailableForThisSlotAndMeetingException();
@@ -91,7 +101,7 @@ class TransformRequestIntoMeetingHandler
         $spot = reset($spots);
 
         $fromSheet = $transformRequestIntoMeeting->meetingRequest->getFromSheet();
-        $toSheet = $transformRequestIntoMeeting->meetingRequest->getToSheet();
+        $toSheet   = $transformRequestIntoMeeting->meetingRequest->getToSheet();
 
         $this->meetingRepository->add(
             new Meeting(
@@ -104,6 +114,11 @@ class TransformRequestIntoMeetingHandler
                 $this->dateTime,
                 $spot
             )
+        );
+
+        $this->eventDispatcher->dispatch(
+            Events::REQUEST_INTO_MEETING,
+            new RequestIntoMeetingEvent([$fromSheet, $toSheet])
         );
     }
 }
