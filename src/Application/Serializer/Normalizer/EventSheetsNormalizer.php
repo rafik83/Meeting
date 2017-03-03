@@ -233,17 +233,15 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         // the tagged data are used in case of empty field
         $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
 
-        foreach ($presentationTemplateData->getObjects() as $presentationObject) {
-            if ($presentationObject instanceof ExportableObjectInterface) {
-                $key = $presentationObject->getKey();
+        foreach ($presentationTemplateData->getExportableObjects() as $presentationObject) {
+            $key = $presentationObject->getKey();
 
-                if (!isset($this->sheetFields[$key])) {
-                    $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
-                    $this->sheetFields[$key] = $fieldName;
-                }
-
-                $rawData[$key] = $presentationObject->getExportableContent($taggedData);
+            if (!isset($this->sheetFields[$key])) {
+                $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
+                $this->sheetFields[$key] = $fieldName;
             }
+
+            $rawData[$key] = $presentationObject->getExportableContent($taggedData);
         }
     }
 
@@ -306,14 +304,26 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
 
         // Registration data
         foreach ($this->registrationFields as $fieldKey => $fieldName) {
-            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+
+            // Avoid set to null in field with same name
+            if ($input === null && isset($normalizedData[$fieldName])) {
+                continue;
+            }
+
             $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
         // Sheet data
         foreach ($this->sheetFields as $fieldKey => $fieldName) {
-            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+
+            // Avoid set to null in field with same name
+            if ($input === null && isset($normalizedData[$fieldName])) {
+                continue;
+            }
+
             $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
