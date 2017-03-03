@@ -20,11 +20,10 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +47,7 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $translator        = $this->prophesize(TranslatorInterface::class);
-        $eventDispatcher   = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
 
         if (!$meeting->isBlockedSlot()) {
             $meetingRepository->remove($meeting)->shouldBeCalled();

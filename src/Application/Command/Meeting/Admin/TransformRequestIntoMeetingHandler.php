@@ -19,7 +19,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class TransformRequestIntoMeetingHandler
 {
@@ -35,9 +35,7 @@ class TransformRequestIntoMeetingHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /**
@@ -45,14 +43,14 @@ class TransformRequestIntoMeetingHandler
      * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
      * @param \DateTimeInterface          $dateTime
-     * @param EventDispatcherInterface    $eventDispatcher
+     * @param DelayedEventDispatcher      $eventDispatcher
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
         \DateTimeInterface $dateTime,
-        EventDispatcherInterface $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->meetingRepository           = $meetingRepository;
         $this->spotRepository              = $spotRepository;

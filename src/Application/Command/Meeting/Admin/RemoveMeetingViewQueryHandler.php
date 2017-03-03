@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RemoveMeetingViewQueryHandler
 {
@@ -30,7 +30,7 @@ class RemoveMeetingViewQueryHandler
     private $translator;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
@@ -39,12 +39,12 @@ class RemoveMeetingViewQueryHandler
      *
      * @param MeetingRepositoryInterface $meetingRepository
      * @param TranslatorInterface        $translator
-     * @param EventDispatcherInterface   $eventDispatcher
+     * @param DelayedEventDispatcher     $eventDispatcher
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         TranslatorInterface $translator,
-        EventDispatcherInterface $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->translator        = $translator;
