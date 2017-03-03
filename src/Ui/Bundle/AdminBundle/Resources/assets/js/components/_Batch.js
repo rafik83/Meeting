@@ -5,7 +5,7 @@ var BatchSelectionHelper = require('./_BatchSelectionHelper');
 /**
  * Batch component
  *
- * @param element
+ * @param {Object} element
  * @constructor
  */
 function Batch(element)
@@ -17,7 +17,9 @@ function Batch(element)
     // Add check all
     [].forEach.call(element.querySelectorAll('[data-batch-all]'), function (item) {
         new CheckAllCheckbox(item, item.getAttribute('data-batch-all'));
+
         item.addEventListener('change', this.toggle.bind(this));
+        item.addEventListener('click', this.toggleHelper.bind(this, true));
     }.bind(this));
 
     // Toggle batch on each checkbox change
@@ -26,6 +28,8 @@ function Batch(element)
             this.toggle();
             this.closest(event.currentTarget, 'TR').classList.toggle('active');
         }.bind(this));
+
+        item.addEventListener('click', this.toggleHelper.bind(this));
     }.bind(this));
 
     // Check row
@@ -37,20 +41,24 @@ function Batch(element)
         });
 
         item.addEventListener('click', function (event) {
-            if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') {
+            if (event.target.tagName === 'A' ||
+                event.target.tagName === 'BUTTON' ||
+                event.target.tagName === 'INPUT') {
                 return;
             }
-
             event.preventDefault();
+
             var checkbox = item.querySelector('input[type=checkbox]');
             checkbox.checked = !checkbox.checked;
 
+            // Trigger and dispatch change event
             var htmlEvent = document.createEvent('HTMLEvents');
             htmlEvent.initEvent('change', true, true);
-
             checkbox.dispatchEvent(htmlEvent);
-        });
-    });
+
+            this.toggleHelper(false);
+        }.bind(this));
+    }.bind(this));
 
     // Handle Batch Selection helper change
     this.element.addEventListener('change-batchSelectionHelper', function(event) {
@@ -96,8 +104,6 @@ Batch.prototype.toggle = function ()
             item.classList.toggle('hide');
         });
 
-        this.batchSelectionHelper.toggle(); // show or hide batch selection helper
-
         this.batch = !this.batch;
     }
 
@@ -105,6 +111,25 @@ Batch.prototype.toggle = function ()
     [].forEach.call(this.element.querySelectorAll('[data-batch-transchoice]'), function (item) {
         this.transchoice(item, item.getAttribute('data-batch-transchoice'), count);
     }.bind(this));
+};
+
+/**
+ * Toggle BatchSelectionHelper component
+ *
+ * @param {boolean} forceToggle
+ * @see BatchSelectionHelper
+ */
+Batch.prototype.toggleHelper = function (forceToggle) {
+    var force = forceToggle || false;
+    var sheetsPerPage = this.element.dataset.pageSheets;
+
+    if (force === true) {
+        this.batchSelectionHelper.toggle(); // show or hide batch selection helper;
+    } else if (this.count() !== parseInt(sheetsPerPage)) {
+        this.batchSelectionHelper.disable();
+    } else if (this.count() === parseInt(sheetsPerPage)) {
+        this.batchSelectionHelper.enable();
+    }
 };
 
 /**
@@ -119,9 +144,9 @@ Batch.prototype.updateTranschoice = function (count) {
 /**
  * Transchoice
  *
- * @param item
- * @param message
- * @param count
+ * @param {Object} item
+ * @param {string} message
+ * @param {int} count
  */
 Batch.prototype.transchoice = function (item, message, count)
 {

@@ -28,6 +28,14 @@ BatchSelectionHelper.prototype.toggle = function () {
     this.helper.classList.toggle('hide');
 };
 
+BatchSelectionHelper.prototype.enable = function () {
+    this.helper.classList.remove('hide');
+};
+
+BatchSelectionHelper.prototype.disable = function () {
+    this.helper.classList.add('hide');
+};
+
 /**
  * @param {Object} helper
  */

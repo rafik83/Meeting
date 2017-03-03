@@ -132,7 +132,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
 
-        return $this->finder->find($query);
+        // TODO: Use searchable for prevent result transform into doctrine object and create specific query for select only ID of sheets (better performance)
+
+        return $this->finder->find($query, 100000);
     }
 
     /**

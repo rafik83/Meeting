@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class BatchHandler
 {
@@ -48,6 +49,7 @@ class BatchHandler
      * @var BatchValidationValidateHandler
      */
     private $batchValidationValidateHandler;
+
     /**
      * @var SheetSearchAdapterInterface
      */
@@ -92,8 +94,12 @@ class BatchHandler
      */
     public function handle(Batch $batch)
     {
-        if (!empty($batch->filters)) {
+        if ($batch->selectionType === Batch::SELECTION_TYPE_ALL) {
             $sheets = $this->sheetSearchAdapter->findAll($batch->event, $batch->filters, $batch->locale);
+
+            $batch->ids = array_map(function (Sheet $sheet) {
+                return $sheet->getId();
+            }, $sheets);
         }
 
         if ($batch->validate) {

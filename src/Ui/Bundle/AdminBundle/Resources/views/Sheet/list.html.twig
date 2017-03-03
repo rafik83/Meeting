@@ -38,7 +38,7 @@
 
     </div>
 
-    {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
+    {{ form_start(batch_form, { 'attr': { 'data-batch': true, 'data-page-sheets': sheets.limit } }) }}
     {{ form_errors(batch_form) }}
 
     <div class="row filters">
