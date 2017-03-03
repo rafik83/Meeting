@@ -148,7 +148,7 @@ $locale = $event->getAvailableLocale($request->getLocale);
 
 Se connecter à la prod pour dumper la DB
 
-        $ ssh proximum-web-apache-01
+        $ ssh vimeet-prod1
         $ cd ~/proximum-vimeet.project.local/htdocs/current
         $ cat app/config/parameters.yml # pour afficher le databasename, host, port, user et password de la DB
         $ mysqldump --host [host] --port [port] -u [username] -p[password] [databasename] > prod.sql
@@ -157,7 +157,7 @@ Se connecter à la prod pour dumper la DB
 Puis en local, dans le répertoire du projet, télécharger la DB
 
         $ cd path/to/local/vimeet
-        $ scp proximum-web-apache-01:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
+        $ scp vimeet-prod1:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
 
 Importer la DB depuis la VM
 
@@ -167,6 +167,6 @@ Importer la DB depuis la VM
 
 Se connecter à la prod et supprimer le fichier dumpé
 
-        $ ssh proximum-web-apache-01
+        $ ssh vimeet-prod1
         $ cd ~/proximum-vimeet.project.local/htdocs/current
         $ rm prod.sql
