@@ -2192,7 +2192,16 @@ services:
             - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
-
+    query.invoice.invoice_data_query_handler:
+        class: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler
+        arguments:
+            - '@query.billing_infos.billing_infos_query_handler'
+            - '@query.order.summary_query_handler'
+            - '@order.balance'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery }
+    query.billing_infos.billing_infos_query_handler:
+        class: Proximum\Vimeet\Application\Query\BillingInfos\BillingInfosQueryHandler
     query.sheet.sheet_validation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQueryHandler
         arguments:
@@ -2939,7 +2948,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.billing_info_repository'
             - '@order.merger'
-            - '@query.order.summary_query_handler'
+            - '@query.invoice.invoice_data_query_handler'
             - '@package.specification.vat_applicable'
             - '@adapter.serializer_adapter'
 
