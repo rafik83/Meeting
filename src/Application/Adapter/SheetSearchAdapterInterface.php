@@ -45,9 +45,18 @@ interface SheetSearchAdapterInterface
     );
 
     /**
-     * @param Event       $event
-     * @param array       $filters
-     * @param string      $locale
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function findAll(Event $event, array $filters, $locale);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
      *
      * @return SheetListView[]
      */

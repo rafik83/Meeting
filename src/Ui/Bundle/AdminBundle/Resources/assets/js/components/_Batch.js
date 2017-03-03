@@ -1,5 +1,6 @@
 
-var CheckAllCheckbox    = require('./_CheckAllCheckbox');
+var CheckAllCheckbox     = require('./_CheckAllCheckbox');
+var BatchSelectionHelper = require('./_BatchSelectionHelper');
 
 /**
  * Batch component
@@ -11,6 +12,7 @@ function Batch(element)
 {
     this.element = element;
     this.batch   = false;
+    this.batchSelectionHelper = new BatchSelectionHelper(element);
 
     // Add check all
     [].forEach.call(element.querySelectorAll('[data-batch-all]'), function (item) {
@@ -88,6 +90,8 @@ Batch.prototype.toggle = function ()
         [].forEach.call(this.element.querySelectorAll('.new-actions'), function (item) {
             item.classList.toggle('hide');
         });
+
+        this.batchSelectionHelper.toggle(); // show or hide batch selection helper
 
         this.batch = !this.batch;
     }

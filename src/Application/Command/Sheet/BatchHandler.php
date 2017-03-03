@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+
 class BatchHandler
 {
     /**
@@ -46,10 +48,15 @@ class BatchHandler
      * @var BatchValidationValidateHandler
      */
     private $batchValidationValidateHandler;
+    /**
+     * @var SheetSearchAdapterInterface
+     */
+    private $sheetSearchAdapter;
 
     /**
      * BatchHandler constructor.
      *
+     * @param SheetSearchAdapterInterface    $sheetSearchAdapter
      * @param BatchValidateHandler           $batchValidateHandler
      * @param BatchAssignHandler             $batchAssignHandler
      * @param BatchAcceptHandler             $batchAcceptHandler
@@ -59,6 +66,7 @@ class BatchHandler
      * @param BatchValidationValidateHandler $batchValidationValidateHandler
      */
     public function __construct(
+        SheetSearchAdapterInterface $sheetSearchAdapter,
         BatchValidateHandler $batchValidateHandler,
         BatchAssignHandler $batchAssignHandler,
         BatchAcceptHandler $batchAcceptHandler,
@@ -67,6 +75,7 @@ class BatchHandler
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler
     ) {
+        $this->sheetSearchAdapter             = $sheetSearchAdapter;
         $this->batchValidateHandler           = $batchValidateHandler;
         $this->batchAssignHandler             = $batchAssignHandler;
         $this->batchAcceptHandler             = $batchAcceptHandler;
@@ -83,6 +92,10 @@ class BatchHandler
      */
     public function handle(Batch $batch)
     {
+        if (!empty($batch->filters)) {
+            $sheets = $this->sheetSearchAdapter->findAll($batch->event, $batch->filters, $batch->locale);
+        }
+
         if ($batch->validate) {
             return $this->batchValidateHandler->handle(new BatchValidate(
                 $batch->ids,

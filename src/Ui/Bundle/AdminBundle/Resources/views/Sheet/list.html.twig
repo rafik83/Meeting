@@ -106,6 +106,21 @@
 
     {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
 
+    <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide" role="alert">
+        <p>
+            <span class="batch-helper-message"
+                  data-all-selected-label="{{ 'admin.sheet.batch.allSelected.label'|trans({'%sheets%': sheets.total})|raw }}"
+                  data-page-selected-label="{{ 'admin.sheet.batch.selection.label'|trans({'%sheets%': sheets.limit})|raw }}">
+                {{ 'admin.sheet.batch.selection.label'|trans({'%sheets%': sheets.limit})|raw }}
+            </span>
+            <span id="batch-select-all" class="batch-helper-select-all"
+                  data-all-label="{{ 'admin.sheet.batch.selectionAll.label'|trans({'%allSheets%': sheets.total})|raw }}"
+                  data-cancel-label="{{ 'admin.sheet.batch.cancelSelection.label'|trans }}">
+                {{ 'admin.sheet.batch.selectionAll.label'|trans({'%allSheets%': sheets.total})|raw }}
+            </span>
+        </p>
+    </div>
+
     <table class="table table-hover selectable-row filterable">
         <thead>
         <tr>

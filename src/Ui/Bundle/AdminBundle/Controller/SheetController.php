@@ -52,6 +52,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class SheetController extends Controller
 {
+    const SHEETS_PER_PAGE = 100;
+
     /**
      * @param Request $request
      * @param Event   $event
@@ -117,7 +119,7 @@ class SheetController extends Controller
                 $event,
                 $filters,
                 $request->query->getInt('page', 1),
-                20,
+                self::SHEETS_PER_PAGE,
                 $locale,
                 $this->getUser()
             );
@@ -128,7 +130,7 @@ class SheetController extends Controller
         }
 
         // Batch
-        $batch     = new Batch($this->getUser(), new \DateTime());
+        $batch     = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()));
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
@@ -160,7 +162,9 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $batch     = new Batch($this->getUser(), new \DateTime());
+        $filters = $this->get('filter.sheet_filter')->get();
+        $batch   = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()), $filters);
+
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,

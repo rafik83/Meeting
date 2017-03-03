@@ -11,9 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class Batch extends AbstractBatch
 {
+    const SELECTION_TYPE_PAGE = 'selection_type_page';
+    const SELECTION_TYPE_ALL  = 'selection_type_all';
+
     /**
      * @var array
      */
@@ -82,10 +86,38 @@ class Batch extends AbstractBatch
     public $validationValidate;
 
     /**
-     * @param Admin $admin
+     * Sheets list active filters
+     *
+     * @var array
      */
-    public function __construct(Admin $admin)
+    public $filters;
+
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
+    /**
+     * @var string
+     */
+    public $selectionType;
+
+    /**
+     * @param Event  $event
+     * @param Admin  $admin
+     * @param string $locale
+     * @param array  $filters
+     */
+    public function __construct(Event $event, Admin $admin, $locale, $filters = [])
     {
-        $this->admin = $admin;
+        $this->admin   = $admin;
+        $this->filters = $filters;
+        $this->event   = $event;
+        $this->locale  = $locale;
     }
 }

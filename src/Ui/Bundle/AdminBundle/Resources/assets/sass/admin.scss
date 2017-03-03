@@ -290,3 +290,10 @@ table th.sort-up:after {
 .col-custom-7 {
   width: 14.2857142857%;
 }
+
+.batch-helper {
+  .batch-helper-select-all {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

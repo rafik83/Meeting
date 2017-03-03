@@ -496,6 +496,10 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
+admin.sheet.batch.selection.label: "Les <strong>%sheets%</strong> fiches de cette page sont seléctionnées."
+admin.sheet.batch.selectionAll.label: "Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres."
+admin.sheet.batch.cancelSelection.label: "Annuler la selection complète"
+admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'

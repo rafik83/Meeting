@@ -123,6 +123,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         );
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll(Event $event, array $filters, $locale)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $query   = new Query($builder->getQuery());
+
+        return $this->finder->find($query);
+    }
+
     /**
      * {@inheritdoc}
      */
