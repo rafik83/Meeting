@@ -93,10 +93,12 @@ class OrdersToInvoice
         if (true === $isVatApplicable) {
             $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
         }
+        
+        $billingInfos = $this->billingInfosRepository->getBySheet($sheet);
 
         $view = $this->invoiceDataQueryHandler->handle(
             new InvoiceDataQuery(
-                $this->billingInfosRepository->getBySheet($sheet),
+                $billingInfos,
                 $orderMerged->getSheet(),
                 $orderMerged,
                 $orderMerged->getSheet()->getEvent()->getFallback()

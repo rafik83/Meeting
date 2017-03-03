@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class InvoiceDataQuery
 {
-    /** @var  BillingInfo */
+    /** @var  BillingInfo|null */
     public $billingInfos;
     
     /** @var  Sheet */
@@ -31,12 +31,12 @@ class InvoiceDataQuery
     /**
      * InvoiceDataQuery constructor.
      *
-     * @param BillingInfo   $billingInfos
-     * @param Sheet         $sheet
-     * @param Order         $order
-     * @param string        $locale
+     * @param BillingInfo|null   $billingInfos
+     * @param Sheet              $sheet
+     * @param Order              $order
+     * @param string             $locale
      */
-    public function __construct(BillingInfo $billingInfos, Sheet $sheet, Order $order, $locale)
+    public function __construct(BillingInfo $billingInfos = null, Sheet $sheet, Order $order, $locale)
     {
         $this->billingInfos = $billingInfos;
         $this->sheet        = $sheet;
