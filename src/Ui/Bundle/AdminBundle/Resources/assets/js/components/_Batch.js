@@ -51,6 +51,11 @@ function Batch(element)
             checkbox.dispatchEvent(htmlEvent);
         });
     });
+
+    // Handle Batch Selection helper change
+    this.element.addEventListener('change-batchSelectionHelper', function(event) {
+        this.updateTranschoice(event.data[0].counts);
+    }.bind(this));
 }
 
 Batch.prototype.closest = function (item, tag)
@@ -97,6 +102,15 @@ Batch.prototype.toggle = function ()
     }
 
     // Transchoice on batch count
+    [].forEach.call(this.element.querySelectorAll('[data-batch-transchoice]'), function (item) {
+        this.transchoice(item, item.getAttribute('data-batch-transchoice'), count);
+    }.bind(this));
+};
+
+/**
+ * @param {int} count
+ */
+Batch.prototype.updateTranschoice = function (count) {
     [].forEach.call(this.element.querySelectorAll('[data-batch-transchoice]'), function (item) {
         this.transchoice(item, item.getAttribute('data-batch-transchoice'), count);
     }.bind(this));

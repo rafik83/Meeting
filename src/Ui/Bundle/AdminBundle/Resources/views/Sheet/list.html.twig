@@ -106,7 +106,7 @@
 
     {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
 
-    <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide" role="alert">
+    <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide" role="alert" data-page-sheets="{{ sheets.limit }}" data-all-sheets="{{ sheets.total }}">
         <p>
             <span class="batch-helper-message"
                   data-all-selected-label="{{ 'admin.sheet.batch.allSelected.label'|trans({'%sheets%': sheets.total})|raw }}"

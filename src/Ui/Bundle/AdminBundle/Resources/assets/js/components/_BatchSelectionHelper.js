@@ -17,8 +17,6 @@ function BatchSelectionHelper(batchForm) {
  * @param {Object} event
  */
 BatchSelectionHelper.prototype.toggleSelectionState = function (event) {
-    console.log(this.inputSelectionType.value);
-
     if (this.inputSelectionType.value === 'selection_type_page') {
         this.selectAll(event.target);
     } else if(this.inputSelectionType.value === 'selection_type_all') {
@@ -39,6 +37,8 @@ BatchSelectionHelper.prototype.selectAll = function (helper) {
 
     message.innerHTML = message.dataset.allSelectedLabel;
     helper.innerHTML  = helper.dataset.cancelLabel;
+
+    this.triggerChange(this.helper.dataset.allSheets);
 };
 
 /**
@@ -50,10 +50,21 @@ BatchSelectionHelper.prototype.selectPage = function (helper) {
 
     message.innerHTML = message.dataset.pageSelectedLabel;
     helper.innerHTML  = helper.dataset.allLabel;
+
+    this.triggerChange(this.helper.dataset.pageSheets);
 };
 
 BatchSelectionHelper.prototype.changeSelectionType = function (type) {
     this.inputSelectionType.value = type;
+};
+
+BatchSelectionHelper.prototype.triggerChange = function (totalSelection) {
+    var htmlEvent = document.createEvent('HTMLEvents');
+    htmlEvent.data = [{'counts': totalSelection}];
+
+    htmlEvent.initEvent('change-batchSelectionHelper', true, true);
+
+    this.batchForm.dispatchEvent(htmlEvent);
 };
 
 module.exports = BatchSelectionHelper;
