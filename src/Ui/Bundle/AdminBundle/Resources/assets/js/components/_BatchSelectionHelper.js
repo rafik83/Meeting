@@ -34,6 +34,7 @@ BatchSelectionHelper.prototype.enable = function () {
 
 BatchSelectionHelper.prototype.disable = function () {
     this.helper.classList.add('hide');
+    this.selectPage(this.helper.querySelector('.batch-helper-select-all'));
 };
 
 /**

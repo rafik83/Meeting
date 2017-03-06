@@ -27,6 +27,10 @@ function Batch(element)
         item.addEventListener('change', function (event) {
             this.toggle();
             this.closest(event.currentTarget, 'TR').classList.toggle('active');
+
+            var updateStateEvent = document.createEvent('HTMLEvents');
+            updateStateEvent.initEvent('updateState-checkAllCheckbox', true, true);
+            this.element.querySelector('[data-batch-all]').dispatchEvent(updateStateEvent);
         }.bind(this));
 
         item.addEventListener('click', this.toggleHelper.bind(this));
@@ -66,6 +70,12 @@ function Batch(element)
     }.bind(this));
 }
 
+/**
+ * @param {Object} item
+ * @param {string} tag
+ *
+ * @return {bool}
+ */
 Batch.prototype.closest = function (item, tag)
 {
     if (item === null || item === undefined) {
@@ -121,13 +131,13 @@ Batch.prototype.toggle = function ()
  */
 Batch.prototype.toggleHelper = function (forceToggle) {
     var force = forceToggle || false;
-    var sheetsPerPage = this.element.dataset.pageSheets;
+    var sheetsPerPage = parseInt(this.element.dataset.pageSheets);
 
     if (force === true) {
         this.batchSelectionHelper.toggle(); // show or hide batch selection helper;
-    } else if (this.count() !== parseInt(sheetsPerPage)) {
+    } else if (this.count() !== sheetsPerPage) {
         this.batchSelectionHelper.disable();
-    } else if (this.count() === parseInt(sheetsPerPage)) {
+    } else if (this.count() === sheetsPerPage) {
         this.batchSelectionHelper.enable();
     }
 };
