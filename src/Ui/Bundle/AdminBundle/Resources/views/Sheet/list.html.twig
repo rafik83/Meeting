@@ -105,6 +105,8 @@
 
     {% set hasCategories = sheetFilter.category is defined ? sheetFilter.category.vars.choices|length > 1 : false %}
 
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+
     <table class="table table-hover selectable-row filterable">
         <thead>
         <tr>
