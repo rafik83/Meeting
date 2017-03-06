@@ -30,7 +30,7 @@ class SheetFilterType extends AbstractFilterType
                 'expanded' => true,
                 'required' => false,
             ])
-            ->add('orderBy', HiddenType::class, [
+            ->add('orderBy', SortChoiceType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
             ]);
     }

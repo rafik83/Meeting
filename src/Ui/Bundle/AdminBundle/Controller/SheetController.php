@@ -73,8 +73,6 @@ class SheetController extends Controller
             ));
         }
 
-        $locale = $event->getAvailableLocale($request->getLocale());
-
         if (empty($request->query->all()) && $this->get('filter.sheet_filter')->get() !== null) {
             return $this->redirectToRoute('admin_sheet', array_merge(
                 ['event' => $event->getId()],
@@ -92,18 +90,13 @@ class SheetController extends Controller
 
         $sheetFilter = $this->createFilterForm(SheetFilterType::class, $filters, [
             'event'  => $event,
-            'locale' => $locale,
+            'locale' => $request->getLocale(),
             'user'   => $this->getUser(),
         ]);
 
-        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
-            'event'  => $event,
-        ]);
+        $isFiltered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
 
-        $filtered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
-        $filterFullForm->handleRequest($request);
-
-        if ($filtered) {
+        if ($isFiltered) {
             $filters = $sheetFilter->getData();
 
             // save filter into session
@@ -120,7 +113,7 @@ class SheetController extends Controller
                 $filters,
                 $selectedSheetsPage,
                 100, // number of sheets by page
-                $locale,
+                $event->getAvailableLocale($request->getLocale()),
                 $this->getUser()
             );
             /** @var PaginatedResult $sheets */
@@ -138,7 +131,13 @@ class SheetController extends Controller
                 return $listView->id;
             }),
             'event'  => $event,
-            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId(), 'page' => $selectedSheetsPage]),
+            'action' => $this->generateUrl(
+                'admin_sheet_batch',
+                [
+                    'event' => $event->getId(),
+                    'page'  => $selectedSheetsPage,
+                ]
+            ),
         ]);
 
         $sheetFilterView = $sheetFilter->createView();
@@ -146,11 +145,13 @@ class SheetController extends Controller
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
             'sheets'           => $sheets,
-            'filter_form'      => $filterFullForm->createView(),
-            'filters_summary'  => $this->get('filter_summary')->getFilters($sheetFilterView, $filters, $locale),
-            'filtered'         => $filtered,
+            'filters_summary'  => $this->get('filter_summary')->getFilters(
+                $sheetFilterView,
+                $filters,
+                $request->getLocale()
+            ),
             'batch_form'       => $batchForm->createView(),
-            'sheetFilter'      => $sheetFilter->createView(),
+            'filter_form'      => $sheetFilter->createView(),
         ]);
     }
 
