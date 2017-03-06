@@ -70,18 +70,24 @@ class BillingInfo
     private $vatNumber;
 
     /**
+     * @var string
+     */
+    private $reference;
+
+    /**
      * BillingInfo constructor.
      *
-     * @param string  $gender
-     * @param string  $lastName
-     * @param string  $firstName
-     * @param string  $position
-     * @param string  $phone
-     * @param string  $mobile
-     * @param string  $email
-     * @param string  $company
+     * @param string $gender
+     * @param string $lastName
+     * @param string $firstName
+     * @param string $position
+     * @param string $phone
+     * @param string $mobile
+     * @param string $email
+     * @param string $company
      * @param Address $address
-     * @param string  $vatNumber
+     * @param string $vatNumber
+     * @param string|null $reference
      */
     public function __construct(
         $gender,
@@ -93,7 +99,8 @@ class BillingInfo
         $email,
         $company,
         Address $address,
-        $vatNumber
+        $vatNumber,
+        $reference = null
     ) {
         $this->gender    = $gender;
         $this->lastName  = $lastName;
@@ -105,6 +112,7 @@ class BillingInfo
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
+        $this->reference = $reference;
     }
 
     /**
@@ -207,5 +215,13 @@ class BillingInfo
     public function getGender()
     {
         return $this->gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
     }
 }

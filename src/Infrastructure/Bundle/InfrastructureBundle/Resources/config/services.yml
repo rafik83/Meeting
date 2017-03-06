@@ -249,6 +249,14 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\CampaignRepository
         arguments:
              - '@doctrine.orm.entity_manager'
+    repository.invoice.invoice_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Invoice\InvoiceRepository
+        arguments:
+             - '@doctrine.orm.entity_manager'
+    repository.invoice.prefix_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Invoice\PrefixRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -528,6 +536,7 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@query.agenda.admin.request_slot_view_query_handler'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting }
     ommand.meeting_request.admin.update_participant_handler:
@@ -1450,12 +1459,20 @@ services:
     command.messaging.campaign.send_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler
         arguments:
+            - '@repository.messaging.campaign_repository'
+            - '@adapter.job_queue_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+    command.messaging.campaign.process_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler
+        arguments:
             - '@repository.billing_info_repository'
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
             - '@domain.messaging.substitutions_provider'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 
     command.planner.import_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
@@ -1514,6 +1531,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
 
+    command.invoice.prefix.create_handler:
+        class: Proximum\Vimeet\Application\Command\InvoicePrefix\CreateHandler
+        arguments:
+            - '@repository.invoice.prefix_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\InvoicePrefix\Create }
+
     #
     # Security
     #
@@ -1552,6 +1576,10 @@ services:
             - '@event_dispatcher'
     adapter.entity_manager_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\EntityManagerAdapter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter.job_queue_adapter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter.serializer_adapter:
@@ -2274,6 +2302,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
+    query.user.user_details_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery }
+
     query.user.user_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserListViewQueryHandler
         arguments:
@@ -2431,6 +2467,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery }
     query.agenda.request_view_query_handler:
@@ -2784,6 +2821,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@template.template_data_factory'
             - '@order.balance'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@repository.invoice.invoice_repository'
 
     #
     # Product Transformer
@@ -2807,6 +2846,14 @@ services:
     #
     command.build_event_guideline_asset_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\BuildEventGuidelineAssetCommand
+        tags:
+            - { name: console.command }
+
+    command.send_campaign_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand
+        arguments:
+            - '@repository.messaging.campaign_repository'
+            - '@command.messaging.campaign.process_handler'
         tags:
             - { name: console.command }
 

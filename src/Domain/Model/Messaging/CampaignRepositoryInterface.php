@@ -36,4 +36,11 @@ interface CampaignRepositoryInterface
      * @return Campaign[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param int $id
+     *
+     * @return Campaign
+     */
+    public function getById($id);
 }

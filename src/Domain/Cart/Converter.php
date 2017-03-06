@@ -132,7 +132,8 @@ class Converter
                 $billingInfo->getAddress()->getCity(),
                 $billingInfo->getAddress()->getCountry()
             ),
-            $billingInfo->getVatNumber()
+            $billingInfo->getVatNumber(),
+            $billingInfo->getReference()
         );
 
         $groupsData = $sheet->getPackage()->serializeData();
