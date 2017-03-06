@@ -102,11 +102,12 @@
                 {% endblock actions %}
             {% endembed %}
         </div>
+        <div class="col-md-8">
+            {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+        </div>
     </div>
 
     {% set hasCategories = filter_form.category is defined ? filter_form.category.vars.choices|length > 1 : false %}
-
-    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
 
     <table class="table table-hover selectable-row filterable">
         <thead>
