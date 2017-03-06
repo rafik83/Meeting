@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\Invoice\Invoice:
+    type: entity
+    table: invoice
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        total:
+            type: integer
+        totalWithVat:
+            type: integer
+        vatAmount:
+            type: integer
+        invoicePrefix:
+            type: string
+        invoiceYear:
+            type: integer
+        invoiceIncrement:
+            type: integer
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+        prefix:
+            targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+    uniqueConstraints:
+        invoice_number:
+            columns: invoice_prefix, invoice_year, invoice_increment

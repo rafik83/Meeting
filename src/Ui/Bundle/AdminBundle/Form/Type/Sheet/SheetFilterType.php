@@ -10,9 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet\Constant;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,9 +23,6 @@ class SheetFilterType extends AbstractFilterType
     {
         parent::buildForm($builder, $options);
 
-        /** @var Event $event */
-        $event = $options['event'];
-
         $builder
             ->add('enabled', EnabledStateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.enabledState.label',
@@ -39,20 +33,6 @@ class SheetFilterType extends AbstractFilterType
             ->add('orderBy', HiddenType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
             ]);
-        
-        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
-
-        if (count($categories) > 0) {
-            $builder->add('category', CategoryChoiceType::class, [
-                'label'    => 'form.sheet_filter.children.category.label',
-                'event'    => $event,
-                'locale'   => $options['locale'],
-                'expanded' => true,
-                'multiple' => true,
-                'required' => false,
-                'data'     => null,
-            ]);
-        }
     }
 
     /**

@@ -136,6 +136,8 @@ class SheetSearchQueryBuilder
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
         $this->filterByHasHappeningParticipation($filters);
+        $this->filterByHasScheduledMeeting($filters);
+        $this->filterByHasInvoice($filters);
         $this->filterByImported($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
@@ -687,6 +689,26 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['hasHappeningParticipation'])) {
             $this->query->addMust((new Term())->setTerm('hasHappeningParticipation', (bool)$filters['hasHappeningParticipation']));
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByHasScheduledMeeting(array &$filters)
+    {
+        if (isset($filters['hasScheduledMeeting'])) {
+            $this->query->addMust((new Term())->setTerm('hasScheduledMeeting', (bool) $filters['hasScheduledMeeting']));
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByHasInvoice(array &$filters)
+    {
+        if (isset($filters['hasInvoice'])) {
+            $this->query->addMust((new Term())->setTerm('hasInvoice', (bool) $filters['hasInvoice']));
         }
     }
 

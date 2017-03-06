@@ -1,0 +1,13 @@
+Proximum\Vimeet\Domain\Model\Invoice\Invoice:
+    invoice_asddays:
+        __construct:
+            - '@event_asddays_2016'
+            - '@sheet_asddays_1'
+            - '@prefix_asddays'
+            - 'As'
+            - '2016'
+            - '0001'
+            - '1000'
+            - '1020'
+            - '20'
+            - <(new DateTime('12-10-2016 08:00:00.000'))>

@@ -65,6 +65,7 @@ admin.filter: Filter
 admin.filter_by: 'Filter by'
 admin.filters.all: All
 admin.filters.reset: 'Reset all the filters'
+admin.global_settings.title: 'Global settings'
 admin.goback.link: Back
 admin.happening_category.add: Add
 admin.happening_category.table.column.color: Color

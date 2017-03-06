@@ -112,12 +112,16 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '@repository.invoice.prefix_repository'
+            - '@security.authorization_checker'
         tags:
             - { name: form.type }
     form_type_event.create_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '@repository.invoice.prefix_repository'
+            - '@security.authorization_checker'
         tags:
             - { name: form.type }
     form_type_type.type_update_type:

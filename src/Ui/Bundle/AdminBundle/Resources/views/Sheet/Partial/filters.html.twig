@@ -38,9 +38,11 @@
                     {{ form_row(form.hasRemainingToPay, {'inline': true}) }}
                     {{ form_row(form.has_order, {'inline': true}) }}
                     {{ form_row(form.has_cart, {'inline': true}) }}
+                    {{ form_row(form.hasInvoice, {'inline': true}) }}
 
                     <hr>
 
+                    {{ form_row(form.hasScheduledMeeting, {'inline': true}) }}
                     {{ form_row(form.hasPendingMeetingPropositions) }}
                     {{ form_row(form.hasNoMeetingRequest) }}
                 </div>

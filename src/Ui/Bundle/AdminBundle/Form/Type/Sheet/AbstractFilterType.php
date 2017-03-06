@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\YesNoType;
@@ -140,18 +141,17 @@ abstract class AbstractFilterType extends AbstractType
                 'multiple'    => false,
                 'expanded'    => true,
                 'required'    => false,
-            ]);
-
-        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
-
-        if (!empty($booleanFilters)) {
-            $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
-                'booleanFilters' => $booleanFilters,
-                'label'          => false
-            ]);
-        }
-
-        $builder
+            ])
+            ->add('hasScheduledMeeting', YesNoType::class, [
+                'label'    => 'form.sheet_filter.children.hasScheduledMeeting.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('hasInvoice', YesNoType::class, [
+                'label'    => 'form.sheet_filter.children.hasInvoice.label',
+                'required' => false,
+                'expanded' => true,
+            ])
             ->add('follower', FollowerChoiceType::class, [
                 'label'      => 'form.sheet_filter.children.follower.label',
                 'event'      => $event,
@@ -166,7 +166,34 @@ abstract class AbstractFilterType extends AbstractType
                 'choice_translation_domain' => 'messages',
                 'expanded'                  => true,
                 'multiple'                  => false,
+            ])
+        ;
+
+        /** @var Event $event */
+        $event = $options['event'];
+
+        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
+
+        if (count($categories) > 0) {
+            $builder->add('category', CategoryChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.category.label',
+                'event'    => $event,
+                'locale'   => $options['locale'],
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+                'data'     => null,
             ]);
+        }
+
+        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
+
+        if (!empty($booleanFilters)) {
+            $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
+                'booleanFilters' => $booleanFilters,
+                'label'          => false
+            ]);
+        }
     }
 
     /**
