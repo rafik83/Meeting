@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Elastica\Result;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -47,11 +48,12 @@ interface SheetSearchAdapterInterface
     /**
      * @param Event  $event
      * @param array  $filters
+     * @param array  $fields
      * @param string $locale
      *
-     * @return array
+     * @return Result[]
      */
-    public function findAll(Event $event, array $filters, $locale);
+    public function findAll(Event $event, array $filters, array $fields = [], $locale);
 
     /**
      * @param Event  $event

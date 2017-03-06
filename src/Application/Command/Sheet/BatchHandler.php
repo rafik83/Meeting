@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Elastica\Result;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -95,11 +96,8 @@ class BatchHandler
     public function handle(Batch $batch)
     {
         if ($batch->selectionType === Batch::SELECTION_TYPE_ALL) {
-            $sheets = $this->sheetSearchAdapter->findAll($batch->event, $batch->filters, $batch->locale);
-
-            $batch->ids = array_map(function (Sheet $sheet) {
-                return $sheet->getId();
-            }, $sheets);
+            $results    = $this->sheetSearchAdapter->findAll($batch->event, $batch->filters, ['id'], $batch->locale);
+            $batch->ids = $this->getIds($results);
         }
 
         if ($batch->validate) {
@@ -155,5 +153,26 @@ class BatchHandler
         }
 
         return new BatchResult(0, $batch->getMessage() . 'no_action');
+    }
+
+    /**
+     * Get IDs of ElasticSearch results sheet ID
+     *
+     * @param Result[] $results
+     *
+     * @return array
+     */
+    private function getIds($results)
+    {
+        $ids = [];
+
+        foreach ($results as $result) {
+            $fields = $result->getFields();
+            if (!empty($fields['id'])) {
+                $ids[] = reset($fields['id']);
+            }
+        }
+
+        return $ids;
     }
 }
