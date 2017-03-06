@@ -16,31 +16,24 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class InvoiceDataQuery
 {
-    /** @var  BillingInfo|null */
-    public $billingInfos;
-    
-    /** @var  Sheet */
+    /** @var Sheet */
     public $sheet;
-    
-    /** @var  Order */
+
+    /** @var Order */
     public $order;
-    
-    /** @var  string */
+
+    /** @var string */
     public $locale;
-    
+
     /**
-     * InvoiceDataQuery constructor.
-     *
-     * @param BillingInfo|null   $billingInfos
-     * @param Sheet              $sheet
-     * @param Order              $order
-     * @param string             $locale
+     * @param Sheet  $sheet
+     * @param Order  $order
+     * @param string $locale
      */
-    public function __construct(BillingInfo $billingInfos = null, Sheet $sheet, Order $order, $locale)
+    public function __construct(Sheet $sheet, Order $order, $locale)
     {
-        $this->billingInfos = $billingInfos;
-        $this->sheet        = $sheet;
-        $this->order        = $order;
-        $this->locale       = $locale;
+        $this->sheet  = $sheet;
+        $this->order  = $order;
+        $this->locale = $locale;
     }
 }

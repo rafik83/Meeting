@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
-use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
@@ -26,9 +25,6 @@ class OrdersToInvoice
     /** @var OrderRepositoryInterface */
     private $orderRepository;
     
-    /** @var  BillingInfoRepositoryInterface */
-    private $billingInfosRepository;
-
     /** @var Merger */
     private $orderMerger;
 
@@ -43,7 +39,6 @@ class OrdersToInvoice
     
     /**
      * @param OrderRepositoryInterface       $orderRepository
-     * @param BillingInfoRepositoryInterface $billingInfosRepository
      * @param Merger                         $orderMerger
      * @param InvoiceDataQueryHandler        $invoiceDataQueryHandler
      * @param VatApplicable                  $vatApplicable
@@ -51,14 +46,12 @@ class OrdersToInvoice
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        BillingInfoRepositoryInterface $billingInfosRepository,
         Merger $orderMerger,
         InvoiceDataQueryHandler $invoiceDataQueryHandler,
         VatApplicable $vatApplicable,
         SerializerAdapterInterface $serializerAdapter
     ) {
         $this->orderRepository          = $orderRepository;
-        $this->billingInfosRepository   = $billingInfosRepository;
         $this->orderMerger              = $orderMerger;
         $this->invoiceDataQueryHandler  = $invoiceDataQueryHandler;
         $this->serializerAdapter        = $serializerAdapter;
@@ -94,11 +87,8 @@ class OrdersToInvoice
             $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
         }
         
-        $billingInfos = $this->billingInfosRepository->getBySheet($sheet);
-
         $view = $this->invoiceDataQueryHandler->handle(
             new InvoiceDataQuery(
-                $billingInfos,
                 $orderMerged->getSheet(),
                 $orderMerged,
                 $orderMerged->getSheet()->getEvent()->getFallback()

@@ -2202,6 +2202,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery }
     query.billing_infos.billing_infos_query_handler:
         class: Proximum\Vimeet\Application\Query\BillingInfos\BillingInfosQueryHandler
+        arguments:
+            - '@repository.billing_info_repository'
     query.sheet.sheet_validation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQueryHandler
         arguments:
@@ -2946,7 +2948,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Order\OrdersToInvoice
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
-            - '@repository.billing_info_repository'
             - '@order.merger'
             - '@query.invoice.invoice_data_query_handler'
             - '@package.specification.vat_applicable'

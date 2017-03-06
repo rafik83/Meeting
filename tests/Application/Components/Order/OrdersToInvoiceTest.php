@@ -21,7 +21,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
-use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -69,8 +68,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
         
-        $billingInfosRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-        
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
@@ -78,7 +75,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            $billingInfosRepository->reveal(),
             new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
@@ -105,15 +101,12 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([]);
     
-        $billingInfosRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            $billingInfosRepository->reveal(),
             new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
@@ -165,7 +158,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            $billingInfosRepository->reveal(),
             new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
@@ -240,8 +232,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
     
-        $billingInfosRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
@@ -249,7 +239,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            $billingInfosRepository->reveal(),
             new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),

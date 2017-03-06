@@ -44,7 +44,12 @@ class InvoiceDataQueryHandler
         $this->summaryQueryHandler      = $summaryQueryHandler;
         $this->balance                  = $balance;
     }
-    
+
+    /**
+     * @param InvoiceDataQuery $invoiceDataQuery
+     *
+     * @return InvoiceDataView
+     */
     public function handle(InvoiceDataQuery $invoiceDataQuery)
     {
         return new InvoiceDataView(
@@ -56,18 +61,7 @@ class InvoiceDataQueryHandler
                )
             ),
             $this->billingInfosQueryHandler->handle(
-                new BillingInfosQuery(
-                    $invoiceDataQuery->billingInfos->getLastname(),
-                    $invoiceDataQuery->billingInfos->getFirstname(),
-                    $invoiceDataQuery->billingInfos->getFunction(),
-                    $invoiceDataQuery->billingInfos->getPhone(),
-                    $invoiceDataQuery->billingInfos->getMobile(),
-                    $invoiceDataQuery->billingInfos->getEmail(),
-                    $invoiceDataQuery->billingInfos->getCompany(),
-                    $invoiceDataQuery->billingInfos->getAddress(),
-                    $invoiceDataQuery->billingInfos->getVatNumber(),
-                    $invoiceDataQuery->billingInfos->getGender()
-                )
+                new BillingInfosQuery($invoiceDataQuery->sheet)
             ),
             $this->balance->getRemainingToPay($invoiceDataQuery->sheet)
         );
