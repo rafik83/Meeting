@@ -214,3 +214,7 @@ migrations:
 	mysql -u root proximum_vimeet -e 'DROP TABLE IF EXISTS `migration_versions`'
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
+
+## Provision supervisor
+provision-supervisor: export ANSIBLE_TAGS = manala_supervisor
+provision-supervisor: provision
