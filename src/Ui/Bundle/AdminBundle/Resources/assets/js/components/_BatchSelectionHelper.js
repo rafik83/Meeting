@@ -45,7 +45,10 @@ BatchSelectionHelper.prototype.selectAll = function (helper) {
     var message = this.helper.querySelector('.batch-helper-message');
 
     message.innerHTML = message.dataset.allSelectedLabel;
-    helper.innerHTML  = helper.dataset.cancelLabel;
+
+    if (parseInt(helper.dataset.isSelectAllEnabled) === 1) {
+        helper.innerHTML = helper.dataset.cancelLabel;
+    }
 
     this.triggerChange(this.helper.dataset.allSheets);
 };
@@ -58,7 +61,10 @@ BatchSelectionHelper.prototype.selectPage = function (helper) {
     var message = this.helper.querySelector('.batch-helper-message');
 
     message.innerHTML = message.dataset.pageSelectedLabel;
-    helper.innerHTML  = helper.dataset.allLabel;
+
+    if (parseInt(helper.dataset.isSelectAllEnabled) === 1) {
+        helper.innerHTML = helper.dataset.allLabel;
+    }
 
     this.triggerChange(this.helper.dataset.pageSheets);
 };
