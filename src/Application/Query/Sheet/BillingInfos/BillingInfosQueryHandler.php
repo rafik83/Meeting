@@ -53,7 +53,8 @@ class BillingInfosQueryHandler
             $billingInfo->getEmail(),
             $billingInfo->getCompany(),
             $billingInfo->getAddress(),
-            $billingInfo->getVatNumber()
+            $billingInfo->getVatNumber(),
+            $billingInfo->getReference()
         );
     }
 }

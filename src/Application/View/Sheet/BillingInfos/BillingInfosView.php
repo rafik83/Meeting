@@ -53,7 +53,11 @@ class BillingInfosView
     /** @var string */
     public $country;
 
+    /** @var string */
+    public $reference;
+
     /**
+     * @param string  $gender
      * @param string  $lastname
      * @param string  $firstname
      * @param string  $function
@@ -63,7 +67,7 @@ class BillingInfosView
      * @param string  $company
      * @param Address $address
      * @param string  $vatNumber
-     * @param string  $gender
+     * @param string  $reference
      */
     public function __construct(
         $gender,
@@ -75,7 +79,8 @@ class BillingInfosView
         $email,
         $company,
         Address $address,
-        $vatNumber
+        $vatNumber,
+        $reference
     ) {
         $this->gender    = $gender;
         $this->lastname  = $lastname;
@@ -90,5 +95,6 @@ class BillingInfosView
         $this->city      = $address->getCity();
         $this->country   = $address->getCountry();
         $this->vatNumber = $vatNumber;
+        $this->reference = $reference;
     }
 }
