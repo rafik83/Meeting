@@ -80,9 +80,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet, participants')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants')
-            ->where('sheet.event = :event')
-            ->andWhere('sheet.inCatalog = true')
+            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -158,10 +156,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->join('sheet.participants', 'participant')
-            ->where('sheet.event = :event')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND sheet.owner = :user OR participant.user = :user'
+            )
             ->setParameter('event', $event->getId())
-            ->andWhere('sheet.owner = :user OR participant.user = :user')
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
@@ -177,9 +178,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND participant.user = :user'
+            )
             ->setParameter('user', $user)
-            ->where('sheet.event = :event')
             ->setParameter('event', $event->getId());
 
         return $queryBuilder->getQuery()->getResult();
@@ -227,9 +232,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'participant.user = :user AND sheet.enable = true AND sheet.type IN (:types)'
+            )
             ->setParameter('user', $user)
-            ->where('sheet.type IN (:types)')
             ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
