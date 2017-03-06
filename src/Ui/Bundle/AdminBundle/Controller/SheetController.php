@@ -90,7 +90,7 @@ class SheetController extends Controller
 
         $sheetFilter = $this->createFilterForm(SheetFilterType::class, $filters, [
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'user'   => $this->getUser(),
         ]);
 

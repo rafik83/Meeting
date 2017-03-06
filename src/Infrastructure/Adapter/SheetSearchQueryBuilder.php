@@ -588,43 +588,35 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $filterAdded    = false;
-        $booleanFilters = (array) $booleanFilters;
+        $booleanFilters = (array)$booleanFilters;
 
-        $nested       = new Nested();
-        $nestedNot    = new Nested();
+        $hasNestedMust = false;
+        $hasNestedMustNot = false;
 
-        $includeTerms = [];
-        $excludeTerms = [];
+        $nestedMust    = new Nested();
+        $boolQueryMust = new BoolQuery();
 
-        foreach ($booleanFilters as $key => $filter) {
-            if ($filter === null) {
-                continue;
+        $nestedMustNot    = new Nested();
+        $boolQueryMustNot = new BoolQuery();
+
+        foreach ($booleanFilters as $key => $isFiltered) {
+            if ($isFiltered === true) {
+                $boolQueryMust->addMust((new Match())->setField('booleanFilter.key', $key));
+                $hasNestedMust = true;
+            } elseif ($isFiltered === false) {
+                $boolQueryMustNot->addMust((new Match())->setField('booleanFilter.key', $key));
+                $hasNestedMustNot = true;
             }
-
-            if ($filter === true) {
-                $includeTerms[] = $key;
-            } elseif ($filter === false) {
-                $excludeTerms[] = $key;
-            }
-
-            $filterAdded = true;
         }
 
-        $termsQuery    = new Terms('booleanFilter.key', $includeTerms);
-        $termsNotQuery = new Terms('booleanFilter.key', $excludeTerms);
+        if (true === $hasNestedMust) {
+            $nestedMust->setQuery($boolQueryMust)->setPath('booleanFilter');
+            $this->query->addMust($nestedMust);
+        }
 
-        if ($filterAdded) {
-            $nested->setQuery($termsQuery)->setPath('booleanFilter');
-            $nestedNot->setQuery($termsNotQuery)->setPath('booleanFilter');
-
-            if (count($includeTerms) > 0) {
-                $this->query->addMust($nested);
-            }
-
-            if (count($excludeTerms) > 0) {
-                $this->query->addMustNot($nestedNot);
-            }
+        if (true === $hasNestedMustNot) {
+            $nestedMustNot->setQuery($boolQueryMustNot)->setPath('booleanFilter');
+            $this->query->addMustNot($nestedMustNot);
         }
     }
 
