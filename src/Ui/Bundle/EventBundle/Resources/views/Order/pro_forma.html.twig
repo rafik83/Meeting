@@ -32,6 +32,13 @@
                 <strong>{{ 'pro_forma.number.title'|trans }}</strong> {{ order.numero }}
             </div>
         </div>
+        {% if pro_forma.billingInfo.reference is not null %}
+            <div class="row">
+                <div class="col-md-12">
+                    <strong>{{ 'pro_forma.reference.title'|trans }}</strong> {{ pro_forma.billingInfo.reference }}
+                </div>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-12">
                 <strong>{{ 'pro_forma.date.title'|trans }}</strong> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
