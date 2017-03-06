@@ -81,6 +81,8 @@
                     {{ form_row(filter_form.boolean_filters) }}
                 {% endif %}
                 {{ form_row(filter_form.imported) }}
+                {{ form_row(filter_form.hasScheduledMeeting) }}
+                {{ form_row(filter_form.hasInvoice) }}
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-9">{{ form_widget(filter_form.submit) }}</div>
                 </div>

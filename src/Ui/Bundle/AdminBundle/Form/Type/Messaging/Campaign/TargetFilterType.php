@@ -105,6 +105,14 @@ class TargetFilterType extends AbstractType
                 'label'       => 'form.sheet_filter.children.imported.label',
                 'required'    => false,
             ])
+            ->add('hasScheduledMeeting', YesNoType::class, [
+                'label'       => 'form.sheet_filter.children.hasScheduledMeeting.label',
+                'required'    => false,
+            ])
+            ->add('hasInvoice', YesNoType::class, [
+                'label'       => 'form.sheet_filter.children.hasInvoice.label',
+                'required'    => false,
+            ])
         ;
 
         $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
