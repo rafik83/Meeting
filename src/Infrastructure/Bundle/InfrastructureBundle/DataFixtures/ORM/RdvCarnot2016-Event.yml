@@ -1,15 +1,3 @@
-Proximum\Vimeet\Domain\Model\Invoice\Prefix:
-    prefix_default:
-        __construct:
-            - 'Vimeet'
-            - 'Vi'
-            - true
-    prefix_rdvcarnot:
-        __construct:
-            - 'RdvCarnot'
-            - 'Rdv'
-            - false
-
 Proximum\Vimeet\Domain\Model\Address (local):
     event_rdv_carnot_2016_payment_address_event:
         __construct:
@@ -30,6 +18,13 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
         happeningsOpenDate: <dateTimeBetween('-15days', 'now')>
         schedulePublishDate: <dateTimeBetween('-10days', 'now')>
 
+Proximum\Vimeet\Domain\Model\Invoice\Prefix:
+    prefix_rdv_carnot:
+        __construct:
+            - 'RdvCarnot'
+            - 'Rdv'
+            - false
+
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
         __construct:
@@ -44,7 +39,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - rdv-carnot-2016.<domain()>    #domain
             - "PROXIMUM"                    #organiserName
             - 'team-project@example.net'    #emailTeam
-            - '@prefix_rdvcarnot'
+            - '@prefix_rdv_carnot'
         assetPath: ''
         configuration: '@event_rdv_carnot_2016_configuration'
         paymentAddress: '@event_rdv_carnot_2016_payment_address_event'

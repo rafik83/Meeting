@@ -148,7 +148,7 @@ $locale = $event->getAvailableLocale($request->getLocale);
 
 Se connecter à la prod pour dumper la DB
 
-        $ ssh proximum-web-apache-01
+        $ ssh vimeet-prod1
         $ cd ~/proximum-vimeet.project.local/htdocs/current
         $ cat app/config/parameters.yml # pour afficher le databasename, host, port, user et password de la DB
         $ mysqldump --host [host] --port [port] -u [username] -p[password] [databasename] > prod.sql
@@ -157,7 +157,7 @@ Se connecter à la prod pour dumper la DB
 Puis en local, dans le répertoire du projet, télécharger la DB
 
         $ cd path/to/local/vimeet
-        $ scp proximum-web-apache-01:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
+        $ scp vimeet-prod1:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
 
 Importer la DB depuis la VM
 
@@ -167,6 +167,21 @@ Importer la DB depuis la VM
 
 Se connecter à la prod et supprimer le fichier dumpé
 
-        $ ssh proximum-web-apache-01
+        $ ssh vimeet-prod1
         $ cd ~/proximum-vimeet.project.local/htdocs/current
         $ rm prod.sql
+
+### Jobs Queue
+
+* [Interface supervisord](http://vimeet.proximum.dev:9001/)
+* [Liste des jobs](http://vimeet.proximum.dev/app_dev.php/admin/fr/jobs/)
+
+Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
+
+
+#### Ajouter un job
+
+Un job correspond une instance de l'entité `JMS\JobQueueBundle\Entity\Job`. Chaque job doit lancer une command console Symfony. 
+
+Pour ajouter un job, ajouter une méthode dans `Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter` et injecter la classe dans le service programmant le job.
+

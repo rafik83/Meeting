@@ -108,6 +108,8 @@
 
     {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
 
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+
     <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-sheets="{{ sheetsLimit }}" data-all-sheets="{{ sheets.total }}">
         <p>
             <span class="batch-helper-message"
