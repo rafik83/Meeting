@@ -50,11 +50,6 @@ class Message
     private static $template = 'MailBundle:Mail:Messaging/emailing.html.twig';
 
     /**
-     * @var string
-     */
-    private static $locale = 'fr';
-
-    /**
      * @param Event              $event
      * @param \DateTimeInterface $createdAt
      * @param string             $name
@@ -130,13 +125,11 @@ class Message
         return $this->createdAt;
     }
 
+    /**
+     * @return string
+     */
     public function getTemplate()
     {
         return self::$template;
-    }
-
-    public function getLocale()
-    {
-        return self::$locale;
     }
 }
