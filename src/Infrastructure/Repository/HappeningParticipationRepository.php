@@ -162,7 +162,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('participation')
+            ->select('participation, happening')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
             ->where('happening.event = :event')
