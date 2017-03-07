@@ -99,7 +99,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('sheet.participants', 'participants')
             ->where('sheet.event = :event')
             ->andWhere('sheet.inCatalog = true')
-            ->andWhere('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE r.from = sheet OR r.to = sheet AND r.state = :approved)')
+            ->andWhere('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
             ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
 
@@ -160,9 +160,31 @@ class SheetRepository implements SheetRepositoryInterface
                 'sheet.participants',
                 'participant',
                 'WITH',
-                'sheet.event = :event AND sheet.enable = true AND sheet.owner = :user OR participant.user = :user'
+                'sheet.event = :event AND sheet.enable = true AND (sheet.owner = :user OR participant.user = :user)'
             )
-            ->setParameter('event', $event->getId())
+            ->setParameter('event', $event)
+            ->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllSheetsByUserAndEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND (sheet.owner = :user OR participant.user = :user)'
+            )
+            ->setParameter('event', $event)
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();

@@ -104,15 +104,14 @@ class UserChecker extends SymfonyUserChecker
      */
     private function checkSheetDisabled(User $user, Event $event)
     {
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+        $sheets = $this->sheetRepository->getAllSheetsByUserAndEvent($user, $event);
 
-        if (!empty($sheets)) {
-            /** @var Sheet $sheet */
-            $sheet = reset($sheets);
+        $disabledSheets = array_filter($sheets, function(Sheet $sheet) {
+            return !$sheet->isEnabled();
+        });
 
-            if (false === $sheet->isEnabled()) {
-                throw new SheetDisabledException('login.error.sheetDisabled');
-            }
+        if (count($sheets) === count($disabledSheets)) {
+            throw new SheetDisabledException('login.error.sheetDisabled');
         }
     }
 
