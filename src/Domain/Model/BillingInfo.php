@@ -339,4 +339,12 @@ class BillingInfo implements MailRecipientInterface
             && null !== $this->address->getCity()
             && null !== $this->address->getCountry();
     }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        $this->getSheet()->getOwnerLocale();
+    }
 }
