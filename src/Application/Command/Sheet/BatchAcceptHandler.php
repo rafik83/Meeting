@@ -54,13 +54,8 @@ class BatchAcceptHandler
      */
     public function handle(BatchAccept $batchAccept)
     {
-        // Get sheets
-        $sheets = $this->sheetRepository->getSheetsById($batchAccept->ids);
-
-        // Ensure all sheets are not accepted
-        $sheets = array_filter($sheets, function (Sheet $sheet) {
-            return !$sheet->isAccepted();
-        });
+        // Get sheets unaccepted by id
+        $sheets = $this->sheetRepository->getSheetsUnacceptedById($batchAccept->ids);
 
         // Accept sheets
         foreach ($sheets as $sheet) {

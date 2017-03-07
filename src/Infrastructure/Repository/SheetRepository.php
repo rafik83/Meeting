@@ -206,13 +206,20 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getSheetsById(array $ids)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet')
-            ->where('sheet.id IN (:ids)')
-            ->setParameter('ids', $ids);
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsUnacceptedById(array $ids)
+    {
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder
+            ->andWhere('sheet.state != state')
+            ->setParameter('state', Sheet::STATE_ACCEPTED);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -439,5 +446,23 @@ class SheetRepository implements SheetRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $ids
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function findByIdsQueryBuilder(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder;
     }
 }
