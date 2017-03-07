@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\BillingInfos;
+namespace Proximum\Vimeet\Application\Query\Sheet\BillingInfos;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 

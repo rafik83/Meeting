@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\BillingInfos;
+namespace Proximum\Vimeet\Application\Query\Sheet\BillingInfos;
 
 use Proximum\Vimeet\Application\View\Sheet\BillingInfos\BillingInfosView;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
