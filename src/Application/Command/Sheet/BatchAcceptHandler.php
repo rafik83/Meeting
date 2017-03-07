@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAcceptHandler
