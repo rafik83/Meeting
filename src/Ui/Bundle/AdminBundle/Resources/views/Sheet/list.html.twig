@@ -113,16 +113,16 @@
     <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-sheets="{{ sheetsLimit }}" data-all-sheets="{{ sheets.total }}">
         <p>
             <span class="batch-helper-message"
-                  data-all-selected-label="{{ 'admin.sheet.batch.allSelected.label'|trans({'%sheets%': sheets.total})|raw }}"
-                  data-page-selected-label="{{ 'admin.sheet.batch.selection.label'|trans({'%sheets%': sheetsLimit})|raw }}">
-                {{ 'admin.sheet.batch.selection.label'|trans({'%sheets%': sheetsLimit})|raw }}
+                  data-all-selected-label="{{ 'admin.sheet.batch.allSelected.label'|trans({'%sheets%': sheets.total})|html }}"
+                  data-page-selected-label="{{ 'admin.sheet.batch.selection.label'|trans({'%sheets%': sheetsLimit})|html }}">
+                {{ 'admin.sheet.batch.selection.label'|trans({'%sheets%': sheetsLimit})|html }}
             </span>
                 <span id="batch-select-all" class="batch-helper-select-all"
                       data-is-select-all-enabled="{{ sheets.total > sheets.limit ? 1 : 0 }}"
-                      data-all-label="{{ 'admin.sheet.batch.selectionAll.label'|trans({'%allSheets%': sheets.total})|raw }}"
+                      data-all-label="{{ 'admin.sheet.batch.selectionAll.label'|trans({'%allSheets%': sheets.total})|html }}"
                       data-cancel-label="{{ 'admin.sheet.batch.cancelSelection.label'|trans }}">
                     {% if sheets.total > sheets.limit %}
-                        {{ 'admin.sheet.batch.selectionAll.label'|trans({'%allSheets%': sheets.total})|raw }}
+                        {{ 'admin.sheet.batch.selectionAll.label'|trans({'%allSheets%': sheets.total})|html }}
                     {% endif %}
                 </span>
         </p>

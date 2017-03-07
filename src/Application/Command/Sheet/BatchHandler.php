@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Elastica\Result;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class BatchHandler
 {
@@ -162,7 +161,7 @@ class BatchHandler
      *
      * @return array
      */
-    private function getIds($results)
+    private function getIds(array $results)
     {
         $ids = [];
 
