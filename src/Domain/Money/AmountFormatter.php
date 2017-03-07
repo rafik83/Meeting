@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Money;
 class AmountFormatter
 {
     /**
-     * Get decimal amount and return an integer amount in centimes
+     * Get decimal amount and return an integer amount in cents
      * Examples : floatToIntAmount(12.59) will return 1259
      *            floatToIntAmount(12)    will return 1200
      *
@@ -28,7 +28,7 @@ class AmountFormatter
     }
 
     /**
-     * @param int   $amount in centimes
+     * @param int   $amount in cents
      * @param float $rate
      *
      * @return int
