@@ -104,7 +104,7 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
 
         $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA];
         $this->participantInfoGuesser->guessParticipantCompleteName($recipient->reveal(), $locale)->willReturn('Henri Désiré Landru');
-        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', [])->willReturn('url-to-event-agenda');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['_locale' => 'fr'])->willReturn('url-to-event-agenda');
 
         $this->assertEquals(
             [
@@ -125,7 +125,7 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
 
         $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_SHEET_PLANNING];
         $this->participantInfoGuesser->guessParticipantCompleteName($recipient, $locale)->willReturn('Henri Désiré Landru');
-        $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', [])->willReturn('url-to-event-agenda');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['_locale' => 'fr'])->willReturn('url-to-event-agenda');
         $this->sheetPlanningViewQueryHandler
             ->handle(new SheetPlanningViewQuery($sheet, $locale, $recipient))
             ->shouldBeCalled()
