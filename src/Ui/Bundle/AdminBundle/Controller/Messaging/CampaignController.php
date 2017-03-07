@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
-use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
@@ -203,57 +202,52 @@ class CampaignController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
-        $campaignListUrl = $this->generateUrl('admin_messaging_campaign_list', ['event' => $event->getId()]);
-        $token           = $request->request->get('_token');
+        $url = $this->generateUrl('admin_messaging_campaign_list', ['event' => $event->getId(),]);
 
-        if (!$token || !$this->isTokenValid($token)) {
-            $this->handleError($campaign, 'flash.messaging.campaign.send.failure.invalid_csrf');
+        // Validate CSRF token
+        if (!$this->isTokenValid($request)) {
+            $this->addFailureMessage($campaign, 'flash.messaging.campaign.send.failure.invalid_csrf');
 
-            return $this->redirect($campaignListUrl);
+            return $this->redirect($url);
         }
 
-        try {
-            $this->get('tactician.commandbus')->handle(new Send($campaign));
-        } catch (CampaignSendingFailedException $exception) {
-            $this->handleError($campaign, $exception->getMessage(), $exception);
+        $this->get('tactician.commandbus')->handle(new Send($campaign));
 
-            return $this->redirect($campaignListUrl);
-        }
-
+        // Add flash
         $this->addFlash('success', 'flash.messaging.campaign.send.success');
 
-        return $this->redirect($campaignListUrl);
+        return $this->redirect($url);
     }
 
     /**
-     * Generate and add
-     *
-     * @param Campaign        $campaign
-     * @param string          $reason
-     * @param \Exception|null $exception
-     */
-    private function handleError(Campaign $campaign, $reason, \Exception $exception = null)
-    {
-        $message = $this->get('translator')->trans(
-            'flash.messaging.campaign.send.failure',
-            ['%reason%' => $this->get('translator')->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
-            'flashes'
-        );
-
-        if (null !== $exception) {
-            $this->get('logger')->error($message, ['exception' => $exception]);
-        }
-
-        $this->addFlash('error', $message);
-    }
-
-    /**
-     * @param $token
+     * @param Request $request
      *
      * @return bool
      */
-    private function isTokenValid($token)
+    private function isTokenValid(Request $request)
     {
-        return $token ? $this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken('send_campaign', $token)) : false;
+        if (!$request->request->has('_token')) {
+            return false;
+        }
+
+        $token = new CsrfToken('send_campaign', $request->request->get('_token'));
+
+        return $this->get('security.csrf.token_manager')->isTokenValid($token);
+    }
+
+    /**
+     * @param Campaign $campaign
+     * @param          $reason
+     */
+    private function addFailureMessage(Campaign $campaign, $reason)
+    {
+        $translator = $this->get('vimeet_infrastructure.adapter.translator_adapter');
+        $message    = $translator->trans(
+            'flash.messaging.campaign.send.failure',
+            ['%reason%' => $translator->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
+            'flashes'
+        );
+
+        $this->addFlash('error', $message);
     }
 }

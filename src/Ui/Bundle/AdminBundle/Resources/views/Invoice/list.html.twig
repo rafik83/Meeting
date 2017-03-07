@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="page-header">{{ 'admin.invoice.title'|trans }}</h1>
 
-    <a href="{{ path('admin_invoice_globals_create') }}" data-toggle="modal" class="btn btn-success">{{ 'admin.invoice.create.button'|trans }}</a>
+    <a href="{{ path('admin_invoice_globals_create') }}" data-toggle="modal" class="btn btn-primary">{{ 'admin.invoice.create.button'|trans }}</a>
 
     <table class="table">
         <thead>
@@ -11,7 +11,6 @@
             <th>{{ 'admin.invoice.list.title'|trans }}</th>
             <th>{{ 'admin.invoice.list.prefix'|trans }}</th>
             <th>{{ 'admin.invoice.list.isDefault'|trans }}</th>
-            <th></th>
         </tr>
         </thead>
         <tbody>

@@ -1,0 +1,60 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Sheet\BillingInfos;
+
+use Proximum\Vimeet\Application\View\Sheet\BillingInfos\BillingInfosView;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
+use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+
+class BillingInfosQueryHandler
+{
+    /** @var BillingInfoRepositoryInterface */
+    private $billingInfosRepository;
+
+    /**
+     * @param BillingInfoRepositoryInterface $billingInfosRepository
+     */
+    public function __construct(BillingInfoRepositoryInterface $billingInfosRepository)
+    {
+        $this->billingInfosRepository = $billingInfosRepository;
+    }
+
+    /**
+     * @param BillingInfosQuery $billingInfosQuery
+     *
+     * @return BillingInfosView
+     * @throws MissingBillingInfoException
+     */
+    public function handle(BillingInfosQuery $billingInfosQuery)
+    {
+        $billingInfo = $this->billingInfosRepository->getBySheet($billingInfosQuery->sheet);
+
+        if (null === $billingInfo) {
+            throw new MissingBillingInfoException(
+                sprintf('Missing billing info for sheet %s', $billingInfosQuery->sheet->getId())
+            );
+        }
+
+        return new BillingInfosView(
+            $billingInfo->getGender(),
+            $billingInfo->getLastname(),
+            $billingInfo->getFirstname(),
+            $billingInfo->getFunction(),
+            $billingInfo->getPhone(),
+            $billingInfo->getMobile(),
+            $billingInfo->getEmail(),
+            $billingInfo->getCompany(),
+            $billingInfo->getAddress(),
+            $billingInfo->getVatNumber(),
+            $billingInfo->getReference()
+        );
+    }
+}

@@ -191,11 +191,12 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order')
+            ->select('_order, row')
             ->from(Order::class, '_order', '_order.id')
+            ->join('_order.rows', 'row')
             ->where('_order.sheet = :sheet')
-            ->andWhere('_order.invoice is NULL')
             ->andWhere('_order.cancelled = false')
+            ->andWhere('_order.invoice IS NULL')
             ->setParameter('sheet', $sheet)
             ->orderBy('_order.createdAt', 'DESC');
 

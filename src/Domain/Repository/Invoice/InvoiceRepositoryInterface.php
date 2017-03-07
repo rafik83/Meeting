@@ -46,4 +46,11 @@ interface InvoiceRepositoryInterface
      * @return int|null
      */
     public function isSheetInvoiced(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasInvoice(Sheet $sheet);
 }

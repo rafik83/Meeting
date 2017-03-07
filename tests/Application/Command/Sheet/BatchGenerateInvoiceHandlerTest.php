@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice;
 use Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler;
+use Proximum\Vimeet\Application\Components\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Order\OrdersToInvoice;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
@@ -45,16 +45,16 @@ class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
         $prefix      = new Prefix('Vimeet', 'Vi');
         $invoice     = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, 4200, 4704, 504, $date);
         $orderToInvoiceView = new OrdersToInvoiceView([$order], [], 4200, 504, 4704);
-        
-        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $orderRepository     = $this->prophesize(OrderRepositoryInterface::class);
-        $ordersToInvoiceView = $this->prophesize(OrdersToInvoice::class);
-        $createHandler       = $this->prophesize(CreateHandler::class);
-        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
+        $ordersToInvoice = $this->prophesize(OrdersToInvoice::class);
+        $createHandler   = $this->prophesize(CreateHandler::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         
         $sheetRepository->getSheetsById([1])->shouldBeCalled()->willReturn([$sheet]);
-        
-        $ordersToInvoiceView->getOrdersToInvoiceViewForSheet($sheet)->shouldBeCalled()->willReturn($orderToInvoiceView);
+
+        $ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet)->shouldBeCalled()->willReturn($orderToInvoiceView);
         
         $orderRepository->set($order)->shouldBeCalled();
     
@@ -69,7 +69,7 @@ class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new BatchGenerateInvoice([1], $admin);
         $handler = new BatchGenerateInvoiceHandler(
             $sheetRepository->reveal(),
-            $ordersToInvoiceView->reveal(),
+            $ordersToInvoice->reveal(),
             $orderRepository->reveal(),
             $createHandler->reveal(),
             $eventDispatcher->reveal(),

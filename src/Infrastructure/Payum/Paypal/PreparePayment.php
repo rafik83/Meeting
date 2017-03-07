@@ -96,7 +96,7 @@ class PreparePayment
         $payment->setClientId($transaction->getSheet()->getId());
         $payment->setClientEmail($billingInfo->getEmail());
         $payment->setTransaction($transaction);
-        $payment->setDescription($description);
+        $payment->setDescription(substr($description, 127));
 
         $payment->setDetails(
             [

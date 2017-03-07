@@ -49,6 +49,10 @@ class UpdateInfoType extends AbstractType
             ->add('city', TextType::class, ['required' => true])
             ->add('country', CountryType::class, ['required' => true, 'select2' => true, 'placeholder' => ''])
             ->add('vatNumber', TextType::class, ['required' => false])
+            ->add('reference', TextType::class, [
+                'required' => false,
+                'placeholder' => 'form.billing_info_update.children.reference.placeholder'
+            ])
         ;
     }
 

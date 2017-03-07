@@ -1,4 +1,4 @@
-set :domain,    "proximum-vimeet-preprod"
+set :domain,    "vimeet-preprod"
 set :deploy_to, "/var/www/proximum-vimeet.project.local/htdocs"
 set :user,      "www-data"
 

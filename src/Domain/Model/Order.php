@@ -217,7 +217,7 @@ class Order
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getGroupsData()
     {
@@ -301,7 +301,7 @@ class Order
             $total += $promotionCode->getPrice();
         }
 
-        return $this->fixAmount($total);
+        return $total;
     }
 
     /**
@@ -312,7 +312,7 @@ class Order
         $total = $this->getTotalWithoutVat();
 
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            return $this->fixAmount($total * $this->vatRate / 100);
+            return $total * $this->vatRate / 100;
         }
 
         return 0;
@@ -337,7 +337,7 @@ class Order
      */
     public function getTotal()
     {
-        return $this->fixAmount($this->getTotalWithVat());
+        return $this->getTotalWithVat();
     }
 
     /**
@@ -423,7 +423,27 @@ class Order
     public function getCustomRowsForProduct(Row $parentRow)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
-            return !$row->isProduct() && $parentRow === $row->getParentRow();
+            return !$row->isProduct() && null !== $row->getParentRow() && $parentRow->getId() === $row->getParentRow()->getId();
+        });
+    }
+
+    /**
+     * @return false|Order\Row[]
+     */
+    public function getRowsWithoutParent()
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+            return !$row->hasParentRow();
+        });
+    }
+
+    /**
+     * @return false|Order\Row[]
+     */
+    public function getRowsWithParent()
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+            return $row->hasParentRow();
         });
     }
 
@@ -439,8 +459,7 @@ class Order
         }
 
         foreach ($this->rows as $row) {
-            if (null !== $row->getProduct()
-              && $row->getProduct() === $product) {
+            if (null !== $row->getProduct() && $row->getProduct() === $product) {
                 return $row;
             }
         }
@@ -652,15 +671,5 @@ class Order
             [],
             $dateTime
         );
-    }
-
-    /**
-     * @param float|int $amount
-     *
-     * @return float|int
-     */
-    private function fixAmount($amount)
-    {
-        return ((int) round(100 * $amount)) / 100;
     }
 }
