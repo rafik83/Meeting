@@ -345,6 +345,6 @@ class BillingInfo implements MailRecipientInterface
      */
     public function getLocale()
     {
-        $this->getSheet()->getOwnerLocale();
+        return $this->getSheet()->getOwnerLocale();
     }
 }
