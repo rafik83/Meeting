@@ -106,6 +106,10 @@ class UserChecker extends SymfonyUserChecker
     {
         $sheets = $this->sheetRepository->getAllSheetsByUserAndEvent($user, $event);
 
+        if (empty($sheets)) {
+            return;
+        }
+
         $disabledSheets = array_filter($sheets, function(Sheet $sheet) {
             return !$sheet->isEnabled();
         });
