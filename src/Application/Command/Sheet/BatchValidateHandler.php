@@ -54,13 +54,8 @@ class BatchValidateHandler
      */
     public function handle(BatchValidate $batchValidate)
     {
-        // Get sheets
-        $sheets = $this->sheetRepository->getSheetsById($batchValidate->ids);
-
-        // Ensure all sheets are not validated
-        $sheets = array_filter($sheets, function (Sheet $sheet) {
-            return !$sheet->isValidated();
-        });
+        // Get unvalidated sheets
+        $sheets = $this->sheetRepository->getUnvalidatedSheetsById($batchValidate->ids);
 
         // Validate sheets
         /** @var Sheet $sheet */

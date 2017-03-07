@@ -105,6 +105,13 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getUnvalidatedSheetsById(array $ids);
+
+    /**
      * @param User  $user
      * @param array $types
      *
