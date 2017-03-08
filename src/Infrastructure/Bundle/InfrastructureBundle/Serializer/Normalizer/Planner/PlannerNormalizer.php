@@ -71,15 +71,15 @@ class PlannerNormalizer implements NormalizerInterface, NormalizerAwareInterface
             ];
         }
 
-        if (!empty($object->meetingList)) {
-            $data['meetingList'] = [
-                'Meeting' => $this->normalizer->normalize($object->meetingList, $format, $context),
-            ];
-        }
-
         if (!empty($object->spotList)) {
             $data['spotList'] = [
                 'Spot' => $this->normalizer->normalize($object->spotList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->meetingList)) {
+            $data['meetingList'] = [
+                'Meeting' => $this->normalizer->normalize($object->meetingList, $format, $context),
             ];
         }
 

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\View\Meeting\MeetingWithLockedSpotAndSlotView;
 
 interface MeetingRepositoryInterface
 {
@@ -126,6 +127,24 @@ interface MeetingRepositoryInterface
      *
      * @return mixed
      *
+     * Example of result:
+     *  [
+     *      1 => [
+     *          'm'               => Meeting,
+     *          'fromParticipant' => fromParticipant,
+     *          'toParticipant'   => toParticipant,
+     *          'meetingBegin'    => slot.begin,
+     *          'meetingEnd'      => slot.end,
+     *          'spotReference'   => spot.reference
+     *      ]
+     *  ]
      */
     public function getAllCompleteByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return MeetingWithLockedSpotAndSlotView[]
+     */
+    public function getMeetingWithLockedSpotAndSlotViewByEvent(Event $event);
 }

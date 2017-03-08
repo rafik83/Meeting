@@ -14,57 +14,60 @@ use Proximum\Vimeet\Application\Exception\Planner\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Planner\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Planner\MeetingView;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
+use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
 class MeetingViewQueryHandler
 {
-    /**
-     * @var SheetView[]
-     */
+    /** @var SheetView[] */
     private $sheets;
 
-    /**
-     * @var ParticipantView[]
-     */
+    /** @var ParticipantView[] */
     private $participants;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $dispatch = [];
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var Request[]
-     */
+    /** @var Request[] */
     private $requests = [];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $recursiveDepth = 0;
 
-    /**
-     * @var VisioGuesser
-     */
+    /** @var VisioGuesser */
     private $visioGuesser;
+
+    /** @var SpotView[] */
+    private $spots;
+
+    /** @var SlotView[] */
+    private $slots;
+
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
 
     /**
      * @param RequestRepositoryInterface $requestRepository
+     * @param MeetingRepositoryInterface $meetingRepository
      * @param VisioGuesser               $visioGuesser
      */
-    public function __construct(RequestRepositoryInterface $requestRepository, VisioGuesser $visioGuesser)
-    {
+    public function __construct(
+        RequestRepositoryInterface $requestRepository,
+        MeetingRepositoryInterface $meetingRepository,
+        VisioGuesser $visioGuesser
+    ) {
         $this->requestRepository = $requestRepository;
+        $this->meetingRepository = $meetingRepository;
         $this->visioGuesser      = $visioGuesser;
     }
 
@@ -79,62 +82,71 @@ class MeetingViewQueryHandler
         $meetingViews = [];
 
         foreach ($this->requests as $request) {
-            if (!$request->hasMeeting()) {
-                try {
-                    $sheetsList = [
-                        $this->getSheetById($request->getFromSheet()->getId()),
-                        $this->getSheetById($request->getToSheet()->getId()),
-                    ];
+            try {
+                $sheetsList = [
+                    $this->getSheetById($request->getFromSheet()->getId()),
+                    $this->getSheetById($request->getToSheet()->getId()),
+                ];
 
-                    $participantsList = [];
+                $participantsList = [];
 
-                    if ($request->hasFromParticipants()) {
+                if ($request->hasFromParticipants()) {
+                    /** @var Participant $participant */
+                    foreach ($request->getFromParticipantsArray() as $participant) {
+                        $participantsList[] = $this->getParticipantById($participant->getId());
+                    }
+                } else {
+                    // No preference on from
+                    // If sheet has only one participant
+                    if ($request->getFromSheet()->countParticipant() === 1) {
                         /** @var Participant $participant */
-                        foreach ($request->getFromParticipantsArray() as $participant) {
+                        foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
                             $participantsList[] = $this->getParticipantById($participant->getId());
                         }
                     } else {
-                        // No preference on from
-                        // If sheet has only one participant
-                        if ($request->getFromSheet()->countParticipant() === 1) {
-                            /** @var Participant $participant */
-                            foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
-                                $participantsList[] = $this->getParticipantById($participant->getId());
-                            }
-                        } else {
-                            $this->resetRecursiveDepth();
-                            $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
-                        }
+                        $this->resetRecursiveDepth();
+                        $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
                     }
-
-                    if ($request->hasToParticipants()) {
-                        foreach ($request->getToParticipantsArray() as $participant) {
-                            $participantsList[] = $this->getParticipantById($participant->getId());
-                        }
-                    } else {
-                        // not preference on to
-                        // If sheet has only one participant
-                        if ($request->getToSheet()->countParticipant() === 1) {
-                            /** @var Participant $participant */
-                            foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
-                                $participantsList[] = $this->getParticipantById($participant->getId());
-                            }
-                        } else {
-                            $this->resetRecursiveDepth();
-                            $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
-                        }
-                    }
-
-                    $meetingViews[] = new MeetingView(
-                        $request->getId(),
-                        $sheetsList,
-                        $participantsList,
-                        $this->visioGuesser->hasMeetingRequestParticipantVisio($request)
-                    );
-                } catch (SheetNotFoundException $exception) {
-                    // In case of a sheet not in catalog but with meeting request
-                    continue;
                 }
+
+                if ($request->hasToParticipants()) {
+                    foreach ($request->getToParticipantsArray() as $participant) {
+                        $participantsList[] = $this->getParticipantById($participant->getId());
+                    }
+                } else {
+                    // not preference on to
+                    // If sheet has only one participant
+                    if ($request->getToSheet()->countParticipant() === 1) {
+                        /** @var Participant $participant */
+                        foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
+                            $participantsList[] = $this->getParticipantById($participant->getId());
+                        }
+                    } else {
+                        $this->resetRecursiveDepth();
+                        $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
+                    }
+                }
+
+                $meetingView = new MeetingView(
+                    $request->getId(),
+                    $sheetsList,
+                    $participantsList,
+                    $this->visioGuesser->hasMeetingRequestParticipantVisio($request)
+                );
+
+                if ($request->hasMeeting()) {
+                    $meeting = $request->getMeeting();
+
+                    if ($meeting !== null) {
+                        $meetingView->slot = $meeting->getSlot();
+                        $meetingView->spot = $meeting->getSpot();
+                    }
+                }
+
+                $meetingViews[] = $meetingView;
+            } catch (SheetNotFoundException $exception) {
+                // In case of a sheet not in catalog but with meeting request
+                continue;
             }
         }
 
@@ -154,12 +166,43 @@ class MeetingViewQueryHandler
      */
     private function setUp(MeetingViewQuery $query)
     {
-        $this->indexSheetsById($query);
-        $this->indexParticipantsById($query);
+        $this->indexById($query);
         $this->requests = $this->requestRepository->getAllAcceptedByEvent($query->event);
-        $this->countRequestBySheet();
 
+        if ($query->resetSolution === false) {
+
+        }
+
+        $this->countRequestBySheet();
         $this->calculateAssignation();
+    }
+
+    private function indexById(MeetingViewQuery $query)
+    {
+        $this->indexSheetsById($query);
+        $this->indexSpotsById($query);
+        $this->indexSlotsById($query);
+        $this->indexParticipantsById($query);
+    }
+
+    /**
+     * @param MeetingViewQuery $query
+     */
+    private function indexSpotsById(MeetingViewQuery $query)
+    {
+        foreach ($query->spots as $spot) {
+            $this->spots[$spot->id] = $spot;
+        }
+    }
+
+    /**
+     * @param MeetingViewQuery $query
+     */
+    private function indexSlotsById(MeetingViewQuery $query)
+    {
+        foreach ($query->slots as $slot) {
+            $this->slots[$slot->id] = $slot;
+        }
     }
 
     /**
@@ -320,5 +363,15 @@ class MeetingViewQueryHandler
 
         // Otherwise, recursivity
         return $this->getParticipantOfSheet($sheet);
+    }
+
+    private function getSpot()
+    {
+
+    }
+
+    private function getSlot()
+    {
+
     }
 }

@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
+use Proximum\Vimeet\Domain\View\Meeting\MeetingWithLockedSpotAndSlotView;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
@@ -373,6 +374,28 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->andWhere('meeting.spot = :spot')
             ->setParameter('slot', $meetingSlot)
             ->setParameter('spot', $spot);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMeetingWithLockedSpotAndSlotViewByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('new Proximum\Vimeet\Domain\View\Meeting\MeetingWithLockedSpotAndSlotView(request.id, slot.id, spot.id, meeting.blockedSlot, meeting.blockedSpot)')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.request', 'request')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.spot', 'spot')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event)
+            ->where('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
     }
