@@ -30,7 +30,6 @@ use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
@@ -66,16 +65,16 @@ class SheetController extends Controller
         $selectedSheetsPage = $request->query->getInt('page', 1);
 
         // redirect to list with default filters if no parameters
-        if (empty($request->query->all()) && empty($this->get('filter.sheet_filter')->get())) {
+        if (!$this->isRequestContainFilters($request) && empty($this->get('filter.sheet_filter')->get())) {
             return $this->redirectToRoute('admin_sheet', array_merge(
-                ['event' => $event->getId()],
+                ['event' => $event->getId(), 'page' => $selectedSheetsPage],
                 FilterFullType::getDefaultFilters()
             ));
         }
 
-        if (empty($request->query->all()) && $this->get('filter.sheet_filter')->get() !== null) {
+        if (!$this->isRequestContainFilters($request) && $this->get('filter.sheet_filter')->get() !== null) {
             return $this->redirectToRoute('admin_sheet', array_merge(
-                ['event' => $event->getId()],
+                ['event' => $event->getId(), 'page' => $selectedSheetsPage],
                 $this->get('filter.sheet_filter')->get()
             ));
         }
@@ -585,5 +584,25 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+    }
+
+    /**
+     * Check if request contains Sheet filters. Exclude page query parameter
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isRequestContainFilters(Request $request)
+    {
+        if (empty($request->query->all())) {
+            return false;
+        }
+
+        if (count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
+            return false;
+        }
+
+        return true;
     }
 }
