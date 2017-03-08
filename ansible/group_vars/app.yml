@@ -213,3 +213,22 @@ app_patterns:
   #        - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
   #        # Dev
   #        - autostart:       false
+
+
+
+  ##############
+  # Supervisor #
+  ##############
+
+  supervisor_configs:
+    - file:     app.conf
+      template: configs/app_program.{{ env }}.j2
+      config:
+        - jms-job-queue:
+          - command:        php bin/console jms-job-queue:run --no-interaction -vv
+          - directory:      "{{ app.dir }}{{ app.dir_release }}"
+          - user:           "{{ app.user }}"
+          - stdout_logfile: "{{ app.log_dir }}/supervisor.jms-job-queue.log"
+          - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
+          # Dev
+          - autostart:       false

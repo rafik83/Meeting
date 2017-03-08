@@ -50,6 +50,8 @@ form.billing_info_update.children.gender.label: Genre
 form.billing_info_update.children.lastname.label: Nom
 form.billing_info_update.children.mobile.label: Mobile
 form.billing_info_update.children.phone.label: Téléphone
+form.billing_info_update.children.reference.label: Votre référence comptable
+form.billing_info_update.children.reference.placeholder: référence comptable, bon de commande ...
 form.billing_info_update.children.street.label: Adresse
 form.billing_info_update.children.submit.label: Enregistrer
 form.billing_info_update.children.vatNumber.label: 'Numéro de TVA'
