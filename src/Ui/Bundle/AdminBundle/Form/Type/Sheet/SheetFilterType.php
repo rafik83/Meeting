@@ -32,14 +32,6 @@ class SheetFilterType extends AbstractFilterType
             ->add('orderBy', SortChoiceType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
             ])
-            ->add('follower', FollowerChoiceType::class, [
-                'label'      => 'form.sheet_filter.children.follower.label',
-                'event'      => $options['event'],
-                'unassigned' => true,
-                'required'   => false,
-                'multiple'   => true,
-                'expanded'   => true,
-            ])
         ;
     }
 

@@ -384,7 +384,7 @@ class SheetSearchQueryBuilder
     protected function filterByFollower(array &$filters)
     {
         if (isset($filters['follower'])) {
-            if ($filters['follower'] === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
+            if (reset($filters['follower']) === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
                 $matchFollower = new Term();
                 $matchFollower->setTerm('followUp', 0);
                 $this->query->addMust($matchFollower);
@@ -396,6 +396,7 @@ class SheetSearchQueryBuilder
             if ($followers instanceof Admin) {
                 $followers = [$followers];
             }
+
             $followerQuery = new BoolQuery();
 
             foreach ($followers as $follower) {

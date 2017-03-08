@@ -109,6 +109,14 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true
             ])
+            ->add('follower', FollowerChoiceType::class, [
+                'label'      => 'form.sheet_filter.children.follower.label',
+                'event'      => $options['event'],
+                'unassigned' => true,
+                'required'   => false,
+                'multiple'   => true,
+                'expanded'   => true,
+            ])
             ->add(Constant::HAS_ORDER, ChoiceType::class, [
                 'choices'     => [
                     'form.sheet_filter.children.order.yes.label' => true,

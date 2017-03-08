@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\AbstractFilterType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -21,24 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TargetFilterType extends AbstractFilterType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        parent::buildForm($builder, $options);
-
-        $builder
-            ->add('follower', FollowerChoiceType::class, [
-                'label'      => 'form.sheet_filter.children.follower.label',
-                'event'      => $options['event'],
-                'unassigned' => false,
-                'required'   => false,
-                'multiple'   => true,
-                'expanded'   => true,
-            ]);
-    }
-
     /**
      * {@inheritdoc}
      */
