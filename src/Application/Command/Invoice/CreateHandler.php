@@ -88,6 +88,7 @@ class CreateHandler
             $ordersToInvoiceView->getTotal(),
             $ordersToInvoiceView->getTotalWithVat(),
             $ordersToInvoiceView->getVatAmount(),
+            $ordersToInvoiceView->getCurrency(),
             $ordersToInvoiceView->getData(),
             $this->dateTime
         );

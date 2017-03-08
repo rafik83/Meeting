@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add data field to invoice
+ * Add data and currency fields to invoice
  */
 class Version20170308163335 extends AbstractMigration
 {
@@ -17,7 +17,7 @@ class Version20170308163335 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE invoice ADD data LONGTEXT NOT NULL COMMENT \'(DC2Type:json_array)\'');
+        $this->addSql('ALTER TABLE invoice ADD currency VARCHAR(255) NOT NULL, ADD data LONGTEXT NOT NULL COMMENT \'(DC2Type:json_array)\'');
     }
 
     /**
@@ -27,6 +27,6 @@ class Version20170308163335 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE invoice DROP data');
+        $this->addSql('ALTER TABLE invoice DROP currency, DROP data');
     }
 }

@@ -50,7 +50,7 @@ class BillingInfosView
     /** @var string */
     public $city;
 
-    /** @var string */
+    /** @var string ISO 3166-1 alpha-2 country code */
     public $country;
 
     /** @var string */

@@ -22,6 +22,8 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
         invoiceIncrement:
             type: integer
             column: invoice_increment
+        currency:
+            type: string
         createdAt:
             type: datetime
         data:

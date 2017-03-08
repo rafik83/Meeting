@@ -28,6 +28,16 @@ class AmountFormatter
     }
 
     /**
+     * @param int $amount
+     *
+     * @return float|int
+     */
+    public static function centsToDecimalAmount($amount)
+    {
+        return $amount / 100;
+    }
+
+    /**
      * @param int   $amount in cents
      * @param float $rate
      *

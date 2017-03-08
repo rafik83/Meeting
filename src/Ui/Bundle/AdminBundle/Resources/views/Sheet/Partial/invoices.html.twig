@@ -17,7 +17,7 @@
                     <tr>
                         <td>{{ invoice.number }}</td>
                         <td nowrap="nowrap">{{ invoice.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                        <td class="text-right">{{ invoice.total|format_currency }}</td>
+                        <td class="text-right">{{ invoice.total|format_amount|localizedcurrency(invoice.currency) }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

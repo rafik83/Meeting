@@ -102,7 +102,8 @@ class OrdersToInvoice
             $data,
             $total,
             $vatToPay,
-            $total + $vatToPay
+            $total + $vatToPay,
+            $orderMerged->getCurrency()
         );
     }
 }

@@ -69,6 +69,11 @@ class Invoice
     private $vatAmount;
 
     /**
+     * @var string 3-letter ISO 4217 currency name
+     */
+    private $currency;
+
+    /**
      * @var \DateTimeInterface
      */
     private $createdAt;
@@ -90,6 +95,7 @@ class Invoice
      * @param int                $total
      * @param int                $totalWithVat
      * @param int                $vatAmount
+     * @param string             $currency
      * @param string             $data
      * @param \DateTimeInterface $createdAt
      */
@@ -103,6 +109,7 @@ class Invoice
         $total,
         $totalWithVat,
         $vatAmount,
+        $currency,
         $data,
         \DateTimeInterface $createdAt
     ) {
@@ -115,6 +122,7 @@ class Invoice
         $this->total            = $total;
         $this->totalWithVat     = $totalWithVat;
         $this->vatAmount        = $vatAmount;
+        $this->currency         = $currency;
         $this->data             = $data;
         $this->createdAt        = $createdAt;
     }
@@ -218,6 +226,14 @@ class Invoice
             $this->getInvoiceYear(),
             str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT)
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 
     /**

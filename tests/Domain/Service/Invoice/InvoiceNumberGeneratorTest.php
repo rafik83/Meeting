@@ -77,6 +77,7 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
             10,
             10,
             10,
+            'EUR',
             'some-data',
             $this->datetime
         );
