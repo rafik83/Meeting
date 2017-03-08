@@ -65,6 +65,11 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
+        // do not process disabled sheets
+        if (false === $create->sheet->isEnabled()) {
+            return false;
+        }
+
         $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($create->sheet);
 
         if (null === $ordersToInvoiceView) {
