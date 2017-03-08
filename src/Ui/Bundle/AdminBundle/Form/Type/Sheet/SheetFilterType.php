@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,7 +31,16 @@ class SheetFilterType extends AbstractFilterType
             ])
             ->add('orderBy', SortChoiceType::class, [
                 'label' => 'form.sheet_filter.children.orderBy.label',
-            ]);
+            ])
+            ->add('follower', FollowerChoiceType::class, [
+                'label'      => 'form.sheet_filter.children.follower.label',
+                'event'      => $options['event'],
+                'unassigned' => true,
+                'required'   => false,
+                'multiple'   => true,
+                'expanded'   => true,
+            ])
+        ;
     }
 
     /**

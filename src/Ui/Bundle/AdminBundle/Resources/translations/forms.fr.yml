@@ -39,6 +39,7 @@ form.admin.picto.Conference: Micro
 form.admin.picto.Dejeuner: Déjeuner
 form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
+form.admin.sheet.follower.un-assigned: 'Non assigné'
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays

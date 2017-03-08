@@ -152,14 +152,6 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
-            ->add('follower', FollowerChoiceType::class, [
-                'label'      => 'form.sheet_filter.children.follower.label',
-                'event'      => $event,
-                'unassigned' => false,
-                'required'   => false,
-                'multiple'   => true,
-                'expanded'   => true,
-            ])
             ->add('registeredAt', CreationIntervalFilterType::class, [
                 'label'                     => 'form.sheet_filter.children.creation_interval.label',
                 'required'                  => false,

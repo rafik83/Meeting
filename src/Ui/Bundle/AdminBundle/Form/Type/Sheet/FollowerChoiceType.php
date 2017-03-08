@@ -58,7 +58,7 @@ class FollowerChoiceType extends AbstractType
                     return $admin->getDisplayName();
                 }
 
-                return 'admin.sheet.follower.un-assigned';
+                return 'form.admin.sheet.follower.un-assigned';
             },
             'choice_value' => function ($admin) {
                 if ($admin instanceof Admin) {
