@@ -587,7 +587,7 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $booleanFilters = (array)$booleanFilters;
+        $booleanFilters = (array) $booleanFilters;
 
         $hasNestedMust = false;
         $hasNestedMustNot = false;
