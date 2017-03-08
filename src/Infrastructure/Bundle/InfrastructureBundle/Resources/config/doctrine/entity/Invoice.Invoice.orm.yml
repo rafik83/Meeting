@@ -24,6 +24,8 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             column: invoice_increment
         createdAt:
             type: datetime
+        data:
+            type: json_array
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -77,6 +77,7 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
             10,
             10,
             10,
+            'some-data',
             $this->datetime
         );
         $expectedInvoiceIncrement = "0889";
@@ -90,8 +91,6 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testIncrementDate()
     {
-        $type    = new Type($this->event);
-        $owner   = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $prefix  = new Prefix('Asddays', 'As');
         $invoice = $this->invoiceRepository->getLastInvoiceForEventPrefix($prefix, 2017);
     

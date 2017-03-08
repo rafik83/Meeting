@@ -719,8 +719,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@order.orders_to_invoice'
-            - '@vimeet_infrastructure.repository.order_repository'
             - '@command.invoice.create_handler'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
@@ -1553,6 +1551,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Invoice\CreateHandler
         arguments:
             - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@order.orders_to_invoice'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }

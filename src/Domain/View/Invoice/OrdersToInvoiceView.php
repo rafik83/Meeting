@@ -26,12 +26,12 @@ class OrdersToInvoiceView
     /** @var int amount in cents */
     private $totalWithVat;
 
-    /** @var string Order\SummaryView serialized in json */
+    /** @var string InvoiceDataView serialized in json */
     private $data;
 
     /**
      * @param array  $orders
-     * @param string $data Order\SummaryView serialized in json
+     * @param string $data InvoiceDataView serialized in json
      * @param int    $total amount in cents
      * @param int    $vatAmount amount in cents
      * @param int    $totalWithVat amount in cents
@@ -78,7 +78,7 @@ class OrdersToInvoiceView
     }
 
     /**
-     * @return string Order\SummaryView serialized in json
+     * @return string InvoiceDataView serialized in json
      */
     public function getData()
     {

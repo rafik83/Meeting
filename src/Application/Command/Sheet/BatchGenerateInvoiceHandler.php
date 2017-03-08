@@ -12,12 +12,9 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
-use Proximum\Vimeet\Application\Components\Order\OrdersToInvoice;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvoicedEvent;
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchGenerateInvoiceHandler
@@ -27,16 +24,6 @@ class BatchGenerateInvoiceHandler
      */
     private $sheetRepository;
 
-    /**
-     * @var OrdersToInvoice
-     */
-    private $ordersToInvoice;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-    
     /**
      * @var CreateHandler
      */
@@ -48,36 +35,23 @@ class BatchGenerateInvoiceHandler
     private $eventDispatcher;
     
     /**
-     * @var Sheet[]
-     */
-    private $sheetsInvoiced;
-    
-    /**
      * @var \DateTimeInterface
      */
     private $datetime;
     
     /**
-     * BatchGenerateInvoiceHandler constructor.
-     *
      * @param SheetRepositoryInterface  $sheetRepository
-     * @param OrdersToInvoice           $ordersToInvoice
-     * @param OrderRepositoryInterface  $orderRepository
      * @param CreateHandler             $createHandler
      * @param DelayedEventDispatcher    $eventDispatcher
      * @param \DateTimeInterface        $datetime
      */
     public function __construct(
         SheetRepositoryInterface   $sheetRepository,
-        OrdersToInvoice            $ordersToInvoice,
-        OrderRepositoryInterface   $orderRepository,
         CreateHandler              $createHandler,
         DelayedEventDispatcher     $eventDispatcher,
         \DateTimeInterface         $datetime
     ) {
         $this->sheetRepository   = $sheetRepository;
-        $this->ordersToInvoice   = $ordersToInvoice;
-        $this->orderRepository   = $orderRepository;
         $this->createHandler     = $createHandler;
         $this->eventDispatcher   = $eventDispatcher;
         $this->datetime          = $datetime;
@@ -95,39 +69,33 @@ class BatchGenerateInvoiceHandler
         if (count($sheets) === 0) {
             return $this->getBatchResult($batchGenerateInvoice, 0);
         }
-        
-        $prefix = $sheets[0]->getEvent()->getInvoicePrefix();
-        $event  = $sheets[0]->getEvent();
-        
+
+        // get event prefix
+        $firstSheet = reset($sheets);
+        $event      = $firstSheet->getEvent();
+        $prefix     = $event->getInvoicePrefix();
+
+        $sheetsInvoiced = [];
+
         foreach ($sheets as $sheet) {
-            $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($sheet);
-            
-            if ($ordersToInvoiceView instanceof OrdersToInvoiceView) {
-                $create = new Create($sheet, $prefix, $ordersToInvoiceView);
-                
-                $invoice = $this->createHandler->handle($create);
-                
-                // Flag Order with generated Invoice
-                foreach ($ordersToInvoiceView->getOrders() as $order) {
-                    $order->setInvoice($invoice);
-                    $this->orderRepository->set($order);
-                }
-                
-                $this->sheetsInvoiced[] = $sheet;
+            if (true === $this->createHandler->handle(new Create($sheet, $prefix))) {
+                $sheetsInvoiced[] = $sheet;
             }
         }
-    
-        $this->eventDispatcher->dispatch(
-            Events::SHEET_INVOICED,
-            new SheetInvoicedEvent(
-                $batchGenerateInvoice->admin,
-                $event,
-                $this->datetime,
-                $this->sheetsInvoiced
-            )
-        );
+
+        if (!empty($sheetsInvoiced)) {
+            $this->eventDispatcher->dispatch(
+                Events::SHEET_INVOICED,
+                new SheetInvoicedEvent(
+                    $batchGenerateInvoice->admin,
+                    $event,
+                    $this->datetime,
+                    $sheetsInvoiced
+                )
+            );
+        }
         
-        return $this->getBatchResult($batchGenerateInvoice, count($this->sheetsInvoiced));
+        return $this->getBatchResult($batchGenerateInvoice, count($sheetsInvoiced));
     }
     
     /**

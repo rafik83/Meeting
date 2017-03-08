@@ -74,6 +74,11 @@ class Invoice
     private $createdAt;
 
     /**
+     * @var string
+     */
+    private $data;
+
+    /**
      * Invoice constructor.
      *
      * @param Event              $event
@@ -85,6 +90,7 @@ class Invoice
      * @param int                $total
      * @param int                $totalWithVat
      * @param int                $vatAmount
+     * @param string             $data
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
@@ -97,8 +103,9 @@ class Invoice
         $total,
         $totalWithVat,
         $vatAmount,
-        \DateTimeInterface $createdAt)
-    {
+        $data,
+        \DateTimeInterface $createdAt
+    ) {
         $this->event            = $event;
         $this->sheet            = $sheet;
         $this->prefix           = $prefix;
@@ -108,6 +115,7 @@ class Invoice
         $this->total            = $total;
         $this->totalWithVat     = $totalWithVat;
         $this->vatAmount        = $vatAmount;
+        $this->data             = $data;
         $this->createdAt        = $createdAt;
     }
 
@@ -168,7 +176,7 @@ class Invoice
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -204,6 +212,19 @@ class Invoice
      */
     public function getNumber()
     {
-        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT);
+        return sprintf(
+            '%s%s-%s',
+            $this->getInvoicePrefix(),
+            $this->getInvoiceYear(),
+            str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }
