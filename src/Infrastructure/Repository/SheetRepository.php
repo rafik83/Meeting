@@ -218,7 +218,7 @@ class SheetRepository implements SheetRepositoryInterface
     {
         $queryBuilder = $this->findByIdsQueryBuilder($ids);
         $queryBuilder
-            ->andWhere('sheet.state != state')
+            ->andWhere('sheet.state != :state')
             ->setParameter('state', Sheet::STATE_ACCEPTED);
 
         return $queryBuilder->getQuery()->getResult();
