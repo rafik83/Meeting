@@ -29,6 +29,7 @@ Proximum\Vimeet\Domain\Model\Order:
                 onDelete: CASCADE
         invoice:
             targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Invoice
+            inversedBy: orders
     oneToMany:
         rows:
             targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
