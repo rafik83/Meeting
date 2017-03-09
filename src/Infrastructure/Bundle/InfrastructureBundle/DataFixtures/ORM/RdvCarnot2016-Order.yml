@@ -3,7 +3,7 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
         __construct:
             - '@event_rdv_carnot_2016'
             - '@sheet_with_invoice'
-            - '@prefix_rdvcarnot_1'
+            - '@prefix_rdv_carnot'
             - 'Rdv'
             - 2017
             - 1
