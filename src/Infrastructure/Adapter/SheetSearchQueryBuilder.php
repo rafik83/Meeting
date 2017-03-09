@@ -386,10 +386,6 @@ class SheetSearchQueryBuilder
         if (isset($filters['follower'])) {
             $followers = $filters['follower'];
 
-            if ($followers instanceof Admin) {
-                $followers = [$followers];
-            }
-
             $followerQuery = new BoolQuery();
 
             foreach ($followers as $follower) {
