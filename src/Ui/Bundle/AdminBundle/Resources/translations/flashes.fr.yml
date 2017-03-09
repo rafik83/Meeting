@@ -46,6 +46,7 @@ flash.admin.product.import.success: 'Le catalogue de produits et les forfaits on
 flash.admin.product.update.success: 'Le produit a été modifié avec succès'
 flash.admin.reset_password_token.expired: 'Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.'
 flash.admin.reset_password_token.success: 'Vous allez recevoir un email vous permettant de créer un nouveau mot de passe'
+flash.admin.sheet.unavailablePage.warning: "La page que vous recherchez n'existe pas, vous avez été redirigé sur la première page"
 flash.admin.sheet_batch.accept.success: '{0} aucune fiche n''a été acceptée.|{1} 1 fiche a été acceptée|]1,Inf[ %count% fiches ont été acceptées'
 flash.admin.sheet_batch.assign.success: '{0} Aucune fiche n''a été assignée.|{1} Une fiche a été assignée|]1,Inf[ %count% fiches ont été assignées'
 flash.admin.sheet_batch.catalog.add.success: '{0} aucune fiche n''a été ajoutée au catalogue.|{1} 1 fiche a été ajoutée au catalogue|]1,Inf[ %count% fiches ont été ajoutées au catalogue'
@@ -150,3 +151,4 @@ flash.sheet.update_block.success: 'Les informations ont bien été enregistrées
 flash.sheet.update_participant.success: 'La fiche participant a bien été modifiée'
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
+

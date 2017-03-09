@@ -816,4 +816,12 @@ class Sheet implements TraceableInterface
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getOwnerLocale()
+    {
+        return $this->getOwner()->getLocale();
+    }
 }

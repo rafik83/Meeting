@@ -63,6 +63,8 @@ class SheetController extends Controller
         // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $selectedSheetsPage = $request->query->getInt('page', 1);
+
         // redirect to list with default filters if no parameters
         if (empty($request->query->all()) && empty($this->get('filter.sheet_filter')->get())) {
             return $this->redirectToRoute('admin_sheet', array_merge(
@@ -116,25 +118,27 @@ class SheetController extends Controller
             $query = new PaginatedSheetListViewQuery(
                 $event,
                 $filters,
-                $request->query->getInt('page', 1),
-                20,
+                $selectedSheetsPage,
+                100, // number of sheets by page
                 $locale,
                 $this->getUser()
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
-            throw $this->createNotFoundException($ex->getMessage());
+            $this->addFlash('warning', 'flash.admin.sheet.unavailablePage.warning');
+
+            return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
         // Batch
-        $batch     = new Batch($this->getUser(), new \DateTime());
+        $batch     = new Batch($this->getUser());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
             }),
             'event'  => $event,
-            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
+            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId(), 'page' => $selectedSheetsPage]),
         ]);
 
         $filterFormView = $filterFullForm->createView();
@@ -160,8 +164,9 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $batch     = new Batch($this->getUser(), new \DateTime());
-        $batchForm = $this->createForm(BatchType::class, $batch, [
+        $selectedSheetsPage = $request->query->getInt('page', 1);
+        $batch              = new Batch($this->getUser());
+        $batchForm          = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
@@ -200,11 +205,11 @@ class SheetController extends Controller
                     ]));
                 }
             } else {
-                $this->addFlash('error', (string)$batchForm->getErrors(true));
+                $this->addFlash('error', (string) $batchForm->getErrors(true));
             }
         }
 
-        return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
+        return $this->redirectToRoute('admin_sheet', ['event' => $event->getId(), 'page' => $selectedSheetsPage]);
     }
 
     /**

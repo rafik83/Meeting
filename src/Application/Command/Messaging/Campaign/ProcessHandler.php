@@ -102,30 +102,31 @@ class ProcessHandler
         $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
         $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);
 
-        $event        = $message->getEvent();
-        $locale       = $event->getAvailableLocale($message->getLocale());
-
         $receivers    = [];
-        $addReceivers = function (Sheet $sheet, $newReceivers) use (&$receivers, $message, $locale) {
+        $addReceivers = function (Sheet $sheet, $newReceivers) use (&$receivers, $message) {
             if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
                 return;
             }
 
             $placeholders = $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent());
 
-            /* @var MailRecipientInterface */
+            /** @var MailRecipientInterface $receiver */
             foreach ($newReceivers as $receiver) {
-                $emailAddress = $receiver->getEmail();
-                $receiverView = new ReceiverView(
-                    $emailAddress,
-                    $this->substitutionsProvider->getSubstitutions($receiver, $sheet, $locale, $placeholders)
-                );
-
-                if (isset($receivers[$emailAddress])) {
+                if (isset($receivers[$receiver->getEmail()])) {
                     continue;
                 }
 
-                $receivers[$emailAddress] = $receiverView;
+                $receiverView = new ReceiverView(
+                    $receiver->getEmail(),
+                    $this->substitutionsProvider->getSubstitutions(
+                        $receiver,
+                        $sheet,
+                        $receiver->getLocale(),
+                        $placeholders
+                    )
+                );
+
+                $receivers[$receiver->getEmail()] = $receiverView;
             }
         };
 
