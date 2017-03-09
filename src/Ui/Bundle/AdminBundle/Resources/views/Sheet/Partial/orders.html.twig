@@ -30,10 +30,15 @@
                             {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
                         </td>
                         <td class="text-right">
-                            {% if order.hasInvoice %}
+                            {% if not order.hasInvoice %}
                                 <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: order.id }) }}" class="btn btn-default btn-sm">
                                     {{ 'admin.order_edit.link'|trans }}
                                 </a>
+                            {% else %}
+                                <span class="label label-success">
+                                    {{ 'admin.order.invoiceNumber'|trans }}
+                                    {{ order.invoice.number }}
+                                </span>
                             {% endif %}
                         </td>
                     </tr>

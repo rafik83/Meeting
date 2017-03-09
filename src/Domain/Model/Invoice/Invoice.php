@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Invoice;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 /**
@@ -83,6 +85,9 @@ class Invoice
      */
     private $data;
 
+    /** @var ArrayCollection of Order */
+    private $orders;
+
     /**
      * Invoice constructor.
      *
@@ -125,6 +130,7 @@ class Invoice
         $this->currency         = $currency;
         $this->data             = $data;
         $this->createdAt        = $createdAt;
+        $this->orders           = new ArrayCollection();
     }
 
     /**
@@ -242,5 +248,13 @@ class Invoice
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * @return Order[]
+     */
+    public function getOrders()
+    {
+        return $this->orders->toArray();
     }
 }

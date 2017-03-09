@@ -35,6 +35,10 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         prefix:
             targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+    oneToMany:
+        orders:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order
+            mappedBy: invoice
     uniqueConstraints:
         invoice_number:
             columns: prefix_id, invoice_prefix, invoice_year, invoice_increment

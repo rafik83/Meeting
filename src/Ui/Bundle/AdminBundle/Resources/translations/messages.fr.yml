@@ -219,6 +219,7 @@ admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
 admin.transaction.column.date: Date
 admin.invoice.column.number: 'Numéro de facture'
+admin.invoice.column.orders: 'Commandes concernées'
 admin.invoice.column.date: 'Date de création'
 admin.invoice.column.total: 'Total HT'
 admin.invoice.column.link: 'Lien'
@@ -371,6 +372,7 @@ admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
 admin.order.cancelled: Annulée
+admin.order.invoiceNumber: Facture N°
 admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
