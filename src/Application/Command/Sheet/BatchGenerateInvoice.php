@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 class BatchGenerateInvoice extends AbstractBatch
 {
     /**
-     * @var array
+     * @var array of Sheet id
      */
     public $ids;
 

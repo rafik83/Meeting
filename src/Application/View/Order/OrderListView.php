@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -61,24 +61,24 @@ class OrderListView
      * @var string
      */
     public $currency;
-    
+
     /**
      * @var bool
      */
     public $isInvoiced;
-    
+
     /**
-     * @param int $id
-     * @param string $numero
-     * @param int $sheetId
-     * @param string $sheetTitle
-     * @param string $sheetType
-     * @param string $follower
+     * @param int                $id
+     * @param string             $numero
+     * @param int                $sheetId
+     * @param string             $sheetTitle
+     * @param string             $sheetType
+     * @param string             $follower
      * @param \DateTimeInterface $createdAt
-     * @param float $total
-     * @param string $vatMode
-     * @param string $currency
-     * @param $isInvoiced
+     * @param float              $total
+     * @param string             $vatMode
+     * @param string             $currency
+     * @param bool               $isInvoiced
      */
     public function __construct(
         $id,
