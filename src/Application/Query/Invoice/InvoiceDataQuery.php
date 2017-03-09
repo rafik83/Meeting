@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Invoice;
 
-use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
