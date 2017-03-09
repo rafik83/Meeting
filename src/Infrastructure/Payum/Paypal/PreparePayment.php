@@ -78,11 +78,12 @@ class PreparePayment
         $storage = $this->payum->getStorage(Payment::class);
 
         $description = $this->translator->trans('order.transaction.paypal.description', [
-            '%sheetName%' => $this->sheetInfoGuesser->guessSheetName(
+            '%sheetName%' => $this->sheetInfoGuesser->guessSheetTitle(
                 $transaction->getSheet(),
                 $locale
             ),
             '%sheetId%'   => $transaction->getSheet()->getId(),
+            '%eventId%' => $transaction->getSheet()->getEvent()->getId(),
             '%eventName%' => $transaction->getSheet()->getEvent()->getTitle(),
         ]);
 
@@ -96,7 +97,7 @@ class PreparePayment
         $payment->setClientId($transaction->getSheet()->getId());
         $payment->setClientEmail($billingInfo->getEmail());
         $payment->setTransaction($transaction);
-        $payment->setDescription(substr($description, 127));
+        $payment->setDescription(substr($description, 0, 127));
 
         $payment->setDetails(
             [
