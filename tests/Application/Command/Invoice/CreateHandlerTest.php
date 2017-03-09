@@ -50,7 +50,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $invoiceRepository->getLastInvoiceForEventPrefix($prefix, $date->format('Y'))->shouldBeCalled();
 
         $invoiceRepository->add($invoice)->shouldBeCalled();
-        $orderRepository->set($order)->shouldBeCalled();
+
+        $expectedOrder = clone $order;
+        $expectedOrder->setInvoice($invoice);
+        $orderRepository->set($expectedOrder)->shouldBeCalled();
 
         $handler = new CreateHandler(
             $invoiceRepository->reveal(),
