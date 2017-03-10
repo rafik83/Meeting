@@ -1,5 +1,5 @@
-set :front1,    "proximum-web-apache-01"
-set :front2,    "proximum-web-apache-02"
+set :front1,    "vimeet-prod1"
+set :front2,    "vimeet-prod2"
 set :deploy_to, "/var/www/proximum-vimeet.project.local/htdocs"
 set :user,      "www-data"
 
@@ -17,7 +17,7 @@ role :app, front2, :primary => false
 namespace :app_tasks do
   task :php do
     capifony_pretty_print "--> Restarting PHP"
-    invoke_command "sudo /usr/sbin/service php5-fpm reload", :via => run_method
+    invoke_command "sudo /usr/sbin/service php5.6-fpm reload", :via => run_method
     capifony_puts_ok
   end
 end

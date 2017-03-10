@@ -74,7 +74,7 @@ class SummaryViewQueryHandler
             $summaryViewQuery->sheet->getEvent()->getVat(),
             $total,
             $summaryViewQuery->sheet->getEvent()->getCurrency(),
-            $this->vatApplicable->onCart($summaryViewQuery->cart)
+            $this->vatApplicable->onSheet($summaryViewQuery->sheet)
         );
     }
 }

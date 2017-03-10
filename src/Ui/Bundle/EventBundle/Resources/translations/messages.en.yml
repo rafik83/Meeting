@@ -31,9 +31,11 @@ catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'
 catalog.meeting_request.proposition.approved: 'Accepted proposal'
+catalog.meeting_request.proposition.placed: 'Meeting proposal accepted - meeting planned'
 catalog.meeting_request.proposition.refused: 'Refused proposal'
 catalog.meeting_request.refuse: Refuse
 catalog.meeting_request.request.approved: 'Accepted request'
+catalog.meeting_request.request.placed: 'You request accepted - Meeting planned'
 catalog.meeting_request.request.refused: 'Refused request'
 catalog.noResult: 'No result'
 catalog.noVisibleTypes: 'You can''t access to any participant''s type'
@@ -143,7 +145,7 @@ order.transaction.mode.bank_check: Cheque
 order.transaction.mode.bank_transfer: Transfer
 order.transaction.mode.paypal: Paypal
 order.transaction.no: None
-order.transaction.paypal.description: 'Participation of %sheetName% (sheet %sheetId%) on the event "%eventName%"'
+order.transaction.paypal.description: '%eventId%-%sheetId% : Participation of %sheetName% on the event "%eventName%"'
 order.transaction.state.cancelled: Cancelled
 order.transaction.state.paid: Paid
 order.transaction.state.pending: Pending

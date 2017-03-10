@@ -1,5 +1,5 @@
-@admin
-@admin-event
+@admin @admin-event
+
 Feature: See, create and update event
   I need to be able to see, create and update an event
 
@@ -72,3 +72,15 @@ Feature: See, create and update event
     And I should see "LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE"
     Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/en"
     And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
+
+  Scenario: update invoice prefix on event
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/en/event/1"
+    When I follow "admin.event.update.link"
+    Then the response status code should be 200
+    And I should be on this page "/admin/en/event/1/update"
+    And I select "RdvCarnot" from "event_update_invoicePrefix"
+    And I press "form.event_update.children.submit.label"
+    Then the response status code should be 200
+    And I should see "flash.admin.event.update.success"
+    And the "event_update_invoicePrefix" field should contain "1"

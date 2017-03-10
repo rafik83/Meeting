@@ -50,6 +50,7 @@ class Update extends AbstractEvent
         $this->textColor     = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
         $this->emailTeam     = $event->getEmailTeam();
+        $this->invoicePrefix = $event->getInvoicePrefix();
         $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
 
         foreach ($event->getTranslations() as $translation) {

@@ -144,6 +144,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->select('slot')
             ->from(MeetingSlot::class, 'slot')
             ->where('slot.event = :event')
+            ->andWhere('slot.locked = false')
             ->setParameter('event', $event);
 
         if (!$ignoreMeetings) {

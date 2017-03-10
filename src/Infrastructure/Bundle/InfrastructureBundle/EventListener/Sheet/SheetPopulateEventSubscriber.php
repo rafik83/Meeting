@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
@@ -23,6 +25,7 @@ use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetInvoicedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
@@ -67,6 +70,9 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::MEETING_REQUEST_UNAPPROVED => 'onMeetingRequestUnapproved',
             Events::MEETING_REQUEST_UNREFUSED  => 'onMeetingRequestUnrefused',
             Events::PARTICIPANT_IMPORTED       => 'onParticipantImported',
+            Events::SHEET_INVOICED             => 'onSheetInvoiced',
+            Events::MEETING_CREATED            => 'onMeetingCreated',
+            Events::MEETING_REMOVED            => 'onMeetingRemoved'
         ];
     }
 
@@ -135,6 +141,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param MeetingRemovedEvent $event
+     */
+    public function onMeetingRemoved(MeetingRemovedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getSheets());
+    }
+
+    /**
      * @param CreateRequestEvent $event
      */
     public function onMeetingRequestCreated(CreateRequestEvent $event)
@@ -186,6 +200,22 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      * @param ParticipantImportedEvent $event
      */
     public function onParticipantImported(ParticipantImportedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getSheets());
+    }
+
+    /**
+     * @param SheetInvoicedEvent $event
+     */
+    public function onSheetInvoiced(SheetInvoicedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getSheets());
+    }
+
+    /**
+     * @param MeetingCreatedEvent $event
+     */
+    public function onMeetingCreated(MeetingCreatedEvent $event)
     {
         $this->updateSheetIndexation($event->getSheets());
     }
