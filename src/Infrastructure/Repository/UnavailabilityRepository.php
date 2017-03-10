@@ -100,11 +100,10 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('unavailability')
+            ->select('unavailability, participant')
             ->from(Unavailability::class, 'unavailability')
             ->join('unavailability.participant', 'participant')
-            ->join('participant.sheet', 'sheet')
-            ->where('sheet.event = :event')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

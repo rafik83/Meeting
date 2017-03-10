@@ -70,10 +70,10 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment')
+            ->select('assignment, mass, participant')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.mass', 'mass')
-            ->where('mass.event = :event')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
+            ->join('assignment.participant', 'participant')
             ->setParameter('event', $event)
         ;
 
@@ -98,10 +98,27 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->createQueryBuilder()
             ->select('assignment, mass, participant')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.participant', 'participant')
+            ->join('assignment.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
             ->join('assignment.mass', 'mass')
-            ->where('participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipant(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('assignment, mass')
+            ->from(MassAssignment::class, 'assignment')
+            ->join('assignment.participant', 'participant', 'WITH', 'participant.id = :participant')
+            ->join('assignment.mass', 'mass')
+            ->setParameter('participant', $participant->getId());
         ;
 
         return $queryBuilder->getQuery()->getResult();

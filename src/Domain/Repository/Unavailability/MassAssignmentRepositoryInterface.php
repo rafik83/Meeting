@@ -49,4 +49,11 @@ interface MassAssignmentRepositoryInterface
      * @return MassAssignment[]
      */
     public function findBySheet(Sheet $sheet);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return MassAssignment[]
+     */
+    public function findByParticipant(Participant $participant);
 }
