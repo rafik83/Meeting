@@ -14,23 +14,29 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ExportPlanning
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     public $typeIds;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $orderBy;
+
+    /** @var string */
+    public $emailToNotify;
+
+    /** @var string */
+    public $locale;
 
     /**
      * @param array  $typeIds
      * @param string $orderBy
+     * @param string $emailToNotify
+     * @param string $locale
      */
-    public function __construct(array $typeIds, $orderBy)
+    public function __construct(array $typeIds, $orderBy, $emailToNotify, $locale)
     {
-        $this->typeIds = $typeIds;
-        $this->orderBy = $orderBy;
+        $this->typeIds       = $typeIds;
+        $this->orderBy       = $orderBy;
+        $this->emailToNotify = $emailToNotify;
+        $this->locale        = $locale;
     }
 }

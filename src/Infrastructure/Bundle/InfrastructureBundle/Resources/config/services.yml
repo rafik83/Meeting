@@ -3474,12 +3474,15 @@ services:
     command.planning.export_planning_handler:
         class: Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler
         arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@planning.displayer.participant_planning_displayer'
             - '@templating'
             - '@adapter.local_file_storage'
+            - '@adapter.mailer_adapter'
             - '%infrastructure.print_planning_path%'
+            - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }

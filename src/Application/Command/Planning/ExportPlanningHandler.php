@@ -10,77 +10,79 @@
 
 namespace Proximum\Vimeet\Application\Command\Planning;
 
-use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 use Proximum\Vimeet\Domain\Planning\PlanningPrint;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\PrintPlanningMail;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class ExportPlanningHandler
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
+
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var ParticipantInfoGuesserCache
-     */
+    /** @var ParticipantInfoGuesserCache */
     private $participantInfoGuesserCache;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @var SheetInfoGuesserCache
-     */
+    /** @var SheetInfoGuesserCache */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantPlanningDisplayer
-     */
+    /** @var ParticipantPlanningDisplayer */
     private $participantPlanningDisplayer;
 
-    /**
-     * @var EngineInterface
-     */
+    /** @var EngineInterface */
     private $templating;
 
-    /**
-     * @var LocalFileStorageAdapter
-     */
+    /** @var LocalFileStorageAdapter */
     private $localFileStorageAdapter;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $publicDir;
 
+    /** @var MailerInterface */
+    private $mailer;
+
+    /** @var string */
+    private $mailSender;
+
     /**
+     * @param TypeRepositoryInterface        $typeRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param SheetInfoGuesser               $sheetInfoGuesser
      * @param ParticipantPlanningDisplayer   $participantPlanningDisplayer
      * @param EngineInterface                $templating
      * @param LocalFileStorageAdapter        $localFileStorageAdapter
+     * @param MailerInterface                $mailer
      * @param string                         $publicDir
+     * @param string                         $mailSender
      */
     public function __construct(
+        TypeRepositoryInterface $typeRepository,
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantPlanningDisplayer $participantPlanningDisplayer,
         EngineInterface $templating,
         LocalFileStorageAdapter $localFileStorageAdapter,
-        $publicDir
+        MailerInterface $mailer,
+        $publicDir,
+        $mailSender
     ) {
+        $this->typeRepository               = $typeRepository;
         $this->participantRepository        = $participantRepository;
         $this->participantInfoGuesserCache  = new ParticipantInfoGuesserCache($participantInfoGuesser);
         $this->sheetInfoGuesser             = new SheetInfoGuesserCache($sheetInfoGuesser);
@@ -88,7 +90,9 @@ class ExportPlanningHandler
         $this->participantInfoGuesser       = $participantInfoGuesser;
         $this->templating                   = $templating;
         $this->localFileStorageAdapter      = $localFileStorageAdapter;
+        $this->mailer                       = $mailer;
         $this->publicDir                    = $publicDir;
+        $this->mailSender                   = $mailSender;
     }
 
     /**
@@ -103,10 +107,9 @@ class ExportPlanningHandler
         }
 
         /** @var Participant $firstParticipant */
-        $firstParticipant   = reset($participants);
-        $event              = $firstParticipant->getSheet()->getEvent();
-
-        $participants = array_splice($participants, 0, 10);
+        $firstParticipant = reset($participants);
+        $event            = $firstParticipant->getSheet()->getEvent();
+        $types            = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
         if ($exportPlanning->orderBy === PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME) {
             // Load cache for the participant last name to avoid error in the usort
@@ -160,6 +163,16 @@ class ExportPlanningHandler
             'plannings' => $plannings,
         ]);
 
-        $filePath = $this->localFileStorageAdapter->create($print, 'print-planning.html', $this->publicDir);
+        $filePath = $this->localFileStorageAdapter->create($print, 'print_planning.html', $this->publicDir);
+
+        $this->mailer->send(new PrintPlanningMail(
+            $event,
+            $this->mailSender,
+            $exportPlanning->emailToNotify,
+            $exportPlanning->locale,
+            str_replace('/', '-', substr($filePath, 1)),
+            $types,
+            $exportPlanning->orderBy
+        ));
     }
 }

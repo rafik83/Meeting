@@ -48,6 +48,7 @@ class GeneratePlanningCommand extends Command
             ->addOption('types', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Type')
             ->addOption('orderBy', null, InputOption::VALUE_REQUIRED, 'OrderBy Sheet name or participant last name')
             ->addOption('emailToNotify', null, InputOption::VALUE_REQUIRED, 'email to notify at the end of the command')
+            ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'locale for the mail of notification')
         ;
     }
 
@@ -56,18 +57,31 @@ class GeneratePlanningCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('orderBy') === null || empty($input->getOption('types'))) {
-            $output->writeln('<error>The orderBy and types options are mandatory and can not be null</error>');
+        if ($input->getOption('orderBy') === null
+            || empty($input->getOption('types'))
+            || null == $input->getOption('emailToNotify')
+            || null == $input->getOption('locale')
+        ) {
+            $output->writeln('<error>The orderBy, types, emailToNotify and locale options are mandatory and can not be null</error>');
 
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The orderBy and types options are mandatory and can not be null, arguments passed: orderBy=%s types=%s',
+                    'The orderBy, types, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s',
                     $input->getOption('orderBy'),
-                    join(', ', $input->getOption('types'))
+                    join(', ', $input->getOption('types')),
+                    $input->getOption('emailToNotify'),
+                    $input->getOption('locale')
                 )
             );
         }
 
-        $this->exportPlanningHandler->handle(new ExportPlanning($input->getOption('types'), $input->getOption('orderBy')));
+        $this->exportPlanningHandler->handle(
+            new ExportPlanning(
+                $input->getOption('types'),
+                $input->getOption('orderBy'),
+                $input->getOption('emailToNotify'),
+                $input->getOption('locale')
+            )
+        );
     }
 }

@@ -1270,10 +1270,8 @@ admin_planning_export:
     defaults: { _controller: AdminBundle:Planning/Export:exportPlanning }
 
 admin_planning_export_link:
-    path: /event/{event}/planning/export/link/{year}/{month}/{file}
+    path: /event/{event}/planning/export/link/{file}
     requirements:
         event: \d+
-        year: \d+
-        month: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Planning/Export:exportPlanningPrint }

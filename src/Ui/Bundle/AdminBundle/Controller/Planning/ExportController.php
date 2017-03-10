@@ -55,24 +55,21 @@ class ExportController extends Controller
     }
 
     /**
-     * @param Request       $request
-     * @param UserInterface $admin
-     * @param Event         $event
-     * @param int           $year
-     * @param int           $month
-     * @param string        $file
+     * @param Event  $event
+     * @param string $file
      *
      * @return Response
      */
-    public function exportPlanningPrintAction(Request $request, UserInterface $admin, Event $event, $year, $month, $file)
+    public function exportPlanningPrintAction(Event $event, $file)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $path = sprintf('%s/%s/%s/%s', $this->getParameter('infrastructure.print_planning_path'), $year, $month, $file);
+        $fileName = str_replace('-', '/', $file);
+        $path     = sprintf('%s/%s', $this->getParameter('infrastructure.print_planning_path'), $fileName);
 
         if (!file_exists($path)) {
-            throw $this->createNotFoundException(sprintf('File %s not found', $file));
+            throw $this->createNotFoundException(sprintf('File %s not found', $fileName));
         }
 
         return new Response(file_get_contents($path));
