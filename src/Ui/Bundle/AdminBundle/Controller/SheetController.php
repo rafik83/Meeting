@@ -182,17 +182,16 @@ class SheetController extends Controller
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
-                    $batch->enable        = $batchForm->get('enable')->isClicked();
-                    $batch->disable       = $batchForm->get('disable')->isClicked();
-                    $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
-                    $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
-                }
-                
-                if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
-                    $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
+                    $batch->enable          = $batchForm->get('enable')->isClicked();
+                    $batch->disable         = $batchForm->get('disable')->isClicked();
+                    $batch->addCatalog      = $batchForm->get('addCatalog')->isClicked();
+                    $batch->removeCatalog   = $batchForm->get('removeCatalog')->isClicked();
+
+                    if ($batchForm->has('generateInvoice')) {
+                        $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
+                    }
                 }
 
-                
                 /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
