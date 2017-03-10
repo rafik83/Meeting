@@ -294,3 +294,30 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
+    # Sheet with invoice
+    sheet_with_invoice:
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur'
+            -
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "L'Aanera est le centre français de la recherche aéronautique, spaciale et de défense." } }
+                # Image
+                1b9a00b3: { file: "Aanera.jpg" }
+                # Lien
+                90713a3d: { url: "http://www.aanera.fr/" }
+                # Description d'activité
+                d691d21c: { text: { fr: "L'Aanera est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
+            - '@proximum_user_visiteur'
+            - <dateTime()>
+        registrationData:
+            3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>

@@ -1,0 +1,55 @@
+Proximum\Vimeet\Domain\Model\Invoice\Invoice:
+    invoice_1:
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@sheet_with_invoice'
+            - '@prefix_rdv_carnot'
+            - 'Rdv'
+            - 2017
+            - 1
+            - 100000
+            - 120000
+            - 20000
+            - 'EUR'
+            - '[]'
+            - <dateTime()>
+
+Proximum\Vimeet\Domain\Model\Address (local):
+    order_address:
+        __construct: false
+        street: 10 rue Saint Marc
+        zipcode: 75002
+        city: Paris
+        country: FR
+
+Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
+    order_billing_info:
+        __construct:
+            - 'man'
+            - Jean
+            - Test
+            - DG
+            - 0101010101
+            - 0101010101
+            - test@elao.com
+            - ELAO
+            - '@order_address'
+            - 123456789
+
+Proximum\Vimeet\Domain\Model\Order:
+    order_invoiced:
+        __construct:
+            - '@sheet_with_invoice'
+            - true
+            - '@order_billing_info'
+            - '{"4":{"translations":{"fr":{"label":"Options d\u2019exposition"},"en":{"label":"Exhibiting options"}},"rank":1},"5":{"translations":{"fr":{"label":"Options d\u2019exposition et de communication"},"en":{"label":"Exhibiting and communication options"}},"rank":2},"6":{"translations":{"fr":{"label":"Options de communication"},"en":{"label":"Communication options"}},"rank":3}}'
+            - <dateTimeBetween('-10days', 'now')>
+        invoice: '@invoice_1'
+Proximum\Vimeet\Domain\Model\Order\Row:
+    order_invoiced_row_1:
+        __construct: false
+        order: '@order_invoiced'
+        quantity: 1
+        price: 1690
+        data: '{"id":10,"type":"plan","translations":{"fr":{"title":"Formule B2B Meeting","heading":"Pas de stand","description":"Vous changez de lieu \u00e0 chaque rendez-vous.","addon":""},"en":{"title":"B2B Meeting Formula","heading":"No booth","description":"You have to move at each appointment.","addon":""}},"productsIncluded":[{"quantity":2,"included":{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\u00eame agenda incluant une entr\u00e9e \u00e0 la convention d\u2019affaire, acc\u00e8s illimit\u00e9 \u00e0 la pause caf\u00e9 et aux conf\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}}]}'
+        product: '@product_plan_1_rdv_carnot'

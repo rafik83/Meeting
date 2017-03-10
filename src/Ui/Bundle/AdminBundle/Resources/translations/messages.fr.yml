@@ -217,6 +217,17 @@ admin.happening.menu.link: Programme
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
+admin.transaction.column.date: Date
+admin.invoice.column.number: 'Numéro de facture'
+admin.invoice.column.orders: 'Commandes concernées'
+admin.invoice.column.date: 'Date de création'
+admin.invoice.column.total: 'Total HT'
+admin.invoice.column.link: 'Lien'
+admin.invoice.pdf: 'Voir la facture'
+admin.invoice.list.title: 'Nom backoffice'
+admin.invoice.list.prefix: 'Prefix'
+admin.invoice.list.isDefault: 'Par défaut'
+admin.invoice.title: 'Liste des préfixes de numéro de facture'
 admin.invoice.create.button: 'Nouveau préfixe'
 admin.invoice.create.title: 'Ajouter un nouveau préfixe'
 admin.invoice.link: Facturation
@@ -361,6 +372,7 @@ admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
 admin.order.cancelled: Annulée
+admin.order.invoiceNumber: Facture N°
 admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
@@ -522,6 +534,7 @@ admin.sheet.details.company.title: Société
 admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
+admin.sheet.details.invoices: 'Factures'
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
 admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'

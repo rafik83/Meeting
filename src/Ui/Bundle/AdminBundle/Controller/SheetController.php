@@ -187,7 +187,12 @@ class SheetController extends Controller
                     $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
+                
+                if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+                    $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
+                }
 
+                
                 /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
@@ -316,7 +321,9 @@ class SheetController extends Controller
 
         $changeTypeForm = null;
 
-        if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1) {
+        if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
+            && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
+        ) {
             $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
 
             $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [

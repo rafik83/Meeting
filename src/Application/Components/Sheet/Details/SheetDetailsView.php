@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
@@ -110,6 +111,11 @@ class SheetDetailsView
     public $transactions;
 
     /**
+     * @var Invoice[]
+     */
+    public $invoices;
+
+    /**
      * @var float
      */
     public $total;
@@ -146,6 +152,7 @@ class SheetDetailsView
      * @param Trace[]           $traces
      * @param Order[]           $orders
      * @param Transaction[]     $transactions
+     * @param Invoice[]         $invoices
      * @param float             $total
      * @param float             $remainingToPay
      * @param int               $completeness
@@ -166,6 +173,7 @@ class SheetDetailsView
         array $traces,
         array $orders,
         array $transactions,
+        array $invoices,
         $total,
         $remainingToPay,
         $completeness,
@@ -185,6 +193,7 @@ class SheetDetailsView
         $this->traces               = $traces;
         $this->orders               = $orders;
         $this->transactions         = $transactions;
+        $this->invoices             = $invoices;
         $this->total                = $total;
         $this->remainingToPay       = $remainingToPay;
         $this->completeness         = $completeness;
