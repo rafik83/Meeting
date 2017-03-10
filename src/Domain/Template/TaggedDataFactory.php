@@ -1,0 +1,141 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Template;
+
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
+
+class TaggedDataFactory
+{
+    /**
+     * @var TemplateDataFactory
+     */
+    private $templateDataFactory;
+
+    /**
+     * @var TaggedDataView[]
+     */
+    private $taggedDataViews;
+
+    /**
+     * TaggedDataFactory constructor.
+     *
+     * @param TemplateDataFactory $templateDataFactory
+     */
+    public function __construct(TemplateDataFactory $templateDataFactory)
+    {
+        $this->templateDataFactory = $templateDataFactory;
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function buildTaggedDataView(Sheet $sheet, $locale)
+    {
+        $this->createTaggedDataView($sheet, $locale);
+        $sheetTemplateData = $this->attachTaggedDataView($sheet, $locale);
+
+        return $sheetTemplateData;
+    }
+
+    /**
+     * Build taggedDataView for all registration template objects
+     *
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @see TaggedDataView
+     */
+    private function createTaggedDataView(Sheet $sheet, $locale)
+    {
+        $registerTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
+
+        $objects = $registerTemplateData->getObjects();
+
+        foreach ($objects as $object) {
+            $tags = $object->getTags();
+
+            if (count($tags) === 0 || !$object instanceof ContentObjectInterface) {
+                continue;
+            }
+
+            foreach ($tags as $tag) {
+                if (in_array($tag, Tag::getSetters())) {
+                    continue;
+                }
+
+                if ($object instanceof TemplateObject\Nomenclature) {
+                    $value = $object->getNomenclatureLabel();
+                } else {
+                    $value = $object->getContentValue();
+                }
+
+                $taggedDataView = new TaggedDataView(
+                    $object->getType(),
+                    $object->isTranslatable(),
+                    $object->getData(),
+                    $value
+                );
+
+                $this->addTaggedDataView($tag, $taggedDataView);
+            }
+        }
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    private function attachTaggedDataView(Sheet $sheet, $locale)
+    {
+        $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+        $objects = $sheetTemplateData->getObjects();
+
+        foreach ($objects as $object) {
+            $tags = $object->getTags();
+            if (count($tags) === 0) {
+                continue;
+            }
+
+            foreach ($tags as $tagData) {
+                $tag = $tagData['tag'];
+                if (in_array($tag, Tag::getSetters())) {
+                    continue;
+                }
+
+                if (!empty($this->taggedDataViews[$tag])) {
+                    $object->addTaggedDataView($this->taggedDataViews[$tag]);
+                }
+            }
+        }
+
+        return $sheetTemplateData;
+    }
+
+    /**
+     * @param string         $forTag
+     * @param TaggedDataView $taggedDataView
+     */
+    private function addTaggedDataView($forTag, $taggedDataView)
+    {
+        if (!isset($this->taggedDataViews[$forTag])) {
+            $this->taggedDataViews[$forTag] = $taggedDataView;
+        }
+    }
+}

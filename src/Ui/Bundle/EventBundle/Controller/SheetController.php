@@ -76,7 +76,7 @@ class SheetController extends Controller
             $locale
         );
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
         $participantProductView = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
