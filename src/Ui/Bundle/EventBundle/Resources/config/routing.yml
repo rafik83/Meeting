@@ -547,6 +547,13 @@ event_order_summary_total:
     methods: [GET]
     defaults: { _controller: EventBundle:Order:summaryTotal }
 
+event_invoice_show:
+    path: /invoice/{sheet}/{invoice}-{hash}
+    requirements:
+        sheet: \d+
+        order: \w+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Invoice:show }
 
 #
 # Agenda

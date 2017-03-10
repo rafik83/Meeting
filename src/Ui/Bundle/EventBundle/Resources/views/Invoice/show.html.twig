@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            {% if event.invoiceLogo is not null %}
+                <div class="col-md-4">
+                    <img src="{{ event.invoiceLogo }}" alt="{{ event.invoiceLogo }}" style="max-width: 600px; max-height: 300px;">
+                </div>
+            {% endif %}
+            {#<div class="col-md-offset-{{ event.invoiceLogo != null ? '4' : '8' }} col-md-4">#}
+                {#<strong>{{ pro_forma.billingInfo.company }}</strong><br>#}
+                {#{{ ('gender.' ~ pro_forma.billingInfo.gender)|trans }} {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>#}
+                {#{{ pro_forma.billingInfo.address.street }}<br>#}
+                {#{{ pro_forma.billingInfo.address.zipCode }} {{ pro_forma.billingInfo.address.city }}<br>#}
+                {#{{ pro_forma.billingInfo.address.country|country }}<br>#}
+                {#{% if pro_forma.billingInfo.vatNumber %}#}
+                    {#<strong>{{ 'pro_forma.vatNumber.title'|trans }}</strong> {{ pro_forma.billingInfo.vatNumber }}#}
+                {#{% endif %}#}
+            {#</div>#}
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <strong>{{ event.title }}</strong>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <strong>{{ 'pro_forma.number.title'|trans }}</strong> {{ invoice.number }}
+            </div>
+        </div>
+
+        {#{% if pro_forma.billingInfo.reference is not null %}#}
+            {#<div class="row">#}
+                {#<div class="col-md-12">#}
+                    {#<strong>{{ 'pro_forma.reference.title'|trans }}</strong> {{ pro_forma.billingInfo.reference }}#}
+                {#</div>#}
+            {#</div>#}
+        {#{% endif %}#}
+
+        <div class="row">
+            <div class="col-md-12">
+                <strong>{{ 'pro_forma.date.title'|trans }}</strong> {{ invoice.createdAt|localizeddate('medium', 'short', event.fallback) }}
+            </div>
+        </div>
+
+        {#{{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary, order: pro_forma.order}) }}#}
+
+        {#<div class="row">#}
+            {#<div class="col-md-4">#}
+                {#{{ pro_forma.billingAddress|nl2br }}<br>#}
+                {#<strong>{{ 'pro_forma.bankInfo.title'|trans }}</strong><br>#}
+                {#{{ pro_forma.bankInfo|nl2br }}<br>#}
+            {#</div>#}
+            {#<div class="col-md-offset-4 col-md-4">#}
+                {#{{ pro_forma.paymentCondition|nl2br }}<br>#}
+            {#</div>#}
+        {#</div>#}
+        {#<div class="row text-center">#}
+            {#<div class="col-md-12">#}
+                {#{{ pro_forma.footer|nl2br }}#}
+            {#</div>#}
+        {#</div>#}
+    </div>
+</body>
+</html>
