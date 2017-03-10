@@ -236,11 +236,42 @@ migrations:
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
 
+endif
+
 ##################################
 # Remote tasks on Vimeet Preprod #
 ##################################
 
-init-db@vimeet-preprod:
-	ssh proximum-vimeet-preprod "cd ~/proximum-vimeet.project.local/htdocs/current && make init-db"
+REMOTE_INSTALL_DIR = ~/proximum-vimeet.project.local/htdocs/current
+
+init-db@preprod:
+	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && make init-db"
+
+# next targets must be run in VM
+ifeq ($(HOST), vimeet.proximum.dev)
+
+get-db@preprod:
+	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  read -p "DB password?" DBPWD; \
+	  ssh vimeet-preprod "mysqldump --host localhost --port 3306 -u vimeet_preprod -p$$DBPWD vimeet_preprod > preprod.sql"; \
+	  scp vimeet-preprod:preprod.sql preprod.sql; \
+	  ssh vimeet-preprod "rm preprod.sql"; \
+	  bin/console doctrine:database:drop --force; \
+	  bin/console doctrine:database:create; \
+	  mysql -u root proximum_vimeet < preprod.sql; \
+	fi
+
+get-db@prod:
+	read -p "You are about to dump then download prod db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  read -p "DB password?" DBPWD; \
+	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$DBPWD vimeet_prod > prod.sql"; \
+	  scp vimeet-prod1:prod.sql prod.sql; \
+	  ssh vimeet-prod1 "rm prod.sql"; \
+	  bin/console doctrine:database:drop --force; \
+	  bin/console doctrine:database:create; \
+	  mysql -u root proximum_vimeet < prod.sql; \
+	fi
 
 endif
