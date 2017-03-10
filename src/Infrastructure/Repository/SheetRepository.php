@@ -241,6 +241,20 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getUnvalidatedSheetsById(array $ids)
+    {
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+
+        $queryBuilder
+            ->andWhere('sheet.state != :state')
+            ->setParameter('state', Sheet::STATE_VALIDATED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+  
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsUnacceptedById(array $ids)
     {
         $queryBuilder = $this->findByIdsQueryBuilder($ids);
