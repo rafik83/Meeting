@@ -1,0 +1,69 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#advancedFilters" aria-expanded="true" aria-controls="advancedFilters">
+                    {{ 'admin.sheet.list.filters.label'|trans }}
+                </a>
+            </h4>
+        </div>
+        <div id="advancedFilters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="form-group pull-right">
+                        <button type="submit" id="submit" name="submit" class=" btn btn-primary">
+                            {{ 'form.admin.sheet.filter.children.submit.label'|trans({}, 'forms') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.enabled, {'inline': true}) }}
+                    {{ form_row(form.validationState, {'inline': true}) }}
+                    {{ form_row(form.state, {'inline': true}) }}
+                    {{ form_row(form.completed, {'inline': true}) }}
+                    {{ form_row(form.inCatalog, {'inline': true}) }}
+                    {{ form_row(form.type) }}
+
+                    {% if form.category is defined %}
+                        {{ form_row(form.category) }}
+                    {% endif %}
+
+                    {{ form_row(form.registeredAt, {'inline': true}) }}
+                    {{ form_row(form.imported) }}
+                    {{ form_row(form.hasHappeningParticipation, {'inline': true}) }}
+
+                    <hr>
+
+                    {{ form_row(form.hasRemainingToPay, {'inline': true}) }}
+                    {{ form_row(form.has_order, {'inline': true}) }}
+                    {{ form_row(form.has_cart, {'inline': true}) }}
+                    {{ form_row(form.hasInvoice, {'inline': true}) }}
+
+                    <hr>
+
+                    {{ form_row(form.hasScheduledMeeting, {'inline': true}) }}
+                    {{ form_row(form.hasPendingMeetingPropositions) }}
+                    {{ form_row(form.hasNoMeetingRequest) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.follower) }}
+
+                    <hr>
+
+                    {% if form.boolean_filters is defined %}
+                        {% for boolean_filter in form.boolean_filters.children %}
+                            {{ form_row(boolean_filter, {'inline': true}) }}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group pull-right">
+                        <button type="submit" id="submit" name="submit" class=" btn btn-primary">
+                            {{ 'form.admin.sheet.filter.children.submit.label'|trans({}, 'forms') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

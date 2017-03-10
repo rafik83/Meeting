@@ -36,17 +36,17 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet1 = new Sheet($event, $type, [], $user1, $date);
+        $sheet1->markAsValidated();
         $sheet2 = new Sheet($event, $type, [], $user2, $date);
+        $sheet2->markAsValidated();
         $sheet3 = new Sheet($event, $type, [], $user3, $date);
         $sheet3->markAsValidated();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $validateHandler = $this->prophesize(ValidateHandler::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
-        $validateHandler->handle(Argument::that(function (Validate $validate) {
-            return !$validate->sheet->isValidated();
-        }))->shouldBeCalledTimes(2);
+        $sheetRepository->getUnvalidatedSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
+        $validateHandler->handle(Argument::type(Validate::class))->shouldBeCalledTimes(2);
 
         $command = new BatchValidate([1, 2, 3], $admin, $comment);
 

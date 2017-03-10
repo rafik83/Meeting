@@ -50,6 +50,10 @@ provision-nginx: provision
 provision-php: export ANSIBLE_TAGS = manala_php
 provision-php: provision
 
+## Provision supervisor
+provision-supervisor: export ANSIBLE_TAGS = manala_supervisor
+provision-supervisor: provision
+
 ###########
 # Install #
 ###########
@@ -231,8 +235,8 @@ migration@prod:
 	bin/console doctrine:migrations:migrate --no-interaction
 
 migrations:
-	bin/console doctrine:schema:drop --force
-	mysql -u root proximum_vimeet -e 'DROP TABLE IF EXISTS `migration_versions`'
+	bin/console doctrine:database:drop --force
+	bin/console doctrine:database:create
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
 

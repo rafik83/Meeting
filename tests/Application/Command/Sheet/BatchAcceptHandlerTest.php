@@ -41,16 +41,14 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $acceptHandler = $this->prophesize(AcceptHandler::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
-        $acceptHandler->handle(Argument::that(function (Accept $accept) {
-            return !$accept->sheet->isAccepted();
-        }))->shouldBeCalledTimes(2);
+        $sheetRepository->getSheetsUnacceptedById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
+        $acceptHandler->handle(Argument::type(Accept::class))->shouldBeCalledTimes(3);
 
         $command = new BatchAccept([1, 2, 3], $admin);
 
         $handler = new BatchAcceptHandler($sheetRepository->reveal(), $acceptHandler->reveal(), $date);
         $result  = $handler->handle($command);
 
-        $this->assertEquals(2, $result->count);
+        $this->assertEquals(3, $result->count);
     }
 }

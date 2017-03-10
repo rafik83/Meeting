@@ -30,6 +30,9 @@ Proximum\Vimeet\Domain\Model\BillingInfo:
         gender:
             type: string
             nullable: true
+        reference:
+            type: string
+            nullable: true
     embedded:
         address:
             class: Proximum\Vimeet\Domain\Model\Address

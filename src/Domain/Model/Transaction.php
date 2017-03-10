@@ -155,7 +155,7 @@ class Transaction
      */
     public function getAmountInCents()
     {
-        return (int) ($this->amount * 100);
+        return (int) round(100 * $this->amount);
     }
 
     /**

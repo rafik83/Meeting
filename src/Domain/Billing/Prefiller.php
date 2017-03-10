@@ -85,7 +85,8 @@ class Prefiller
                 $user->getAccount()->getZipCode(),
                 $user->getAccount()->getCity(),
                 $user->getAccount()->getCountry()
-            )
+            ),
+            $billingInfo->getReference()
         );
     }
 }
