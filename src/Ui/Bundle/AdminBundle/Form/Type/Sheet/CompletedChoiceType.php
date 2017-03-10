@@ -27,6 +27,7 @@ class CompletedChoiceType extends AbstractType
                 'event.sheet.completed.incomplete' => false,
             ],
             'choice_translation_domain' => 'messages',
+            'placeholder' => 'event.sheet.completed.all',
         ]);
     }
 

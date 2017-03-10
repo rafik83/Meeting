@@ -15,7 +15,9 @@ use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Exception\Sheet\InvoicedSheetException;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -70,6 +72,7 @@ class ChangeTypeHandler
      */
     public function handle(ChangeType $changeType)
     {
+        $this->denyAccessIfAtLeastOneOrderIsInvoiced($changeType->sheet);
         $previousType = $changeType->sheet->getType();
 
         if (null === $changeType->type || $changeType->type === $previousType) {
@@ -125,5 +128,20 @@ class ChangeTypeHandler
         // trigger event to generate must select package notification if user has no order
         $ordersUpdated = new MustSelectPackageEvent($changeType->sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $ordersUpdated);
+    }
+    
+    /**
+     * Throw exception if current sheet has at least one order invoiced
+     * When user attempt to change sheet type
+     *
+     * @param Sheet $sheet
+     *
+     * @throws InvoicedSheetException
+     */
+    private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet)
+    {
+        if ($this->orderRepository->hasInvoice($sheet) === true) {
+            throw new InvoicedSheetException('Sheet type cannot be changed');
+        }
     }
 }

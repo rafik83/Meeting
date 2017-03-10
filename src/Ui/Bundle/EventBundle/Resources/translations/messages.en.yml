@@ -145,7 +145,7 @@ order.transaction.mode.bank_check: Cheque
 order.transaction.mode.bank_transfer: Transfer
 order.transaction.mode.paypal: Paypal
 order.transaction.no: None
-order.transaction.paypal.description: 'Participation of %sheetName% (sheet %sheetId%) on the event "%eventName%"'
+order.transaction.paypal.description: '%eventId%-%sheetId% : Participation of %sheetName% on the event "%eventName%"'
 order.transaction.state.cancelled: Cancelled
 order.transaction.state.paid: Paid
 order.transaction.state.pending: Pending

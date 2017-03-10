@@ -12,10 +12,13 @@ namespace Proximum\Vimeet\Domain\Model\Sheet;
 
 final class Constant
 {
-    const CREATED_TODAY     = 'created_today';
-    const CREATED_THIS_WEEK = 'created_this_week';
-    const NO_ORDER          = 'no_order';
-    const HAS_CART          = 'has_cart';
+    const CREATED_TODAY        = 'created_today';
+    const CREATED_THIS_WEEK    = 'created_this_week';
+    const NO_ORDER             = 'no_order';
+    const HAS_CART             = 'has_cart';
+    const HAS_ORDER            = 'has_order';
+    const HAS_REMAINING_TO_PAY = 'hasRemainingToPay';
+    const BOOLEAN_FILTER       = 'boolean_filters';
 
     const ORDER_BY_ALPHABETICAL          = 'alphabetical';
     const ORDER_BY_DATE_ADDED_TO_CATALOG = 'dateAddedToCatalog';

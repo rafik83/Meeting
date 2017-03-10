@@ -48,6 +48,11 @@ class BatchHandler
     private $batchValidationValidateHandler;
 
     /**
+     * @var BatchGenerateInvoiceHandler;
+     */
+    private $batchGenerateInvoiceHandler;
+
+    /**
      * BatchHandler constructor.
      *
      * @param BatchValidateHandler           $batchValidateHandler
@@ -57,6 +62,7 @@ class BatchHandler
      * @param BatchCatalogHandler            $batchCatalogHandler
      * @param BatchDraftHandler              $batchDraftHandler
      * @param BatchValidationValidateHandler $batchValidationValidateHandler
+     * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
      */
     public function __construct(
         BatchValidateHandler $batchValidateHandler,
@@ -65,7 +71,8 @@ class BatchHandler
         BatchEnableDisableHandler $batchEnableDisableHandler,
         BatchCatalogHandler $batchCatalogHandler,
         BatchDraftHandler $batchDraftHandler,
-        BatchValidationValidateHandler $batchValidationValidateHandler
+        BatchValidationValidateHandler $batchValidationValidateHandler,
+        BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler
     ) {
         $this->batchValidateHandler           = $batchValidateHandler;
         $this->batchAssignHandler             = $batchAssignHandler;
@@ -74,6 +81,7 @@ class BatchHandler
         $this->batchCatalogHandler            = $batchCatalogHandler;
         $this->batchDraftHandler              = $batchDraftHandler;
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
+        $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
     }
 
     /**
@@ -133,6 +141,12 @@ class BatchHandler
             return $this->batchValidationValidateHandler->handle(
                 new BatchValidationValidate($batch->ids, $batch->admin)
             );
+        }
+        
+        if ($batch->generateInvoice) {
+           return $this->batchGenerateInvoiceHandler->handle(
+               new BatchGenerateInvoice($batch->ids, $batch->admin)
+           );
         }
 
         return new BatchResult(0, $batch->getMessage() . 'no_action');

@@ -28,9 +28,9 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
@@ -39,7 +39,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -66,18 +66,16 @@ class SheetController extends Controller
         $selectedSheetsPage = $request->query->getInt('page', 1);
 
         // redirect to list with default filters if no parameters
-        if (empty($request->query->all()) && empty($this->get('filter.sheet_filter')->get())) {
+        if (!$this->isRequestContainFilters($request) && empty($this->get('filter.sheet_filter')->get())) {
             return $this->redirectToRoute('admin_sheet', array_merge(
-                ['event' => $event->getId()],
+                ['event' => $event->getId(), 'page' => $selectedSheetsPage],
                 FilterFullType::getDefaultFilters()
             ));
         }
 
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        if (empty($request->query->all()) && $this->get('filter.sheet_filter')->get() !== null) {
+        if (!$this->isRequestContainFilters($request) && $this->get('filter.sheet_filter')->get() !== null) {
             return $this->redirectToRoute('admin_sheet', array_merge(
-                ['event' => $event->getId()],
+                ['event' => $event->getId(), 'page' => $selectedSheetsPage],
                 $this->get('filter.sheet_filter')->get()
             ));
         }
@@ -90,25 +88,20 @@ class SheetController extends Controller
 
         $filters = FilterFullType::getDefaultFilters();
 
-        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
+        $sheetFilter = $this->createFilterForm(SheetFilterType::class, $filters, [
             'event'  => $event,
-            'locale' => $locale,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'user'   => $this->getUser(),
         ]);
 
-        $filterPartForm = $this->createFilterForm(FilterPartType::class, [], [
-            'event'  => $event,
-            'locale' => $locale,
-        ]);
+        $isFiltered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
 
-        $filterPartForm->handleRequest(Request::create($request->getUri()));
-        $filtered = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
+        if ($isFiltered) {
+            $filters = $sheetFilter->getData();
 
-        if ($filtered) {
-            $filters = $filterFullForm->getData();
             // save filter into session
             $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
-                $filterFullForm,
+                $sheetFilter,
                 $request->query->all()
             ));
         }
@@ -120,7 +113,7 @@ class SheetController extends Controller
                 $filters,
                 $selectedSheetsPage,
                 100, // number of sheets by page
-                $locale,
+                $event->getAvailableLocale($request->getLocale()),
                 $this->getUser()
             );
             /** @var PaginatedResult $sheets */
@@ -138,19 +131,27 @@ class SheetController extends Controller
                 return $listView->id;
             }),
             'event'  => $event,
-            'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId(), 'page' => $selectedSheetsPage]),
+            'action' => $this->generateUrl(
+                'admin_sheet_batch',
+                [
+                    'event' => $event->getId(),
+                    'page'  => $selectedSheetsPage,
+                ]
+            ),
         ]);
 
-        $filterFormView = $filterFullForm->createView();
+        $sheetFilterView = $sheetFilter->createView();
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
             'sheets'           => $sheets,
-            'filter_form'      => $filterFormView,
-            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
-            'filtered'         => $filtered,
+            'filters_summary'  => $this->get('filter_summary')->getFilters(
+                $sheetFilterView,
+                $filters,
+                $request->getLocale()
+            ),
             'batch_form'       => $batchForm->createView(),
-            'filter_part_form' => $filterPartForm->createView(),
+            'filter_form'      => $sheetFilter->createView(),
         ]);
     }
 
@@ -186,7 +187,12 @@ class SheetController extends Controller
                     $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
+                
+                if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+                    $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
+                }
 
+                
                 /** @var BatchResult $result */
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
@@ -315,7 +321,9 @@ class SheetController extends Controller
 
         $changeTypeForm = null;
 
-        if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1) {
+        if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
+            && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
+        ) {
             $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
 
             $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
@@ -584,5 +592,25 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+    }
+
+    /**
+     * Check if request contains Sheet filters. Exclude page query parameter
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isRequestContainFilters(Request $request)
+    {
+        if (empty($request->query->all())) {
+            return false;
+        }
+
+        if (count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
+            return false;
+        }
+
+        return true;
     }
 }
