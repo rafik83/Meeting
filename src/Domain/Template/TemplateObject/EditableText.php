@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface
+use Proximum\Vimeet\Domain\Template\TranslatableInterface;
+
+class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
     /**
      * @param string|null locale
+     *
      * @return null|string
      */
     public function getContent($locale = null)
@@ -210,5 +213,23 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         }
 
         return '';
+    }
+
+    /**
+     * @return array
+     */
+    public function getTranslations()
+    {
+        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach ($this->data['text'] as $locale => $content) {
+            $translations[$locale] = $content;
+        }
+
+        return $translations;
     }
 }

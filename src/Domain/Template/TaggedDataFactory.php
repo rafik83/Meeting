@@ -90,7 +90,7 @@ class TaggedDataFactory
                 $taggedDataView = new TaggedDataView(
                     $object->getType(),
                     $object->isTranslatable(),
-                    $object->getData(),
+                    $object instanceof TranslatableInterface ? $object->getTranslations() : [],
                     $value
                 );
 
