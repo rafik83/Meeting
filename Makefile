@@ -247,6 +247,18 @@ REMOTE_INSTALL_DIR = ~/proximum-vimeet.project.local/htdocs/current
 init-db@preprod:
 	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && make init-db"
 
+clean-npm-tmp@preprod:
+	read -p "You are about to remove npm directories in /tmp on preprod, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  ssh vimeet-preprod "cd /tmp && rm -rf npm-*"; \
+	fi
+
+clean-npm-tmp@prod:
+	read -p "You are about to remove npm directories in /tmp on prod, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  ssh vimeet-prod "cd /tmp && rm -rf npm-*"; \
+	fi
+
 # next targets must be run in VM
 ifeq ($(HOST), vimeet.proximum.dev)
 
