@@ -72,6 +72,10 @@ class TaggedDataFactory
                 continue;
             }
 
+            if (!in_array(Tag::SHEET_DATA, $tags)) {
+                continue;
+            }
+
             foreach ($tags as $tag) {
                 if (in_array($tag, Tag::getSetters())) {
                     continue;
