@@ -1,7 +1,7 @@
 {% if filters|length > 0 %}
     <div class="text-center filters-summary">
         {% for label, value in filters %}
-            <span class="label label-default">{{ label }}: {{ value }}</span>
+            <span class="label label-default">{{ label }}: {{ value|trans({}, 'forms') }}</span>
         {% endfor %}
 
         <a href="{{ resetLink }}" class="btn btn-default btn-xs">

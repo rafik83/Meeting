@@ -61,26 +61,41 @@
         <div class="col-md-6 well">
             {{ form_start(filter_form) }}
                 {{ form_row(filter_form.text) }}
-                {{ form_row(filter_form.validationState) }}
-                {{ form_row(filter_form.state) }}
-                {{ form_row(filter_form.completed) }}
-                {{ form_row(filter_form.inCatalog) }}
+                {{ form_row(filter_form.validationState, {'inline': true}) }}
+                {{ form_row(filter_form.state, {'inline': true}) }}
+                {{ form_row(filter_form.completed, {'inline': true}) }}
+                {{ form_row(filter_form.inCatalog, {'inline': true}) }}
                 {{ form_row(filter_form.type) }}
+
                 {% if filter_form.category is defined %}
                     {{ form_row(filter_form.category) }}
                 {% endif %}
+
                 {{ form_row(filter_form.follower) }}
-                {{ form_row(filter_form.registeredAt) }}
-                {{ form_row(filter_form.hasHappeningParticipation) }}
-                {{ form_row(filter_form.hasRemainingToPay) }}
-                {{ form_row(filter_form.hasNoMeetingRequest) }}
-                {{ form_row(filter_form.hasPendingMeetingPropositions) }}
-                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::NO_ORDER')]) }}
-                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')]) }}
-                {% if filter_form.boolean_filters is defined %}
-                    {{ form_row(filter_form.boolean_filters) }}
-                {% endif %}
+                {{ form_row(filter_form.registeredAt, {'inline': true}) }}
                 {{ form_row(filter_form.imported) }}
+                {{ form_row(filter_form.hasHappeningParticipation) }}
+
+                <hr>
+
+                {{ form_row(filter_form.hasRemainingToPay, {'inline': true}) }}
+                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_ORDER')], {'inline': true}) }}
+                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')], {'inline': true}) }}
+                {{ form_row(filter_form.hasInvoice, {'inline': true}) }}
+
+                <hr>
+
+                {{ form_row(filter_form.hasScheduledMeeting, {'inline': true}) }}
+                {{ form_row(filter_form.hasPendingMeetingPropositions) }}
+                {{ form_row(filter_form.hasNoMeetingRequest) }}
+
+                {% if filter_form.boolean_filters is defined %}
+                    <hr>
+                    {% for boolean_filter in filter_form.boolean_filters.children %}
+                        {{ form_row(boolean_filter, {'inline': true}) }}
+                    {% endfor %}
+                {% endif %}
+
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-9">{{ form_widget(filter_form.submit) }}</div>
                 </div>

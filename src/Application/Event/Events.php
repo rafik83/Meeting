@@ -30,6 +30,8 @@ final class Events
     const MEETING_REQUEST_UNAPPROVED           = 'meeting_request.unapproved';
     const MEETING_REQUEST_UNREFUSED            = 'meeting_request.unrefused';
     const MEETING_CANCELED                     = 'meeting.canceled';
+    const MEETING_REMOVED                      = 'meeting.removed';
+    const MEETING_CREATED                      = 'meeting.created';
     const REQUEST_PARTICIPANT_ADDED            = 'meeting_request.participant.added';
     const REQUEST_PARTICIPANT_REMOVED          = 'meeting_request.participant.removed';
     const REQUEST_UPDATE_MESSAGE               = 'meeting_request.update.message';
@@ -47,6 +49,7 @@ final class Events
     const USER_PROFILE_COMPLETED               = 'user.profile_completed';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
+    const SHEET_INVOICED                       = 'sheet.invoiced';
     const REGISTRATION_STEP                    = 'user.registration.step';
     const SHEET_UPDATED                        = 'sheet.updated';
     const MUST_SELECT_PACKAGE                  = 'package.must_select_package';

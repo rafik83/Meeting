@@ -77,6 +77,7 @@ class BatchType extends AbstractType
         $builder
             ->add('validationStateDraft', SubmitType::class)
             ->add('validationStateValidate', SubmitType::class)
+            ->add('generateInvoice', SubmitType::class)
         ;
     }
 

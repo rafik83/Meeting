@@ -132,14 +132,15 @@ class Converter
                 $billingInfo->getAddress()->getCity(),
                 $billingInfo->getAddress()->getCountry()
             ),
-            $billingInfo->getVatNumber()
+            $billingInfo->getVatNumber(),
+            $billingInfo->getReference()
         );
 
         $groupsData = $sheet->getPackage()->serializeData();
 
         $order = new Order(
             $sheet,
-            $this->vatApplicable->onCart($cart),
+            $this->vatApplicable->onSheet($sheet),
             $orderBillingInfo,
             $groupsData,
             $this->datetime

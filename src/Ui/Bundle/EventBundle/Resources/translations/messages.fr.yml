@@ -32,13 +32,13 @@ catalog.complete_sheet: 'Voir la fiche complète'
 catalog.meeting_request.approve: Accepter
 catalog.meeting_request.create: 'Demander en RDV'
 catalog.meeting_request.pending: 'Demande en attente'
-catalog.meeting_request.proposition.approved: 'Proposition acceptée'
-catalog.meeting_request.proposition.placed: 'RDV planifié'
-catalog.meeting_request.proposition.refused: 'Proposition refusée'
+catalog.meeting_request.proposition.approved: 'Proposition reçue acceptée'
+catalog.meeting_request.proposition.placed: 'Proposition reçue acceptée - RDV plannifié'
+catalog.meeting_request.proposition.refused: 'Proposition reçue refusée'
 catalog.meeting_request.refuse: Refuser
-catalog.meeting_request.request.approved: 'Demande acceptée'
-catalog.meeting_request.request.placed: 'RDV planifié'
-catalog.meeting_request.request.refused: 'Demande refusée'
+catalog.meeting_request.request.approved: 'Votre demande acceptée'
+catalog.meeting_request.request.placed: 'Votre demande acceptée - RDV planifié'
+catalog.meeting_request.request.refused: 'Votre demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
@@ -91,7 +91,7 @@ login.memberArea: 'Espace membre'
 modal.back: Retour
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
 navigation.category.billing: Facturation
-navigation.category.catalog: 'Catalogue'
+navigation.category.catalog: Catalogue
 navigation.category.happening: 'Gestion RDV'
 navigation.category.meeting: 'Gestion RDV'
 navigation.category.member_space: 'Espace membre'
@@ -180,7 +180,7 @@ order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
 order.transaction.mode.paypal: Paypal
 order.transaction.no: Aucune
-order.transaction.paypal.description: 'Participation de %sheetName% (fiche %sheetId%) à l''évènement "%eventName%"'
+order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %sheetName% à l''évènement "%eventName%"'
 order.transaction.state.cancelled: Annulé
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
@@ -254,6 +254,7 @@ package.vatMode.et: HT
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
 pro_forma.date.title: 'Date :'
 pro_forma.number.title: 'N° pro-forma :'
+pro_forma.reference.title: 'Votre référence :'
 pro_forma.title: 'Pro-forma - %date%'
 pro_forma.vatNumber.title: 'Numéro TVA'
 program.title: Programme
