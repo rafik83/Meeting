@@ -65,7 +65,7 @@ class SummaryViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $promotionCodeQueryHandler->handle(Argument::type(PromotionCodeQuery::class))->shouldBeCalled()
             ->willReturn($promotionCodesView);
 
-        $vatApplicable->onCart($cart)->shouldBeCalled()->willReturn(true);
+        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
 
         $handler = new SummaryViewQueryHandler(
             $groupsViewQueryHandler->reveal(),
