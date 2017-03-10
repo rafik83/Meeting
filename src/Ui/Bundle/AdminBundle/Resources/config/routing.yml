@@ -1257,3 +1257,23 @@ admin_invoice_globals_create:
     path: /invoice/prefix/create
     defaults: { _controller: AdminBundle:Invoice:create }
     methods: [GET, POST]
+
+
+#
+# Planning
+#
+admin_planning_export:
+    path: /event/{event}/planning/export
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Planning/Export:exportPlanning }
+
+admin_planning_export_link:
+    path: /event/{event}/planning/export/link/{year}/{month}/{file}
+    requirements:
+        event: \d+
+        year: \d+
+        month: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planning/Export:exportPlanningPrint }
