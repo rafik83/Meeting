@@ -6,17 +6,6 @@ COLOR_RESET   = \033[0m
 COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
-HOST = $(shell hostname)
-IS_PROD = no
-
-ifeq ($(HOST), web-apache-01.proximum.local)
-	IS_PROD = yes
-endif
-
-ifeq ($(HOST), web-apache-02.proximum.local)
-	IS_PROD = yes
-endif
-
 ## Help
 help:
 	printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"
@@ -31,13 +20,6 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
-
-## Show current host
-show-host:
-	printf "HOST ? ${HOST} ; IS_PROD ? ${IS_PROD}\n"
-
-# Do no allow targets in production
-ifeq ($(IS_PROD), no)
 
 #########
 # Setup #
@@ -210,8 +192,26 @@ deploy-capifony@prod:
 # Custom #
 ##########
 
+HOST = $(shell hostname)
+IS_PROD = no
+
+ifeq ($(HOST), web-apache-01.proximum.local)
+	IS_PROD = yes
+endif
+
+ifeq ($(HOST), web-apache-02.proximum.local)
+	IS_PROD = yes
+endif
+
+## Show current host
+show-host:
+	printf "HOST ? ${HOST} ; IS_PROD ? ${IS_PROD}\n"
+
+# Do no allow targets in production
+ifeq ($(IS_PROD), no)
+
 init-db:
-	read -p "You are about to ini db, please confirm (y/n)?" CONFIRM; \
+	read -p "You are about to init db, please confirm (y/n)?" CONFIRM; \
 	if [ "$$CONFIRM" = "y" ]; then \
 	  bin/console doctrine:schema:drop --force; \
 	  bin/console doctrine:schema:create; \
