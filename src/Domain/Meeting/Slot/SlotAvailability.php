@@ -340,23 +340,23 @@ class SlotAvailability
     {
         foreach ($this->massUnavailability as $mass) {
             if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
-                return !$mass->isBlocking() || $mass->isDispatch();
+                return $mass->isBlocking() && !$mass->isDispatch();
             }
 
             if ($slot->getEnd() > $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return !$mass->isBlocking() || $mass->isDispatch();
+                return $mass->isBlocking() && !$mass->isDispatch();
             }
 
             if ($slot->getBegin() >= $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return !$mass->isBlocking() || $mass->isDispatch();
+                return $mass->isBlocking() && !$mass->isDispatch();
             }
 
             if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() < $slot->getEnd()) {
-                return !$mass->isBlocking() || $mass->isDispatch();
+                return $mass->isBlocking() && !$mass->isDispatch();
             }
 
             if ($mass->getEnd() > $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
-                return !$mass->isBlocking() || $mass->isDispatch();
+                return $mass->isBlocking() && !$mass->isDispatch();
             }
         }
 
