@@ -51,10 +51,10 @@ class Cart
     /**
      * Cart constructor.
      *
-     * @param Sheet     $sheet
-     * @param CartRow[] $rows
-     * @param array     $promotionRows
-     * @param int       $currentStep
+     * @param Sheet              $sheet
+     * @param CartRow[]          $rows
+     * @param PromotionCodeRow[] $promotionRows
+     * @param int                $currentStep
      */
     public function __construct(Sheet $sheet, array $rows, array $promotionRows, $currentStep = null)
     {
