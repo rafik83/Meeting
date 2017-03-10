@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2017 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CompletedChoiceType extends AbstractType
+class EnabledStateChoiceType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -22,12 +22,12 @@ class CompletedChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices' => [
-                'event.sheet.completed.complete'   => true,
-                'event.sheet.completed.incomplete' => false,
+            'choices'                   => [
+                'form.sheet_filter.children.enabledState.enabled.label'  => true,
+                'form.sheet_filter.children.enabledState.disabled.label' => false,
             ],
-            'choice_translation_domain' => 'messages',
-            'placeholder' => 'event.sheet.completed.all',
+            'choice_translation_domain' => 'forms',
+            'placeholder'               => 'form.sheet_filter.children.enabledState.all.label',
         ]);
     }
 
@@ -44,6 +44,6 @@ class CompletedChoiceType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'sheet_completed_choice';
+        return 'sheet_enabled_state_choice';
     }
 }
