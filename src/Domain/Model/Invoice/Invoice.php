@@ -257,4 +257,12 @@ class Invoice
     {
         return $this->orders->toArray();
     }
+
+    /**
+     * @return string
+     */
+    public function getHash()
+    {
+        return hash('sha256', $this->getId() . $this->getNumber() . $this->getCreatedAt()->format('YmdHis'));
+    }
 }

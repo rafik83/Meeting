@@ -1655,6 +1655,12 @@ services:
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
             - '@order.balance'
+            - '@sheet.sheet_details.invoice_view_query_handler'
+    sheet.sheet_details.invoice_view_query_handler:
+        class: Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler
+        arguments:
+            - '@repository.invoice.invoice_repository'
+            - '@adapter.event_url_generator'
     sheet.sheet_meetings_list_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
         arguments:

@@ -28,18 +28,15 @@ class InvoiceController extends Controller
      */
     public function showAction(EventDomain $eventDomain, Sheet $sheet, Invoice $invoice, $hash)
     {
-        dump($sheet, $invoice, $hash);
-
-        if ($invoice->getSheet() !== $sheet) {
+        if ($invoice->getSheet() !== $sheet || $invoice->getHash() !== $hash) {
             throw $this->createNotFoundException();
         }
 
         $event = $eventDomain->getEvent();
 
-        exit;
-
         return $this->render('EventBundle:Invoice:show.html.twig', [
             'event' => $event,
+            'invoice' => $invoice,
         ]);
     }
 }
