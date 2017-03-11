@@ -547,13 +547,14 @@ event_order_summary_total:
     methods: [GET]
     defaults: { _controller: EventBundle:Order:summaryTotal }
 
-# this route is available without authentication
+# These routes event_invoice_* are available without authentication
 event_invoice_show:
-    path: /invoice/{sheet}/{invoice}a{hash} # "a" is a separator
+    path: /invoice/{sheet}/{invoice}a{hash}.{format} # "a" is a separator
     requirements:
         sheet: \d+
         invoice: \d+
         hash: \w+
+        format: (html|pdf)
     methods: [GET]
     defaults: { _controller: EventBundle:Invoice:show }
 

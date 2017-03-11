@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;

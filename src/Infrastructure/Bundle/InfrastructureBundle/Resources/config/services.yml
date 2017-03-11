@@ -3541,3 +3541,14 @@ services:
         arguments:
             - '@planning.formatter.sheet_planning_formatter'
             - '@markdown'
+
+
+    #
+    # Invoice
+    #
+    printer.invoice_pdf_printer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicePdfPrinter
+        arguments:
+            - '@router'
+            - '%phantomjs_path%'
+            - '%phantomjs_script%'

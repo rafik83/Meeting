@@ -58,7 +58,8 @@ class InvoiceViewQueryHandler
                 [
                     'sheet' => $invoiceViewQuery->sheet->getId(),
                     'invoice' => $invoice->getId(),
-                    'hash' => $invoice->getHash()
+                    'hash' => $invoice->getHash(),
+                    'format' => 'pdf',
                 ]
             );
 
