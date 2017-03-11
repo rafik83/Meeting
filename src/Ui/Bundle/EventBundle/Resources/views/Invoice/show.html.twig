@@ -2,6 +2,18 @@
 <head>
     <title></title>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    <script type="text/javascript">
+        var PhantomJSPrinting = {
+            header: {
+                height: "2cm",
+                contents: function(pageNum, numPages) { return '<span style="color: red">Mon header</span> : ' + pageNum + "/" + numPages; }
+            },
+            footer: {
+                height: "1cm",
+                contents: function(pageNum, numPages) { return 'Mon footer : ' + pageNum + "/" + numPages; }
+            }
+        };
+    </script>
 </head>
 <body>
     <div class="container">

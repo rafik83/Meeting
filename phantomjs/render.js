@@ -1,22 +1,58 @@
+"use strict";
+
 var system = require('system');
-var page   = require('webpage').create();
-var args   = system.args;
+var page = require('webpage').create();
+var args = system.args;
+
+var address = args[1];
+var output = args[2];
+var httpPassword = args[3];
 
 page.settings.userName = "phantomjs";
-page.settings.password = args[3];
+page.settings.password = httpPassword;
 
 page.paperSize = {
-    format      : "A4",
-    orientation : "portrait",
-    margin      : { left: "1cm", right: "1cm", top: "1cm", bottom: "1cm" }
+    format: "A4",
+    orientation: "portrait",
+    margin: {left: "1cm", right: "1cm", top: "1cm", bottom: "1cm"},
+    header: {},
+    footer: {}
 };
 
 page.viewportSize = {
-    width:  1200,
+    width: 1200,
     height: 600
 };
 
-page.open(args[1], function() {
-    page.render(args[2]);
-    phantom.exit();
+page.open(address, function () {
+    if (page.evaluate(function () {
+            return typeof PhantomJSPrinting == "object";
+        })
+    ) {
+        var paperSize = page.paperSize;
+        paperSize.header.height = page.evaluate(function () {
+            return PhantomJSPrinting.header.height;
+        });
+        paperSize.header.contents = phantom.callback(function (pageNum, numPages) {
+            return page.evaluate(function (pageNum, numPages) {
+                return PhantomJSPrinting.header.contents(pageNum, numPages);
+            }, pageNum, numPages);
+        });
+        paperSize.footer.height = page.evaluate(function () {
+            return PhantomJSPrinting.footer.height;
+        });
+        paperSize.footer.contents = phantom.callback(function (pageNum, numPages) {
+            return page.evaluate(function (pageNum, numPages) {
+                return PhantomJSPrinting.footer.contents(pageNum, numPages);
+            }, pageNum, numPages);
+        });
+        page.paperSize = paperSize;
+        console.log(page.paperSize.header.height);
+        console.log(page.paperSize.footer.height);
+    }
+
+    window.setTimeout(function () {
+        page.render(output);
+        phantom.exit();
+    }, 200);
 });
