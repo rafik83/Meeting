@@ -1,0 +1,4 @@
+{% if event.invoiceLogo is not null %}
+    {# It mus be an absolute url to render image in header #}
+    <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ event.invoiceLogo }}" style="max-width: 10cm; max-height: 1cm;">
+{% endif %}
