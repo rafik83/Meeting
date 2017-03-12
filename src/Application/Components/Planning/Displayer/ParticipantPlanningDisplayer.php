@@ -52,4 +52,12 @@ class ParticipantPlanningDisplayer
 
         return $this->markdown->toHtml($planningMarkdown);
     }
+
+    /**
+     * @param Participant[] $participants
+     */
+    public function preloadForParticipants(array $participants)
+    {
+        $this->participantPlanningFormatter->preloadPlanningHandlerForParticipants($participants);
+    }
 }

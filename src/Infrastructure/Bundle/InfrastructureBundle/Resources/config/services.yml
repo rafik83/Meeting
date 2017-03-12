@@ -3481,7 +3481,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@planning.formatter.unallocated_formatter'
-            - '@query.agenda.agenda_view_query_handler'
             - '@query.planning.planning_view_query_handler'
     planning.formatter.sheet_planning_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\SheetPlanningFormatter

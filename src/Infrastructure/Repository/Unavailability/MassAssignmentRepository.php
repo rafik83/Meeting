@@ -83,6 +83,25 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findEnabledByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('assignment, mass, participant')
+            ->from(MassAssignment::class, 'assignment')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
+            ->join('assignment.participant', 'participant')
+            ->where('assignment.enabled = true')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(MassAssignment $massAssignment)
     {
         $this->entityManager->flush($massAssignment);
@@ -119,6 +138,44 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->join('assignment.participant', 'participant', 'WITH', 'participant.id = :participant')
             ->join('assignment.mass', 'mass')
             ->setParameter('participant', $participant->getId());
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByParticipant(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('assignment, mass')
+            ->from(MassAssignment::class, 'assignment')
+            ->join('assignment.participant', 'participant', 'WITH', 'participant.id = :participant')
+            ->join('assignment.mass', 'mass')
+            ->where('assignment.enabled = true')
+            ->setParameter('participant', $participant->getId());
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByParticipants(array $participants)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('assignment, mass')
+            ->from(MassAssignment::class, 'assignment')
+            ->join('assignment.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
+            ->join('assignment.mass', 'mass')
+            ->where('assignment.enabled = true')
+            ->setParameter('participants', $participants);
         ;
 
         return $queryBuilder->getQuery()->getResult();

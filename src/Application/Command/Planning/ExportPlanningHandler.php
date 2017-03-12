@@ -138,6 +138,7 @@ class ExportPlanningHandler
         }
 
         $plannings = [];
+        $this->participantPlanningDisplayer->preloadForParticipants($participants);
 
         foreach ($participants as $participant) {
             $plannings[] = new PlanningPrint(

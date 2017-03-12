@@ -92,7 +92,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     {
         $rawParticipants = [];
         $locale          = $context['locale'];
-        $this->participantPlanningFormatter->preloadPlanningHandler($object->event);
+        $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($object->event);
 
         foreach ($this->participantRepository->getParticipantsByEvent($object->event, $locale) as $participant) {
             $rawParticipants[] = $this->getParticipantRawData($participant, $object->user, $locale);

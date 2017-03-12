@@ -12,7 +12,11 @@ namespace Proximum\Vimeet\Application\Query\Planning;
 
 use Proximum\Vimeet\Application\View\Planning\PlanningView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -154,7 +158,7 @@ class PlanningViewQueryHandler
         }
 
         if (!isset($this->assignments[$participant->getId()])) {
-            $this->assignments[$participant->getId()] = $this->assignmentRepository->findByParticipant($participant);
+            $this->assignments[$participant->getId()] = $this->assignmentRepository->findEnabledByParticipant($participant);
         }
 
         if (!isset($this->meetings[$participant->getId()])) {
@@ -171,36 +175,74 @@ class PlanningViewQueryHandler
     }
 
     /**
-     * @param Event $event
+     * @param Participant[] $participants
      */
-    public function preload(Event $event)
+    public function preloadForParticipants(array $participants)
     {
-        $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
+        if (!empty($participants)) {
+            $firstParticipant = reset($participants);
+            $event            = $firstParticipant->getSheet()->getEvent();
 
-        $meetings = $this->meetingRepository->getAllByEvent($event);
+            $this->masses = $this->massUnavailabilityRepository->findByEvent($event);
+        }
 
+        $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByParticipants($participants));
+        $this->assignMeetingByParticipant($this->meetingRepository->findByParticipants($participants));
+        $this->assignUnavailabilitiesByParticipant($this->unavailabilityRepository->findByParticipants($participants));
+        $this->assignHappeningsByParticipant($this->happeningParticipationRepository->findByParticipants($participants));
+    }
+
+    /**
+     * @param Meeting[] $meetings
+     */
+    private function assignMeetingByParticipant(array $meetings)
+    {
         foreach ($meetings as $meeting) {
             foreach ($meeting->getAllParticipants() as $participant) {
                 $this->meetings[$participant->getId()][] = $meeting;
             }
         }
+    }
 
-        $assignments = $this->assignmentRepository->findByEvent($event);
-
+    /**
+     * @param MassAssignment[] $assignments
+     */
+    private function assignAssignmentByParticipant(array $assignments)
+    {
         foreach ($assignments as $assignment) {
             $this->assignments[$assignment->getParticipant()->getId()][] = $assignment;
         }
+    }
 
-        $unavailabilites = $this->unavailabilityRepository->getByEvent($event);
-
-        foreach ($unavailabilites as $unavailability) {
+    /**
+     * @param Unavailability[] $unavailabilities
+     */
+    private function assignUnavailabilitiesByParticipant(array $unavailabilities)
+    {
+        foreach ($unavailabilities as $unavailability) {
             $this->unavailabilities[$unavailability->getParticipant()->getId()][] = $unavailability;
         }
+    }
 
-        $happenings = $this->happeningParticipationRepository->getByEvent($event);
-
+    /**
+     * @param HappeningParticipation[] $happenings
+     */
+    private function assignHappeningsByParticipant(array $happenings)
+    {
         foreach ($happenings as $happening) {
             $this->happeningParticipations[$happening->getParticipant()->getId()][] = $happening;
         }
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function preloadForEvent(Event $event)
+    {
+        $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
+        $this->assignMeetingByParticipant($this->meetingRepository->getAllByEvent($event));
+        $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByEvent($event));
+        $this->assignUnavailabilitiesByParticipant($this->unavailabilityRepository->getByEvent($event));
+        $this->assignHappeningsByParticipant($this->happeningParticipationRepository->getByEvent($event));
     }
 }

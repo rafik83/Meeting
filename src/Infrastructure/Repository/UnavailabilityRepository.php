@@ -74,6 +74,21 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipants(array $participants)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->join('unavailability.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
+            ->setParameter('participants', $participants);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 
     /**
      * {@inheritdoc}

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
-use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\Day\AbstractTimeEntityView;
@@ -45,11 +44,6 @@ class ParticipantPlanningFormatter
     private $unallocatedFormatter;
 
     /**
-     * @var AgendaViewQueryHandler
-     */
-    private $agendaViewQueryHandler;
-
-    /**
      * @var PlanningViewQueryHandler
      */
     private $planningViewQueryHandler;
@@ -57,18 +51,15 @@ class ParticipantPlanningFormatter
     /**
      * @param TranslatorAdapter        $translator
      * @param UnallocatedFormatter     $unallocatedFormatter
-     * @param AgendaViewQueryHandler   $agendaViewQueryHandler
      * @param PlanningViewQueryHandler $planningViewQueryHandler
      */
     public function __construct(
         TranslatorAdapter $translator,
         UnallocatedFormatter $unallocatedFormatter,
-        AgendaViewQueryHandler $agendaViewQueryHandler,
         PlanningViewQueryHandler $planningViewQueryHandler
     ) {
-        $this->translator             = $translator;
-        $this->unallocatedFormatter   = $unallocatedFormatter;
-        $this->agendaViewQueryHandler = $agendaViewQueryHandler;
+        $this->translator               = $translator;
+        $this->unallocatedFormatter     = $unallocatedFormatter;
         $this->planningViewQueryHandler = $planningViewQueryHandler;
     }
 
@@ -84,9 +75,9 @@ class ParticipantPlanningFormatter
     {
         $sheet  = $participant->getSheet();
         $event  = $sheet->getEvent();
-        $planning = $this->getAgendaFromParticipant($event, $participant, $userLocale);
+        $planning = $this->getPlanningFromParticipant($event, $participant, $userLocale);
 
-        return $this->formatPlanningFromAgenda($planning, $userLocale);
+        return $this->formatPlanningFromPlanningView($planning, $userLocale);
     }
 
     /**
@@ -97,19 +88,27 @@ class ParticipantPlanningFormatter
      */
     public function formatPlanningFromParticipantWithUnallocated(Participant $participant, $userLocale)
     {
-        $sheet  = $participant->getSheet();
-        $event  = $sheet->getEvent();
-        $agenda = $this->getAgendaFromParticipant($event, $participant, $userLocale);
+        $sheet        = $participant->getSheet();
+        $event        = $sheet->getEvent();
+        $planningView = $this->getPlanningFromParticipant($event, $participant, $userLocale);
 
-        return $this->formatPlanningFromAgendaWithUnallocated($sheet, $agenda, $userLocale);
+        return $this->formatPlanningFromPlanningViewWithUnallocated($sheet, $planningView, $userLocale);
     }
 
     /**
      * @param Event $event
      */
-    public function preloadPlanningHandler(Event $event)
+    public function preloadPlanningHandlerForEvent(Event $event)
     {
-        $this->planningViewQueryHandler->preload($event);
+        $this->planningViewQueryHandler->preloadForEvent($event);
+    }
+
+    /**
+     * @param Participant[] $participants
+     */
+    public function preloadPlanningHandlerForParticipants(array $participants)
+    {
+        $this->planningViewQueryHandler->preloadForParticipants($participants);
     }
 
     /**
@@ -119,7 +118,7 @@ class ParticipantPlanningFormatter
      *
      * @return PlanningView
      */
-    private function getAgendaFromParticipant(Event $event, Participant $participant, $userLocale)
+    private function getPlanningFromParticipant(Event $event, Participant $participant, $userLocale)
     {
         return $this->planningViewQueryHandler->handle(new PlanningViewQuery($event, $participant, $userLocale));
     }
@@ -132,7 +131,7 @@ class ParticipantPlanningFormatter
      *
      * @return string
      */
-    public function formatPlanningFromAgenda(PlanningView $planning, $userLocale)
+    public function formatPlanningFromPlanningView(PlanningView $planning, $userLocale)
     {
         return $this->format($planning->days, $userLocale);
     }
@@ -146,7 +145,7 @@ class ParticipantPlanningFormatter
      *
      * @return string
      */
-    public function formatPlanningFromAgendaWithUnallocated(Sheet $sheet, PlanningView $planningView, $userLocale)
+    public function formatPlanningFromPlanningViewWithUnallocated(Sheet $sheet, PlanningView $planningView, $userLocale)
     {
         $planning    = $this->format($planningView->days, $userLocale);
         $unallocated = $this->unallocatedFormatter->format($sheet, $userLocale);
