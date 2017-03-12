@@ -54,6 +54,10 @@ class ParticipantPlanningDisplayer
     }
 
     /**
+     * To optimize the use of this service for multiple participant
+     * This method can be called to preload the participants data before
+     * And avoid multiple unit call for each participant
+     *
      * @param Participant[] $participants
      */
     public function preloadForParticipants(array $participants)

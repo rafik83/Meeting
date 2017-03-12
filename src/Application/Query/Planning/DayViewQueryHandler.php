@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -68,11 +68,11 @@ class DayViewQueryHandler
      */
     public function handle(DayViewQuery $query)
     {
-        $happeningViews  = [];
-        $assignments     = [];
-        $unavailabilites = [];
-        $masses          = [];
-        $meetings        = [];
+        $happeningViews   = [];
+        $assignments      = [];
+        $unavailabilities = [];
+        $masses           = [];
+        $meetings         = [];
 
         foreach ($query->happenings as $happening) {
             if ($happening->getHappening()->getBegin() >= $query->day->getStartTime()
@@ -91,7 +91,7 @@ class DayViewQueryHandler
             if ($unavailability->getBegin() >= $query->day->getStartTime()
                 && $unavailability->getEnd() <= $query->day->getEndTime()
             ) {
-                $unavailabilites[] = $this->unavailabilityHandler->handle(
+                $unavailabilities[] = $this->unavailabilityHandler->handle(
                     new UnavailabilityViewQuery($unavailability)
                 );
             }
@@ -140,7 +140,7 @@ class DayViewQueryHandler
             $query->day->getStartTime(),
             $query->day->getEndTime(),
             $happeningViews,
-            $unavailabilites,
+            $unavailabilities,
             $masses,
             $assignments,
             $meetings

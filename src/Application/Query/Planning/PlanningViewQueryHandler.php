@@ -183,7 +183,7 @@ class PlanningViewQueryHandler
             $firstParticipant = reset($participants);
             $event            = $firstParticipant->getSheet()->getEvent();
 
-            $this->masses = $this->massUnavailabilityRepository->findByEvent($event);
+            $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
         }
 
         $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByParticipants($participants));
