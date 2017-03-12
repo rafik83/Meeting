@@ -46,10 +46,9 @@ class InvoicePdfPrinter
     public function generate(Invoice $invoice)
     {
         $pathToPdf = sprintf(
-            '%s/%s-%s.pdf',
+            '%s/invoice-%s.pdf',
             sys_get_temp_dir(),
-            $invoice->getId(),
-            $invoice->getNumber()
+            $invoice->getId()
         );
 
         $urlToPrint = $this->router->generate(

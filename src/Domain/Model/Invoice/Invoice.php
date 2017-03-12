@@ -263,6 +263,10 @@ class Invoice
      */
     public function getHash()
     {
-        return hash('sha256', $this->getId() . $this->getNumber() . $this->getCreatedAt()->format('YmdHis'));
+        return sprintf(
+            '%s-%s',
+            $this->getNumber(),
+            hash('sha256', $this->getId() . $this->getNumber() . $this->getCreatedAt()->format('YmdHis'))
+        );
     }
 }
