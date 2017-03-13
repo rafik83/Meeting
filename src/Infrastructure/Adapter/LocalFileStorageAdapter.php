@@ -64,7 +64,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
             throw new \Exception(sprintf('"%s" expected, "%s" given.', UploadedFile::class, is_object($file) ? get_class($file) : gettype($file)));
         }
 
-        $path = $this->getAnnualizedPath(true);
+        $path = $this->getAnnualizedPath('uploads/');
 
         $directory = ($directoryPath === null) ? $this->publicDir . $path : $directoryPath . $path;
         $extension = '.' . $file->getClientOriginalExtension();
@@ -99,15 +99,13 @@ class LocalFileStorageAdapter implements FileStorageInterface
     }
 
     /**
-     * @param bool $uploadInPath
+     * @param string|null $extraDirInPath should be a string ending with a "/"
      *
      * @return string
      */
-    public function getAnnualizedPath($uploadInPath = false)
+    public function getAnnualizedPath($extraDirInPath = null)
     {
-        $uploadPath = true === $uploadInPath ? 'uploads/' : null;
-
-        return $path = sprintf('/%s%s/%s', $uploadPath, $this->dateTime->format('Y'), $this->dateTime->format('m'));
+        return $path = sprintf('/%s%s/%s', $extraDirInPath, $this->dateTime->format('Y'), $this->dateTime->format('m'));
     }
 
     /**
