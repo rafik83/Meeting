@@ -57,7 +57,7 @@ mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
 mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
-mail.planning.print.link.intro: "Vous pouvez télécharger le fichier à l'adresse suivante: "
+mail.planning.print.link.intro: "Vous pouvez imprimer les plannings en cliquant ici :"
 mail.planning.print.link.click: 'Fichier de planning'
 mail.planning.print.orderBy.sheet_title: par nom de société
 mail.planning.print.orderBy.participant_last_name: par nom de famille du participant

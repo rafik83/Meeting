@@ -3,8 +3,8 @@
 <body>
 {{ 'mail.planning.print.intro'|trans({}, 'mail', mail.locale)|html|nl2br }}
 <ul>
-    {% for type in mail.types %}
-        {{ type.title }}
+    {% for typeView in mail.typeViews %}
+        <li>{{ typeView.title }}</li>
     {% endfor %}
 </ul>
 <br>

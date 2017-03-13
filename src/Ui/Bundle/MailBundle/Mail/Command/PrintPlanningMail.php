@@ -12,51 +12,39 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\View\TypeView;
 
 class PrintPlanningMail extends AbstractMail
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $subject = 'mail.planning.print.subject';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $template = 'MailBundle:Mail:Planning/print.html.twig';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $messageId = 'export_planning_print';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $filePath;
 
-    /**
-     * @var Type[]
-     */
-    public $types;
+    /** @var TypeView[] */
+    public $typeViews;
 
     /** @var string */
     public $orderBy;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $filePath
-     * @param Type[] $types
-     * @param string $orderBy
+     * @param Event      $event
+     * @param string     $sender
+     * @param string     $receiver
+     * @param string     $locale
+     * @param string     $filePath
+     * @param TypeView[] $typeViews
+     * @param string     $orderBy
      */
     public function __construct(
         Event $event,
@@ -64,14 +52,14 @@ class PrintPlanningMail extends AbstractMail
         $receiver,
         $locale,
         $filePath,
-        array $types = [],
+        array $typeViews = [],
         $orderBy
     ) {
         parent::__construct($sender, $receiver, $locale);
 
-        $this->event    = $event;
-        $this->filePath = $filePath;
-        $this->types    = $types;
-        $this->orderBy  = $orderBy;
+        $this->event     = $event;
+        $this->filePath  = $filePath;
+        $this->typeViews = $typeViews;
+        $this->orderBy   = $orderBy;
     }
 }

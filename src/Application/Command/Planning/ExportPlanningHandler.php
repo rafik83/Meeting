@@ -104,7 +104,6 @@ class ExportPlanningHandler
         /** @var Participant $firstParticipant */
         $firstParticipant = reset($participants);
         $event            = $firstParticipant->getSheet()->getEvent();
-        $types            = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
         $this->orderParticipant($event, $exportPlanning->orderBy, $participants);
 
@@ -136,6 +135,8 @@ class ExportPlanningHandler
         ]);
 
         $filePath = $this->localFileStorageAdapter->create($print, 'print_planning.html', $this->publicDir);
+
+        $types = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
         $this->mailer->send(new PrintPlanningMail(
             $event,
