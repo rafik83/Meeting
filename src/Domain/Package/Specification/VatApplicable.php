@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Package\Specification;
 
-use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
@@ -40,23 +40,22 @@ class VatApplicable
     }
 
     /**
-     * @param Cart $cart
+     * @param Sheet $sheet
      *
      * @return bool
-     *
      * @throws MissingBillingInfoException
      */
-    public function onCart(Cart $cart)
+    public function onSheet(Sheet $sheet)
     {
-        $billingInfo = $this->billingInfoRepository->getBySheet($cart->getSheet());
+        $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
 
         if (null === $billingInfo) {
             throw new MissingBillingInfoException('missing billing info');
         }
 
         return $this->isApplicable(
-            $cart->getSheet()->getEvent()->getMode(),
-            $cart->getSheet()->getEvent()->getCountry(),
+            $sheet->getEvent()->getMode(),
+            $sheet->getEvent()->getCountry(),
             $billingInfo->getAddress()->getCountry(),
             $billingInfo->getVatNumber()
         );

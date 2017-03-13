@@ -15,12 +15,19 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             type: integer
         invoicePrefix:
             type: string
+            column: invoice_prefix
         invoiceYear:
             type: integer
+            column: invoice_year
         invoiceIncrement:
             type: integer
+            column: invoice_increment
+        currency:
+            type: string
         createdAt:
             type: datetime
+        data:
+            type: json_array
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
@@ -28,6 +35,10 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
         prefix:
             targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+    oneToMany:
+        orders:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order
+            mappedBy: invoice
     uniqueConstraints:
         invoice_number:
-            columns: invoice_prefix, invoice_year, invoice_increment
+            columns: prefix_id, invoice_prefix, invoice_year, invoice_increment

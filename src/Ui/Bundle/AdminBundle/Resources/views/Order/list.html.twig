@@ -30,6 +30,7 @@
             <th>{{ 'admin.order.follower'|trans }}</th>
             <th>{{ 'admin.order.createdAt'|trans }}</th>
             <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -56,7 +57,9 @@
                     {{ order.total|localizedcurrency(order.currency) }}
                 </td>
                 <td class="text-right">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">{{ 'admin.order_edit.link'|trans }}</a>
+                    {% if order.isInvoiced == false %}
+                        <a class="btn btn-default btn-sm" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">{{ 'admin.order_edit.link'|trans }}</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

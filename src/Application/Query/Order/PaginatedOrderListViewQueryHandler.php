@@ -64,7 +64,8 @@ class PaginatedOrderListViewQueryHandler
                     $order->getCreatedAt(),
                     $order->getTotal(),
                     $order->getVatMode(),
-                    $order->getCurrency()
+                    $order->getCurrency(),
+                    $order->hasInvoice()
                 );
             },
             $orders->results

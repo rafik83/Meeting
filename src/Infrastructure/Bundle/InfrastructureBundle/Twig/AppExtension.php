@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig;
 
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
 use Proximum\Vimeet\Ui\Helper\DataFormatter;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
@@ -57,6 +58,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('currency_symbol', [$this, 'currencySymbol']),
+            new \Twig_SimpleFilter('format_amount', [$this, 'formatAmount']),
         ];
     }
 
@@ -156,6 +158,16 @@ class AppExtension extends \Twig_Extension
     public function currencySymbol($currency, $locale = null)
     {
         return Intl::getCurrencyBundle()->getCurrencySymbol($currency, $locale);
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return string
+     */
+    public function formatAmount($value)
+    {
+        return AmountFormatter::centsToDecimalAmount($value);
     }
 
     /**
