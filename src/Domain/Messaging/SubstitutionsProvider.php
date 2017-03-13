@@ -77,7 +77,6 @@ class SubstitutionsProvider
     public function getSubstitutions(MailRecipientInterface $recipient, Sheet $sheet, $locale, $placeholders = [])
     {
         $substitutions = [];
-        $locale        = $sheet->getEvent()->getAvailableLocale($locale);
 
         foreach ($placeholders as $placeholder) {
             $substitutions[$placeholder] = $this->getSubstitution($placeholder, $recipient, $sheet, $locale);

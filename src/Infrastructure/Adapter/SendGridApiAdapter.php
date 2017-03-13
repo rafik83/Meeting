@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedExcepti
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 use SendGrid\Content;
 use SendGrid\Email;
 use SendGrid\Mail;
@@ -66,10 +67,21 @@ class SendGridApiAdapter
      */
     public function send(Message $message, array $receivers)
     {
-        $rawMail = $this->transform($message);
+        $rawMails = $this->transform($message);
 
         foreach (array_chunk($receivers, self::MAX_RECEIVERS, true) as $receiversChunk) {
-            $this->doSend($this->prepare(clone $rawMail, $receiversChunk));
+            $receiverByLocale = [];
+
+            /** @var ReceiverView $receiverOfChunck */
+            foreach ($receiversChunk as $receiverOfChunck) {
+                // Reindex the receiver by locale and by mail (they were by mail)
+                $receiverByLocale[$receiverOfChunck->getLocale()][$receiverOfChunck->getEmail()] = $receiverOfChunck;
+            }
+
+            // For each locale, send the chunck of receivers for this locale with the mail
+            foreach ($receiverByLocale as $locale => $receiversForLocale) {
+                $this->doSend($this->prepare($rawMails[$locale], $receiversForLocale));
+            }
         }
     }
 
@@ -78,38 +90,46 @@ class SendGridApiAdapter
      *
      * @param Message $message
      *
-     * @return Mail
+     * @return Mail[] indexed by locale (all locales of event)
      */
     private function transform(Message $message)
     {
         $event = $message->getEvent();
-        $body  = $this->twig->load($message->getTemplate())->render(['mail' => $message]);
+        $mails = [];
 
-        $mail = new Mail();
-        $mail->setSubject($message->getSubject());
-        $mail->setFrom(new Email($event->getTitle(), $this->eventSender->generate($event)));
-        $mail->addContent(new Content('text/html', $body));
+        foreach ($event->getLocales() as $locale) {
+            $body[$locale] = $this
+                ->twig
+                ->load($message->getTemplate())
+                ->render(['mail' => new MessageContentMail($message, $event, $locale)]);
 
-        return $mail;
+            $mail = new Mail();
+            $mail->setSubject($message->getSubject());
+            $mail->setFrom(new Email($event->getTitle(), $this->eventSender->generate($event)));
+            $mail->addContent(new Content('text/html', $body[$locale]));
+
+            $mails[$locale] = $mail;
+        }
+
+        return $mails;
     }
 
     /**
      * Adds receivers and substitutions to a given SendGrid Mail.
      *
-     * @param Mail  $mail
-     * @param array $receivers An array of ReceiverView instances indexed by email
+     * @param Mail           $mail
+     * @param ReceiverView[] $receivers An array of ReceiverView instances indexed by email
      *
      * @return Mail
      */
     private function prepare(Mail $mail, array $receivers)
     {
-        /* @var ReceiverView */
         foreach ($receivers as $email => $receiver) {
             $personalization = new Personalization();
-            $personalization->addTo(new Email(null, $email));
+            $personalization->addTo(new Email(null, (string) $email));
 
             foreach ($receiver->getReplaces() as $placeholder => $value) {
-                $personalization->addSubstitution($placeholder, $value);
+                $personalization->addSubstitution((string) $placeholder, (string) $value);
             }
 
             $mail->addPersonalization($personalization);
