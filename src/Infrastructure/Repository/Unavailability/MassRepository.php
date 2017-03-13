@@ -85,7 +85,7 @@ class MassRepository implements MassRepositoryInterface
             ->createQueryBuilder()
             ->select('mass')
             ->from(Mass::class, 'mass')
-            ->andWhere('mass.dispatch = TRUE')
+            ->andWhere('mass.dispatch = true')
             ->andWhere('mass.event = :event')
             ->setParameter('event', $event);
 
@@ -102,7 +102,7 @@ class MassRepository implements MassRepositoryInterface
             ->createQueryBuilder()
             ->select('mass')
             ->from(Mass::class, 'mass')
-            ->andWhere('mass.dispatch = FALSE')
+            ->andWhere('mass.dispatch = false')
             ->andWhere('mass.event = :event')
             ->setParameter('event', $event);
 

@@ -154,8 +154,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->select('assignment, mass')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.participant', 'participant', 'WITH', 'participant.id = :participant')
-            ->join('assignment.mass', 'mass')
-            ->where('assignment.enabled = true')
+            ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
             ->setParameter('participant', $participant->getId());
         ;
 
@@ -173,8 +172,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->select('assignment, mass')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
-            ->join('assignment.mass', 'mass')
-            ->where('assignment.enabled = true')
+            ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
             ->setParameter('participants', $participants);
         ;
 

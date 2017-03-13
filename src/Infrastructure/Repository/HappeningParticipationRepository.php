@@ -106,8 +106,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('participation, happening')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
-            ->join('participation.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
-            ->where('participation.disabled = false')
+            ->join('participation.participant', 'participant', 'WITH', 'participant.id IN (:participants) AND participation.disabled = false')
             ->setParameter('participants', $participants)
         ;
 
