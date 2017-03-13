@@ -2,7 +2,7 @@
     <div class="header" style="background: {{ planning.leftColor }}; background: linear-gradient(to right, {{planning.leftColor }}, {{ planning.rightColor }});">
         {% if planning.eventLogo is not null %}
         <div class="event-logo">
-            <img src="https://{{  planning.eventDomain }}/{{ planning.eventLogo }}"/>
+            <img src="{{ asset(planning.eventLogo) }}" class="logo"/>
         </div>
         {% endif %}
         <div class="event-title">
