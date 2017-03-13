@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planning;
 
 use Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planning\ExportPlanningType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,8 +33,9 @@ class ExportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        if (!$admin instanceof Admin) { throw $this->createNotFoundException('Admin not found'); }
 
-        $exportPlanning = new ExportPlanningJobCreator();
+        $exportPlanning = new ExportPlanningJobCreator($admin, $request->getLocale());
         $form           = $this->createForm(ExportPlanningType::class, $exportPlanning, [
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),

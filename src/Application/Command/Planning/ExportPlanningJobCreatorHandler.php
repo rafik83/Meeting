@@ -10,15 +10,33 @@
 
 namespace Proximum\Vimeet\Application\Command\Planning;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+
 class ExportPlanningJobCreatorHandler
 {
-    public function __construct()
-    {
+    /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
 
+    /**
+     * @param JobQueueInterface $jobQueue
+     */
+    public function __construct(JobQueueInterface $jobQueue)
+    {
+        $this->jobQueue = $jobQueue;
     }
 
-    public function handle(ExportPlanning $exportPlanning)
+    /**
+     * @param ExportPlanningJobCreator $exportPlanning
+     */
+    public function handle(ExportPlanningJobCreator $exportPlanning)
     {
-
+        $this->jobQueue->printPlanning(
+            $exportPlanning->types,
+            $exportPlanning->orderBy,
+            $exportPlanning->emailToNotify,
+            $exportPlanning->locale
+        );
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Planning;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class ExportPlanningJobCreator
@@ -25,10 +26,25 @@ class ExportPlanningJobCreator
     public $orderBy;
 
     /**
-     * Create the job for the planning export
+     * @var string
      */
-    public function __construct()
+    public $locale;
+
+    /**
+     * @var string
+     */
+    public $emailToNotify;
+
+    /**
+     * Create the job for the planning export
+     *
+     * @param Admin  $admin
+     * @param string $locale
+     */
+    public function __construct(Admin $admin, $locale)
     {
-        $this->types = [];
+        $this->types         = [];
+        $this->emailToNotify = $admin->getEmail();
+        $this->locale        = $locale;
     }
 }
