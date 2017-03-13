@@ -24,6 +24,8 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class ExportPlanningHandler
 {
+    const PLANNING_TEMPLATE = 'AdminBundle:Planning/Print:plannings.html.twig';
+
     /** @var TypeRepositoryInterface */
     private $typeRepository;
 
@@ -130,12 +132,25 @@ class ExportPlanningHandler
             );
         }
 
-        $print = $this->templating->render('AdminBundle:Planning/Print:plannings.html.twig', [
+        $print = $this->templating->render(self::PLANNING_TEMPLATE, [
             'plannings' => $plannings,
         ]);
 
         $filePath = $this->localFileStorageAdapter->create($print, 'print_planning.html', $this->publicDir);
 
+        $this->notifyCreationOfFile($event, $exportPlanning, $filePath);
+
+    }
+
+    /**
+     * Send a mail to the emailToNotify with the summary of the types, orderBy and a link to see the file
+     *
+     * @param Event          $event
+     * @param ExportPlanning $exportPlanning
+     * @param string         $filePath
+     */
+    private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, $filePath)
+    {
         $types = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
         $this->mailer->send(new PrintPlanningMail(
