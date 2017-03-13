@@ -90,7 +90,7 @@ class SendGridApiAdapter
      *
      * @param Message $message
      *
-     * @return Mail[]
+     * @return Mail[] indexed by locale (all locales of event)
      */
     private function transform(Message $message)
     {
