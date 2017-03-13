@@ -49,7 +49,7 @@ class JobQueueAdapter implements JobQueueInterface
      */
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale)
     {
-        $typeOption = implode('', array_map(function (Type $type) {
+        $typeOption = implode(' ', array_map(function (Type $type) {
             return sprintf('--types=%s', $type->getId());
         }, $types));
 

@@ -33,7 +33,10 @@ class ExportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        if (!$admin instanceof Admin) { throw $this->createNotFoundException('Admin not found'); }
+
+        if (!$admin instanceof Admin) {
+            throw $this->createNotFoundException('Admin not found');
+        }
 
         $exportPlanning = new ExportPlanningJobCreator($admin, $request->getLocale());
         $form           = $this->createForm(ExportPlanningType::class, $exportPlanning, [
@@ -45,7 +48,7 @@ class ExportController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($exportPlanning);
-            $this->addFlash('success', '');
+            $this->addFlash('success', 'flash.admin.planning.export.success');
 
             return $this->redirectToRoute('admin_planning_export', ['event' => $event->getId()]);
         }
