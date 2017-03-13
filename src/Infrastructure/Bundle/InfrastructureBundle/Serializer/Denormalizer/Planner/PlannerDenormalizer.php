@@ -72,7 +72,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
         $this->createMeetings($data); // Create the meetings after the creation of the list to get the objects
 
         if (isset($context[AbstractNormalizer::OBJECT_TO_POPULATE])
-            && $context[AbstractNormalizer::OBJECT_TO_POPULATE] instanceof PlannerResult) {
+            && $context[AbstractNormalizer::OBJECT_TO_POPULATE] instanceof PlannerResult
+        ) {
             $plannerResult = $context[AbstractNormalizer::OBJECT_TO_POPULATE];
         } else {
             $plannerResult = new PlannerResult();
