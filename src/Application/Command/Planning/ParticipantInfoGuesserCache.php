@@ -43,10 +43,27 @@ class ParticipantInfoGuesserCache
     {
         $key = $participant->getId() . $locale;
 
-        if (!isset($this->cache[$key])) {
-            $this->cache[$key] = $this->guesser->guessParticipantLastName($participant, $locale);
+        if (!isset($this->cache['lastName'][$key])) {
+            $this->cache['lastName'][$key] = $this->guesser->guessParticipantLastName($participant, $locale);
         }
 
-        return $this->cache[$key];
+        return $this->cache['lastName'][$key];
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return string
+     */
+    public function guessParticipantCompleteName(Participant $participant, $locale)
+    {
+        $key = $participant->getId() . $locale;
+
+        if (!isset($this->cache['completeName'][$key])) {
+            $this->cache['completeName'][$key] = $this->guesser->guessParticipantCompleteName($participant, $locale);
+        }
+
+        return $this->cache['completeName'][$key];
     }
 }

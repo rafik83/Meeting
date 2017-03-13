@@ -3320,6 +3320,20 @@ services:
             - { name: serializer.decoder }
 
     #
+    # Guesser Cache
+    #
+    command.planning.participant_info_guesser_cache:
+        class: Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache
+        shared: false
+        arguments:
+            - '@template.participant_info_guesser'
+    command.planning.sheet_info_guesser_cache:
+        class: Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache
+        shared: false
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
+    #
     # Planner
     #
     service_planner.exporter:
@@ -3592,8 +3606,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@command.planning.participant_info_guesser_cache'
+            - '@command.planning.sheet_info_guesser_cache'
             - '@planning.displayer.participant_planning_displayer'
             - '@templating'
             - '@adapter.local_file_storage'

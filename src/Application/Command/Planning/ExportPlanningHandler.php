@@ -12,13 +12,12 @@ namespace Proximum\Vimeet\Application\Command\Planning;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 use Proximum\Vimeet\Domain\Planning\PlanningPrint;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\PrintPlanningMail;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -34,11 +33,8 @@ class ExportPlanningHandler
     /** @var ParticipantInfoGuesserCache */
     private $participantInfoGuesserCache;
 
-    /** @var ParticipantInfoGuesser */
-    private $participantInfoGuesser;
-
     /** @var SheetInfoGuesserCache */
-    private $sheetInfoGuesser;
+    private $sheetInfoGuesserCache;
 
     /** @var ParticipantPlanningDisplayer */
     private $participantPlanningDisplayer;
@@ -61,8 +57,8 @@ class ExportPlanningHandler
     /**
      * @param TypeRepositoryInterface        $typeRepository
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param ParticipantInfoGuesser         $participantInfoGuesser
-     * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param ParticipantInfoGuesserCache    $participantInfoGuesserCache
+     * @param SheetInfoGuesserCache          $sheetInfoGuesserCache
      * @param ParticipantPlanningDisplayer   $participantPlanningDisplayer
      * @param EngineInterface                $templating
      * @param LocalFileStorageAdapter        $localFileStorageAdapter
@@ -73,8 +69,8 @@ class ExportPlanningHandler
     public function __construct(
         TypeRepositoryInterface $typeRepository,
         ParticipantRepositoryInterface $participantRepository,
-        ParticipantInfoGuesser $participantInfoGuesser,
-        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesserCache $participantInfoGuesserCache,
+        SheetInfoGuesserCache $sheetInfoGuesserCache,
         ParticipantPlanningDisplayer $participantPlanningDisplayer,
         EngineInterface $templating,
         LocalFileStorageAdapter $localFileStorageAdapter,
@@ -84,10 +80,9 @@ class ExportPlanningHandler
     ) {
         $this->typeRepository               = $typeRepository;
         $this->participantRepository        = $participantRepository;
-        $this->participantInfoGuesserCache  = new ParticipantInfoGuesserCache($participantInfoGuesser);
-        $this->sheetInfoGuesser             = new SheetInfoGuesserCache($sheetInfoGuesser);
+        $this->participantInfoGuesserCache  = $participantInfoGuesserCache;
+        $this->sheetInfoGuesserCache        = $sheetInfoGuesserCache;
         $this->participantPlanningDisplayer = $participantPlanningDisplayer;
-        $this->participantInfoGuesser       = $participantInfoGuesser;
         $this->templating                   = $templating;
         $this->localFileStorageAdapter      = $localFileStorageAdapter;
         $this->mailer                       = $mailer;
@@ -111,39 +106,15 @@ class ExportPlanningHandler
         $event            = $firstParticipant->getSheet()->getEvent();
         $types            = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
-        if ($exportPlanning->orderBy === PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME) {
-            // Load cache for the participant last name to avoid error in the usort
-            foreach ($participants as $participant) {
-                $this->participantInfoGuesser->guessParticipantLastName($participant, $event->getFallback());
-            }
-
-            usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
-                $left  = $this->participantInfoGuesserCache->guessParticipantLastName($participantLeft, $event->getFallback());
-                $right = $this->participantInfoGuesserCache->guessParticipantLastName($participantRight, $event->getFallback());
-
-                return strcasecmp($left, $right);
-            });
-        } elseif ($exportPlanning->orderBy === PlanningOrderedBy::ORDER_BY_SHEET_TITLE) {
-            // Load cache for the sheet title to avoid error in the usort
-            foreach ($participants as $participant) {
-                $this->sheetInfoGuesser->guessSheetTitle($participant->getSheet(), $event->getFallback());
-            }
-
-            usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
-                $left  = $this->sheetInfoGuesser->guessSheetTitle($participantLeft->getSheet(), $event->getFallback());
-                $right = $this->sheetInfoGuesser->guessSheetTitle($participantRight->getSheet(), $event->getFallback());
-
-                return strcasecmp($left, $right);
-            });
-        }
+        $this->orderParticipant($event, $exportPlanning->orderBy, $participants);
 
         $plannings = [];
         $this->participantPlanningDisplayer->preloadForParticipants($participants);
 
         foreach ($participants as $participant) {
             $plannings[] = new PlanningPrint(
-                $this->sheetInfoGuesser->guessSheetTitle($participant->getSheet(), $event->getFallback()), // Sheet title
-                $this->participantInfoGuesser->guessParticipantCompleteName($participant, $event->getFallback()), // Participant name
+                $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback()), // Sheet title
+                $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $event->getFallback()), // Participant name
                 $this->participantPlanningDisplayer->display($participant, $participant->getLocale()), // Planning
                 $participant->getLocale(), // participant locale
                 $event->getConfiguration()->getLeftColor(), // Left Color
@@ -175,5 +146,39 @@ class ExportPlanningHandler
             $types,
             $exportPlanning->orderBy
         ));
+    }
+
+    /**
+     * @param Event         $event
+     * @param string        $orderBy
+     * @param Participant[] $participants
+     */
+    private function orderParticipant(Event $event, $orderBy, array $participants)
+    {
+        if ($orderBy === PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME) {
+            // Load cache for the participant last name to avoid error in the usort
+            foreach ($participants as $participant) {
+                $this->participantInfoGuesserCache->guessParticipantLastName($participant, $event->getFallback());
+            }
+
+            usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
+                $left  = $this->participantInfoGuesserCache->guessParticipantLastName($participantLeft, $event->getFallback());
+                $right = $this->participantInfoGuesserCache->guessParticipantLastName($participantRight, $event->getFallback());
+
+                return strcasecmp($left, $right);
+            });
+        } elseif ($orderBy === PlanningOrderedBy::ORDER_BY_SHEET_TITLE) {
+            // Load cache for the sheet title to avoid error in the usort
+            foreach ($participants as $participant) {
+                $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback());
+            }
+
+            usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
+                $left  = $this->sheetInfoGuesserCache->guessSheetTitle($participantLeft->getSheet(), $event->getFallback());
+                $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getFallback());
+
+                return strcasecmp($left, $right);
+            });
+        }
     }
 }
