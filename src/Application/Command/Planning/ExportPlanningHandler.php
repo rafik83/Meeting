@@ -47,8 +47,8 @@ class ExportPlanningHandler
     /** @var LocalFileStorageAdapter */
     private $localFileStorageAdapter;
 
-    /** @var string */
-    private $publicDir;
+    /** @var string Path to where the planning need to be stored */
+    private $printPlanningPath;
 
     /** @var MailerInterface */
     private $mailer;
@@ -65,7 +65,7 @@ class ExportPlanningHandler
      * @param EngineInterface                $templating
      * @param LocalFileStorageAdapter        $localFileStorageAdapter
      * @param MailerInterface                $mailer
-     * @param string                         $publicDir
+     * @param string                         $printPlanningPath
      * @param string                         $mailSender
      */
     public function __construct(
@@ -77,7 +77,7 @@ class ExportPlanningHandler
         EngineInterface $templating,
         LocalFileStorageAdapter $localFileStorageAdapter,
         MailerInterface $mailer,
-        $publicDir,
+        $printPlanningPath,
         $mailSender
     ) {
         $this->typeRepository               = $typeRepository;
@@ -88,7 +88,7 @@ class ExportPlanningHandler
         $this->templating                   = $templating;
         $this->localFileStorageAdapter      = $localFileStorageAdapter;
         $this->mailer                       = $mailer;
-        $this->publicDir                    = $publicDir;
+        $this->printPlanningPath            = $printPlanningPath;
         $this->mailSender                   = $mailSender;
     }
 
@@ -136,7 +136,7 @@ class ExportPlanningHandler
             'plannings' => $plannings,
         ]);
 
-        $filePath = $this->localFileStorageAdapter->create($print, 'print_planning.html', $this->publicDir);
+        $filePath = $this->localFileStorageAdapter->create($print, 'print_planning.html', $this->printPlanningPath);
 
         $this->notifyCreationOfFile($event, $exportPlanning, $filePath);
 
