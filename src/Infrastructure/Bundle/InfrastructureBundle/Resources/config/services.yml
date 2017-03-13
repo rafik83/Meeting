@@ -3469,6 +3469,7 @@ services:
             - '@repository.unavailability.mass_assignment_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@query.planning.day_view_query_handler'
+            - '@vimeet_infrastructure.repository.participant_repository'
     ###### Formatter
     planning.formatter.unallocated_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter

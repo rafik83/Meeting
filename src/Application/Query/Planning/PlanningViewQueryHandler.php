@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -62,6 +63,11 @@ class PlanningViewQueryHandler
     private $assignmentRepository;
 
     /**
+     * @var ParticipantRepositoryInterface
+     */
+    private $participantRepository;
+
+    /**
      * @param DayRepositoryInterface                    $dayRepository
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
@@ -69,6 +75,7 @@ class PlanningViewQueryHandler
      * @param MassAssignmentRepositoryInterface         $assignmentRepository
      * @param MeetingRepositoryInterface                $meetingRepository
      * @param DayViewQueryHandler                       $dayViewQueryHandler
+     * @param ParticipantRepositoryInterface            $participantRepository
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
@@ -77,7 +84,8 @@ class PlanningViewQueryHandler
         MassRepositoryInterface $massUnavailabilityRepository,
         MassAssignmentRepositoryInterface $assignmentRepository,
         MeetingRepositoryInterface $meetingRepository,
-        DayViewQueryHandler $dayViewQueryHandler
+        DayViewQueryHandler $dayViewQueryHandler,
+        ParticipantRepositoryInterface $participantRepository
     ) {
         $this->dayRepository                    = $dayRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
@@ -86,6 +94,7 @@ class PlanningViewQueryHandler
         $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
         $this->meetingRepository                = $meetingRepository;
         $this->dayViewQueryHandler              = $dayViewQueryHandler;
+        $this->participantRepository            = $participantRepository;
     }
 
     /**
@@ -190,6 +199,7 @@ class PlanningViewQueryHandler
         $this->assignMeetingByParticipant($this->meetingRepository->findByParticipants($participants));
         $this->assignUnavailabilitiesByParticipant($this->unavailabilityRepository->findByParticipants($participants));
         $this->assignHappeningsByParticipant($this->happeningParticipationRepository->findByParticipants($participants));
+        $this->addEmptyForParticipant($participants);
     }
 
     /**
@@ -244,5 +254,32 @@ class PlanningViewQueryHandler
         $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByEvent($event));
         $this->assignUnavailabilitiesByParticipant($this->unavailabilityRepository->getByEvent($event));
         $this->assignHappeningsByParticipant($this->happeningParticipationRepository->getByEvent($event));
+        $this->addEmptyForParticipant($this->participantRepository->findByEvent($event));
+    }
+
+    /**
+     * This method is use to set an empty array for participant without mass/unavailability/assignment/etc...
+     *
+     * @param Participant[] $participants
+     */
+    private function addEmptyForParticipant(array $participants)
+    {
+        foreach ($participants as $participant) {
+            if (!isset($this->assignments[$participant->getId()])) {
+                $this->assignments[$participant->getId()] = [];
+            }
+
+            if (!isset($this->meetings[$participant->getId()])) {
+                $this->meetings[$participant->getId()] = [];
+            }
+
+            if (!isset($this->unavailabilities[$participant->getId()])) {
+                $this->unavailabilities[$participant->getId()] = [];
+            }
+
+            if (!isset($this->happeningParticipations[$participant->getId()])) {
+                $this->happeningParticipations[$participant->getId()] = [];
+            }
+        }
     }
 }

@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -85,6 +86,9 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRepository                = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->findByParticipant($participant->reveal())->shouldBeCalled()->willReturn([$meeting->reveal()]);
 
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->findByEvent($event)->shouldNotBeCalled();
+
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView1 = new DayView($beginDay1, $endDay1, [], [], [], [], []);
         $dayView2 = new DayView($beginDay2, $endDay2, [], [], [], [], []);
@@ -121,7 +125,8 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massUnavailabilityRepository->reveal(),
             $assignmentRepository->reveal(),
             $meetingRepository->reveal(),
-            $dayViewQueryHandler->reveal()
+            $dayViewQueryHandler->reveal(),
+            $participantRepository->reveal()
         );
         $result = $handler->handle($query);
 
@@ -186,6 +191,9 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->findByParticipants([$participant->reveal()])->shouldBeCalled()->willReturn([$meeting->reveal()]);
 
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->findByEvent($event)->shouldNotBeCalled();
+
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView1 = new DayView($beginDay1, $endDay1, [], [], [], [], []);
         $dayView2 = new DayView($beginDay2, $endDay2, [], [], [], [], []);
@@ -222,7 +230,8 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massUnavailabilityRepository->reveal(),
             $assignmentRepository->reveal(),
             $meetingRepository->reveal(),
-            $dayViewQueryHandler->reveal()
+            $dayViewQueryHandler->reveal(),
+            $participantRepository->reveal()
         );
         $handler->preloadForParticipants([$participant->reveal()]);
         $result = $handler->handle($query);
@@ -288,6 +297,9 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRepository                = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->getAllByEvent($event)->shouldBeCalled()->willReturn([$meeting->reveal()]);
 
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->findByEvent($event)->shouldBeCalled()->willReturn([$participant]);
+
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView1 = new DayView($beginDay1, $endDay1, [], [], [], [], []);
         $dayView2 = new DayView($beginDay2, $endDay2, [], [], [], [], []);
@@ -324,7 +336,8 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massUnavailabilityRepository->reveal(),
             $assignmentRepository->reveal(),
             $meetingRepository->reveal(),
-            $dayViewQueryHandler->reveal()
+            $dayViewQueryHandler->reveal(),
+            $participantRepository->reveal()
         );
         $handler->preloadForEvent($event);
         $result = $handler->handle($query);
