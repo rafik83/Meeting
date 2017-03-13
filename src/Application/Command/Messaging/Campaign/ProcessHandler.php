@@ -117,15 +117,16 @@ class ProcessHandler
                     continue;
                 }
 
-                $receiverView = new ReceiverView(
+                $receiverLocale = $event->getAvailableLocale($receiver->getLocale());
+                $receiverView   = new ReceiverView(
                     $receiver->getEmail(),
                     $this->substitutionsProvider->getSubstitutions(
                         $receiver,
                         $sheet,
-                        $receiver->getLocale(),
+                        $receiverLocale,
                         $placeholders
                     ),
-                    $event->getAvailableLocale($receiver->getLocale())
+                    $receiverLocale
                 );
 
                 $receivers[$receiver->getEmail()] = $receiverView;
