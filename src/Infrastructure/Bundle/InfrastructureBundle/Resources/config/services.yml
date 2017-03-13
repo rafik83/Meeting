@@ -3552,3 +3552,50 @@ services:
             - '@router'
             - '%phantomjs_path%'
             - '%phantomjs_script%'
+
+    query.invoice_query_handler:
+        class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery }
+
+    serializer.denormalizer.invoice_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.summary_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\SummaryViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.groups_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupsViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.group_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.promotion_codes_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionCodesViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.promotion_code_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionCodeViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.promotion_product_row_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionProductRowViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.row_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\RowViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }

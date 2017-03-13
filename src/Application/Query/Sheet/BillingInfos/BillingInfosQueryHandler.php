@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\BillingInfos;
 
-use Proximum\Vimeet\Application\View\Sheet\BillingInfos\BillingInfosView;
+use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
@@ -52,7 +52,10 @@ class BillingInfosQueryHandler
             $billingInfo->getMobile(),
             $billingInfo->getEmail(),
             $billingInfo->getCompany(),
-            $billingInfo->getAddress(),
+            $billingInfo->getAddress()->getStreet(),
+            $billingInfo->getAddress()->getZipcode(),
+            $billingInfo->getAddress()->getCity(),
+            $billingInfo->getAddress()->getCity(),
             $billingInfo->getVatNumber(),
             $billingInfo->getReference()
         );

@@ -1,0 +1,69 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Invoice\Denormalizer;
+
+use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
+use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
+use Proximum\Vimeet\Application\View\Invoice\SummaryView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+
+class InvoiceViewDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+{
+    use DenormalizerAwareTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalize($data, $class, $format = null, array $context = [])
+    {
+        /** @var Invoice $invoice */
+        $invoice = $context['invoice'];
+
+        /** @var Event $event */
+        $event = $invoice->getEvent();
+
+        $eventDefaultLocale = $event->getFallback();
+
+        return new InvoiceView(
+            $invoice->getNumber(),
+            $invoice->getTotal(),
+            $invoice->getTotalWithVat(),
+            $invoice->getVatAmount(),
+            $invoice->getCurrency(),
+            $event->getTitle(),
+            $event->getInvoiceLogo(),
+            $invoice->getCreatedAt(),
+            $eventDefaultLocale,
+            $event->getBillingAddress($eventDefaultLocale),
+            $event->getBankInfo($eventDefaultLocale),
+            $event->getPaymentCondition($eventDefaultLocale),
+            $event->getPaymentFooter($eventDefaultLocale),
+            $this->denormalizer->denormalize($data['summaryView'], SummaryView::class, $format, $context),
+            $this->denormalizer->denormalize($data['billingInfosView'], BillingInfosView::class, $format, $context),
+            $data['amountRemainToPay']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return $type === InvoiceView::class
+            && isset($data['summaryView'])
+            && isset($data['billingInfosView'])
+            && isset($data['amountRemainToPay']);
+    }
+}

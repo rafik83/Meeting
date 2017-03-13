@@ -1,0 +1,63 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Invoice\Denormalizer;
+
+use Proximum\Vimeet\Application\View\Invoice\CustomRowView;
+use Proximum\Vimeet\Application\View\Invoice\GroupView;
+use Proximum\Vimeet\Application\View\Invoice\RowView;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+
+class GroupViewDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+{
+    use DenormalizerAwareTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalize($data, $class, $format = null, array $context = [])
+    {
+        $rowViews = [];
+
+        foreach ($data['products'] as $product) {
+            $rowViews[] = $this->denormalizer->denormalize($product, RowView::class, $format, $context);
+        }
+
+        $customRowViews = [];
+
+        foreach ($data['customRows'] as $customRow) {
+            $customRowViews[] = $this->denormalizer->denormalize($customRow, CustomRowView::class, $format, $context);
+        }
+
+        return new GroupView(
+            $data['label'],
+            $data['type'],
+            $data['groupId'],
+            $rowViews,
+            $customRowViews
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return $type === GroupView::class
+            && isset($data['label'])
+            && isset($data['type'])
+            && isset($data['products'])
+            && is_array($data['products'])
+            && isset($data['customRows'])
+            && is_array($data['customRows']);
+    }
+}

@@ -11,22 +11,19 @@
 namespace Proximum\Vimeet\Application\View\Invoice;
 
 use Proximum\Vimeet\Application\View\Order\SummaryView;
-use Proximum\Vimeet\Application\View\Sheet\BillingInfos\BillingInfosView;
 
 class InvoiceDataView
 {
-    /** @var  SummaryView */
+    /** @var SummaryView */
     public $summaryView;
     
-    /** @var  BillingInfosView */
+    /** @var BillingInfosView */
     public $billingInfosView;
     
     /** @var float */
     public $amountRemainToPay;
     
     /**
-     * InvoiceDataView constructor.
-     *
      * @param SummaryView       $summaryView
      * @param BillingInfosView  $billingInfosView
      * @param float             $amountRemainToPay

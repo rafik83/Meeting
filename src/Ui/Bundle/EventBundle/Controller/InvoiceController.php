@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -40,6 +41,8 @@ class InvoiceController extends Controller
                 $this->get('printer.invoice_pdf_printer')->generate($invoice)
             );
         }
+
+        $this->get('tactician.commandbus')->handle(new InvoiceQuery($invoice));
 
         $event = $eventDomain->getEvent();
 
