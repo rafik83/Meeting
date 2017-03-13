@@ -49,16 +49,22 @@ class JobQueueAdapter implements JobQueueInterface
      */
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale)
     {
-        $typeOption = implode(' ', array_map(function (Type $type) {
+        $typeOptions = array_map(function (Type $type) {
             return sprintf('--types=%s', $type->getId());
-        }, $types));
+        }, $types);
 
-        $job = new Job('vimeet:planning:generate', [
-            $typeOption,
-            sprintf('--orderBy=%s', $orderBy),
-            sprintf('--emailToNotify=%s', $emailToNotify),
-            sprintf('--locale=%s', $locale),
-        ]);
+        $job = new Job(
+            'vimeet:planning:generate',
+            array_merge(
+                $typeOptions,
+                [
+                    sprintf('--orderBy=%s', $orderBy),
+                    sprintf('--emailToNotify=%s', $emailToNotify),
+                    sprintf('--locale=%s', $locale),
+                ]
+            )
+        );
+
         $this->entityManager->persist($job);
         $this->entityManager->flush($job);
     }
