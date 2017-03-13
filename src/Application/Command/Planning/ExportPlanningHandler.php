@@ -154,7 +154,7 @@ class ExportPlanningHandler
      * @param string        $orderBy
      * @param Participant[] $participants
      */
-    private function orderParticipant(Event $event, $orderBy, array $participants)
+    private function orderParticipant(Event $event, $orderBy, array &$participants)
     {
         if ($orderBy === PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME) {
             // Load cache for the participant last name to avoid error in the usort
