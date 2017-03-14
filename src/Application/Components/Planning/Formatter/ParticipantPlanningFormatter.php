@@ -100,7 +100,7 @@ class ParticipantPlanningFormatter
      */
     public function preloadPlanningHandlerForEvent(Event $event)
     {
-        $this->planningViewQueryHandler->preloadForEavent($event);
+        $this->planningViewQueryHandler->preloadForEvent($event);
     }
 
     /**
