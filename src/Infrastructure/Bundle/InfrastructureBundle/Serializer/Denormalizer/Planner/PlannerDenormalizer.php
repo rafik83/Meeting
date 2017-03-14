@@ -172,6 +172,20 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
+        if (isset($spot['unavailabilityList'])
+            && is_array($spot['unavailabilityList'])
+            && isset($spot['unavailabilityList']['Slot'])
+        ) {
+            if ($this->isSingle($spot['unavailabilityList']['Slot'])) {
+                $this->handleSlot($spot['unavailabilityList']['Slot']);
+            } else {
+                foreach ($spot['unavailabilityList']['Slot'] as $slot) {
+                    $this->handleSlot($slot);
+                }
+            }
+
+        }
+
         return $spotResult;
     }
 
