@@ -3174,6 +3174,7 @@ services:
             - '@router'
             - '%phantomjs_path%'
             - '%phantomjs_script%'
+            - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
 
     sheet.infos_helper:
@@ -3552,6 +3553,8 @@ services:
             - '@router'
             - '%phantomjs_path%'
             - '%phantomjs_script%'
+            - '%phantomjs_http_user%'
+            - '%phantomjs_http_password%'
 
     query.invoice_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler

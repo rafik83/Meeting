@@ -6,9 +6,10 @@ var args = system.args;
 
 var address = args[1];
 var output = args[2];
-var httpPassword = args[3];
+var httpUser = args[3];
+var httpPassword = args[4];
 
-page.settings.userName = "phantomjs";
+page.settings.userName = httpUser;
 page.settings.password = httpPassword;
 
 page.paperSize = {

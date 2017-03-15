@@ -26,16 +26,31 @@ class InvoicePdfPrinter
     /** @var string */
     private $phantomjsScript;
 
+    /** @var string */
+    private $phantomjsHttpUser;
+
+    /** @var string */
+    private $phantomjsHttpPassword;
+
     /**
      * @param RouterInterface $router
      * @param string          $phantomjsPath
      * @param string          $phantomjsScript
+     * @param string          $phantomjsHttpUser
+     * @param string          $phantomjsHttpPassword
      */
-    public function __construct(RouterInterface $router, $phantomjsPath, $phantomjsScript)
-    {
+    public function __construct(
+        RouterInterface $router,
+        $phantomjsPath,
+        $phantomjsScript,
+        $phantomjsHttpUser,
+        $phantomjsHttpPassword
+    ) {
         $this->router                = $router;
         $this->phantomjsPath         = $phantomjsPath;
         $this->phantomjsScript       = $phantomjsScript;
+        $this->phantomjsHttpUser     = $phantomjsHttpUser;
+        $this->phantomjsHttpPassword = $phantomjsHttpPassword;
     }
 
     /**
@@ -64,11 +79,13 @@ class InvoicePdfPrinter
 
         $process = new Process(
             sprintf(
-                '%s %s %s %s',
+                '%s %s %s %s %s %s',
                 $this->phantomjsPath,
                 $this->phantomjsScript,
                 $urlToPrint,
-                $pathToPdf
+                $pathToPdf,
+                $this->phantomjsHttpUser,
+                $this->phantomjsHttpPassword
             )
         );
 

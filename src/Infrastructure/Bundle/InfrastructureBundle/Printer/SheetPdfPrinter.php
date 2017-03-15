@@ -28,19 +28,29 @@ class SheetPdfPrinter
     private $phantomjsScript;
 
     /** @var string */
+    private $phantomjsHttpUser;
+
+    /** @var string */
     private $phantomjsHttpPassword;
 
     /**
      * @param RouterInterface $router
      * @param string          $phantomjsPath
      * @param string          $phantomjsScript
+     * @param string          $phantomjsHttpUser
      * @param string          $phantomjsHttpPassword
      */
-    public function __construct(RouterInterface $router, $phantomjsPath, $phantomjsScript, $phantomjsHttpPassword)
-    {
+    public function __construct(
+        RouterInterface $router,
+        $phantomjsPath,
+        $phantomjsScript,
+        $phantomjsHttpUser,
+        $phantomjsHttpPassword
+    ) {
         $this->router                = $router;
         $this->phantomjsPath         = $phantomjsPath;
         $this->phantomjsScript       = $phantomjsScript;
+        $this->phantomjsHttpUser     = $phantomjsHttpUser;
         $this->phantomjsHttpPassword = $phantomjsHttpPassword;
     }
 
@@ -72,16 +82,16 @@ class SheetPdfPrinter
 
         $process = new Process(
             sprintf(
-                '%s %s %s %s %s',
+                '%s %s %s %s %s %s',
                 $this->phantomjsPath,
                 $this->phantomjsScript,
                 $urlToPrint,
                 $pathToPdf,
+                $this->phantomjsHttpUser,
                 $this->phantomjsHttpPassword
             )
         );
 
-        $process->setTimeout(60);
         $process->run();
 
         if (!$process->isSuccessful()) {
