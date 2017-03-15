@@ -86,7 +86,8 @@ class MeetingRequestController extends Controller
         }
 
         $event       = $eventDomain->getEvent();
-        $query       = new MeetingRequestListViewQuery($event, $sheet, $request->getLocale(), $filters);
+        $user        = $this->getUser();
+        $query       = new MeetingRequestListViewQuery($event, $sheet, $request->getLocale(), $user, $filters);
         $statusQuery = new StateListViewQuery($sheet, $filters);
 
         /** @var MeetingRequestListView $meetingRequestListView */

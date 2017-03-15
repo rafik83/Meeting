@@ -69,6 +69,7 @@ class MeetingRequestListViewQueryHandler
                     $meetingRequest,
                     $query->sheet,
                     $query->locale,
+                    $query->user,
                     $isMeetingPublished,
                     $isMeetingRequestUpdateLocked
                 )
