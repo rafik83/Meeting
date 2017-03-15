@@ -72,7 +72,6 @@ class InvoicePdfPrinter
             )
         );
 
-        $process->setTimeout(10);
         $process->run();
 
         if (!$process->isSuccessful()) {

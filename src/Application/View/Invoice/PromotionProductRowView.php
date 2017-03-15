@@ -12,6 +12,10 @@ namespace Proximum\Vimeet\Application\View\Invoice;
 
 class PromotionProductRowView
 {
+    const TYPE_PERCENT_OFF = 'percent_off';
+    const TYPE_VALUE_OFF   = 'value_off';
+    const TYPE_FREE        = 'free';
+
     /** @var string */
     public $productLabel;
 
@@ -36,5 +40,29 @@ class PromotionProductRowView
         $this->promotionType = $promotionType;
         $this->discountValue = $discountValue;
         $this->quantity      = $quantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentOff()
+    {
+        return $this->promotionType === self::TYPE_PERCENT_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValueOff()
+    {
+        return $this->promotionType === self::TYPE_VALUE_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFree()
+    {
+        return $this->promotionType === self::TYPE_FREE;
     }
 }

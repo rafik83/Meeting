@@ -6,11 +6,11 @@
         var PhantomJSPrinting = {
             header: {
                 height: "2cm",
-                contents: function(pageNum, numPages) { return '{{ include('EventBundle:Invoice:header.html.twig', {invoiceView: invoiceView})|escape('js') }}'; }
+                contents: function(pageNum, numPages) { return '{{ include('EventBundle:Invoice/Partial:header.html.twig', {invoiceView: invoiceView})|escape('js') }}'; }
             },
             footer: {
-                height: "1cm",
-                contents: function(pageNum, numPages) { return 'Mon footer : ' + pageNum + "/" + numPages; }
+                height: "2cm",
+                contents: function(pageNum, numPages) { return '{{ include('EventBundle:Invoice/Partial:footer.html.twig', {invoiceView: invoiceView})|escape('js') }}'; }
             }
         };
     </script>
@@ -22,63 +22,60 @@
     #}
     <img src="{{ asset(invoiceView.invoiceLogo) }}" style="display: none" />
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            {#<div class="col-md-offset-{{ event.invoiceLogo != null ? '4' : '8' }} col-md-4">#}
-                {#<strong>{{ pro_forma.billingInfo.company }}</strong><br>#}
-                {#{{ ('gender.' ~ pro_forma.billingInfo.gender)|trans }} {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>#}
-                {#{{ pro_forma.billingInfo.address.street }}<br>#}
-                {#{{ pro_forma.billingInfo.address.zipCode }} {{ pro_forma.billingInfo.address.city }}<br>#}
-                {#{{ pro_forma.billingInfo.address.country|country }}<br>#}
-                {#{% if pro_forma.billingInfo.vatNumber %}#}
-                    {#<strong>{{ 'pro_forma.vatNumber.title'|trans }}</strong> {{ pro_forma.billingInfo.vatNumber }}#}
-                {#{% endif %}#}
-            {#</div>#}
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <strong>{{ invoiceView.eventTitle }}</strong>
+            <div class="col-md-offset-8 col-md-4">
+                <strong>{{ invoiceView.billingInfosView.company }}</strong><br>
+                {{ ('invoice.gender.' ~ invoiceView.billingInfosView.gender)|trans({}, "invoices", invoiceView.eventDefaultLocale) }} {{ invoiceView.billingInfosView.firstname }} {{ invoiceView.billingInfosView.lastname }}<br>
+                {{ invoiceView.billingInfosView.street }}<br>
+                {{ invoiceView.billingInfosView.zipcode }} {{ invoiceView.billingInfosView.city }}<br>
+                {{ invoiceView.billingInfosView.country|country(invoiceView.eventDefaultLocale)|upper }}
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <strong>{{ 'invoice.number.title'|trans({}, "messages", invoiceView.eventDefaultLocale) }}</strong> {{ invoiceView.invoiceNumber }}
+                <p>
+                    <strong>{{ invoiceView.eventTitle }}</strong>
+                    <br><strong>{{ 'invoice.number.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
+                    {{ invoiceView.invoiceNumber }}
+
+                    {% if invoiceView.billingInfosView.reference is not null %}
+                        <br><strong>{{ 'invoice.reference.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
+                        {{ invoiceView.billingInfosView.reference }}
+                    {% endif %}
+
+                    <br><strong>{{ 'invoice.date.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
+                    {{ invoiceView.createdAt|localizeddate('medium', 'none', invoiceView.eventDefaultLocale) }}
+                </p>
             </div>
         </div>
 
-        {#{% if pro_forma.billingInfo.reference is not null %}#}
-            {#<div class="row">#}
-                {#<div class="col-md-12">#}
-                    {#<strong>{{ 'pro_forma.reference.title'|trans }}</strong> {{ pro_forma.billingInfo.reference }}#}
-                {#</div>#}
-            {#</div>#}
-        {#{% endif %}#}
+        {{ include('EventBundle:Invoice/Partial:summary.html.twig', { invoiceView: invoiceView }) }}
+
+        {% if invoiceView.billingInfosView.vatNumber %}
+            <p>
+                <strong>{{ 'invoice.vatNumber.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
+                {{ invoiceView.billingInfosView.vatNumber }}
+            </p>
+        {% endif %}
 
         <div class="row">
-            <div class="col-md-12">
-                <strong>{{ 'invoice.date.title'|trans({}, "messages", invoiceView.eventDefaultLocale) }}</strong> {{ invoiceView.createdAt|localizeddate('medium', 'short', invoiceView.eventDefaultLocale) }}
+            <div class="col-md-6">
+                <p>
+                    {{ invoiceView.eventBillingAddress|nl2br }}
+                </p>
+                <p>
+                    <strong>{{ 'invoice.bankInfo.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong><br>
+                    {{ invoiceView.eventBankInfo|nl2br }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    {{ invoiceView.eventPaymentCondition|nl2br }}
+                </p>
             </div>
         </div>
-
-        {#{{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary, order: pro_forma.order}) }}#}
-
-        {#<div class="row">#}
-            {#<div class="col-md-4">#}
-                {#{{ pro_forma.billingAddress|nl2br }}<br>#}
-                {#<strong>{{ 'pro_forma.bankInfo.title'|trans }}</strong><br>#}
-                {#{{ pro_forma.bankInfo|nl2br }}<br>#}
-            {#</div>#}
-            {#<div class="col-md-offset-4 col-md-4">#}
-                {#{{ pro_forma.paymentCondition|nl2br }}<br>#}
-            {#</div>#}
-        {#</div>#}
-        {#<div class="row text-center">#}
-            {#<div class="col-md-12">#}
-                {#{{ pro_forma.footer|nl2br }}#}
-            {#</div>#}
-        {#</div>#}
     </div>
 </body>
 </html>

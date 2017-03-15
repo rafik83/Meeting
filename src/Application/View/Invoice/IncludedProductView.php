@@ -13,16 +13,16 @@ namespace Proximum\Vimeet\Application\View\Invoice;
 class IncludedProductView
 {
     /** @var string */
-    private $label;
+    public $label;
 
     /** @var int */
-    private $quantity;
+    public $quantity;
 
     /** @var int in cents */
-    private $price;
+    public $price;
 
     /** @var int in cents */
-    private $total;
+    public $total;
 
     /**
      * @param string $label

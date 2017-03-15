@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\View\Invoice;
 
 class GroupView
 {
+    const TYPE_OPTION = 'option';
+
     /** @var int */
     public $groupId;
 
@@ -21,8 +23,7 @@ class GroupView
     /** @var string */
     public $type;
 
-    /** @var RowView[]
-     */
+    /** @var RowView[] */
     public $rowViews = [];
 
     /** @var CustomRowView[] */
@@ -47,5 +48,13 @@ class GroupView
         $this->groupId        = $groupId;
         $this->rowViews       = $rowViews;
         $this->customRowViews = $customRowViews;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOption()
+    {
+        return $this->type === self::TYPE_OPTION;
     }
 }

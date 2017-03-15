@@ -1,0 +1,19 @@
+invoice.bankInfo.title: 'Coordonnées bancaires :'
+invoice.date.title: 'Date :'
+invoice.gender.man: Monsieur
+invoice.gender.woman: Madame
+invoice.number.title: 'N° facture :'
+invoice.reference.title: 'Votre référence :'
+invoice.summary.column.quantity: Quantité
+invoice.summary.column.title: Intitulé
+invoice.summary.column.total: Total
+invoice.summary.column.unitPrice: 'Prix unitaire'
+invoice.summary.group.option.title: Options
+invoice.summary.product.included: 'Inclus :'
+invoice.summary.promotionCode.free: Offert
+invoice.summary.promotionCode.title: 'Offres de réductions'
+invoice.summary.remainToPay: 'Solde restant dû :'
+invoice.summary.total: 'Total HT'
+invoice.summary.totalIncludeTaxes: 'Total TTC'
+invoice.summary.vatRate: 'TVA applicable %vatRate%%'
+invoice.vatNumber.title: 'N° TVA intracommunautaire :'

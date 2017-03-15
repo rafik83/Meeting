@@ -1,0 +1,11 @@
+{% if promotionCodeView is defined %}
+    <tr>
+        <td colspan="3">
+            <strong>{{ promotionCodeView.label }}</strong>
+            <br>{{ promotionCodeView.description }}
+        </td>
+        <td class="text-right">
+            {{ promotionCodeView.total|format_amount|localizedcurrency(currency, eventDefaultLocale) }}
+        </td>
+    </tr>
+{% endif %}
