@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Planning;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class ExportPlanning
 {
     /** @var array */

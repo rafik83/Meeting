@@ -105,7 +105,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
      */
     public function getAnnualizedPath($extraDirInPath = null)
     {
-        return $path = sprintf('/%s%s/%s', $extraDirInPath, $this->dateTime->format('Y'), $this->dateTime->format('m'));
+        return sprintf('/%s%s/%s', $extraDirInPath, $this->dateTime->format('Y'), $this->dateTime->format('m'));
     }
 
     /**

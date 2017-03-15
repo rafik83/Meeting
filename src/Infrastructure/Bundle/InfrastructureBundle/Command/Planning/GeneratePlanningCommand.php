@@ -59,8 +59,8 @@ class GeneratePlanningCommand extends Command
     {
         if ($input->getOption('orderBy') === null
             || empty($input->getOption('types'))
-            || null == $input->getOption('emailToNotify')
-            || null == $input->getOption('locale')
+            || null === $input->getOption('emailToNotify')
+            || null === $input->getOption('locale')
         ) {
             $output->writeln('<error>The orderBy, types, emailToNotify and locale options are mandatory and can not be null</error>');
 
