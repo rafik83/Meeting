@@ -257,6 +257,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Invoice\PrefixRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.file_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\FileRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers

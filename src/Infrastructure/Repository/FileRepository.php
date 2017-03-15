@@ -1,0 +1,42 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Repository;
+
+use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
+
+class FileRepository implements FileRepositoryInterface
+{
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * FileRepository constructor.
+     *
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(File $file)
+    {
+        $this->entityManager->persist($file);
+        $this->entityManager->flush();
+    }
+}
