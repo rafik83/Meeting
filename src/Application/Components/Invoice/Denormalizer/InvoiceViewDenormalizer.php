@@ -38,6 +38,9 @@ class InvoiceViewDenormalizer implements DenormalizerInterface, DenormalizerAwar
 
         return new InvoiceView(
             $invoice->getNumber(),
+            $invoice->isVatApplicable(),
+            $invoice->getVatMode(),
+            $invoice->getVatRate(),
             $invoice->getTotal(),
             $invoice->getTotalWithVat(),
             $invoice->getVatAmount(),

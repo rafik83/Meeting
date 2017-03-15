@@ -9,6 +9,10 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
     fields:
         vatApplicable:
             type: boolean
+        vatMode:
+            type: string
+        vatRate:
+            type: float
         total:
             type: integer
         totalWithVat:

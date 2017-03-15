@@ -91,6 +91,8 @@ class CreateHandler
             $this->dateTime->format('Y'),
             $invoiceIncrement,
             $ordersToInvoiceView->isVatApplicable(),
+            $ordersToInvoiceView->getVatMode(),
+            $ordersToInvoiceView->getVatRate(),
             $ordersToInvoiceView->getTotal(),
             $ordersToInvoiceView->getTotalWithVat(),
             $ordersToInvoiceView->getVatAmount(),

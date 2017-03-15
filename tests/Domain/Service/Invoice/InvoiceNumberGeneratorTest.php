@@ -75,6 +75,8 @@ class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
             date('Y'),
             888,
             true,
+            'et',
+            20,
             10,
             10,
             10,

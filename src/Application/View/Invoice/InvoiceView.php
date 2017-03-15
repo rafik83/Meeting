@@ -60,8 +60,20 @@ class InvoiceView
     /** @var int in cents */
     public $amountRemainToPay;
 
+    /** @var bool */
+    public $vatApplicable;
+
+    /** @var string 'ati'|'et' ; See Proximum\Vimeet\Domain\Model\Event VAT_MODE_ATI and VAT_MODE_ET */
+    public $vatMode;
+
+    /** @var float */
+    public $vatRate;
+
     /**
      * @param string             $invoiceNumber
+     * @param bool               $vatApplicable
+     * @param string             $vatMode
+     * @param float              $vatRate
      * @param int                $total
      * @param int                $totalWithVat
      * @param int                $vatAmount
@@ -80,6 +92,9 @@ class InvoiceView
      */
     public function __construct(
         $invoiceNumber,
+        $vatApplicable,
+        $vatMode,
+        $vatRate,
         $total,
         $totalWithVat,
         $vatAmount,
@@ -96,6 +111,14 @@ class InvoiceView
         BillingInfosView $billingInfosView,
         $amountRemainToPay
     ) {
+        $this->invoiceNumber         = $invoiceNumber;
+        $this->vatApplicable         = $vatApplicable;
+        $this->vatMode               = $vatMode;
+        $this->vatRate               = $vatRate;
+        $this->total                 = $total;
+        $this->totalWithVat          = $totalWithVat;
+        $this->vatAmount             = $vatAmount;
+        $this->currency              = $currency;
         $this->eventTitle            = $eventTitle;
         $this->invoiceLogo           = $invoiceLogo;
         $this->createdAt             = $createdAt;
@@ -107,10 +130,5 @@ class InvoiceView
         $this->summaryView           = $summaryView;
         $this->billingInfosView      = $billingInfosView;
         $this->amountRemainToPay     = $amountRemainToPay;
-        $this->invoiceNumber         = $invoiceNumber;
-        $this->total                 = $total;
-        $this->totalWithVat          = $totalWithVat;
-        $this->vatAmount             = $vatAmount;
-        $this->currency              = $currency;
     }
 }

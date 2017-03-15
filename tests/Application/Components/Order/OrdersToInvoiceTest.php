@@ -83,7 +83,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
-        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], '', true, 256400, 51280, 307680, 'EUR');
+        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], '', true, 'et', 20, 256400, 51280, 307680, 'EUR');
 
         $this->assertEquals($expectedOrdersToInvoiceView, $ordersToInvoiceView);
     }
@@ -244,7 +244,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         );
         $ordersToInvoiceView = $orderToInvoice->getOrdersToInvoiceViewForSheet($sheet);
 
-        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], '', true, 270300, 54060, 324360, 'EUR');
+        $expectedOrdersToInvoiceView = new OrdersToInvoiceView([$orderOne, $orderTwo], '', true, 'et', 20, 270300, 54060, 324360, 'EUR');
 
         $this->assertEquals($expectedOrdersToInvoiceView, $ordersToInvoiceView);
     }
