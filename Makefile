@@ -276,6 +276,10 @@ get-db@preprod:
 	  bin/console doctrine:database:drop --force; \
 	  bin/console doctrine:database:create; \
 	  mysql -u root proximum_vimeet < preprod.sql; \
+	  bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.dev')"; \
+	  bin/console doctrine:query:sql "UPDATE user SET email = CONCAT(id, '@example.net')"; \
+	  bin/console vimeet:event:build-guideline-asset; \
+	  bin/console fos:elastica:populate --env=dev; \
 	fi
 
 get-db@prod:
@@ -288,6 +292,10 @@ get-db@prod:
 	  bin/console doctrine:database:drop --force; \
 	  bin/console doctrine:database:create; \
 	  mysql -u root proximum_vimeet < prod.sql; \
+	  bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum.dev')"; \
+	  bin/console doctrine:query:sql "UPDATE user SET email = CONCAT(id, '@example.net')"; \
+	  bin/console vimeet:event:build-guideline-asset; \
+	  bin/console fos:elastica:populate --env=dev; \
 	fi
 
 endif
