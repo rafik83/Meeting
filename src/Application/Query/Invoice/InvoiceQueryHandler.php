@@ -30,16 +30,16 @@ class InvoiceQueryHandler
 
     /**
      * @param InvoiceQuery $invoiceQuery
+     *
+     * @return InvoiceView
      */
     public function handle(InvoiceQuery $invoiceQuery)
     {
-        $invoiceView = $this->serializer->deserialize(
+        return $this->serializer->deserialize(
             $invoiceQuery->invoice->getData(),
             InvoiceView::class,
             'json',
             ['invoice' => $invoiceQuery->invoice]
         );
-        dump($invoiceView);
-        exit;
     }
 }

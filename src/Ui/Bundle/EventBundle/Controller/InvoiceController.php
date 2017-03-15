@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery;
+use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -42,15 +43,13 @@ class InvoiceController extends Controller
             );
         }
 
-        $this->get('tactician.commandbus')->handle(new InvoiceQuery($invoice));
-
-        $event = $eventDomain->getEvent();
+        /** @var InvoiceView $invoiceView */
+        $invoiceView = $this->get('tactician.commandbus')->handle(new InvoiceQuery($invoice));
 
         return $this->render(
             'EventBundle:Invoice:show.html.twig',
             [
-                'event' => $event,
-                'invoice' => $invoice,
+                'invoiceView' => $invoiceView,
             ]
         );
     }

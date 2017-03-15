@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\View\Invoice;
 class InvoiceView
 {
     /** @var string */
-    private $invoiceNumber;
+    public $invoiceNumber;
 
     /** @var string */
     public $eventTitle;
@@ -25,30 +25,31 @@ class InvoiceView
     public $createdAt;
 
     /** @var int in cents */
-    private $total;
+    public $total;
 
     /** @var int */
-    private $totalWithVat;
+    public $totalWithVat;
 
     /** @var int */
-    private $vatAmount;
+    public $vatAmount;
 
     /** @var string 3-letter ISO 4217 currency name */
-    private $currency;
+    public $currency;
 
     /** @var string */
-    private $eventDefaultLocale;
+    public $eventDefaultLocale;
 
     /** @var string */
     public $eventBillingAddress;
 
     /** @var string */
-    private $eventBankInfo;
-    /** @var string */
-    private $eventPaymentCondition;
+    public $eventBankInfo;
 
     /** @var string */
-    private $eventPaymentFooter;
+    public $eventPaymentCondition;
+
+    /** @var string */
+    public $eventPaymentFooter;
 
     /** @var SummaryView */
     public $summaryView;

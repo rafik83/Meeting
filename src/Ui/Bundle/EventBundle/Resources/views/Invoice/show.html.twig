@@ -1,12 +1,12 @@
 <html>
 <head>
-    <title></title>
+    <title>{{ invoiceView.invoiceNumber }}</title>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <script type="text/javascript">
         var PhantomJSPrinting = {
             header: {
                 height: "2cm",
-                contents: function(pageNum, numPages) { return '{{ include('EventBundle:Invoice:header.html.twig', {event: event})|escape('js') }}'; }
+                contents: function(pageNum, numPages) { return '{{ include('EventBundle:Invoice:header.html.twig', {invoiceView: invoiceView})|escape('js') }}'; }
             },
             footer: {
                 height: "1cm",
@@ -20,7 +20,7 @@
         Due to this issue https://github.com/ariya/phantomjs/issues/12887,
         we need to render the image in the body content in order to be rendered in header.
     #}
-    <img src="{{ event.invoiceLogo }}" style="display: none" />
+    <img src="{{ asset(invoiceView.invoiceLogo) }}" style="display: none" />
 
     <div class="container">
         <div class="row">
@@ -38,13 +38,13 @@
 
         <div class="row">
             <div class="col-md-12">
-                <strong>{{ event.title }}</strong>
+                <strong>{{ invoiceView.eventTitle }}</strong>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <strong>{{ 'invoice.number.title'|trans }}</strong> {{ invoice.number }}
+                <strong>{{ 'invoice.number.title'|trans({}, "messages", invoiceView.eventDefaultLocale) }}</strong> {{ invoiceView.invoiceNumber }}
             </div>
         </div>
 
@@ -58,7 +58,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <strong>{{ 'invoice.date.title'|trans }}</strong> {{ invoice.createdAt|localizeddate('medium', 'short', event.fallback) }}
+                <strong>{{ 'invoice.date.title'|trans({}, "messages", invoiceView.eventDefaultLocale) }}</strong> {{ invoiceView.createdAt|localizeddate('medium', 'short', invoiceView.eventDefaultLocale) }}
             </div>
         </div>
 
