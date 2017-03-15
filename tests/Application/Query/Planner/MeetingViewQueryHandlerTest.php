@@ -56,11 +56,11 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participant3->setVisio(true);
         $participant4     = ParticipantFactory::create($sheet3);
         $participant5     = ParticipantFactory::create($sheet3);
-        $participantView  = new ParticipantView(1, 'fullName1', $sheetView, [$slotView]);
-        $participantView2 = new ParticipantView(2, 'fullName2', $sheetView, []);
-        $participantView3 = new ParticipantView(3, 'fullName3', $sheetView2, [$slotView2]);
-        $participantView4 = new ParticipantView(4, 'fullName4', $sheetView3, []);
-        $participantView5 = new ParticipantView(5, 'fullName5', $sheetView3, [$slotView, $slotView2, $slotView3]);
+        $participantView  = new ParticipantView(1, 'fullName1', $sheetView, [$slotView], false);
+        $participantView2 = new ParticipantView(2, 'fullName2', $sheetView, [], true);
+        $participantView3 = new ParticipantView(3, 'fullName3', $sheetView2, [$slotView2], true);
+        $participantView4 = new ParticipantView(4, 'fullName4', $sheetView3, [], false);
+        $participantView5 = new ParticipantView(5, 'fullName5', $sheetView3, [$slotView, $slotView2, $slotView3], true);
         $participants     = [
             $participantView,
             $participantView2,
@@ -108,14 +108,9 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository->getAllAcceptedByEvent($event)->shouldBeCalled()->willReturn(
             [$request1, $request2, $request3, $request4]
         );
-        $visioGuesser = $this->prophesize(VisioGuesser::class);
-        $visioGuesser->hasMeetingRequestParticipantVisio($request1)->shouldBeCalled()->willReturn(true);
-        $visioGuesser->hasMeetingRequestParticipantVisio($request2)->shouldBeCalled()->willReturn(false);
-        $visioGuesser->hasMeetingRequestParticipantVisio($request3)->shouldBeCalled()->willReturn(true);
-        $visioGuesser->hasMeetingRequestParticipantVisio($request4)->shouldNotBeCalled();
 
         // Handler
-        $handler = new MeetingViewQueryHandler($requestRepository->reveal(), $visioGuesser->reveal());
+        $handler = new MeetingViewQueryHandler($requestRepository->reveal());
         $result  = $handler->handle(new MeetingViewQuery($event, $sheets, $participants, $slots));
 
         // Expected
