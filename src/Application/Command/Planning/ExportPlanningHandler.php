@@ -13,9 +13,11 @@ namespace Proximum\Vimeet\Application\Command\Planning;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 use Proximum\Vimeet\Domain\Planning\PlanningPrint;
+use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
@@ -56,6 +58,12 @@ class ExportPlanningHandler
     /** @var string */
     private $mailSender;
 
+    /** @var FileRepositoryInterface */
+    private $fileRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param TypeRepositoryInterface        $typeRepository
      * @param ParticipantRepositoryInterface $participantRepository
@@ -67,6 +75,8 @@ class ExportPlanningHandler
      * @param MailerInterface                $mailer
      * @param string                         $printPlanningPath
      * @param string                         $mailSender
+     * @param FileRepositoryInterface        $fileRepository
+     * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
@@ -78,7 +88,9 @@ class ExportPlanningHandler
         LocalFileStorageAdapter $localFileStorageAdapter,
         MailerInterface $mailer,
         $printPlanningPath,
-        $mailSender
+        $mailSender,
+        FileRepositoryInterface $fileRepository,
+        \DateTimeInterface $dateTime
     ) {
         $this->typeRepository               = $typeRepository;
         $this->participantRepository        = $participantRepository;
@@ -90,6 +102,8 @@ class ExportPlanningHandler
         $this->mailer                       = $mailer;
         $this->printPlanningPath            = $printPlanningPath;
         $this->mailSender                   = $mailSender;
+        $this->fileRepository               = $fileRepository;
+        $this->dateTime                     = $dateTime;
     }
 
     /**
@@ -136,10 +150,25 @@ class ExportPlanningHandler
             'plannings' => $plannings,
         ]);
 
+        $file = $this->createFile($print);
+
+        $this->notifyCreationOfFile($event, $exportPlanning, $file);
+
+    }
+
+    /**
+     * @param string $print
+     *
+     * @return File
+     */
+    private function createFile(&$print)
+    {
         $filePath = $this->localFileStorageAdapter->create($print, 'print_planning.html', $this->printPlanningPath);
 
-        $this->notifyCreationOfFile($event, $exportPlanning, $filePath);
+        $file = new File($filePath, $this->dateTime);
+        $this->fileRepository->add($file);
 
+        return $file;
     }
 
     /**
@@ -147,9 +176,9 @@ class ExportPlanningHandler
      *
      * @param Event          $event
      * @param ExportPlanning $exportPlanning
-     * @param string         $filePath
+     * @param File           $file
      */
-    private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, $filePath)
+    private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, File $file)
     {
         $types = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
@@ -158,7 +187,8 @@ class ExportPlanningHandler
             $this->mailSender,
             $exportPlanning->emailToNotify,
             $exportPlanning->locale,
-            str_replace('/', '-', substr($filePath, 1)),
+            $file->getHash(),
+            $file->getId(),
             $types,
             $exportPlanning->orderBy
         ));

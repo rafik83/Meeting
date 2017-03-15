@@ -37,12 +37,19 @@ class PrintPlanningMail extends AbstractMail
     /** @var Event */
     public $event;
 
+    /** @var string */
+    public $fileHash;
+
+    /** @var int */
+    public $fileId;
+
     /**
      * @param Event      $event
      * @param string     $sender
      * @param string     $receiver
      * @param string     $locale
-     * @param string     $filePath
+     * @param string     $fileHash
+     * @param int        $fileId
      * @param TypeView[] $typeViews
      * @param string     $orderBy
      */
@@ -51,14 +58,16 @@ class PrintPlanningMail extends AbstractMail
         $sender,
         $receiver,
         $locale,
-        $filePath,
+        $fileHash,
+        $fileId,
         array $typeViews = [],
         $orderBy
     ) {
         parent::__construct($sender, $receiver, $locale);
 
         $this->event     = $event;
-        $this->filePath  = $filePath;
+        $this->fileHash  = $fileHash;
+        $this->fileId    = $fileId;
         $this->typeViews = $typeViews;
         $this->orderBy   = $orderBy;
     }

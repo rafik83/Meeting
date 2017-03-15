@@ -3618,6 +3618,8 @@ services:
             - '@adapter.mailer_adapter'
             - '%infrastructure.print_planning_path%'
             - '%mailer_sender%'
+            - '@repository.file_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
     ###### Job

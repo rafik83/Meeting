@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planning;
 use Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planning\ExportPlanningType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,20 +62,26 @@ class ExportController extends Controller
 
     /**
      * @param Event  $event
-     * @param string $file
+     * @param string $hash
+     * @param File   $file
      *
      * @return Response
      */
-    public function exportPlanningPrintAction(Event $event, $file)
+    public function exportPlanningPrintAction(Event $event, $hash, File $file)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $fileName = str_replace('-', '/', $file);
-        $path     = sprintf('%s/%s', $this->getParameter('infrastructure.print_planning_path'), $fileName);
+        if ($file->getHash() !== $hash) {
+            throw $this->createNotFoundException(
+                sprintf('File %s has a different hash from the one given %s', $file->getId(), $hash)
+            );
+        }
+
+        $path = sprintf('%s/%s', $this->getParameter('infrastructure.print_planning_path'), $file->getPath());
 
         if (!file_exists($path)) {
-            throw $this->createNotFoundException(sprintf('File %s not found', $fileName));
+            throw $this->createNotFoundException(sprintf('File %s not found', $file->getId()));
         }
 
         return new Response(file_get_contents($path));

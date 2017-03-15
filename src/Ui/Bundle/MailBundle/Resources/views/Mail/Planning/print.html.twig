@@ -17,7 +17,7 @@
 
 {{ macros.button(
     'mail.planning.print.link.click'|trans({}, 'mail', mail.locale),
-    url('admin_planning_export_link', {'event': mail.event.id, 'file': mail.filePath})
+    url('admin_planning_export_link', {'event': mail.event.id, 'hash': mail.fileHash, 'file': mail.fileId})
 ) }}
 </body>
 </html>
