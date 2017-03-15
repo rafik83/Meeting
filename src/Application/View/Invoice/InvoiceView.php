@@ -88,7 +88,7 @@ class InvoiceView
      * @param string             $eventPaymentFooter
      * @param SummaryView        $summaryView
      * @param BillingInfosView   $billingInfosView
-     * @param float              $amountRemainToPay
+     * @param int                $amountRemainToPay
      */
     public function __construct(
         $invoiceNumber,

@@ -30,7 +30,7 @@ class PromotionCodeView
     /**
      * @param string                    $label
      * @param string                    $description
-     * @param float                     $total
+     * @param int                       $total
      * @param int                       $quantity
      * @param PromotionProductRowView[] $promotionProductRowViews
      */
