@@ -67,6 +67,7 @@ class InvoiceViewQueryHandler
                 $invoice->getId(),
                 $invoice->getNumber(),
                 $invoice->getTotal(),
+                $invoice->getTotalWithVat(),
                 $invoice->getCurrency(),
                 $invoice->getCreatedAt(),
                 $orderViews,
