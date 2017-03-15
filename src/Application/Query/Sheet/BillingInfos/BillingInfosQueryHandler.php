@@ -55,7 +55,7 @@ class BillingInfosQueryHandler
             $billingInfo->getAddress()->getStreet(),
             $billingInfo->getAddress()->getZipcode(),
             $billingInfo->getAddress()->getCity(),
-            $billingInfo->getAddress()->getCity(),
+            $billingInfo->getAddress()->getCountry(),
             $billingInfo->getVatNumber(),
             $billingInfo->getReference()
         );
