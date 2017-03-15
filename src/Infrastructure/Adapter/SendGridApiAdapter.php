@@ -80,7 +80,7 @@ class SendGridApiAdapter
 
             // For each locale, send the chunck of receivers for this locale with the mail
             foreach ($receiverByLocale as $locale => $receiversForLocale) {
-                $this->doSend($this->prepare($rawMails[$locale], $receiversForLocale));
+                $this->doSend($this->prepare(clone $rawMails[$locale], $receiversForLocale));
             }
         }
     }
