@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             generator:
                 strategy: AUTO
     fields:
+        vatApplicable:
+            type: boolean
         total:
             type: integer
         totalWithVat:

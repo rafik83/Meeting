@@ -88,6 +88,9 @@ class Invoice
     /** @var ArrayCollection of Order */
     private $orders;
 
+    /** @var bool */
+    private $vatApplicable;
+
     /**
      * Invoice constructor.
      *
@@ -97,6 +100,7 @@ class Invoice
      * @param string             $invoicePrefix
      * @param int                $invoiceYear
      * @param int                $invoiceIncrement
+     * @param bool               $vatApplicable
      * @param int                $total
      * @param int                $totalWithVat
      * @param int                $vatAmount
@@ -111,6 +115,7 @@ class Invoice
         $invoicePrefix,
         $invoiceYear,
         $invoiceIncrement,
+        $vatApplicable,
         $total,
         $totalWithVat,
         $vatAmount,
@@ -124,6 +129,7 @@ class Invoice
         $this->invoicePrefix    = $invoicePrefix;
         $this->invoiceYear      = $invoiceYear;
         $this->invoiceIncrement = $invoiceIncrement;
+        $this->vatApplicable    = $vatApplicable;
         $this->total            = $total;
         $this->totalWithVat     = $totalWithVat;
         $this->vatAmount        = $vatAmount;
@@ -256,6 +262,14 @@ class Invoice
     public function getOrders()
     {
         return $this->orders->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVatApplicable()
+    {
+        return $this->vatApplicable;
     }
 
     /**

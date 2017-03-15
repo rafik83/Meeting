@@ -32,22 +32,27 @@ class OrdersToInvoiceView
     /** @var string string 3-letter ISO 4217 currency name */
     private $currency;
 
+    /** @var bool */
+    private $vatApplicable;
+
     /**
      * @param array  $orders
      * @param string $data InvoiceDataView serialized in json
+     * @param bool   $vatApplicable
      * @param int    $total amount in cents
      * @param int    $vatAmount amount in cents
      * @param int    $totalWithVat amount in cents
      * @param string $currency
      */
-    public function __construct(array $orders, $data, $total, $vatAmount, $totalWithVat, $currency)
+    public function __construct(array $orders, $data, $vatApplicable, $total, $vatAmount, $totalWithVat, $currency)
     {
-        $this->orders       = $orders;
-        $this->total        = $total;
-        $this->vatAmount    = $vatAmount;
-        $this->totalWithVat = $totalWithVat;
-        $this->data         = $data;
-        $this->currency     = $currency;
+        $this->orders        = $orders;
+        $this->data          = $data;
+        $this->vatApplicable = $vatApplicable;
+        $this->total         = $total;
+        $this->vatAmount     = $vatAmount;
+        $this->totalWithVat  = $totalWithVat;
+        $this->currency      = $currency;
     }
 
     /**
@@ -96,5 +101,13 @@ class OrdersToInvoiceView
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVatApplicable()
+    {
+        return $this->vatApplicable;
     }
 }

@@ -100,6 +100,7 @@ class OrdersToInvoice
         return new OrdersToInvoiceView(
             $orders,
             $data,
+            $isVatApplicable,
             $total,
             $vatToPay,
             $total + $vatToPay,

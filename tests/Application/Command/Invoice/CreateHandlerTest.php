@@ -39,8 +39,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $billingInfo        = new BillingInfo('test', 'test', 'test', 'test', '0', '0', 'test@test.com', 'test', $address, 'FR42');
         $order              = new Order($sheet, true, $billingInfo, 'test', $date);
         $prefix             = new Prefix('Vimeet', 'Vi');
-        $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, 1000, 1200, 200, 'EUR', '[]', $date);
-        $orderToInvoiceView = new OrdersToInvoiceView([$order], '[]', 1000, 200, 1200, 'EUR');
+        $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, true, 1000, 1200, 200, 'EUR', '[]', $date);
+        $orderToInvoiceView = new OrdersToInvoiceView([$order], '[]', true, 1000, 200, 1200, 'EUR');
 
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
         $orderRepository   = $this->prophesize(OrderRepositoryInterface::class);

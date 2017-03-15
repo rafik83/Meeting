@@ -90,6 +90,7 @@ class CreateHandler
             $create->prefix->getPrefix(),
             $this->dateTime->format('Y'),
             $invoiceIncrement,
+            $ordersToInvoiceView->isVatApplicable(),
             $ordersToInvoiceView->getTotal(),
             $ordersToInvoiceView->getTotalWithVat(),
             $ordersToInvoiceView->getVatAmount(),
