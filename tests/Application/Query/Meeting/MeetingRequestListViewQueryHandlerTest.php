@@ -42,7 +42,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user);
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr');
+        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr', $user);
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -64,6 +64,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 $meetingRequest,
                 $sheet,
                 'fr',
+                $user,
                 false,
                 false
             ))
