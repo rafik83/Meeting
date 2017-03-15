@@ -23,14 +23,21 @@ final class ReceiverView
     private $replaces;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * @param string $email
      * @param array  $replaces An array of format [placeholder => value]
      *                         to be used for mail rendering
+     * @param string $locale User locale
      */
-    public function __construct($email, array $replaces)
+    public function __construct($email, array $replaces, $locale)
     {
         $this->email    = $email;
         $this->replaces = $replaces;
+        $this->locale   = $locale;
     }
 
     /**
@@ -47,5 +54,13 @@ final class ReceiverView
     public function getReplaces()
     {
         return $this->replaces;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 }

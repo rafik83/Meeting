@@ -23,6 +23,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 
 class ProcessHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +41,9 @@ class ProcessHandlerTest extends \PHPUnit_Framework_TestCase
         $campaign->addSheet($sheet);
 
         $template = $this->prophesize(\Twig_TemplateInterface::class);
-        $template->render(['mail' => $message])->willReturn('test content');
+        foreach ($event->getLocales() as $locale) {
+            $template->render(['mail' => new MessageContentMail($message, $event, $locale)])->willReturn('test content ' . $locale);
+        }
 
         $twig = $this->prophesize(\Twig_Environment::class);
         $twig->load($message->getTemplate())->willReturn($template);
