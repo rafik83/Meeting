@@ -67,6 +67,8 @@ class MeetingViewQueryHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
 
+        $isSheetDetailsSeeAble = !empty($rules) ? true : false;
+        
         $meeting  = new MeetingView(
             $sheetMet->getId(),
             $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
@@ -76,7 +78,8 @@ class MeetingViewQueryHandler
             $query->event->getTimeZone(),
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
-            $participants
+            $participants,
+            $isSheetDetailsSeeAble
         );
 
         return $meeting;
