@@ -83,7 +83,8 @@ class ParticipantViewQueryHandler
                         $participant->getId(),
                         $participant->getUser()->getAccount()->getCompleteName(),
                         $sheet,
-                        $unavailabilitiesSlots
+                        $unavailabilitiesSlots,
+                        $participant->isVisio()
                     );
                 }
             }
