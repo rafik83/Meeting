@@ -78,4 +78,12 @@ class MeetingViewQuery
     {
         return $this->exportSolutionType === ExportSolutionType::SOLUTION_FROM_SCRATCH;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSolutionLocked()
+    {
+        return $this->exportSolutionType === ExportSolutiontype::SOLUTION_OPTIMIZE_LOCKED;
+    }
 }

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -82,44 +83,7 @@ class MeetingViewQueryHandler
                     $this->getSheetById($request->getToSheet()->getId()),
                 ];
 
-                $participantsList = [];
-
-                if ($request->hasFromParticipants()) {
-                    /** @var Participant $participant */
-                    foreach ($request->getFromParticipantsArray() as $participant) {
-                        $participantsList[] = $this->getParticipantById($participant->getId());
-                    }
-                } else {
-                    // No preference on from
-                    // If sheet has only one participant
-                    if ($request->getFromSheet()->countParticipant() === 1) {
-                        /** @var Participant $participant */
-                        foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
-                            $participantsList[] = $this->getParticipantById($participant->getId());
-                        }
-                    } else {
-                        $this->resetRecursiveDepth();
-                        $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
-                    }
-                }
-
-                if ($request->hasToParticipants()) {
-                    foreach ($request->getToParticipantsArray() as $participant) {
-                        $participantsList[] = $this->getParticipantById($participant->getId());
-                    }
-                } else {
-                    // not preference on to
-                    // If sheet has only one participant
-                    if ($request->getToSheet()->countParticipant() === 1) {
-                        /** @var Participant $participant */
-                        foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
-                            $participantsList[] = $this->getParticipantById($participant->getId());
-                        }
-                    } else {
-                        $this->resetRecursiveDepth();
-                        $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
-                    }
-                }
+                $participantsList = $this->getParticipantsList($query, $request, $request->getMeeting());
 
                 $meetingView = new MeetingView(
                     $request->getId(),
@@ -153,6 +117,63 @@ class MeetingViewQueryHandler
     private function resetRecursiveDepth()
     {
         $this->recursiveDepth = 0;
+    }
+
+    /**
+     * @param MeetingViewQuery $query
+     * @param Request          $request
+     * @param Meeting|null     $meeting
+     *
+     * @return ParticipantView[]
+     */
+    private function getParticipantsList(MeetingViewQuery $query, Request $request, Meeting $meeting = null)
+    {
+        $participantsList = [];
+
+        if (!$query->isSolutionFromScratch() && $meeting !== null) {
+            foreach ($meeting->getAllParticipants() as $participant) {
+                $participantsList[] = $this->getParticipantById($participant->getId());
+            }
+        } else {
+            if ($request->hasFromParticipants()) {
+                /** @var Participant $participant */
+                foreach ($request->getFromParticipantsArray() as $participant) {
+                    $participantsList[] = $this->getParticipantById($participant->getId());
+                }
+            } else {
+                // No preference on from
+                // If sheet has only one participant
+                if ($request->getFromSheet()->countParticipant() === 1) {
+                    /** @var Participant $participant */
+                    foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
+                        $participantsList[] = $this->getParticipantById($participant->getId());
+                    }
+                } else {
+                    $this->resetRecursiveDepth();
+                    $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
+                }
+            }
+
+            if ($request->hasToParticipants()) {
+                foreach ($request->getToParticipantsArray() as $participant) {
+                    $participantsList[] = $this->getParticipantById($participant->getId());
+                }
+            } else {
+                // not preference on to
+                // If sheet has only one participant
+                if ($request->getToSheet()->countParticipant() === 1) {
+                    /** @var Participant $participant */
+                    foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
+                        $participantsList[] = $this->getParticipantById($participant->getId());
+                    }
+                } else {
+                    $this->resetRecursiveDepth();
+                    $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
+                }
+            }
+        }
+
+        return $participantsList;
     }
 
     /**
