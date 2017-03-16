@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
-use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -44,9 +43,6 @@ class MeetingViewQueryHandler
     /** @var int */
     private $recursiveDepth = 0;
 
-    /** @var VisioGuesser */
-    private $visioGuesser;
-
     /** @var SpotView[] */
     private $spots;
 
@@ -59,16 +55,13 @@ class MeetingViewQueryHandler
     /**
      * @param RequestRepositoryInterface $requestRepository
      * @param MeetingRepositoryInterface $meetingRepository
-     * @param VisioGuesser               $visioGuesser
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        MeetingRepositoryInterface $meetingRepository,
-        VisioGuesser $visioGuesser
+        MeetingRepositoryInterface $meetingRepository
     ) {
         $this->requestRepository = $requestRepository;
         $this->meetingRepository = $meetingRepository;
-        $this->visioGuesser      = $visioGuesser;
     }
 
     /**
@@ -83,6 +76,7 @@ class MeetingViewQueryHandler
 
         foreach ($this->requests as $request) {
             try {
+                if ($query->exportSolutionType) {}
                 $sheetsList = [
                     $this->getSheetById($request->getFromSheet()->getId()),
                     $this->getSheetById($request->getToSheet()->getId()),
@@ -131,7 +125,7 @@ class MeetingViewQueryHandler
                     $request->getId(),
                     $sheetsList,
                     $participantsList,
-                    $this->visioGuesser->hasMeetingRequestParticipantVisio($request)
+                    $this->isVisio($participantsList)
                 );
 
                 if ($request->hasMeeting()) {
@@ -168,11 +162,6 @@ class MeetingViewQueryHandler
     {
         $this->indexById($query);
         $this->requests = $this->requestRepository->getAllAcceptedByEvent($query->event);
-
-        if ($query->resetSolution === false) {
-
-        }
-
         $this->countRequestBySheet();
         $this->calculateAssignation();
     }
@@ -269,6 +258,24 @@ class MeetingViewQueryHandler
         }
 
         throw new ParticipantNotFoundException(sprintf('Participant of id %s was not found', $id));
+    }
+
+    /**
+     * Check if at least a participant is Visio
+     *
+     * @param ParticipantView[] $participantList
+     *
+     * @return bool
+     */
+    private function isVisio(array $participantList)
+    {
+        foreach ($participantList as $participant) {
+            if ($participant->isVisio) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

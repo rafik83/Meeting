@@ -63,4 +63,20 @@ class CampaignRepository implements CampaignRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getById($id)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->from(Campaign::class, 'campaign')
+            ->select('campaign')
+            ->where('campaign.id = :id')
+            ->setParameter('id', $id)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

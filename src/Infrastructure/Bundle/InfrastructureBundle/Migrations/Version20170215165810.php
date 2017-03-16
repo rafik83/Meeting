@@ -32,7 +32,6 @@ class Version20170215165810 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
         $this->addSql('ALTER TABLE event DROP FOREIGN KEY FK_3BAE0AA739FABE62');
         $this->addSql('DROP INDEX IDX_3BAE0AA739FABE62 ON event');
         $this->addSql('ALTER TABLE event DROP invoice_prefix_id');

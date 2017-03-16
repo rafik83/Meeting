@@ -198,6 +198,16 @@ class Promotion
     }
 
     /**
+     * @param $type
+     *
+     * @return bool
+     */
+    public static function isTypeValueOff($type)
+    {
+        return $type === self::TYPE_VALUE_OFF;
+    }
+
+    /**
      * @return bool
      */
     public function isFree()

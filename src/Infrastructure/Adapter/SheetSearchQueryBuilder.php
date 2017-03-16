@@ -85,8 +85,6 @@ class SheetSearchQueryBuilder
 
         $this->query = new BoolQuery();
         $this->matchEvent($event);
-        $this->hasOwner();
-        $this->hasParticipant();
         $this->filter($filters);
     }
 
@@ -110,30 +108,6 @@ class SheetSearchQueryBuilder
         $matchEvent = new Term();
         $matchEvent->setTerm('event', $event->getId());
         $this->query->addMust($matchEvent);
-    }
-
-    /**
-     * Has owner
-     *
-     * @deprecated To be removed, used for dev reason
-     */
-    protected function hasOwner()
-    {
-        $rangeOwner = new Range();
-        $rangeOwner->addField('owner', ['gt' => 0]);
-        $this->query->addMust($rangeOwner);
-    }
-
-    /**
-     * Has participant
-     *
-     * @deprecated To be removed, used for dev reason
-     */
-    protected function hasParticipant()
-    {
-        $range = new Range();
-        $range->addField('participantNumber', ['gt' => 0]);
-        $this->query->addMust($range);
     }
 
     /**
@@ -161,14 +135,16 @@ class SheetSearchQueryBuilder
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
         $this->filterByHasHappeningParticipation($filters);
+        $this->filterByHasScheduledMeeting($filters);
+        $this->filterByHasInvoice($filters);
         $this->filterByImported($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
-            $this->filterHasCart();
+            $this->filterHasCart(true);
         }
 
         if (isset($filters[Constant::NO_ORDER]) && true === $filters[Constant::NO_ORDER]) {
-            $this->filterNoOrder();
+            $this->filterHasOrder(false);
         }
 
         if (isset($filters['boolean_filters'])) {
@@ -179,8 +155,16 @@ class SheetSearchQueryBuilder
             $this->filterByObjective($filters[SearchType::FILTER_OBJECTIVE]);
         }
 
-        if (isset($filters['hasRemainingToPay']) && true === $filters['hasRemainingToPay']) {
-            $this->filterByHasRemainingToPay();
+        if (isset($filters[Constant::HAS_ORDER])) {
+            $this->filterHasOrder($filters[Constant::HAS_ORDER]);
+        }
+
+        if (isset($filters[Constant::HAS_CART])) {
+            $this->filterHasCart($filters[Constant::HAS_CART]);
+        }
+
+        if (isset($filters['hasRemainingToPay'])) {
+            $this->filterByHasRemainingToPay($filters['hasRemainingToPay']);
         }
 
         if (isset($filters['hasNoMeetingRequest']) && true === $filters['hasNoMeetingRequest']) {
@@ -298,16 +282,18 @@ class SheetSearchQueryBuilder
      */
     protected function filterByState(array &$filters)
     {
-        /** @var array|string $filters['state'] */
+        /** @var array|string $filters ['state'] */
         if (isset($filters['state'])) {
             // Cast into array:
-            $states = (array) $filters['state'];
+            $states        = (array) $filters['state'];
             $filterByState = new BoolQuery();
+
             foreach ($states as $state) {
                 if (in_array($state, Sheet::getAllStates())) {
                     $filterByState->addShould((new Term())->setTerm('state', $state));
                 }
             }
+
             $this->query->addMust($filterByState);
         }
     }
@@ -319,7 +305,7 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['validationState'])) {
             // Cast validationState into array:
-            $validationStates = (array) $filters['validationState'];
+            $validationStates        = (array) $filters['validationState'];
             $filterByValidationState = new BoolQuery();
             foreach ($validationStates as $validationState) {
                 if (in_array($validationState, Sheet::getAllValidationStates())) {
@@ -336,7 +322,7 @@ class SheetSearchQueryBuilder
     protected function filterByEnabled(array &$filters)
     {
         if (isset($filters['enabled'])) {
-            $this->query->addMust((new Term())->setTerm('enabled', (bool)$filters['enabled']));
+            $this->query->addMust((new Term())->setTerm('enabled', (bool) $filters['enabled']));
         }
     }
 
@@ -377,8 +363,8 @@ class SheetSearchQueryBuilder
             if ($categories instanceof Category) {
                 $categories = [$categories];
             }
-            $nested     = new Nested();
-            $boolQuery  = new BoolQuery();
+            $nested    = new Nested();
+            $boolQuery = new BoolQuery();
             foreach ($categories as $category) {
                 if ($category instanceof Category) {
                     $matchQuery = new Match();
@@ -398,27 +384,22 @@ class SheetSearchQueryBuilder
     protected function filterByFollower(array &$filters)
     {
         if (isset($filters['follower'])) {
-            if ($filters['follower'] === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
-                $matchFollower = new Term();
-                $matchFollower->setTerm('followUp', 0);
-                $this->query->addMust($matchFollower);
-
-                return;
-            }
-
             $followers = $filters['follower'];
-            if ($followers instanceof Admin) {
-                $followers = [$followers];
-            }
+
             $followerQuery = new BoolQuery();
 
             foreach ($followers as $follower) {
-                if ($follower instanceof Admin) {
+                if ($follower === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
+                    $matchFollower = new Term();
+                    $matchFollower->setTerm('followUp', 0);
+                    $followerQuery->addShould($matchFollower);
+                } elseif ($follower instanceof Admin) {
                     $matchFollower = new Term();
                     $matchFollower->setTerm('followUp', $follower->getId());
                     $followerQuery->addShould($matchFollower);
                 }
             }
+
             $this->query->addMust($followerQuery);
         }
     }
@@ -433,12 +414,6 @@ class SheetSearchQueryBuilder
                 $this->filterCreatedToday();
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
-            } elseif ($filters['predefined'] === Constant::NO_ORDER) {
-                $this->filterNoOrder();
-            } elseif ($filters['predefined'] === Constant::HAS_CART) {
-                $this->filterHasCart();
-            } else {
-                $this->filterByBooleanFilter($filters['predefined']);
             }
         }
     }
@@ -586,23 +561,14 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * Sheet with no order
+     * Sheet with or without unpaid cart
+     *
+     * @param bool $hasCart
      */
-    protected function filterNoOrder()
-    {
-        $matchHasOrder = new Term();
-        $matchHasOrder->setTerm('hasOrder', false);
-
-        $this->query->addMust($matchHasOrder);
-    }
-
-    /**
-     * Sheet with unpaid cart
-     */
-    protected function filterHasCart()
+    protected function filterHasCart($hasCart)
     {
         $matchHasCart = new Term();
-        $matchHasCart->setTerm('hasCart', true);
+        $matchHasCart->setTerm('hasCart', $hasCart);
 
         $this->query->addMust($matchHasCart);
     }
@@ -618,17 +584,34 @@ class SheetSearchQueryBuilder
 
         $booleanFilters = (array) $booleanFilters;
 
-        $nested     = new Nested();
-        $boolQuery  = new BoolQuery();
+        $hasNestedMust = false;
+        $hasNestedMustNot = false;
 
-        foreach ($booleanFilters as $filter) {
-            $matchQuery = new Match();
-            $matchQuery->setField('booleanFilter.key', $filter);
-            $boolQuery->addShould($matchQuery);
+        $nestedMust    = new Nested();
+        $boolQueryMust = new BoolQuery();
+
+        $nestedMustNot    = new Nested();
+        $boolQueryMustNot = new BoolQuery();
+
+        foreach ($booleanFilters as $key => $isFiltered) {
+            if ($isFiltered === true) {
+                $boolQueryMust->addMust((new Match())->setField('booleanFilter.key', $key));
+                $hasNestedMust = true;
+            } elseif ($isFiltered === false) {
+                $boolQueryMustNot->addMust((new Match())->setField('booleanFilter.key', $key));
+                $hasNestedMustNot = true;
+            }
         }
 
-        $nested->setQuery($boolQuery)->setPath('booleanFilter');
-        $this->query->addMust($nested);
+        if (true === $hasNestedMust) {
+            $nestedMust->setQuery($boolQueryMust)->setPath('booleanFilter');
+            $this->query->addMust($nestedMust);
+        }
+
+        if (true === $hasNestedMustNot) {
+            $nestedMustNot->setQuery($boolQueryMustNot)->setPath('booleanFilter');
+            $this->query->addMustNot($nestedMustNot);
+        }
     }
 
     /**
@@ -695,10 +678,39 @@ class SheetSearchQueryBuilder
         }
     }
 
-    private function filterByHasRemainingToPay()
+    /**
+     * @param array $filters
+     */
+    private function filterByHasScheduledMeeting(array &$filters)
+    {
+        if (isset($filters['hasScheduledMeeting'])) {
+            $this->query->addMust((new Term())->setTerm('hasScheduledMeeting', (bool) $filters['hasScheduledMeeting']));
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByHasInvoice(array &$filters)
+    {
+        if (isset($filters['hasInvoice'])) {
+            $this->query->addMust((new Term())->setTerm('hasInvoice', (bool) $filters['hasInvoice']));
+        }
+    }
+
+    /**
+     * If participant has remaning to pay, greater than 0,
+     * if not, less than equal 0
+     *
+     * @param bool $hasRemainingToPay
+     */
+    private function filterByHasRemainingToPay($hasRemainingToPay)
     {
         $positiveRange = new Range();
-        $positiveRange->addField('remainingToPay', ['gt' => 0]);
+
+        $parameters = $hasRemainingToPay === true ? ['gt' => 0] : ['lte' => 0];
+
+        $positiveRange->addField('remainingToPay', $parameters);
         $this->query->addMust($positiveRange);
     }
 
@@ -761,5 +773,16 @@ class SheetSearchQueryBuilder
     private function hasConnectionFilter()
     {
         return (new Filtered())->setFilter(new Exists('lastLoginAt'));
+    }
+
+    /**
+     * @param bool $hasOrder
+     */
+    private function filterHasOrder($hasOrder)
+    {
+        $matchHasOrder = new Term();
+        $matchHasOrder->setTerm('hasOrder', $hasOrder);
+
+        $this->query->addMust($matchHasOrder);
     }
 }

@@ -1,0 +1,6 @@
+Proximum\Vimeet\Domain\Model\Invoice\Prefix:
+    prefix_vimeet:
+        __construct:
+            - 'Vimeet'
+            - 'Vi'
+            - true

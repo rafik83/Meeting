@@ -39,6 +39,7 @@ form.admin.picto.Conference: Micro
 form.admin.picto.Dejeuner: Déjeuner
 form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
+form.admin.sheet.follower.un-assigned: 'Non assigné'
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -49,6 +50,8 @@ form.billing_info_update.children.gender.label: Genre
 form.billing_info_update.children.lastname.label: Nom
 form.billing_info_update.children.mobile.label: Mobile
 form.billing_info_update.children.phone.label: Téléphone
+form.billing_info_update.children.reference.label: Votre référence comptable
+form.billing_info_update.children.reference.placeholder: référence comptable, bon de commande ...
 form.billing_info_update.children.street.label: Adresse
 form.billing_info_update.children.submit.label: Enregistrer
 form.billing_info_update.children.vatNumber.label: 'Numéro de TVA'
@@ -86,7 +89,7 @@ form.change_password.children.submit.label: Envoyer
 form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
-form.common.choices.all: 'Tout sélectionner'
+form.common.choices.all: 'Peu importe'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -550,6 +553,7 @@ form.sheet_batch.children.assign.label: Assigner
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
+form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -562,13 +566,15 @@ form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
-form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
+admin.sheet.follower.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
+form.sheet_filter.children.hasInvoice.label: 'A au moins une facture'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
-form.sheet_filter.children.imported.all.label: Tous
+form.sheet_filter.children.imported.all.label: 'Peu importe'
+form.sheet_filter.children.hasScheduledMeeting.label: 'A au moins un RDV planifié'
 form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
@@ -762,3 +768,23 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
+form.admin.sheet.filter.children.submit.label: 'Filtrer'
+form.sheet_filter.children.enabledState.label: 'Statut de la fiche'
+form.sheet_filter.children.enabledState.all.label: Toutes
+form.sheet_filter.children.enabledState.enabled.label: Active
+form.sheet_filter.children.enabledState.disabled.label: Non active
+form.sheet_filter.children.hasOrder.label: Commande
+form.sheet_filter.children.order.noPreference.label: 'Peu importe'
+form.sheet_filter.children.order.yes.label: Avec
+form.sheet_filter.children.order.no.label: Sans
+form.sheet_filter.children.hasCart.label: Panier
+form.sheet_filter.children.cart.noPreference.label: 'Peu importe'
+form.sheet_filter.children.cart.yes.label: Avec
+form.sheet_filter.children.cart.no.label: Sans
+form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'Peu importe'
+form.sheet_filter.children.hasRemainingToPay.yes.label: Oui
+form.sheet_filter.children.hasRemainingToPay.no.label: Non
+form.sheet.filter.children.template_filters.label: 'Filtres supplémentaires'
+form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
+created_at: 'Date d''inscription'
+alphabetical: 'Alphabétique'

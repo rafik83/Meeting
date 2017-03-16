@@ -180,7 +180,7 @@ order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
 order.transaction.mode.paypal: Paypal
 order.transaction.no: Aucune
-order.transaction.paypal.description: 'Participation de %sheetName% (fiche %sheetId%) à l''évènement "%eventName%"'
+order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %sheetName% à l''évènement "%eventName%"'
 order.transaction.state.cancelled: Annulé
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
@@ -254,6 +254,7 @@ package.vatMode.et: HT
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
 pro_forma.date.title: 'Date :'
 pro_forma.number.title: 'N° pro-forma :'
+pro_forma.reference.title: 'Votre référence :'
 pro_forma.title: 'Pro-forma - %date%'
 pro_forma.vatNumber.title: 'Numéro TVA'
 program.title: Programme

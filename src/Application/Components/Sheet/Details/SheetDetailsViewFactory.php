@@ -132,6 +132,8 @@ class SheetDetailsViewFactory
             $this->balance->getOrders($sheet),
             // Transactions
             $this->balance->getTransactions($sheet),
+            // Invoices
+            $this->balance->getInvoices($sheet),
             // Total of orders
             $this->balance->getTotal($sheet),
             // Remaining to pay

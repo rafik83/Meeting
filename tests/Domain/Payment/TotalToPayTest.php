@@ -51,7 +51,7 @@ class TotalToPayTest extends \PHPUnit_Framework_TestCase
         $cartManager   = $this->prophesize(CartManager::class);
         $vatApplicable = $this->prophesize(VatApplicable::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $vatApplicable->onCart($cart)->shouldBeCalled()->willReturn(true);
+        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
 
         $totalToPay = new TotalToPay($cartManager->reveal(), $vatApplicable->reveal());
         $this->assertEquals(480, $totalToPay->getTotal($sheet));

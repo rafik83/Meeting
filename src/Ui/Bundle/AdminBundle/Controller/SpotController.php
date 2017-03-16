@@ -239,7 +239,7 @@ class SpotController extends Controller
 
         $meetingSlots = [];
 
-        if ($spotUnavailabilityView->isSameUnavailabilities()) {
+        if (!$spotUnavailabilityView->isSameUnavailabilities()) {
             $meetingSlots = $spotUnavailabilityView->getMeetingSlots();
         } else {
             $this->addFlash('warning', 'flash.admin.spot_batch.spotUnavailability.exist.warning');

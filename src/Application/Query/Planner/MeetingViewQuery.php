@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
+use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 
 class MeetingViewQuery
 {
@@ -43,10 +44,8 @@ class MeetingViewQuery
      */
     public $spots;
 
-    /**
-     * @var string
-     */
-    private $exportSolutionType;
+    /** @var string */
+    public $exportSolutionType;
 
     /**
      * @param Event             $event
@@ -70,5 +69,13 @@ class MeetingViewQuery
         $this->slots              = $slots;
         $this->spots              = $spots;
         $this->exportSolutionType = $exportSolutionType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSolutionFromScratch()
+    {
+        return $this->exportSolutionType === ExportSolutionType::SOLUTION_FROM_SCRATCH;
     }
 }

@@ -27,6 +27,7 @@ class CreationIntervalFilterType extends AbstractType
                 'admin.sheet.created_today'     => Constant::CREATED_TODAY,
                 'admin.sheet.created_this_week' => Constant::CREATED_THIS_WEEK,
             ],
+            'placeholder' => 'admin.sheet.registeredAt.all'
         ]);
     }
 

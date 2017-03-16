@@ -13,15 +13,17 @@ namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQueryHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,14 +47,23 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $translator        = $this->prophesize(TranslatorInterface::class);
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
 
         if (!$meeting->isBlockedSlot()) {
             $meetingRepository->remove($meeting)->shouldBeCalled();
+            $eventDispatcher->dispatch(
+                Events::MEETING_REMOVED,
+                new MeetingRemovedEvent([
+                    $meeting->getFromSheet(),
+                    $meeting->getToSheet()
+                ])
+            )->shouldBeCalled();
         }
 
         $handler = new RemoveMeetingViewQueryHandler(
             $meetingRepository->reveal(),
-            $translator->reveal()
+            $translator->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle(new RemoveMeetingViewQuery($meeting, $admin));
