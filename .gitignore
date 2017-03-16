@@ -2,6 +2,7 @@
 /web/integration/dist/
 /app/config/parameters.yml
 /var/participants_imports
+/var/planning-print
 /var/bootstrap.php.cache
 /var/SymfonyRequirements.php
 /var/cache

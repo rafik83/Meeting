@@ -10,15 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
-use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
-use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
-use Proximum\Vimeet\Application\View\Agenda\AgendaView;
-use Proximum\Vimeet\Application\View\Agenda\DayView;
-use Proximum\Vimeet\Application\View\Agenda\HappeningView;
-use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
-use Proximum\Vimeet\Application\View\Agenda\MeetingView;
-use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
+use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
+use Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler;
+use Proximum\Vimeet\Application\View\Planning\Day\AbstractTimeEntityView;
+use Proximum\Vimeet\Application\View\Planning\DayView;
+use Proximum\Vimeet\Application\View\Planning\day\HappeningParticipationView;
+use Proximum\Vimeet\Application\View\Planning\day\MassView;
+use Proximum\Vimeet\Application\View\Planning\day\AssignmentView;
+use Proximum\Vimeet\Application\View\Planning\day\MeetingView;
+use Proximum\Vimeet\Application\View\Planning\day\UnavailabilityView;
+use Proximum\Vimeet\Application\View\Planning\PlanningView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -43,23 +44,23 @@ class ParticipantPlanningFormatter
     private $unallocatedFormatter;
 
     /**
-     * @var AgendaViewQueryHandler
+     * @var PlanningViewQueryHandler
      */
-    private $agendaViewQueryHandler;
+    private $planningViewQueryHandler;
 
     /**
-     * @param TranslatorAdapter      $translator
-     * @param UnallocatedFormatter   $unallocatedFormatter
-     * @param AgendaViewQueryHandler $agendaViewQueryHandler
+     * @param TranslatorAdapter        $translator
+     * @param UnallocatedFormatter     $unallocatedFormatter
+     * @param PlanningViewQueryHandler $planningViewQueryHandler
      */
     public function __construct(
         TranslatorAdapter $translator,
         UnallocatedFormatter $unallocatedFormatter,
-        AgendaViewQueryHandler $agendaViewQueryHandler
+        PlanningViewQueryHandler $planningViewQueryHandler
     ) {
-        $this->translator             = $translator;
-        $this->unallocatedFormatter   = $unallocatedFormatter;
-        $this->agendaViewQueryHandler = $agendaViewQueryHandler;
+        $this->translator               = $translator;
+        $this->unallocatedFormatter     = $unallocatedFormatter;
+        $this->planningViewQueryHandler = $planningViewQueryHandler;
     }
 
     /**
@@ -74,9 +75,9 @@ class ParticipantPlanningFormatter
     {
         $sheet  = $participant->getSheet();
         $event  = $sheet->getEvent();
-        $agenda = $this->getAgendaFromParticipant($event, $sheet, $participant, $userLocale);
+        $planning = $this->getPlanningFromParticipant($event, $participant, $userLocale);
 
-        return $this->formatPlanningFromAgenda($agenda, $userLocale);
+        return $this->formatPlanningFromPlanningView($planning, $userLocale);
     }
 
     /**
@@ -87,51 +88,66 @@ class ParticipantPlanningFormatter
      */
     public function formatPlanningFromParticipantWithUnallocated(Participant $participant, $userLocale)
     {
-        $sheet  = $participant->getSheet();
-        $event  = $sheet->getEvent();
-        $agenda = $this->getAgendaFromParticipant($event, $sheet, $participant, $userLocale);
+        $sheet        = $participant->getSheet();
+        $event        = $sheet->getEvent();
+        $planningView = $this->getPlanningFromParticipant($event, $participant, $userLocale);
 
-        return $this->formatPlanningFromAgendaWithUnallocated($sheet, $agenda, $userLocale);
+        return $this->formatPlanningFromPlanningViewWithUnallocated($sheet, $planningView, $userLocale);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function preloadPlanningHandlerForEvent(Event $event)
+    {
+        $this->planningViewQueryHandler->preloadForEvent($event);
+    }
+
+    /**
+     * @param Participant[] $participants
+     */
+    public function preloadPlanningHandlerForParticipants(array $participants)
+    {
+        $this->planningViewQueryHandler->preloadForParticipants($participants);
     }
 
     /**
      * @param Event       $event
-     * @param Sheet       $sheet
      * @param Participant $participant
      * @param string      $userLocale
      *
-     * @return AgendaView
+     * @return PlanningView
      */
-    private function getAgendaFromParticipant(Event $event, Sheet $sheet, Participant $participant, $userLocale)
+    private function getPlanningFromParticipant(Event $event, Participant $participant, $userLocale)
     {
-        return $this->agendaViewQueryHandler->handle(new AgendaViewQuery($event, $sheet, $participant, $userLocale));
+        return $this->planningViewQueryHandler->handle(new PlanningViewQuery($event, $participant, $userLocale));
     }
 
     /**
-     * Format the planning of the participant from the AgendaView
+     * Format the planning of the participant from the PlanningView
      *
-     * @param AgendaView $agenda
-     * @param string     $userLocale
+     * @param PlanningView $planning
+     * @param string       $userLocale
      *
      * @return string
      */
-    public function formatPlanningFromAgenda(AgendaView $agenda, $userLocale)
+    public function formatPlanningFromPlanningView(PlanningView $planning, $userLocale)
     {
-        return $this->format($agenda->days, $userLocale);
+        return $this->format($planning->days, $userLocale);
     }
 
     /**
      * Format the planning of the participant with the sheet unallocated
      *
      * @param Sheet      $sheet
-     * @param AgendaView $agenda
+     * @param PlanningView $planningView
      * @param string     $userLocale
      *
      * @return string
      */
-    public function formatPlanningFromAgendaWithUnallocated(Sheet $sheet, AgendaView $agenda, $userLocale)
+    public function formatPlanningFromPlanningViewWithUnallocated(Sheet $sheet, PlanningView $planningView, $userLocale)
     {
-        $planning    = $this->format($agenda->days, $userLocale);
+        $planning    = $this->format($planningView->days, $userLocale);
         $unallocated = $this->unallocatedFormatter->format($sheet, $userLocale);
 
         if (empty($unallocated)) {
@@ -201,7 +217,7 @@ class ParticipantPlanningFormatter
                     self::TRANSLATION_DOMAIN,
                     $participantLocale
                 );
-            } elseif ($timeEntity instanceof MassUnavailabilityView || $timeEntity instanceof HappeningView) {
+            } elseif ($timeEntity instanceof MassView || $timeEntity instanceof HappeningParticipationView || $timeEntity instanceof AssignmentView) {
                 $formatted .= $timeEntity->title;
             } elseif ($timeEntity instanceof UnavailabilityView) {
                 if ($timeEntity->hasMessage()) {

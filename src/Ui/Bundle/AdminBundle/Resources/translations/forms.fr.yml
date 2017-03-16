@@ -12,6 +12,11 @@ form.add_unavailability.children.to.label: À
 form.admin_activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.admin_activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.admin_activate_account_password.children.submit.label: Envoyer
+form.admin_export_planning.children.types.label: Types
+form.admin_export_planning.children.orderBy.label: Ordre de l'export des plannings
+form.admin_export_planning.children.orderBy.choice.sheet_title: Par nom de société
+form.admin_export_planning.children.orderBy.choice.participant_last_name: Par nom de famille du participant
+form.admin_export_planning.children.submit.label: Exporter
 form.admin_lib_add.children.submit.label: Ajouter
 form.admin_lib_choice.children.choices.label: Choix
 form.admin_lib_choice.children.choices.label_add: 'Ajouter un item'

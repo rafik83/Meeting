@@ -78,7 +78,7 @@ class TaggedInfoGuesser
     public function guessFirstFromTemplateData(TemplateData $templateData, $tag, $default = null)
     {
         $taggedDatas = $templateData->getTaggedDatas($tag);
-        $taggedData  = array_shift($taggedDatas);
+        $taggedData  = reset($taggedDatas);
 
         return $taggedData !== null ? $taggedData : $default;
     }

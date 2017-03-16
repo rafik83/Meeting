@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Behat\Transliterator\Transliterator;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class LocalFileStorageAdapter implements FileStorageInterface
@@ -27,15 +28,25 @@ class LocalFileStorageAdapter implements FileStorageInterface
     private $dateTime;
 
     /**
+     * @var FileSystemAdapterInterface
+     */
+    private $fileSystemAdapter;
+
+    /**
      * LocalFileStorageAdapter constructor.
      *
-     * @param string             $publicDir
-     * @param \DateTimeInterface $dateTime
+     * @param FileSystemAdapterInterface $fileSystemAdapter
+     * @param string                     $publicDir
+     * @param \DateTimeInterface         $dateTime
      */
-    public function __construct($publicDir, \DateTimeInterface $dateTime)
-    {
-        $this->publicDir = $publicDir;
-        $this->dateTime  = $dateTime;
+    public function __construct(
+        FileSystemAdapterInterface $fileSystemAdapter,
+        $publicDir,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->fileSystemAdapter = $fileSystemAdapter;
+        $this->publicDir         = $publicDir;
+        $this->dateTime          = $dateTime;
     }
 
     /**
@@ -53,7 +64,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
             throw new \Exception(sprintf('"%s" expected, "%s" given.', UploadedFile::class, is_object($file) ? get_class($file) : gettype($file)));
         }
 
-        $path = sprintf('/uploads/%s/%s', $this->dateTime->format('Y'), $this->dateTime->format('m'));
+        $path = $this->getAnnualizedPath('uploads/');
 
         $directory = ($directoryPath === null) ? $this->publicDir . $path : $directoryPath . $path;
         $extension = '.' . $file->getClientOriginalExtension();
@@ -63,6 +74,38 @@ class LocalFileStorageAdapter implements FileStorageInterface
         $file->move($directory, $filename);
 
         return $path . '/' . $filename;
+    }
+
+    /**
+     * Create a file with the content given
+     *
+     * @param mixed       $content
+     * @param string      $filename with possible extension
+     * @param string|null $directoryPath
+     *
+     * @return string return the filePath with filename after the directory path
+     */
+    public function create($content, $filename, $directoryPath = null)
+    {
+        if ($directoryPath === null) {
+            $directoryPath = $this->publicDir;
+        }
+
+        $filePath = sprintf('%s/%s_%s', $this->getAnnualizedPath(), uniqid(), $filename);
+
+        $this->fileSystemAdapter->dumpFile(sprintf('%s/%s', $directoryPath, $filePath), $content);
+
+        return $filePath;
+    }
+
+    /**
+     * @param string|null $extraDirInPath should be a string ending with a "/"
+     *
+     * @return string
+     */
+    public function getAnnualizedPath($extraDirInPath = null)
+    {
+        return sprintf('/%s%s/%s', $extraDirInPath, $this->dateTime->format('Y'), $this->dateTime->format('m'));
     }
 
     /**
