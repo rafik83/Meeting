@@ -67,7 +67,7 @@ class MeetingViewQueryHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
 
-        $isSheetDetailsSeeAble = !empty($rules) ? true : false;
+        $isSheetDetailsSeeAble = !empty($rules);
         
         $meeting  = new MeetingView(
             $sheetMet->getId(),
