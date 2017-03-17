@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedExcepti
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
+use Proximum\Vimeet\Application\Exception\Transaction\TransactionNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
@@ -104,7 +105,16 @@ class EventController extends Controller
             }
             
             if ($transactionFormSubmitted && $transactionForm->isValid()) {
-            
+                try {
+                    $result = $this->get('tactician.commandbus')->handle($findTransaction);
+                    
+                    $this->addFlash('success', 'ok');
+                    return $this->redirect($this->generateUrl('admin_sheet_details', [
+                    
+                    ]) . '#transactionsExport');
+                } catch (TransactionNotFoundException $exception) {
+                    dump($exception->getMessage());
+                }
             }
         }
 
