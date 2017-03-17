@@ -1,0 +1,44 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Order\Export;
+
+class OrdersExportView
+{
+    /** @var ProductView[] */
+    public $products;
+
+    /** @var PromotionCodeView[] */
+    public $promotionCodes;
+
+    /** @var OrderView[] */
+    public $orders;
+
+    /** @var CustomRowView[] */
+    public $customRowsColumns;
+
+    /**
+     * @param ProductView[]       $products
+     * @param PromotionCodeView[] $promotionCodes
+     * @param OrderView[]         $orders
+     * @param CustomRowView[]     $customRowsColumns
+     */
+    public function __construct(
+        array $products,
+        array $promotionCodes,
+        array $orders,
+        array $customRowsColumns
+    ) {
+        $this->products          = $products;
+        $this->promotionCodes    = $promotionCodes;
+        $this->orders            = $orders;
+        $this->customRowsColumns = $customRowsColumns;
+    }
+}

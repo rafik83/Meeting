@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Order\Export;
+
+class ProductView
+{
+    /** @var int */
+    public $productId;
+
+    /** @var string */
+    public $productTitle;
+
+    /** @var string */
+    public $productTitleWithUnitPriceTranslation;
+
+    /** @var string */
+    public $productTitleWithQuantityTranslation;
+
+    /** @var string */
+    public $productTitleWithTotalTranslation;
+
+    /**
+     * @param int    $productId
+     * @param string $productTitle
+     * @param string $productTitleWithUnitPriceTranslation
+     * @param string $productTitleWithQuantityTranslation
+     * @param string $productTitleWithTotalTranslation
+     */
+    public function __construct(
+        $productId,
+        $productTitle,
+        $productTitleWithUnitPriceTranslation,
+        $productTitleWithQuantityTranslation,
+        $productTitleWithTotalTranslation
+    ) {
+        $this->productId                            = $productId;
+        $this->productTitle                         = $productTitle;
+        $this->productTitleWithUnitPriceTranslation = $productTitleWithUnitPriceTranslation;
+        $this->productTitleWithQuantityTranslation  = $productTitleWithQuantityTranslation;
+        $this->productTitleWithTotalTranslation     = $productTitleWithTotalTranslation;
+    }
+}

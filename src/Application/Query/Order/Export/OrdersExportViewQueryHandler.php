@@ -1,0 +1,139 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Order\Export;
+
+use Proximum\Vimeet\Application\View\Order\Export\OrdersExportView;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+
+class OrdersExportViewQueryHandler
+{
+    /** @var PromotionCodeViewQueryHandler */
+    private $promotionCodeViewQueryHandler;
+
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
+
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
+    /** @var PromotionCodeRepositoryInterface */
+    private $promotionCodeRepository;
+
+    /** @var ProductViewQueryHandler */
+    private $productViewQueryHandler;
+
+    /** @var OrderViewQueryHandler */
+    private $orderViewQueryHandler;
+
+    /** @var CustomRowViewQueryHandler */
+    private $customRowViewQueryHandler;
+
+    /**
+     * @param OrderRepositoryInterface         $orderRepository
+     * @param ProductRepositoryInterface       $productRepository
+     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
+     * @param ProductViewQueryHandler          $productViewQueryHandler
+     * @param PromotionCodeViewQueryHandler    $promotionCodeViewQueryHandler
+     * @param OrderViewQueryHandler            $orderViewQueryHandler
+     * @param CustomRowViewQueryHandler        $customRowViewQueryHandler
+     */
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        ProductRepositoryInterface $productRepository,
+        PromotionCodeRepositoryInterface $promotionCodeRepository,
+        ProductViewQueryHandler $productViewQueryHandler,
+        PromotionCodeViewQueryHandler $promotionCodeViewQueryHandler,
+        OrderViewQueryHandler $orderViewQueryHandler,
+        CustomRowViewQueryHandler $customRowViewQueryHandler
+    ) {
+        $this->orderRepository               = $orderRepository;
+        $this->productRepository             = $productRepository;
+        $this->promotionCodeRepository       = $promotionCodeRepository;
+        $this->productViewQueryHandler       = $productViewQueryHandler;
+        $this->promotionCodeViewQueryHandler = $promotionCodeViewQueryHandler;
+        $this->orderViewQueryHandler         = $orderViewQueryHandler;
+        $this->customRowViewQueryHandler     = $customRowViewQueryHandler;
+    }
+
+    /**
+     * @param OrdersExportViewQuery $query
+     *
+     * @return OrdersExportView
+     */
+    public function handle(OrdersExportViewQuery $query)
+    {
+        $locale         = $query->event->getFallback();
+        $products       = $this->productRepository->findByEvent($query->event);
+        $promotionCodes = $this->promotionCodeRepository->findByEvent($query->event);
+
+        // Initiate the empty array for the products views, promotion code views, order views and customRow views
+        $plans              = [];
+        $participants       = [];
+        $plannings          = [];
+        $options            = [];
+        $promotionCodesView = [];
+        $orderViews         = [];
+        $customRowViews     = [];
+
+        foreach ($products as $product) {
+            $productView = $this->productViewQueryHandler->handle(
+                new ProductViewQuery($product, $locale, $query->adminLocale)
+            );
+
+            if ($product->isPlan()) {
+                $plans[] = $productView;
+
+            } elseif ($product->isParticipant()) {
+                $participants[] = $productView;
+
+            } elseif ($product->isPlanning()) {
+                $plannings[] = $productView;
+
+            } elseif ($product->isOption()) {
+                $options[] = $productView;
+            }
+        }
+
+        foreach ($promotionCodes as $promotionCode) {
+            $promotionCodesView[] = $this->promotionCodeViewQueryHandler->handle(
+                new PromotionCodeViewQuery($promotionCode, $query->adminLocale)
+            );
+        }
+
+        $maxIndexOfCustomRow = 0;
+        $orders = $this->orderRepository->findByEvent($query->event);
+
+        foreach ($orders as $order) {
+            $orderView = $this->orderViewQueryHandler->handle(
+                new OrderViewQuery($order, $locale, $query->adminLocale)
+            );
+
+            if (count($orderView->customRowsViews) > $maxIndexOfCustomRow) {
+                $maxIndexOfCustomRow = count($orderView->customRowsViews);
+            }
+
+            $orderViews[] = $orderView;
+        }
+
+        for ($index = 1; $index <= $maxIndexOfCustomRow; $index++) {
+            $customRowViews[] = $this->customRowViewQueryHandler->handle(new CustomRowViewQuery($index, $query->adminLocale));
+        }
+
+        return new OrdersExportView(
+            array_merge($plans, $participants, $plannings, $options),
+            $promotionCodesView,
+            $orderViews,
+            $customRowViews
+        );
+    }
+}

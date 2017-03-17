@@ -1,0 +1,79 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Order\Export;
+
+use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
+use Proximum\Vimeet\Application\View\Order\Export\OrderView;
+
+class OrderViewQueryHandler
+{
+    /** @var BillingInfoViewQueryHandler */
+    private $billingInfoViewQueryHandler;
+
+    /** @var SheetInfoGuesserCache */
+    private $sheetInfoGuesserCache;
+
+    /** @var ProductBoughtViewQueryHandler */
+    private $productBoughtViewQueryHandler;
+
+    /** @var CustomRowBoughtViewQueryHandler */
+    private $customRowBoughtViewQueryHandler;
+
+    /**
+     * @param SheetInfoGuesserCache           $sheetInfoGuesserCache
+     * @param BillingInfoViewQueryHandler     $billingInfoViewQueryHandler
+     * @param ProductBoughtViewQueryHandler   $productBoughtViewQueryHandler
+     * @param CustomRowBoughtViewQueryHandler $customRowBoughtViewQueryHandler
+     */
+    public function __construct(
+        SheetInfoGuesserCache $sheetInfoGuesserCache,
+        BillingInfoViewQueryHandler $billingInfoViewQueryHandler,
+        ProductBoughtViewQueryHandler $productBoughtViewQueryHandler,
+        CustomRowBoughtViewQueryHandler $customRowBoughtViewQueryHandler
+    ) {
+        $this->sheetInfoGuesserCache           = $sheetInfoGuesserCache;
+        $this->billingInfoViewQueryHandler     = $billingInfoViewQueryHandler;
+        $this->productBoughtViewQueryHandler   = $productBoughtViewQueryHandler;
+        $this->customRowBoughtViewQueryHandler = $customRowBoughtViewQueryHandler;
+    }
+
+    /**
+     * @param OrderViewQuery $query
+     *
+     * @return OrderView
+     */
+    public function handle(OrderViewQuery $query)
+    {
+        $adminLocale     = $query->adminLocale;
+        $sheet           = $query->order->getSheet();
+        $billingInfoView = $this->billingInfoViewQueryHandler->handle(new BillingInfoViewQuery($sheet, $adminLocale));
+
+        $productBoughtViews = [];
+        $customRowViews     = [];
+
+        foreach ($query->order->getRows() as $row) {
+            if ($row->isProduct()) {
+                $productBoughtViews[] = $this->productBoughtViewQueryHandler->handle(new ProductBoughtViewQuery($row));
+            } else {
+                $customRowViews[] = $this->customRowBoughtViewQueryHandler->handle(new CustomRowBoughtViewQuery($row, $adminLocale));
+            }
+        }
+
+        return new OrderView(
+            $query->order->getId(),
+            $sheet->getId(),
+            $this->sheetInfoGuesserCache->guessSheetTitle($sheet, $query->locale),
+            $billingInfoView,
+            $productBoughtViews,
+            $customRowViews
+        );
+    }
+}
