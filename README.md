@@ -146,11 +146,15 @@ $locale = $event->getAvailableLocale($request->getLocale);
 
 Récupérer la DB de prod en locale, à faire dans la VM (nécessite d'avoir le mdp mysql de la prod - voir dans 1password):
 
-        ⇒ make get-db@prod
+        ⇒ make get-prod-db@vm
 
 Synchroniser la DB de préprod avec celle de la prod (nécessite d'avoir le mdp mysql de la prod et de la préprod - voir dans 1password)
 
-        $ make sync-db-preprod-from-prod
+        $ make sync-db-from-prod@preprod
+
+Importer un fichier prod.sql placé sur le root du projet :
+
+        $ make import-preprod-db@vm
 
 ### Jobs Queue
 
