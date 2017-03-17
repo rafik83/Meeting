@@ -2838,6 +2838,62 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\Details\MeetingViewQuery }
 
     #
+    # Order Export Queries
+    #
+    query.order.export.billing_info_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\BillingInfoViewQueryHandler
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.intl_adapter'
+
+    query.order.export.shared_columns_translation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\SharedColumnsTranslationViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    query.order.export.promotion_code_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    query.order.export.product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\ProductViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    query.order.export.product_bought_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\ProductBoughtViewQueryHandler
+
+    query.order.export.custom_row_bought_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\CustomRowBoughtViewQueryHandler
+
+    query.order.export.order_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\OrderViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@query.order.export.billing_info_view_query_handler'
+            - '@query.order.export.product_bought_view_query_handler'
+            - '@query.order.export.custom_row_bought_view_query_handler'
+
+    query.order.export.custom_row_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    query.order.export.orders_export_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\OrdersExportViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@repository.promotion_code_repository'
+            - '@query.order.export.product_view_query_handler'
+            - '@query.order.export.promotion_code_view_query_handler'
+            - '@query.order.export.order_view_query_handler'
+            - '@query.order.export.custom_row_view_query_handler'
+            - '@query.order.export.shared_columns_translation_view_query_handler'
+
+    #
     # Elastic Transformer
     #
     transformer.elastic.sheet_elastic_transformer:
@@ -3322,6 +3378,22 @@ services:
         public: false
         tags:
             - { name: serializer.decoder }
+
+    serializer.orders_export_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Order\OrdersExportNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.order_export_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Order\OrderRowNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
+    # Adapter
+    #
+    adapter.intl_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter
 
     #
     # Guesser Cache
