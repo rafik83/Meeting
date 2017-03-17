@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\View\Order\Export\OrderView;
 use Proximum\Vimeet\Application\View\Order\Export\SharedColumnsTranslationView;
-use Proximum\Vimeet\Domain\Model\Order;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class OrderRowNormalizer implements NormalizerInterface
