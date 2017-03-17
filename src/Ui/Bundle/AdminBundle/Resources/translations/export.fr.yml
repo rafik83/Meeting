@@ -1,0 +1,11 @@
+gender.man: Monsieur
+gender.woman: Madame
+order.column.product.unitPrice: '%productTitle% : prix unitaire (HT)'
+order.column.product.quantity: '%productTitle% : quantité (HT)'
+order.column.product.total: '%productTitle% : prix calculé (HT)'
+order.column.promotionCode.quantity: '%promotionCodeTitle% : Quantité'
+order.column.promotionCode.total: '%promotionCodeTitle% : Total (HT)'
+order.column.customRow.title: 'Ligne supplémentaire %customRowIndex% libellé'
+order.column.customRow.unitPrice: 'Ligne supplémentaire %customRowIndex% prix unitaire (HT)'
+order.column.customRow.quantity: 'Ligne supplémentaire %customRowIndex% quantité'
+order.column.customRow.total: 'Ligne supplémentaire %customRowIndex% prix total (HT)'
