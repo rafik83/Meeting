@@ -619,6 +619,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Create }
+    command.transaction.find_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\FindHandler
+        arguments:
+            - '@repository.transaction'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Find }
     command.transaction.update_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
         arguments:
