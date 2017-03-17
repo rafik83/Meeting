@@ -9,3 +9,20 @@ order.column.customRow.title: 'Ligne supplémentaire %customRowIndex% libellé'
 order.column.customRow.unitPrice: 'Ligne supplémentaire %customRowIndex% prix unitaire (HT)'
 order.column.customRow.quantity: 'Ligne supplémentaire %customRowIndex% quantité'
 order.column.customRow.total: 'Ligne supplémentaire %customRowIndex% prix total (HT)'
+order.column.order_id: 'Id Commande'
+order.column.sheet_id: 'Id Fiche'
+order.column.sheet_title: 'titre de la fiche'
+order.column.billing_info_gender: genre
+order.column.billing_info_last_name: nom
+order.column.billing_info_first_name: 'prénom'
+order.column.billing_info_position: fonction
+order.column.billing_info_phone: 'téléphone'
+order.column.billing_info_mobile: mobile
+order.column.billing_info_email: email
+order.column.billing_info_company: 'société'
+order.column.billing_info_street: adresse
+order.column.billing_info_zip_code: 'code postal'
+order.column.billing_info_city: ville
+order.column.billing_info_country: pays
+order.column.billing_info_vat_number: 'numéro de tva intra'
+order.column.billing_info_reference: 'référence comptable'
