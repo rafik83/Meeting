@@ -69,8 +69,13 @@ interface TransactionRepositoryInterface
     /**
      * @param \DateTimeInterface $beginDate
      * @param \DateTimeInterface $endDate
+     * @param Event[] $events
      *
      * @return Transaction[]
      */
-    public function findPaidByDateRangeAndCrossEvent(\DateTimeInterface $beginDate, \DateTimeInterface $endDate);
+    public function findPaidByDateRangeAndCrossEvent(
+        \DateTimeInterface $beginDate,
+        \DateTimeInterface $endDate,
+        array $events
+    );
 }

@@ -619,12 +619,14 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Create }
-    command.transaction.find_handler:
-        class: Proximum\Vimeet\Application\Command\Transaction\FindHandler
+    command.transaction.filter_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\FilterHandler
         arguments:
             - '@repository.transaction'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@query.transaction.view_query_handler'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Find }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Filter }
     command.transaction.update_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
         arguments:
@@ -2823,7 +2825,17 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
-
+    query.transaction.view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
+        arguments:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }
+    query.transaction.list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionListView }
     query.messaging.message.list_handler:
         class: Proximum\Vimeet\Application\Query\Messaging\Message\ListQueryHandler
         arguments:

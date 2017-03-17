@@ -24,7 +24,7 @@
                     </li>
                 {% endif %}
                 {% if transactionForm is defined and transactionForm is not null %}
-                    <li role="presentation" class="{% if transactionTabActive %}active{% endif %}">
+                    <li role="presentation">
                         <a href="#transactionsExport" aria-controls="transactions" role="tab" data-toggle="tab">
                             {{ 'admin.event.page.transactionsExport.title'|trans }}
                         </a>
@@ -91,7 +91,7 @@
                     </div>
                 {% endif %}
                 {% if transactionForm is defined and transactionForm is not null %}
-                    <div role="tabpanel" class="tab-pane {% if transactionTabActive %}active{% endif %}" id="transactionsExport">
+                    <div role="tabpanel" class="tab-pane" id="transactionsExport">
                         {{ include('AdminBundle:Event/TransactionExport:form.html.twig', {'form': transactionForm}) }}
                     </div>
                 {% endif %}

@@ -12,22 +12,17 @@ namespace Proximum\Vimeet\Application\Command\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class Find
+class Filter
 {
     /**
-     * @var string
+     * @var \DateTimeInterface
      */
     public $beginDate;
     
     /**
-     * @var string
+     * @var \DateTimeInterface
      */
     public $endDate;
-    
-    /**
-     * @var bool
-     */
-    public $paid = true;
     
     /**
      * @var Admin

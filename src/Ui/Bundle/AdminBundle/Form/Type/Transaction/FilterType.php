@@ -10,15 +10,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction;
 
-use Proximum\Vimeet\Application\Command\Transaction\Find;
+use Proximum\Vimeet\Application\Command\Transaction\Filter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FindType extends AbstractType
+class FilterType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -44,14 +43,12 @@ class FindType extends AbstractType
                 'data'        => $lastDay,
                 'placeholder' => 'form.transaction_find.children.date.placeholder',
             ])
-            ->add('paid', HiddenType::class)
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'pull-right col-md-2',
                 ],
             ])
         ;
-        
     }
     
     /**
@@ -60,7 +57,7 @@ class FindType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Find::class,
+            'data_class' => Filter::class,
             'submit'     => true,
         ]);
     }

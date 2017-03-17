@@ -17,7 +17,7 @@ use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as Paymen
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Command\Order\Find;
-use Proximum\Vimeet\Application\Command\Transaction\Find as FindTransaction;
+use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -34,7 +34,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FindType as FindTransactionType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -59,19 +59,20 @@ class EventController extends Controller
         $orderForm                = null;
         $formIsSubmitted          = false;
         $transactionForm          = null;
-        $transactionFormSubmitted = false;
 
         if (Finder::IsAllowedToFind($admin)) {
+            $filterTransaction = new FilterTransaction($admin);
+            $transactionForm = $this->createForm(
+                FilterTransactionType::class,
+                $filterTransaction,
+                ['action' => $this->generateUrl('admin.event.transaction_export')]
+            );
+            
             $find      = new Find($admin);
             $orderForm = $this->createForm(FindType::class, $find);
 
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
             
-            $findTransaction = new FindTransaction($admin);
-            $transactionForm = $this->createForm(FindTransactionType::class, $findTransaction);
-    
-            $transactionFormSubmitted = $transactionForm->handleRequest($request)->isSubmitted();
-
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
                     /** @var FindResult $result */
@@ -103,19 +104,6 @@ class EventController extends Controller
                     );
                 }
             }
-            
-            if ($transactionFormSubmitted && $transactionForm->isValid()) {
-                try {
-                    $result = $this->get('tactician.commandbus')->handle($findTransaction);
-                    
-                    $this->addFlash('success', 'ok');
-                    return $this->redirect($this->generateUrl('admin_sheet_details', [
-                    
-                    ]) . '#transactionsExport');
-                } catch (TransactionNotFoundException $exception) {
-                    dump($exception->getMessage());
-                }
-            }
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
@@ -123,8 +111,36 @@ class EventController extends Controller
             'orderForm'             => $orderForm !== null ? $orderForm->createView() : null,
             'orderTabActive'        => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
             'transactionForm'       => $transactionForm !== null ? $transactionForm->createView() : null,
-            'transactionTabActive'  => $transactionForm !== null && $transactionFormSubmitted ? !$transactionForm->isValid() : false,
         ]);
+    }
+    
+    /**
+     * @param Request $request
+     * 
+     * @return RedirectResponse
+     */
+    public function exportTransactionAction(Request $request)
+    {
+        $admin = $this->getUser();
+        
+        if (Finder::IsAllowedToFind($admin)) {
+            $filterTransaction = new FilterTransaction($admin);
+            $transactionForm = $this->createForm(FilterTransactionType::class, $filterTransaction);
+    
+            if ($transactionForm->handleRequest($request)->isSubmitted() && $transactionForm->isValid()) {
+                try {
+                    $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
+            
+                    return $this->redirect($this->generateUrl('admin.event.transaction_export', [
+                        'transactionListView' => $transactionListView
+                    ]));
+                } catch (TransactionNotFoundException $exception) {
+                
+                }
+            }
+        }
+        
+        return $this->redirectToRoute('admin_event_list');
     }
 
     /**
