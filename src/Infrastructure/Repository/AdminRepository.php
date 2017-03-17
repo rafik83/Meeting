@@ -82,7 +82,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('admin')
-            ->from('Entity:Admin', 'admin')
+            ->from(Admin::class, 'admin')
             ->where('admin.id = :id')
             ->setParameter('id', $id)
             ->setMaxResults(1);
