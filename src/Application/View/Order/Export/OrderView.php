@@ -27,16 +27,19 @@ class OrderView
     /** @var ProductBoughtView[] */
     public $productBoughtViews;
 
-    /** @var CustomRowView[] */
+    /** @var CustomRowBoughtView[] */
     public $customRowsViews;
 
+    /** @var array */
+    public $columnArray;
+
     /**
-     * @param int                 $orderId
-     * @param int                 $sheetId
-     * @param string              $sheetTitle
-     * @param BillingInfoView     $billingInfo
-     * @param ProductBoughtView[] $productBougthViews
-     * @param CustomRowView[]     $customRowsViews
+     * @param int                   $orderId
+     * @param int                   $sheetId
+     * @param string                $sheetTitle
+     * @param BillingInfoView       $billingInfo
+     * @param ProductBoughtView[]   $productBougthViews
+     * @param CustomRowBoughtView[] $customRowsViews
      */
     public function __construct(
         $orderId,
@@ -52,5 +55,14 @@ class OrderView
         $this->billingInfo        = $billingInfo;
         $this->productBoughtViews = $productBougthViews;
         $this->customRowsViews    = $customRowsViews;
+        $this->columnArray        = [];
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setColumnArray(array $data)
+    {
+        $this->columnArray = $data;
     }
 }

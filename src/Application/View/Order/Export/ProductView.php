@@ -47,4 +47,29 @@ class ProductView
         $this->productTitleWithQuantityTranslation  = $productTitleWithQuantityTranslation;
         $this->productTitleWithTotalTranslation     = $productTitleWithTotalTranslation;
     }
+
+    /**
+     * @return string
+     */
+    public function getUnitPriceColumnId()
+    {
+        return sprintf('product%sUnitPrice', $this->productId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuantityColumnId()
+    {
+        return sprintf('product%sQuantity', $this->productId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalColumnId()
+    {
+        return sprintf('product%sTotal', $this->productId);
+    }
+
 }

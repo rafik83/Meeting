@@ -41,4 +41,20 @@ class PromotionCodeView
         $this->promotionCodeTitleWithQuantityTranslation = $promotionCodeTitleWithQuantityTranslation;
         $this->promotionCodeTitleWithTotalTranslation    = $promotionCodeTitleWithTotalTranslation;
     }
+
+    /**
+     * @return string
+     */
+    public function getQuantityColumnId()
+    {
+        return sprintf('promotionCode%sQuantity', $this->promotionCodeId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalColumnId()
+    {
+        return sprintf('promotionCode%sTotal', $this->promotionCodeId);
+    }
 }
