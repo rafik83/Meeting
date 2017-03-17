@@ -62,6 +62,12 @@ class SpotViewQueryHandler
                         $sheetsList[] = $sheetView;
                     }
                 }
+
+                if (empty($sheetsList)) {
+                    // Skip this spot as it is not a mutalize one
+                    // But its sheets are not in the catalog
+                    continue;
+                }
             }
 
             $unavailabilities    = $spot->getSpotUnavailabilities();

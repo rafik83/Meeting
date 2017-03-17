@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Exception\Planner\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Planner\MeetingView;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
-use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -54,18 +53,11 @@ class MeetingViewQueryHandler
     private $recursiveDepth = 0;
 
     /**
-     * @var VisioGuesser
-     */
-    private $visioGuesser;
-
-    /**
      * @param RequestRepositoryInterface $requestRepository
-     * @param VisioGuesser               $visioGuesser
      */
-    public function __construct(RequestRepositoryInterface $requestRepository, VisioGuesser $visioGuesser)
+    public function __construct(RequestRepositoryInterface $requestRepository)
     {
         $this->requestRepository = $requestRepository;
-        $this->visioGuesser      = $visioGuesser;
     }
 
     /**
@@ -129,7 +121,7 @@ class MeetingViewQueryHandler
                         $request->getId(),
                         $sheetsList,
                         $participantsList,
-                        $this->visioGuesser->hasMeetingRequestParticipantVisio($request)
+                        $this->isVisio($participantsList)
                     );
                 } catch (SheetNotFoundException $exception) {
                     // In case of a sheet not in catalog but with meeting request
@@ -226,6 +218,24 @@ class MeetingViewQueryHandler
         }
 
         throw new ParticipantNotFoundException(sprintf('Participant of id %s was not found', $id));
+    }
+
+    /**
+     * Check if at least a participant is Visio
+     *
+     * @param ParticipantView[] $participantList
+     *
+     * @return bool
+     */
+    private function isVisio(array &$participantList)
+    {
+        foreach ($participantList as $participant) {
+            if ($participant->isVisio) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -257,6 +257,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Invoice\PrefixRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.file_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\FileRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1585,6 +1589,7 @@ services:
     adapter.local_file_storage:
         class: Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter
         arguments:
+            - '@adapter.file_system_adapter'
             - '%kernel.root_dir%/../web'
             - '@datetime'
     adapter.authentication_manager:
@@ -1616,6 +1621,11 @@ services:
         arguments:
             - '%scheme%'
             - '@router'
+
+    adapter.file_system_adapter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter
+        arguments:
+            - '@filesystem'
 
     #
     # Components
@@ -2882,6 +2892,13 @@ services:
         tags:
             - { name: console.command }
 
+    command_planning.generate_planning_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand
+        arguments:
+            - '@command.planning.export_planning_handler'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
@@ -3314,6 +3331,20 @@ services:
             - { name: serializer.decoder }
 
     #
+    # Guesser Cache
+    #
+    command.planning.participant_info_guesser_cache:
+        class: Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache
+        shared: false
+        arguments:
+            - '@template.participant_info_guesser'
+    command.planning.sheet_info_guesser_cache:
+        class: Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache
+        shared: false
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
+    #
     # Planner
     #
     service_planner.exporter:
@@ -3357,7 +3388,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@domain.meeting.visio_guesser'
 
     query.planner.spot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\SpotViewQueryHandler
@@ -3516,6 +3546,38 @@ services:
     #
     # Planning
     #
+    ###### Views
+    query.planning.day.assignment_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\Day\AssignmentViewQueryHandler
+    query.planning.day.happening_participation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\Day\HappeningParticipationViewQueryHandler
+    query.planning.day.mass_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\Day\MassViewQueryHandler
+    query.planning.day.meeting_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    query.planning.day.unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler
+    query.planning.day_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\DayViewQueryHandler
+        arguments:
+            - '@query.planning.day.happening_participation_view_query_handler'
+            - '@query.planning.day.mass_view_query_handler'
+            - '@query.planning.day.assignment_view_query_handler'
+            - '@query.planning.day.unavailability_view_query_handler'
+            - '@query.planning.day.meeting_view_query_handler'
+    query.planning.planning_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler
+        arguments:
+            - '@repository.event.day_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@repository.unavailability.mass_repository'
+            - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@query.planning.day_view_query_handler'
+            - '@vimeet_infrastructure.repository.participant_repository'
     ###### Formatter
     planning.formatter.unallocated_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter
@@ -3528,7 +3590,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@planning.formatter.unallocated_formatter'
-            - '@query.agenda.agenda_view_query_handler'
+            - '@query.planning.planning_view_query_handler'
     planning.formatter.sheet_planning_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\SheetPlanningFormatter
         arguments:
@@ -3543,6 +3605,37 @@ services:
             - '@planning.formatter.sheet_planning_formatter'
             - '@markdown'
 
+    planning.displayer.participant_planning_displayer:
+        class: Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer
+        arguments:
+            - '@planning.formatter.participant_planning_formatter'
+            - '@markdown'
+
+    ###### Exporter
+    command.planning.export_planning_handler:
+        class: Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@command.planning.participant_info_guesser_cache'
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@planning.displayer.participant_planning_displayer'
+            - '@templating'
+            - '@adapter.local_file_storage'
+            - '@adapter.mailer_adapter'
+            - '%infrastructure.print_planning_path%'
+            - '%mailer_sender%'
+            - '@repository.file_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
+    ###### Job
+    command.planning.export_planning_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator }
 
     #
     # Invoice

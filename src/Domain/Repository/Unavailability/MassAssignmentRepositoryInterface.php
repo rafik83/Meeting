@@ -39,6 +39,13 @@ interface MassAssignmentRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return  MassAssignment[]
+     */
+    public function findEnabledByEvent(Event $event);
+
+    /**
      * @param MassAssignment $massAssignment
      */
     public function set(MassAssignment $massAssignment);
@@ -49,4 +56,25 @@ interface MassAssignmentRepositoryInterface
      * @return MassAssignment[]
      */
     public function findBySheet(Sheet $sheet);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return MassAssignment[]
+     */
+    public function findByParticipant(Participant $participant);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return MassAssignment[]
+     */
+    public function findEnabledByParticipant(Participant $participant);
+
+    /**
+     * @param Participant[] $participants
+     *
+     * @return MassAssignment[]
+     */
+    public function findEnabledByParticipants(array $participants);
 }
