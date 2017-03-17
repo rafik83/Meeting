@@ -1,0 +1,11 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.event.transaction.export.title'|trans %}
+
+{% block form_content %}
+    {{ form_errors(form) }}
+    {{ form_row(form.beginDate) }}
+    {{ form_row(form.endDate) }}
+    {{ form_row(form.paid) }}
+    {{ form_row(form.submit) }}
+{% endblock form_content %}

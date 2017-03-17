@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as Paymen
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Command\Order\Find;
+use Proximum\Vimeet\Application\Command\Transaction\Find as FindTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -32,6 +33,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FindType as FindTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,14 +55,21 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($admin);
 
-        $orderForm       = null;
-        $formIsSubmitted = false;
+        $orderForm                = null;
+        $formIsSubmitted          = false;
+        $transactionForm          = null;
+        $transactionFormSubmitted = false;
 
         if (Finder::IsAllowedToFind($admin)) {
             $find      = new Find($admin);
             $orderForm = $this->createForm(FindType::class, $find);
 
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
+            
+            $findTransaction = new FindTransaction($admin);
+            $transactionForm = $this->createForm(FindTransactionType::class, $findTransaction);
+    
+            $transactionFormSubmitted = $transactionForm->handleRequest($request)->isSubmitted();
 
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
@@ -93,12 +102,18 @@ class EventController extends Controller
                     );
                 }
             }
+            
+            if ($transactionFormSubmitted && $transactionForm->isValid()) {
+            
+            }
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'         => $events,
-            'orderForm'      => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive' => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'events'                => $events,
+            'orderForm'             => $orderForm !== null ? $orderForm->createView() : null,
+            'orderTabActive'        => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'transactionForm'       => $transactionForm !== null ? $transactionForm->createView() : null,
+            'transactionTabActive'  => $transactionForm !== null && $transactionFormSubmitted ? !$transactionForm->isValid() : false,
         ]);
     }
 

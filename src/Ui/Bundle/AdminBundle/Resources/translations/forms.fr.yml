@@ -646,6 +646,10 @@ form.transaction.children.transaction_mode.bank_cash: 'Argent comptant'
 form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
 form.transaction.children.transaction_mode.paypal: Paypal
+form.transaction_find.children.beginDate.label: 'Date de début'
+form.transaction_find.children.endDate.label: 'Date de fin'
+form.transaction_find.children.date.placeholder: 'JJ/MM/AAAA'
+form.transaction_find.children.submit.label: 'Exporter'
 form.type_create.children.hidden.label: Caché
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position
