@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Order\Export;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\View\Order\Export\OrderView;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class OrderViewQueryHandler
 {
@@ -43,6 +44,14 @@ class OrderViewQueryHandler
         $this->billingInfoViewQueryHandler     = $billingInfoViewQueryHandler;
         $this->productBoughtViewQueryHandler   = $productBoughtViewQueryHandler;
         $this->customRowBoughtViewQueryHandler = $customRowBoughtViewQueryHandler;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function preloadBillingInfo(Event $event)
+    {
+        $this->billingInfoViewQueryHandler->preload($event);
     }
 
     /**

@@ -118,6 +118,7 @@ class OrdersExportViewQueryHandler
 
         $maxIndexOfCustomRow = 0;
         $orders = $this->orderRepository->findByEvent($query->event);
+        $this->orderViewQueryHandler->preloadBillingInfo($query->event);
 
         foreach ($orders as $order) {
             $orderView = $this->orderViewQueryHandler->handle(
