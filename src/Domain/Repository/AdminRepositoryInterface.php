@@ -37,14 +37,14 @@ interface AdminRepositoryInterface
     /**
      * @param int $id
      *
-     * @return Admin
+     * @return Admin|null
      */
     public function findById($id);
 
     /**
      * @param string $email
      *
-     * @return Admin
+     * @return Admin|null
      */
     public function findByEmail($email);
 
