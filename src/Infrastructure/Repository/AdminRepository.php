@@ -76,6 +76,23 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findById($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from('Entity:Admin', 'admin')
+            ->where('admin.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEmail($email)
     {
         $queryBuilder = $this

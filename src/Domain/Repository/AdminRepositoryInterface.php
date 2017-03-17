@@ -35,6 +35,13 @@ interface AdminRepositoryInterface
     public function set(Admin $admin);
 
     /**
+     * @param int $id
+     *
+     * @return Admin
+     */
+    public function findById($id);
+
+    /**
      * @param string $email
      *
      * @return Admin

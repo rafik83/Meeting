@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -27,4 +28,10 @@ interface JobQueueInterface
      * @param string $locale
      */
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
+
+    /**
+     * @param int[] $sheetIds
+     * @param Admin $admin
+     */
+    public function generateInvoice(array $sheetIds, Admin $admin);
 }

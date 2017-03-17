@@ -722,10 +722,7 @@ services:
     command.sheet.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.invoice.create_handler'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
     command.sheet.batch_enable_disable_handler:
@@ -1560,6 +1557,16 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }
+
+    command.invoice.batch_generate_invoice_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.invoice.create_handler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invo\BatchGenerateInvoice }
 
     #
     # Security
@@ -2896,6 +2903,14 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand
         arguments:
             - '@command.planning.export_planning_handler'
+        tags:
+            - { name: console.command }
+
+    command.generate_invoice_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@command.invoice.batch_generate_invoice_handler'
         tags:
             - { name: console.command }
 
