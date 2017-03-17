@@ -15,6 +15,9 @@ use Proximum\Vimeet\Application\View\Order\Export\CustomRowView;
 
 class CustomRowViewQueryHandler
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param TranslatorInterface $translator
      */
@@ -31,10 +34,11 @@ class CustomRowViewQueryHandler
     public function handle(CustomRowViewQuery $query)
     {
         return new CustomRowView(
-            $this->translator->trans('order.column.customRow.title', ['%%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale),
-            $this->translator->trans('order.column.customRow.unitPrice', ['%%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale),
-            $this->translator->trans('order.column.customRow.quantity', ['%%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale),
-            $this->translator->trans('order.column.customRow.total', ['%%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale)
+            $query->customRowIndex,
+            $this->translator->trans('order.column.customRow.title', ['%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.customRow.unitPrice', ['%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.customRow.quantity', ['%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.customRow.total', ['%customRowIndex%' => $query->customRowIndex], 'export', $query->adminLocale)
         );
     }
 }

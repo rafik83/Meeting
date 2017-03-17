@@ -38,14 +38,18 @@ class OrdersExportViewQueryHandler
     /** @var CustomRowViewQueryHandler */
     private $customRowViewQueryHandler;
 
+    /** @var SharedColumnsTranslationViewQueryHandler */
+    private $sharedColumnsTranslationViewQueryHandler;
+
     /**
-     * @param OrderRepositoryInterface         $orderRepository
-     * @param ProductRepositoryInterface       $productRepository
-     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     * @param ProductViewQueryHandler          $productViewQueryHandler
-     * @param PromotionCodeViewQueryHandler    $promotionCodeViewQueryHandler
-     * @param OrderViewQueryHandler            $orderViewQueryHandler
-     * @param CustomRowViewQueryHandler        $customRowViewQueryHandler
+     * @param OrderRepositoryInterface                 $orderRepository
+     * @param ProductRepositoryInterface               $productRepository
+     * @param PromotionCodeRepositoryInterface         $promotionCodeRepository
+     * @param ProductViewQueryHandler                  $productViewQueryHandler
+     * @param PromotionCodeViewQueryHandler            $promotionCodeViewQueryHandler
+     * @param OrderViewQueryHandler                    $orderViewQueryHandler
+     * @param CustomRowViewQueryHandler                $customRowViewQueryHandler
+     * @param SharedColumnsTranslationViewQueryHandler $sharedColumnsTranslationViewQueryHandler
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -54,15 +58,17 @@ class OrdersExportViewQueryHandler
         ProductViewQueryHandler $productViewQueryHandler,
         PromotionCodeViewQueryHandler $promotionCodeViewQueryHandler,
         OrderViewQueryHandler $orderViewQueryHandler,
-        CustomRowViewQueryHandler $customRowViewQueryHandler
+        CustomRowViewQueryHandler $customRowViewQueryHandler,
+        SharedColumnsTranslationViewQueryHandler $sharedColumnsTranslationViewQueryHandler
     ) {
-        $this->orderRepository               = $orderRepository;
-        $this->productRepository             = $productRepository;
-        $this->promotionCodeRepository       = $promotionCodeRepository;
-        $this->productViewQueryHandler       = $productViewQueryHandler;
-        $this->promotionCodeViewQueryHandler = $promotionCodeViewQueryHandler;
-        $this->orderViewQueryHandler         = $orderViewQueryHandler;
-        $this->customRowViewQueryHandler     = $customRowViewQueryHandler;
+        $this->orderRepository                          = $orderRepository;
+        $this->productRepository                        = $productRepository;
+        $this->promotionCodeRepository                  = $promotionCodeRepository;
+        $this->productViewQueryHandler                  = $productViewQueryHandler;
+        $this->promotionCodeViewQueryHandler            = $promotionCodeViewQueryHandler;
+        $this->orderViewQueryHandler                    = $orderViewQueryHandler;
+        $this->customRowViewQueryHandler                = $customRowViewQueryHandler;
+        $this->sharedColumnsTranslationViewQueryHandler = $sharedColumnsTranslationViewQueryHandler;
     }
 
     /**
@@ -130,6 +136,7 @@ class OrdersExportViewQueryHandler
         }
 
         return new OrdersExportView(
+            $this->sharedColumnsTranslationViewQueryHandler->handle(new SharedColumnsTranslationViewQuery($query->adminLocale)),
             array_merge($plans, $participants, $plannings, $options),
             $promotionCodesView,
             $orderViews,

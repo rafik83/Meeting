@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Export;
 
+use Proximum\Vimeet\Application\Adapter\IntlAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Order\Export\BillingInfoView;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
@@ -30,14 +31,22 @@ class BillingInfoViewQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var IntlAdapterInterface */
+    private $intlAdapter;
+
     /**
      * @param BillingInfoRepositoryInterface $billingInfoRepository
      * @param TranslatorInterface            $translator
+     * @param IntlAdapterInterface           $intlAdapter
      */
-    public function __construct(BillingInfoRepositoryInterface $billingInfoRepository, TranslatorInterface $translator)
-    {
+    public function __construct(
+        BillingInfoRepositoryInterface $billingInfoRepository,
+        TranslatorInterface $translator,
+        IntlAdapterInterface $intlAdapter
+    ) {
         $this->billingInfoRepository = $billingInfoRepository;
         $this->translator            = $translator;
+        $this->intlAdapter           = $intlAdapter;
     }
 
     /**
@@ -104,7 +113,7 @@ class BillingInfoViewQueryHandler
         $billingInfoView->street    = $billingInfo->getAddress()->getStreet();
         $billingInfoView->zipCode   = $billingInfo->getAddress()->getZipcode();
         $billingInfoView->city      = $billingInfo->getAddress()->getCity();
-        $billingInfoView->country   = $billingInfo->getAddress()->getCountry();
+        $billingInfoView->country   = $this->intlAdapter->getCountryName($billingInfo->getAddress()->getCountry(), $adminLocale);
         $billingInfoView->vatNumber = $billingInfo->getVatNumber();
         $billingInfoView->reference = $billingInfo->getReference();
     }

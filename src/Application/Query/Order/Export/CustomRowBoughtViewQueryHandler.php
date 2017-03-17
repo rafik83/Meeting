@@ -10,19 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Export;
 
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Order\Export\CustomRowBoughtView;
 
 class CustomRowBoughtViewQueryHandler
 {
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * @param CustomRowBoughtViewQuery $query
      *

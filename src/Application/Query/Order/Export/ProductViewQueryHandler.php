@@ -15,6 +15,9 @@ use Proximum\Vimeet\Application\View\Order\Export\ProductView;
 
 class ProductViewQueryHandler
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param TranslatorInterface $translator
      */
