@@ -33,29 +33,35 @@ class OrderView
     /** @var array */
     public $columnArray;
 
+    /** @var PromotionCodeBoughtView[] */
+    public $promotionCodeBoughtViews;
+
     /**
-     * @param int                   $orderId
-     * @param int                   $sheetId
-     * @param string                $sheetTitle
-     * @param BillingInfoView       $billingInfo
-     * @param ProductBoughtView[]   $productBougthViews
-     * @param CustomRowBoughtView[] $customRowsViews
+     * @param int                       $orderId
+     * @param int                       $sheetId
+     * @param string                    $sheetTitle
+     * @param BillingInfoView           $billingInfo
+     * @param ProductBoughtView[]       $productBoughtViews
+     * @param PromotionCodeBoughtView[] $promotionCodeBoughtViews
+     * @param CustomRowBoughtView[]     $customRowsViews
      */
     public function __construct(
         $orderId,
         $sheetId,
         $sheetTitle,
         BillingInfoView $billingInfo,
-        array $productBougthViews,
+        array $productBoughtViews,
+        array $promotionCodeBoughtViews,
         array $customRowsViews
     ) {
-        $this->orderId            = $orderId;
-        $this->sheetId            = $sheetId;
-        $this->sheetTitle         = $sheetTitle;
-        $this->billingInfo        = $billingInfo;
-        $this->productBoughtViews = $productBougthViews;
-        $this->customRowsViews    = $customRowsViews;
-        $this->columnArray        = [];
+        $this->orderId                  = $orderId;
+        $this->sheetId                  = $sheetId;
+        $this->sheetTitle               = $sheetTitle;
+        $this->billingInfo              = $billingInfo;
+        $this->productBoughtViews       = $productBoughtViews;
+        $this->promotionCodeBoughtViews = $promotionCodeBoughtViews;
+        $this->customRowsViews          = $customRowsViews;
+        $this->columnArray              = [];
     }
 
     /**

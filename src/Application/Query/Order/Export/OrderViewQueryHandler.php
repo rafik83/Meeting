@@ -28,22 +28,28 @@ class OrderViewQueryHandler
     /** @var CustomRowBoughtViewQueryHandler */
     private $customRowBoughtViewQueryHandler;
 
+    /** @var PromotionCodeBoughtViewQueryHandler */
+    private $promotionCodeBoughtViewQueryHandler;
+
     /**
-     * @param SheetInfoGuesserCache           $sheetInfoGuesserCache
-     * @param BillingInfoViewQueryHandler     $billingInfoViewQueryHandler
-     * @param ProductBoughtViewQueryHandler   $productBoughtViewQueryHandler
-     * @param CustomRowBoughtViewQueryHandler $customRowBoughtViewQueryHandler
+     * @param SheetInfoGuesserCache               $sheetInfoGuesserCache
+     * @param BillingInfoViewQueryHandler         $billingInfoViewQueryHandler
+     * @param ProductBoughtViewQueryHandler       $productBoughtViewQueryHandler
+     * @param CustomRowBoughtViewQueryHandler     $customRowBoughtViewQueryHandler
+     * @param PromotionCodeBoughtViewQueryHandler $promotionCodeBoughtViewQueryHandler
      */
     public function __construct(
         SheetInfoGuesserCache $sheetInfoGuesserCache,
         BillingInfoViewQueryHandler $billingInfoViewQueryHandler,
         ProductBoughtViewQueryHandler $productBoughtViewQueryHandler,
-        CustomRowBoughtViewQueryHandler $customRowBoughtViewQueryHandler
+        CustomRowBoughtViewQueryHandler $customRowBoughtViewQueryHandler,
+        PromotionCodeBoughtViewQueryHandler $promotionCodeBoughtViewQueryHandler
     ) {
         $this->sheetInfoGuesserCache           = $sheetInfoGuesserCache;
         $this->billingInfoViewQueryHandler     = $billingInfoViewQueryHandler;
         $this->productBoughtViewQueryHandler   = $productBoughtViewQueryHandler;
         $this->customRowBoughtViewQueryHandler = $customRowBoughtViewQueryHandler;
+        $this->promotionCodeBoughtViewQueryHandler = $promotionCodeBoughtViewQueryHandler;
     }
 
     /**
@@ -65,8 +71,9 @@ class OrderViewQueryHandler
         $sheet           = $query->order->getSheet();
         $billingInfoView = $this->billingInfoViewQueryHandler->handle(new BillingInfoViewQuery($sheet, $adminLocale));
 
-        $productBoughtViews = [];
-        $customRowViews     = [];
+        $productBoughtViews       = [];
+        $promotionCodeBoughtViews = [];
+        $customRowViews           = [];
 
         foreach ($query->order->getRows() as $row) {
             if ($row->isProduct()) {
@@ -76,12 +83,17 @@ class OrderViewQueryHandler
             }
         }
 
+        foreach ($query->order->getPromotionCodes() as $promotionCodeBought) {
+            $promotionCodeBoughtViews[] = $this->promotionCodeBoughtViewQueryHandler->handle(new PromotionCodeBoughtViewQuery($promotionCodeBought));
+        }
+
         return new OrderView(
             $query->order->getId(),
             $sheet->getId(),
             $this->sheetInfoGuesserCache->guessSheetTitle($sheet, $query->locale),
             $billingInfoView,
             $productBoughtViews,
+            $promotionCodeBoughtViews,
             $customRowViews
         );
     }
