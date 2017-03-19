@@ -2868,6 +2868,9 @@ services:
     query.order.export.custom_row_bought_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Export\CustomRowBoughtViewQueryHandler
 
+    query.order.export.promotion_code_bought_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeBoughtViewQueryHandler
+
     query.order.export.order_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Export\OrderViewQueryHandler
         arguments:
@@ -2875,6 +2878,7 @@ services:
             - '@query.order.export.billing_info_view_query_handler'
             - '@query.order.export.product_bought_view_query_handler'
             - '@query.order.export.custom_row_bought_view_query_handler'
+            - '@query.order.export.promotion_code_bought_view_query_handler'
 
     query.order.export.custom_row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQueryHandler
