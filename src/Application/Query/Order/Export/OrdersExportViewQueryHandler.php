@@ -117,7 +117,7 @@ class OrdersExportViewQueryHandler
         }
 
         $maxIndexOfCustomRow = 0;
-        $orders = $this->orderRepository->findByEvent($query->event);
+        $orders = $this->orderRepository->findNotCancelledWithJoinRowAndPromotionCodeByEvent($query->event);
         $this->orderViewQueryHandler->preloadBillingInfo($query->event);
 
         foreach ($orders as $order) {

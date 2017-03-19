@@ -163,6 +163,25 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findNotCancelledWithJoinRowAndPromotionCodeByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order, sheet, row, promotionCode')
+            ->from(Order::class, '_order', '_order.id')
+            ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true AND _order.cancelled = false')
+            ->join('_order.rows', 'row')
+            ->join('_order.promotionCodes', 'promotionCode')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByNumero(OrderNumeroView $orderNumeroView)
     {
         $queryBuilder = $this
