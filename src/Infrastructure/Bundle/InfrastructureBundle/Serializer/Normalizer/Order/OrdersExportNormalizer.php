@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Order;
 
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Order\Export\OrdersExportView;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -58,28 +59,38 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
 
         // Shared columns
         foreach ($object->sharedColumnsTranslationView->getAllColumns() as $columnKey => $columnTranslation) {
-            $data[$columnKey] = $columnTranslation;
+            $data[$columnKey] = $this->convertCharset($columnTranslation);
         }
 
         // product column
         foreach ($object->products as $product) {
-            $data[$product->getUnitPriceColumnId()] = $product->productTitleWithUnitPriceTranslation;
-            $data[$product->getQuantityColumnId()]  = $product->productTitleWithQuantityTranslation;
-            $data[$product->getTotalColumnId()]     = $product->productTitleWithTotalTranslation;
+            $data[$product->getUnitPriceColumnId()] = $this->convertCharset($product->productTitleWithUnitPriceTranslation);
+            $data[$product->getQuantityColumnId()]  = $this->convertCharset($product->productTitleWithQuantityTranslation);
+            $data[$product->getTotalColumnId()]     = $this->convertCharset($product->productTitleWithTotalTranslation);
         }
 
         foreach ($object->promotionCodes as $promotionCode) {
-            $data[$promotionCode->getQuantityColumnId()] = $promotionCode->promotionCodeTitleWithQuantityTranslation;
-            $data[$promotionCode->getTotalColumnId()]    = $promotionCode->promotionCodeTitleWithTotalTranslation;
+            $data[$promotionCode->getQuantityColumnId()] = $this->convertCharset($promotionCode->promotionCodeTitleWithQuantityTranslation);
+            $data[$promotionCode->getTotalColumnId()]    = $this->convertCharset($promotionCode->promotionCodeTitleWithTotalTranslation);
         }
 
         foreach ($object->customRowsColumns as $customRow) {
-            $data[$customRow->getTitleColumnId()]     = $customRow->title;
-            $data[$customRow->getUnitPriceColumnId()] = $customRow->unitPriceTitle;
-            $data[$customRow->getQuantityColumnId()]  = $customRow->quantityTitle;
-            $data[$customRow->getTotalColumnId()]     = $customRow->totalTitle;
+            $data[$customRow->getTitleColumnId()]     = $this->convertCharset($customRow->title);
+            $data[$customRow->getUnitPriceColumnId()] = $this->convertCharset($customRow->unitPriceTitle);
+            $data[$customRow->getQuantityColumnId()]  = $this->convertCharset($customRow->quantityTitle);
+            $data[$customRow->getTotalColumnId()]     = $this->convertCharset($customRow->totalTitle);
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $input
+     *
+     * @return string
+     */
+    private function convertCharset($input)
+    {
+        return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT", $input);
     }
 }
