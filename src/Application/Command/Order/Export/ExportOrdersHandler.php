@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Order\Export;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Order\Export\InvalidArgumentForExportException;
 use Proximum\Vimeet\Application\Query\Order\Export\OrdersExportViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\OrdersExportViewQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Charset;
@@ -86,10 +87,16 @@ class ExportOrdersHandler
 
     /**
      * @param ExportOrders $command
+     *
+     * @throws InvalidArgumentForExportException
      */
     public function handle(ExportOrders $command)
     {
         $event = $this->eventRepository->getById($command->eventId);
+
+        if ($event === null) {
+            throw new InvalidArgumentForExportException(sprintf('Event %s not found', $command->eventId));
+        }
 
         $view = $this->queryHandler->handle(new OrdersExportViewQuery($event, $command->locale));
         $data = $this->serializer->serialize($view, 'csv', [
