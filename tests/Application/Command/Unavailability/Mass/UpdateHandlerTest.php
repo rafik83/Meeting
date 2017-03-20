@@ -24,10 +24,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = EventFactory::createEvent();
         $oldCategory = new Category($event, 'Conference', 'old title', '#AABBCC', '#CCBBAA');
         $category    = new Category($event, 'Conference', 'title', '#123123', '#312312');
-        $oldBegin    = new \DateTime('10/10/2016 10:00');
-        $oldEnd      = new \DateTime('10/10/2016 12:00');
-        $begin       = new \DateTime('12/10/2016 10:00');
-        $end         = new \DateTime('12/10/2016 12:00');
+        $oldBegin    = new \DateTime('2016-10-10 10:00');
+        $oldEnd      = new \DateTime('2016-10-10 12:00');
+        $begin       = new \DateTime('2016-10-12 10:00');
+        $end         = new \DateTime('2016-10-12 12:00');
 
         // Existing
         $existing = new Mass(
@@ -75,6 +75,79 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'title'       => 'title',
                 'description' => 'description',
             ]
+        ];
+
+        // Handler
+        $handler = new UpdateHandler($massRepository->reveal());
+        $handler->handle($update);
+    }
+
+    public function testHandleDispatch()
+    {
+        $event    = EventFactory::createEvent();
+        $oldCategory = new Category($event, 'Conference', 'old title', '#AABBCC', '#CCBBAA');
+        $category    = new Category($event, 'Conference', 'title', '#123123', '#312312');
+        $oldBegin    = new \DateTime('2016-10-10 10:00');
+        $oldEnd      = new \DateTime('2016-10-10 12:00');
+        $begin       = new \DateTime('2016-10-12 10:00');
+        $end         = new \DateTime('2016-10-12 12:00');
+
+        // Existing
+        $existing = new Mass(
+            $event,
+            $oldCategory,
+            'old name',
+            $oldBegin,
+            $oldEnd,
+            false
+        );
+        $existing->createTranslation('fr', 'vieux titre', 'vieille description');
+        $existing->createTranslation('en', 'old title', 'old description');
+
+
+        // Expected
+        $expected = new Mass(
+            $event,
+            $category,
+            'name',
+            $begin,
+            $end,
+            true,
+            true,
+            [
+                ['from' => new \DateTime('2016-10-12 10:00'), 'to' => new \DateTime('2016-10-12 11:00')],
+                ['from' => new \DateTime('2016-10-12 11:00'), 'to' => new \DateTime('2016-10-12 12:00')],
+            ]
+        );
+        $expected->createTranslation('fr', 'titre', 'description');
+        $expected->createTranslation('en', 'title', 'description');
+
+
+        // Mock
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massRepository->update($expected)->shouldBeCalled();
+
+        // Create
+        $update               = new Update($existing);
+        $update->category     = $category;
+        $update->begin        = $begin;
+        $update->end          = $end;
+        $update->name         = 'name';
+        $update->blocking     = true;
+        $update->translations = [
+            'fr' => [
+                'title'       => 'titre',
+                'description' => 'description',
+            ],
+            'en' => [
+                'title'       => 'title',
+                'description' => 'description',
+            ]
+        ];
+        $update->dispatch     = true;
+        $update->timeSlots    = [
+            ['from' => new \DateTime('2016-10-12 10:00'), 'to' => new \DateTime('2016-10-12 11:00')],
+            ['from' => new \DateTime('2016-10-12 11:00'), 'to' => new \DateTime('2016-10-12 12:00')],
         ];
 
         // Handler

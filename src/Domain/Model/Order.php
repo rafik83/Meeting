@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Order\Row;
@@ -80,6 +81,11 @@ class Order
      * @var boolean
      */
     private $cancelled = false;
+
+    /**
+     * @var Invoice
+     */
+    private $invoice;
 
     /**
      * @param Sheet             $sheet
@@ -211,7 +217,7 @@ class Order
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getGroupsData()
     {
@@ -417,7 +423,27 @@ class Order
     public function getCustomRowsForProduct(Row $parentRow)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
-            return !$row->isProduct() && $parentRow === $row->getParentRow();
+            return !$row->isProduct() && null !== $row->getParentRow() && $parentRow->getId() === $row->getParentRow()->getId();
+        });
+    }
+
+    /**
+     * @return false|Order\Row[]
+     */
+    public function getRowsWithoutParent()
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+            return !$row->hasParentRow();
+        });
+    }
+
+    /**
+     * @return false|Order\Row[]
+     */
+    public function getRowsWithParent()
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+            return $row->hasParentRow();
         });
     }
 
@@ -433,8 +459,7 @@ class Order
         }
 
         foreach ($this->rows as $row) {
-            if (null !== $row->getProduct()
-              && $row->getProduct() === $product) {
+            if (null !== $row->getProduct() && $row->getProduct() === $product) {
                 return $row;
             }
         }
@@ -605,6 +630,30 @@ class Order
     public function cancel()
     {
         $this->cancelled = true;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * @param Invoice $invoice
+     */
+    public function setInvoice(Invoice $invoice)
+    {
+        $this->invoice = $invoice;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function hasInvoice()
+    {
+        return $this->getInvoice() === null ? false : true;
     }
 
     /**

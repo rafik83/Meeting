@@ -44,6 +44,7 @@ class Composer
         }
 
         $rule = reset($rules);
+        $composedRule->rule = $rule;
         $composedRule->tags = $rule->getWhat();
 
         return $composedRule;

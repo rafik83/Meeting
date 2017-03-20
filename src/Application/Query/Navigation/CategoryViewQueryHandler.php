@@ -117,56 +117,48 @@ class CategoryViewQueryHandler
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::BILLING:
                 return $this->billingViewQueryHandler->handle(new BillingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::SHEET:
                 return $this->sheetViewQueryHandler->handle(new SheetViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::CATALOG:
                 return $this->catalogViewQueryHandler->handle(new CatalogViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::MEETING:
                 return $this->meetingViewQueryHandler->handle(new MeetingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PACKAGE:
                 return $this->packageViewQueryHandler->handle(new PackageViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PROGRAM:
                 return $this->programViewQueryHandler->handle(new ProgramViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
         }
 
         return null;

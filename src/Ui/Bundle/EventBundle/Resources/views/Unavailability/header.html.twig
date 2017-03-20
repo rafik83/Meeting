@@ -4,7 +4,11 @@
         <p class="title">
             {{ unavailability.begin|date('H:i', unavailability.timeZone) ~ ' - ' ~ unavailability.end|date('H:i', unavailability.timeZone) }}
             -
-            {{ 'unavailability.title'|trans }}
+            {% if unavailability.hasMessage %}
+                {{ unavailability.message }}
+            {% else %}
+                {{ 'unavailability.title'|trans }}
+            {% endif %}
         </p>
         {% if participantId is defined %}
             <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id, 'participant': participantId }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">

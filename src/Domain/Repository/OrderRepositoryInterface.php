@@ -43,6 +43,13 @@ interface OrderRepositoryInterface
     public function findNotCancelledBySheet(Sheet $sheet);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet);
+
+    /**
      * @param Event  $event
      * @param array  $filters
      * @param int    $page
@@ -65,4 +72,18 @@ interface OrderRepositoryInterface
      * @return Order[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasInvoice(Sheet $sheet);
 }

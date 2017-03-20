@@ -12,29 +12,19 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetListViewQueryHandler
 {
     /**
-     * @var MeetingRepositoryInterface
-     */
-    private $meetingRepository;
-
-    /**
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var RequestRepositoryInterface
-     */
-    private $requestRepository;
 
     /**
      * @var SheetInfoGuesser
@@ -42,39 +32,41 @@ class SheetListViewQueryHandler
     private $sheetInfoGuesser;
 
     /**
-     * @var IndicatorCalculator
-     */
-    private $indicatorCalculator;
-
-    /**
      * @var RouterInterface
      */
     private $router;
 
     /**
+     * @var SheetIndicatorsViewQueryHandler
+     */
+    private $sheetIndicatorsViewQueryHandler;
+
+    /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
      * SheetListViewQueryHandler constructor.
      *
-     * @param SheetRepositoryInterface   $sheetRepository
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param SheetIndicatorsViewQueryHandler $sheetIndicatorsViewQueryHandler
      * @param MeetingRepositoryInterface $meetingRepository
-     * @param RequestRepositoryInterface $requestRepository
-     * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param IndicatorCalculator        $indicatorCalculator
-     * @param RouterInterface            $router
+     * @param RouterInterface $router
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        MeetingRepositoryInterface $meetingRepository,
-        RequestRepositoryInterface $requestRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        IndicatorCalculator $indicatorCalculator,
+        SheetIndicatorsViewQueryHandler $sheetIndicatorsViewQueryHandler,
+        MeetingRepositoryInterface $meetingRepository,
         RouterInterface $router
     ) {
-        $this->meetingRepository   = $meetingRepository;
-        $this->sheetRepository     = $sheetRepository;
-        $this->requestRepository   = $requestRepository;
-        $this->sheetInfoGuesser    = $sheetInfoGuesser;
-        $this->indicatorCalculator = $indicatorCalculator;
-        $this->router              = $router;
+        $this->sheetRepository   = $sheetRepository;
+        $this->sheetInfoGuesser  = $sheetInfoGuesser;
+        $this->meetingRepository = $meetingRepository;
+        $this->router            = $router;
+        $this->sheetIndicatorsViewQueryHandler = $sheetIndicatorsViewQueryHandler;
     }
 
     /**
@@ -88,27 +80,31 @@ class SheetListViewQueryHandler
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
+        $countMeetings = [];
+
+        if ($sheetListViewQuery->lazyLoadIndicators === true) {
+            $countMeetings = $this->meetingRepository->countMeetingsOfEvent($sheetListViewQuery->event);
+        }
+
         foreach ($sheets as $sheet) {
-            // Count the request per sheet
-            $request = $this->requestRepository->countRequestSentBySheet($sheet);
+            if (!$sheetListViewQuery->lazyLoadIndicators) {
+                $sheetIndicatorsView = $this->sheetIndicatorsViewQueryHandler->handle(new SheetIndicatorsViewQuery($sheet));
+            } else {
+                $countMeetingsOfSheet = 0;
 
-            // Count the proposition per sheet
-            $propositions = $this->requestRepository->countPropositionReceivedBySheet($sheet);
+                if (isset($countMeetings[$sheet->getId()])) {
+                    $countMeetingsOfSheet = (int) $countMeetings[$sheet->getId()]['countMeetings'];
+                }
 
-            $indicator = $this->indicatorCalculator->getIndicator($sheet);
+                $sheetIndicatorsView = new SheetIndicatorsView(0, 0, 0, 0, 0, $countMeetingsOfSheet);
+            }
 
             $sheetList[] = new SheetView(
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
-                $request,
-                $propositions,
-                $indicator->meetingRequestsCount,
-                $indicator->slotCount,
-                $indicator->usableSlots,
-                $this->getPlacedMeetingsNumber($sheet),
-                $indicator->pendingPropositionCount,
+                $sheetIndicatorsView,
                 null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
                 $this->router->generate(
                     'admin_sheet_details',
@@ -128,24 +124,7 @@ class SheetListViewQueryHandler
     private function sortSheetsByTitle(array &$sheetList)
     {
         usort($sheetList, function (SheetView $one, SheetView $other) {
-            return strcmp($one->title, $other->title);
+            return strcasecmp($one->title, $other->title);
         });
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return int
-     */
-    private function getPlacedMeetingsNumber(Sheet $sheet)
-    {
-        $participants        = $sheet->getParticipants();
-        $countPlacedMeetings = 0;
-
-        foreach ($participants as $participant) {
-            $countPlacedMeetings += $this->meetingRepository->countByParticipant($participant);
-        }
-
-        return $countPlacedMeetings;
     }
 }

@@ -1,19 +1,19 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title 'Details de la demande de Rendez-vous' %}
+{% block title 'event.meeting.request.details.title'|trans %}
 
 {% block content %}
 
-    <h2>Details de la demande de rendez-vous</h2>
+    <h2>{{ 'event.meeting.request.details.title'|trans }}</h2>
     <table class="table table-bordered">
         <thead>
-        <th>Provenant de:</th>
-        <th>Participants de la provenance:</th>
-        <th>A destination de:</th>
-        <th>Participant de la destination:</th>
-        <th>Statut</th>
-        <th>Création</th>
-        <th>Changement de statut</th>
+        <th>{{ 'event.meeting.request.details.from'|trans }}</th>
+        <th>{{ 'event.meeting.request.details.fromParticipant'|trans }}</th>
+        <th>{{ 'event.meeting.request.details.to'|trans }}</th>
+        <th>{{ 'event.meeting.request.details.toParticipant'|trans }}</th>
+        <th>{{ 'event.meeting.request.details.state'|trans }}</th>
+        <th>{{ 'event.meeting.request.details.createdAt'|trans }}</th>
+        <th>{{ 'event.meeting.request.details.updatedAt'|trans }}</th>
         </thead>
         <tbody>
         {% set state = { approved: 'success', sent: 'info', refused: 'danger', cancelled: 'warning' } %}
@@ -35,13 +35,13 @@
                     {{ ('event.meeting.request.state.to.' ~ meetingRequestView.state)|trans }}
                 </span>
             </td>
-            <td>{{ meetingRequestView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-            <td>{{ meetingRequestView.stateUpdatedAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+            <td>{{ meetingRequestView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+            <td>{{ meetingRequestView.stateUpdatedAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
         </tr>
         </tbody>
     </table>
 
-    <h3>Echanges de messages:</h3>
+    <h3>{{ 'event.meeting.request.details.message'|trans }}</h3>
     {% for message in meetingRequestView.messages %}
         {% if message.from.id == meetingRequestView.fromSheetId %}
             <h5>{{ meetingRequestView.fromSheetName }}</h5>

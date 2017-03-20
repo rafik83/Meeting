@@ -58,13 +58,14 @@ class PaginatedOrderListViewQueryHandler
                     $order->getId(),
                     $order->getNumero(),
                     $order->getSheet()->getId(),
-                    $this->sheetInfoGuesser->guessSheetName($order->getSheet(), $query->locale),
+                    $this->sheetInfoGuesser->guessSheetTitle($order->getSheet(), $query->locale),
                     $order->getSheet()->getType()->getTitle($query->locale),
                     $order->getSheet()->getFollower() ? $order->getSheet()->getFollower()->getDisplayName() : '',
                     $order->getCreatedAt(),
                     $order->getTotal(),
                     $order->getVatMode(),
-                    $order->getCurrency()
+                    $order->getCurrency(),
+                    $order->hasInvoice()
                 );
             },
             $orders->results

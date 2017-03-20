@@ -3,3 +3,5 @@ Proximum\Vimeet\Application\Command\Rule\SeeWhat:
         priority:
             - NotNull: ~
             - Type: { type: integer }
+            - Range:
+                min: 1

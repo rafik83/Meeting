@@ -56,7 +56,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'company',
             'email@email.com',
             new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
+            'vatNumber',
+            'Patrick sebastien'
         );
 
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
@@ -114,7 +115,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotal() == $order->getTotal() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
         }))->shouldBeCalled();
         $billingInfoRepository->getBySheet($sheet)->shouldBeCalled()->willReturn($billingInfo);
-        $vatApplicable->onCart($cart)->shouldBeCalled()->willReturn(true);
+        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
         $cartRowRepository->deleteForSheet($sheet)->shouldBeCalled();
         $cartStepRepository->deleteForSheet($sheet)->shouldBeCalled();
         $promotionCodeRowRepository->deleteForSheet($sheet)->shouldBeCalled();

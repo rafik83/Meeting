@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\Unavailability:
             type: datetime
         end:
             type: datetime
+        message:
+            type: string
+            nullable: true
     manyToOne:
         participant:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

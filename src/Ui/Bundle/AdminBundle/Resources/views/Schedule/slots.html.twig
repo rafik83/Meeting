@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.schedule.title'|trans }}</h1>
 
@@ -64,6 +66,7 @@
                     <th>{{ 'admin.schedule.slots.table.end'|trans }}</th>
                     <th>{{ 'admin.schedule.slots.table.duration'|trans }}</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -96,6 +99,9 @@
                                     </div>
                                 </form>
                             {% endif %}
+                        </td>
+                        <td class="text-right">
+                            {{ delete_button(path('admin_schedule_slot_remove', {'event': event.id, 'meetingSlot': slot.id, }), 'admin.schedule.slot.remove'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.schedule.slot.remove.confirm'|trans}) }}
                         </td>
                     </tr>
                 {% endfor %}

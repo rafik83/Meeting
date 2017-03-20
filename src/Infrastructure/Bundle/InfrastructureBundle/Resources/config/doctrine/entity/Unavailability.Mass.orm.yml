@@ -17,12 +17,21 @@ Proximum\Vimeet\Domain\Model\Unavailability\Mass:
             type: boolean
             options:
                 default: true
+        dispatch:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\MassTranslation
             mappedBy: mass
             indexBy: locale
             cascade: ['persist']
+        timeSlots:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\MassTimeSlot
+            mappedBy: mass
+            cascade: ['persist', 'remove']
+            orphanRemoval: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

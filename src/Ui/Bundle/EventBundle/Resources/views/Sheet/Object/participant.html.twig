@@ -38,7 +38,13 @@
 
     {% if isCatalog and userSheet != sheet %}
         <div class="buttons-zone button">
-            {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {'sheet': sheet, 'userSheet': userSheet, 'meetingRequest': meetingRequest, 'isMeetingPublished': isMeetingPublished|default(false)}) }}
+            {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
+                'sheet': sheet,
+                'userSheet': userSheet,
+                'meetingRequest': meetingRequest,
+                'isMeetingPublished': isMeetingPublished|default(false),
+                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+            }) }}
         </div>
     {% endif %}
 </section>

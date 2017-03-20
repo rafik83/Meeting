@@ -19,7 +19,7 @@ Feature: Sheet with a tag in editable text title
         When I go to this page "/fr"
         Then I should be on this page "/fr/sheet"
         And I should see "Titre de votre fiche"
-        And I should not see "Onera"
+        And I should not see "Aanera"
 
     Scenario: I can see the organization name in the sheet title
         Given I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"

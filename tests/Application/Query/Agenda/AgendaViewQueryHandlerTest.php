@@ -63,7 +63,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn([$day]);
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $happeningParticipationRepository->findByParticipant($participant)->shouldBeCalled()->willReturn([
+        $happeningParticipationRepository->findByParticipant($participant, ['disabled' => false])->shouldBeCalled()->willReturn([
             $happeningParticipation
         ]);
 
@@ -75,7 +75,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
+            ->handle(new DayViewQuery($day, $sheet, $event, $participant, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -107,7 +107,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, $user, 'fr'));
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
         // Expected
         $expected = new AgendaView([$dayView], $sheet, $participant, true, [new ParticipantView(1, 'fullName')]);
@@ -142,9 +142,13 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn([$day]);
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $happeningParticipationRepository->findByParticipant($participant2)->shouldBeCalled()->willReturn([
-            $happeningParticipation
-        ]);
+        $happeningParticipationRepository
+            ->findByParticipant($participant2, ['disabled' => false])
+            ->shouldBeCalled()
+            ->willReturn([
+                $happeningParticipation
+            ])
+        ;
 
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $unavailabilityRepository->findByParticipant($participant2)->shouldBeCalled()->willReturn([$unavailability]);
@@ -154,7 +158,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
+            ->handle(new DayViewQuery($day, $sheet, $event, $participant2, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -187,7 +191,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, $user2, 'fr'));
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user2));
 
         // Expected
         $expected = new AgendaView([$dayView], $sheet, $participant2, false, [new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')]);

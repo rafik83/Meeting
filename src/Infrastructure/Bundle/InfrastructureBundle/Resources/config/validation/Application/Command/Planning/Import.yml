@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator:
+    properties:
+        types:
+            - NotBlank: ~
+        orderBy:
+            - NotBlank: ~

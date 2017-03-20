@@ -12,6 +12,11 @@ form.add_unavailability.children.to.label: À
 form.admin_activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.admin_activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.admin_activate_account_password.children.submit.label: Envoyer
+form.admin_export_planning.children.types.label: Types
+form.admin_export_planning.children.orderBy.label: Ordre de l'export des plannings
+form.admin_export_planning.children.orderBy.choice.sheet_title: Par nom de société
+form.admin_export_planning.children.orderBy.choice.participant_last_name: Par nom de famille du participant
+form.admin_export_planning.children.submit.label: Exporter
 form.admin_lib_add.children.submit.label: Ajouter
 form.admin_lib_choice.children.choices.label: Choix
 form.admin_lib_choice.children.choices.label_add: 'Ajouter un item'
@@ -39,6 +44,7 @@ form.admin.picto.Conference: Micro
 form.admin.picto.Dejeuner: Déjeuner
 form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
+form.admin.sheet.follower.un-assigned: 'Non assigné'
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -49,6 +55,8 @@ form.billing_info_update.children.gender.label: Genre
 form.billing_info_update.children.lastname.label: Nom
 form.billing_info_update.children.mobile.label: Mobile
 form.billing_info_update.children.phone.label: Téléphone
+form.billing_info_update.children.reference.label: Votre référence comptable
+form.billing_info_update.children.reference.placeholder: référence comptable, bon de commande ...
 form.billing_info_update.children.street.label: Adresse
 form.billing_info_update.children.submit.label: Enregistrer
 form.billing_info_update.children.vatNumber.label: 'Numéro de TVA'
@@ -86,7 +94,7 @@ form.change_password.children.submit.label: Envoyer
 form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
-form.common.choices.all: 'Tout sélectionner'
+form.common.choices.all: 'Peu importe'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -128,6 +136,7 @@ form.delete_participant.children.submit.label: Supprimer
 form.dont_see_what.children.participant.label: Participant
 form.dont_see_what.children.sheet.label: Fiche
 form.dont_see_what.children.submit.label: Enregistrer
+form.event_billing_configuration.children.invoiceLogo.label: 'Logo affiché sur pro forma et facture'
 form.event_billing_configuration.children.legalInfo.label: 'Informations légales'
 form.event_billing_configuration.children.submit.label: Enregistrer
 form.event_billing_configuration.children.translations.prototype.children.bankInfo.label: 'Bank information'
@@ -147,6 +156,7 @@ form.event_create.children.domain.label: 'Domaine (complet)'
 form.event_create.children.domain.placeholder: 'Nom de domaine complet de l''événement: *.vimeet.events'
 form.event_create.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_create.children.fallback.label: 'Langue par défaut'
+form.event_create.children.invoicePrefix.label: 'Préfixe de facturation'
 form.event_create.children.leftColor.label: 'Couleur habillage de gauche'
 form.event_create.children.locales.label: Langues
 form.event_create.children.logo.label: Logo
@@ -162,6 +172,7 @@ form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le pa
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
 form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
+form.event_payment_conditions_update.children.paymentModes.label: 'Moyens de paiement'
 form.event_payment_conditions_update.children.submit.label: Enregistrer
 form.event_practical_info_update.children.contactFirstName.label: 'Prénom du contact'
 form.event_practical_info_update.children.contactLastName.label: 'Nom du contact'
@@ -170,12 +181,14 @@ form.event_practical_info_update.children.organiserName.label: Organisateur
 form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de contact'
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
+form.event_update.children.analyticsCode.label: 'Code analytique'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
 form.event_update.children.domain.label: 'Domaine (complet)'
 form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
+form.event_update.children.invoicePrefix.label: 'Préfixe de facturation'
 form.event_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.event_update.children.locales.label: Langues
 form.event_update.children.logo.label: Logo
@@ -188,6 +201,7 @@ form.event_update.children.timeZone.label: 'Fuseau horaire'
 form.event_update.children.title.label: Titre
 form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
 form.event_update.children.vat.label: TVA
+form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
@@ -247,8 +261,12 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
+form.invoice_prefix_create.children.prefix.label: Préfixe
+form.invoice_prefix_create.children.submit.label: Créer
+form.invoice_prefix_create.children.title.label: 'Nom backoffice du préfixe'
 form.login.children.password.label: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté pendant 30 jours'
 form.login.children.submit.label: 'Se connecter'
@@ -262,6 +280,11 @@ form.meeting_request_cancel.children.submit.label: Envoyer
 form.meeting_request_create.children.description.label: 'Motiver votre demande'
 form.meeting_request_create.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
 form.meeting_request_create.children.submit.label: Envoyer
+form.meeting_request_filter.children.order_by.label: 'Trier par'
+form.meeting_request_filter.children.order_by.options.created_at_asc: 'Date de création croissante'
+form.meeting_request_filter.children.order_by.options.created_at_desc: 'Date de création décroissante'
+form.meeting_request_filter.children.order_by.options.state_updated_at_asc: 'Modification de statut croissant'
+form.meeting_request_filter.children.order_by.options.state_updated_at_desc: 'Modification de statut décroissant'
 form.meeting_request_filter.children.state.label: Statut
 form.meeting_request_message.children.message.label: 'Expliquer pourquoi'
 form.meeting_request_message.children.submit.label: Envoyer
@@ -270,6 +293,10 @@ form.meeting_request_refuse.children.submit.label: Envoyer
 form.meeting_request_update_from.children.description.label: 'Expliquer pourquoi'
 form.meeting_request_update_from.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
 form.meeting_request_update_from.children.submit.label: Envoyer
+form.meeting_request_update_lock.children.lock.label: Verrouillage
+form.meeting_request_update_lock.children.submit.label: Enregistrer
+form.meeting_request_update_lock.choice.no: Déverrouillé
+form.meeting_request_update_lock.choice.yes: Verrouillé
 form.meeting_request_update_to.children.description.label: 'Expliquer pourquoi'
 form.meeting_request_update_to.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
 form.meeting_request_update_to.children.submit.label: Envoyer
@@ -344,10 +371,22 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Libe
 form.package_update.children.title.label: 'Titre du template'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
+form.participant_import.children.charset.label: Encodage
+form.participant_import.children.file.label: 'Fichier CSV'
+form.participant_import.children.submit.label: Importer
+form.participant_import.children.type.label: Type
+form.participant_import.field.ignore: Ignorer
+form.participant_import.field.mail: Email
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
+form.payment_mode_choice.children.paymentMode.bank_check: Chèque
+form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
+form.payment_mode_choice.children.paymentMode.paypal: Paypal
+form.planner_import.children.file.label: 'Solution à importer'
+form.planner_import.children.submit.label: Importer
+form.planner_import.confirm.submit.label: 'L''import d''une nouvelle solution a pour effet de supprimer l''ensemble des rendez-vous positionnés de l''événement, êtes-vous sûr de vouloir réaliser cette action ?'
 form.planning.add_with_participant: 'Ajouter un pack de rendez-vous supplémentaire avec le participant'
 form.position_meeting.children.fromParticipants.label: Participants
 form.position_meeting.children.slot.label: 'Créneau de rendez-vous'
@@ -519,6 +558,7 @@ form.sheet_batch.children.assign.label: Assigner
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
+form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -531,12 +571,16 @@ form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
-form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
+admin.sheet.follower.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
+form.sheet_filter.children.hasInvoice.label: 'A au moins une facture'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
+form.sheet_filter.children.imported.all.label: 'Peu importe'
+form.sheet_filter.children.hasScheduledMeeting.label: 'A au moins un RDV planifié'
+form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
@@ -566,6 +610,7 @@ form.sheet.messaging_campaign.message.submit.label: Terminer
 form.sheet.messaging_campaign.recipients.submit.label: Valider
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
+form.spot_batch_create.children.priority.label: Priorité
 form.spot_batch_create.children.recipes.label: 'Identifiants du lot'
 form.spot_batch_create.children.recipes.label_add: Ajouter
 form.spot_batch_create.children.recipes.label_delete: Supprimer
@@ -575,15 +620,19 @@ form.spot_batch_create.children.recipes.prototype.children.start.label: Début
 form.spot_batch_create.children.seatCapacity.label: 'Capacité du nombre de places assises'
 form.spot_batch_create.children.size.label: 'Taille en m²'
 form.spot_batch_create.children.submit.label: Enregistrer
+form.spot_batch_create.children.visio.label: Visio
+form.spot_batch_unavailability.children.submit.label: 'Créer les indisponibilités'
 form.spot_create.children.active.label: Actif
 form.spot_create.children.filters.all.label: Tous
 form.spot_create.children.filters.no.label: Non
 form.spot_create.children.filters.yes.label: Oui
 form.spot_create.children.meetingCapacity.label: 'Nombre de rendez-vous en simultané'
+form.spot_create.children.priority.label: Priorité
 form.spot_create.children.reference.label: Identifiant
 form.spot_create.children.seatCapacity.label: 'Nombre de places assises'
 form.spot_create.children.size.label: 'Taille en m²'
 form.spot_create.children.submit.label: Enregistrer
+form.spot_create.children.visio.label: Visio
 form.template_registration_update.children.submit.label: Enregistrer
 form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
@@ -647,17 +696,29 @@ form.unavailability_category_update.children.title.label: 'Titre de la catégori
 form.unavailability_mass_create.children.begin.label: Début
 form.unavailability_mass_create.children.blocking.label: Bloquant
 form.unavailability_mass_create.children.category.label: Catégorie
+form.unavailability_mass_create.children.dispatch.label: Dispatch
 form.unavailability_mass_create.children.end.label: Fin
 form.unavailability_mass_create.children.name.label: 'Nom backoffice'
 form.unavailability_mass_create.children.submit.label: Enregistrer
+form.unavailability_mass_create.children.timeSlots.label: 'Créneaux de dispatch'
+form.unavailability_mass_create.children.timeSlots.label_add: Ajouter
+form.unavailability_mass_create.children.timeSlots.label_delete: Supprimer
+form.unavailability_mass_create.children.timeSlots.prototype.children.from.label: Début
+form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
 form.unavailability_mass_update.children.begin.label: Début
 form.unavailability_mass_update.children.blocking.label: Bloquant
 form.unavailability_mass_update.children.category.label: Catégorie
+form.unavailability_mass_update.children.dispatch.label: Dispatch
 form.unavailability_mass_update.children.end.label: Fin
 form.unavailability_mass_update.children.name.label: 'Nom backoffice'
 form.unavailability_mass_update.children.submit.label: Enregistrer
+form.unavailability_mass_update.children.timeSlots.label: 'Créneaux de dispatch'
+form.unavailability_mass_update.children.timeSlots.label_add: Ajouter
+form.unavailability_mass_update.children.timeSlots.label_delete: Supprimer
+form.unavailability_mass_update.children.timeSlots.prototype.children.from.label: Début
+form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
 form.unavailability.mass.children.blocking.answer.false: Non
@@ -712,3 +773,23 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
+form.admin.sheet.filter.children.submit.label: 'Filtrer'
+form.sheet_filter.children.enabledState.label: 'Statut de la fiche'
+form.sheet_filter.children.enabledState.all.label: Toutes
+form.sheet_filter.children.enabledState.enabled.label: Active
+form.sheet_filter.children.enabledState.disabled.label: Non active
+form.sheet_filter.children.hasOrder.label: Commande
+form.sheet_filter.children.order.noPreference.label: 'Peu importe'
+form.sheet_filter.children.order.yes.label: Avec
+form.sheet_filter.children.order.no.label: Sans
+form.sheet_filter.children.hasCart.label: Panier
+form.sheet_filter.children.cart.noPreference.label: 'Peu importe'
+form.sheet_filter.children.cart.yes.label: Avec
+form.sheet_filter.children.cart.no.label: Sans
+form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'Peu importe'
+form.sheet_filter.children.hasRemainingToPay.yes.label: Oui
+form.sheet_filter.children.hasRemainingToPay.no.label: Non
+form.sheet.filter.children.template_filters.label: 'Filtres supplémentaires'
+form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
+created_at: 'Date d''inscription'
+alphabetical: 'Alphabétique'

@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -47,7 +50,7 @@ class UserController extends Controller
 
         $filterType = $this->createFilterForm(FilterType::class, $filters, [
             'event'  => $event,
-            'locale' => $request->getLocale(),
+            'locale' => $locale,
             'user'   => $this->getUser(),
         ]);
 
@@ -93,23 +96,22 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $userEvent = $this
-            ->get('vimeet_infrastructure.repository.user_event_repository')
-            ->getUserEvent($user, $event);
+        try {
+            $view = $this
+                ->get('query.user.user_details_view_query_handler')
+                ->handle(new UserDetailsViewQuery($user, $event))
+            ;
 
-        if (null === $userEvent) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'This user %s is not on this event %s',
-                    $user->getId(),
-                    $event->getId()
-                )
-            );
+        } catch (UserEventMissingException $userEventMissingException) {
+            throw $this->createNotFoundException($userEventMissingException->getMessage());
+        } catch (SheetNotFoundException $sheetNotFoundException) {
+            throw $this->createNotFoundException($sheetNotFoundException->getMessage());
         }
 
         return $this->render('AdminBundle:User:show.html.twig', [
-            'event'  => $event,
-            'user'   => $user,
+            'event'         => $view->event,
+            'user'          => $view->user,
+            'userSheetList' => $view->userSheetView,
         ]);
     }
 

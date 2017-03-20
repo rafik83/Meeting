@@ -16,6 +16,12 @@ Proximum\Vimeet\Domain\Model\Event:
         logo:
             type: string
             nullable: true
+        invoiceLogo:
+            type: string
+            nullable: true
+        invoiceLogoExtension:
+            type: string
+            nullable: true
         locales:
             type: json_array
         fallback:
@@ -65,3 +71,9 @@ Proximum\Vimeet\Domain\Model\Event:
             mappedBy: event
             cascade: ["all"]
             orphanRemoval: true
+    manyToOne:
+        invoicePrefix:
+            targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+            cascade: ["persist"]
+            joinColumn:
+                nullable: false

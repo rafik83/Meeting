@@ -121,6 +121,23 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getTypeViewsByIds(array $typeIds, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title, translations.description)')
+            ->from('Entity:Type', 'type', 'type.id')
+            ->join('type.translations', 'translations', 'WITH', 'type.id IN (:typeIds) AND translations.locale = :locale')
+            ->setParameter('typeIds', $typeIds)
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeViewByIdAndEvent($typeId, Event $event, $locale)
     {
         $queryBuilder = $this

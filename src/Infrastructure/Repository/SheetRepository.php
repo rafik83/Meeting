@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -79,9 +80,27 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet, participants')
             ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participants')
             ->where('sheet.event = :event')
             ->andWhere('sheet.inCatalog = true')
+            ->andWhere('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
+            ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -137,10 +156,35 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->join('sheet.participants', 'participant')
-            ->where('sheet.event = :event')
-            ->setParameter('event', $event->getId())
-            ->andWhere('sheet.owner = :user OR participant.user = :user')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND (sheet.owner = :user OR participant.user = :user)'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllSheetsByUserAndEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND (sheet.owner = :user OR participant.user = :user)'
+            )
+            ->setParameter('event', $event)
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
@@ -156,9 +200,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND participant.user = :user'
+            )
             ->setParameter('user', $user)
-            ->where('sheet.event = :event')
             ->setParameter('event', $event->getId());
 
         return $queryBuilder->getQuery()->getResult();
@@ -185,13 +233,34 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getSheetsById(array $ids)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet')
-            ->where('sheet.id IN (:ids)')
-            ->setParameter('ids', $ids);
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUnvalidatedSheetsById(array $ids)
+    {
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+
+        $queryBuilder
+            ->andWhere('sheet.state != :state')
+            ->setParameter('state', Sheet::STATE_VALIDATED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+  
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsUnacceptedById(array $ids)
+    {
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder
+            ->andWhere('sheet.state != :state')
+            ->setParameter('state', Sheet::STATE_ACCEPTED);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -206,9 +275,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'participant.user = :user AND sheet.enable = true AND sheet.type IN (:types)'
+            )
             ->setParameter('user', $user)
-            ->where('sheet.type IN (:types)')
             ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
@@ -255,6 +328,23 @@ class SheetRepository implements SheetRepositoryInterface
         }
 
         return $resultsOrdered;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByIds(array $sheetIds)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participant')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.participants', 'participant')
+            ->where('sheet.id IN (:sheets)')
+            ->setParameter('sheets', $sheetIds);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -326,7 +416,9 @@ class SheetRepository implements SheetRepositoryInterface
     {
         $queryBuilder = $this->queryEnabledSheetsByEvent($event);
 
-        $queryBuilder->select('sheet');
+        $queryBuilder->select('sheet, owner, type');
+        $queryBuilder->join('sheet.owner', 'owner');
+        $queryBuilder->join('sheet.type', 'type');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -381,5 +473,41 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByUser(User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->leftJoin('sheet.participants', 'participant')
+            ->andWhere('sheet.owner = :user OR participant.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $ids
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function findByIdsQueryBuilder(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder;
     }
 }

@@ -38,7 +38,21 @@ interface MassRepositoryInterface
      *
      * @return Mass[]
      */
+    public function findDispatchByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Mass[]
+     */
     public function findBlockingByEvent(Event $event);
+
+    /**
+     * @param Event  $event
+     *
+     * @return Mass[]
+     */
+    public function findNotDispatchedByEvent(Event $event);
 
     /**
      * @param Mass $mass

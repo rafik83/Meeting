@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 interface MeetingSlotRepositoryInterface
@@ -27,6 +28,19 @@ interface MeetingSlotRepositoryInterface
     public function set(MeetingSlot $meetingSlot);
 
     /**
+     * @param MeetingSlot $meetingSlot
+     */
+    public function remove(MeetingSlot $meetingSlot);
+
+    /**
+     * @param Event $event
+     * @param int   $slotId
+     *
+     * @return null|MeetingSlot
+     */
+    public function find(Event $event, $slotId);
+
+    /**
      * @param Event $event
      *
      * @return MeetingSlot[]
@@ -36,17 +50,31 @@ interface MeetingSlotRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return MeetingSlot[]
+     */
+    public function getAvailableSlotByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
      * @return int
      */
     public function countByEvent(Event $event);
 
     /**
-     * @param array $ids
-     * @param bool  $ignoreMeetings
+     * @param Event   $event
+     * @param array   $participantsId
+     * @param bool    $ignoreMeetings
+     * @param Meeting $exceptedMeeting
      *
-     * @return array
+     * @return MeetingSlot[]
      */
-    public function findAvailableSlotIdByParticipantsIds(array $ids, $ignoreMeetings = false);
+    public function findAvailableSlotsByParticipantsIds(
+        Event $event,
+        array $participantsId,
+        $ignoreMeetings = false,
+        Meeting $exceptedMeeting = null
+    );
 
     /**
      * @param Event $event

@@ -11,6 +11,8 @@
     {{ form_row(form.begin) }}
     {{ form_row(form.end) }}
     {{ form_row(form.blocking) }}
+    {{ form_row(form.dispatch) }}
+    {{ form_row(form.timeSlots) }}
 {% endblock %}
 
 {% block goback_link path('admin_unavailability_mass_list', { 'event': event.id }) %}

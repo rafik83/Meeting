@@ -85,6 +85,11 @@ class UpdateInfo
     public $gender;
 
     /**
+     * @var string
+     */
+    public $reference;
+
+    /**
      * UpdateInfo constructor.
      *
      * @param BillingInfo $billingInfo
@@ -105,5 +110,6 @@ class UpdateInfo
         $this->country     = $billingInfo->getAddress()->getCountry();
         $this->vatNumber   = $billingInfo->getVatNumber();
         $this->gender      = $billingInfo->getGender();
+        $this->reference   = $billingInfo->getReference();
     }
 }

@@ -21,7 +21,7 @@ mail.completeProfile.end: 'Cordialement,'
 mail.completeProfile.link: 'Compléter votre profil participant'
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
-mail.confirmResetPassword.subject: 'Votre mot de pase a bien été changé'
+mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
 mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription  \"%event%\" a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe \"%event%\".\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
 mail.event.preregister.end: 'Bien cordialement,'
 mail.event.preregister.link: 'Votre profil participant'
@@ -56,3 +56,10 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
+mail.planning.print.link.intro: "Vous pouvez imprimer les plannings en cliquant ici :"
+mail.planning.print.link.click: 'Fichier de planning'
+mail.planning.print.orderBy.sheet_title: par nom de société
+mail.planning.print.orderBy.participant_last_name: par nom de famille du participant
+mail.planning.print.orderBy.text: Le fichier est trié
+mail.planning.print.subject: Fichier de plannings

@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Event;
 
+use Proximum\Vimeet\Domain\Payment\Mode;
+
 class Configuration
 {
     /**
@@ -101,15 +103,32 @@ class Configuration
     private $schedulePublishDate;
 
     /**
+     * @var bool
+     */
+    private $meetingRequestUpdateLocked;
+
+    /**
+     * @var array
+     */
+    private $paymentModes;
+
+    /**
+     * @var string
+     */
+    private $analyticsCode;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
      */
     public function __construct($leftColor, $rightColor, $textColor)
     {
-        $this->leftColor  = $leftColor;
-        $this->rightColor = $rightColor;
-        $this->textColor  = $textColor;
+        $this->leftColor                  = $leftColor;
+        $this->rightColor                 = $rightColor;
+        $this->textColor                  = $textColor;
+        $this->meetingRequestUpdateLocked = false;
+        $this->paymentModes               = Mode::getPaymentModes();
     }
 
     /**
@@ -159,17 +178,20 @@ class Configuration
     }
 
     /**
+     * @param array                   $paymentModes
      * @param bool                    $allowDeposit
      * @param \DateTimeInterface|null $depositUntil
      * @param float|null              $minimumForDeposit
      * @param int|null                $deposit
      */
     public function updatePaymentConditions(
+        array $paymentModes,
         $allowDeposit,
         \DateTimeInterface $depositUntil = null,
         $minimumForDeposit = null,
         $deposit = null
     ) {
+        $this->paymentModes      = $paymentModes;
         $this->allowDeposit      = $allowDeposit;
         $this->depositUntil      = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
@@ -335,5 +357,53 @@ class Configuration
     public function getSchedulePublishDate()
     {
         return $this->schedulePublishDate;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAnalyticsCode()
+    {
+        return $this->analyticsCode;
+    }
+
+    /**
+     * @param null|string $analyticsCode
+     */
+    public function setAnalyticsCode($analyticsCode)
+    {
+        $this->analyticsCode = $analyticsCode;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMeetingRequestUpdateLocked()
+    {
+        return $this->meetingRequestUpdateLocked;
+    }
+
+    /**
+     * @param boolean $meetingRequestUpdateLocked
+     */
+    public function setMeetingRequestUpdateLocked($meetingRequestUpdateLocked)
+    {
+        $this->meetingRequestUpdateLocked = $meetingRequestUpdateLocked;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPaymentModes()
+    {
+        return $this->paymentModes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowedToPayRemaining()
+    {
+        return in_array(Mode::PAYMENT_PAYPAL, $this->paymentModes);
     }
 }

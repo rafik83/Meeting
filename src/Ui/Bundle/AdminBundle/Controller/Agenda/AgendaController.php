@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -22,17 +23,17 @@ use Symfony\Component\HttpFoundation\Response;
 class AgendaController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response|JsonResponse
      */
-    public function indexAction(Request $request, Event $event)
+    public function indexAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         return $this->render('AdminBundle:Agenda:index.html.twig', [
-            'event' => $event,
+            'event'                        => $event,
+            'isMeetingRequestUpdateLocked' => $event->getConfiguration()->isMeetingRequestUpdateLocked()
         ]);
     }
 
@@ -46,8 +47,8 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle(
-            new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()))
+        $sheets = $this->get('tactician.commandbus.query')->handle(
+            new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()), false)
         );
 
         return new JsonResponse($sheets);
@@ -74,4 +75,38 @@ class AgendaController extends Controller
 
         return new JsonResponse($agendaSheetView);
     }
+
+    /**
+     * Return an array of sheet indicators
+     *
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return JsonResponse
+     */
+    public function indicatorsAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if (!$request->query->has('s')) {
+            return $this->createErrorJsonResponse('admin.agenda.sheet.indicators.error');
+        }
+
+        $indicators = $this->get('tactician.commandbus.query')->handle(
+            new SheetIndicatorsLazyLoadViewQuery($event, $request->query->get('s'))
+        );
+
+        return new JsonResponse($indicators);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return JsonResponse
+     */
+    private function createErrorJsonResponse($key)
+    {
+        return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
 }

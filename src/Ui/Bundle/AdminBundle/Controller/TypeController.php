@@ -42,7 +42,7 @@ class TypeController extends Controller
         $typeViewQuery = new TypeViewQuery(
             $request->query->get('page', 1),
             $event,
-            $request->getLocale()
+            $event->getAvailableLocale($request->getLocale())
         );
 
         $typeListsView = $this->get('tactician.commandbus.query')->handle($typeViewQuery);
@@ -63,7 +63,7 @@ class TypeController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $create = new Create($event, $request->getLocale());
+        $create = new Create($event, $event->getAvailableLocale($request->getLocale()));
         $form   = $this->createForm(TypeCreateType::class, $create, [
             'action'       => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
             'method'       => 'POST',
@@ -109,7 +109,7 @@ class TypeController extends Controller
             throw $this->createNotFoundException('Type not found.');
         }
 
-        $update = new Update($type, $request->getLocale());
+        $update = new Update($type, $event->getAvailableLocale($request->getLocale()));
         $form   = $this->createForm(TypeUpdateType::class, $update, [
             'action'       => $this->generateUrl('admin_type_update',
                 ['event' => $event->getId(), 'type' => $type->getId()]),

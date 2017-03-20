@@ -83,8 +83,9 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order')
+            ->select('_order, row')
             ->from(Order::class, '_order', '_order.id')
+            ->join('_order.rows', 'row')
             ->where('_order.sheet = :sheet')
             ->andWhere('_order.cancelled = false')
             ->setParameter('sheet', $sheet)
@@ -131,9 +132,29 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order')
+            ->select('_order, sheet, row')
             ->from(Order::class, '_order', '_order.id')
             ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
+            ->join('_order.rows', 'row')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findNotCancelledByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order, sheet, row')
+            ->from(Order::class, '_order', '_order.id')
+            ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
+            ->join('_order.rows', 'row')
+            ->where('_order.cancelled = false')
             ->setParameter('event', $event)
         ;
 
@@ -160,5 +181,43 @@ class OrderRepository implements OrderRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order, row')
+            ->from(Order::class, '_order', '_order.id')
+            ->join('_order.rows', 'row')
+            ->where('_order.sheet = :sheet')
+            ->andWhere('_order.cancelled = false')
+            ->andWhere('_order.invoice IS NULL')
+            ->setParameter('sheet', $sheet)
+            ->orderBy('_order.createdAt', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function hasInvoice(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order.id')
+            ->from(ORder::class, '_order', '_order.id')
+            ->where('_order.sheet = :sheet')
+            ->andWhere('_order.invoice IS NOT NULL')
+            ->setParameter('sheet', $sheet)
+            ->setMaxResults(1);
+        
+        return ($queryBuilder->getQuery()->getOneOrNullResult() === null) ? false : true;
     }
 }

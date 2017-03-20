@@ -47,7 +47,7 @@
                     <div class="panel-body text-center h1">
                         {{ remainingToPay|localizedcurrency(event.currency) }}
 
-                        {% if 0 < remainingToPay %}
+                        {% if 0 < remainingToPay and event.configuration.isAllowedToPayRemaining %}
                             <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'order.list.pay_remaining'|trans }}</a>
                         {% endif %}
                     </div>
@@ -79,7 +79,7 @@
                     <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</td>
                     <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
-                    <td>
+                    <td class="col-md-2 text-right">
                         {% if transaction.isRequiredPaymentInfo %}
                             <a href="{{ path('event_payment_info') }}" target="_blank">{{ 'order.transaction.howtopay'|trans }}</a>
                         {% endif %}
@@ -88,6 +88,47 @@
             {% else %}
                 <tr>
                     <td colspan="4">{{ 'order.transaction.no'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+<section class="main">
+    <header>
+        <h1>
+            <i class="icon-Paiement_1"></i>
+            {{ 'invoice.list.title'|trans }}
+        </h1>
+    </header>
+    <div class="main__container">
+        <table class="table">
+            <thead>
+            <th>{{ 'invoice.list.column.number'|trans }}</th>
+            <th>{{ 'invoice.list.column.date'|trans }}</th>
+            <th>{{ 'invoice.list.column.totalExcludeTaxes'|trans }}</th>
+            <th>{{ 'invoice.list.column.totalIncludeTaxes'|trans }}</th>
+            <th></th>
+            </thead>
+            <tbody>
+            {% for invoiceView in invoiceViews %}
+                <tr>
+                    <td>{{ invoiceView.number }}</td>
+                    <td>{{ invoiceView.createdAt|localizeddate('short', 'none', app.request.locale) }}</td>
+                    <td>{{ invoiceView.total|format_amount|localizedcurrency(invoiceView.currency) }}</td>
+                    <td>{{ invoiceView.totalWithVat|format_amount|localizedcurrency(invoiceView.currency) }}</td>
+                    <td class="col-md-2 text-right">
+                        <a href="{{ invoiceView.url }}" target="_blank">
+                            <i class="icon-Note_1"></i>
+                            {{ 'invoice.show'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">{{ 'invoice.no-result'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>

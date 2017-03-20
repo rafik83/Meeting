@@ -97,7 +97,7 @@ class PaginatedSheetListViewQueryHandler
      */
     public function handle(PaginatedSheetListViewQuery $query)
     {
-        if ($query->admin->hasAllowedTypes() && !isset($query->filters['type'])) {
+        if ($query->admin->hasAllowedTypes() && empty($query->filters['type'])) {
             $query->filters['type'] = $this->typeRepository->getAllowedTypesByEvent($query->admin, $query->event);
         }
 

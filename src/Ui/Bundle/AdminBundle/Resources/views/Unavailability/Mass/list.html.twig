@@ -10,6 +10,13 @@
     <h1 class="page-header">
         {{ 'admin.unavailability.mass.title'|trans }}
         <div class="pull-right">
+            {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <a class="btn btn-warning"
+               href="{{ path('admin_unavailability_mass_dispatch', {event: event.id}) }}"
+                data-confirm="{{ 'admin.unavailability.button.dispatch_confirm'|trans }}">
+                {{ 'admin.unavailability.button.dispatch'|trans }}
+            </a>
+            {% endif %}
             <a class="btn btn-info" href="{{ path('admin_unavailability_category_list', {event: event.id}) }}">
                 {{ 'admin.unavailability.button.category'|trans }}
             </a>
@@ -30,6 +37,7 @@
             <th>{{ 'admin.unavailability.mass.table.column.category'|trans }}</th>
             <th>{{ 'admin.unavailability.mass.table.column.begin'|trans }}</th>
             <th>{{ 'admin.unavailability.mass.table.column.end'|trans }}</th>
+            <th>{{ 'admin.unavailability.mass.table.column.dispatch'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -41,7 +49,8 @@
                 <td>{{ mass.category.title }}</td>
                 <td>{{ mass.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td>{{ mass.end|localizeddate('medium', 'short', app.request.locale) }}</td>
-                <td class="text-right">
+                <td>{{ mass.dispatch ? '✓' : '' }}</td>
+                <td class="text-right" style="width: 110px;">
                     <div class="btn-group">
                         <a href="{{ path('admin_unavailability_mass_update', {event: event.id, mass: mass.id}) }}" class="btn btn-default btn-sm">
                             {{ 'admin.unavailability.mass.table.content.update'|trans }}

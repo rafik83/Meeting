@@ -23,7 +23,9 @@ EventEmitter.prototype.on = function(name, callback) {
  * @param {String} event Event name
  */
 EventEmitter.prototype.emit = function(name) {
-    this.element.dispatchEvent(new Event(name));
+    var event = document.createEvent('HTMLEvents');
+    event.initEvent(name, true, true);
+    this.element.dispatchEvent(event);
 };
 
 module.exports = EventEmitter;

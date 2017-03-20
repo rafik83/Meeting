@@ -26,8 +26,10 @@ help:
 #########
 
 ## Setup environment & Install application
-setup: provision
-	vagrant ssh -c 'cd /srv/app/symfony && make install'
+setup:
+	vagrant up --no-provision
+	vagrant provision
+	vagrant ssh -- "cd /srv/app && make install"
 
 setup@test: provision@test install@test
 
@@ -36,23 +38,21 @@ setup@test: provision@test install@test
 #############
 
 ## Provision environment
-provision: provision-vagrant
+provision: export ANSIBLE_EXTRA_VARS = {"manala":{"update":false}}
+provision:
+	vagrant provision --provision-with app
 
-provision@test: provision-ansible@test
+## Provision nginx
+provision-nginx: export ANSIBLE_TAGS = manala_nginx
+provision-nginx: provision
 
-provision-services@test: provision-services-ansible@test
+## Provision php
+provision-php: export ANSIBLE_TAGS = manala_php
+provision-php: provision
 
-provision-vagrant:
-	ansible-galaxy install -r ansible/roles.yml -p ansible/roles -f
-	vagrant up --no-provision
-	vagrant provision
-
-provision-ansible@test:
-	sudo ansible-galaxy install -r ansible/roles.yml -f
-	ansible-playbook -i ansible/hosts -l env_test,app -s -e "_user=${_ANSIBLE_USER}" --force-handlers ansible/playbook.yml
-
-provision-services-ansible@test:
-	ansible-playbook -i ansible/hosts -l env_test,app -s --tags=elao_services ansible/playbook.yml
+## Provision supervisor
+provision-supervisor: export ANSIBLE_TAGS = manala_supervisor
+provision-supervisor: provision
 
 ###########
 # Install #
@@ -98,20 +98,6 @@ install-db-fixtures@test:
 install-dep:
 	npm --no-spin install
 
-init-db:
-	bin/console doctrine:schema:drop --force
-	bin/console doctrine:schema:create
-	bin/console doctrine:fixtures:load -n
-	bin/console fos:elastica:populate
-	bin/console vimeet:event:build-guideline-asset
-
-init-db@test:
-	bin/console doctrine:schema:drop --force --env=test
-	bin/console doctrine:schema:create --env=test
-	bin/console doctrine:fixtures:load -n --env=test
-	bin/console cache:clear --env=test
-	bin/console fos:elastica:populate --env=test
-
 #########
 # Build #
 #########
@@ -138,6 +124,7 @@ watch: watch-assets
 
 watch-assets:
 	gulp watch --dev
+
 ################
 # Translations #
 ################
@@ -209,8 +196,126 @@ deploy-capifony@prod:
 # Custom #
 ##########
 
+HOST = $(shell hostname)
+IS_PROD = no
+
+ifeq ($(HOST), web-apache-01.proximum.local)
+	IS_PROD = yes
+endif
+
+ifeq ($(HOST), web-apache-02.proximum.local)
+	IS_PROD = yes
+endif
+
+## Show current host
+show-host:
+	printf "HOST ? ${HOST} ; IS_PROD ? ${IS_PROD}\n"
+
+# Do no allow targets in production
+ifeq ($(IS_PROD), no)
+
+init-db:
+	read -p "You are about to init db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  bin/console doctrine:schema:drop --force; \
+	  bin/console doctrine:schema:create; \
+	  bin/console doctrine:fixtures:load -n; \
+	  bin/console fos:elastica:populate; \
+	  bin/console vimeet:event:build-guideline-asset; \
+	fi
+
+init-db@test:
+	bin/console doctrine:schema:drop --force --env=test
+	bin/console doctrine:schema:create --env=test
+	bin/console doctrine:fixtures:load -n --env=test
+	bin/console cache:clear --env=test
+	bin/console fos:elastica:populate --env=test
+
+migration@prod:
+	bin/console doctrine:migrations:migrate --no-interaction
+
 migrations:
-	bin/console doctrine:schema:drop --force
-	mysql -u root proximum_vimeet -e 'DROP TABLE IF EXISTS `migration_versions`'
+	bin/console doctrine:database:drop --force
+	bin/console doctrine:database:create
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
+
+endif
+
+##################################
+# Remote tasks on Vimeet Preprod #
+##################################
+
+REMOTE_INSTALL_DIR = /var/www/proximum-vimeet.project.local/htdocs/current
+
+init-db@preprod:
+	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && make init-db"
+
+clean-npm-tmp@preprod:
+	read -p "You are about to remove npm directories in /tmp on preprod, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  ssh vimeet-preprod "cd /tmp && rm -rf npm-*"; \
+	fi
+
+clean-npm-tmp@prod:
+	read -p "You are about to remove npm directories in /tmp on prod, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  ssh vimeet-prod "cd /tmp && rm -rf npm-*"; \
+	fi
+
+# next targets must be run in VM
+ifeq ($(HOST), vimeet.proximum.dev)
+
+get-preprod-db@vm:
+	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  read -p "DB password?" DBPWD; \
+	  ssh vimeet-preprod "mysqldump --host localhost --port 3306 -u vimeet_preprod -p$$DBPWD vimeet_preprod > preprod.sql"; \
+	  scp vimeet-preprod:preprod.sql preprod.sql; \
+	  ssh vimeet-preprod "rm preprod.sql"; \
+	  bin/console doctrine:database:drop --force; \
+	  bin/console doctrine:database:create; \
+	  make import-preprod-db@vm; \
+	fi
+
+get-prod-db@vm:
+	read -p "You are about to dump then download prod db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  read -p "DB password?" DBPWD; \
+	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$DBPWD vimeet_prod > prod.sql"; \
+	  scp vimeet-prod1:prod.sql prod.sql; \
+	  ssh vimeet-prod1 "rm prod.sql"; \
+	  bin/console doctrine:database:drop --force; \
+	  bin/console doctrine:database:create; \
+	  make import-prod-db@vm; \
+	fi
+
+import-preprod-db@vm:
+	mysql -u root proximum_vimeet < preprod.sql
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.dev')"
+	make post-import-db@vm
+
+import-prod-db@vm:
+	mysql -u root proximum_vimeet < prod.sql
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum.dev')"
+	make post-import-db@vm
+
+post-import-db@vm:
+	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT(id, '@example.net')"
+	bin/console doctrine:migrations:migrate
+	bin/console vimeet:event:build-guideline-asset
+	bin/console fos:elastica:populate --env=dev --no-debug
+
+endif
+
+sync-db-from-prod@preprod:
+	read -p "You are about to sync preprod DB from prod db, please confirm (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  read -p "Prod DB password?" PRODDBPWD; \
+	  read -p "Preprod DB password?" PREPRODDBPWD; \
+	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$PRODDBPWD vimeet_prod > prod.sql"; \
+	  scp vimeet-prod1:prod.sql prod.sql; \
+	  ssh vimeet-prod1 "rm prod.sql"; \
+	  scp prod.sql vimeet-preprod:prod.sql; \
+	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"; \
+	fi

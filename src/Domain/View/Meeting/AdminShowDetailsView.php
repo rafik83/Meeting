@@ -75,8 +75,8 @@ class AdminShowDetailsView
      * @param string             $fromSheetName
      * @param int                $toSheetId
      * @param string             $toSheetName
-     * @param array              $toParticipantNames
      * @param array              $fromParticipantNames
+     * @param array              $toParticipantNames
      * @param array              $messages
      * @param string             $state
      * @param \DateTimeInterface $createdAt
@@ -88,8 +88,8 @@ class AdminShowDetailsView
         $fromSheetName,
         $toSheetId,
         $toSheetName,
-        array $toParticipantNames,
         array $fromParticipantNames,
+        array $toParticipantNames,
         array $messages,
         $state,
         \DateTimeInterface $createdAt,

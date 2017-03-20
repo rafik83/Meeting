@@ -1,10 +1,10 @@
-<li>
-    <a href="{{ path('admin_dashboard', { 'event': event.id }) }}">
-        {{ 'admin.dashboard.link'|trans }}
-    </a>
-</li>
-
 {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
+    <li>
+        <a href="{{ path('admin_dashboard', { 'event': event.id }) }}">
+            {{ 'admin.dashboard.link'|trans }}
+        </a>
+    </li>
+
     <li class="dropdown-submenu">
         <a href="{{ path('admin_event_update', { 'event': event.id }) }}">{{ 'admin.event.settings.link'|trans }}</a>
         <ul class="dropdown-menu">
@@ -26,11 +26,6 @@
             <li>
                 <a href="{{ path('admin_event_payment_conditions', { 'event': event.id }) }}">
                     {{ 'admin.event.paymentConditions.link'|trans }}
-                </a>
-            </li>
-            <li>
-                <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
-                    {{ 'admin.spot.link'|trans }}
                 </a>
             </li>
             <li>
@@ -153,8 +148,25 @@
                 </a>
             </li>
             <li>
-                <a href="{{ path('admin_meeting_request_sheets_list', { 'event': event.id }) }}">
-                    {{ 'admin.meeting_request_sheets_list.link'|trans }}
+                <a href="{{ path ('admin_planner', {'event' : event.id}) }}">
+                    {{ 'admin.planner.index'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_agenda_export_participant_index', { 'event': event.id}) }}">
+                    {{ 'admin.agenda.export.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
+            {{ 'admin.spot.link'|trans }}
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
+                    {{ 'admin.spot.link'|trans }}
                 </a>
             </li>
         </ul>

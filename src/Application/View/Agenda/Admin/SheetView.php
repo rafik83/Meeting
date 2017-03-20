@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
+use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
+
 class SheetView
 {
     /**
@@ -104,32 +106,41 @@ class SheetView
     public $url;
 
     /**
-     * @param int         $id
-     * @param string      $title
-     * @param string      $type
-     * @param int         $countParticipant
-     * @param int         $countRequest
-     * @param int         $countProposition
-     * @param int         $countValidatedRequest
-     * @param int         $countSlots
-     * @param int         $usableSlots
-     * @param int         $countPlacedMeetings
-     * @param int         $countPendingPropositions
-     * @param string|null $follower
-     * @param string      $url
+     * "La fiche a-t-elle effectuée aucune demandes de rendez-vous"
+     *
+     * @var bool
+     */
+    public $hasNotSentMeetingRequest;
+
+    /**
+     * "La fiche a-t-elle des demandes de rendez-vous en attente de validation"
+     *
+     * @var bool
+     */
+    public $hasMeetingToApprove;
+
+    /**
+     * "La fiche a-t-elle assez de creneaux disponible"
+     *
+     * @var bool
+     */
+    public $hasNotEnoughAvailableSlot;
+
+    /**
+     * @param int                 $id
+     * @param string              $title
+     * @param string              $type
+     * @param int                 $countParticipant
+     * @param SheetIndicatorsView $sheetIndicatorsView
+     * @param string|null         $follower
+     * @param string              $url
      */
     public function __construct(
         $id,
         $title,
         $type,
         $countParticipant,
-        $countRequest,
-        $countProposition,
-        $countValidatedRequest,
-        $countSlots,
-        $usableSlots,
-        $countPlacedMeetings,
-        $countPendingPropositions,
+        SheetIndicatorsView $sheetIndicatorsView,
         $follower,
         $url
     ) {
@@ -137,14 +148,18 @@ class SheetView
         $this->title                    = $title;
         $this->type                     = $type;
         $this->countParticipant         = $countParticipant;
-        $this->countRequest             = $countRequest;
-        $this->countProposition         = $countProposition;
-        $this->countValidatedRequest    = $countValidatedRequest;
-        $this->countSlots               = $countSlots;
-        $this->countPlacedMeetings      = $countPlacedMeetings;
-        $this->usableSlots              = $usableSlots;
-        $this->countPendingPropositions = $countPendingPropositions;
+        $this->countRequest             = $sheetIndicatorsView->countRequest;
+        $this->countProposition         = $sheetIndicatorsView->countProposition;
+        $this->countValidatedRequest    = $sheetIndicatorsView->countValidatedRequest;
+        $this->countSlots               = $sheetIndicatorsView->countSlots;
+        $this->countPlacedMeetings      = $sheetIndicatorsView->countPlacedMeetings;
+        $this->usableSlots              = $sheetIndicatorsView->usableSlots;
+        $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
         $this->url                      = $url;
         $this->follower                 = $follower;
+
+        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
+        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
+        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
     }
 }

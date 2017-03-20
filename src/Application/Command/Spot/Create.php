@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Spot;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Spot;
 
 class Create
 {
@@ -45,12 +46,24 @@ class Create
     public $active;
 
     /**
+     * @var int
+     */
+    public $priority;
+
+    /**
+     * @var bool
+     */
+    public $visio;
+
+    /**
      * Create constructor.
      *
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event    = $event;
+        $this->priority = Spot::PRIORITY_MUTUALIZE;
+        $this->visio    = false;
     }
 }

@@ -136,7 +136,7 @@ class UnavailabilityController extends Controller
         $agenda = $this
             ->get('tactician.commandbus.query')
             ->handle(
-                new AgendaViewQuery($event, $sheet, $participant, $user, $request->getLocale())
+                new AgendaViewQuery($event, $sheet, $participant, $request->getLocale(), $user)
             );
 
         return $this->render('EventBundle:Unavailability:create.html.twig', [

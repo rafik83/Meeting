@@ -43,6 +43,7 @@ class CampaignAssembler
      * @var array
      */
     private static $filterLabels = [
+        'imported'         => 'form.sheet_filter.children.imported.label',
         'text'             => 'form.sheet_filter.children.text_search.label',
         'validationState'  => 'form.sheet_filter.children.validationState.label',
         'state'            => 'form.sheet_filter.children.state.label',
@@ -55,10 +56,12 @@ class CampaignAssembler
         Constant::NO_ORDER => 'admin.sheet.filter.no_order',
         Constant::HAS_CART => 'admin.sheet.filter.has_cart',
         'boolean_filters'  => 'admin.sheet.filter.template_filters',
+        'hasInvoice'       => 'form.sheet_filter.children.hasInvoice.label',
         'hasRemainingToPay'             => 'form.sheet_filter.children.hasRemainingToPay.label',
         'hasHappeningParticipation'     => 'form.sheet_filter.children.hasHappeningParticipation.label',
         'hasNoMeetingRequest'           => 'form.sheet_filter.children.hasNoMeetingRequest.label',
         'hasPendingMeetingPropositions' => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
+        'hasScheduledMeeting'           => 'form.sheet_filter.children.hasScheduledMeeting.label',
     ];
 
     /**
@@ -129,6 +132,14 @@ class CampaignAssembler
             $label = '';
             foreach ($values as $currentValue) {
                 switch ($key) {
+                    case 'completed':
+                        $currentValue = $currentValue
+                            ? $this->translator->trans('event.sheet.completed.complete')
+                            : $this->translator->trans('event.sheet.completed.incomplete');
+                        break;
+                    case 'imported':
+                        $currentValue = $this->translator->trans(sprintf('event.sheet.imported.%s.label', $currentValue));
+                        break;
                     case 'validationState':
                         $currentValue = $this->translator->trans(sprintf('event.sheet.validationState.%s', $currentValue));
                         break;
@@ -168,7 +179,11 @@ class CampaignAssembler
                     case 'hasHappeningParticipation':
                     case 'hasNoMeetingRequest':
                     case 'hasPendingMeetingPropositions':
-                        $currentValue = $this->translator->trans('boolean.true');
+                    case 'hasScheduledMeeting':
+                    case 'hasInvoice':
+                        $currentValue = $currentValue
+                            ? $this->translator->trans('boolean.true')
+                            : $this->translator->trans('boolean.false');
                         break;
                 }
 

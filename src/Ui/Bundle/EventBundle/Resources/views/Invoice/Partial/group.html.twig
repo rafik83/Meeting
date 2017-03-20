@@ -1,0 +1,42 @@
+{% if groupView.rowViews is not empty or groupView.customRowViews is not empty %}
+    <tr>
+        <td colspan="4" class="active">
+            {% if groupView.isOption %}
+                <b>{{ 'invoice.summary.group.option.title'|trans({}, "invoices", eventDefaultLocale) }}</b>
+                "{{ groupView.label }}"
+            {% else %}
+                <b>{{ groupView.label }}</b>
+            {% endif %}
+        </td>
+    </tr>
+
+    {% if groupView.rowViews is not empty %}
+        {% for rowView in groupView.rowViews %}
+            {{ include('EventBundle:Invoice/Partial:product.html.twig', {
+                rowView: rowView,
+                eventDefaultLocale: invoiceView.eventDefaultLocale,
+                currency: invoiceView.currency
+            }) }}
+
+            {% if rowView.customRowViews is not empty %}
+                {% for customRowView in rowView.customRowViews %}
+                    {{ include('EventBundle:Invoice/Partial:custom_row.html.twig', {
+                        customRowView: customRowView,
+                        eventDefaultLocale: invoiceView.eventDefaultLocale,
+                        currency: invoiceView.currency
+                    }) }}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if groupView.customRowViews is not empty %}
+        {% for customRowView in groupView.customRowViews %}
+            {{ include('EventBundle:Invoice/Partial:custom_row.html.twig', {
+                customRowView: customRowView,
+                eventDefaultLocale: invoiceView.eventDefaultLocale,
+                currency: invoiceView.currency
+            }) }}
+        {% endfor %}
+    {% endif %}
+{% endif %}

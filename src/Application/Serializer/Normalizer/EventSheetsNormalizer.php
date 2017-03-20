@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Balance;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
@@ -32,6 +34,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
+    const TRANSLATION_COL       = 'admin.sheet.export.fields';
     const COL_EVENT_ID          = 'event_id';
     const COL_EVENT_NAME        = 'event_name';
     const COL_SHEET_ID          = 'sheet_id';
@@ -41,9 +44,13 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     const COL_CATEGORY          = 'category';
     const COL_REGISTRATION_DATE = 'registration_date';
     const COL_PARTICIPANTS      = 'participants';
-    const COL_STATUS            = 'status';
-    const COL_FOLLOWING         = 'following';
+    const COL_STATUS            = 'status'; // Validation State
+    const COL_FOLLOWING         = 'following';  // Admin that follow up the sheet
     const COL_IN_CATALOG        = 'in_catalog';
+    const COL_ORDER_PROMO_CODE  = 'order_promo_code';
+    const COL_SHEET_STATE       = 'sheet_state'; // State
+    const COL_TOTAL_ORDER       = 'total_excluded_vat'; // Total hors taxes
+    const COL_REMAINING_TO_PAY  = 'remaining_to_pay'; // Total restant à payer avec taxes
 
     protected $normalizerType = 'sheet';
 
@@ -68,14 +75,30 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private $registrationFields;
 
     /**
+     * Order merger
+     *
+     * @var Merger
+     */
+    private $merger;
+
+    /**
+     * @var Balance
+     */
+    private $balance;
+
+    /**
+     * @param TranslatorInterface      $translator
      * @param SheetRepositoryInterface $sheetRepository
      * @param TemplateDataFactory      $templateDataFactory
-     * @param TranslatorInterface      $translator
+     * @param Merger                   $merger
+     * @param Balance                  $balance
      */
     public function __construct(
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        Merger $merger,
+        Balance $balance
     ) {
         parent::__construct($translator);
 
@@ -83,6 +106,8 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         $this->templateDataFactory = $templateDataFactory;
         $this->sheetFields         = [];
         $this->registrationFields  = [];
+        $this->merger              = $merger;
+        $this->balance             = $balance;
     }
 
     /**
@@ -97,12 +122,16 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
         $rawSheets = [];
         $locale    = $context['locale'];
 
+        // Preload transaction and order to avoid a query by sheet
+        $this->balance->loadAllForEvent($object);
+
         foreach ($this->sheetRepository->getEnabledSheetsByEvent($object) as $sheet) {
             $rawSheets[] = $this->getSheetRawData($sheet, $locale);
         }
 
         $charset          = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedSheets = [];
+
         foreach ($rawSheets as $rawSheet) {
             $normalizedSheets[] = $this->normalizeSheetRawData($rawSheet, $charset);
         }
@@ -143,11 +172,29 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             $sheet->getType()->getCategories()->toArray()
         ));
 
+        $promotionCodes      = [];
+        $totalOrder          = 0;
+        $totalRemainingToPay = 0;
+        $notCancelledOrders  = $this->balance->getNotCancelledOrders($sheet);
+
+        if (!empty($notCancelledOrders)) {
+            $orders = $notCancelledOrders;
+            $order  = $this->merger->merge($orders);
+
+            foreach($order->getPromotionCodes() as $orderPromotionCode) {
+                $promotionCodes[] = $orderPromotionCode->getPromotionCode()->getCode();
+            }
+
+            $totalOrder = $this->balance->getTotalWithoutVat($sheet);
+            $totalRemainingToPay = $this->balance->getRemainingToPay($sheet);
+        }
+
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
             self::COL_EVENT_ID          => $event->getId(),
             self::COL_EVENT_NAME        => $event->getTitle(),
             self::COL_SHEET_ID          => $sheet->getId(),
+            self::COL_SHEET_STATE       => $sheet->getState(),
             self::COL_OWNER_ID          => $owner->getId(),
             self::COL_OWNER_EMAIL       => $owner->getEmail(),
             self::COL_TYPE              => $sheet->getType()->getTitle($availableLocale),
@@ -157,6 +204,9 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             self::COL_STATUS            => $sheet->getValidationState(),
             self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
             self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
+            self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
+            self::COL_TOTAL_ORDER       => $totalOrder,
+            self::COL_REMAINING_TO_PAY  => $totalRemainingToPay,
         ];
 
         // 2. Registration data
@@ -169,6 +219,8 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     }
 
     /**
+     * This method formats all sheet_template fields
+     *
      * @param array  $rawData
      * @param Sheet  $sheet
      * @param string $availableLocale
@@ -177,19 +229,25 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private function addPresentationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $presentationTemplateData = $this->templateDataFactory->createFromSheet($sheet, $availableLocale);
-        foreach ($presentationTemplateData->getObjects() as $presentationObject) {
-            if ($presentationObject instanceof ExportableObjectInterface) {
-                $key = $presentationObject->getKey();
-                if (!isset($this->sheetFields[$key])) {
-                    $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
-                    $this->sheetFields[$key] = $fieldName;
-                }
-                $rawData[$key] = $presentationObject->getExportableContent();
+
+        // the tagged data are used in case of empty field
+        $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
+
+        foreach ($presentationTemplateData->getExportableObjects() as $presentationObject) {
+            $key = $presentationObject->getKey();
+
+            if (!isset($this->sheetFields[$key])) {
+                $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
+                $this->sheetFields[$key] = $fieldName;
             }
+
+            $rawData[$key] = $presentationObject->getExportableContent($taggedData);
         }
     }
 
     /**
+     * This method formats all registration fields with the tag SHEET_DATA
+     *
      * @param array  $rawData
      * @param Sheet  $sheet
      * @param string $availableLocale
@@ -198,13 +256,16 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
+
         foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
+
                 if (!isset($this->registrationFields[$key])) {
                     $fieldName = $registrationObject->getExportableFieldname($availableLocale, $fallbackLocale);
                     $this->registrationFields[$key] = $fieldName;
                 }
+
                 $rawData[$key] = $registrationObject->getExportableContent();
             }
         }
@@ -225,7 +286,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
 
         // Common fields (event ID, event name, etc.)
         foreach (self::getCommonFieldKeys() as $fieldKey) {
-            $translationKey = 'admin.sheet.export.fields.' . $fieldKey;
+            $translationKey = sprintf('%s.%s', self::TRANSLATION_COL, $fieldKey);
             $input          = $rawData[$fieldKey];
 
             $translatedFieldname = $this->convertCharset(
@@ -243,14 +304,26 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
 
         // Registration data
         foreach ($this->registrationFields as $fieldKey => $fieldName) {
-            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+
+            // Avoid set to null in field with same name
+            if ($input === null && isset($normalizedData[$fieldName])) {
+                continue;
+            }
+
             $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
         // Sheet data
         foreach ($this->sheetFields as $fieldKey => $fieldName) {
-            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+
+            // Avoid set to null in field with same name
+            if ($input === null && isset($normalizedData[$fieldName])) {
+                continue;
+            }
+
             $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
@@ -267,6 +340,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             self::COL_EVENT_ID,
             self::COL_EVENT_NAME,
             self::COL_SHEET_ID,
+            self::COL_SHEET_STATE,
             self::COL_OWNER_ID,
             self::COL_OWNER_EMAIL,
             self::COL_TYPE,
@@ -276,6 +350,9 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
             self::COL_STATUS,
             self::COL_FOLLOWING,
             self::COL_IN_CATALOG,
+            self::COL_ORDER_PROMO_CODE,
+            self::COL_TOTAL_ORDER,
+            self::COL_REMAINING_TO_PAY,
         ];
     }
 }

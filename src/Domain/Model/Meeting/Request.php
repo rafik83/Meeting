@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -65,7 +66,7 @@ class Request implements MessageSubjectInterface
     private $meetingSlot;
 
     /**
-     * @var Meeting
+     * @var ArrayCollection
      */
     private $meeting;
 
@@ -80,6 +81,11 @@ class Request implements MessageSubjectInterface
     private $stateUpdatedAt;
 
     /**
+     * @var bool
+     */
+    private $disabled;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
@@ -88,6 +94,7 @@ class Request implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
+     * @param bool               $disabled
      */
     public function __construct(
         Sheet $from,
@@ -95,7 +102,8 @@ class Request implements MessageSubjectInterface
         Sheet $to,
         array $toParticipants,
         DateTimeInterface $createdAt,
-        User $creator
+        User $creator,
+        $disabled = false
     ) {
         $this->from             = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
@@ -105,6 +113,8 @@ class Request implements MessageSubjectInterface
         $this->createdAt        = $createdAt;
         $this->stateUpdatedAt   = $createdAt;
         $this->creator          = $creator;
+        $this->disabled         = $disabled;
+        $this->meeting          = new ArrayCollection();
     }
 
     /**
@@ -132,6 +142,14 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getFromParticipantsArray()
+    {
+        return $this->fromParticipants->toArray();
+    }
+
+    /**
      * @return Sheet
      */
     public function getToSheet()
@@ -145,6 +163,14 @@ class Request implements MessageSubjectInterface
     public function getToParticipants()
     {
         return $this->toParticipants;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getToParticipantsArray()
+    {
+        return $this->toParticipants->toArray();
     }
 
     /**
@@ -264,11 +290,17 @@ class Request implements MessageSubjectInterface
     /**
      * Get meeting
      *
-     * @return Meeting
+     * @return null|Meeting
      */
     public function getMeeting()
     {
-        return $this->meeting;
+        $meeting = $this->meeting->first();
+
+        if (false === $meeting) {
+            return null;
+        }
+
+        return $meeting;
     }
 
     /**
@@ -280,7 +312,7 @@ class Request implements MessageSubjectInterface
      */
     public function setMeeting(Meeting $meeting)
     {
-        $this->meeting = $meeting;
+        $this->meeting->add($meeting);
 
         return $this;
     }
@@ -366,6 +398,30 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param Participant[] $participants
+     */
+    public function updateFromParticipants(array $participants)
+    {
+        $this->fromParticipants->clear();
+
+        foreach ($participants as $participant) {
+            $this->fromParticipants->add($participant);
+        }
+    }
+
+    /**
+     * @param Participant[] $participants
+     */
+    public function updateToParticipants(array $participants)
+    {
+        $this->toParticipants->clear();
+
+        foreach ($participants as $participant) {
+            $this->toParticipants->add($participant);
+        }
+    }
+
+    /**
      * @return bool
      */
     public function isSent()
@@ -440,6 +496,14 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isTransformableIntoMeeting()
+    {
+        return TransformableRequest::isTransformable($this);
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Sheet
@@ -458,29 +522,28 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * "Quand la demande de RDV n'a pas de participant de préférence et que la liste
+     *  des participants disponible est vide on utilise le seul participant de la fiche"
+     *
      * @param Sheet $sheet
      *
      * @return Participant[]
      */
     public function getParticipants(Sheet $sheet)
     {
+        if ($this->hasNoPreference($sheet) && $sheet->getParticipants()->count() === 1) {
+            return [$sheet->getParticipants()->first()];
+        }
+
         if ($this->isSender($sheet)) {
-            return $this->fromParticipants;
+            return $this->fromParticipants->toArray();
         }
 
         if ($this->isReceiver($sheet)) {
-            return $this->toParticipants;
+            return $this->toParticipants->toArray();
         }
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
-    }
-
-    /**
-     * @return Participant[]
-     */
-    public function getAllParticipants()
-    {
-        return array_merge($this->fromParticipants->toArray(), $this->toParticipants->toArray());
     }
 
     /**
@@ -488,6 +551,59 @@ class Request implements MessageSubjectInterface
      */
     public function hasMeeting()
     {
-        return $this->meeting !== null;
+        return $this->getMeeting() !== null;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getAllParticipants()
+    {
+        return array_merge($this->getParticipants($this->from), $this->getParticipants($this->to));
+    }
+
+    /**
+     * @return int[] array of all participants id
+     */
+    public function getParticipantsId()
+    {
+        return array_map(
+            function (Participant $participant) {
+                return $participant->getId();
+            },
+            $this->getAllParticipants()
+        );
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->getFromSheet()->getEvent();
+    }
+
+    /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @param bool $disabled
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = $disabled;
     }
 }

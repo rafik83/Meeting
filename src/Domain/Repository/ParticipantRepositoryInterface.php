@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\ParticipantView;
 
@@ -32,11 +33,33 @@ interface ParticipantRepositoryInterface
     public function delete(Participant $participant);
 
     /**
+     * @param Event $event
+     *
+     * @return Participant[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     * @param Mass  $mass
+     *
+     * @return Participant[]
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass);
+
+    /**
      * @param int $id
      *
      * @return Participant
      */
     public function findById($id);
+
+    /**
+     * @param array $ids array of participant ids
+     *
+     * @return Participant[]
+     */
+    public function findByIds(array $ids);
 
     /**
      * @param Participant $participant
@@ -154,6 +177,20 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
+
+    /**
+     * @param int $id
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsBySheetId($id);
+
+    /**
+     * @param array
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsWithSheetInCatalogAndActiveByTypeIds(array $ids);
 
     /**
      * @param Event  $event

@@ -40,7 +40,7 @@ Feature: Meeting Request / Proposition
     And the "type_4" checkbox should be checked
     And I should see "Exposant"
     And I should see "Investisseur"
-    And I should see "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense."
+    And I should see "L'Aanera est le centre français de la recherche aéronautique, spaciale et de défense."
     And I should see "catalog.complete_sheet"
     And I should see "Exposant"
 

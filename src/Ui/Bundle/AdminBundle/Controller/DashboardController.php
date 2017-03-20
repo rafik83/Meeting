@@ -28,7 +28,7 @@ class DashboardController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $query = new DashboardViewQuery($event, $request->getLocale());
+        $query = new DashboardViewQuery($event, $event->getAvailableLocale($request->getLocale()));
         $view  = $this->get('query.sheet.dashboard_view_query_handler')->handle($query);
 
         return $this->render('AdminBundle:Event/Dashboard:index.html.twig', [

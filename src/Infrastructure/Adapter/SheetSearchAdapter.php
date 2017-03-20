@@ -145,7 +145,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function findLocalization(Event $event, $filter, $locale)
     {
-        $query = new Query();
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $locale
+        );
+
+        $query = new Query($builder->getQuery());
         $query->addAggregation($this->findCityQuery($event, $filter))
             ->addAggregation($this->findCountryQuery($event, $filter, $locale))
             ->setSize(0);
@@ -158,6 +164,12 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function findKeyword(Event $event, $filter, $locale)
     {
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $locale
+        );
+
         $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
@@ -185,7 +197,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterKeywordsEvent = new Filter('keywords', $filterEventQuery);
         $filterKeywordsEvent->addAggregation($nestedKeywordsAggregations);
 
-        $query = new Query();
+        $query = new Query($builder->getQuery());
         $query->addAggregation($filterKeywordsEvent)
             ->addAggregation($this->findSheetnameQuery($event, $filter))
             ->setSize(0);

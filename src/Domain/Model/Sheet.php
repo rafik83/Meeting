@@ -128,6 +128,11 @@ class Sheet implements TraceableInterface
     private $spot;
 
     /**
+     * @var bool
+     */
+    private $imported = false;
+
+    /**
      * Sheet constructor.
      *
      * @param Event              $event
@@ -778,6 +783,31 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isImported()
+    {
+        return $this->imported;
+    }
+
+    /**
+     * @param bool $imported
+     *
+     * @return $this
+     */
+    public function setImported($imported)
+    {
+        $this->imported = $imported;
+
+        // Imported sheet don't have last login yet
+        if ($imported) {
+            $this->lastLoginAt = null;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Sheet
      */
     public function submitToValidation()
@@ -785,5 +815,13 @@ class Sheet implements TraceableInterface
         $this->validationState = self::STATE_VALIDATION_PENDING;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerLocale()
+    {
+        return $this->getOwner()->getLocale();
     }
 }

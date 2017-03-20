@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
-use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
@@ -60,32 +59,26 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-default'],
         ]);
 
-        $filterForm->handleRequest($request);
-        $filters = $filterForm->getData();
-
+        $filters        = $filterForm->handleRequest($request)->getData();
         $query          = new SheetListViewQuery($event, $filters, $locale);
         $sheets         = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
 
-        $createCampaignForm = $this->createForm(CreateCampaignType::class, new Create($event, $request->get($filterForm->getName(), [])), [
-            'sheet_ids' => array_map(function (SheetListView $sheet) {
-                return $sheet->id;
-            }, $sheets),
-            'action'    => $this->generateUrl('admin_messaging_campaign_select_sheets', ['event' => $event->getId()]) . '?' . $request->getQueryString(),
+        $createCampaignCommand = new Create($event, $request->get($filterForm->getName(), []));
+        $createCampaignForm    = $this->createForm(CreateCampaignType::class, $createCampaignCommand, [
+            'sheet_ids' => array_map(function (SheetListView $sheet) { return $sheet->id; }, $sheets),
+            'action'    => $this->generateUrl('admin_messaging_campaign_select_sheets', array_merge(['event' => $event->getId()], $request->query->all())),
         ]);
 
-        if ('POST' == $request->getMethod()) {
-            $createCampaignForm->handleRequest($request);
+        if ($createCampaignForm->handleRequest($request)->isSubmitted() && $createCampaignForm->isValid()) {
+            /** @var Campaign $campaign */
+            $campaign = $this->get('tactician.commandbus')->handle($createCampaignCommand);
+            $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
 
-            if ($createCampaignForm->isValid()) {
-                $campaign = $this->get('tactician.commandbus')->handle($createCampaignForm->getData());
-                $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
-
-                return $this->redirectToRoute('admin_messaging_campaign_select_recipients', [
-                    'event'    => $event->getId(),
-                    'campaign' => $campaign->getId(),
-                ]);
-            }
+            return $this->redirectToRoute('admin_messaging_campaign_select_recipients', [
+                'event'    => $event->getId(),
+                'campaign' => $campaign->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:Messaging\Campaign:select_sheets.html.twig', [
@@ -117,7 +110,7 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-primary'],
         ]);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($form->getData());
             $this->addFlash('success', 'flash.admin.messaging.campaign.recipients.success');
 
@@ -159,7 +152,7 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-primary'],
         ]);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($selectMessage);
             $this->addFlash('success', 'flash.admin.messaging.campaign.message.success');
 
@@ -177,12 +170,11 @@ class CampaignController extends Controller
     /**
      * Display all messaging campaigns for a given event.
      *
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function listAction(Request $request, Event $event)
+    public function listAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
@@ -199,6 +191,7 @@ class CampaignController extends Controller
     /**
      * Sends a given messaging Campaign.
      *
+     * @param Request  $request
      * @param Event    $event
      * @param Campaign $campaign
      *
@@ -209,41 +202,52 @@ class CampaignController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
-        $campaignListUrl = $this->generateUrl('admin_messaging_campaign_list', [
-            'event' => $event->getId(),
-        ]);
+        $url = $this->generateUrl('admin_messaging_campaign_list', ['event' => $event->getId(),]);
 
-        $errorHandler = function ($reason = null, \Exception $exception = null) use ($campaignListUrl, $campaign) {
-            $translator = $this->get('vimeet_infrastructure.adapter.translator_adapter');
-            $message    = $translator->trans(
-                'flash.messaging.campaign.send.failure',
-                ['%reason%' => $translator->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
-                'flashes'
-            );
+        // Validate CSRF token
+        if (!$this->isTokenValid($request)) {
+            $this->addFailureMessage($campaign, 'flash.messaging.campaign.send.failure.invalid_csrf');
 
-            if (null !== $exception) {
-                $this->get('logger')->error($message, ['exception' => $exception]);
-            }
-
-            $this->addFlash('error', $message);
-
-            return $this->redirect($campaignListUrl);
-        };
-
-        $token = $request->request->get('_token');
-
-        if (!$token || !$this->get('security.csrf.token_manager')->isTokenValid($token ? new CsrfToken('send_campaign', $token) : null)) {
-            return $errorHandler('flash.messaging.campaign.send.failure.invalid_csrf');
+            return $this->redirect($url);
         }
 
-        try {
-            $this->get('tactician.commandbus')->handle(new Send($campaign));
-        } catch (CampaignSendingFailedException $e) {
-            return $errorHandler($e->getMessage(), $e);
-        }
+        $this->get('tactician.commandbus')->handle(new Send($campaign));
 
+        // Add flash
         $this->addFlash('success', 'flash.messaging.campaign.send.success');
 
-        return $this->redirect($campaignListUrl);
+        return $this->redirect($url);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isTokenValid(Request $request)
+    {
+        if (!$request->request->has('_token')) {
+            return false;
+        }
+
+        $token = new CsrfToken('send_campaign', $request->request->get('_token'));
+
+        return $this->get('security.csrf.token_manager')->isTokenValid($token);
+    }
+
+    /**
+     * @param Campaign $campaign
+     * @param          $reason
+     */
+    private function addFailureMessage(Campaign $campaign, $reason)
+    {
+        $translator = $this->get('vimeet_infrastructure.adapter.translator_adapter');
+        $message    = $translator->trans(
+            'flash.messaging.campaign.send.failure',
+            ['%reason%' => $translator->trans($reason, ['%title%' => $campaign->getTitle()], 'flashes')],
+            'flashes'
+        );
+
+        $this->addFlash('error', $message);
     }
 }

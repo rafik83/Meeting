@@ -131,7 +131,7 @@ class CompletenessCalculator
     ) {
         $countTotal     = 0;
         $countCompleted = 0;
-        foreach ($templateData->getCompanyObjects() as $object) {
+        foreach ($templateData->getEditableSheetDataExceptedImageObjects() as $object) {
             if ($object->isEditable() && true === $object->getRequired()) {
                 $countTotal++;
 

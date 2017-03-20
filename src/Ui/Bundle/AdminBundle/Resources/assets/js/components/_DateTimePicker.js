@@ -2,8 +2,9 @@ require('eonasdan-bootstrap-datetimepicker');
 var $      = require('jquery'),
     moment = require('moment');
 
-function DateTimePicker(element)
+function DateTimePicker(element, customConfig)
 {
+    var customConfig = customConfig || null;
     this.element        = element;
     this.parentZone     = null;
 
@@ -25,6 +26,10 @@ function DateTimePicker(element)
         format: 'DD/MM/YYYY HH:mm'
     };
 
+    if (customConfig !== null) {
+       this.standardConfig = Object.assign(this.standardConfig, customConfig);
+    }
+    
     $(element).datetimepicker(this.standardConfig);
 
     if ($(this.element).hasClass("datetimepicker-range-element")) {

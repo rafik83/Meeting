@@ -2,19 +2,35 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.meeting_request.link'|trans }}
+{% endblock %}
+
 {% block content %}
-    <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(totalRequest, {'%count%': totalRequest}) }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.meeting_request.title'|transchoice(meeting_requests.total, {'%count%': meeting_requests.total}) }}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <a href="{{ path('admin_meeting_request_lock_update', {'event': event.id}) }}" class="btn btn-info pull-right">
+                {{ 'admin.meeting_request.action.lock'|trans }}
+            </a>
+        {% endif %}
+    </h1>
 
     {{ include('AdminBundle:Common:filters_summary.html.twig', {
         filters:   filters_summary,
         resetLink: path('admin_meeting_request_list', { 'event': event.id })
     }) }}
 
+    <div class="col-md-offset-8 col-md-4 text-right">
+        {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
+    </div>
+
     <table class="table table-hover filterable">
         <thead>
         <tr>
             <th>{{ 'admin.meeting_request.from'|trans }}</th>
             <th>{{ 'admin.meeting_request.to'|trans }}</th>
+            <th>{{ 'admin.meeting_request.stateUpdatedAt'|trans }}</th>
             <th>{{ 'admin.meeting_request.createdAt'|trans }}</th>
             <th>{{ macro.choice_as_dropdown(filter_form.state) }}</th>
             <th></th>
@@ -33,7 +49,8 @@
                         {{ meeting_request.sheetNameTo }}
                     </a>
                 </td>
-                <td>{{ meeting_request.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ meeting_request.stateUpdatedAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+                <td>{{ meeting_request.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>
                     {{ macro.state_label(
                         ('admin.meeting_request.state.' ~ meeting_request.state)|trans,
@@ -49,15 +66,12 @@
                 <td class="text-right">
                     {{ macro.btnGroupAndRightMenuDropdown({
                         ('admin.meeting_request.details'|trans): path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}),
-                    }|merge(meeting_request.state != 'approved'
-                        ? {}
-                        : { ('admin.meeting_request.set_a_meeting'|trans): path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }
-                    )) }}
+                    }) }}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">
+                <td colspan="5" class="text-center">
                     {{ 'admin.zero-result'|trans }}
                 </td>
             </tr>

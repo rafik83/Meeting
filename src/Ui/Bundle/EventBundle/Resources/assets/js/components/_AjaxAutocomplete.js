@@ -74,7 +74,10 @@ AjaxAutocomplete.prototype.updateParentInput = function () {
     ).join(',');
 
     this.parentInput.value = tags.toString();
-    this.parentInput.dispatchEvent(new Event('change'));
+    var htmlEvent = document.createEvent('HTMLEvents');
+    htmlEvent.initEvent('change', true, true);
+
+    this.parentInput.dispatchEvent(htmlEvent);
 };
 
 AjaxAutocomplete.prototype.prefill = function () {

@@ -30,7 +30,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView
+     * @return SearchFacetView|false
      */
     public function hasType()
     {

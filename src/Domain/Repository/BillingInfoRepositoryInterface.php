@@ -19,7 +19,7 @@ interface BillingInfoRepositoryInterface
     /**
      * @param Sheet $sheet
      *
-     * @return BillingInfo
+     * @return null|BillingInfo
      */
     public function getBySheet(Sheet $sheet);
 

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 interface SpotRepositoryInterface
@@ -28,12 +29,28 @@ interface SpotRepositoryInterface
     public function set(Spot $spot);
 
     /**
-     * @param Event $event
-     * @param integer $id
+     * @param Event     $event
+     * @param int|array $id
+     * @param bool      $visio
      *
-     * @return Spot
+     * @return null|Spot
      */
-    public function find(Event $event, $id);
+    public function find(Event $event, $id, $visio = false);
+
+    /**
+     * @param Event $event
+     * @param array $ids
+     *
+     * @return Spot[]
+     */
+    public function findMany(Event $event, array $ids);
+
+    /**
+     * @param Event $event
+     *
+     * @return Spot[]
+     */
+    public function getActiveByEvent(Event $event);
 
     /**
      * @param Event $event
@@ -44,6 +61,13 @@ interface SpotRepositoryInterface
     public function getSpotFilter(Event $event, array $filter = []);
 
     /**
+     * @param array $spotsIds
+     *
+     * @return Spot[]
+     */
+    public function getSpotsByIds(array $spotsIds = []);
+
+    /**
      * @param Event  $event
      * @param string $reference
      *
@@ -52,10 +76,10 @@ interface SpotRepositoryInterface
     public function findByReference(Event $event, $reference);
 
     /**
-     * @param array $ids
-     * @param Event $event
+     * @param Spot[] $spots
+     * @param Event  $event
      */
-    public function removeBatchSpot(array $ids, Event $event);
+    public function removeBatchSpot(array $spots, Event $event);
 
     /**
      * @param array $ids
@@ -71,21 +95,62 @@ interface SpotRepositoryInterface
 
     /**
      * @param Meeting $meeting
+     * @param bool $visio
      *
      * @return Spot[]
      */
-    public function getSpotsForMeeting(Meeting $meeting);
+    public function getSpotsForMeeting(Meeting $meeting, $visio = false);
 
     /**
-     * @param MeetingSlot  $slot
-     * @param int          $participantsQuantity
-     * @param Meeting|null $exceptMeeting
+     * @param Spot $spot
      *
-     * @return Spot[]
+     * @return bool
+     */
+    public function hasMeeting(Spot $spot);
+
+    /**
+     * @param Meeting $meeting
+     * @param bool $visio
+     *
+     * @return bool
+     */
+    public function hasSpotsForMeeting(Meeting $meeting, $visio = false);
+
+    /**
+     * @param MeetingSlot $slot
+     * @param int $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
+     *
+     * @return \Proximum\Vimeet\Domain\Model\Spot[]
      */
     public function getSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
-        Meeting $exceptMeeting = null
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null,
+        $visio = false
+    );
+
+    /**
+     * @param MeetingSlot $slot
+     * @param int $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
+     *
+     * @return bool
+     */
+    public function hasSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null,
+        $visio = false
     );
 }

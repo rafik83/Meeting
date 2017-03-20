@@ -57,6 +57,11 @@ class AgendaViewQueryHandler
     private $meetingRepository;
 
     /**
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
      * @param DayRepositoryInterface                    $dayRepository
      * @param DayViewQueryHandler                       $dayViewQueryHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
@@ -96,7 +101,11 @@ class AgendaViewQueryHandler
         $eventDays              = $this->dayRepository->findByEvent($query->event);
         $participant            = $query->participant;
         $sheet                  = $query->sheet;
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($query->user, $sheet);
+
+        $isUserAloneParticipant = null !== $query->user ?
+            ParticipantHelper::isUserAloneParticipant($query->user, $sheet)
+            : false
+        ;
 
         $participants = $this->participantViewQueryHandler->handle(
             new ParticipantViewQuery($sheet->getParticipants()->toArray(), $query->locale)
@@ -106,10 +115,12 @@ class AgendaViewQueryHandler
             return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants);
         }
 
-        $happeningParticipations = $this->happeningParticipationRepository->findByParticipant($participant);
         $unavailabilites         = $this->unavailabilityRepository->findByParticipant($participant);
         $masses                  = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
         $meetings                = [];
+        $happeningParticipations = $this
+            ->happeningParticipationRepository
+            ->findByParticipant($participant, ['disabled' => false]);
 
         if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
             $meetings = $this->meetingRepository->findByParticipant($participant);
@@ -123,6 +134,7 @@ class AgendaViewQueryHandler
                     $day,
                     $sheet,
                     $query->event,
+                    $participant,
                     $query->locale,
                     $happeningParticipations,
                     $unavailabilites,

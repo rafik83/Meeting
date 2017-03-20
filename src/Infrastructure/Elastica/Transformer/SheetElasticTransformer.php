@@ -21,7 +21,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -71,6 +73,16 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private $orderBalance;
 
     /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
      * @param SheetInfoGuesser                          $sheetInfoGuesser
      * @param ParticipantInfoGuesser                    $participantInfoGuesser
      * @param CartRowRepositoryInterface                $cartRowRepository
@@ -78,6 +90,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
      * @param RequestRepositoryInterface                $meetingRequestRepository
      * @param TemplateDataFactory                       $templateDataFactory
      * @param Balance                                   $orderBalance
+     * @param MeetingRepositoryInterface                $meetingRepository
+     * @param InvoiceRepositoryInterface                $invoiceRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -86,13 +100,17 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         RequestRepositoryInterface $meetingRequestRepository,
         TemplateDataFactory $templateDataFactory,
-        Balance $orderBalance
+        Balance $orderBalance,
+        MeetingRepositoryInterface $meetingRepository,
+        InvoiceRepositoryInterface $invoiceRepository
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->cartRowRepository      = $cartRowRepository;
         $this->templateDataFactory    = $templateDataFactory;
         $this->orderBalance           = $orderBalance;
+        $this->meetingRepository      = $meetingRepository;
+        $this->invoiceRepository      = $invoiceRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->meetingRequestRepository         = $meetingRequestRepository;
     }
@@ -174,6 +192,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'event'                   => $sheet->getEvent()->getId(),
                 'owner'                   => $owner,
                 'remainingToPay'          => $this->orderBalance->getRemainingToPay($sheet),
+                'imported'                => $sheet->isImported(),
+                'lastLoginAt'             => $sheet->getLastLoginAt() ? $sheet->getLastLoginAt()->format('c') : null,
                 'createdAt'               => $sheet->getCreatedAt()->format('c'),
                 'inCatalog'               => $sheet->isInCatalog(),
                 'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
@@ -192,6 +212,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasHappeningParticipation'    => $this->happeningParticipationRepository->hasParticipationsBySheet($sheet),
                 'hasMeetingRequest'            => $this->meetingRequestRepository->hasRequestSentBySheet($sheet),
                 'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
+                'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
+                'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet)
             ],
             $contentByLocale
         ));

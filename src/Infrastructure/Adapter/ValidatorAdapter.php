@@ -1,0 +1,52 @@
+<?php
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Adapter;
+
+use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
+
+class ValidatorAdapter implements ValidatorInterface
+{
+    /**
+     * @var SymfonyValidatorInterface
+     */
+    private $validator;
+
+    /**
+     * ValidatorAdapter constructor.
+     *
+     * @param SymfonyValidatorInterface $validator
+     */
+    public function __construct(SymfonyValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    /**
+     * @param mixed  $data
+     * @param string $constraintType
+     *
+     * @return mixed
+     */
+    public function validate($data, $constraintType)
+    {
+        switch ($constraintType) {
+            case self::VALIDATOR_EMAIL_TYPE:
+                return $this->validator->validate($data, new Email(
+                    [
+                        'strict' => true,
+                    ]
+                ));
+            default:
+                break;
+        }
+    }
+}

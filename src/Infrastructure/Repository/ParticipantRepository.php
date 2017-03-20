@@ -18,6 +18,8 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -71,12 +73,30 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->where('participant.id = :id')
+            ->join('participant.sheet', 'sheet')
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByIds(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet')
+            ->where('participant.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -88,10 +108,44 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\ParticipantView(participant.id, participant.data, user.id, user.email, participant.owner)')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->join('participant.user', 'user')
             ->where('participant.sheet = :sheetId')
             ->setParameter('sheetId', $sheetId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsBySheetId($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.user', 'user')
+            ->where('participant.sheet = :sheetId')
+            ->setParameter('sheetId', $id);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsWithSheetInCatalogAndActiveByTypeIds(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant, sheet, type')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.enable = true AND sheet.inCatalog = true')
+            ->join('sheet.type', 'type', 'WITH', 'type.id IN (:ids)')
+            ->setParameter('ids', $ids);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -105,7 +159,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant.id')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
             ->setParameter('userId', $userId)
             ->join('participant.sheet', 'sheet')
@@ -129,7 +183,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
             ->setParameter('userId', $user->getId())
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id = :sheetId')
@@ -148,7 +202,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant.id')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->join('participant.user', 'user', 'WITH', 'user = :user')
             ->setParameter('user', $user)
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
@@ -166,7 +220,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
             ->setParameter('userId', $userId)
@@ -184,7 +238,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
-            ->from('Entity:Participant', 'participant')
+            ->from(Participant::class, 'participant')
             ->where('participant.sheet = :sheetId')
             ->setParameter('sheetId', $sheet->getId())
             ->andWhere('participant.active = false');
@@ -279,7 +333,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-                // Participant have not already a meeting during this period
+            // Participant have not already a meeting during this period
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
@@ -333,7 +387,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting) {
+    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting)
+    {
         return $this->getAvailableParticipants(
             $participants,
             $meeting->getSlot()->getBegin(),
@@ -345,7 +400,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAvailableParticipantsForHappening(array $participants, Happening $happening) {
+    public function getAvailableParticipantsForHappening(array $participants, Happening $happening)
+    {
         return $this->getAvailableParticipants(
             $participants,
             $happening->getBegin(),
@@ -372,7 +428,47 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 'participant.sheet = :sheet AND happeningParticipation.happening = :happening'
             )
             ->setParameter('sheet', $sheet)
-            ->setParameter('happening', $happening)
+            ->setParameter('happening', $happening);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.user', 'user')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.event', 'event')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.user', 'user')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.event', 'event')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.participant = participant AND m.mass = :mass)')
+            ->setParameter('mass', $mass)
         ;
 
         return $queryBuilder->getQuery()->getResult();

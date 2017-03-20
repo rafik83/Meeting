@@ -157,9 +157,9 @@ class PackageGroup
     /**
      * Set ordered option
      *
-     * @param Product[] $options
+     * @param Product[] $options indexed by rank
      *
-     * @return Package
+     * @return PackageGroup
      */
     public function setOptions(array $options)
     {

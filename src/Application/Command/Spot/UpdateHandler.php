@@ -41,7 +41,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        if (!in_array($update->property, ['reference', 'size', 'meetingCapacity', 'seatCapacity'])) {
+        if (!in_array($update->property, ['reference', 'size', 'meetingCapacity', 'seatCapacity', 'priority'])) {
             throw new PropertyNotSupportedException($update->property);
         }
 

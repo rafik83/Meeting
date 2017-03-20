@@ -4,6 +4,7 @@ Proximum\Vimeet\Application\Command\Operator\Create:
             - NotBlank: ~
             - Email:
                 message: validators.email
+                strict: true
         lastname:
             - NotBlank: ~
         firstname:

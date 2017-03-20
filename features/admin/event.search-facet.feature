@@ -19,6 +19,7 @@ Feature: See and update search facet
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
       | Admin.yml                                                                |
+    And elastica is populate
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/en/event/1"
     When I follow "admin.event.search_facets.link"

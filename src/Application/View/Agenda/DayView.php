@@ -43,6 +43,11 @@ class DayView
     public $masses;
 
     /**
+     * @var MeetingView[]
+     */
+    public $meetings;
+
+    /**
      * @param \DateTimeInterface       $begin
      * @param \DateTimeInterface       $end
      * @param int                      $scale
@@ -83,5 +88,18 @@ class DayView
     public function getScale()
     {
         return gmdate('H:i', $this->scale * 60);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTimeEntities()
+    {
+        return array_merge(
+            $this->happenings,
+            $this->unavailabilities,
+            $this->masses,
+            $this->meetings
+        );
     }
 }

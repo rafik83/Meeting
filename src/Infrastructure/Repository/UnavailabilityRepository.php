@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
@@ -76,7 +77,23 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event)
+    public function findByParticipants(array $participants)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->join('unavailability.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
+            ->setParameter('participants', $participants);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this
             ->entityManager
@@ -84,8 +101,24 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
             ->join('unavailability.participant', 'participant')
-            ->join('participant.sheet', 'sheet')
-            ->where('sheet.event = :event')
+            ->where('participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability, participant')
+            ->from(Unavailability::class, 'unavailability')
+            ->join('unavailability.participant', 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

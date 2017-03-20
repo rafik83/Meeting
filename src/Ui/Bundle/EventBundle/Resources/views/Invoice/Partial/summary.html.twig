@@ -1,0 +1,39 @@
+{% if invoiceView.summaryView is defined %}
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="col-md-6">{{ 'invoice.summary.column.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</th>
+                <th class="text-center col-md-2">{{ 'invoice.summary.column.unitPrice'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</th>
+                <th class="text-center col-md-2">{{ 'invoice.summary.column.quantity'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</th>
+                <th class="text-center col-md-2">{{ 'invoice.summary.column.total'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {{ include('EventBundle:Invoice/Partial:groups.html.twig', {invoiceView: invoiceView}) }}
+        {{ include('EventBundle:Invoice/Partial:promotion_codes.html.twig', {invoiceView: invoiceView}) }}
+
+            <tr>
+                <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.totalExcludeTaxes'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
+                <td class="text-right">{{ invoiceView.total|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
+            </tr>
+
+        {% if invoiceView.vatApplicable %}
+            <tr>
+                <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.vatRate'|trans({'%vatRate%': invoiceView.vatRate}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
+                <td class="text-right">{{ invoiceView.vatAmount|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.totalIncludeTaxes'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
+                <td class="text-right">{{ invoiceView.totalWithVat|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
+            </tr>
+        {% endif %}
+
+        <tr>
+            <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.remainToPay'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
+            <td class="text-right">{{ invoiceView.amountRemainToPay|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
+        </tr>
+        </tbody>
+    </table>
+{% endif %}

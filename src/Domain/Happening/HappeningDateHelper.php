@@ -34,7 +34,7 @@ class HappeningDateHelper
             $timeZone
         );
 
-        return $dateFormatter->format($datetime);
+        return self::getStringOutOfFormat($dateFormatter, $datetime);
     }
 
     /**
@@ -53,6 +53,19 @@ class HappeningDateHelper
             $timeZone
         );
 
-        return $dateFormatter->format($datetime);
+        return self::getStringOutOfFormat($dateFormatter, $datetime);
+    }
+
+    /**
+     * @param \IntlDateFormatter $formatter
+     * @param \DateTimeInterface $datetime
+     *
+     * @return string
+     */
+    private static function getStringOutOfFormat(\IntlDateFormatter $formatter, \DateTimeInterface $datetime)
+    {
+        $formatted = $formatter->format($datetime);
+
+        return false !== $formatted ? $formatted : '';
     }
 }

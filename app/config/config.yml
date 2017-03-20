@@ -10,7 +10,9 @@ parameters:
 
 framework:
     #esi:             ~
-    translator:      { fallbacks: ["%locale%"] }
+    translator:
+        fallbacks: ["%locale%"]
+        logging: false
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -34,6 +36,8 @@ framework:
     http_method_override: true
     assets:
         version: "%assets_version%"
+    php_errors:
+        log: true
 
 # Twig Configuration
 twig:
@@ -196,6 +200,10 @@ fos_elastica:
                             type: integer
                         owner:
                             type: integer
+                        lastLoginAt:
+                            type: date
+                        imported:
+                            type: boolean
                         createdAt:
                             type: date
                         remainingToPay:
@@ -213,6 +221,10 @@ fos_elastica:
                         hasMeetingRequest:
                             type: boolean
                         hasPendingMeetingProposition:
+                            type: boolean
+                        hasScheduledMeeting:
+                            type: boolean
+                        hasInvoice:
                             type: boolean
                         organizationCategory:
                             type: string
@@ -285,9 +297,9 @@ elao_form_translation:
 
 services:
     twig.extension.text:
-       class: Twig_Extension_StringLoader
-       tags:
-           - { name: twig.extension }
+        class: Twig_Extension_StringLoader
+        tags:
+            - { name: twig.extension }
 
 infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
@@ -296,6 +308,7 @@ infrastructure:
     bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
+    print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
     package:
         default_labels:
             plans:

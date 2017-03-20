@@ -55,7 +55,7 @@ form.search.meeting.state.cancelled: Cancelled
 form.search.meeting.state.label: 'My meetings'
 form.search.meeting.state.receive: 'Proposals received'
 form.search.meeting.state.refused: Refused
-form.search.meeting.state.sent: 'Pending requests'
+form.search.meeting.state.sent: 'Your pending requests'
 form.search.meeting.type.label: 'My meetings'
 form.search.objective.label: Objectives
 form.search.objective.need: 'Answer to my needs'

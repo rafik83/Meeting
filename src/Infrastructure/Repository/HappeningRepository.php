@@ -188,6 +188,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('participations.participant', 'participant')
             ->join('participant.user', 'user')
             ->where('happening.event = :event')
+            ->andWhere('participations.disabled = false')
             ->orderBy('happening.begin')
             ->setParameter('event', $event);
 

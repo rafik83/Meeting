@@ -39,7 +39,9 @@ class CreateHandler
             $create->name,
             $create->begin,
             $create->end,
-            $create->blocking
+            $create->blocking,
+            $create->dispatch,
+            $create->timeSlots
         );
 
         foreach ($create->translations as $locale => $translation) {

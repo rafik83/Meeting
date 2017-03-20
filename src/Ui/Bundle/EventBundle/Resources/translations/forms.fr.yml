@@ -29,10 +29,14 @@ form.change_password_user.children.plainPassword.children.first.label: 'Nouveau 
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.change_password_user.children.submit.label: Envoyer
 form.create_unavailability.children.day.label: Le
+form.create_unavailability.children.message.label: Commentaire
 form.create_unavailability.children.participants.label: 'Indisponible:'
 form.create_unavailability.children.submit.label: Ajouter
 form.create_unavailability.children.time.children.begin.label: de
 form.create_unavailability.children.time.children.end.label: à
+form.create_unavailability.data.maxLength.translations.plural: 'caractères restants'
+form.create_unavailability.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
+form.create_unavailability.data.maxLength.translations.singular: 'caractère restant'
 form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
@@ -70,7 +74,7 @@ form.search.meeting.state.cancelled: Annulées
 form.search.meeting.state.label: 'Gestion de RDV'
 form.search.meeting.state.receive: 'Propositions reçues'
 form.search.meeting.state.refused: Refusées
-form.search.meeting.state.sent: 'Demandes en attente'
+form.search.meeting.state.sent: 'Vos demandes en attente'
 form.search.meeting.type.label: 'Gestion de RDV'
 form.search.objective.label: Objectifs
 form.search.objective.need: 'Répondre à mes besoins'
@@ -91,7 +95,7 @@ form.sheet_editable_text_data.children.submit.label: Enregistrer
 form.sheet_editable_text_data.data.maxLength.translations.plural: 'caractères restants'
 form.sheet_editable_text_data.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
 form.sheet_editable_text_data.data.maxLength.translations.singular: 'caractère restant'
-form.sheet_image_data.children.selectedProduct.label: 'Produits liées'
+form.sheet_image_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_image_data.children.submit.label: Enregistrer
 form.sheet_item_collection_data.children.items.label_add: Ajouter
 form.sheet_item_collection_data.children.items.label_delete: '&times;'
@@ -102,7 +106,7 @@ form.sheet_media_collection_data.children.medias.label_delete: '&times;'
 form.sheet_media_collection_data.children.medias.prototype.children.title.label: Titre
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
-form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liées'
+form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_media_collection_data.children.submit.label: Enregistrer
 gender.man: Monsieur
 gender.woman: Madame

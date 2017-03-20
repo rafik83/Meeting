@@ -8,10 +8,9 @@
 
 ### Requirements
 
-* [Vagrant 1.7.4+](http://www.vagrantup.com/downloads.html)
-* [VirtualBox 5.0.4+](https://www.virtualbox.org/wiki/Downloads)
-* [Ansible 1.9.3+](http://docs.ansible.com/intro_installation.html)
-* [Vagrant Landrush 0.18.0+](https://github.com/phinze/landrush) or [Vagrant Host Manager plugin 1.6.1+](https://github.com/smdahlen/vagrant-hostmanager)
+* [Vagrant 1.8.4](http://www.vagrantup.com/downloads.html)
+* [VirtualBox 5.0.32](http://download.virtualbox.org/virtualbox/5.0.32/)
+* [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
 
 ### Setup
 
@@ -87,6 +86,20 @@ Remarks :
 
 ### Deployment
 
+To deploy to preprod and prod, you need to be connected to VPN with this  ~/.ssh/config :
+
+        Host vimeet-preprod
+                User www-data
+                Hostname 10.11.0.83
+
+        Host vimeet-prod1
+                User www-data
+                Hostname 10.11.0.31
+
+        Host vimeet-prod2
+                User www-data
+                Hostname 10.11.0.32
+
 There are two branches and two command to deploy for each environment:
 
 - `preprod`
@@ -131,29 +144,29 @@ $locale = $event->getAvailableLocale($request->getLocale);
 
 ### Utils
 
-#### Récupérer la DB de prod
+Récupérer la DB de prod en locale, à faire dans la VM (nécessite d'avoir le mdp mysql de la prod - voir dans 1password):
 
-Se connecter à la prod pour dumper la DB
+        ⇒ make get-prod-db@vm
 
-        $ ssh proximum-web-apache-01
-        $ cd ~/proximum-vimeet.project.local/htdocs/current
-        $ cat app/config/parameters.yml # pour afficher le databasename, host, port, user et password de la DB
-        $ mysqldump --host [host] --port [port] -u [username] -p[password] [databasename] > prod.sql
-        $ exit
+Synchroniser la DB de préprod avec celle de la prod (nécessite d'avoir le mdp mysql de la prod et de la préprod - voir dans 1password)
 
-Puis en local, dans le répertoire du projet, télécharger la DB
+        $ make sync-db-from-prod@preprod
 
-        $ cd path/to/local/vimeet
-        $ scp proximum-web-apache-01:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
+Importer un fichier prod.sql placé sur le root du projet :
 
-Importer la DB depuis la VM
+        $ make import-preprod-db@vm
 
-        $ vagrant ssh
-        ⇒ bin/console doctrine:schema:drop --force
-        ⇒ mysql -u root proximum_vimeet < prod.sql
+### Jobs Queue
 
-Se connecter à la prod et supprimer le fichier dumpé
+* [Interface supervisord](http://vimeet.proximum.dev:9001/)
+* [Liste des jobs](http://vimeet.proximum.dev/app_dev.php/admin/fr/jobs/)
 
-        $ ssh proximum-web-apache-01
-        $ cd ~/proximum-vimeet.project.local/htdocs/current
-        $ rm prod.sql
+Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
+
+
+#### Ajouter un job
+
+Un job correspond une instance de l'entité `JMS\JobQueueBundle\Entity\Job`. Chaque job doit lancer une command console Symfony. 
+
+Pour ajouter un job, ajouter une méthode dans `Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter` et injecter la classe dans le service programmant le job.
+
