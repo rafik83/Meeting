@@ -18,7 +18,7 @@ class CustomRowBoughtViewQuery
     public $row;
 
     /**
-     * @param Row    $row
+     * @param Row $row
      */
     public function __construct(Row $row)
     {
