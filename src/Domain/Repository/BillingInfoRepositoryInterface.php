@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -24,9 +23,9 @@ interface BillingInfoRepositoryInterface
     public function getBySheet(Sheet $sheet);
 
     /**
-     * @param ArrayCollection|Sheet[]
+     * @param Sheet[]
      *
-     * @return ArrayCollection|BillingInfo[]
+     * @return BillingInfo[]
      */
     public function getBySheets($sheets);
 

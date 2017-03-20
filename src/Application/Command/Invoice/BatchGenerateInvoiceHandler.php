@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Application\Command\Invoice;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvoicedEvent;
+use Proximum\Vimeet\Application\View\Sheet\SheetInvoicedView;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class BatchGenerateInvoiceHandler
 {
@@ -28,7 +29,7 @@ class BatchGenerateInvoiceHandler
     private $createHandler;
 
     /**
-     * @var DelayedEventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -40,13 +41,13 @@ class BatchGenerateInvoiceHandler
     /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param CreateHandler            $createHandler
-     * @param DelayedEventDispatcher   $eventDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface       $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         CreateHandler $createHandler,
-        DelayedEventDispatcher $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $datetime
     ) {
         $this->sheetRepository = $sheetRepository;
@@ -71,22 +72,26 @@ class BatchGenerateInvoiceHandler
         $event      = $firstSheet->getEvent();
         $prefix     = $event->getInvoicePrefix();
 
-        $sheetsInvoiced = [];
+        $sheetInvoicedViews = [];
 
         foreach ($sheets as $sheet) {
-            if ($event === $sheet->getEvent() && true === $this->createHandler->handle(new Create($sheet, $prefix))) {
-                $sheetsInvoiced[] = $sheet;
+            if ($event === $sheet->getEvent()) {
+                $invoices = $this->createHandler->handle(new Create($sheet, $prefix));
+
+                if (!empty($invoices)) {
+                    $sheetInvoicedViews[] = new SheetInvoicedView($sheet, $invoices);
+                }
             }
         }
 
-        if (!empty($sheetsInvoiced)) {
+        if (!empty($sheetInvoicedViews)) {
             $this->eventDispatcher->dispatch(
                 Events::SHEET_INVOICED,
                 new SheetInvoicedEvent(
                     $batchGenerateInvoice->admin,
                     $event,
                     $this->datetime,
-                    $sheetsInvoiced
+                    $sheetInvoicedViews
                 )
             );
         }

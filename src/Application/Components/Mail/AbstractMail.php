@@ -48,22 +48,22 @@ class AbstractMail
     private $sender;
 
     /**
-     * @var string
+     * @var array of receivers email
      */
-    private $receiver;
+    private $receivers;
 
     /**
      * AbstractMail constructor.
      *
      * @param string $sender
-     * @param string $receiver
+     * @param string $email
      * @param string $locale
      */
-    public function __construct($sender, $receiver, $locale)
+    public function __construct($sender, $email, $locale)
     {
-        $this->sender   = $sender;
-        $this->receiver = $receiver;
-        $this->locale   = $locale;
+        $this->sender      = $sender;
+        $this->receivers[] = $email;
+        $this->locale      = $locale;
     }
 
     /**
@@ -75,11 +75,21 @@ class AbstractMail
     }
 
     /**
-     * @return string
+     * @param $email
      */
-    public function getReceiver()
+    public function addReceiver($email)
     {
-        return $this->receiver;
+        if (false === in_array($email, $this->receivers)) {
+            $this->receivers[] = $email;
+        }
+    }
+
+    /**
+     * @return array of receivers email
+     */
+    public function getReceivers()
+    {
+        return $this->receivers;
     }
 
     /**
