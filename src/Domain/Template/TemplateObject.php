@@ -304,6 +304,14 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @return TaggedDataView[]
+     */
+    public function getTaggedDataViews()
+    {
+        return $this->taggedDataViews;
+    }
+
+    /**
      * @return bool
      */
     public function hasOnlyTagUrl()

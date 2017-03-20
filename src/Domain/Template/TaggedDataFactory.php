@@ -94,7 +94,8 @@ class TaggedDataFactory
                     $object->getType(),
                     $object->isTranslatable(),
                     $object instanceof TranslatableInterface ? $object->getTranslations($eventLocales) : [],
-                    $value
+                    $value,
+                    $tag
                 );
 
                 $this->addTaggedDataView($tag, $taggedDataView);
@@ -112,26 +113,7 @@ class TaggedDataFactory
     {
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
-        $objects = $sheetTemplateData->getObjects();
-
-        /** @var TemplateObject $object */
-        foreach ($objects as $object) {
-            $tags = $object->getTags();
-            if (count($tags) === 0) {
-                continue;
-            }
-
-            foreach ($tags as $tagData) {
-                $tag = $tagData['tag'];
-                if (in_array($tag, Tag::getSetters())) {
-                    continue;
-                }
-
-                if (!empty($this->taggedDataViews[$tag])) {
-                    $object->addTaggedDataView($this->taggedDataViews[$tag]);
-                }
-            }
-        }
+        $sheetTemplateData->setTaggedDataViews($this->taggedDataViews);
 
         return $sheetTemplateData;
     }

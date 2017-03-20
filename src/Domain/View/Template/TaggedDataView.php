@@ -33,18 +33,25 @@ class TaggedDataView
     public $content;
 
     /**
+     * @var string
+     */
+    public $tag;
+
+    /**
      * TaggedDataView constructor.
      *
      * @param string $type
      * @param bool   $translatable
      * @param array  $translations
      * @param string $content
+     * @param string $tag
      */
-    public function __construct($type, $translatable, array $translations, $content)
+    public function __construct($type, $translatable, array $translations, $content, $tag)
     {
         $this->type         = $type;
         $this->translatable = $translatable;
         $this->translations = $translations;
         $this->content      = $content;
+        $this->tag          = $tag;
     }
 }

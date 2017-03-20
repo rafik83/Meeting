@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class Block extends AbstractChild
 {
@@ -68,6 +69,8 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $locale
+     *
      * @return string
      */
     public function getLabel($locale)
@@ -234,7 +237,7 @@ class Block extends AbstractChild
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object instanceof TemplateObject\Image
-                   || $object instanceof TemplateObject\EditableText
+                   || $object instanceof EditableText
                    || $object instanceof TemplateObject\Participant;
         });
     }
@@ -524,6 +527,37 @@ class Block extends AbstractChild
             foreach ($data as $tag => $value) {
                 if ($object->hasTag($tag) && $object instanceof TemplateObject\ContentObjectInterface) {
                     $object->setContentValue($value);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $taggedDataViews
+     *
+     * @return Block
+     */
+    public function setTaggedDataViews(array $taggedDataViews)
+    {
+        /** @var TemplateObject $object */
+        foreach ($this->getObjects() as $object) {
+            $tags = $object instanceof EditableText ? [$object->getTag()] : $object->getTags();
+
+            if (count($tags) === 0) {
+                continue;
+            }
+
+            foreach ($tags as $tagData) {
+                $tag = isset($tagData['tag']) ? $tagData['tag'] : $tagData;
+
+                if (in_array($tag, Tag::getSetters())) {
+                    continue;
+                }
+
+                if (!empty($taggedDataViews[$tag])) {
+                    $object->addTaggedDataView($taggedDataViews[$tag]);
                 }
             }
         }
