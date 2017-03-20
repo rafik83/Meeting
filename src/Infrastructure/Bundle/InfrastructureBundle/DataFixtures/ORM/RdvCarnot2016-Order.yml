@@ -7,6 +7,9 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             - 'Rdv'
             - 2017
             - 1
+            - true
+            - 'et'
+            - 20
             - 100000
             - 120000
             - 20000

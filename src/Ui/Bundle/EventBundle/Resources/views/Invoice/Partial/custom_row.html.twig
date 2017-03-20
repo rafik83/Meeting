@@ -1,0 +1,15 @@
+<tr>
+    <td>{{ customRowView.label }}</td>
+
+    <td class="text-right">
+        {{ customRowView.price|format_amount|localizedcurrency(currency, eventDefaultLocale) }}
+    </td>
+
+    <td class="text-right">
+        {{ customRowView.quantity }}
+    </td>
+
+    <td class="text-right">
+        {{ customRowView.total|format_amount|localizedcurrency(currency, eventDefaultLocale) }}
+    </td>
+</tr>

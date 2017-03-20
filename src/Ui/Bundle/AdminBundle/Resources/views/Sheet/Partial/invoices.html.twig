@@ -3,7 +3,7 @@
         {{ 'admin.sheet.details.invoices'|trans }}
     </div>
     <div class="panel-body">
-        {% if invoices|length > 0 %}
+        {% if invoiceViews|length > 0 %}
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -11,21 +11,27 @@
                     <th>{{ 'admin.invoice.column.orders'|trans }}</th>
                     <th>{{ 'admin.invoice.column.date'|trans }}</th>
                     <th class="text-right">{{ 'admin.invoice.column.total'|trans }}</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for invoice in invoices %}
+                {% for invoiceView in invoiceViews %}
                     <tr>
-                        <td>{{ invoice.number }}</td>
+                        <td>{{ invoiceView.number }}</td>
                         <td>
                             <ul>
-                                {% for order in invoice.orders %}
-                                    <li>{{ order.numero }}</li>
+                                {% for orderView in invoiceView.orderViews %}
+                                    <li>{{ orderView.numero }}</li>
                                 {% endfor %}
                             </ul>
                         </td>
-                        <td nowrap="nowrap">{{ invoice.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                        <td class="text-right">{{ invoice.total|format_amount|localizedcurrency(invoice.currency) }}</td>
+                        <td nowrap="nowrap">{{ invoiceView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td class="text-right">{{ invoiceView.total|format_amount|localizedcurrency(invoiceView.currency) }}</td>
+                        <td class="text-right">
+                            <a href="{{ invoiceView.url }}" target="_blank" class="btn btn-sm btn-default">
+                                {{ 'admin.invoice.show'|trans }}
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
