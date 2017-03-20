@@ -171,8 +171,8 @@ class OrderRepository implements OrderRepositoryInterface
             ->select('_order, sheet, row, promotionCode')
             ->from(Order::class, '_order', '_order.id')
             ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true AND _order.cancelled = false')
-            ->join('_order.rows', 'row')
-            ->join('_order.promotionCodes', 'promotionCode')
+            ->leftJoin('_order.rows', 'row')
+            ->leftJoin('_order.promotionCodes', 'promotionCode')
             ->setParameter('event', $event)
         ;
 
