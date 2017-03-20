@@ -38,10 +38,12 @@ class TaggedDataFactory
     }
 
     /**
+     * Get tagged data from registration template and build TaggedDataView into sheetTemplate
+     *
      * @param Sheet  $sheet
      * @param string $locale
      *
-     * @return TemplateData
+     * @return TemplateData sheetTemplate
      */
     public function buildTaggedDataView(Sheet $sheet, $locale)
     {
@@ -63,7 +65,8 @@ class TaggedDataFactory
     {
         $registerTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
 
-        $objects = $registerTemplateData->getObjects();
+        $objects      = $registerTemplateData->getObjects();
+        $eventLocales = $sheet->getEvent()->getLocales();
 
         foreach ($objects as $object) {
             $tags = $object->getTags();
@@ -90,7 +93,7 @@ class TaggedDataFactory
                 $taggedDataView = new TaggedDataView(
                     $object->getType(),
                     $object->isTranslatable(),
-                    $object instanceof TranslatableInterface ? $object->getTranslations() : [],
+                    $object instanceof TranslatableInterface ? $object->getTranslations($eventLocales) : [],
                     $value
                 );
 
@@ -111,6 +114,7 @@ class TaggedDataFactory
 
         $objects = $sheetTemplateData->getObjects();
 
+        /** @var TemplateObject $object */
         foreach ($objects as $object) {
             $tags = $object->getTags();
             if (count($tags) === 0) {

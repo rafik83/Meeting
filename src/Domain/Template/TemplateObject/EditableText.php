@@ -216,9 +216,9 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getTranslations()
+    public function getTranslations(array $locales = [])
     {
         if (!$this->isTranslatable() || !is_array($this->data['text'])) {
             return [];

@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
+use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
-class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface
+class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
     /**
      * Need and supply objectives constants
@@ -389,5 +390,22 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }
 
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslations(array $locales = [])
+    {
+        $translations = [];
+
+        foreach ($this->getItems() as $itemKey) {
+            foreach ($locales as $locale) {
+                $label = $this->getLabelForKey($itemKey, $locale);
+                $translations[$locale] = $label;
+            }
+        }
+
+        return $translations;
     }
 }
