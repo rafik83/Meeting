@@ -1,3 +1,9 @@
 services:
     behat_storage:
         class: Proximum\Vimeet\Behat\Service\Storage
+
+    proxy.event_context:
+        class: Proximum\Vimeet\Behat\Proxy\EventContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@vimeet_infrastructure.repository.event_repository'

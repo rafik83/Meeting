@@ -10,46 +10,28 @@
 
 namespace Proximum\Vimeet\Behat\Service;
 
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
 
-class Storage
+class Storage implements StorageInterface
 {
-    /** @var null|Event */
-    private $lastEvent;
-
-    /** @var null|Sheet */
-    private $lastSheet;
+    /**
+     * @var array
+     */
+    private $storage;
 
     /**
-     * @return null|Event
+     * {@inheritdoc}
      */
-    public function getLastEvent()
+    public function set($name, $value)
     {
-        return $this->lastEvent;
+        $this->storage[$name] = $value;
     }
 
     /**
-     * @param Event $event
+     * {@inheritdoc}
      */
-    public function setLastEvent(Event $event)
+    public function get($name)
     {
-        $this->lastEvent = $event;
-    }
-
-    /**
-     * @return null|Sheet
-     */
-    public function getLastSheet()
-    {
-        return $this->lastSheet;
-    }
-
-    /**
-     * @param Sheet $sheet
-     */
-    public function setLastSheet(Sheet $sheet)
-    {
-        $this->lastSheet = $sheet;
+        return isset($this->storage[$name]) ? $this->storage[$name] : null;
     }
 }

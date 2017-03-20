@@ -23,8 +23,7 @@ default:
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
                 - Proximum\Vimeet\Behat\Context\FeatureContext: ~
                 - Proximum\Vimeet\Behat\Context\Domain\EventContext:
-                    - '@behat_storage'
-                    - '@vimeet_infrastructure.repository.event_repository'
+                    - '@proxy.event_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SlotContext:
                     - '@behat_storage'
                     - '@vimeet_infrastructure.repository.meeting_slot_repository'

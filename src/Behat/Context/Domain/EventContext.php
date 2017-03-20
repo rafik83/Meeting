@@ -3,9 +3,8 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
-use Proximum\Vimeet\Behat\Service\Storage;
-use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
-use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\EventContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -16,17 +15,6 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -34,22 +22,15 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class EventContext implements Context
 {
-    /** @var Storage */
-    private $storage;
-
-    /** @var EventRepositoryInterface */
-    private $eventRepository;
+    /** @var EventContextProxyInterface */
+    private $eventContextProxy;
 
     /**
-     * EventContext constructor.
-     *
-     * @param Storage                  $storage
-     * @param EventRepositoryInterface $eventRepository
+     * @param EventContextProxyInterface $eventContextProxy
      */
-    public function __construct(Storage $storage, EventRepositoryInterface $eventRepository)
+    public function __construct(EventContextProxyInterface $eventContextProxy)
     {
-        $this->storage = $storage;
-        $this->eventRepository = $eventRepository;
+        $this->eventContextProxy = $eventContextProxy;
     }
 
     /**
@@ -60,8 +41,8 @@ class EventContext implements Context
     public function createEvent($eventTitle = null)
     {
         $event = EventFactory::createEvent($eventTitle);
-        $this->eventRepository->add($event);
-        $this->storage->setLastEvent($event);
+        $this->eventContextProxy->getEventRepository()->add($event);
+        $this->eventContextProxy->getStorage()->set('event', $event);
     }
 
     /**
@@ -74,18 +55,18 @@ class EventContext implements Context
      */
     public function createMeetingOnSpot($spotReference)
     {
-        if (!$this->lastEvent) {
+        if (!$this->eventContextProxy->getStorage()->get('event')) {
             $this->createEvent();
         }
 
-        $spot = $this->getSpotRepository()->findByReference($this->lastEvent, $spotReference);
+        $spot = $this->getSpotRepository()->findByReference($this->eventContextProxy->getStorage()->get('event'), $spotReference);
 
         if (null === $spot) {
             throw new \InvalidArgumentException('Given spot reference not exists');
         }
 
         $meetingRequest = $this->createMeetinRequest();
-        $slots = $this->getMeetingSlotRepository()->findByEvent($this->lastEvent);
+        $slots = $this->getMeetingSlotRepository()->findByEvent($this->eventContextProxy->getStorage()->get('event'));
 
         if (0 === count($slots)) {
             throw new \Exception('There are no available slot for this meeting');
@@ -170,7 +151,7 @@ class EventContext implements Context
      */
     public function createSheet(User $user = null, Type $type = null)
     {
-        if (!$this->storage->getLastEvent()) {
+        if (!$this->eventContextProxy->getStorage()->get('event')) {
             throw new \InvalidArgumentException('Missing event');
         }
 
@@ -197,7 +178,7 @@ class EventContext implements Context
      */
     public function createType()
     {
-        if (!$this->storage->getLastEvent()) {
+        if (!$this->eventContextProxy->getStorage()->get('event')) {
             throw new \InvalidArgumentException('Missing event');
         }
 
@@ -217,17 +198,20 @@ class EventContext implements Context
      */
     private function createRegistrationTemplate()
     {
-        if (!$this->storage->getLastEvent()) {
+        /** @var Event|null $event */
+        $event = $this->eventContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
             throw new \InvalidArgumentException('Missing event');
         }
 
         $registrationTemplate = new RegistrationTemplate(
             'RegistrationTemplate',
             [],
-            $this->lastEvent->getLocales(),
-            $this->lastEvent->getFallback(),
+            $event->getLocales(),
+            $event->getFallback(),
             new \DateTime(),
-            $this->lastEvent
+            $event
         );
         $this->getRegistrationTemplateRepository()->add($registrationTemplate);
 
