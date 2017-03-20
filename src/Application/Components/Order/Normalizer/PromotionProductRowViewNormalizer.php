@@ -13,14 +13,10 @@ namespace Proximum\Vimeet\Application\Components\Order\Normalizer;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionProductRowView;
 use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class PromotionProductRowViewNormalizer implements NormalizerInterface, NormalizerAwareInterface
+class PromotionProductRowViewNormalizer implements NormalizerInterface
 {
-    use NormalizerAwareTrait;
-
     /**
      * @param PromotionProductRowView $object
      * @param string                  $format

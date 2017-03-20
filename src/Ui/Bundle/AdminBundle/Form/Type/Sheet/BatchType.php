@@ -71,12 +71,8 @@ class BatchType extends AbstractType
                 ->add('disable', SubmitType::class)
                 ->add('addCatalog', SubmitType::class)
                 ->add('removeCatalog', SubmitType::class)
+                ->add('generateInvoice', SubmitType::class)
             ;
-
-            // feature disabled
-            if (false) {
-                $builder->add('generateInvoice', SubmitType::class);
-            }
         }
 
         $builder

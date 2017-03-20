@@ -8,9 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Sheet\BillingInfos;
-
-use Proximum\Vimeet\Domain\Model\Address;
+namespace Proximum\Vimeet\Application\View\Invoice;
 
 class BillingInfosView
 {
@@ -57,17 +55,20 @@ class BillingInfosView
     public $reference;
 
     /**
-     * @param string  $gender
-     * @param string  $lastname
-     * @param string  $firstname
-     * @param string  $function
-     * @param string  $phone
-     * @param string  $mobile
-     * @param string  $email
-     * @param string  $company
-     * @param Address $address
-     * @param string  $vatNumber
-     * @param string  $reference
+     * @param string $gender
+     * @param string $lastname
+     * @param string $firstname
+     * @param string $function
+     * @param string $phone
+     * @param string $mobile
+     * @param string $email
+     * @param string $company
+     * @param string $street
+     * @param string $zipcode
+     * @param string $city
+     * @param string $country
+     * @param string $vatNumber
+     * @param string $reference
      */
     public function __construct(
         $gender,
@@ -78,7 +79,10 @@ class BillingInfosView
         $mobile,
         $email,
         $company,
-        Address $address,
+        $street,
+        $zipcode,
+        $city,
+        $country,
         $vatNumber,
         $reference
     ) {
@@ -90,10 +94,10 @@ class BillingInfosView
         $this->mobile    = $mobile;
         $this->email     = $email;
         $this->company   = $company;
-        $this->street    = $address->getStreet();
-        $this->zipcode   = $address->getZipcode();
-        $this->city      = $address->getCity();
-        $this->country   = $address->getCountry();
+        $this->street    = $street;
+        $this->zipcode   = $zipcode;
+        $this->city      = $city;
+        $this->country   = $country;
         $this->vatNumber = $vatNumber;
         $this->reference = $reference;
     }

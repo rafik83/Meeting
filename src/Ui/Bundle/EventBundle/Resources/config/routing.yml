@@ -547,6 +547,15 @@ event_order_summary_total:
     methods: [GET]
     defaults: { _controller: EventBundle:Order:summaryTotal }
 
+# This route is available publicly, without authentication
+event_invoice_show:
+    path: /invoice/{sheet}/{hash}z{invoice}.{format} # "z" is a separator
+    requirements:
+        sheet: \d+
+        invoice: \d+
+        format: (html|pdf)
+    methods: [GET]
+    defaults: { _controller: EventBundle:Invoice:show }
 
 #
 # Agenda

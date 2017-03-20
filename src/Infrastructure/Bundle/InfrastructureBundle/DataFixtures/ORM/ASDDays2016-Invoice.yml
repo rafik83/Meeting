@@ -5,11 +5,14 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             - '@sheet_asddays_1'
             - '@prefix_asddays'
             - 'As'
-            - '2016'
-            - '0001'
-            - '1000'
-            - '1020'
-            - '20'
+            - 2016
+            - 1
+            - true
+            - 'et'
+            - 20
+            - 1000
+            - 1200
+            - 200
             - 'EUR'
-            - ''
+            - '[]'
             - <(new DateTime('12-10-2016 08:00:00.000'))>
