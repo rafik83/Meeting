@@ -63,9 +63,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('invoice')
+            ->select('invoice, orders')
             ->from(Invoice::class, 'invoice')
-            ->where('invoice.sheet = :sheet')
+            ->join('invoice.orders', 'orders', 'WITH', 'invoice.sheet = :sheet')
             ->setParameter('sheet', $sheet)
             ->orderBy('invoice.id', 'DESC');
 
