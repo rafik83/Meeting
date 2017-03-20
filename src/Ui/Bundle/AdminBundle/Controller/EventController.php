@@ -124,6 +124,7 @@ class EventController extends Controller
         $admin = $this->getUser();
         
         if (Finder::IsAllowedToFind($admin)) {
+            
             $filterTransaction = new FilterTransaction($admin);
             $transactionForm = $this->createForm(FilterTransactionType::class, $filterTransaction);
     
@@ -131,11 +132,11 @@ class EventController extends Controller
                 try {
                     $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
             
-                    return $this->redirect($this->generateUrl('admin.event.transaction_export', [
+                    return $this->redirect($this->generateUrl('admin_event_list', [
                         'transactionListView' => $transactionListView
-                    ]));
+                    ]) . '#transactionsExport');
                 } catch (TransactionNotFoundException $exception) {
-                
+                    dump($exception);die;
                 }
             }
         }

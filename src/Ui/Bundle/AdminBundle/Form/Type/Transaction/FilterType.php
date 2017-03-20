@@ -28,7 +28,7 @@ class FilterType extends AbstractType
         $firstDay->modify('first day of last month');
         
         $lastDay = new \DateTime();
-        $lastDay->modify('last day of last month');
+        $lastDay->modify('last day of last month + 23 hours');
         
         $builder
             ->add('beginDate', DateType::class, [

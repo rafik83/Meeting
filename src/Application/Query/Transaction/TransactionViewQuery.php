@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Transaction;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -32,16 +33,23 @@ class TransactionViewQuery
     public $payment;
     
     /**
+     * @var Event
+     */
+    public $event;
+    
+    /**
      * TransactionViewQuery constructor.
      *
      * @param Transaction $transaction
      * @param Sheet       $sheet
      * @param Payment     $payment
+     * @param Event       $event
      */
-    public function __construct(Transaction $transaction, Sheet $sheet, Payment $payment)
+    public function __construct(Transaction $transaction, Sheet $sheet, Payment $payment, Event $event)
     {
         $this->transaction = $transaction;
         $this->sheet       = $sheet;
         $this->payment     = $payment;
+        $this->event       = $event;
     }
 }

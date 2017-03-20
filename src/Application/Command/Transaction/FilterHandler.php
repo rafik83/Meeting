@@ -66,18 +66,19 @@ class FilterHandler
             throw new TransactionNotFoundException();
         }
         
-        $transactions = $this->transactionRepository->findPaidByDateRangeAndCrossEvent(
+        $payments = $this->transactionRepository->findPaidByDateRangeAndCrossEvent(
             $command->beginDate,
             $command->endDate,
             $events
         );
         
         $transactionViews = [];
-        foreach ($transactions as $transaction) {
+        foreach ($payments as $payment ) {
             $transactionViews[] = $this->transactionViewQueryHandler->handle(new TransactionViewQuery(
-                $transaction,
-                $transaction->getSheet(),
-                null
+                $payment->getTransaction(),
+                $payment->getTransaction()->getSheet(),
+                $payment,
+                $payment->getTransaction()->getSheet()->getEvent()
             ));
         }
         

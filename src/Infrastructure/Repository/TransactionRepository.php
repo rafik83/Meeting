@@ -157,20 +157,21 @@ class TransactionRepository implements TransactionRepositoryInterface
     ) {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
-            ->select('transaction', 'payment')
+            ->select('payment')
             ->from(Transaction::class, 'transaction')
-            ->join(Sheet::class, 'sheet')
-            ->join(Payment::class, 'payment', 'WITH', 'payment.transaction = transaction')
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event IN (:events)')
+            ->leftJoin(Payment::class, 'payment', 'WITH', 'payment.transaction = transaction')
             ->where('transaction.date BETWEEN :beginDate and :endDate')
             ->andWhere('transaction.state = :state')
-            ->andWhere('sheet.event IN (:events)')
+            ->andWhere('payment.id IS NOT NULL')
+            ->groupBy('transaction.id')
             ->setParameters([
                 'state' => Transaction::STATE_PAID,
                 'beginDate' => $beginDate,
                 'endDate' => $endDate,
                 'events' => $events,
             ]);
-       
+      
         return $queryBuilder->getQuery()->getResult();
     }
 }

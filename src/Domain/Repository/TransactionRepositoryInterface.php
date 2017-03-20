@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 
@@ -69,9 +70,9 @@ interface TransactionRepositoryInterface
     /**
      * @param \DateTimeInterface $beginDate
      * @param \DateTimeInterface $endDate
-     * @param Event[] $events
+     * @param Event[]            $events
      *
-     * @return Transaction[]
+     * @return Payment[]
      */
     public function findPaidByDateRangeAndCrossEvent(
         \DateTimeInterface $beginDate,
