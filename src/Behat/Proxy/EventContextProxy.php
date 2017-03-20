@@ -4,24 +4,24 @@ namespace Proximum\Vimeet\Behat\Proxy;
 
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\EventContextProxyInterface;
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Behat\Service\Manager\EventManager;
 
 class EventContextProxy implements EventContextProxyInterface
 {
     /** @var StorageInterface */
     private $storage;
 
-    /** @var EventRepositoryInterface */
-    private $eventRepository;
+    /** @var EventManager */
+    private $eventManager;
 
     /**
-     * @param StorageInterface         $storage
-     * @param EventRepositoryInterface $eventRepository
+     * @param StorageInterface $storage
+     * @param EventManager     $eventManager
      */
-    public function __construct(StorageInterface $storage, EventRepositoryInterface $eventRepository)
+    public function __construct(StorageInterface $storage, EventManager $eventManager)
     {
-        $this->storage         = $storage;
-        $this->eventRepository = $eventRepository;
+        $this->storage      = $storage;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -33,10 +33,10 @@ class EventContextProxy implements EventContextProxyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return EventManager
      */
-    public function getEventRepository()
+    public function getEventManager()
     {
-        return $this->eventRepository;
+        return $this->eventManager;
     }
 }

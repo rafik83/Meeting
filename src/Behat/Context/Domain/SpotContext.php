@@ -3,35 +3,19 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
-use Proximum\Vimeet\Behat\Service\Storage;
-use Proximum\Vimeet\Domain\Model\Spot;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\SpotContextProxyInterface;
 
 class SpotContext implements Context
 {
-    /** @var Storage */
-    private $storage;
-
-    /** @var SpotRepositoryInterface */
-    private $spotRepository;
-
-    /** @var SheetRepositoryInterface */
-    private $sheetRepository;
+    /** @var SpotContextProxyInterface */
+    private $spotContextProxy;
 
     /**
-     * @param Storage                  $storage
-     * @param SpotRepositoryInterface  $spotRepository
-     * @param SheetRepositoryInterface $sheetRepository
+     * @param SpotContextProxyInterface $spotContextProxy
      */
-    public function __construct(
-        Storage $storage,
-        SpotRepositoryInterface $spotRepository,
-        SheetRepositoryInterface $sheetRepository
-    ) {
-        $this->storage = $storage;
-        $this->spotRepository = $spotRepository;
-        $this->sheetRepository = $sheetRepository;
+    public function __construct(SpotContextProxyInterface $spotContextProxy)
+    {
+        $this->spotContextProxy = $spotContextProxy;
     }
 
     /**
@@ -40,19 +24,16 @@ class SpotContext implements Context
      * @param string $reference
      * @param int    $meetingCapacity
      * @param int    $seatCapacity
-     *
-     * @return Spot
      */
-    public function createSpot($reference, $meetingCapacity, $seatCapacity)
+    public function thereIsAnActiveSpot($reference, $meetingCapacity, $seatCapacity)
     {
-        if (!$this->storage->getLastEvent()) {
-            throw new \InvalidArgumentException('Missing event');
+        $event = $this->spotContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
         }
 
-        $spot = new Spot($reference, $this->storage->getLastEvent(), 1, $meetingCapacity, $seatCapacity, true);
-        $this->spotRepository->add($spot);
-
-        return $spot;
+        $this->spotContextProxy->getSpotManager()->create($event, $reference, $meetingCapacity, $seatCapacity);
     }
 
     /**
@@ -60,23 +41,20 @@ class SpotContext implements Context
      *
      * @param string $spotReference
      */
-    public function spotIsAssignedToAnotherSheet($spotReference)
+    public function spotIsAssignedToThisSheet($spotReference)
     {
-        if (!$this->storage->getLastEvent()) {
-            throw new \InvalidArgumentException('Missing event');
+        $event = $this->spotContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
         }
 
-        if (!$this->storage->getLastSheet()) {
-            throw new \InvalidArgumentException('Missing sheet');
+        $sheet = $this->spotContextProxy->getStorage()->get('sheet');
+
+        if (null === $sheet) {
+            throw new \InvalidArgumentException('Missing Sheet');
         }
 
-        $spot = $this->getSpotRepository()->findByReference($this->storage->getLastEvent(), $spotReference);
-
-        if (null === $spot) {
-            throw new \InvalidArgumentException('Given spot reference not exists');
-        }
-
-        $this->storage->getLastSheet()->setSpot($spot);
-        $this->sheetRepository->set($this->storage->getLastSheet());
+        $this->spotContextProxy->getSpotManager()->assignToSheet($event, $sheet, $spotReference);
     }
 }

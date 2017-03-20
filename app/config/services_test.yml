@@ -1,9 +1,105 @@
 services:
+    #
+    # Storage
+    #
     behat_storage:
-        class: Proximum\Vimeet\Behat\Service\Storage
+        class: Proximum\Vimeet\Behat\Service\Storage\Storage
 
-    proxy.event_context:
+    #
+    # Managers
+    #
+    behat_manager.user:
+        class: Proximum\Vimeet\Behat\Service\Manager\UserManager
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+
+    behat_manager.event:
+        class: Proximum\Vimeet\Behat\Service\Manager\EventManager
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    behat_manager.type:
+        class: Proximum\Vimeet\Behat\Service\Manager\TypeManager
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@behat_manager.user'
+            - '@behat_manager.sheet_template'
+            - '@behat_manager.registration_template'
+
+    behat_manager.sheet_template:
+        class: Proximum\Vimeet\Behat\Service\Manager\SheetTemplateManager
+        arguments:
+            - '@repository.template.sheet_template_repository'
+
+    behat_manager.registration_template:
+        class: Proximum\Vimeet\Behat\Service\Manager\RegistrationTemplateManager
+        arguments:
+            - '@repository.template.registration_template_repository'
+
+    behat_manager.sheet:
+        class: Proximum\Vimeet\Behat\Service\Manager\SheetManager
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@behat_manager.user'
+            - '@behat_manager.type'
+
+    behat_manager.participant:
+        class: Proximum\Vimeet\Behat\Service\Manager\ParticipantManager
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@behat_manager.sheet'
+            - '@behat_manager.user'
+
+    behat_manager.slot:
+        class: Proximum\Vimeet\Behat\Service\Manager\SlotManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.meeting.slot.slot_generator'
+
+    behat_manager.spot:
+        class: Proximum\Vimeet\Behat\Service\Manager\SpotManager
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    behat_manager.meeting:
+        class: Proximum\Vimeet\Behat\Service\Manager\MeetingManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@behat_manager.participant'
+            - '@behat_manager.slot'
+            - '@behat_manager.spot'
+
+    #
+    # Proxies
+    #
+    behat_proxy.event_context:
         class: Proximum\Vimeet\Behat\Proxy\EventContextProxy
         arguments:
             - '@behat_storage'
-            - '@vimeet_infrastructure.repository.event_repository'
+            - '@behat_manager.event'
+
+    behat_proxy.slot_context:
+        class: Proximum\Vimeet\Behat\Proxy\SlotContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.slot'
+
+    behat_proxy.spot_context:
+        class: Proximum\Vimeet\Behat\Proxy\SpotContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.spot'
+
+    behat_proxy.sheet_context:
+        class: Proximum\Vimeet\Behat\Proxy\SheetContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.sheet'
+
+    behat_proxy.meeting_context:
+        class: Proximum\Vimeet\Behat\Proxy\MeetingContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.meeting'

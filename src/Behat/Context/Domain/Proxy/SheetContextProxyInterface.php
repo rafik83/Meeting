@@ -3,9 +3,9 @@
 namespace Proximum\Vimeet\Behat\Context\Domain\Proxy;
 
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
-use Proximum\Vimeet\Behat\Service\Manager\EventManager;
+use Proximum\Vimeet\Behat\Service\Manager\SheetManager;
 
-interface EventContextProxyInterface
+interface SheetContextProxyInterface
 {
     /**
      * @return StorageInterface
@@ -13,7 +13,7 @@ interface EventContextProxyInterface
     public function getStorage();
 
     /**
-     * @return EventManager
+     * @return SheetManager
      */
-    public function getEventManager();
+    public function getSheetManager();
 }

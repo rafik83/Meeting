@@ -3,35 +3,19 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
-use Proximum\Vimeet\Behat\Service\Storage;
-use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
-use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\SlotContextProxyInterface;
 
 class SlotContext implements Context
 {
-    /** @var Storage */
-    private $storage;
-
-    /** @var MeetingSlotRepositoryInterface */
-    private $meetingSlotRepository;
-
-    /** @var SlotGenerator */
-    private $slotGenerator;
+    /** @var SlotContextProxyInterface */
+    private $slotContextProxy;
 
     /**
-     * @param Storage                        $storage
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param SlotGenerator                  $slotGenerator
+     * @param SlotContextProxyInterface $slotContextProxy
      */
-    public function __construct(
-        Storage $storage,
-        MeetingSlotRepositoryInterface $meetingSlotRepository,
-        SlotGenerator $slotGenerator
-    ) {
-        $this->storage = $storage;
-        $this->meetingSlotRepository = $meetingSlotRepository;
-        $this->slotGenerator = $slotGenerator;
+    public function __construct(SlotContextProxyInterface $slotContextProxy)
+    {
+        $this->slotContextProxy = $slotContextProxy;
     }
 
     /**
@@ -39,27 +23,14 @@ class SlotContext implements Context
      *
      * @param int $quantity
      */
-    public function createSlots($quantity)
+    public function thereAreSlots($quantity)
     {
-        if (!$this->storage->getLastEvent()) {
-            throw new \InvalidArgumentException('Missing event');
+        $event = $this->slotContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
         }
 
-        $interval = 5;
-        $duration = 10;
-
-        $now = new \DateTime();
-        $begin = new \DateTime(sprintf('%s %s', $now->format('Y-m-d'), '08:00:00'));
-        $end = clone $begin;
-        $end->add(new \DateInterval(sprintf('PT%sM', $interval * $duration * $quantity)));
-
-        $slots = $this->slotGenerator->generate(
-            $this->storage->getLastEvent(),
-            [new Recipe($begin, $end, $interval, $duration)]
-        );
-
-        foreach ($slots as $slot) {
-            $this->meetingSlotRepository->add($slot);
-        }
+        $this->slotContextProxy->getSlotManager()->create($event, $quantity);
     }
 }

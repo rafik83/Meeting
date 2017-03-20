@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Behat\Service;
+namespace Proximum\Vimeet\Behat\Service\Storage;
 
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
 

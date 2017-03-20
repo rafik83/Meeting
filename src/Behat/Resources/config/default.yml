@@ -23,15 +23,15 @@ default:
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
                 - Proximum\Vimeet\Behat\Context\FeatureContext: ~
                 - Proximum\Vimeet\Behat\Context\Domain\EventContext:
-                    - '@proxy.event_context'
+                    - '@behat_proxy.event_context'
+                - Proximum\Vimeet\Behat\Context\Domain\SheetContext:
+                    - '@behat_proxy.sheet_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SlotContext:
-                    - '@behat_storage'
-                    - '@vimeet_infrastructure.repository.meeting_slot_repository'
-                    - '@domain.meeting.slot.slot_generator'
+                    - '@behat_proxy.slot_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SpotContext:
-                    - '@behat_storage'
-                    - '@vimeet_infrastructure.repository.spot_repository'
-                    - '@vimeet_infrastructure.repository.sheet_repository'
+                    - '@behat_proxy.spot_context'
+                - Proximum\Vimeet\Behat\Context\Domain\MeetingContext:
+                    - '@behat_proxy.meeting_context'
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser
