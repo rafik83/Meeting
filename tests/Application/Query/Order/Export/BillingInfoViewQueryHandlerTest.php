@@ -24,7 +24,6 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BillingInfoViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
-
     /** @var ObjectProphecy */
     private $billingInfoRepository;
 
