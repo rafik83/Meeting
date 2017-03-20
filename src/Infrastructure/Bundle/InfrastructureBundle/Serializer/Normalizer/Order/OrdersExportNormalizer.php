@@ -20,6 +20,8 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
 {
     use NormalizerAwareTrait;
 
+    private $charset = Charset::UTF_8;
+
     /**
      * {@inheritdoc}
      */
@@ -27,6 +29,10 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
     {
         if (!$object instanceof OrdersExportView) {
             throw new \Exception('Invalid object');
+        }
+
+        if (isset($context['charset']) && $context['charset'] !== $this->charset) {
+            $this->charset = $context['charset'];
         }
 
         $columns = $this->createColumnName($object);
@@ -91,6 +97,10 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
      */
     private function convertCharset($input)
     {
-        return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT", $input);
+        if ($this->charset !== Charset::UTF_8) {
+            return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT", $input);
+        }
+
+        return $input;
     }
 }

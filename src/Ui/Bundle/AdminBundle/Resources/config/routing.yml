@@ -1276,3 +1276,21 @@ admin_planning_export_link:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Planning/Export:exportPlanningPrint }
+
+#
+# Order
+#
+admin_order_export:
+    path: /event/{event}/order/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Order/Export:export }
+
+admin_order_export_file:
+    path: /event/{event}/order/export/link/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Order/Export:exportFile }

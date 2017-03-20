@@ -2952,6 +2952,12 @@ services:
             - '@command.planning.export_planning_handler'
         tags:
             - { name: console.command }
+    command.order.export_order_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand
+        arguments:
+            - '@command.order.export.export_orders_handler'
+        tags:
+            - { name: console.command }
 
     #
     # Funnel
@@ -3704,3 +3710,25 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator }
+
+    #
+    # Order export
+    #
+    command.order.export.export_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Order\Export\ExportJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Export\ExportJobCreator }
+    command.order.export.export_orders_handler:
+        class: Proximum\Vimeet\Application\Command\Order\Export\ExportOrdersHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.serializer_adapter'
+            - '@query.order.export.orders_export_view_query_handler'
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+            - '%infrastructure.export_order_path%'
+            - '@datetime'

@@ -377,6 +377,7 @@ admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
+admin.order.export.button.label: 'Exporter les commandes'
 admin.order.link: Commandes
 admin.order.sheet: Fiche
 admin.order.title: 'Liste des commandes'
