@@ -22,10 +22,13 @@ class MeetingNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = [])
     {
+        // The boolean value are return as 1 or 0
+        // therefore, the boolean must be change to string true or false to be interpreted
+
         return [
             '@id'             => $object->reference,
             'id'              => $object->id,
-            'isVisio'         => $object->isVisio,
+            'isVisio'         => $object->isVisio ? 'true' : 'false',
             'sheetList'       => [
                 'Sheet' => array_map(function (SheetView $sheet) {
                     return ['@reference' => $sheet->reference];

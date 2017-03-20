@@ -2,6 +2,7 @@
 /web/integration/dist/
 /app/config/parameters.yml
 /var/participants_imports
+/var/planning-print
 /var/bootstrap.php.cache
 /var/SymfonyRequirements.php
 /var/cache
@@ -12,6 +13,7 @@
 !bin/console
 !bin/symfony_requirements
 /composer.phar
+/*.sql
 
 # Tests
 /var/tests/*

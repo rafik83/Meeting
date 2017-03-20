@@ -56,10 +56,12 @@ class CampaignAssembler
         Constant::NO_ORDER => 'admin.sheet.filter.no_order',
         Constant::HAS_CART => 'admin.sheet.filter.has_cart',
         'boolean_filters'  => 'admin.sheet.filter.template_filters',
+        'hasInvoice'       => 'form.sheet_filter.children.hasInvoice.label',
         'hasRemainingToPay'             => 'form.sheet_filter.children.hasRemainingToPay.label',
         'hasHappeningParticipation'     => 'form.sheet_filter.children.hasHappeningParticipation.label',
         'hasNoMeetingRequest'           => 'form.sheet_filter.children.hasNoMeetingRequest.label',
         'hasPendingMeetingPropositions' => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
+        'hasScheduledMeeting'           => 'form.sheet_filter.children.hasScheduledMeeting.label',
     ];
 
     /**
@@ -177,6 +179,8 @@ class CampaignAssembler
                     case 'hasHappeningParticipation':
                     case 'hasNoMeetingRequest':
                     case 'hasPendingMeetingPropositions':
+                    case 'hasScheduledMeeting':
+                    case 'hasInvoice':
                         $currentValue = $currentValue
                             ? $this->translator->trans('boolean.true')
                             : $this->translator->trans('boolean.false');

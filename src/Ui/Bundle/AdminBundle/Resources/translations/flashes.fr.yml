@@ -41,11 +41,13 @@ flash.admin.partner.update.success: 'Le partenaire a bien été édité avec suc
 flash.admin.planner.export.daysNotConfigured: 'Les jours de l''événement ne sont pas configurés'
 flash.admin.planner.export.slotNotConfigured: 'Les créneaux de rendez-vous ne sont pas configurés'
 flash.admin.planner.import.success: 'Importation des données réalisée avec succès'
+flash.admin.planning.export.success: 'Vous recevrez un email lorsque le fichier d''export des plannings est prêt.'
 flash.admin.product.create.success: 'Le produit a bien été créé'
 flash.admin.product.import.success: 'Le catalogue de produits et les forfaits ont été importés'
 flash.admin.product.update.success: 'Le produit a été modifié avec succès'
 flash.admin.reset_password_token.expired: 'Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.'
 flash.admin.reset_password_token.success: 'Vous allez recevoir un email vous permettant de créer un nouveau mot de passe'
+flash.admin.sheet.unavailablePage.warning: "La page que vous recherchez n'existe pas, vous avez été redirigé sur la première page"
 flash.admin.sheet_batch.accept.success: '{0} aucune fiche n''a été acceptée.|{1} 1 fiche a été acceptée|]1,Inf[ %count% fiches ont été acceptées'
 flash.admin.sheet_batch.assign.success: '{0} Aucune fiche n''a été assignée.|{1} Une fiche a été assignée|]1,Inf[ %count% fiches ont été assignées'
 flash.admin.sheet_batch.catalog.add.success: '{0} aucune fiche n''a été ajoutée au catalogue.|{1} 1 fiche a été ajoutée au catalogue|]1,Inf[ %count% fiches ont été ajoutées au catalogue'
@@ -55,6 +57,7 @@ flash.admin.sheet_batch.disable.success: '{0} aucune fiche n''a été désactiv�
 flash.admin.sheet_batch.disable.warning: 'Les fiches suivantes: %sheets% ne peuvent pas être désactivées car elles ont des rendez-vous positionnés. L''action s''effectue quand même pour les autres fiches non impactées par ce cas.'
 flash.admin.sheet_batch.draft.success: '{0} aucune fiche n''a été mise en brouillon.|{1} 1 fiche a été mise en brouillon|]1,Inf[ %count% fiches ont été mises en brouillons'
 flash.admin.sheet_batch.enable.success: '{0} aucune fiche n''a été activée.|{1} 1 fiche a été activée|]1,Inf[ %count% fiches ont été activées'
+flash.admin.sheet_batch.generateInvoice.success: '{0} Aucune facture n''a été générée.|{1} 1 facture a été générée|]1,Inf[ %count% factures ont été générées'
 flash.admin.sheet_batch.validate.success: '{0} aucune fiche n''a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées'
 flash.admin.sheet_batch.validation.validate.success: '{0} aucune fiche n''a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées'
 flash.admin.sheet.add_comment.success: 'Votre commentaire a bien été ajouté'
@@ -149,3 +152,4 @@ flash.sheet.update_block.success: 'Les informations ont bien été enregistrées
 flash.sheet.update_participant.success: 'La fiche participant a bien été modifiée'
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
+

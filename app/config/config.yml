@@ -222,6 +222,10 @@ fos_elastica:
                             type: boolean
                         hasPendingMeetingProposition:
                             type: boolean
+                        hasScheduledMeeting:
+                            type: boolean
+                        hasInvoice:
+                            type: boolean
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
@@ -304,6 +308,7 @@ infrastructure:
     bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
+    print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
     package:
         default_labels:
             plans:

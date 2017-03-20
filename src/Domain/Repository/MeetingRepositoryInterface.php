@@ -55,6 +55,13 @@ interface MeetingRepositoryInterface
     public function findByParticipant(Participant $participant);
 
     /**
+     * @param Participant[] $participants
+     *
+     * @return Meeting[]
+     */
+    public function findByParticipants(array $participants);
+
+    /**
      * @param Sheet $sheet
      *
      * @return Meeting[]
@@ -105,7 +112,7 @@ interface MeetingRepositoryInterface
      * @param Meeting $meeting
      */
     public function remove(Meeting $meeting);
-    
+
     /**
      * @param MeetingSlot $meetingSlot
      *
@@ -122,9 +129,16 @@ interface MeetingRepositoryInterface
     public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasScheduledMeeting(Sheet $sheet);
+    
+    /**
      * @param Event $event
      *
-     * @return mixed
+     * @return array
      *
      */
     public function getAllCompleteByEvent(Event $event);

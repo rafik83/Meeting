@@ -69,7 +69,7 @@ class SubstitutionsProvider
      *
      * @param MailRecipientInterface $recipient    Participant, sheet owner or billing contact
      * @param Sheet                  $sheet        The participation sheet the mailing message is part of
-     * @param string                 $locale       Mail locale
+     * @param string                 $locale       Recipient's locale
      * @param string[]               $placeholders Placeholders to provide substitutions for
      *
      * @return string[] List of replaced values indexed by their placeholder
@@ -77,8 +77,6 @@ class SubstitutionsProvider
     public function getSubstitutions(MailRecipientInterface $recipient, Sheet $sheet, $locale, $placeholders = [])
     {
         $substitutions = [];
-        $event         = $sheet->getEvent();
-        $locale        = $event->getAvailableLocale($locale);
 
         foreach ($placeholders as $placeholder) {
             $substitutions[$placeholder] = $this->getSubstitution($placeholder, $recipient, $sheet, $locale);
@@ -141,23 +139,23 @@ class SubstitutionsProvider
             case Compose::TAG_SHEET_PLANNING:
                 return $this->handleSheetPlanning($sheet, $locale, $recipient);
             case Compose::LINK_ACTIVACTE_ACCOUNT:
-                return $this->getActivateAccountUrl($recipient, $sheet);
+                return $this->getActivateAccountUrl($recipient, $sheet, $locale);
             case Compose::LINK_AGENDA:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', []);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['_locale' => $locale]);
             case Compose::LINK_CATALOG:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', []);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', ['_locale' => $locale]);
             case Compose::LINK_MEETING_REQUEST:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_list_request', ['sheet' => $sheet->getId()]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_list_request', ['_locale' => $locale, 'sheet' => $sheet->getId()]);
             case Compose::LINK_ORDERS:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_order_list', ['sheet' => $sheet->getId()]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_order_list', ['_locale' => $locale, 'sheet' => $sheet->getId()]);
             case Compose::LINK_PACKAGE:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_package', []);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_package', ['_locale' => $locale]);
             case Compose::LINK_PROGRAM:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', []);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', ['_locale' => $locale]);
             case Compose::LINK_SHEET:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet', []);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet', ['_locale' => $locale]);
             case Compose::LINK_EXPORT_MEETING_SHEET:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', []);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', ['_locale' => $locale]);
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);
@@ -168,32 +166,36 @@ class SubstitutionsProvider
      *
      * @param MailRecipientInterface $recipient
      * @param Sheet                  $sheet
+     * @param string                 $locale
      *
      * @return string
      */
-    private function getActivateAccountUrl(MailRecipientInterface $recipient, Sheet $sheet)
+    private function getActivateAccountUrl(MailRecipientInterface $recipient, Sheet $sheet, $locale)
     {
         $event = $sheet->getEvent();
 
         // If recipient is biling contact:
         if ($recipient instanceof BillingInfo) {
-            return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', []);
+            return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', ['_locale' => $locale]);
         }
 
         // Owner who does not participate:
         if ($recipient instanceof User && null === $sheet->getParticipantOwner()) {
-            return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', []);
+            return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', ['_locale' => $locale]);
         }
 
         // Participant or participating owner: distinguish between inactive and active users:
         $user = $recipient instanceof Participant ? $recipient->getUser() : $recipient;
 
         return $user->isActive() ?
-            $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', []) :
+            $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', ['_locale' => $locale]) :
             $this->eventUrlGenerator->generateEventAbsoluteUrl(
                 $event,
                 'event_activate_account',
-                ['token' => $this->activateAccountTokenGenerator->generate($user, $sheet)->getToken()]
+                [
+                    'token'   => $this->activateAccountTokenGenerator->generate($user, $sheet)->getToken(),
+                    '_locale' => $locale
+                ]
             )
         ;
     }
@@ -208,15 +210,13 @@ class SubstitutionsProvider
     private function handleSheetPlanning(Sheet $sheet, $locale, MailRecipientInterface $recipient)
     {
         $participant = null;
-        $userLocale  = $locale;
 
         if ($recipient instanceof Participant) {
-            $userLocale  = $recipient->getUser()->getLocale();
             $participant = $recipient;
         }
 
         $sheetPlanning = $this->sheetPlanningViewQueryHandler->handle(
-            new SheetPlanningViewQuery($sheet, $userLocale, $participant)
+            new SheetPlanningViewQuery($sheet, $locale, $participant)
         );
 
         return $sheetPlanning->planning;

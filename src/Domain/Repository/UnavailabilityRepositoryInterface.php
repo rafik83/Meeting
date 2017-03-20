@@ -54,6 +54,13 @@ interface UnavailabilityRepositoryInterface
     public function findByParticipant(Participant $participant);
 
     /**
+     * @param Participant[] $participants
+     *
+     * @return Unavailability[]
+     */
+    public function findByParticipants(array $participants);
+
+    /**
      * @param Sheet $sheet
      *
      * @return Unavailability[]

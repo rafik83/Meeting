@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Invoice;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 /**
@@ -69,23 +71,38 @@ class Invoice
     private $vatAmount;
 
     /**
-     * @var \DateTime
+     * @var string 3-letter ISO 4217 currency name
+     */
+    private $currency;
+
+    /**
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
+     * @var string
+     */
+    private $data;
+
+    /** @var ArrayCollection of Order */
+    private $orders;
+
+    /**
      * Invoice constructor.
      *
-     * @param Event     $event
-     * @param Sheet     $sheet
-     * @param Prefix    $prefix
-     * @param string    $invoicePrefix
-     * @param int       $invoiceYear
-     * @param int       $invoiceIncrement
-     * @param int       $total
-     * @param int       $totalWithVat
-     * @param int       $vatAmount
-     * @param \DateTime $createdAt
+     * @param Event              $event
+     * @param Sheet              $sheet
+     * @param Prefix             $prefix
+     * @param string             $invoicePrefix
+     * @param int                $invoiceYear
+     * @param int                $invoiceIncrement
+     * @param int                $total
+     * @param int                $totalWithVat
+     * @param int                $vatAmount
+     * @param string             $currency
+     * @param string             $data
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Event $event,
@@ -97,8 +114,10 @@ class Invoice
         $total,
         $totalWithVat,
         $vatAmount,
-        \DateTime $createdAt)
-    {
+        $currency,
+        $data,
+        \DateTimeInterface $createdAt
+    ) {
         $this->event            = $event;
         $this->sheet            = $sheet;
         $this->prefix           = $prefix;
@@ -108,7 +127,10 @@ class Invoice
         $this->total            = $total;
         $this->totalWithVat     = $totalWithVat;
         $this->vatAmount        = $vatAmount;
+        $this->currency         = $currency;
+        $this->data             = $data;
         $this->createdAt        = $createdAt;
+        $this->orders           = new ArrayCollection();
     }
 
     /**
@@ -168,7 +190,7 @@ class Invoice
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -204,6 +226,35 @@ class Invoice
      */
     public function getNumber()
     {
-        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT);
+        return sprintf(
+            '%s%s-%s',
+            $this->getInvoicePrefix(),
+            $this->getInvoiceYear(),
+            str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return Order[]
+     */
+    public function getOrders()
+    {
+        return $this->orders->toArray();
     }
 }

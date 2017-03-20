@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('bundle_guideline_path')->end()
                 ->scalarNode('font_path')->end()
                 ->scalarNode('image_path')->end()
+                ->scalarNode('print_planning_path')->end()
                 ->arrayNode('package')
                     ->children()
                         ->arrayNode('default_labels')
