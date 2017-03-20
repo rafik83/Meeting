@@ -71,4 +71,12 @@ class OrderView
     {
         $this->columnArray = $data;
     }
+
+    /**
+     * @return int
+     */
+    public function countCustomRows()
+    {
+        return count($this->customRowsViews);
+    }
 }

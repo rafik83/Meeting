@@ -125,8 +125,8 @@ class OrdersExportViewQueryHandler
                 new OrderViewQuery($order, $locale, $query->adminLocale)
             );
 
-            if (count($orderView->customRowsViews) > $maxIndexOfCustomRow) {
-                $maxIndexOfCustomRow = count($orderView->customRowsViews);
+            if ($orderView->countCustomRows() > $maxIndexOfCustomRow) {
+                $maxIndexOfCustomRow = $orderView->countCustomRows();
             }
 
             $orderViews[] = $orderView;
