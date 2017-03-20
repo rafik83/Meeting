@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
 use Proximum\Vimeet\Application\Exception\Transaction\TransactionNotFoundException;
-use Proximum\Vimeet\Application\Query\Transaction\TransactionListView;
+use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -54,7 +54,7 @@ class FilterHandler
     /**
      * @param Filter $command
      *
-     * @return TransactionListView
+     * @return TransactionListViewQuery
      *
      * @throws TransactionNotFoundException
      */
@@ -62,7 +62,7 @@ class FilterHandler
     {
         $events = $this->eventRepository->getEventsByAdmin($command->admin);
         
-        if (!$events) {
+        if (empty($events)) {
             throw new TransactionNotFoundException();
         }
         
@@ -82,6 +82,6 @@ class FilterHandler
             ));
         }
         
-        return new TransactionListView($transactionViews);
+        return new TransactionListViewQuery($transactionViews);
     }
 }

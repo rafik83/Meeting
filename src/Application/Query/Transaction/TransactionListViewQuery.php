@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Transaction;
 
-class TransactionListView
+class TransactionListViewQuery
 {
     /**
      * @var Transaction[]
@@ -20,7 +20,7 @@ class TransactionListView
     public $transactions;
     
     /**
-     * TransactionListView constructor.
+     * TransactionListViewQuery constructor.
      *
      * @param Transaction[] $transactions
      */

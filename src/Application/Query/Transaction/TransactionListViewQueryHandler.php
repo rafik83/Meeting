@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Transaction;
 
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter;
 
-class TransactionListViewHandler
+class TransactionListViewQueryHandler
 {
     /**
      * @var SerializerAdapter
@@ -20,7 +20,7 @@ class TransactionListViewHandler
     private $serializer;
     
     /**
-     * TransactionListViewHandler constructor.
+     * TransactionListViewQueryHandler constructor.
      *
      * @param SerializerAdapter $serializer
      */
@@ -30,10 +30,12 @@ class TransactionListViewHandler
     }
     
     /**
-     * @param TransactionListView $query
+     * @param TransactionListViewQuery $query
+     *
+     * @return string
      */
-    public function handle(TransactionListView $query)
+    public function handle(TransactionListViewQuery $query)
     {
-    
+        return $this->serializer->serialize($query, 'csv');
     }
 }

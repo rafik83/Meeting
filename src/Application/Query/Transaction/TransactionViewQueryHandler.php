@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Transaction;
 
-
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 
 class TransactionViewQueryHandler

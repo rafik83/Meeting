@@ -2831,11 +2831,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }
     query.transaction.list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewHandler
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionListView }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery }
     query.messaging.message.list_handler:
         class: Proximum\Vimeet\Application\Query\Messaging\Message\ListQueryHandler
         arguments:

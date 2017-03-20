@@ -131,10 +131,12 @@ class EventController extends Controller
             if ($transactionForm->handleRequest($request)->isSubmitted() && $transactionForm->isValid()) {
                 try {
                     $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
-            
-                    return $this->redirect($this->generateUrl('admin_event_list', [
-                        'transactionListView' => $transactionListView
-                    ]) . '#transactionsExport');
+                    
+                    $dataCsv = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
+                    
+                    file_put_contents('export_transaction', $dataCsv);
+                    
+                    return $this->redirect($this->generateUrl('admin_event_list') . '#transactionsExport');
                 } catch (TransactionNotFoundException $exception) {
                     dump($exception);die;
                 }
