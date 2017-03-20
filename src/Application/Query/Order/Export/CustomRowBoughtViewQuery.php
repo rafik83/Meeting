@@ -17,16 +17,11 @@ class CustomRowBoughtViewQuery
     /** @var Row */
     public $row;
 
-    /** @var string */
-    public $adminLocale;
-
     /**
      * @param Row    $row
-     * @param string $adminLocale
      */
-    public function __construct(Row $row, $adminLocale)
+    public function __construct(Row $row)
     {
-        $this->row         = $row;
-        $this->adminLocale = $adminLocale;
+        $this->row = $row;
     }
 }

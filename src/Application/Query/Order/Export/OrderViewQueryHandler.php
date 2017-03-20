@@ -79,7 +79,7 @@ class OrderViewQueryHandler
             if ($row->isProduct()) {
                 $productBoughtViews[] = $this->productBoughtViewQueryHandler->handle(new ProductBoughtViewQuery($row));
             } else {
-                $customRowViews[] = $this->customRowBoughtViewQueryHandler->handle(new CustomRowBoughtViewQuery($row, $adminLocale));
+                $customRowViews[] = $this->customRowBoughtViewQueryHandler->handle(new CustomRowBoughtViewQuery($row));
             }
         }
 
