@@ -73,7 +73,7 @@
 
                         {{ include('AdminBundle:Sheet/Partial:transactions.html.twig', { event: event, sheet: sheet, transactions: details.transactions }, false) }}
 
-                        {{ include('AdminBundle:Sheet/Partial:invoices.html.twig', { event: event, sheet: sheet, invoices: details.invoices }, false) }}
+                        {{ include('AdminBundle:Sheet/Partial:invoices.html.twig', { event: event, sheet: sheet, invoiceViews: details.invoiceViews }, false) }}
                     </div>
                 {% endif %}
 

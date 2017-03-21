@@ -37,6 +37,7 @@ flash.admin.operator.update.success: 'Le collaborateur a été édité avec succ
 flash.admin.order.add_row.success: 'La ligne a été ajoutée'
 flash.admin.order.remove_row.success: 'La ligne a été supprimée'
 flash.admin.order.update_row.success: 'La ligne a été mise à jour'
+flash.admin.order.export.success: 'L''export des commandes a été plannifié, vous allez recevoir un mail avec le fichier'
 flash.admin.package.create.success: 'La formule a bien été créée'
 flash.admin.partner.create.success: 'Le nouveau partenaire a bien été créé'
 flash.admin.partner.update.success: 'Le partenaire a bien été édité avec succès'

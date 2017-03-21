@@ -24,7 +24,7 @@ class OrdersToInvoice
 {
     /** @var OrderRepositoryInterface */
     private $orderRepository;
-    
+
     /** @var Merger */
     private $orderMerger;
 
@@ -36,7 +36,7 @@ class OrdersToInvoice
 
     /** @var VatApplicable */
     private $vatApplicable;
-    
+
     /**
      * @param OrderRepositoryInterface       $orderRepository
      * @param Merger                         $orderMerger
@@ -86,7 +86,7 @@ class OrdersToInvoice
         if (true === $isVatApplicable) {
             $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
         }
-        
+
         $view = $this->invoiceDataQueryHandler->handle(
             new InvoiceDataQuery(
                 $orderMerged->getSheet(),
@@ -97,9 +97,14 @@ class OrdersToInvoice
 
         $data = $this->serializerAdapter->serialize($view, 'json');
 
+        $event = $sheet->getEvent();
+
         return new OrdersToInvoiceView(
             $orders,
             $data,
+            $isVatApplicable,
+            $event->getMode(),
+            $event->getVat(),
             $total,
             $vatToPay,
             $total + $vatToPay,

@@ -1,0 +1,9 @@
+{% if invoiceView.summaryView.groupsView.groupViews is not empty %}
+    {% for groupView in invoiceView.summaryView.groupsView.groupViews %}
+        {{ include('EventBundle:Invoice/Partial:group.html.twig', {
+            groupView: groupView,
+            eventDefaultLocale: invoiceView.eventDefaultLocale,
+            currency: invoiceView.currency
+        }) }}
+    {% endfor %}
+{% endif %}

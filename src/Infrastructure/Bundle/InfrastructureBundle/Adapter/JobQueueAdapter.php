@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -64,6 +66,17 @@ class JobQueueAdapter implements JobQueueInterface
                 ]
             )
         );
+
+        $this->entityManager->persist($job);
+        $this->entityManager->flush($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exportOrdersForEvent(Event $event, Admin $admin, $locale)
+    {
+        $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
 
         $this->entityManager->persist($job);
         $this->entityManager->flush($job);

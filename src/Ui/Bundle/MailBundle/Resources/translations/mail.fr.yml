@@ -56,6 +56,9 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.order.export.intro: "Bonjour,\n\n Voici l'export des commandes pour l'événement %eventTitle% :\n"
+mail.order.export.link.click: 'Télécharger les commandes'
+mail.order.export.subject: 'Fichier d''export des commandes'
 mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
 mail.planning.print.link.intro: "Vous pouvez imprimer les plannings en cliquant ici :"
 mail.planning.print.link.click: 'Fichier de planning'

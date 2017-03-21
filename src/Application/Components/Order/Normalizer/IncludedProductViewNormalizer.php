@@ -12,14 +12,10 @@ namespace Proximum\Vimeet\Application\Components\Order\Normalizer;
 
 use Proximum\Vimeet\Application\View\Order\IncludedProductView;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class IncludedProductViewNormalizer implements NormalizerInterface, NormalizerAwareInterface
+class IncludedProductViewNormalizer implements NormalizerInterface
 {
-    use NormalizerAwareTrait;
-
     /**
      * @param IncludedProductView $object
      * @param string              $format

@@ -31,7 +31,6 @@ class CsvFileResponse extends Response
         $charset = Charset::WINDOWS_1252
     ) {
         parent::__construct($file, $status, $headers);
-        
         $disposition = $this->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
         $this->headers->set('Content-Disposition', $disposition);
         $this->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));

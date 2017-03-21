@@ -144,32 +144,17 @@ $locale = $event->getAvailableLocale($request->getLocale);
 
 ### Utils
 
-#### Récupérer la DB de prod
+Récupérer la DB de prod en locale, à faire dans la VM (nécessite d'avoir le mdp mysql de la prod - voir dans 1password):
 
-Se connecter à la prod pour dumper la DB
+        ⇒ make get-prod-db@vm
 
-        $ ssh vimeet-prod1
-        $ cd ~/proximum-vimeet.project.local/htdocs/current
-        $ cat app/config/parameters.yml # pour afficher le databasename, host, port, user et password de la DB
-        $ mysqldump --host [host] --port [port] -u [username] -p[password] [databasename] > prod.sql
-        $ exit
+Synchroniser la DB de préprod avec celle de la prod (nécessite d'avoir le mdp mysql de la prod et de la préprod - voir dans 1password)
 
-Puis en local, dans le répertoire du projet, télécharger la DB
+        $ make sync-db-from-prod@preprod
 
-        $ cd path/to/local/vimeet
-        $ scp vimeet-prod1:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
+Importer un fichier prod.sql placé sur le root du projet :
 
-Importer la DB depuis la VM
-
-        $ vagrant ssh
-        ⇒ bin/console doctrine:schema:drop --force
-        ⇒ mysql -u root proximum_vimeet < prod.sql
-
-Se connecter à la prod et supprimer le fichier dumpé
-
-        $ ssh vimeet-prod1
-        $ cd ~/proximum-vimeet.project.local/htdocs/current
-        $ rm prod.sql
+        $ make import-preprod-db@vm
 
 ### Jobs Queue
 
