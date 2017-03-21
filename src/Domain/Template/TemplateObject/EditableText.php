@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TranslatableInterface;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslatableDataType;
 
 class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
