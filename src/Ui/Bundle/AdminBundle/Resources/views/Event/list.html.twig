@@ -92,7 +92,7 @@
                 {% endif %}
                 <div role="tabpanel" class="tab-pane" id="invoice">
                     {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-                        <form action="{{ path('admin_invoice_export') }}" method="POST">
+                        <form action="{{ path('admin_invoice_export') }}">
                             {{ form_errors(invoiceExportForm) }}
                             {{ form_row(invoiceExportForm.beginDate) }}
                             {{ form_row(invoiceExportForm.endDate) }}
