@@ -30,7 +30,7 @@ class EditableTextTranslationType extends AbstractType
             'entry_options' => [
                 'object' => $options['object'],
             ],
-            'label' => false,
+            'label'         => false,
         ]);
     }
 

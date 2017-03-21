@@ -11,11 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EditableTextInputDataType extends AbstractEditableTextInputDataType
@@ -30,7 +25,7 @@ class EditableTextInputDataType extends AbstractEditableTextInputDataType
         $resolver->setDefaults([
             'data_class' => TemplateObject\EditableText::class,
             'rows'       => 7,
-            'showLabel'  => true
+            'showLabel'  => true,
         ]);
     }
 
