@@ -85,8 +85,8 @@ form.event_billing_configuration.children.legalInfo.label: 'Legal information'
 form.event_billing_configuration.children.submit.label: Save
 form.event_billing_configuration.children.translations.prototype.children.bankInfo.label: 'Bank details'
 form.event_billing_configuration.children.translations.prototype.children.bankInfo.placeholder: IBAN
-form.event_billing_configuration.children.translations.prototype.children.billingAddress.label: 'Payment address'
-form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Payment Terms'
+form.event_billing_configuration.children.translations.prototype.children.billingAddress.label: 'Transaction address'
+form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Transaction Terms'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_configure_date.children.catalogOnlineDate.label: 'Catalogue opening'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication of the final meeting schedules'

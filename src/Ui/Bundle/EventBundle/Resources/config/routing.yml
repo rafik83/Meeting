@@ -492,7 +492,7 @@ event_package_payment:
     requirements:
         sheet: \d+
     methods: [GET, POST]
-    defaults: { _controller: EventBundle:Payment:paymentChoice }
+    defaults: { _controller: EventBundle:Transaction:paymentChoice }
 
 event_package_payment_prepare_paypal:
     path: /sheet/{sheet}/package/payment/paypal/{transaction}
@@ -500,14 +500,14 @@ event_package_payment_prepare_paypal:
         sheet: \d+
         transaction: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:preparePaypal }
+    defaults: { _controller: EventBundle:Transaction:preparePaypal }
 
 event_package_payment_done:
     path: /sheet/{sheet}/package/payment/done
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:donePayment }
+    defaults: { _controller: EventBundle:Transaction:donePayment }
 
 event_package_payment_pay_remaining:
     path: /sheet/{sheet}/package/payment/pay-remaining
@@ -515,12 +515,12 @@ event_package_payment_pay_remaining:
         sheet: \d+
         transaction: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:payRemaining }
+    defaults: { _controller: EventBundle:Transaction:payRemaining }
 
 event_payment_info:
     path: /sheet/payment
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:paymentInfo }
+    defaults: { _controller: EventBundle:Transaction:paymentInfo }
 
 #
 # Order

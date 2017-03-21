@@ -3028,7 +3028,7 @@ services:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
 
     #
-    # Payment
+    # Transaction
     #
     payment.total_to_pay:
         class: Proximum\Vimeet\Domain\Payment\TotalToPay
@@ -3475,6 +3475,16 @@ services:
     #
     serializer_denormalizer_planner.planner_denormalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Denormalizer\Planner\PlannerDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
+    # Transaction Normalizer
+    #
+    serializer_normalizer_transaction.transaction_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Transaction\TransactionNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: serializer.normalizer }
 

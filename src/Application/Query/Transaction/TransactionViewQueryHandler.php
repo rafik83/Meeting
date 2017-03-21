@@ -22,6 +22,7 @@ class TransactionViewQueryHandler
     public function handle(TransactionViewQuery $query)
     {
         return new TransactionView(
+            $query->sheet->getId(),
             $query->event->getId(),
             $query->event->getTraceableName(),
             $query->sheet->getOwner()->getId(),
@@ -29,7 +30,7 @@ class TransactionViewQueryHandler
             $query->transaction->getDate(),
             $query->transaction->getMode(),
             $query->transaction->getReference(),
-            $query->payment->getDetails(),
+            $query->payment->getClientId(),
             $query->transaction->getAmount(),
             $query->event->getPaymentAddress()->getCountry(),
             $query->event->getVat()

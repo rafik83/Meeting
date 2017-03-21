@@ -15,6 +15,11 @@ class TransactionView
     /**
      * @var int
      */
+    public $sheetId;
+    
+    /**
+     * @var int
+     */
     public $eventId;
     
     /**
@@ -30,7 +35,7 @@ class TransactionView
     /**
      * @var string
      */
-    public $society;
+    public $societyName;
     
     /**
      * @var \DateTimeInterface
@@ -70,10 +75,11 @@ class TransactionView
     /**
      * TransactionView constructor.
      *
+     * @param int                   $sheetId
      * @param int                   $eventId
      * @param string                $eventName
      * @param int                   $sheetOwnerId
-     * @param string                $society
+     * @param string                $societyName
      * @param \DateTimeInterface    $transactionDate
      * @param int                   $transactionType
      * @param string                $transactionReference
@@ -83,10 +89,11 @@ class TransactionView
      * @param string                $vatNumber
      */
     public function __construct(
+        $sheetId,
         $eventId,
         $eventName,
         $sheetOwnerId,
-        $society,
+        $societyName,
         \DateTimeInterface $transactionDate,
         $transactionType,
         $transactionReference,
@@ -95,10 +102,11 @@ class TransactionView
         $contactBillingInfoCountry,
         $vatNumber
     ) {
+        $this->sheetId                      = $sheetId;
         $this->eventId                      = $eventId;
         $this->eventName                    = $eventName;
         $this->sheetOwnerId                 = $sheetOwnerId;
-        $this->society                      = $society;
+        $this->societyName                  = $societyName;
         $this->transactionDate              = $transactionDate;
         $this->transactionType              = $transactionType;
         $this->transactionReference         = $transactionReference;

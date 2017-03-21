@@ -82,6 +82,6 @@ class FilterHandler
             ));
         }
         
-        return new TransactionListViewQuery($transactionViews);
+        return new TransactionListViewQuery($transactionViews, $command->admin->getLocale());
     }
 }

@@ -10,27 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Query\Transaction;
 
-use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 
 class TransactionListViewQuery
 {
     /**
-     * @var Transaction[]
+     * @var TransactionView[]
      */
-    public $transactions;
+    public $transactionsView;
     
     /**
-     * @var \DateTimeInterface
+     * @var string
      */
-    public $dateTime;
+    public $adminLocale;
     
     /**
      * TransactionListViewQuery constructor.
      *
-     * @param Transaction[] $transactions
+     * @param TransactionView[] $transactionsView
+     * @param string            $adminLocale
      */
-    public function __construct(array $transactions)
+    public function __construct(array $transactionsView, $adminLocale)
     {
-        $this->transactions = $transactions;
+        $this->transactionsView = $transactionsView;
+        $this->adminLocale      = $adminLocale;
     }
 }

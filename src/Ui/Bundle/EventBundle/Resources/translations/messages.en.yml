@@ -95,7 +95,7 @@ navigation.links.member_space.profile: Profile
 navigation.links.notification: Notifications
 navigation.links.package.order_list: 'My orders'
 navigation.links.package.order_summary_total: 'Global summary'
-navigation.links.package.payment: Payment
+navigation.links.package.payment: Transaction
 navigation.links.package.summary: 'Order summary'
 navigation.links.planning.all_schedule: 'All meeting schedules'
 navigation.links.planning.available_date: 'Available on the'
@@ -149,7 +149,7 @@ order.transaction.paypal.description: '%eventId%-%sheetId% : Participation of %s
 order.transaction.state.cancelled: Cancelled
 order.transaction.state.paid: Paid
 order.transaction.state.pending: Pending
-package.funnel.payment: Payment
+package.funnel.payment: Transaction
 package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
 package.participant_planning.validate: Validate
@@ -161,7 +161,7 @@ package.payment.billingAddress: 'Billing address'
 package.payment.deposit.title: Deposit
 package.payment.deposit.toPay: 'You can pay a deposit of %deposit% by selecting payment with deposit'
 package.payment.pay.label: Validate
-package.payment.title: Payment
+package.payment.title: Transaction
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'
 package.planning.label: 'Title & Description'
