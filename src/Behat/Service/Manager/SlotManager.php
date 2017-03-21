@@ -41,7 +41,7 @@ class SlotManager
         $now   = new \DateTime();
         $begin = new \DateTime(sprintf('%s %s', $now->format('Y-m-d'), '08:00:00'));
         $end   = clone $begin;
-        $end->add(new \DateInterval(sprintf('PT%sM', $interval * $duration * $quantity)));
+        $end->add(new \DateInterval(sprintf('PT%sM', ($interval + $duration) * $quantity)));
 
         $slots = $this->slotGenerator->generate(
             $event,
@@ -61,5 +61,17 @@ class SlotManager
     public function findByEvent(Event $event)
     {
         return $this->meetingSlotRepository->findByEvent($event);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @param int   $slotId
+     *
+     * @return null|MeetingSlot
+     */
+    public function findByEventAndId(Event $event, $slotId)
+    {
+        return $this->meetingSlotRepository->find($event, $slotId);
     }
 }

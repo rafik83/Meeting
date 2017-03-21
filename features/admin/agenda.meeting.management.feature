@@ -6,8 +6,8 @@ Feature: Update meeting spot and slot in agenda via the API
 
   Scenario: I can get available spots for a meeting
     Given the database is purged
-    And I am logged as admin
     And the event "Best of web" is created
+    And I am logged as admin
     And there is 1 slot in this event
     And there is an active spot "A1" with meeting capacity of 1, seat capacity of 2
     And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
@@ -34,6 +34,7 @@ Feature: Update meeting spot and slot in agenda via the API
       }
       """
 
+  # This Scenario depends on previous one
   Scenario: I can change the spot for a meeting
     Given I am logged as admin
     When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
@@ -46,6 +47,7 @@ Feature: Update meeting spot and slot in agenda via the API
       """
     Then the response status code should be 200
 
+  # This Scenario depends on previous one
   Scenario: I can get available spots for a meeting via the API
     Given I am logged as admin
     When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot"
@@ -55,6 +57,7 @@ Feature: Update meeting spot and slot in agenda via the API
           "admin.agenda.meeting.updateSpot.error"
       """
 
+  # This Scenario depends on previous one
   Scenario: I can not change the spot for a meeting because given spot not available
     Given I am logged as admin
     When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
@@ -71,6 +74,7 @@ Feature: Update meeting spot and slot in agenda via the API
           "admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting"
       """
 
+  # This Scenario depends on previous one
   Scenario: I can not change the spot for a meeting when spot is blocked
     Given I am logged as admin
     And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
@@ -98,8 +102,8 @@ Feature: Update meeting spot and slot in agenda via the API
 
   Scenario: I can get available spots for a meeting
     Given the database is purged
-    And I am logged as admin
     And the event "Best of web" is created
+    And I am logged as admin
     And there is 1 slot in this event
     And there is an active spot "A1" with meeting capacity of 1, seat capacity of 2
     And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
@@ -124,8 +128,8 @@ Feature: Update meeting spot and slot in agenda via the API
 
   Scenario: I can get a spot available for several meetings
     Given the database is purged
-    And I am logged as admin
     And the event "Best of web" is created
+    And I am logged as admin
     And there is 1 slot in this event
     And there is an active spot "A1" with meeting capacity of 2, seat capacity of 4
     And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
@@ -148,22 +152,25 @@ Feature: Update meeting spot and slot in agenda via the API
       """
 
   Scenario: I can get available slots for a meeting
-    Given I am logged as admin
+    Given the database is purged
+    And the event "Best of web" is created
+    And I am logged as admin
+    And there are 3 slots in this event
+    And there is a meeting on slot "1"
     When I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-slot"
     Then the JSON should be equal to:
       """
       {
-          "availableSlotsId": [
-              1,
-              2,
-              3,
-              4
-          ]
+          "availableSlotsId": [1, 2, 3]
       }
       """
 
   Scenario: I can move a meeting to available slot
-    Given I am logged as admin
+    Given the database is purged
+    And the event "Best of web" is created
+    And I am logged as admin
+    And there are 3 slots in this event
+    And there is a meeting on slot "3"
     When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
       """
       {
@@ -172,39 +179,58 @@ Feature: Update meeting spot and slot in agenda via the API
       """
     Then the response status code should be 200
 
-#  Scenario: I can not move a meeting to unavailable slot
-#    Given I am logged as admin
-#    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
-#      """
-#      {
-#          "slotId": 2
-#      }
-#      """
-#    Then the response status code should be 422
-#    And the JSON should be equal to:
-#      """
-#          "admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting"
-#      """
+  Scenario: I can not move a meeting to unavailable slot
+    Given the database is purged
+    And the event "Best of web" is created
+    And I am logged as admin
+    And there are 2 slots in this event
+    And there is an active spot "A1" with meeting capacity of 2, seat capacity of 4
+    And there is a sheet
+    And there is a participant for this sheet
+    And there is a meeting on slot "1" and spot "A1" for this participant
+    And there is a meeting on slot "2" and spot "A1" for this participant
+    And I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-slot"
+    And the JSON should be equal to:
+      """
+      {
+          "availableSlotsId": [1]
+      }
+      """
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+      """
+      {
+          "slotId": 2
+      }
+      """
+    Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting"
+      """
 
-#  Scenario: I can not change the slot for a meeting when slot is blocked
-#    Given I am logged as admin
-#    And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
-#      """
-#      {
-#          "spotId": 2,
-#          "blockedSlot": true,
-#          "blockedSpot": false
-#      }
-#      """
-#    And the response status code should be 200
-#    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
-#      """
-#      {
-#          "slotId": 1
-#      }
-#      """
-#    Then the response status code should be 422
-#    And the JSON should be equal to:
-#      """
-#          "admin.agenda.meeting.updateSlot.meetingIsBlockedSlot"
-#      """
+  Scenario: I can not change the slot for a meeting when slot is blocked
+    Given the database is purged
+    And the event "Best of web" is created
+    And I am logged as admin
+    And there are 2 slots in this event
+    And there is a meeting on slot "1"
+    And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+      """
+      {
+          "spotId": 1,
+          "blockedSlot": true,
+          "blockedSpot": false
+      }
+      """
+    And the response status code should be 200
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+      """
+      {
+          "slotId": 2
+      }
+      """
+    Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSlot.meetingIsBlockedSlot"
+      """

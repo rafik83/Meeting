@@ -98,6 +98,12 @@ services:
             - '@behat_storage'
             - '@behat_manager.sheet'
 
+    behat_proxy.participant_context:
+        class: Proximum\Vimeet\Behat\Proxy\ParticipantContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.participant'
+
     behat_proxy.meeting_context:
         class: Proximum\Vimeet\Behat\Proxy\MeetingContextProxy
         arguments:

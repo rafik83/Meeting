@@ -6,6 +6,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -76,22 +78,42 @@ class MeetingManager
     }
 
     /**
-     * @param Event $event
+     * @param Event         $event
+     * @param Sheet|null    $fromSheet
+     * @param Participant[] $fromParticipants
+     * @param Sheet|null    $toSheet
+     * @param Participant[] $toParticipants
      *
      * @return Request
      */
-    public function createMeetinRequest(Event $event)
-    {
-        $fromParticipant = $this->participantManager->create($event);
-        $toParticipant   = $this->participantManager->create($event);
+    public function createMeetingRequest(
+        Event $event,
+        Sheet $fromSheet = null,
+        array $fromParticipants = [],
+        Sheet $toSheet = null,
+        array $toParticipants = []
+    ) {
+        if (empty($fromParticipants)) {
+            $fromParticipants = [$this->participantManager->create($event, $fromSheet)];
+        }
+
+        if (empty($toParticipants)) {
+            $toParticipants = [$this->participantManager->create($event, $toSheet)];
+        }
+
+        $firstFromParticipant = reset($fromParticipants);
+        $fromSheet = $firstFromParticipant->getSheet();
+
+        $firstToParticipant = reset($toParticipants);
+        $toSheet = $firstToParticipant->getSheet();
 
         $meetingRequest = new Request(
-            $fromParticipant->getSheet(),
-            [$fromParticipant],
-            $toParticipant->getSheet(),
-            [$toParticipant],
+            $fromSheet,
+            $fromParticipants,
+            $toSheet,
+            $toParticipants,
             new \DateTime(),
-            $fromParticipant->getUser()
+            $firstFromParticipant->getUser()
         );
 
         $this->requestRepository->add($meetingRequest);
@@ -114,13 +136,64 @@ class MeetingManager
             throw new \Exception('Spot not found');
         }
 
-        $meetingRequest = $this->createMeetinRequest($event);
+        $meetingRequest = $this->createMeetingRequest($event);
 
         $slots = $this->slotManager->findByEvent($event);
-        $slot = reset($slots);
+        $slot  = reset($slots);
 
         if (false === $slot) {
             throw new \Exception('There are no available slot for this meeting');
+        }
+
+        return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+    }
+
+    /**
+     * @param Event $event
+     * @param int   $slotId
+     *
+     * @return Meeting
+     * @throws \Exception
+     */
+    public function createMeetingOnSlot(Event $event, $slotId)
+    {
+        $slot = $this->slotManager->findByEventAndId($event, $slotId);
+
+        if (null === $slot) {
+            throw new \Exception('Slot not found');
+        }
+
+        $meetingRequest = $this->createMeetingRequest($event);
+
+        $spot = $this->spotManager->create($event, 'MyRef', 1, 2);
+
+        return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param int         $slotId
+     * @param string      $spotReference
+     *
+     * @return Meeting
+     * @throws \Exception
+     */
+    public function createMeetingForParticipantOnGivenSlotAndSpot(Participant $participant, $slotId, $spotReference)
+    {
+        $sheet = $participant->getSheet();
+        $event = $sheet->getEvent();
+        $slot  = $this->slotManager->findByEventAndId($event, $slotId);
+
+        if (null === $slot) {
+            throw new \Exception('Slot not found');
+        }
+
+        $meetingRequest = $this->createMeetingRequest($event, $sheet, [$participant]);
+
+        $spot = $this->spotManager->getByReference($event, $spotReference);
+
+        if (null === $spot) {
+            throw new \Exception('Spot not found');
         }
 
         return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);

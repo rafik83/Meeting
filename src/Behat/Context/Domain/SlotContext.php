@@ -19,7 +19,7 @@ class SlotContext implements Context
     }
 
     /**
-     * @Given /^there are|is (?P<quantity>\d+) slot|slots in this event$/
+     * @Given /^there (is|are) (?P<quantity>\d+) (slot|slots) in this event$/
      *
      * @param int $quantity
      */
