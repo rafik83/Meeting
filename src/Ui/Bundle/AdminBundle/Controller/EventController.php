@@ -132,10 +132,7 @@ class EventController extends Controller
             if ($transactionForm->handleRequest($request)->isSubmitted() && $transactionForm->isValid()) {
                 try {
                     $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
-                    
                     $filePath = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
-                    
-                    $this->addFlash('success', 'flash.admin.event.export.success');
                     
                     return new CsvFileResponse(
                         file_get_contents($this->getParameter('infrastructure.export_transactions_path') . $filePath),
