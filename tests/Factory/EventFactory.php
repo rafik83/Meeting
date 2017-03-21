@@ -15,16 +15,22 @@ use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 
 class EventFactory
 {
+    const FALLBACK_DEFAULT = 'fr';
+
     /**
+     * @param string|null $eventTitle
+     *
+     * @param string      $fallback
+     *
      * @return Event
      */
-    public static function createEvent()
+    public static function createEvent($eventTitle = null, $fallback = self::FALLBACK_DEFAULT)
     {
         $prefix = self::createInvoicePrefix();
 
         return new Event(
-            'super event',
-            'fr',
+            null === $eventTitle ? 'super event' : $eventTitle,
+            $fallback,
             ['fr', 'en'],
             Event::VAT_MODE_ATI,
             20,
