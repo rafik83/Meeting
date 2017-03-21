@@ -120,7 +120,6 @@ class ExportHandler
             }
         }
 
-        dump($invoiceExportViews);die;
         return new InvoicesNormalizerView($invoiceExportViews, $command->user->getLocale());
     }
 
