@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 
 class MeetingRequestViewQuery
 {
@@ -32,11 +31,6 @@ class MeetingRequestViewQuery
     public $locale;
     
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * @var bool
      */
     public $isMeetingPublished;
@@ -52,7 +46,6 @@ class MeetingRequestViewQuery
      * @param MeetingRequest $meetingRequest
      * @param Sheet          $sheet
      * @param string         $locale
-     * @param User           $user
      * @param bool           $isMeetingPublished
      * @param bool           $isMeetingRequestUpdateLocked
      */
@@ -60,7 +53,6 @@ class MeetingRequestViewQuery
         MeetingRequest $meetingRequest,
         Sheet $sheet,
         $locale,
-        User $user,
         $isMeetingPublished,
         $isMeetingRequestUpdateLocked
     ) {
@@ -69,6 +61,5 @@ class MeetingRequestViewQuery
         $this->sheet                        = $sheet;
         $this->isMeetingPublished           = $isMeetingPublished;
         $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
-        $this->user                         = $user;
     }
 }

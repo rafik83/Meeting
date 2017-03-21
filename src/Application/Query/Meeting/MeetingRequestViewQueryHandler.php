@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
-use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
@@ -37,28 +36,20 @@ class MeetingRequestViewQueryHandler
     private $ruleRepository;
     
     /**
-     * @var SheetGuesser
-     */
-    private $sheetGuesser;
-    
-    /**
      * MeetingRequestViewQueryHandler constructor.
      *
      * @param Preview                   $preview
      * @param SheetInfoGuesser          $sheetInfoGuesser
      * @param RuleRepositoryInterface   $ruleRepository
-     * @param SheetGuesser              $sheetGuesser
      */
     public function __construct(
         Preview $preview,
         SheetInfoGuesser $sheetInfoGuesser,
-        RuleRepositoryInterface $ruleRepository,
-        SheetGuesser $sheetGuesser
+        RuleRepositoryInterface $ruleRepository
     ) {
         $this->preview          = $preview;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->ruleRepository   = $ruleRepository;
-        $this->sheetGuesser     = $sheetGuesser;
     }
 
     /**
@@ -71,7 +62,7 @@ class MeetingRequestViewQueryHandler
         $sheet    = $this->getViewedSheet($query);
         $previews = $this->preview->getPreview($sheet, $query->locale);
 
-        $userSheet = $this->sheetGuesser->getUserSheet($query->user, $sheet->getEvent(), $query->user->getLocale());
+        $userSheet = $query->sheet;
     
         $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
         

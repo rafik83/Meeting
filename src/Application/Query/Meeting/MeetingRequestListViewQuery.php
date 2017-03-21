@@ -37,25 +37,18 @@ class MeetingRequestListViewQuery
     public $event;
     
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * MeetingRequestListViewQuery constructor.
      *
      * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
-     * @param User   $user
      * @param array  $filters
      */
-    public function __construct(Event $event, Sheet $sheet, $locale, User $user, array $filters = [])
+    public function __construct(Event $event, Sheet $sheet, $locale, array $filters = [])
     {
         $this->event   = $event;
         $this->sheet   = $sheet;
         $this->locale  = $locale;
-        $this->user    = $user;
         $this->filters = $filters;
     }
 }
