@@ -15,14 +15,15 @@ use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
 class FilterHandler
 {
     /**
-     * @var TransactionRepositoryInterface
+     * @var PaymentRepositoryInterface
      */
-    private $transactionRepository;
+    private $paymentRepository;
     
     /**
      * @var EventRepositoryInterface
@@ -37,16 +38,16 @@ class FilterHandler
     /**
      * FindHandler constructor.
      *
-     * @param TransactionRepositoryInterface $transactionRepository
+     * @param PaymentRepositoryInterface $paymentRepository
      * @param EventRepositoryInterface $eventRepository
      * @param TransactionViewQueryHandler $transactionViewQueryHandler
      */
     public function __construct(
-        TransactionRepositoryInterface $transactionRepository,
+        PaymentRepositoryInterface $paymentRepository,
         EventRepositoryInterface $eventRepository,
         TransactionViewQueryHandler $transactionViewQueryHandler
     ) {
-        $this->transactionRepository       = $transactionRepository;
+        $this->paymentRepository           = $paymentRepository;
         $this->eventRepository             = $eventRepository;
         $this->transactionViewQueryHandler = $transactionViewQueryHandler;
     }
@@ -66,7 +67,7 @@ class FilterHandler
             throw new TransactionNotFoundException();
         }
         
-        $payments = $this->transactionRepository->findPaidByDateRangeAndCrossEvent(
+        $payments = $this->paymentRepository->findPaidByDateRangeAndCrossEvent(
             $command->beginDate,
             $command->endDate,
             $events
