@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class TaggedDataFactory
@@ -95,7 +96,8 @@ class TaggedDataFactory
                     $object->isTranslatable(),
                     $object instanceof TranslatableInterface ? $object->getTranslations($eventLocales) : [],
                     $value,
-                    $tag
+                    $tag,
+                    $object instanceof EditableText ? $object->isTextarea() : false
                 );
 
                 $this->addTaggedDataView($tag, $taggedDataView);

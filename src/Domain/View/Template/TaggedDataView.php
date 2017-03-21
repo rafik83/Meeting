@@ -38,6 +38,11 @@ class TaggedDataView
     public $tag;
 
     /**
+     * @var bool
+     */
+    public $isTextarea;
+
+    /**
      * TaggedDataView constructor.
      *
      * @param string $type
@@ -45,13 +50,15 @@ class TaggedDataView
      * @param array  $translations
      * @param string $content
      * @param string $tag
+     * @param bool   $isTextarea
      */
-    public function __construct($type, $translatable, array $translations, $content, $tag)
+    public function __construct($type, $translatable, array $translations, $content, $tag, $isTextarea)
     {
         $this->type         = $type;
         $this->translatable = $translatable;
         $this->translations = $translations;
         $this->content      = $content;
         $this->tag          = $tag;
+        $this->isTextarea   = $isTextarea;
     }
 }

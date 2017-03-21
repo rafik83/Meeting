@@ -1,4 +1,4 @@
-{% if not isCatalog %}
+{% if not isCatalog and not taggedDataView.isTextarea %}
     <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}">
 {% endif %}
 
@@ -10,6 +10,16 @@
     {{ taggedDataView.content }}
 {% endif %}
 
-{% if not isCatalog %}
+{% if not isCatalog and not taggedDataView.isTextarea %}
     </a>
+{% endif %}
+
+
+{% if taggedDataView.isTextarea %}
+    <div>
+        <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}" class="edit-link">
+            <i class="icon-Note_2"></i> {{ 'sheet.object.action.edit'|trans }}
+            "{{ label }}"
+        </a>
+    </div>
 {% endif %}
