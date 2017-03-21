@@ -20,7 +20,7 @@ interface InvoiceRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return array
+     * @return Invoice[]
      */
     public function getAllByEvent(Event $event);
     

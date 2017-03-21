@@ -11,13 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
+use Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\InvoicePrefix\CreateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Domain\View\Normalizer\InvoicesNormalizerView;
 
 class InvoiceController extends Controller
 {
@@ -65,7 +65,7 @@ class InvoiceController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $charset        = Charset::WINDOWS_1252;
-        $normaliserView = new InvoicesNormalizerView($this->getUser());
+        $normaliserView = $this->get('tactician.commandbus.query')->handle(new InvoiceExportQuery($this->getUser()));
 
         $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($normaliserView, 'csv', [

@@ -11,12 +11,8 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
-use Proximum\Vimeet\Domain\Order\Balance;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 use Proximum\Vimeet\Domain\View\Normalizer\InvoicesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -26,6 +22,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     const COL_EVENT_NAME              = 'event_name';
     const COL_OWNER_ID                = 'owner_id';
     const COL_SHEET_TITLE             = 'sheet_title';
+    const COL_INVOICE_DATE            = 'invoice_date';
     const COL_INVOICE_NUMBER          = 'invoice_number';
     const COL_TOTAL                   = 'total';
     const COL_TOTAL_WITH_VAT          = 'total_with_vat';
@@ -34,8 +31,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     const COL_INTRA_COMMUNITY_VAT     = 'intra_community_vat';
     const COL_BILLING_CONTACT_COUNTRY = 'billing_contact_country';
     const COL_ANALYTIC_CODE           = 'analytic_code';
-
-    const EXPORT_BASE_KEY = 'admin.invoice.export.fields.';
+    const EXPORT_BASE_KEY             = 'admin.invoice.export.fields.';
 
     /**
      * @var string
@@ -43,44 +39,11 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     protected $normalizerType = 'invoice';
 
     /**
-     * @var InvoiceRepositoryInterface
+     * @param TranslatorInterface $translator
      */
-    private $invoiceRepository;
-
-    /**
-     * @var EventRepositoryInterface
-     */
-    private $eventRepository;
-
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
-     * @var Balance
-     */
-    private $balance;
-
-    /**
-     * @param TranslatorInterface        $translator
-     * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param EventRepositoryInterface   $eventRepository
-     * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param Balance                    $balance
-     */
-    public function __construct(
-        TranslatorInterface $translator,
-        InvoiceRepositoryInterface $invoiceRepository,
-        EventRepositoryInterface $eventRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
-        Balance $balance
-    ) {
+    public function __construct(TranslatorInterface $translator)
+    {
         parent::__construct($translator);
-        $this->invoiceRepository = $invoiceRepository;
-        $this->eventRepository   = $eventRepository;
-        $this->sheetInfoGuesser  = $sheetInfoGuesser;
-        $this->balance           = $balance;
     }
 
     /**
@@ -95,14 +58,8 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
         $rawInvoices        = [];
         $normalizedInvoices = [];
 
-        $events = $this->eventRepository->getEventsByAdmin($object->user);
-
-        foreach ($events as $event) {
-            $invoices = $this->invoiceRepository->getAllByEvent($event);
-
-            foreach ($invoices as $invoice) {
-                $rawInvoices[] = $this->getInvoiceRawData($invoice, $object->user->getLocale());
-            }
+        foreach ($object->exportViews as $invoice) {
+            $rawInvoices[] = $this->getInvoiceRawData($invoice, $object->locale);
         }
 
         $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
@@ -123,31 +80,26 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     }
 
     /**
-     * @param Invoice $invoice
-     * @param string  $adminLocale
+     * @param ExportView $invoice
      *
      * @return array Raw data about invoice
      */
-    private function getInvoiceRawData(Invoice $invoice, $adminLocale)
+    private function getInvoiceRawData(ExportView $invoice)
     {
-        $sheetTitle = $this->sheetInfoGuesser->guessSheetTitle(
-            $invoice->getSheet(),
-            $invoice->getEvent()->getAvailableLocale($adminLocale)
-        );
-
         $rawData = [
-            self::COL_EVENT_ID       => $invoice->getEvent()->getId(),
-            self::COL_EVENT_NAME     => $invoice->getEvent()->getTitle(),
-            self::COL_OWNER_ID       => $invoice->getSheet()->getOwner()->getFullname(),
-            self::COL_SHEET_TITLE    => $sheetTitle,
-            self::COL_INVOICE_NUMBER => $invoice->getNumber(),
-            self::COL_TOTAL          => $invoice->getTotal(),
-            self::COL_TOTAL_WITH_VAT => $invoice->getTotalWithVat(),
-            self::COL_VAT_AMOUNT     => $invoice->getVatAmount(),
-            self::COL_BALANCE        => $this->balance->getBalance($invoice->getSheet()),
-            //            self::COL_INTRA_COMMUNITY_VAT => $invoice->getData()->getBillingInfo()->getVatNumber(),
-            //            self::COL_BILLING_CONTACT_COUNTRY => $invoice->getData()->getBillingInfo()->getAddress()->getCountry(),
-            self::COL_ANALYTIC_CODE  => $invoice->getEvent()->getConfiguration()->getAnalyticsCode(),
+            self::COL_EVENT_ID                => $invoice->eventId,
+            self::COL_EVENT_NAME              => $invoice->eventTitle,
+            self::COL_OWNER_ID                => $invoice->ownerId,
+            self::COL_SHEET_TITLE             => $invoice->sheetTitle,
+            self::COL_INVOICE_NUMBER          => $invoice->invoiceNumber,
+            self::COL_INVOICE_DATE            => $invoice->invoiceDate,
+            self::COL_TOTAL                   => $invoice->total,
+            self::COL_TOTAL_WITH_VAT          => $invoice->totalWithVat,
+            self::COL_VAT_AMOUNT              => $invoice->vatAmount,
+            self::COL_BALANCE                 => $invoice->balance,
+            self::COL_INTRA_COMMUNITY_VAT     => $invoice->vatNumber,
+            self::COL_BILLING_CONTACT_COUNTRY => $invoice->billingInfoCountry,
+            self::COL_ANALYTIC_CODE           => $invoice->analyticsCode,
         ];
 
         return $rawData;
@@ -196,12 +148,13 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
             self::COL_OWNER_ID,
             self::COL_SHEET_TITLE,
             self::COL_INVOICE_NUMBER,
+            self::COL_INVOICE_DATE,
             self::COL_TOTAL,
             self::COL_TOTAL_WITH_VAT,
             self::COL_VAT_AMOUNT,
             self::COL_BALANCE,
-            //            self::COL_INTRA_COMMUNITY_VAT,
-            //            self::COL_BILLING_CONTACT_COUNTRY,
+            self::COL_INTRA_COMMUNITY_VAT,
+            self::COL_BILLING_CONTACT_COUNTRY,
             self::COL_ANALYTIC_CODE,
         ];
     }

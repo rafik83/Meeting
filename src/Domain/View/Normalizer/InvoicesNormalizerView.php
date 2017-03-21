@@ -11,21 +11,29 @@
 namespace Proximum\Vimeet\Domain\View\Normalizer;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 
 class InvoicesNormalizerView
 {
     /**
-     * @var Admin
+     * @var ExportView[]
      */
-    public $user;
+    public $exportViews;
+
+    /**
+     * @var string
+     */
+    public $locale;
 
     /**
      * InvoicesNormalizerView constructor.
      *
-     * @param Admin $user
+     * @param ExportView[] $exportViews
+     * @param string       $locale
      */
-    public function __construct(Admin $user)
+    public function __construct(array $exportViews, $locale)
     {
-        $this->user = $user;
+        $this->exportViews = $exportViews;
+        $this->locale      = $locale;
     }
 }

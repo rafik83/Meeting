@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedExcepti
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
+use Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
@@ -31,6 +32,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -53,24 +55,28 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($admin);
 
-        $orderForm       = null;
-        $formIsSubmitted = false;
+        $orderForm         = null;
+        $invoiceExportForm = null;
 
         if (Finder::IsAllowedToFind($admin)) {
             $find      = new Find($admin);
+            $invoiceExport    = new InvoiceExportQuery($admin);
             $orderForm = $this->createForm(FindType::class, $find);
+            $invoiceExportForm = $this->createForm(ExportType::class, $invoiceExport);
 
-            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
+            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted()
+                               || $invoiceExportForm->handleRequest($request)->isSubmitted();
 
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
                     /** @var FindResult $result */
                     $result = $this->get('tactician.commandbus')->handle($find);
 
-                    return $this->redirect($this->generateUrl('admin_sheet_details', [
-                        'event' => $result->sheet->getEvent()->getId(),
-                        'sheet' => $result->sheet->getId(),
-                    ]) . '#sheetOrders');
+                    return $this->redirect($this->generateUrl('admin_sheet_details',
+                            [
+                                'event' => $result->sheet->getEvent()->getId(),
+                                'sheet' => $result->sheet->getId(),
+                            ]) . '#sheetOrders');
                 } catch (OrderNotFoundException $exception) {
                     $orderForm->get('numero')->addError(
                         new FormError(
@@ -96,9 +102,10 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'         => $events,
-            'orderForm'      => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive' => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'events'            => $events,
+            'orderForm'         => $orderForm !== null ? $orderForm->createView() : null,
+            'invoiceExportForm' => $invoiceExportForm !== null ? $invoiceExportForm->createView() : null,
+            'orderTabActive'    => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
         ]);
     }
 

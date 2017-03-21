@@ -3676,6 +3676,18 @@ services:
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
 
+    query.invoice_export_query_handler:
+        class: Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@order.balance'
+
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery }
+
     query.invoice_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler
         arguments:
@@ -3685,6 +3697,11 @@ services:
 
     serializer.denormalizer.invoice_view:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.invoice_export_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\ExportViewDenormalizer
         tags:
             - { name: serializer.normalizer }
 
