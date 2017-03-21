@@ -72,11 +72,10 @@ class EventController extends Controller
                     /** @var FindResult $result */
                     $result = $this->get('tactician.commandbus')->handle($find);
 
-                    return $this->redirect($this->generateUrl('admin_sheet_details',
-                            [
-                                'event' => $result->sheet->getEvent()->getId(),
-                                'sheet' => $result->sheet->getId(),
-                            ]) . '#sheetOrders');
+                    return $this->redirect($this->generateUrl('admin_sheet_details', [
+                            'event' => $result->sheet->getEvent()->getId(),
+                            'sheet' => $result->sheet->getId(),
+                        ]) . '#sheetOrders');
                 } catch (OrderNotFoundException $exception) {
                     $orderForm->get('numero')->addError(
                         new FormError(

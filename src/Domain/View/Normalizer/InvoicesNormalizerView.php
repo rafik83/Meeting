@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\View\Normalizer;
 
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 
 class InvoicesNormalizerView
