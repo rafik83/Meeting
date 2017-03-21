@@ -1558,6 +1558,17 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }
 
+    command.invoice_export_query_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\ExportHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@order.balance'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Export }
+
     command.invoice.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler
         arguments:
@@ -3675,18 +3686,6 @@ services:
             - '%phantomjs_script%'
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
-
-    query.invoice_export_query_handler:
-        class: Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQueryHandler
-        arguments:
-            - '@adapter.serializer_adapter'
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@repository.invoice.invoice_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@order.balance'
-
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery }
 
     query.invoice_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler

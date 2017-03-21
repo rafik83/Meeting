@@ -19,10 +19,11 @@ interface InvoiceRepositoryInterface
 {
     /**
      * @param Event $event
+     * @param array $filters
      *
      * @return Invoice[]
      */
-    public function getAllByEvent(Event $event);
+    public function getAllByEvent(Event $event, array $filters);
     
     /**
      * @param Invoice $invoice

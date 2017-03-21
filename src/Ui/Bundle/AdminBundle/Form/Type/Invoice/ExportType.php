@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice;
 
-use Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery;
+use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -36,13 +37,19 @@ class ExportType extends AbstractType
                 'widget'      => 'single_text',
                 'format'      => 'dd-MM-yyyy',
                 'data'        => $firstDay,
-                'placeholder' => 'form.transaction_find.children.date.placeholder',
+                'placeholder' => 'form.invoice_export.children.date.placeholder',
             ])
             ->add('endDate', DateType::class, [
                 'widget'      => 'single_text',
                 'format'      => 'dd-MM-yyyy',
                 'data'        => $lastDay,
-                'placeholder' => 'form.transaction_find.children.date.placeholder',
+                'placeholder' => 'form.invoice_export.children.date.placeholder',
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'form.invoice_export.children.submit.label',
+                'attr' => [
+                        'class' => 'pull-right col-md-2',
+                    ],
             ])
         ;
     }
@@ -53,7 +60,9 @@ class ExportType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => InvoiceExportQuery::class,
+            'data_class'      => Export::class,
+            'submit'          => true,
+            'csrf_protection' => false,
         ]);
     }
 

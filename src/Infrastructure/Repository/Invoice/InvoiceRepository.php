@@ -37,13 +37,21 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllByEvent(Event $event)
+    public function getAllByEvent(Event $event, array $filters = [])
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('invoice')
             ->from(Invoice::class, 'invoice', 'invoice.id')
             ->where('invoice.event = :event')
             ->setParameter('event', $event);
+
+        if ($dateFilters = $filters['date']) {
+            $queryBuilder
+                ->andWhere('invoice.createdAt BETWEEN :beginDate and :endDate')
+                ->setParameter('beginDate', $dateFilters['beginDate'])
+                ->setParameter('endDate', $dateFilters['endDate'])
+            ;
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

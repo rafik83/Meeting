@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
-use Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\InvoicePrefix\CreateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,22 +65,28 @@ class InvoiceController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $charset        = Charset::WINDOWS_1252;
-        $normaliserView = $this->get('tactician.commandbus.query')->handle(new InvoiceExportQuery($this->getUser()));
+        $response      = new Response();
+        $invoiceExport = new Export($this->getUser());
+        $form          = $this->createForm(ExportType::class, $invoiceExport)->handleRequest($request);
 
-        $serializer    = $this->get('serializer');
-        $exportContent = $serializer->serialize($normaliserView, 'csv', [
-            'locale'  => $request->getLocale(),
-            'charset' => $charset,
-        ]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $charset        = Charset::WINDOWS_1252;
+            $normaliserView = $this->get('tactician.commandbus')->handle($invoiceExport);
 
-        $response    = new Response($exportContent);
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_invoices_" . date("Y_m_d_His") . ".csv"
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+            $serializer    = $this->get('serializer');
+            $exportContent = $serializer->serialize($normaliserView, 'csv', [
+                'locale'  => $request->getLocale(),
+                'charset' => $charset,
+            ]);
+
+            $response->setContent($exportContent);
+            $disposition = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                "export_invoices_" . date("Y_m_d_His") . ".csv"
+            );
+            $response->headers->set('Content-Disposition', $disposition);
+            $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+        }
 
         return $response;
     }

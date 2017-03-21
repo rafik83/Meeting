@@ -16,13 +16,13 @@ use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\Order\Find;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
-use Proximum\Vimeet\Application\Query\Invoice\InvoiceExportQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
@@ -60,7 +60,7 @@ class EventController extends Controller
 
         if (Finder::IsAllowedToFind($admin)) {
             $find      = new Find($admin);
-            $invoiceExport    = new InvoiceExportQuery($admin);
+            $invoiceExport    = new Export($admin);
             $orderForm = $this->createForm(FindType::class, $find);
             $invoiceExportForm = $this->createForm(ExportType::class, $invoiceExport);
 
