@@ -50,7 +50,7 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getBySheets($sheets)
+    public function getBySheets(array $sheets)
     {
         $queryBuilder = $this
             ->entityManager

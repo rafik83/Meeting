@@ -23,11 +23,11 @@ interface BillingInfoRepositoryInterface
     public function getBySheet(Sheet $sheet);
 
     /**
-     * @param Sheet[]
+     * @param Sheet[] $sheets
      *
      * @return BillingInfo[]
      */
-    public function getBySheets($sheets);
+    public function getBySheets(array $sheets);
 
     /**
      * @param BillingInfo $billingInfo
