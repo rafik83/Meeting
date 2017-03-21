@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class TransactionNormalizer implements NormalizerInterface
@@ -33,6 +34,7 @@ class TransactionNormalizer implements NormalizerInterface
     {
         $this->translator = $translator;
     }
+    
     /**
      * {@inheritdoc}
      */
@@ -45,13 +47,20 @@ class TransactionNormalizer implements NormalizerInterface
         $data = [];
         
         foreach($object->transactionsView as $view) {
+            
+            $createdAt = $this->formatDate(
+                $view->transactionDate->getTimestamp(),
+                $view->event,
+                $object->adminLocale
+            );
+            
             $data[] =  [
                 $this->translate('sheet.id', $object->adminLocale) => $view->sheetId,
                 $this->translate('event.id', $object->adminLocale) => $view->eventId,
                 $this->translate('event.name', $object->adminLocale) => $view->eventName,
                 $this->translate('sheet.owner.id', $object->adminLocale) => $view->sheetOwnerId,
                 $this->translate('society.name', $object->adminLocale) => $view->societyName,
-                $this->translate('transaction_date', $object->adminLocale) => $view->transactionDate->getTimestamp(),
+                $this->translate('transaction_date', $object->adminLocale) => !$createdAt ? null : $createdAt,
                 $this->translate('transaction_type', $object->adminLocale) => $view->transactionType,
                 $this->translate('transaction_reference', $object->adminLocale) => $view->transactionReference,
                 $this->translate('payment.gateway', $object->adminLocale) => $view->transactionGateway,
@@ -81,5 +90,24 @@ class TransactionNormalizer implements NormalizerInterface
     private function translate($key, $locale)
     {
         return $this->translator->trans(self::TRANSLATION_PREFIX.$key, [], self::TRANSLATION_DOMAIN, $locale);
+    }
+    
+    /**
+     * @param int       $dateTime
+     * @param Event     $event
+     * @param string    $locale
+     *
+     * @return bool|string
+     */
+    private function formatDate($dateTime, Event $event, $locale)
+    {
+        $timeFormatter = \IntlDateFormatter::create(
+            $event->getAvailableLocale($locale),
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $event->getTimeZone()
+        );
+        
+        return $timeFormatter->format($dateTime);
     }
 }

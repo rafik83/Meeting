@@ -10,8 +10,15 @@
 
 namespace Proximum\Vimeet\Application\View\Transaction;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class TransactionView
 {
+    /**
+     * @var Event
+     */
+    public $event;
+    
     /**
      * @var int
      */
@@ -75,6 +82,7 @@ class TransactionView
     /**
      * TransactionView constructor.
      *
+     * @param Event                 $event
      * @param int                   $sheetId
      * @param int                   $eventId
      * @param string                $eventName
@@ -82,13 +90,14 @@ class TransactionView
      * @param string                $societyName
      * @param \DateTimeInterface    $transactionDate
      * @param int                   $transactionType
-     * @param string                $transactionReference
-     * @param null|string           $transactionGateway
+     * @param string|null           $transactionReference
+     * @param string|null           $transactionGateway
      * @param float                 $transactionAmount
-     * @param string                $contactBillingInfoCountry
-     * @param string                $vatNumber
+     * @param string|null           $contactBillingInfoCountry
+     * @param string|null           $vatNumber
      */
     public function __construct(
+        Event $event,
         $sheetId,
         $eventId,
         $eventName,
@@ -102,6 +111,7 @@ class TransactionView
         $contactBillingInfoCountry,
         $vatNumber
     ) {
+        $this->event                        = $event;
         $this->sheetId                      = $sheetId;
         $this->eventId                      = $eventId;
         $this->eventName                    = $eventName;
