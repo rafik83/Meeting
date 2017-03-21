@@ -60,7 +60,7 @@ class SheetInvoicedEventSubscriber implements EventSubscriberInterface
         $this->mailer                     = $mailer;
         $this->sender                     = $sender;
         $this->eventUrlGenerator          = $eventUrlGenerator;
-        $this->billingInfoRepository = $billingInfoRepository;
+        $this->billingInfoRepository      = $billingInfoRepository;
     }
 
     /**
@@ -73,30 +73,36 @@ class SheetInvoicedEventSubscriber implements EventSubscriberInterface
         foreach ($sheetInvoicedEvent->getSheetInvoicedViews() as $sheetInvoicedView) {
             $sheet = $sheetInvoicedView->sheet;
 
+            $receivers = [
+                $sheet->getOwner()->getEmail(),
+                isset($billingInfosIndexedBySheetId[$sheet->getId()])
+                    ? $billingInfosIndexedBySheetId[$sheet->getId()]->getEmail()
+                    : null
+            ];
+
+            $invoiceUrlViews = array_map(
+                function (Invoice $invoice) {
+                    return $this->invoiceUrlViewQueryHandler->handle(new InvoiceUrlViewQuery($invoice));
+                },
+                $sheetInvoicedView->invoices
+            );
+
+            $ordersUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+                $sheet->getEvent(),
+                'event_order_list',
+                [
+                    '_locale' => $sheet->getOwnerLocale(), 'sheet' => $sheet->getId(),
+                ]
+            );
+
             $mail = new SheetInvoicedMail(
                 $sheet,
                 $this->sender->generate($sheet->getEvent()),
-                [
-                    $sheet->getOwner()->getEmail(),
-                    isset($billingInfosIndexedBySheetId[$sheet->getId()])
-                        ? $billingInfosIndexedBySheetId[$sheet->getId()]->getEmail()
-                        : null
-                ],
+                $receivers,
                 new ParticipantInfoView($sheet->getOwner()->getFirstName(), $sheet->getOwner()->getLastName()),
                 $sheet->getOwnerLocale(),
-                array_map(
-                    function (Invoice $invoice) {
-                        return $this->invoiceUrlViewQueryHandler->handle(new InvoiceUrlViewQuery($invoice));
-                    },
-                    $sheetInvoicedView->invoices
-                ),
-                $this->eventUrlGenerator->generateEventAbsoluteUrl(
-                    $sheet->getEvent(),
-                    'event_order_list',
-                    [
-                        '_locale' => $sheet->getOwnerLocale(), 'sheet' => $sheet->getId(),
-                    ]
-                )
+                $invoiceUrlViews,
+                $ordersUrl
             );
 
             $this->mailer->send($mail);

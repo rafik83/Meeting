@@ -59,11 +59,13 @@ class SheetInvoicedMail extends UserMail
         array $invoiceUrlViews,
         $ordersUrl
     ) {
-        if (0 === count($receivers)) {
-            throw new \Exception('No receivers given');
+        $firstReceiver = reset($receivers);
+
+        if (false === $firstReceiver) {
+            throw new \Exception('No receiver given');
         }
 
-        parent::__construct($sender, reset($receivers), $locale, $sheet->getEvent(), $participantInfoView);
+        parent::__construct($sender, $firstReceiver, $locale, $sheet->getEvent(), $participantInfoView);
 
         $this->sheet           = $sheet;
         $this->invoiceUrlViews = $invoiceUrlViews;
