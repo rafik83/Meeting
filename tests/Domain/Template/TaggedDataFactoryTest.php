@@ -1,0 +1,106 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Template;
+
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+
+class TaggedDataFactoryTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $sheet    = SheetFactory::create();
+        $locale   = 'fr';
+        $template = [
+            '0aea62b2' => [
+                'component' => 'object',
+                'type'      => 'editable-text',
+                'config'    => [
+                    'translatable' => true,
+                    'tags'         => [Tag::SHEET_TITLE, Tag::SHEET_DATA], // registration template tags
+                    'tag'          => Tag::SHEET_TITLE // sheet template tag
+                ],
+            ],
+            '0aea62b3' => [
+                'component' => 'object',
+                'type'      => 'editable-text',
+                'config'    => [
+                    'translatable' => false,
+                    'tags'         => ['sheet_generic_tag_1', Tag::SHEET_DATA], // registration template tags
+                    'tag'          => 'sheet_generic_tag_1' // sheet template tag
+                ],
+            ],
+        ];
+
+        $data = [
+            '0aea62b2' => [
+                'text' => ['fr' => 'Lorem ipsum ec74be5e fr', 'en' => 'Lorem ipsum ec74be5e en'],
+            ],
+            '0aea62b3' => [
+                'text' => ['fr' => 'Lorem ipsum ec74be5e fr'],
+            ],
+        ];
+
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+
+        $factory           = new TemplateDataFactory($nomenclatureRepository->reveal());
+        $templateData      = $factory->create($template, $data, 'fr', 'fr');
+        $sheetTemplateData = $factory->create($template, $data, 'fr', 'fr');
+
+        // Expected
+        $expectedTaggedDataViewObject1 = new TaggedDataView(
+            'editable-text',
+            true, // translatable
+            ['fr' => 'Lorem ipsum ec74be5e fr', 'en' => 'Lorem ipsum ec74be5e en'],
+            'Lorem ipsum ec74be5e fr',
+            Tag::SHEET_TITLE,
+            false
+        );
+        $expectedTaggedDataViewObject2 = new TaggedDataView(
+            'editable-text',
+            false, // translatable
+            [],
+            '',
+            'sheet_generic_tag_1',
+            false
+        );
+
+        // Mock
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+
+        $templateDataFactory
+            ->createRegistrationFromSheet($sheet, $locale)
+            ->shouldBeCalled()
+            ->willReturn($templateData);
+
+        /** @var TemplateData $sheetTemplateData */
+        $templateDataFactory
+            ->createFromSheet($sheet, $locale)
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateData);
+
+        $taggedDataFactory = new TaggedDataFactory($templateDataFactory->reveal());
+        $sheetTemplateData = $taggedDataFactory->buildTaggedDataView($sheet, $locale);
+
+        $objectEditableText1 = $sheetTemplateData->getObject('0aea62b2');
+        $objectEditableText2 = $sheetTemplateData->getObject('0aea62b3');
+
+        $this->assertCount(1, $objectEditableText1->getTaggedDataViews());
+        $this->assertCount(1, $objectEditableText2->getTaggedDataViews());
+        $this->assertEquals($expectedTaggedDataViewObject1, $objectEditableText1->getTaggedDataViews()[0]);
+        $this->assertEquals($expectedTaggedDataViewObject2, $objectEditableText2->getTaggedDataViews()[0]);
+    }
+}

@@ -26,7 +26,7 @@ class TaggedDataFactory
     /**
      * @var TaggedDataView[]
      */
-    private $taggedDataViews;
+    private $taggedDataViews = [];
 
     /**
      * TaggedDataFactory constructor.
