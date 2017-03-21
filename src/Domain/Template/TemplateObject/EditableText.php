@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TranslatableInterface;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslatableDataType;
 
 class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
@@ -233,8 +234,37 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         return $translations;
     }
 
-    public function setTranslations(array $translations = [])
+    /**
+     * @see EditableTextTranslationType
+     *
+     * @return array
+     */
+    public function getTranslationsInput()
     {
-        
+        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach ($this->data['text'] as $locale => $content) {
+            $translations[$locale]['content'] = $content;
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @param array $translations "['fr' => ['content' => 'content_here']]"
+     *
+     * @see EditableTextTranslationType
+     */
+    public function setTranslationsInput(array $translations = [])
+    {
+        $this->data['text'] = []; // erase previous untranslatable value
+
+        foreach ($translations as $locale => $translation) {
+            $this->data['text'][$locale] = $translation['content'];
+        }
     }
 }

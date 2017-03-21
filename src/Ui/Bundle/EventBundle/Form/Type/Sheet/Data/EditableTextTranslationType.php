@@ -24,7 +24,7 @@ class EditableTextTranslationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('translations', TranslationsType::class, [
+        $builder->add('translationsInput', TranslationsType::class, [
             'locales'       => $options['locales'],
             'entry_type'    => EditableTextTranslatableDataType::class,
             'entry_options' => [
