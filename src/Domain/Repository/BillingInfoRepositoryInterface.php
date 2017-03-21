@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface BillingInfoRepositoryInterface
@@ -19,7 +20,7 @@ interface BillingInfoRepositoryInterface
     /**
      * @param Sheet $sheet
      *
-     * @return BillingInfo
+     * @return null|BillingInfo
      */
     public function getBySheet(Sheet $sheet);
 
@@ -39,4 +40,11 @@ interface BillingInfoRepositoryInterface
      * @param BillingInfo $billingInfo
      */
     public function set(BillingInfo $billingInfo);
+
+    /**
+     * @param Event $event
+     *
+     * @return BillingInfo[]
+     */
+    public function findByEvent(Event $event);
 }

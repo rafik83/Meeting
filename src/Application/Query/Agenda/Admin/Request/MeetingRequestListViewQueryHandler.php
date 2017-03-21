@@ -55,6 +55,8 @@ class MeetingRequestListViewQueryHandler
                 Request::STATE_APPROVED
             );
 
+        $requests = [];
+
         foreach ($unassignedRequests as $request) {
             $requests[] = $this->requestViewQueryHandler->handle(
                 new RequestViewQuery(

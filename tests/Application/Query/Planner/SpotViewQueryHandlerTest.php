@@ -161,4 +161,60 @@ class SpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function testHandleWithoutSheetInCatalog()
+    {
+        // Data
+        $event = EventFactory::createEvent();
+        $sheet  = SheetFactory::create($event);
+        $sheet2 = SheetFactory::create($event);
+        $sheet3 = SheetFactory::create($event);
+
+        $type       = new TypeView(1, 'title');
+        $sheetView2 = new SheetView(2, $type, 3, 3);
+        $sheetView3 = new SheetView(3, $type, 4, 4);
+
+        $spot = new Spot('ref1', $event, 2, 2, 2, true, 8, true);
+        $spot2 = new Spot('ref2', $event, 3, 3, 3, true, 8, false);
+        $spot3 = new Spot('ref3', $event, 4, 4, 4, true, 12, true);
+        $spot4 = new Spot('ref4', $event, 5, 5, 5, true, 12, false);
+        $spot->addSheet($sheet);
+        $spot2->addSheet($sheet2);
+        $spot2->addSheet($sheet3);
+
+        // Reflection
+        $reflectionSheet = new \ReflectionClass(Sheet::class);
+        $propertySheet   = $reflectionSheet->getProperty('id');
+        $propertySheet->setAccessible(true);
+        $propertySheet->setValue($sheet, 1);
+        $propertySheet->setValue($sheet2, 2);
+        $propertySheet->setValue($sheet3, 3);
+        $propertySheet->setAccessible(false);
+
+        $reflectionSpot = new \ReflectionClass(Spot::class);
+        $propertySpot   = $reflectionSpot->getProperty('id');
+        $propertySpot->setAccessible(true);
+        $propertySpot->setValue($spot, 1);
+        $propertySpot->setValue($spot2, 2);
+        $propertySpot->setValue($spot3, 3);
+        $propertySpot->setValue($spot4, 4);
+        $propertySpot->setAccessible(false);
+
+        // Mock
+        $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $spotRepository->getActiveByEvent($event)->shouldBeCalled()->willReturn([$spot, $spot2, $spot3, $spot4]);
+
+        // Handler
+        $handler = new SpotViewQueryHandler($spotRepository->reveal());
+        $result  = $handler->handle(new SpotViewQuery($event, [$sheetView2, $sheetView3], []));
+
+        // Expected
+        $expected = [
+            new SpotView(2, false, 'ref2', 3, 3, [$sheetView2, $sheetView3], 8, []),
+            new SpotView(3, true, 'ref3', 4, 4, [], 12, []),
+            new SpotView(4, false, 'ref4', 5, 5, [], 12, []),
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
 }

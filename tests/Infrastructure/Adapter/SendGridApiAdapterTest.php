@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 use SendGrid\Mail;
 use SendGrid\Response;
 
@@ -24,12 +25,14 @@ class SendGridApiAdapterTest extends \PHPUnit_Framework_TestCase
     public function testSend()
     {
         $event     = EventFactory::createEvent();
-        $receiver  = new ReceiverView('user@vimeet.com', []);
+        $receiver  = new ReceiverView('user@vimeet.com', [], 'fr');
         $createdAt = new \DateTime();
         $message   = new Message($event, $createdAt, 'test', 'test subject', 'test content');
 
         $template = $this->prophesize(\Twig_TemplateInterface::class);
-        $template->render(['mail' => $message])->shouldBeCalled()->willReturn('test content');
+        foreach ($event->getLocales() as $locale) {
+            $template->render(['mail' => new MessageContentMail($message, $event, $locale)])->shouldBeCalled()->willReturn('test content');
+        }
 
         $twig = $this->prophesize(\Twig_Environment::class);
         $twig->load($message->getTemplate())->shouldBeCalled()->willReturn($template);

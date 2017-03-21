@@ -108,7 +108,15 @@ class Batch extends AbstractBatch
     public $selectionType;
 
     /**
+     * "Générer facture"
+     *
+     * @var bool
+     */
+    public $generateInvoice;
+
+    /**
      * @param Event  $event
+     * @param Admin $admin
      * @param Admin  $admin
      * @param string $locale
      * @param array  $filters

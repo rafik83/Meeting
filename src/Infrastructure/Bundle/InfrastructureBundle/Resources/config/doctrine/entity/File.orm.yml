@@ -1,0 +1,13 @@
+Proximum\Vimeet\Domain\Model\File:
+    type: entity
+    table: file
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        path:
+            type: string
+        createdAt:
+            type: datetime

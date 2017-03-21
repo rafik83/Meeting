@@ -102,7 +102,7 @@ class Event implements EventInterface, TraceableInterface
     private $legalInformation;
 
     /**
-     * @var string
+     * @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const
      */
     private $mode;
 
@@ -549,13 +549,21 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * Get mode
+     * Get VAT mode
      *
      * @return string
      */
     public function getMode()
     {
         return $this->mode;
+    }
+
+    /**
+     * Set Vat mode to VAT_MODE_ET
+     */
+    public function setVatModeToExclusiveOfTaxes()
+    {
+        $this->mode = self::VAT_MODE_ET;
     }
 
     /**

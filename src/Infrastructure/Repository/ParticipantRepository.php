@@ -136,6 +136,23 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getParticipantsWithSheetInCatalogAndActiveByTypeIds(array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant, sheet, type')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.enable = true AND sheet.inCatalog = true')
+            ->join('sheet.type', 'type', 'WITH', 'type.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLastParticipantIdForEventAndUser($userId, $eventId)
     {
         $queryBuilder = $this

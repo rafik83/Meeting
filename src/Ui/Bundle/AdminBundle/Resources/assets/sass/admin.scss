@@ -305,3 +305,11 @@ table th.sort-up:after {
   -ms-user-select: none;
   user-select: none;
 }
+
+.pagination {
+  margin: 0 !important;
+}
+
+.pagination ul {
+  margin-bottom: 0 !important;
+}

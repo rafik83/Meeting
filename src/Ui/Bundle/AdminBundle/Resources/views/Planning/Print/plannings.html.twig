@@ -1,0 +1,74 @@
+<html>
+<head>
+    <style type="text/css">
+        .page {
+            clear: both;
+            font-family: Helvetica, sans-serif;
+            padding: 20px;
+            page-break-before: always;
+        }
+
+        .page:first-child {
+            page-break-before: avoid;
+        }
+
+        .participant-name {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .planning {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: 12px;
+        }
+
+        .event-title {
+            color: #ffffff;
+            float: left;
+            margin-left: 20px;
+            margin-top: 15px;
+            width: 55%;
+        }
+
+        .header {
+            padding: 20px;
+        }
+
+        .event-logo {
+            float: left;
+            width: 40%;
+        }
+
+        .footer {
+            color: #ffffff;
+            font-family: Helvetica, sans-serif;
+            font-size: 15px;
+            margin-top: 10px;
+            padding: 20px;
+        }
+
+        .clear-both {
+            clear: both;
+        }
+
+        .link {
+            color: #ffffff;
+        }
+
+        .logo {
+            max-width: 100%;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+{% for planning in plannings %}
+    {{ include('AdminBundle:Planning/Print:page.html.twig', {'planning': planning}) }}
+{% endfor %}
+<script>
+    window.print();
+</script>
+</body>
+</html>
