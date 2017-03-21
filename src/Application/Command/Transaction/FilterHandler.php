@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
-use Proximum\Vimeet\Application\Exception\Transaction\TransactionNotFoundException;
+use Proximum\Vimeet\Application\Exception\Event\EventsListEmptyException;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
@@ -56,14 +56,14 @@ class FilterHandler
      *
      * @return TransactionListViewQuery
      *
-     * @throws TransactionNotFoundException
+     * @throws EventsListEmptyException
      */
     public function handle(Filter $command)
     {
         $events = $this->eventRepository->getEventsByAdmin($command->admin);
         
         if (empty($events)) {
-            throw new TransactionNotFoundException();
+            throw new EventsListEmptyException();
         }
         
         $payments = $this->paymentRepository->findPaidByDateRangeAndCrossEvent(

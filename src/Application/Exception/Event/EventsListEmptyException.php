@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\Transaction;
+namespace Proximum\Vimeet\Application\Exception\Event;
 
-class TransactionException extends \Exception
+class EventsListEmptyException extends EventException
 {
 }

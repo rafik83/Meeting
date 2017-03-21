@@ -21,9 +21,9 @@ use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Application\Exception\Event\EventsListEmptyException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
-use Proximum\Vimeet\Application\Exception\Transaction\TransactionNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
@@ -135,12 +135,14 @@ class EventController extends Controller
                     
                     $filePath = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
                     
+                    $this->addFlash('success', 'flash.admin.event.export.success');
+                    
                     return new CsvFileResponse(
                         file_get_contents($this->getParameter('infrastructure.export_transactions_path') . $filePath),
                         sprintf('export_transactions_%s.csv', date("Y_m_d_His"))
                     );
-                } catch (TransactionNotFoundException $exception) {
-                    dump($exception);die;
+                } catch (EventsListEmptyException $exception) {
+                    $this->addFlash('error', 'flash.admin.event.empty_list');
                 }
             }
         }
