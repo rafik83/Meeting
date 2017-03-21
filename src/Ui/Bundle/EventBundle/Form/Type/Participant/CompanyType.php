@@ -14,9 +14,11 @@ use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\EditableTextTranslatableDataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,9 +33,9 @@ class CompanyType extends AbstractType
         /** @var Template\TemplateData $template */
         $template = $options['template'];
 
-        foreach ($template->getCompanyObjects() as $key => $object) {
+        foreach ($template->getEditableSheetDataExceptedImageObjects() as $key => $object) {
             if ($object instanceof Template\TemplateObject\EditableText) {
-                $this->addText($key, $builder, $object, $options['locale']);
+                $this->addText($key, $builder, $object, $options['locale'], $options['locales']);
             } elseif ($object instanceof Template\TemplateObject\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Telephone) {
@@ -55,9 +57,9 @@ class CompanyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'        => Template\TemplateData::class,
-            'validation_groups' => ['Default', 'company']
+            'validation_groups' => ['Default', 'company'],
         ]);
-        $resolver->setRequired(['template', 'locale', 'country']);
+        $resolver->setRequired(['template', 'locale', 'country', 'locales']);
         $resolver->setAllowedTypes('locale', 'string');
         $resolver->setAllowedTypes('template', Template\TemplateData::class);
         $resolver->setAllowedTypes('country', 'string');
@@ -68,14 +70,28 @@ class CompanyType extends AbstractType
      * @param FormBuilderInterface    $builder
      * @param Template\TemplateObject $object
      * @param string                  $locale
+     * @param array                   $locales
      */
-    private function addText($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
-    {
-        $builder->add($key, EditableTextInputDataType::class, [
-            'label'  => false,
-            'locale' => $locale,
-            'object' => $object,
-        ]);
+    private function addText(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject $object,
+        $locale,
+        $locales
+    ) {
+        if ($object->isTranslatable()) {
+            $builder->add($key, EditableTextTranslationType::class, [
+                'locales' => $locales,
+                'object'  => $object,
+                'label'   => $object->getOption('label', $locale),
+            ]);
+        } else {
+            $builder->add($key, EditableTextInputDataType::class, [
+                'label'  => false,
+                'locale' => $locale,
+                'object' => $object,
+            ]);
+        }
     }
 
     /**
@@ -106,9 +122,9 @@ class CompanyType extends AbstractType
         $locale
     ) {
         $builder->add($key, BooleanDataType::class, [
-            'object'  => $object,
-            'locale'  => $locale,
-            'label'   => false,
+            'object' => $object,
+            'locale' => $locale,
+            'label'  => false,
         ]);
     }
 
@@ -119,8 +135,13 @@ class CompanyType extends AbstractType
      * @param string                  $locale
      * @param string                  $country
      */
-    private function addTelephone($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale, $country)
-    {
+    private function addTelephone(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject $object,
+        $locale,
+        $country
+    ) {
         $builder->add($key, TelephoneDataType::class, [
             'label'   => false,
             'locale'  => $locale,
@@ -150,8 +171,12 @@ class CompanyType extends AbstractType
      * @param Template\TemplateObject\Nomenclature $object
      * @param string                               $locale
      */
-    private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
-    {
+    private function addNomenclature(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject\Nomenclature $object,
+        $locale
+    ) {
         $builder->add($key, NomenclatureDataType::class, [
             'label'       => false,
             'locale'      => $locale,

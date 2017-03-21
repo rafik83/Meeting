@@ -232,4 +232,9 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
 
         return $translations;
     }
+
+    public function setTranslations(array $translations = [])
+    {
+        
+    }
 }
