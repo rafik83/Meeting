@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
 class FilterHandler
 {
