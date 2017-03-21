@@ -27,19 +27,24 @@ class ParticipantView
     /** @var string */
     public $reference;
 
+    /** @var bool */
+    public $isVisio;
+
     /**
      * @param int        $id
      * @param string     $fullName
      * @param SheetView  $sheet
      * @param SlotView[] $unavailabilityList
+     * @param bool       $isVisio
      */
-    public function __construct($id, $fullName, SheetView $sheet, array $unavailabilityList)
+    public function __construct($id, $fullName, SheetView $sheet, array $unavailabilityList, $isVisio = false)
     {
         $this->id                 = $id;
         $this->fullName           = $fullName;
         $this->sheet              = $sheet;
         $this->unavailabilityList = $unavailabilityList;
         $this->reference          = sprintf('participant%s', $id);
+        $this->isVisio            = $isVisio;
     }
 
     /**

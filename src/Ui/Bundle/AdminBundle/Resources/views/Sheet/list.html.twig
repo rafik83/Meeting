@@ -18,25 +18,31 @@
         {% endif %}
     </h1>
 
-    <div class="row filters">
-        {{ form_start(filter_part_form) }}
-        <div class="col-md-offset-4 col-md-4">
-
-            <div class="input-group">
-                <div class="input-group-btn">
-                    {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
-                    {{ macro.choice_as_dropdown(filter_form.imported, true, false, true) }}
+    {{ form_start(filter_form) }}
+        <div class="row filters">
+            <div class="col-md-offset-4 col-md-4">
+                <div class="input-group col-md-12">
+                    {{ form_widget(filter_form.text) }}
                 </div>
-                {{ form_widget(filter_part_form.text) }}
+
             </div>
-
+            <div class="col-md-4 text-right">
+                {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
+                {{ form_widget(filter_form.orderBy, {'attr': {'class': 'hide'}}) }}
+            </div>
         </div>
-        <div class="col-md-4 text-right">
-            {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
-        </div>
-        {{ form_end(filter_part_form) }}
 
-    </div>
+        <div class="row filters">
+            <div class="col-md-12 text-center">
+                {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
+                }) }}
+            </div>
+        </div>
+
+        {{ include('AdminBundle:Sheet/Partial:filters.html.twig', { 'form': filter_form }) }}
+    {{ form_end(filter_form) }}
 
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
     {{ form_errors(batch_form) }}
@@ -93,20 +99,20 @@
                     {% if batch_form.validationStateValidate is defined %}
                         <li>{{ form_widget(batch_form.validationStateValidate) }}</li>
                     {% endif %}
+
+                    {% if batch_form.generateInvoice is defined %}
+                        <li role="separator" class="divider"></li>
+                        <li>{{ form_widget(batch_form.generateInvoice) }}</li>
+                    {% endif %}
                 {% endblock actions %}
             {% endembed %}
         </div>
-        <div class="col-md-4">
-            {{ include('AdminBundle:Common:filters_summary.html.twig', {
-                filters:   filters_summary,
-                resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
-            }) }}
+        <div class="col-md-8">
+            {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
         </div>
     </div>
 
-    {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
-
-    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+    {% set hasCategories = filter_form.category is defined ? filter_form.category.vars.choices|length > 1 : false %}
 
     <table class="table table-hover selectable-row filterable">
         <thead>
@@ -115,32 +121,32 @@
                 <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}"/>
             </th>
             <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.enabled) }}
+                {{ 'form.sheet_filter.children.enabled.label'|trans({}, 'forms') }}
             </th>
 
             {% if hasCategories %}
                 <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.category) }}
+                    {{ 'form.sheet_filter.children.category.label'|trans({}, 'forms') }}
                 </th>
             {% endif %}
 
             <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.type) }}
+                {{ 'form.sheet_filter.children.type.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.validationState) }}
+                {{ 'form.sheet_filter.children.validationState.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.completed) }}
+                {{ 'form.sheet_filter.children.completed.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.state) }}
+                {{ 'form.sheet_filter.children.state.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
             <th>{{ 'admin.sheet.createdAt'|trans }}</th>
             <th>{{ 'admin.sheet.spot'|trans }}</th>
             <th nowrap="nowrap">
-                {{ macro.choice_as_dropdown(filter_form.follower) }}
+                {{ 'form.sheet_batch.children.follower.label'|trans({}, 'forms') }}
             </th>
             <th class="col-md-1"></th>
         </tr>

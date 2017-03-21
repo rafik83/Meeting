@@ -217,6 +217,17 @@ admin.happening.menu.link: Programme
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
+admin.transaction.column.date: Date
+admin.invoice.column.number: 'Numéro de facture'
+admin.invoice.column.orders: 'Commandes concernées'
+admin.invoice.column.date: 'Date de création'
+admin.invoice.column.total: 'Total HT'
+admin.invoice.column.link: 'Lien'
+admin.invoice.pdf: 'Voir la facture'
+admin.invoice.list.title: 'Nom backoffice'
+admin.invoice.list.prefix: 'Prefix'
+admin.invoice.list.isDefault: 'Par défaut'
+admin.invoice.title: 'Liste des préfixes de numéro de facture'
 admin.invoice.create.button: 'Nouveau préfixe'
 admin.invoice.create.title: 'Ajouter un nouveau préfixe'
 admin.invoice.link: Facturation
@@ -224,6 +235,7 @@ admin.invoice.list.isDefault: 'Par défaut'
 admin.invoice.list.prefix: Préfixe
 admin.invoice.list.title: 'Nom backoffice'
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
+admin.invoice.show: 'Voir'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
@@ -361,10 +373,12 @@ admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
 admin.order.cancelled: Annulée
+admin.order.invoiceNumber: Facture N°
 admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
+admin.order.export.button.label: 'Exporter les commandes'
 admin.order.link: Commandes
 admin.order.sheet: Fiche
 admin.order.title: 'Liste des commandes'
@@ -426,6 +440,8 @@ admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvell
 admin.planner.import.link: Importer
 admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
+admin.planning.export.title: Export des plannings en pdf
+admin.planning.export.link: Exporter
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -496,7 +512,9 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
+admin.sheet.registeredAt.all: 'Peu importe'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
+admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
@@ -520,6 +538,7 @@ admin.sheet.details.company.title: Société
 admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
+admin.sheet.details.invoices: 'Factures'
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
 admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'
@@ -568,6 +587,7 @@ admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.filter.template_filters: 'Filtres supplémentaires'
+admin.sheet.list.filters.label: 'Filtres avancés'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
@@ -834,6 +854,7 @@ event.sheet.cart.label.totalPrice: Total
 event.sheet.cart.title: 'Récapitulatif de votre panier'
 event.sheet.cart.totalWithoutTaxes: 'Total HT'
 event.sheet.completed.complete: Complète
+event.sheet.completed.all: 'Peu importe'
 event.sheet.completed.incomplete: Incomplète
 event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active

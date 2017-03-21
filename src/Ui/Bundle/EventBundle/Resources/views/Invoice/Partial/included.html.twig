@@ -1,0 +1,13 @@
+<tr>
+    <td>
+        {{ 'invoice.summary.product.included'|trans({}, "invoices", eventDefaultLocale) }}
+        {{ includedProductView.label }}
+    </td>
+    <td></td>
+    <td class="text-right">
+        {{ includedProductView.quantity }}
+    </td>
+    <td class="text-right">
+        {{ includedProductView.total|format_amount|localizedcurrency(currency, eventDefaultLocale) }}
+    </td>
+</tr>

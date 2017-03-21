@@ -45,6 +45,13 @@ interface HappeningParticipationRepositoryInterface
     public function findByParticipant(Participant $participant, array $filters = []);
 
     /**
+     * @param Participant[] $participants
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByParticipants(array $participants);
+
+    /**
      * @param Happening $happening
      *
      * @return int

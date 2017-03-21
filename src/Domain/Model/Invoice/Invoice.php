@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Invoice;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 /**
@@ -18,74 +20,73 @@ use Proximum\Vimeet\Domain\Model\Sheet;
  */
 class Invoice
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     private $sheet;
 
-    /**
-     * @var Prefix
-     */
+    /** @var Prefix */
     private $prefix;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoicePrefix;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $invoiceYear;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $invoiceIncrement;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $total;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $totalWithVat;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $vatAmount;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var string 3-letter ISO 4217 currency name */
+    private $currency;
+
+    /** @var \DateTimeInterface */
     private $createdAt;
 
+    /** @var string */
+    private $data;
+
+    /** @var ArrayCollection of Order */
+    private $orders;
+
+    /** @var bool */
+    private $vatApplicable;
+
+    /** @var string 'ati'|'et' ; See Proximum\Vimeet\Domain\Model\Event VAT_MODE_ATI and VAT_MODE_ET */
+    private $vatMode;
+
+    /** @var float */
+    private $vatRate;
+
     /**
-     * Invoice constructor.
-     *
-     * @param Event     $event
-     * @param Sheet     $sheet
-     * @param Prefix    $prefix
-     * @param string    $invoicePrefix
-     * @param int       $invoiceYear
-     * @param int       $invoiceIncrement
-     * @param int       $total
-     * @param int       $totalWithVat
-     * @param int       $vatAmount
-     * @param \DateTime $createdAt
+     * @param Event              $event
+     * @param Sheet              $sheet
+     * @param Prefix             $prefix
+     * @param string             $invoicePrefix
+     * @param int                $invoiceYear
+     * @param int                $invoiceIncrement
+     * @param bool               $vatApplicable
+     * @param string             $vatMode
+     * @param float              $vatRate
+     * @param int                $total
+     * @param int                $totalWithVat
+     * @param int                $vatAmount
+     * @param string             $currency
+     * @param string             $data
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Event $event,
@@ -94,21 +95,32 @@ class Invoice
         $invoicePrefix,
         $invoiceYear,
         $invoiceIncrement,
+        $vatApplicable,
+        $vatMode,
+        $vatRate,
         $total,
         $totalWithVat,
         $vatAmount,
-        \DateTime $createdAt)
-    {
+        $currency,
+        $data,
+        \DateTimeInterface $createdAt
+    ) {
         $this->event            = $event;
         $this->sheet            = $sheet;
         $this->prefix           = $prefix;
         $this->invoicePrefix    = $invoicePrefix;
         $this->invoiceYear      = $invoiceYear;
         $this->invoiceIncrement = $invoiceIncrement;
+        $this->vatApplicable    = $vatApplicable;
         $this->total            = $total;
         $this->totalWithVat     = $totalWithVat;
         $this->vatAmount        = $vatAmount;
+        $this->currency         = $currency;
+        $this->data             = $data;
         $this->createdAt        = $createdAt;
+        $this->orders           = new ArrayCollection();
+        $this->vatMode          = $vatMode;
+        $this->vatRate          = $vatRate;
     }
 
     /**
@@ -168,7 +180,7 @@ class Invoice
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -204,6 +216,71 @@ class Invoice
      */
     public function getNumber()
     {
-        return $this->getInvoicePrefix() . $this->getInvoiceYear() . '-' . str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT);
+        return sprintf(
+            '%s%s-%s',
+            $this->getInvoicePrefix(),
+            $this->getInvoiceYear(),
+            str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return Order[]
+     */
+    public function getOrders()
+    {
+        return $this->orders->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVatApplicable()
+    {
+        return $this->vatApplicable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->vatMode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVatRate()
+    {
+        return $this->vatRate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash()
+    {
+        return sprintf(
+            '%s-%s',
+            $this->getNumber(),
+            hash('sha256', $this->getId() . $this->getNumber() . $this->getCreatedAt()->format('YmdHis'))
+        );
     }
 }

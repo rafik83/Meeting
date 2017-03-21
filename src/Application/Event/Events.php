@@ -49,6 +49,7 @@ final class Events
     const USER_PROFILE_COMPLETED               = 'user.profile_completed';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
+    const SHEET_INVOICED                       = 'sheet.invoiced';
     const REGISTRATION_STEP                    = 'user.registration.step';
     const SHEET_UPDATED                        = 'sheet.updated';
     const MUST_SELECT_PACKAGE                  = 'package.must_select_package';

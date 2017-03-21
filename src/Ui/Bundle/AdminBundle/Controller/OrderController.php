@@ -98,6 +98,7 @@ class OrderController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfOrderNotInEvent($event, $order);
+        $this->denyAccessIfOrderIsInvoiced($order);
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
@@ -294,5 +295,15 @@ class OrderController extends Controller
             'required'           => false,
             'allow_extra_fields' => true,
         ]));
+    }
+
+    /**
+     * @param Order $order
+     */
+    private function denyAccessIfOrderIsInvoiced(Order $order)
+    {
+        if ($order->getInvoice() !== null) {
+            throw $this->createAccessDeniedException();
+        }
     }
 }

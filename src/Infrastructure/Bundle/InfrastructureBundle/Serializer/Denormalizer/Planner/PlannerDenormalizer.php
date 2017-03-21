@@ -72,7 +72,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
         $this->createMeetings($data); // Create the meetings after the creation of the list to get the objects
 
         if (isset($context[AbstractNormalizer::OBJECT_TO_POPULATE])
-            && $context[AbstractNormalizer::OBJECT_TO_POPULATE] instanceof PlannerResult) {
+            && $context[AbstractNormalizer::OBJECT_TO_POPULATE] instanceof PlannerResult
+        ) {
             $plannerResult = $context[AbstractNormalizer::OBJECT_TO_POPULATE];
         } else {
             $plannerResult = new PlannerResult();
@@ -170,6 +171,20 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
                     $this->handleSheet($sheet);
                 }
             }
+        }
+
+        if (isset($spot['unavailabilityList'])
+            && is_array($spot['unavailabilityList'])
+            && isset($spot['unavailabilityList']['Slot'])
+        ) {
+            if ($this->isSingle($spot['unavailabilityList']['Slot'])) {
+                $this->handleSlot($spot['unavailabilityList']['Slot']);
+            } else {
+                foreach ($spot['unavailabilityList']['Slot'] as $slot) {
+                    $this->handleSlot($slot);
+                }
+            }
+
         }
 
         return $spotResult;

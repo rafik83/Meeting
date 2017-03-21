@@ -1,0 +1,89 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
+
+use Prophecy\Argument;
+use Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler;
+use Proximum\Vimeet\Application\View\Package\Summary\GroupsView;
+use Proximum\Vimeet\Application\View\Package\Summary\PlanGroupView;
+use Proximum\Vimeet\Application\View\Package\Summary\ProductView;
+use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\PackageGroup;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\ProductFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+
+class GroupsViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $datetime = new \DateTime();
+        $locale   = 'fr';
+        $event    = EventFactory::createEvent();
+        $type     = new Type($event);
+        $package  = new Package($event, 'Package1', $datetime);
+        $package->enable(true, true, true);
+        $sheet = SheetFactory::create($event, null, $datetime, $type);
+
+        $option      = ProductFactory::create($event, 'option');
+        $participant = ProductFactory::create($event, 'participant');
+        $planning    = ProductFactory::create($event, 'planning');
+
+        $package->setPlanning($option);
+        $type->setPackage($package);
+
+        $cartRowOption      = new CartRow($sheet, $option, 1);
+        $cartRowParticipant = new CartRow($sheet, $participant, 1);
+        $cartRowPlanning    = new CartRow($sheet, $planning, 1);
+        $cart               = new Cart($sheet, [$cartRowOption, $cartRowParticipant, $cartRowPlanning], []);
+
+        $group   = new PackageGroup($package, 1);
+        $group->setOptions([$option]);
+        $package->setGroupsModel([$group]);
+
+        // Mock
+        $planGroupViewQueryHandler        = $this->prophesize(PlanGroupViewQueryHandler::class);
+        $participantGroupViewQueryHandler = $this->prophesize(ParticipantGroupViewQueryHandler::class);
+        $planningGroupViewQueryHandler    = $this->prophesize(PlanningGroupViewQueryHandler::class);
+        $groupViewQueryHandler            = $this->prophesize(GroupViewQueryHandler::class);
+
+        $planGroupViewQueryHandler->handle(Argument::type(PlanGroupViewQuery::class))->shouldBeCalled();
+
+        $participantGroupViewQueryHandler->handle(Argument::type(ParticipantGroupViewQuery::class))->shouldBeCalled();
+
+        $planningGroupViewQueryHandler->handle(Argument::type(PlanningGroupViewQuery::class))->shouldBeCalled();
+
+        $groupViewQueryHandler->handle(Argument::type(GroupViewQuery::class))->shouldBeCalled();
+
+        $handler = new GroupsViewQueryHandler(
+            $planGroupViewQueryHandler->reveal(),
+            $participantGroupViewQueryHandler->reveal(),
+            $planningGroupViewQueryHandler->reveal(),
+            $groupViewQueryHandler->reveal()
+        );
+
+        $query = new GroupsViewQuery($sheet, $cart, $locale);
+
+        $this->assertInstanceOf(GroupsView::class, $handler->handle($query));
+    }
+}
