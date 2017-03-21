@@ -162,15 +162,15 @@ Feature: Update meeting spot and slot in agenda via the API
       }
       """
 
-#  Scenario: I can move a meeting to available slot
-#    Given I am logged as admin
-#    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
-#      """
-#      {
-#          "slotId": 10
-#      }
-#      """
-#    Then the response status code should be 200
+  Scenario: I can move a meeting to available slot
+    Given I am logged as admin
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+      """
+      {
+          "slotId": 1
+      }
+      """
+    Then the response status code should be 200
 
 #  Scenario: I can not move a meeting to unavailable slot
 #    Given I am logged as admin
