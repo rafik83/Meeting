@@ -379,6 +379,13 @@ form.participate_happening.children.submit.label: Participer
 form.payment_mode_choice.children.paymentMode.bank_check: Chèque
 form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_mode_choice.children.paymentMode.paypal: Paypal
+form.planner_export.children.lockMeetingRequest.label: 'Vérrouiller les demandes de rendez-vous'
+form.planner_export.children.lockMeetingRequest.option.yes: 'Oui'
+form.planner_export.children.lockMeetingRequest.option.no: 'Non'
+form.planner_export.children.solutionType.label: 'Type de solution à exporter'
+form.planner_export.children.solutionType.option.from_scratch: 'Réinitialisation - les rdv déjà créés sont supprimés'
+form.planner_export.children.solutionType.option.moving_allowed: 'Optimiser en bougeant les rdv'
+form.planner_export.children.solutionType.option.locked: 'Optimiser sans bouger les rdv'
 form.planner_import.children.file.label: 'Solution à importer'
 form.planner_import.children.submit.label: Importer
 form.planner_import.confirm.submit.label: 'L''import d''une nouvelle solution a pour effet de supprimer l''ensemble des rendez-vous positionnés de l''événement, êtes-vous sûr de vouloir réaliser cette action ?'

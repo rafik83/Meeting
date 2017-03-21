@@ -77,7 +77,6 @@ class MeetingViewQueryHandler
 
         foreach ($this->requests as $request) {
             try {
-                if ($query->exportSolutionType) {}
                 $sheetsList = [
                     $this->getSheetById($request->getFromSheet()->getId()),
                     $this->getSheetById($request->getToSheet()->getId()),
