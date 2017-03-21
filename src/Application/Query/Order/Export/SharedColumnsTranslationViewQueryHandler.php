@@ -15,6 +15,9 @@ use Proximum\Vimeet\Application\View\Order\Export\SharedColumnsTranslationView;
 
 class SharedColumnsTranslationViewQueryHandler
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param TranslatorInterface $translator
      */
