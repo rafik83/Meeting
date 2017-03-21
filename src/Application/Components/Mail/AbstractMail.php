@@ -75,7 +75,7 @@ class AbstractMail
     }
 
     /**
-     * @param $email
+     * @param string $email
      */
     public function addReceiver($email)
     {
