@@ -65,7 +65,7 @@ class TransactionView
     /**
      * @var string
      */
-    public $tvaNumber;
+    public $vatNumber;
     
     /**
      * TransactionView constructor.
@@ -80,7 +80,7 @@ class TransactionView
      * @param null|string           $transactionGateway
      * @param float                 $transactionAmount
      * @param string                $contactBillingInfoCountry
-     * @param string                $tvaNumber
+     * @param string                $vatNumber
      */
     public function __construct(
         $eventId,
@@ -93,7 +93,7 @@ class TransactionView
         $transactionGateway,
         $transactionAmount,
         $contactBillingInfoCountry,
-        $tvaNumber
+        $vatNumber
     ) {
         $this->eventId                      = $eventId;
         $this->eventName                    = $eventName;
@@ -105,6 +105,6 @@ class TransactionView
         $this->transactionGateway           = $transactionGateway;
         $this->transactionAmount            = $transactionAmount;
         $this->contactBillingInfoCountry    = $contactBillingInfoCountry;
-        $this->tvaNumber                    = $tvaNumber;
+        $this->vatNumber                    = $vatNumber;
     }
 }

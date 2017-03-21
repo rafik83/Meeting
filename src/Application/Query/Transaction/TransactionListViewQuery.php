@@ -20,6 +20,11 @@ class TransactionListViewQuery
     public $transactions;
     
     /**
+     * @var \DateTimeInterface
+     */
+    public $dateTime;
+    
+    /**
      * TransactionListViewQuery constructor.
      *
      * @param Transaction[] $transactions

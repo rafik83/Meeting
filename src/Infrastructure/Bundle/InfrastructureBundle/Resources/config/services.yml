@@ -2834,6 +2834,9 @@ services:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_transactions_path%'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery }
     query.messaging.message.list_handler:

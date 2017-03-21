@@ -27,6 +27,7 @@ use Proximum\Vimeet\Application\Exception\Transaction\TransactionNotFoundExcepti
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
@@ -37,6 +38,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -116,8 +118,8 @@ class EventController extends Controller
     
     /**
      * @param Request $request
-     * 
-     * @return RedirectResponse
+     *
+     * @return CsvFileResponse|RedirectResponse
      */
     public function exportTransactionAction(Request $request)
     {
@@ -132,11 +134,12 @@ class EventController extends Controller
                 try {
                     $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
                     
-                    $dataCsv = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
+                    $filePath = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
                     
-                    file_put_contents('export_transaction', $dataCsv);
-                    
-                    return $this->redirect($this->generateUrl('admin_event_list') . '#transactionsExport');
+                    return new CsvFileResponse(
+                        file_get_contents($this->getParameter('infrastructure.export_transactions_path') . $filePath),
+                        sprintf('export_transactions_%s.csv', date("Y_m_d_His"))
+                    );
                 } catch (TransactionNotFoundException $exception) {
                     dump($exception);die;
                 }
