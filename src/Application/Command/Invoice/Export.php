@@ -1,0 +1,41 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Invoice;
+
+use Proximum\Vimeet\Domain\Model\Admin;
+
+class Export
+{
+    /**
+     * @var Admin
+     */
+    public $user;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $beginDate;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $endDate;
+
+    /**
+     * Export constructor.
+     *
+     * @param Admin $user
+     */
+    public function __construct(Admin $user)
+    {
+        $this->user = $user;
+    }
+}
