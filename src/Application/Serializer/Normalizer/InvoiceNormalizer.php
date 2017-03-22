@@ -28,7 +28,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     const COL_TOTAL_WITH_VAT          = 'total_with_vat';
     const COL_VAT_AMOUNT              = 'vat_amount';
     const COL_BALANCE                 = 'balance';
-    const COL_INTRA_COMMUNITY_VAT     = 'intra_community_vat';
+    const COL_INTRA_COMMUNITY_VAT     = 'vat_number';
     const COL_BILLING_CONTACT_COUNTRY = 'billing_contact_country';
     const COL_ANALYTIC_CODE           = 'analytic_code';
     const EXPORT_BASE_KEY             = 'admin.invoice.export.fields.';
@@ -117,7 +117,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     {
         $normalizedData = [];
 
-        foreach (self::getCommonFieldKeys() as $fieldKey) {
+        foreach (self::getFieldKeys() as $fieldKey) {
             $translationKey = self::EXPORT_BASE_KEY . $fieldKey;
             $input          = $rawData[$fieldKey];
 
@@ -140,7 +140,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     /**
      * @return string[] Keys of common columns' headers
      */
-    private static function getCommonFieldKeys()
+    private static function getFieldKeys()
     {
         return [
             self::COL_EVENT_ID,
