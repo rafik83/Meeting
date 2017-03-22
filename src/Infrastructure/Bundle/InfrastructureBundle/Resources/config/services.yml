@@ -2823,6 +2823,15 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
+    query.spot.agenda.spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\Agenda\SpotViewQueryHandler
+    query.spot.agenda.list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@query.spot.agenda.spot_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery }
 
     query.messaging.message.list_handler:
         class: Proximum\Vimeet\Application\Query\Messaging\Message\ListQueryHandler

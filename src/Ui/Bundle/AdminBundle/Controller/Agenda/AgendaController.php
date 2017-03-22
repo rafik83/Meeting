@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -100,6 +101,22 @@ class AgendaController extends Controller
     }
 
     /**
+     * @param Event $event
+     *
+     * @return JsonResponse
+     */
+    public function spotsListAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $spots = $this->get('tactician.commandbus.query')->handle(new ListViewQuery(
+            $event
+        ));
+
+        return new JsonResponse($spots);
+    }
+
+    /**
      * @param string $key
      *
      * @return JsonResponse
@@ -108,5 +125,4 @@ class AgendaController extends Controller
     {
         return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
-
 }
