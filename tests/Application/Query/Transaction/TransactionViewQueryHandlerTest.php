@@ -57,7 +57,7 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $event
         );
         
-        $sheetInfoGuesser->guessSheetInfos($sheet)->shouldBeCalled();
+        $sheetInfoGuesser->guessSheetTitle($sheet)->shouldBeCalled();
         $billingInfosRepository->getBySheet($sheet)->shouldBeCalled();
         
         $queryHandler = new TransactionViewQueryHandler(

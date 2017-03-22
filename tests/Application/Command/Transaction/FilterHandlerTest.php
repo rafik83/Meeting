@@ -10,15 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
-use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
-use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -26,13 +23,14 @@ class FilterHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $dateTime   = new \DateTime();
-        $endDate    = new \DateTime('+ 1 day');
-        $event      = EventFactory::createEvent();
-        $admin      = new Admin('test@test.com', '__salt__', null, 'fr', 'Jeff', 'Atwood', Admin::ROLE_ORGANIZER, $dateTime);
-        $type       = new Type($event);
-        $payment    = new Payment();
-        $command    = new Filter($admin);
+        $dateTime    = new \DateTime();
+        $endDate     = new \DateTime('+ 1 day');
+        $event       = EventFactory::createEvent();
+        $sheet       = SheetFactory::create($event);
+        $admin       = new Admin('test@test.com', '__salt__', null, 'fr', 'Jeff', 'Atwood', Admin::ROLE_ORGANIZER, $dateTime);
+        $type        = new Type($event);
+        $transaction = new Transaction($sheet, 100, $dateTime, 'paypal', '42', 'paid', 'EUR');
+        $command     = new Filter($admin);
     
         $command->beginDate = $dateTime;
         $command->endDate   = $endDate;
@@ -41,21 +39,21 @@ class FilterHandlerTest extends \PHPUnit_Framework_TestCase
         $admin->setTypeEvents([$type]);
     
         $eventRepository                = $this->prophesize(EventRepositoryInterface::class);
-        $paymentRepository              = $this->prophesize(PaymentRepositoryInterface::class);
+        $transactionRepository          = $this->prophesize(TransactionRepositoryInterface::class);
         $transactionViewQueryHandler    = $this->prophesize(TransactionViewQueryHandler::class);
         
         $eventRepository
             ->getEventsByAdmin($admin)
             ->shouldBeCalled()
             ->willReturn([$event]);
-        
-        $paymentRepository
+    
+        $transactionRepository
             ->findPaidByDateRangeAndCrossEvent($command->beginDate, $command->endDate, [$event])
             ->shouldBeCalled()
-            ->willReturn($payment);
+            ->willReturn([$transaction]);
         
         $filterHandler = new FilterHandler(
-            $paymentRepository->reveal(),
+            $transactionRepository->reveal(),
             $eventRepository->reveal(),
             $transactionViewQueryHandler->reveal()
         );
