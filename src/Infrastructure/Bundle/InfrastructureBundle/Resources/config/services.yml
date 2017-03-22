@@ -1564,8 +1564,6 @@ services:
             - '@adapter.serializer_adapter'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.invoice.invoice_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@order.balance'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Export }
 
@@ -3701,6 +3699,9 @@ services:
 
     serializer.denormalizer.invoice_export_view:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\ExportViewDenormalizer
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 
