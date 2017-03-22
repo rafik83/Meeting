@@ -23,11 +23,16 @@ class Export
     /** @var Event */
     public $event;
 
+    /** @var string */
+    public $locale;
+
     /**
-     * @param $event
+     * @param Event  $event
+     * @param string $locale
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, $locale)
     {
-        $this->event = $event;
+        $this->event  = $event;
+        $this->locale = $locale;
     }
 }

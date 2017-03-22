@@ -34,23 +34,20 @@ class ExportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $export = new Export($event);
+        $export = new Export($event, $request->getLocale());
         $form   = $this->createForm(ExportType::class, $export, [
             'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle(new Dispatcher($event));
-                /*
-                $content  = $this->get('service_planner.exporter')->getXML($event, $request->getLocale());
+                $content  = $this->get('tactician.commandbus')->handle($export);
                 $response = new XmlFileResponse(
                     $content,
                     sprintf("export_planner_%s_%s.xml", $event->getId(), date("Y_m_d_His"))
                 );
 
                 return $response;
-                */
             } catch(SlotNotConfiguredException $exception) {
                 $this->addFlash('error', sprintf('flash.%s', $exception->getMessage()));
             } catch(DayNotConfiguredException $exception) {

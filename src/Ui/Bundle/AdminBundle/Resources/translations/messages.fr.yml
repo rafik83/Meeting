@@ -431,6 +431,7 @@ admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
 admin.planner.export: Exporter
+admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
 admin.planner.export.heading: admin.planner.export.heading
 admin.planner.heading.export: 'Exporter les données pour l''algorithme'
 admin.planner.heading.import: 'Importer une solution depuis l''algorithme'

@@ -35,8 +35,11 @@ class PlannerViewQuery
      * @param string $locale
      * @param string $exportSolutionType
      */
-    public function __construct(Event $event, $locale, $exportSolutionType = ExportSolutionType::SOLUTION_OPTIMIZE_MOVING)
-    {
+    public function __construct(
+        Event $event,
+        $locale,
+        $exportSolutionType = ExportSolutionType::SOLUTION_OPTIMIZE_MOVING
+    ) {
         $this->event              = $event;
         $this->locale             = $event->getAvailableLocale($locale);
         $this->exportSolutionType = $exportSolutionType;

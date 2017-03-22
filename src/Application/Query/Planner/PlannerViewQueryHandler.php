@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Application\View\Planner\PlannerView;
+use Proximum\Vimeet\Application\Exception\Planner;
 
 class PlannerViewQueryHandler
 {
@@ -88,6 +89,9 @@ class PlannerViewQueryHandler
      * @param PlannerViewQuery $query
      *
      * @return PlannerView
+     *
+     * @throws Planner\SlotNotConfiguredException
+     * @throws Planner\DayNotConfiguredException
      */
     public function handle(PlannerViewQuery $query)
     {
