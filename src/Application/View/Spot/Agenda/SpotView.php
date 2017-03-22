@@ -25,11 +25,6 @@ class SpotView
     /**
      * @var bool
      */
-    public $active;
-
-    /**
-     * @var bool
-     */
     public $visio;
 
     /**
@@ -37,14 +32,12 @@ class SpotView
      *
      * @param int    $id
      * @param string $reference
-     * @param bool   $active
      * @param bool   $visio
      */
-    public function __construct($id, $reference, $active, $visio)
+    public function __construct($id, $reference, $visio)
     {
         $this->id        = $id;
         $this->reference = $reference;
-        $this->active    = $active;
         $this->visio     = $visio;
     }
 }

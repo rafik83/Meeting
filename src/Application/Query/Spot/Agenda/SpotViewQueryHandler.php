@@ -24,7 +24,6 @@ class SpotViewQueryHandler
         $view = new SpotView(
             $query->spot->getId(),
             $query->spot->getReference(),
-            $query->spot->isActive(),
             $query->spot->isVisio()
         );
 

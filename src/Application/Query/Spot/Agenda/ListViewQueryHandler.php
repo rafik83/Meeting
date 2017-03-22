@@ -50,9 +50,10 @@ class ListViewQueryHandler
         $spotViews = [];
 
         foreach ($spots as $spot) {
-            $spotView = $this->spotViewQueryHandler->handle(new SpotViewQuery($spot));
-
-            $spotViews[] = $spotView;
+            if ($spot->isActive()) {
+                $spotView    = $this->spotViewQueryHandler->handle(new SpotViewQuery($spot));
+                $spotViews[] = $spotView;
+            }
         }
 
         return new ListView($spotViews);
