@@ -15,10 +15,12 @@ use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\InvoicePrefix\CreateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class InvoiceController extends Controller
 {
@@ -61,20 +63,20 @@ class InvoiceController extends Controller
      *
      * @return Response
      */
-    public function exportAction(Request $request)
+    public function exportAction(Request $request, UserInterface $admin)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $response      = new Response();
-        $invoiceExport = new Export($this->getUser());
-        $form          = $this->createForm(ExportType::class, $invoiceExport)->handleRequest($request);
+        $response = new Response();
+        $export   = new Export($admin);
+        $form     = $this->createForm(ExportType::class, $export)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $charset        = Charset::WINDOWS_1252;
-            $normaliserView = $this->get('tactician.commandbus')->handle($invoiceExport);
+            $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
 
             $serializer    = $this->get('serializer');
-            $exportContent = $serializer->serialize($normaliserView, 'csv', [
+            $exportContent = $serializer->serialize($invoicesNormaliserView, 'csv', [
                 'locale'  => $request->getLocale(),
                 'charset' => $charset,
             ]);
