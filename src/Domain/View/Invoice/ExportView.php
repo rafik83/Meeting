@@ -73,24 +73,26 @@ class ExportView
     public $analyticsCode;
 
     /**
-     * @var \DateTimeInterface
+     * @var string
      */
     public $invoiceDate;
 
     /**
      * ExportView constructor.
      *
-     * @param int       $eventId
-     * @param string    $eventTitle
-     * @param int       $ownerId
-     * @param string    $sheetTitle
-     * @param string    $invoiceNumber
-     * @param \DateTime $invoiceDate
-     * @param int       $total
-     * @param int       $totalWithVat
-     * @param int       $vatAmount
-     * @param int       $balance
-     * @param string    $analyticsCode
+     * @param int    $eventId
+     * @param string $eventTitle
+     * @param int    $ownerId
+     * @param string $sheetTitle
+     * @param string $invoiceNumber
+     * @param string $invoiceDate
+     * @param int    $total
+     * @param int    $totalWithVat
+     * @param int    $vatAmount
+     * @param int    $balance
+     * @param string $analyticsCode
+     * @param string $vatNumber
+     * @param string $billingInfoCountry
      */
     public function __construct(
         $eventId,
@@ -103,7 +105,9 @@ class ExportView
         $totalWithVat,
         $vatAmount,
         $balance,
-        $analyticsCode
+        $analyticsCode,
+        $vatNumber,
+        $billingInfoCountry
     ) {
         $this->eventId            = $eventId;
         $this->eventTitle         = $eventTitle;
@@ -116,5 +120,7 @@ class ExportView
         $this->balance            = $balance;
         $this->analyticsCode      = $analyticsCode;
         $this->invoiceDate        = $invoiceDate;
+        $this->vatNumber          = $vatNumber;
+        $this->billingInfoCountry = $billingInfoCountry;
     }
 }
