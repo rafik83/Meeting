@@ -32,9 +32,9 @@ class Filter
     /**
      * Find constructor.
      *
-     * @param $admin
+     * @param Admin $admin
      */
-    public function __construct($admin)
+    public function __construct(Admin $admin)
     {
         $this->admin = $admin;
     }

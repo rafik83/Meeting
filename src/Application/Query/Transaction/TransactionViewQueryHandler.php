@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Transaction;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
+use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
 class TransactionViewQueryHandler
@@ -57,9 +58,11 @@ class TransactionViewQueryHandler
             $paypalGateWay = $paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY];
         }
     
-        $sheetInfos   = $this->sheetInfoGuesser->guessSheetInfos($query->sheet);
-        $society      = $sheetInfos[Tag::SHEET_ORGANIZATION];
-        $billingInfos = $this->billingInfoRepository->getBySheet($query->sheet);
+        $sheetInfos     = $this->sheetInfoGuesser->guessSheetInfos($query->sheet);
+        $society        = $sheetInfos[Tag::SHEET_ORGANIZATION];
+        $billingInfos   = $this->billingInfoRepository->getBySheet($query->sheet);
+        $billingCountry = !$billingInfos ? null : $billingInfos->getAddress()->getCountry();
+        $billingVat     = !$billingInfos ? null : $billingInfos->getVatNumber();
         
         return new TransactionView(
             $query->event,
@@ -73,8 +76,8 @@ class TransactionViewQueryHandler
             $query->transaction->getReference(),
             $paypalGateWay,
             $query->transaction->getAmount(),
-            $billingInfos->getAddress()->getCountry(),
-            $billingInfos->getVatNumber()
+            $billingCountry,
+            $billingVat
         );
     }
 }
