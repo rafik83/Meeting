@@ -37,21 +37,17 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllByEvent(Event $event, array $filters = [])
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('invoice')
             ->from(Invoice::class, 'invoice', 'invoice.id')
-            ->where('invoice.event = :event')
-            ->setParameter('event', $event);
-
-        if ($dateFilters = $filters['date']) {
-            $queryBuilder
-                ->andWhere('invoice.createdAt BETWEEN :beginDate and :endDate')
-                ->setParameter('beginDate', $dateFilters['beginDate'])
-                ->setParameter('endDate', $dateFilters['endDate'])
-            ;
-        }
+            ->where('invoice.event IN (:events)')
+            ->andWhere('invoice.createdAt BETWEEN :beginDate and :endDate')
+            ->setParameter('beginDate', $beginDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('events', $events)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -75,7 +71,8 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->from(Invoice::class, 'invoice')
             ->join('invoice.orders', 'orders', 'WITH', 'invoice.sheet = :sheet')
             ->setParameter('sheet', $sheet)
-            ->orderBy('invoice.id', 'DESC');
+            ->orderBy('invoice.id', 'DESC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -95,9 +92,10 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->setParameters([
                 'prefix'         => $prefix,
                 'invoice_prefix' => $prefix->getPrefix(),
-                'invoice_year'   => $year,
+                'invoice_year'   => $year
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
@@ -113,7 +111,8 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->from(Invoice::class, 'invoice')
             ->where('invoice.sheet = :sheet')
             ->setParameter('sheet', $sheet)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
@@ -128,7 +127,8 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->from(Invoice::class, 'invoice')
             ->where('invoice.sheet = :sheet')
             ->setParameter('sheet', $sheet)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }

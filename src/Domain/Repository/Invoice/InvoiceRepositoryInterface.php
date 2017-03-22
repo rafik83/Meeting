@@ -18,14 +18,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 interface InvoiceRepositoryInterface
 {
     /**
-     * @param Event $event
-     * @param array $filters
-     *
-     * @return Invoice[]
-     */
-    public function getAllByEvent(Event $event, array $filters);
-    
-    /**
      * @param Invoice $invoice
      */
     public function add(Invoice $invoice);
@@ -62,4 +54,13 @@ interface InvoiceRepositoryInterface
      * @return bool
      */
     public function hasInvoice(Sheet $sheet);
+
+    /**
+     * @param Event[]            $events
+     * @param \DateTimeInterface $beginDate
+     * @param \DateTimeInterface $endDate
+     *
+     * @return Invoice[]
+     */
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate);
 }
