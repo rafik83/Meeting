@@ -37,36 +37,20 @@ class ExportHandler
     private $invoiceRepository;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
-     * @var Balance
-     */
-    private $balance;
-
-    /**
      * Export constructor.
      *
      * @param SerializerAdapterInterface $serializer
      * @param EventRepositoryInterface   $eventRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param Balance                    $balance
      */
     public function __construct(
         SerializerAdapterInterface $serializer,
         EventRepositoryInterface $eventRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
-        Balance $balance
+        InvoiceRepositoryInterface $invoiceRepository
     ) {
         $this->serializer        = $serializer;
         $this->eventRepository   = $eventRepository;
         $this->invoiceRepository = $invoiceRepository;
-        $this->sheetInfoGuesser  = $sheetInfoGuesser;
-        $this->balance           = $balance;
     }
 
     /**
@@ -77,63 +61,29 @@ class ExportHandler
     public function handle(Export $command)
     {
         $invoiceExportViews = [];
-
-        $events = $this->eventRepository->getEventsByAdmin($command->user);
-        $filters = $this->getDefaultFilters($command);
+        $dateFormatters     = [];
+        $events   = $this->eventRepository->getEventsByAdmin($command->admin);
 
         foreach ($events as $event) {
-            $invoices = $this->invoiceRepository->getAllByEvent($event, $filters);
-
-            foreach ($invoices as $invoice) {
-                $sheetTitle = $this->sheetInfoGuesser->guessSheetTitle(
-                    $invoice->getSheet(),
-                    $invoice->getEvent()->getAvailableLocale($command->user->getLocale())
-                );
-
-                $dateFormatter = IntlDateFormatter::create(
-                    $command->user->getLocale(),
-                    IntlDateFormatter::SHORT,
-                    IntlDateFormatter::NONE,
-                    $event->getTimeZone()
-                );
-
-                $invoiceExportView = new ExportView(
-                    $invoice->getEvent()->getId(),
-                    $invoice->getEvent()->getTitle(),
-                    $invoice->getSheet()->getOwner()->getId(),
-                    $sheetTitle,
-                    $invoice->getNumber(),
-                    $dateFormatter->format($invoice->getCreatedAt()),
-                    $invoice->getTotal(),
-                    $invoice->getTotalWithVat(),
-                    $invoice->getVatAmount(),
-                    $this->balance->getBalance($invoice->getSheet()),
-                    $invoice->getEvent()->getConfiguration()->getAnalyticsCode()
-                );
-
-                $invoiceExportViews[] = $this->serializer->deserialize(
-                    $invoice->getData(),
-                    ExportView::class,
-                    'json',
-                    ['invoice' => $invoiceExportView]
-                );
-            }
+            $dateFormatters[$event->getId()] = IntlDateFormatter::create(
+                $command->admin->getLocale(),
+                IntlDateFormatter::SHORT,
+                IntlDateFormatter::NONE,
+                $event->getTimeZone()
+            );
         }
 
-        return new InvoicesNormalizerView($invoiceExportViews, $command->user->getLocale());
-    }
+        $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $command->endDate);
 
-    /**
-     * @param Export $command
-     *
-     * @return array
-     */
-    private function getDefaultFilters(Export $command)
-    {
-        return ['date' => [
-            'beginDate' => $command->beginDate,
-            'endDate'   => $command->endDate
-            ]
-        ];
+        foreach ($invoices as $invoice) {
+            $invoiceExportViews[] = $this->serializer->deserialize(
+                $invoice->getData(),
+                ExportView::class,
+                'json',
+                ['invoice' => $invoice, 'locale' => $command->admin->getLocale(), 'dateFormatters' => $dateFormatters]
+            );
+        }
+
+        return new InvoicesNormalizerView($invoiceExportViews, $command->admin->getLocale());
     }
 }
