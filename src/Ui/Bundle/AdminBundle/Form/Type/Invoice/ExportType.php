@@ -24,32 +24,28 @@ class ExportType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $firstDay = new \DateTime();
-        $firstDay->modify('first day of last month')
-        ->setTime(0, 0, 0);
+        $firstDay = (new \DateTime())->modify('first day of last month 00:00:00.000');
 
-        $lastDay = new \DateTime();
-        $lastDay->modify('last day of last month')
-        ->setTime(23, 59, 59);
+        $lastDay = (new \DateTime())->modify('last day of last month 23:59:59.999');
 
         $builder
+            ->setAction($options['action'])
+            ->setMethod('POST')
             ->add('beginDate', DateType::class, [
                 'widget'      => 'single_text',
-                'format'      => 'dd-MM-yyyy',
+                'format'      => 'dd/MM/yyyy',
                 'data'        => $firstDay,
                 'placeholder' => 'form.invoice_export.children.date.placeholder',
             ])
             ->add('endDate', DateType::class, [
                 'widget'      => 'single_text',
-                'format'      => 'dd-MM-yyyy',
+                'format'      => 'dd/MM/yyyy',
                 'data'        => $lastDay,
                 'placeholder' => 'form.invoice_export.children.date.placeholder',
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'form.invoice_export.children.submit.label',
-                'attr' => [
-                        'class' => 'pull-right col-md-2',
-                    ],
+                'attr' => ['class' => 'pull-right col-md-2'],
             ])
         ;
     }
@@ -61,8 +57,6 @@ class ExportType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'      => Export::class,
-            'submit'          => true,
-            'csrf_protection' => false,
         ]);
     }
 
