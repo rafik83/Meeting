@@ -570,13 +570,13 @@ admin_sheet_export_sheet:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet:exportSheet }
+    defaults: { _controller: AdminBundle:Sheet/Export:exportSheet }
 admin_sheet_export_participant:
     path: /event/{event}/sheet/export/participant
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet:exportParticipant }
+    defaults: { _controller: AdminBundle:Sheet/Export:exportParticipant }
 admin_sheet_import:
     path: /event/{event}/sheet/import
     requirements:
