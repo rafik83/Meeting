@@ -35,6 +35,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,7 +63,15 @@ class EventController extends Controller
             $find      = new Find($admin);
             $invoiceExport    = new Export($admin);
             $orderForm = $this->createForm(FindType::class, $find);
-            $invoiceExportForm = $this->createForm(ExportType::class, $invoiceExport);
+            $invoiceExportForm = $this->createForm(
+                ExportType::class,
+                $invoiceExport,
+                ['action' => $this->generateUrl('admin_invoice_export')]
+            );
+            $invoiceExportForm->add('submit', SubmitType::class, [
+                'label' => 'form.invoice_export.children.submit.label',
+                'attr' => ['class' => 'pull-right col-md-2'],
+            ]);
 
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted()
                                || $invoiceExportForm->handleRequest($request)->isSubmitted();
@@ -73,9 +82,9 @@ class EventController extends Controller
                     $result = $this->get('tactician.commandbus')->handle($find);
 
                     return $this->redirect($this->generateUrl('admin_sheet_details', [
-                            'event' => $result->sheet->getEvent()->getId(),
-                            'sheet' => $result->sheet->getId(),
-                        ]) . '#sheetOrders');
+                        'event' => $result->sheet->getEvent()->getId(),
+                        'sheet' => $result->sheet->getId(),
+                    ]) . '#sheetOrders');
                 } catch (OrderNotFoundException $exception) {
                     $orderForm->get('numero')->addError(
                         new FormError(
