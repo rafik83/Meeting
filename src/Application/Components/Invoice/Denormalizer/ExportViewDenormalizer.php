@@ -76,6 +76,7 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
             $invoice->getEvent()->getId(),
             $invoice->getEvent()->getTitle(),
             $invoice->getSheet()->getOwner()->getId(),
+            $invoice->getSheet()->getId(),
             $sheetTitle,
             $invoice->getNumber(),
             $invoiceDate,

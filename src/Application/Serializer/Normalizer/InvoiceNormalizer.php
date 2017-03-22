@@ -21,6 +21,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     const COL_EVENT_ID                = 'event_id';
     const COL_EVENT_NAME              = 'event_name';
     const COL_OWNER_ID                = 'owner_id';
+    const COL_SHEET_ID                = 'sheet_id';
     const COL_SHEET_TITLE             = 'sheet_title';
     const COL_INVOICE_DATE            = 'invoice_date';
     const COL_INVOICE_NUMBER          = 'invoice_number';
@@ -90,6 +91,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
             self::COL_EVENT_ID                => $invoice->eventId,
             self::COL_EVENT_NAME              => $invoice->eventTitle,
             self::COL_OWNER_ID                => $invoice->ownerId,
+            self::COL_SHEET_ID                => $invoice->sheetId,
             self::COL_SHEET_TITLE             => $invoice->sheetTitle,
             self::COL_INVOICE_NUMBER          => $invoice->invoiceNumber,
             self::COL_INVOICE_DATE            => $invoice->invoiceDate,
@@ -146,6 +148,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
             self::COL_EVENT_ID,
             self::COL_EVENT_NAME,
             self::COL_OWNER_ID,
+            self::COL_SHEET_ID,
             self::COL_SHEET_TITLE,
             self::COL_INVOICE_NUMBER,
             self::COL_INVOICE_DATE,

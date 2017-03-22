@@ -78,11 +78,17 @@ class ExportView
     public $invoiceDate;
 
     /**
+     * @var int
+     */
+    public $sheetId;
+
+    /**
      * ExportView constructor.
      *
      * @param int    $eventId
      * @param string $eventTitle
      * @param int    $ownerId
+     * @param int    $sheetId
      * @param string $sheetTitle
      * @param string $invoiceNumber
      * @param string $invoiceDate
@@ -98,6 +104,7 @@ class ExportView
         $eventId,
         $eventTitle,
         $ownerId,
+        $sheetId,
         $sheetTitle,
         $invoiceNumber,
         $invoiceDate,
@@ -122,5 +129,6 @@ class ExportView
         $this->invoiceDate        = $invoiceDate;
         $this->vatNumber          = $vatNumber;
         $this->billingInfoCountry = $billingInfoCountry;
+        $this->sheetId            = $sheetId;
     }
 }
