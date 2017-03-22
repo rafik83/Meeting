@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
+use Proximum\Vimeet\Application\View\Spot\Agenda\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -109,11 +110,12 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $spots = $this->get('tactician.commandbus.query')->handle(new ListViewQuery(
+        /** @var ListView $spots */
+        $listView = $this->get('tactician.commandbus.query')->handle(new ListViewQuery(
             $event
         ));
 
-        return new JsonResponse($spots);
+        return new JsonResponse($listView->spotViews);
     }
 
     /**

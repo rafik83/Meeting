@@ -18,6 +18,8 @@ admin.admin_list.table.title.firstname: Prénom
 admin.admin_list.table.title.lastname: Nom
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'Liste des utilisateurs du backoffice'
+admin.agenda.tab.sheet.title.label: 'Fiches'
+admin.agenda.tab.spot.title.label: 'Lieux'
 admin.agenda.countPendingProposition: 'Nombre de propositions reçues à valider'
 admin.agenda.countPlacedMeetings: 'Nombre de RDV'
 admin.agenda.countProposition: 'Nombre de propositions reçues'
@@ -85,7 +87,8 @@ admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
-admin.agenda.sheet.loader: 'Chargement des fiches'
+admin.agenda.sheet.loader: 'Chargement des fiches ...'
+admin.agenda.spot.loader: 'Chargement des lieux ...'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
 admin.agenda.sort.alphabetical.label: Alphabétique

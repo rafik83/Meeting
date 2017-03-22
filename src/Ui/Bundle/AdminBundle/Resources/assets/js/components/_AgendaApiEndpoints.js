@@ -16,6 +16,16 @@ AgendaApiEndpoints.prototype.getSheetsEndpoint = function () {
 };
 
 /**
+ * Returns /admin/fr/event/{event_id}/agenda/spots
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/spots
+ *
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getSpotsEndpoint = function () {
+    return this.getPathname() + '/spots';
+};
+
+/**
  * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
  * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
  *

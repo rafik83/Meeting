@@ -100,6 +100,21 @@
     padding: 0 0 100px 10px;
   }
 
+  .spots-list {
+    position: fixed;
+    left: 0;
+    height: 100%;
+    width: 17%;
+    overflow-y: scroll;
+    padding: 0 0 0 10px;
+    .spot-td {
+      cursor: pointer;
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
+
   .sheet-title {
     display: block;
     overflow: hidden;
