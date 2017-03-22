@@ -40,9 +40,9 @@ class ExportController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            /*
             try {
                 $this->get('tactician.commandbus')->handle(new Dispatcher($event));
+                /*
                 $content  = $this->get('service_planner.exporter')->getXML($event, $request->getLocale());
                 $response = new XmlFileResponse(
                     $content,
@@ -50,6 +50,7 @@ class ExportController extends Controller
                 );
 
                 return $response;
+                */
             } catch(SlotNotConfiguredException $exception) {
                 $this->addFlash('error', sprintf('flash.%s', $exception->getMessage()));
             } catch(DayNotConfiguredException $exception) {
@@ -57,13 +58,11 @@ class ExportController extends Controller
             } catch (UnableToDispatchException $exception) {
                 $this->addFlash('error', sprintf('flash.%s', $exception->indication));
             }
-            */
         }
 
         return $this->render('AdminBundle:Planner/Export:form.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);
-        //return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
     }
 }

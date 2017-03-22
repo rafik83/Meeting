@@ -1235,7 +1235,7 @@ admin_export_planner_data:
     path: /event/{event}/planner/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Planner/Export:export }
 
 admin_import_planner_data:
