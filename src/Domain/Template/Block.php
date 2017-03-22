@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class Block extends AbstractChild
@@ -543,7 +544,7 @@ class Block extends AbstractChild
     {
         /** @var TemplateObject $object */
         foreach ($this->getObjects() as $object) {
-            $tags = $object instanceof EditableText ? [$object->getTag()] : $object->getTags();
+            $tags = $object instanceof EditableText && !empty($object->getTag()) ? [$object->getTag()] : $object->getTags();
 
             if (count($tags) === 0) {
                 continue;
