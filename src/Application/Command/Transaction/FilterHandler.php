@@ -14,15 +14,16 @@ use Proximum\Vimeet\Application\Exception\Event\EventsListEmptyException;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
 class FilterHandler
 {
     /**
-     * @var PaymentRepositoryInterface
+     * @var TransactionRepositoryInterface
      */
-    private $paymentRepository;
+    private $transactionRepository;
     
     /**
      * @var EventRepositoryInterface
@@ -37,16 +38,16 @@ class FilterHandler
     /**
      * FindHandler constructor.
      *
-     * @param PaymentRepositoryInterface $paymentRepository
-     * @param EventRepositoryInterface $eventRepository
-     * @param TransactionViewQueryHandler $transactionViewQueryHandler
+     * @param TransactionRepositoryInterface    $transactionRepository
+     * @param EventRepositoryInterface          $eventRepository
+     * @param TransactionViewQueryHandler       $transactionViewQueryHandler
      */
     public function __construct(
-        PaymentRepositoryInterface $paymentRepository,
+        TransactionRepositoryInterface $transactionRepository,
         EventRepositoryInterface $eventRepository,
         TransactionViewQueryHandler $transactionViewQueryHandler
     ) {
-        $this->paymentRepository           = $paymentRepository;
+        $this->transactionRepository       = $transactionRepository;
         $this->eventRepository             = $eventRepository;
         $this->transactionViewQueryHandler = $transactionViewQueryHandler;
     }
@@ -66,20 +67,26 @@ class FilterHandler
             throw new EventsListEmptyException();
         }
         
-        $payments = $this->paymentRepository->findPaidByDateRangeAndCrossEvent(
+        $transactions = $this->transactionRepository->findPaidByDateRangeAndCrossEvent(
             $command->beginDate,
             $command->endDate,
             $events
         );
         
         $transactionViews = [];
-        foreach ($payments as $payment ) {
+        
+        $this->transactionViewQueryHandler->preloadBillingInfo(array_map(function (Transaction $transaction) {
+            return $transaction->getSheet();
+        }, $transactions));
+        
+        foreach ($transactions as $transaction ) {
             $transactionViews[] = $this->transactionViewQueryHandler->handle(new TransactionViewQuery(
-                $payment->getTransaction(),
-                $payment->getTransaction()->getSheet(),
-                $payment,
-                $payment->getTransaction()->getSheet()->getEvent()
-            ));
+                    $transaction,
+                    $transaction->getSheet(),
+                    $transaction->getPayment(),
+                    $transaction->getSheet()->getEvent()
+                )
+            );
         }
         
         return new TransactionListViewQuery($transactionViews, $command->admin->getLocale());

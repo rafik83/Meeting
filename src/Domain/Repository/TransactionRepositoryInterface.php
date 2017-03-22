@@ -65,4 +65,17 @@ interface TransactionRepositoryInterface
      * @return Transaction[]
      */
     public function findPaidByEvent(Event $event);
+    
+    /**
+     * @param \DateTimeInterface $beginDate
+     * @param \DateTimeInterface $endDate
+     * @param Event[]            $events
+     *
+     * @return Transaction[]
+     */
+    public function findPaidByDateRangeAndCrossEvent(
+        \DateTimeInterface $beginDate,
+        \DateTimeInterface $endDate,
+        array $events
+    );
 }

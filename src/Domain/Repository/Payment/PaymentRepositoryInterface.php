@@ -21,17 +21,4 @@ interface PaymentRepositoryInterface
      * @return null|Payment
      */
     public function findById($id);
-    
-    /**
-     * @param \DateTimeInterface $beginDate
-     * @param \DateTimeInterface $endDate
-     * @param Event[]            $events
-     *
-     * @return Payment[]
-     */
-    public function findPaidByDateRangeAndCrossEvent(
-        \DateTimeInterface $beginDate,
-        \DateTimeInterface $endDate,
-        array $events
-    );
 }

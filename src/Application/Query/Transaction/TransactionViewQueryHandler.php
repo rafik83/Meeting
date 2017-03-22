@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Transaction;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
-use Proximum\Vimeet\Domain\Model\Payment\Payment;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
 class TransactionViewQueryHandler
@@ -31,6 +30,11 @@ class TransactionViewQueryHandler
     private $billingInfoRepository;
     
     /**
+     * @var array
+     */
+    private $billingInfo = [];
+    
+    /**
      * TransactionViewQueryHandler constructor.
      *
      * @param SheetInfoGuesser $sheetInfoGuesser
@@ -45,6 +49,18 @@ class TransactionViewQueryHandler
     }
     
     /**
+     * @param Sheet[] $sheets
+     */
+    public function preloadBillingInfo(array $sheets)
+    {
+        $billingInfos = $this->billingInfoRepository->getBySheets($sheets);
+        
+        foreach ($billingInfos as $billingInfo) {
+            $this->billingInfo[$billingInfo->getSheet()->getId()] = $billingInfo;
+        }
+    }
+    
+    /**
      * @param TransactionViewQuery $query
      *
      * @return TransactionView
@@ -52,15 +68,21 @@ class TransactionViewQueryHandler
     public function handle(TransactionViewQuery $query)
     {
         $paypalGateWay  = null;
-        $paymentDetails = $query->payment->getDetails();
         
-        if($query->transaction->getMode() === 'paypal' && isset($paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY])) {
-            $paypalGateWay = $paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY];
-        }
+        if($query->payment !== null) {
+            $paymentDetails = $query->payment->getDetails();
     
-        $sheetInfos     = $this->sheetInfoGuesser->guessSheetInfos($query->sheet);
-        $society        = $sheetInfos[Tag::SHEET_ORGANIZATION];
-        $billingInfos   = $this->billingInfoRepository->getBySheet($query->sheet);
+            if ($query->transaction->getMode() === 'paypal' && isset($paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY])) {
+                $paypalGateWay = $paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY];
+            }
+        }
+        $sheetTitle     = $this->sheetInfoGuesser->guessSheetTitle($query->sheet);
+        
+        if (!isset($this->billingInfo[$query->sheet->getId()])) {
+            $this->billingInfo[$query->sheet->getId()] = $this->billingInfoRepository->getBySheet($query->sheet);
+        }
+        
+        $billingInfos   = $this->billingInfo[$query->sheet->getId()];
         $billingCountry = !$billingInfos ? null : $billingInfos->getAddress()->getCountry();
         $billingVat     = !$billingInfos ? null : $billingInfos->getVatNumber();
         
@@ -70,7 +92,7 @@ class TransactionViewQueryHandler
             $query->event->getId(),
             $query->event->getTitle(),
             $query->sheet->getOwner()->getId(),
-            $society,
+            $sheetTitle,
             $query->transaction->getDate(),
             $query->transaction->getMode(),
             $query->transaction->getReference(),

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
@@ -143,6 +144,33 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->setParameter('state', Transaction::STATE_PAID)
             ->setParameter('event', $event);
 
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function findPaidByDateRangeAndCrossEvent(
+        \DateTimeInterface $beginDate,
+        \DateTimeInterface $endDate,
+        array $events
+    ) {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('transaction')
+            ->from(Transaction::class, 'transaction')
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event IN (:events)')
+            //->leftJoin(Payment::class, 'payment')
+            ->where('transaction.date BETWEEN :beginDate and :endDate')
+            ->andWhere('transaction.state = :state')
+            ->groupBy('transaction.id')
+            ->setParameters([
+                'state' => Transaction::STATE_PAID,
+                'beginDate' => $beginDate,
+                'endDate' => $endDate,
+                'events' => $events,
+            ]);
+        
         return $queryBuilder->getQuery()->getResult();
     }
 }

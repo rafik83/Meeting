@@ -48,32 +48,4 @@ class PaymentRepository implements PaymentRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function findPaidByDateRangeAndCrossEvent(
-        \DateTimeInterface $beginDate,
-        \DateTimeInterface $endDate,
-        array $events
-    ) {
-        $queryBuilder = $this->entityManager
-            ->createQueryBuilder()
-            ->select('payment')
-            ->from(Transaction::class, 'transaction')
-            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event IN (:events)')
-            ->leftJoin(Payment::class, 'payment', 'WITH', 'payment.transaction = transaction')
-            ->where('transaction.date BETWEEN :beginDate and :endDate')
-            ->andWhere('transaction.state = :state')
-            ->andWhere('payment.id IS NOT NULL')
-            ->groupBy('transaction.id')
-            ->setParameters([
-                'state' => Transaction::STATE_PAID,
-                'beginDate' => $beginDate,
-                'endDate' => $endDate,
-                'events' => $events,
-            ]);
-        
-        return $queryBuilder->getQuery()->getResult();
-    }
 }
