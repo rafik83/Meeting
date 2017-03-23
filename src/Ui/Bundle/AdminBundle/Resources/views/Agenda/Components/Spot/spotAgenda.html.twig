@@ -1,0 +1,24 @@
+<script type="x/template" id="spot-agenda">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <strong>${ spot.reference }</strong>
+            <a href="#" class="pull-right" v-on:click="close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+        </div>
+        <div class="panel-body">
+            <table class="table-agenda table-condensed">
+                <tr>
+                    <td v-for="day in spot.days" class="col-xs-6">
+                        <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day + 1 }</div>
+                        <table class="table-agenda-day table table-bordered table-condensed">
+                            <tr v-for="slot in day.slots">
+                                <spot-slot-agenda v-bind:agendaSlot="slot"></spot-slot-agenda>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</script>

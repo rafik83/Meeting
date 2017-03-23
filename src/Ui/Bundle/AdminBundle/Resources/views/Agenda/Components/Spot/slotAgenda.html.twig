@@ -1,0 +1,30 @@
+<script type="x/template" id="spot-slot-agenda">
+    <td>
+        <div class="slot empty-slot" v-if="agendaSlot.type === 'slot_available'">
+            <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
+        </div>
+
+        <div class="slot unavailability" v-if="agendaSlot.type === 'unavailability'">
+            <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
+        </div>
+
+        <div class="slot happening" v-if="agendaSlot.type === 'happening_unavailability'">
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
+        </div>
+
+        <div class="slot meeting" v-if="agendaSlot.type === 'meeting_unavailability'">
+            <div class="slot-label slot-time">
+                <span class="glyphicon glyphicon-lock"></span>
+                ${ agendaSlot.beginEndHour }
+            </div>
+        </div>
+
+        <div class="slot mass-unavailability" v-if="agendaSlot.type === 'mass_unavailability'">
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
+        </div>
+
+        <div class="slot mass-unavailability" v-if="agendaSlot.type === 'mass_assignment_unavailability'">
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
+        </div>
+    </td>
+</script>

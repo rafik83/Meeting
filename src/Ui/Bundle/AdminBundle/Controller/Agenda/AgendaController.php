@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
 use Proximum\Vimeet\Application\View\Spot\Agenda\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,6 +117,69 @@ class AgendaController extends Controller
         ));
 
         return new JsonResponse($listView->spotViews);
+    }
+
+    /**
+     * @param Event $event
+     * @param Spot  $spot
+     *
+     * @return JsonResponse
+     */
+    public function spotDetailAction(Event $event, Spot $spot)
+    {
+        $mock = [
+            'spot' => [
+                'id' => 10,
+                'reference' => $spot->getReference(),
+                'days'      => [
+                    0 => [
+                        'day' => 0,
+                        'slots' => [
+                            0 => [
+                                'id'           => 37,
+                                'begin'        => new \DateTime(),
+                                'end'          => new \DateTime(),
+                                'beginEndHour' => '10:00 - 12:00',
+                                'type'         => 'slot_available',
+                                'meetings'     => [
+                                    0 => [
+                                        'fromSheet' => null,
+                                        'toSheet' => null
+                                    ]
+                                ],
+                            ],
+                            1 => [
+                                'id'           => 38,
+                                'begin'        => new \DateTime(),
+                                'end'          => new \DateTime(),
+                                'beginEndHour' => '10:00 - 12:00',
+                                'type'         => 'slot_available',
+                                'meetings'     => [
+
+                                ],
+                            ],
+                        ],
+                    ],
+                    1 => [
+                        'day' => 1,
+                        'slots' => [
+                            0 => [
+                                'id'           => 37,
+                                'begin'        => new \DateTime(),
+                                'end'          => new \DateTime(),
+                                'beginEndHour' => '10:00 - 12:00',
+                                'type'         => 'slot_available',
+                                'meetings'     => [
+
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        return new JsonResponse($mock);
     }
 
     /**

@@ -45,7 +45,10 @@
     {{ include('AdminBundle:Agenda/Components:massAssignmentForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sortModal.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sortSheetForm.html.twig') }}
+
     {{ include('AdminBundle:Agenda/Tabs:spots.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components/Spot:spotAgenda.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components/Spot:slotAgenda.html.twig') }}
 
     <!-- template for the Modal component -->
     <script type="x/template" id="modal-template">
