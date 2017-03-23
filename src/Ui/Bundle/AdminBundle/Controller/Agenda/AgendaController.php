@@ -140,11 +140,31 @@ class AgendaController extends Controller
                                 'begin'        => new \DateTime(),
                                 'end'          => new \DateTime(),
                                 'beginEndHour' => '10:00 - 12:00',
-                                'type'         => 'slot_available',
+                                'type'         => 'meeting_unavailability',
                                 'meetings'     => [
                                     0 => [
-                                        'fromSheet' => null,
-                                        'toSheet' => null
+                                        'fromSheet' => [
+                                            'title' => 'Elao'
+                                        ],
+                                        'toSheet' => [
+                                            'title' => 'Proximum'
+                                        ]
+                                    ],
+                                    1 => [
+                                        'fromSheet' => [
+                                            'title' => 'Apple'
+                                        ],
+                                        'toSheet' => [
+                                            'title' => 'Microsoft'
+                                        ]
+                                    ],
+                                    2 => [
+                                        'fromSheet' => [
+                                            'title' => 'AIRMATE - MYRIEL AVIATION'
+                                        ],
+                                        'toSheet' => [
+                                            'title' => 'ASL - AIRBUS SAFRAN LAUNCHERS'
+                                        ]
                                     ]
                                 ],
                             ],
@@ -154,9 +174,7 @@ class AgendaController extends Controller
                                 'end'          => new \DateTime(),
                                 'beginEndHour' => '10:00 - 12:00',
                                 'type'         => 'slot_available',
-                                'meetings'     => [
-
-                                ],
+                                'meetings'     => [],
                             ],
                         ],
                     ],

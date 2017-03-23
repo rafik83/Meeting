@@ -1,11 +1,11 @@
 <script type="x/template" id="spot-slot-agenda">
     <td>
         <div class="slot empty-slot" v-if="agendaSlot.type === 'slot_available'">
-            <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
         </div>
 
         <div class="slot unavailability" v-if="agendaSlot.type === 'unavailability'">
-            <div class="slot-label agendaSlot-time">${ agendaSlot.beginEndHour }</div>
+            <div class="slot-label slot-time">${ agendaSlot.beginEndHour }</div>
         </div>
 
         <div class="slot happening" v-if="agendaSlot.type === 'happening_unavailability'">
@@ -16,6 +16,19 @@
             <div class="slot-label slot-time">
                 <span class="glyphicon glyphicon-lock"></span>
                 ${ agendaSlot.beginEndHour }
+            </div>
+            <div>
+                <table class="table spot-slot-meeting-table">
+                    <tr>
+                        <td v-for="meeting in agendaSlot.meetings">
+                            <div class="text-center">
+                                <span class="sheet-title">${ meeting.fromSheet.title }</span>
+                                <i class="glyphicon glyphicon-arrow-right"></i>
+                                <span class="sheet-title">${ meeting.toSheet.title }</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 

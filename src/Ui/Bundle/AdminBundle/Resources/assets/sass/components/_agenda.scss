@@ -44,8 +44,8 @@
 
   .slot {
     padding: 4px;
-    height: 65px;
-    width: 120px;
+    min-height: 65px;
+    min-width: 120px;
 
     &.meeting {
       background: #32b5fc;
@@ -88,6 +88,16 @@
     .slot-time {
       font-size: 85%;
       display: inline;
+    }
+  }
+
+  .spot-slot-meeting-table {
+    .sheet-title {
+      text-overflow: ellipsis;
+      /* Required for text-overflow to do anything */
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100px;
     }
   }
 
