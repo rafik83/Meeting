@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
@@ -78,6 +79,16 @@ class JobQueueAdapter implements JobQueueInterface
             'adminId'  => $admin->getId(),
             'sheetIds' => implode(',', $sheetIds),
         ]);
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exportOrdersForEvent(Event $event, Admin $admin, $locale)
+    {
+        $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
 
         $this->setJob($job);
     }

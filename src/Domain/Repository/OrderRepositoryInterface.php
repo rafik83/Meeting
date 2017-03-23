@@ -81,6 +81,13 @@ interface OrderRepositoryInterface
     public function findNotCancelledByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledWithJoinRowAndPromotionCodeByEvent(Event $event);
+
+    /**
      * @param Sheet $sheet
      *
      * @return bool
