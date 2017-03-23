@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Repository\Payment;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Transaction;
 
@@ -23,6 +22,13 @@ interface PaymentRepositoryInterface
      * @return null|Payment
      */
     public function findById($id);
+
+    /**
+     * @param Transaction $transaction
+     *
+     * @return null|Payment
+     */
+    public function getByTransaction(Transaction $transaction);
 
     /**
      * @param ArrayCollection|Transaction[]

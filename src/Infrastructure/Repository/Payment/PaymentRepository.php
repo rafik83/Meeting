@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Payment;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 
@@ -32,9 +31,7 @@ class PaymentRepository implements PaymentRepositoryInterface
     }
 
     /**
-     * @param int $id
-     *
-     * @return null|Payment
+     * {@inheritdoc}
      */
     public function findById($id)
     {
@@ -52,7 +49,24 @@ class PaymentRepository implements PaymentRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByTransactions($transactions)
+    public function getByTransaction(Transaction $transaction)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('payment')
+            ->from(Payment::class, 'payment')
+            ->where('payment.transaction = :transaction')
+            ->setParameter('transaction', $transaction)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByTransactions(array $transactions)
     {
         $queryBuilder = $this
             ->entityManager

@@ -95,15 +95,21 @@ class TransactionViewQueryHandler
     public function handle(TransactionViewQuery $query)
     {
         $paypalGateWay  = null;
-        
-        if($query->payment !== null) {
-            $paymentDetails = $query->payment->getDetails();
-    
+
+        if (!isset($this->payments[$query->transaction->getId()])) {
+            $this->payments[$query->transaction->getId()] = $this->paymentRepository->getByTransaction($query->transaction);
+        }
+
+        if ($this->payments[$query->transaction->getId()] !== null) {
+            $payment        = $this->payments[$query->transaction->getId()];
+            $paymentDetails = $payment->getDetails();
+
             if ($query->transaction->getMode() === 'paypal' && isset($paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY])) {
                 $paypalGateWay = $paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY];
             }
         }
-        $sheetTitle     = $this->sheetInfoGuesser->guessSheetTitle($query->sheet);
+
+        $sheetTitle = $this->sheetInfoGuesser->guessSheetTitle($query->sheet);
         
         if (!isset($this->billingInfo[$query->sheet->getId()])) {
             $this->billingInfo[$query->sheet->getId()] = $this->billingInfoRepository->getBySheet($query->sheet);
