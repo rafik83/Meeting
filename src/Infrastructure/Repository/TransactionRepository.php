@@ -160,7 +160,6 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->select('transaction')
             ->from(Transaction::class, 'transaction')
             ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event IN (:events)')
-            //->leftJoin(Payment::class, 'payment')
             ->where('transaction.date BETWEEN :beginDate and :endDate')
             ->andWhere('transaction.state = :state')
             ->groupBy('transaction.id')

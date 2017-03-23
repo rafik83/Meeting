@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Application\Query\Transaction;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 
 class TransactionViewQueryHandler
 {
@@ -28,24 +30,37 @@ class TransactionViewQueryHandler
      * @var BillingInfoRepositoryInterface
      */
     private $billingInfoRepository;
+
+    /**
+     * @var PaymentRepositoryInterface
+     */
+    private $paymentRepository;
     
     /**
      * @var array
      */
     private $billingInfo = [];
+
+    /**
+     * @var array
+     */
+    private $payments = [];
     
     /**
      * TransactionViewQueryHandler constructor.
      *
-     * @param SheetInfoGuesser $sheetInfoGuesser
-     * @param BillingInfoRepositoryInterface $billingInfoRepository
+     * @param SheetInfoGuesser                  $sheetInfoGuesser
+     * @param BillingInfoRepositoryInterface    $billingInfoRepository
+     * @param PaymentRepositoryInterface        $paymentRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
-        BillingInfoRepositoryInterface $billingInfoRepository
+        BillingInfoRepositoryInterface $billingInfoRepository,
+        PaymentRepositoryInterface $paymentRepository
     ) {
         $this->sheetInfoGuesser      = $sheetInfoGuesser;
         $this->billingInfoRepository = $billingInfoRepository;
+        $this->paymentRepository     = $paymentRepository;
     }
     
     /**
@@ -57,6 +72,18 @@ class TransactionViewQueryHandler
         
         foreach ($billingInfos as $billingInfo) {
             $this->billingInfo[$billingInfo->getSheet()->getId()] = $billingInfo;
+        }
+    }
+
+    /**
+     * @param Transaction[] $transactions
+     */
+    public function preloadPayments(array $transactions)
+    {
+        $payments = $this->paymentRepository->getByTransactions($transactions);
+
+        foreach ($payments as $payment) {
+            $this->payments[$payment->getTransaction()->getId()] = $payment;
         }
     }
     

@@ -78,7 +78,11 @@ class FilterHandler
         $this->transactionViewQueryHandler->preloadBillingInfo(array_map(function (Transaction $transaction) {
             return $transaction->getSheet();
         }, $transactions));
-        
+
+        $this->transactionViewQueryHandler->preloadPayments(array_map(function (Transaction $transaction) {
+            return $transaction;
+        }, $transactions));
+
         foreach ($transactions as $transaction ) {
             $transactionViews[] = $this->transactionViewQueryHandler->handle(new TransactionViewQuery(
                     $transaction,
