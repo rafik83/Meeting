@@ -452,6 +452,28 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant') // missing sheet and typeTranslation
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.enable = true AND sheet.event = :event')
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('sheetIds', $sheetIds)
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -478,8 +500,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         array $participants,
         \DateTimeInterface $begin,
         \DateTimeInterface $end
-    )
-    {
+    ) {
         return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
     }
   

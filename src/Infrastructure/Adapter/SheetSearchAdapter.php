@@ -25,6 +25,7 @@ use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -148,6 +149,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         }, $results);
 
         return new SheetIdsView($sheetIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale)
+    {
+        $results = $this->getSearchResults($event, $filters, $locale);
+
+        $sheetIds = array_map(function (Result $result) {
+            return $result->id;
+        }, $results);
+
+        return new ParticipantsSheetIdsView($sheetIds);
     }
 
     /**

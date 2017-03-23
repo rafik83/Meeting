@@ -40,6 +40,15 @@ interface ParticipantRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * @param Event  $event
+     * @param int[]  $sheetIds
+     * @param string $locale
+     *
+     * @return Participant[]
+     */
+    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale);
+
+    /**
      * @param Event $event
      * @param Mass  $mass
      *

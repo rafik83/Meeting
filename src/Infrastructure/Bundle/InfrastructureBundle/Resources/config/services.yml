@@ -2375,6 +2375,12 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.sheet_search_adapter'
 
+    query.participant.export_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.sheet_search_adapter'
+
     #
     # Program query
     #
@@ -3317,8 +3323,8 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    serializer.normalizer.event_participants:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantsNormalizer
+    serializer.normalizer.participants_sheet_ids_view:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\ParticipantsSheetIdsViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
