@@ -85,8 +85,7 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $slotRepository        = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $slotAvailability      = $this->prophesize(SlotAvailability::class);
-        $participantRepository->getParticipantsBySheetId(1)->shouldBeCalled()->willReturn([$participant1]);
-        $participantRepository->getParticipantsBySheetId(2)->shouldBeCalled()->willReturn([$participant2, $participant3]);
+        $participantRepository->getParticipantsBySheetIds([1, 2])->shouldBeCalled()->willReturn([$participant1, $participant2, $participant3]);
         $slotRepository->getAvailableSlotByEvent($event)->shouldBeCalled()->willReturn([$slot, $slot2]);
         // Participant 1
         $slotAvailability->isAvailable($slot, $participant1)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE));

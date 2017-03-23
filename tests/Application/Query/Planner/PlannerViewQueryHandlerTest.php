@@ -83,7 +83,7 @@ class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participantView]);
         $meetingViewQueryHandler
-            ->handle(new MeetingViewQuery($event, [$sheetView], [$participantView], [$slotView]))
+            ->handle(new MeetingViewQuery($event, [$sheetView], [$participantView], [$slotView], [$spotView], 'moving_allowed'))
             ->shouldBeCalled()
             ->willReturn([$meetingView]);
         $spotViewQueryHandler
@@ -102,7 +102,7 @@ class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $spotViewQueryHandler->reveal()
         );
 
-        $result = $plannerViewQueryHandler->handle(new PlannerViewQuery($event, 'fr'));
+        $result = $plannerViewQueryHandler->handle(new PlannerViewQuery($event, 'fr', 'moving_allowed'));
 
         // Expected
         $expected = new PlannerView(

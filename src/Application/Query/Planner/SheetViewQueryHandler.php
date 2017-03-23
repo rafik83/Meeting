@@ -61,14 +61,14 @@ class SheetViewQueryHandler
         foreach ($sheets as $sheet) {
             $indicator = $this->indicatorCalculator->getIndicator($sheet);
 
-            //if ($indicator->possibleMeetingsQuantity > 0) {
+            if ($indicator->possibleMeetingsQuantity > 0) {
                 $sheetViews[] = new SheetView(
                     $sheet->getId(),
                     $this->types[$sheet->getType()->getId()],
                     $indicator->sheetsPlanningQuantity,
                     $indicator->possibleMeetingsQuantity
                 );
-            //}
+            }
         }
 
         return $sheetViews;
