@@ -3133,9 +3133,9 @@ services:
     order.balance:
         class: Proximum\Vimeet\Domain\Order\Balance
         arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_views_by_event_query_handler'
+            - '@query.order.order_vat_views_by_sheet_query_handler'
             - '@repository.transaction'
-            - '@repository.invoice.invoice_repository'
 
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
