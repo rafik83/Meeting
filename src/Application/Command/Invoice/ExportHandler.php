@@ -63,7 +63,7 @@ class ExportHandler
         $events   = $this->eventRepository->getEventsByAdmin($command->admin);
 
         foreach ($events as $event) {
-            $dateFormatters[$event->getId()] = IntlDateFormatter::create(
+            $dateFormatter = IntlDateFormatter::create(
                 $command->admin->getLocale(),
                 IntlDateFormatter::SHORT,
                 IntlDateFormatter::NONE,
@@ -78,7 +78,7 @@ class ExportHandler
                 $invoice->getData(),
                 ExportView::class,
                 'json',
-                ['invoice' => $invoice, 'locale' => $command->admin->getLocale(), 'dateFormatters' => $dateFormatters]
+                ['invoice' => $invoice, 'locale' => $command->admin->getLocale(), 'dateFormatter' => $dateFormatter]
             );
         }
 

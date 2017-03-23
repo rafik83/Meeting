@@ -68,7 +68,7 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
         );
 
         $invoiceDate = $this->getFormattedDate(
-            $context['dateFormatters'][$invoice->getEvent()->getId()],
+            $context['dateFormatter'],
             $invoice->getCreatedAt()
         );
 
@@ -83,7 +83,7 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
             AmountFormatter::centsToDecimalAmount($invoice->getTotal()),
             AmountFormatter::centsToDecimalAmount($invoice->getTotalWithVat()),
             $invoice->getVatAmount(),
-            AmountFormatter::centsToDecimalAmount($this->balance->getBalance($invoice->getSheet())),
+            $this->balance->getBalance($invoice->getSheet()),
             $invoice->getEvent()->getConfiguration()->getAnalyticsCode(),
             $billingInfo->vatNumber,
             $billingInfo->country
@@ -108,6 +108,8 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
      */
     private function getFormattedDate(IntlDateFormatter $dateFormatter, \DateTimeInterface $date)
     {
-        return $dateFormatter->format($date) ? $dateFormatter->format($date) : '';
+        $dateFormatted = $dateFormatter->format($date);
+
+        return $dateFormatted !== false ? $dateFormatted : '';
     }
 }
