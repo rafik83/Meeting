@@ -23,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
 class MeetingViewQueryHandler
 {
@@ -51,19 +50,12 @@ class MeetingViewQueryHandler
     /** @var SlotView[] */
     private $slots;
 
-    /** @var MeetingRepositoryInterface */
-    private $meetingRepository;
-
     /**
      * @param RequestRepositoryInterface $requestRepository
-     * @param MeetingRepositoryInterface $meetingRepository
      */
-    public function __construct(
-        RequestRepositoryInterface $requestRepository,
-        MeetingRepositoryInterface $meetingRepository
-    ) {
+    public function __construct(RequestRepositoryInterface $requestRepository)
+    {
         $this->requestRepository = $requestRepository;
-        $this->meetingRepository = $meetingRepository;
     }
 
     /**
@@ -98,6 +90,14 @@ class MeetingViewQueryHandler
                     if ($meeting !== null) {
                         $meetingView->slot = $this->getSlotById($meeting->getSlot()->getId());
                         $meetingView->spot = $this->getSpotById($meeting->getSpot()->getId());
+
+                        if ($meeting->isBlockedSlot()) {
+                            $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());
+                        }
+
+                        if ($meeting->isBlockedSpot()) {
+                            $meetingView->lockedSpot = $this->getSpotById($meeting->getSpot()->getId());
+                        }
 
                         if ($query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED) {
                             $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());

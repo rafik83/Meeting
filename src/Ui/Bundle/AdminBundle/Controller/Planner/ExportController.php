@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\Export;
-use Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Domain\Model\Event;
