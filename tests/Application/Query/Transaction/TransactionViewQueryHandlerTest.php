@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -50,6 +51,7 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         
         $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesser::class);
         $billingInfosRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
+        $paymentRepository      = $this->prophesize(PaymentRepositoryInterface::class);
         $transactionViewQuery   = new TransactionViewQuery(
             $transaction,
             $sheet,
@@ -62,7 +64,8 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         
         $queryHandler = new TransactionViewQueryHandler(
             $sheetInfoGuesser->reveal(),
-            $billingInfosRepository->reveal()
+            $billingInfosRepository->reveal(),
+            $paymentRepository->reveal()
         );
         
         $result = $queryHandler->handle($transactionViewQuery);
