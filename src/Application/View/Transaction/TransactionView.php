@@ -42,7 +42,7 @@ class TransactionView
     /**
      * @var string
      */
-    public $societyName;
+    public $companyName;
     
     /**
      * @var \DateTimeInterface
@@ -87,7 +87,7 @@ class TransactionView
      * @param int                   $eventId
      * @param string                $eventName
      * @param int                   $sheetOwnerId
-     * @param string                $societyName
+     * @param string                $companyName
      * @param \DateTimeInterface    $transactionDate
      * @param int                   $transactionType
      * @param string|null           $transactionReference
@@ -102,7 +102,7 @@ class TransactionView
         $eventId,
         $eventName,
         $sheetOwnerId,
-        $societyName,
+        $companyName,
         \DateTimeInterface $transactionDate,
         $transactionType,
         $transactionReference,
@@ -116,7 +116,7 @@ class TransactionView
         $this->eventId                      = $eventId;
         $this->eventName                    = $eventName;
         $this->sheetOwnerId                 = $sheetOwnerId;
-        $this->societyName                  = $societyName;
+        $this->companyName                  = $companyName;
         $this->transactionDate              = $transactionDate;
         $this->transactionType              = $transactionType;
         $this->transactionReference         = $transactionReference;

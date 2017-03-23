@@ -82,8 +82,8 @@ class TransactionNormalizer implements NormalizerInterface
     }
     
     /**
-     * @param $key
-     * @param $locale
+     * @param string $key
+     * @param string $locale
      *
      * @return string
      */

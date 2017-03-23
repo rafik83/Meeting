@@ -31,9 +31,9 @@ interface PaymentRepositoryInterface
     public function getByTransaction(Transaction $transaction);
 
     /**
-     * @param ArrayCollection|Transaction[]
+     * @param array Transaction[]
      *
-     * @return ArrayCollection|Payment[]
+     * @return array Payment[]
      */
     public function getByTransactions(array $transactions);
 }
