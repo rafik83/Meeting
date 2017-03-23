@@ -29,7 +29,7 @@ class MeetingRequestViewQuery
      * @var string
      */
     public $locale;
-    
+
     /**
      * @var bool
      */

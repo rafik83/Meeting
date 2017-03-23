@@ -34,7 +34,7 @@ class MeetingRequestListViewQuery
      * @var Event
      */
     public $event;
-    
+
     /**
      * MeetingRequestListViewQuery constructor.
      *

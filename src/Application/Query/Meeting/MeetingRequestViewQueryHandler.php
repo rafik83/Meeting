@@ -66,7 +66,7 @@ class MeetingRequestViewQueryHandler
     
         $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
         
-        $isSheetSeeable = !empty($rules) ? true : false;
+        $isSheetSeeable = !empty($rules);
         
         return new MeetingRequestView(
             $sheet,
