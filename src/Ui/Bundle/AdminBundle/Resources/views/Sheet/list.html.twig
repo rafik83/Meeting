@@ -6,7 +6,7 @@
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <div class="dropdown pull-right">
+            <div class="dropdown pull-right" data-toggle="tooltip" data-placement="top" title="{{ 'admin.sheet.export.help'|trans }}">
                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     {{ 'admin.sheet.export.button.label'|trans }}
                     <span class="caret"></span>
