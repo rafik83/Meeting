@@ -2576,6 +2576,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_unavailability_repository'
+            - '@query.agenda.admin.spot.meeting_slot_view_query_handler'
 
     query.agenda.admin.spot.day_spot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\DaySpotViewQueryHandler
@@ -2590,6 +2591,11 @@ services:
             - '@query.agenda.admin.spot.day_spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery }
+
+    query.agenda.admin.spot.meeting_slot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
 
     ##
     # Navigation builder

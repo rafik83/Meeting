@@ -122,12 +122,13 @@ class AgendaController extends Controller
     }
 
     /**
-     * @param Event $event
-     * @param Spot  $spot
+     * @param Request $request
+     * @param Event   $event
+     * @param Spot    $spot
      *
      * @return JsonResponse
      */
-    public function spotDetailAction(Event $event, Spot $spot)
+    public function spotDetailAction(Request $request, Event $event, Spot $spot)
     {
         $mock = [
             'spot' => [
@@ -201,7 +202,7 @@ class AgendaController extends Controller
 
         /** @var AgendaSpotView $agendaSpotView */
         $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
-            new AgendaSpotViewQuery($spot, $event)
+            new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))
         );
 
         return new JsonResponse($agendaSpotView);

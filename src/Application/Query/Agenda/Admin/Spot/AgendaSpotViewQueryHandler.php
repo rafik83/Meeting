@@ -61,7 +61,13 @@ class AgendaSpotViewQueryHandler
 
         foreach ($eventDays as $dayNumber => $day) {
             $dayViews[] = $this->daySpotViewQueryHandler->handle(
-                new DaySpotViewQuery($day, $dayNumber, $query->event, $query->spot)
+                new DaySpotViewQuery(
+                    $day,
+                    $dayNumber,
+                    $query->event,
+                    $query->spot,
+                    $query->locale
+                )
             );
         }
 

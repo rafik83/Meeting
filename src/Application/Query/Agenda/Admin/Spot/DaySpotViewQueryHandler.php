@@ -40,7 +40,8 @@ class DaySpotViewQueryHandler
             new SlotViewQuery(
                 $query->event,
                 $query->day,
-                $query->spot
+                $query->spot,
+                $query->locale
             )
         );
 

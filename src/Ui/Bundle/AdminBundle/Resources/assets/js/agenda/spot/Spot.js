@@ -29,7 +29,9 @@ module.exports = {
          * @param {Object} spot
          */
         detailAction: function (spot) {
-            this.loadSpotDetail(spot.id);
+            if (!this.isSpotOpened(spot)) {
+                this.loadSpotDetail(spot.id);
+            }
         },
         /**
          * @param {Object} spot

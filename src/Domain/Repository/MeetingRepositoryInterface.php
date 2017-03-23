@@ -129,6 +129,14 @@ interface MeetingRepositoryInterface
     public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
 
     /**
+     * @param Spot        $spot
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return Meeting[]
+     */
+    public function findBySpotAndSlotWithSheet(Spot $spot, MeetingSlot $meetingSlot);
+
+    /**
      * @param Sheet $sheet
      *
      * @return bool

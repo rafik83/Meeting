@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Spot;
 
+use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\SpotMeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\SpotSlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\SpotUnavailability;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -36,20 +39,28 @@ class SlotViewQueryHandler
     private $meetingRepository;
 
     /**
+     * @var MeetingSlotViewQueryHandler
+     */
+    private $meetingSlotViewQueryHandler;
+
+    /**
      * SlotViewQueryHandler constructor.
      *
      * @param MeetingRepositoryInterface            $meetingRepository
      * @param MeetingSlotRepositoryInterface        $meetingSlotRepository
      * @param SpotUnavailabilityRepositoryInterface $spotUnavailabilityRepository
+     * @param MeetingSlotViewQueryHandler           $meetingSlotViewQueryHandler
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        SpotUnavailabilityRepositoryInterface $spotUnavailabilityRepository
+        SpotUnavailabilityRepositoryInterface $spotUnavailabilityRepository,
+        MeetingSlotViewQueryHandler $meetingSlotViewQueryHandler
     ) {
         $this->meetingSlotRepository        = $meetingSlotRepository;
         $this->spotUnavailabilityRepository = $spotUnavailabilityRepository;
         $this->meetingRepository            = $meetingRepository;
+        $this->meetingSlotViewQueryHandler  = $meetingSlotViewQueryHandler;
     }
 
     /**
@@ -65,7 +76,7 @@ class SlotViewQueryHandler
         $slotViews = [];
 
         foreach ($slots as $slot) {
-            $meetings      = $this->meetingRepository->findBySpotAndSlot($query->spot, $slot);
+            $meetings      = $this->meetingRepository->findBySpotAndSlotWithSheet($query->spot, $slot);
             $isUnavailable = $this->hasUnavailability($slot, $spotUnavailabilities);
 
             if ($isUnavailable) {
@@ -79,7 +90,7 @@ class SlotViewQueryHandler
             $slotView = new SpotSlotView(
                 $slot,
                 $type,
-                []
+                $this->buildMeetingView($meetings, $query->locale)
             );
 
             $slotViews[] = $slotView;
@@ -104,5 +115,25 @@ class SlotViewQueryHandler
         }
 
         return false;
+    }
+
+    /**
+     * @param array  $meetings
+     * @param string $locale
+     *
+     * @return SpotMeetingSlotView[]
+     */
+    private function buildMeetingView(array $meetings, $locale)
+    {
+        $meetingViews = [];
+
+        /** @var Meeting $meeting */
+        foreach ($meetings as $meeting) {
+            $meetingViews[] = $this->meetingSlotViewQueryHandler->handle(
+                new MeetingSlotViewQuery($meeting, $locale)
+            );
+        }
+
+        return $meetingViews;
     }
 }

@@ -14,7 +14,6 @@
 
         <div class="slot meeting" v-if="agendaSlot.type === 'meeting_unavailability'">
             <div class="slot-label slot-time">
-                <span class="glyphicon glyphicon-lock"></span>
                 ${ agendaSlot.beginEndHour }
             </div>
             <div>
@@ -22,9 +21,9 @@
                     <tr>
                         <td v-for="meeting in agendaSlot.meetings">
                             <div class="text-center">
-                                <span class="sheet-title">${ meeting.fromSheet.title }</span>
-                                <i class="glyphicon glyphicon-arrow-right"></i>
-                                <span class="sheet-title">${ meeting.toSheet.title }</span>
+                                <span class="sheet-title">${ meeting.fromSheetTitle }</span>
+                                <i class="glyphicon glyphicon-arrow-down"></i>
+                                <span class="sheet-title">${ meeting.toSheetTitle }</span>
                             </div>
                         </td>
                     </tr>

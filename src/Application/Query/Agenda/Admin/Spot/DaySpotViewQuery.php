@@ -37,18 +37,25 @@ class DaySpotViewQuery
     public $spot;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * DaySpotViewQuery constructor.
      *
-     * @param Day   $day
-     * @param int   $dayNumber
-     * @param Event $event
-     * @param Spot  $spot
+     * @param Day    $day
+     * @param int    $dayNumber
+     * @param Event  $event
+     * @param Spot   $spot
+     * @param string $locale
      */
-    public function __construct(Day $day, $dayNumber, Event $event, Spot $spot)
+    public function __construct(Day $day, $dayNumber, Event $event, Spot $spot, $locale)
     {
         $this->day       = $day;
         $this->dayNumber = $dayNumber;
         $this->event     = $event;
         $this->spot      = $spot;
+        $this->locale    = $locale;
     }
 }
