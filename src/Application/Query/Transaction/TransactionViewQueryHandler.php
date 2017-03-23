@@ -13,9 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Transaction;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 
 class TransactionViewQueryHandler
 {
@@ -32,35 +30,22 @@ class TransactionViewQueryHandler
     private $billingInfoRepository;
 
     /**
-     * @var PaymentRepositoryInterface
-     */
-    private $paymentRepository;
-    
-    /**
      * @var array
      */
     private $billingInfo = [];
-
-    /**
-     * @var array
-     */
-    private $payments = [];
     
     /**
      * TransactionViewQueryHandler constructor.
      *
      * @param SheetInfoGuesser                  $sheetInfoGuesser
      * @param BillingInfoRepositoryInterface    $billingInfoRepository
-     * @param PaymentRepositoryInterface        $paymentRepository
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
-        BillingInfoRepositoryInterface $billingInfoRepository,
-        PaymentRepositoryInterface $paymentRepository
+        BillingInfoRepositoryInterface $billingInfoRepository
     ) {
         $this->sheetInfoGuesser      = $sheetInfoGuesser;
         $this->billingInfoRepository = $billingInfoRepository;
-        $this->paymentRepository     = $paymentRepository;
     }
     
     /**
@@ -76,33 +61,16 @@ class TransactionViewQueryHandler
     }
 
     /**
-     * @param Transaction[] $transactions
-     */
-    public function preloadPayments(array $transactions)
-    {
-        $payments = $this->paymentRepository->getByTransactions($transactions);
-
-        foreach ($payments as $payment) {
-            $this->payments[$payment->getTransaction()->getId()] = $payment;
-        }
-    }
-    
-    /**
      * @param TransactionViewQuery $query
      *
      * @return TransactionView
      */
     public function handle(TransactionViewQuery $query)
     {
-        $paypalGateWay  = null;
-
-        if (!isset($this->payments[$query->transaction->getId()])) {
-            $this->payments[$query->transaction->getId()] = $this->paymentRepository->getByTransaction($query->transaction);
-        }
-
-        if ($this->payments[$query->transaction->getId()] !== null) {
-            $payment        = $this->payments[$query->transaction->getId()];
-            $paymentDetails = $payment->getDetails();
+        $paypalGateWay = null;
+        
+        if ($query->payment !== null) {
+            $paymentDetails = $query->payment->getDetails();
 
             if ($query->transaction->getMode() === 'paypal' && isset($paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY])) {
                 $paypalGateWay = $paymentDetails[self::PAYPAL_TRANSACTION_ID_KEY];

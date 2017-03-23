@@ -67,21 +67,16 @@ class FilterHandler
             throw new EventsListEmptyException();
         }
         
-        $transactions = $this->transactionRepository->findPaidByDateRangeAndCrossEvent(
+        $transactions = $this->transactionRepository->findPaidByDateRange(
             $command->beginDate,
-            $command->endDate,
-            $events
+            $command->endDate
         );
-        
-        $transactionViews = [];
-        
+
         $this->transactionViewQueryHandler->preloadBillingInfo(array_map(function (Transaction $transaction) {
             return $transaction->getSheet();
         }, $transactions));
 
-        $this->transactionViewQueryHandler->preloadPayments(array_map(function (Transaction $transaction) {
-            return $transaction;
-        }, $transactions));
+        $transactionViews = [];
 
         foreach ($transactions as $transaction ) {
             $transactionViews[] = $this->transactionViewQueryHandler->handle(new TransactionViewQuery(

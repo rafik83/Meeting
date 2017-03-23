@@ -48,7 +48,7 @@ class FilterHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$event]);
     
         $transactionRepository
-            ->findPaidByDateRangeAndCrossEvent($command->beginDate, $command->endDate, [$event])
+            ->findPaidByDateRange($command->beginDate, $command->endDate)
             ->shouldBeCalled()
             ->willReturn([$transaction]);
         

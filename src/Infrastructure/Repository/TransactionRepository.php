@@ -149,16 +149,16 @@ class TransactionRepository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findPaidByDateRangeAndCrossEvent(
+    public function findPaidByDateRange(
         \DateTimeInterface $beginDate,
-        \DateTimeInterface $endDate,
-        array $events
+        \DateTimeInterface $endDate
     ) {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
-            ->select('transaction')
+            ->select('transaction, payment, sheet')
             ->from(Transaction::class, 'transaction')
-            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event IN (:events)')
+            ->leftJoin('transaction.payment', 'payment')
+            ->join('transaction.sheet', 'sheet')
             ->where('transaction.date BETWEEN :beginDate and :endDate')
             ->andWhere('transaction.state = :state')
             ->groupBy('transaction.id')
@@ -166,7 +166,6 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'state' => Transaction::STATE_PAID,
                 'beginDate' => $beginDate,
                 'endDate' => $endDate,
-                'events' => $events,
             ]);
         
         return $queryBuilder->getQuery()->getResult();

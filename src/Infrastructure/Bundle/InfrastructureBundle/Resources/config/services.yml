@@ -2836,7 +2836,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@repository.billing_info_repository'
-            - '@repository.payment.payment_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }
     query.transaction.list_view_query_handler:
