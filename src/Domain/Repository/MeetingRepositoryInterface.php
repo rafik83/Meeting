@@ -147,11 +147,4 @@ interface MeetingRepositoryInterface
      *  ]
      */
     public function getAllCompleteByEvent(Event $event);
-
-    /**
-     * @param Event $event
-     *
-     * @return MeetingWithLockedSpotAndSlotView[]
-     */
-    public function getMeetingWithLockedSpotAndSlotViewByEvent(Event $event);
 }

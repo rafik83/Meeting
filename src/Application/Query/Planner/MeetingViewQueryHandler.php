@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
@@ -95,8 +96,13 @@ class MeetingViewQueryHandler
                     $meeting = $request->getMeeting();
 
                     if ($meeting !== null) {
-                        $meetingView->slot = $meeting->getSlot();
-                        $meetingView->spot = $meeting->getSpot();
+                        $meetingView->slot = $this->getSlotById($meeting->getSlot()->getId());
+                        $meetingView->spot = $this->getSpotById($meeting->getSpot()->getId());
+
+                        if ($query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED) {
+                            $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());
+                            $meetingView->lockedSpot = $this->getSpotById($meeting->getSpot()->getId());
+                        }
                     }
                 }
 
@@ -392,13 +398,23 @@ class MeetingViewQueryHandler
         return $this->getParticipantOfSheet($sheet);
     }
 
-    private function getSpot()
+    /**
+     * @param int $spotId
+     *
+     * @return null|SpotView
+     */
+    private function getSpotById($spotId)
     {
-
+        return isset($this->spots[$spotId]) ? $this->spots[$spotId] : null;
     }
 
-    private function getSlot()
+    /**
+     * @param int $slotId
+     *
+     * @return null|SlotView
+     */
+    private function getSlotById($slotId)
     {
-
+        return isset($this->slots[$slotId]) ? $this->slots[$slotId] : null;
     }
 }

@@ -22,7 +22,7 @@ class MeetingNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        return [
+        $data = [
             '@id'             => $object->reference,
             'id'              => $object->id,
             'isVisio'         => $object->isVisio ? 'true' : 'false',
@@ -37,6 +37,24 @@ class MeetingNormalizer implements NormalizerInterface
                 }, $object->participantList),
             ],
         ];
+
+        if ($object->hasSpot()) {
+            $data['spot'] = ['@reference' => $object->getSpotReference()];
+        }
+
+        if ($object->hasSlot()) {
+            $data['slot'] = ['@reference' => $object->getSlotReference()];
+        }
+
+        if ($object->hasLockedSpot()) {
+            $data['lockedSpot'] = ['@reference' => $object->getLockedSpotReference()];
+        }
+
+        if ($object->hasLockedSlot()) {
+            $data['lockedSlot'] = ['@reference' => $object->getLockedSlotReference()];
+        }
+
+        return $data;
     }
 
     /**

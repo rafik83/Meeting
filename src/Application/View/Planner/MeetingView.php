@@ -10,6 +10,11 @@
 
 namespace Proximum\Vimeet\Application\View\Planner;
 
+use Proximum\Vimeet\Application\Exception\Planner\Meeting\NoLockedSlotException;
+use Proximum\Vimeet\Application\Exception\Planner\Meeting\NoLockedSpotException;
+use Proximum\Vimeet\Application\Exception\Planner\Meeting\NoSlotException;
+use Proximum\Vimeet\Application\Exception\Planner\Meeting\NoSpotException;
+
 class MeetingView
 {
     /** @var int */
@@ -71,6 +76,32 @@ class MeetingView
     }
 
     /**
+     * @return string
+     * @throws NoSlotException
+     */
+    public function getSlotReference()
+    {
+        if ($this->slot === null) {
+            throw new NoSlotException();
+        }
+
+        return $this->slot->reference;
+    }
+
+    /**
+     * @return string
+     * @throws NoSpotException
+     */
+    public function getSpotReference()
+    {
+        if ($this->spot === null) {
+            throw new NoSpotException();
+        }
+
+        return $this->spot->reference;
+    }
+
+    /**
      * @return bool
      */
     public function hasSpot()
@@ -87,10 +118,36 @@ class MeetingView
     }
 
     /**
+     * @return string
+     * @throws NoLockedSlotException
+     */
+    public function getLockedSlotReference()
+    {
+        if ($this->lockedSlot === null) {
+            throw new NoLockedSlotException();
+        }
+
+        return $this->lockedSlot->reference;
+    }
+
+    /**
      * @return bool
      */
     public function hasLockedSpot()
     {
         return $this->lockedSpot !== null;
+    }
+
+    /**
+     * @return string
+     * @throws NoLockedSpotException
+     */
+    public function getLockedSpotReference()
+    {
+        if ($this->lockedSpot === null) {
+            throw new NoLockedSpotException();
+        }
+
+        return $this->lockedSpot->reference;
     }
 }

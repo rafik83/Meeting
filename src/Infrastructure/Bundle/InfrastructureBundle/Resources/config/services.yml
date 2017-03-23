@@ -3354,6 +3354,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     query.planner.spot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\SpotViewQueryHandler

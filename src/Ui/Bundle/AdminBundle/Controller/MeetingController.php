@@ -36,8 +36,6 @@ class MeetingController extends Controller
     public function listAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $t = $this->get('vimeet_infrastructure.repository.meeting_repository')->getMeetingWithLockedSpotAndSlotViewByEvent($event);
-        dump($t);
 
         $meetings = $this
             ->get('vimeet_infrastructure.repository.meeting_repository')

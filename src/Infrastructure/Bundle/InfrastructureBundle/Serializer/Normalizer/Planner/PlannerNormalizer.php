@@ -31,8 +31,8 @@ class PlannerNormalizer implements NormalizerInterface, NormalizerAwareInterface
             'typePriorityList' => [],
             'sheetList'        => [],
             'participantList'  => [],
-            'meetingList'      => [],
             'spotList'         => [],
+            'meetingList'      => [],
         ];
 
         if (!empty($object->dayList)) {
