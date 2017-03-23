@@ -97,9 +97,7 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === ExportView::class
-               && isset($data['billingInfosView'])
-               && isset($data['invoice']);
+        return $type === ExportView::class && isset($data['billingInfosView']);
     }
 
     /**
