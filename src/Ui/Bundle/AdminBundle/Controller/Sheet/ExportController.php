@@ -10,26 +10,30 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet;
 
+use Proximum\Vimeet\Application\Query\Sheet\Export\ExportQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportController extends Controller
 {
     /**
      * CSV export of event's sheets. Requires super admin or organizer role.
      *
-     * @param Request $request
-     * @param Event   $event
+     * @param UserInterface $user
+     * @param Request       $request
+     * @param Event         $event
      *
      * @return Response
      */
-    public function exportSheetAction(Request $request, Event $event)
+    public function exportSheetAction(UserInterface $user, Request $request, Event $event)
     {
         // Only super admin & organizers are allowed to export sheets:
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -37,20 +41,31 @@ class ExportController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $charset       = Charset::WINDOWS_1252;
-        $serializer    = $this->get('serializer');
-        $exportContent = $serializer->serialize($event, 'csv', [
-            'locale'  => $locale,
-            'charset' => $charset,
+        $filters = $this->get('filter.sheet_filter')->get();
+
+        if (null === $filters) {
+            $filters = SheetFilterType::getDefaultFilters();
+        }
+
+        $sheetFilterForm = $this->createFilterForm(SheetFilterType::class, $filters, [
+            'event'  => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
+            'user'   => $user,
         ]);
 
-        $response    = new Response($exportContent);
+        $sheetFilterForm->submit($filters);
+        $filters = $sheetFilterForm->getData();
+
+        $exportQuery = new ExportQuery($event, $filters, $locale);
+
+        $response = new Response($this->get('query.sheet.export_handler')->handle($exportQuery));
+
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             "export_event_sheets_" . date("Y_m_d_His") . ".csv"
         );
         $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $exportQuery->charset));
 
         return $response;
     }

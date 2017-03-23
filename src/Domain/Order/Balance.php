@@ -80,6 +80,19 @@ class Balance
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
+     */
+    public function loadAllTransactionsForSheetIds(Event $event, array $sheetIds)
+    {
+        $transactions = $this->transactionRepository->findByEventAndSheetIds($event, $sheetIds);
+
+        foreach ($transactions as $transaction) {
+            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
+        }
+    }
+
+    /**
+     * @param Event $event
      */
     public function loadAllOrders(Event $event)
     {
@@ -92,13 +105,14 @@ class Balance
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
      */
-    public function loadAllInvoices(Event $event)
+    public function loadAllOrdersForSheetIds(Event $event, array $sheetIds)
     {
-        $invoices = $this->invoiceRepository->findByEvent($event);
+        $orders = $this->orderRepository->findByEventAndSheetIds($event, $sheetIds);
 
-        foreach ($invoices as $invoice) {
-            $this->invoices[$invoice->getSheet()->getId()][] = $invoice;
+        foreach ($orders as $order) {
+            $this->orders[$order->getSheet()->getId()][] = $order;
         }
     }
 
@@ -112,12 +126,13 @@ class Balance
     }
 
     /**
-     * @param Sheet $sheet
-     * @param array $orders
+     * @param Event $event
+     * @param int[] $sheetIds
      */
-    public function preloadOrdersForSheet(Sheet $sheet, array $orders)
+    public function loadAllForSheetIds(Event $event, array $sheetIds)
     {
-        $this->orders[$sheet->getId()] = $orders;
+        $this->loadAllOrdersForSheetIds($event, $sheetIds);
+        $this->loadAllTransactionsForSheetIds($event, $sheetIds);
     }
 
     /**

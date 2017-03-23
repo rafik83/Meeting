@@ -84,20 +84,20 @@ class SheetController extends Controller
 
         $filters = SheetFilterType::getDefaultFilters();
 
-        $sheetFilter = $this->createFilterForm(SheetFilterType::class, $filters, [
+        $sheetFilterForm = $this->createFilterForm(SheetFilterType::class, $filters, [
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'user'   => $this->getUser(),
         ]);
 
-        $isFiltered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
+        $isFiltered = $sheetFilterForm->handleRequest($request)->isSubmitted() && $sheetFilterForm->isValid();
 
         if ($isFiltered) {
-            $filters = $sheetFilter->getData();
+            $filters = $sheetFilterForm->getData();
 
             // save filter into session
             $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
-                $sheetFilter,
+                $sheetFilterForm,
                 $request->query->all()
             ));
         }
@@ -136,7 +136,7 @@ class SheetController extends Controller
             ),
         ]);
 
-        $sheetFilterView = $sheetFilter->createView();
+        $sheetFilterView = $sheetFilterForm->createView();
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
@@ -147,7 +147,7 @@ class SheetController extends Controller
                 $request->getLocale()
             ),
             'batch_form'       => $batchForm->createView(),
-            'filter_form'      => $sheetFilter->createView(),
+            'filter_form'      => $sheetFilterView,
         ]);
     }
 

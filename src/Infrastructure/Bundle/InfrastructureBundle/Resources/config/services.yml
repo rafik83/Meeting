@@ -2369,6 +2369,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
 
+    query.sheet.export_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.sheet_search_adapter'
+
     #
     # Program query
     #
@@ -3301,7 +3307,7 @@ services:
         abstract: true
 
     serializer.normalizer.event_sheets:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\SheetIdsViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
