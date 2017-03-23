@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
-use Proximum\Vimeet\Domain\View\Meeting\MeetingWithLockedSpotAndSlotView;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {

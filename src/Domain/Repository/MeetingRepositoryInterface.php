@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
-use Proximum\Vimeet\Domain\View\Meeting\MeetingWithLockedSpotAndSlotView;
 
 interface MeetingRepositoryInterface
 {
