@@ -193,6 +193,13 @@ interface ParticipantRepositoryInterface
     public function getParticipantsBySheetIds(array $ids);
 
     /**
+     * @param array
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsWithSheetInCatalogAndActiveByTypeIds(array $ids);
+
+    /**
      * @param Event  $event
      * @param string $locale
      *

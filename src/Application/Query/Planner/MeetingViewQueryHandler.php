@@ -293,7 +293,7 @@ class MeetingViewQueryHandler
      *
      * @return bool
      */
-    private function isVisio(array $participantList)
+    private function isVisio(array &$participantList)
     {
         foreach ($participantList as $participant) {
             if ($participant->isVisio) {

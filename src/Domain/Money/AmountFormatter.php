@@ -14,8 +14,8 @@ class AmountFormatter
 {
     /**
      * Get decimal amount and return an integer amount in cents
-     * Examples : floatToIntAmount(12.59) will return 1259
-     *            floatToIntAmount(12)    will return 1200
+     * Examples : decimalToCentsAmount(12.59) will return 1259
+     *            decimalToCentsAmount(12)    will return 1200
      *
      * @param float $amount
      *

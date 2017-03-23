@@ -12,14 +12,10 @@ namespace Proximum\Vimeet\Application\Components\Order\Normalizer;
 
 use Proximum\Vimeet\Application\View\Order\CustomRowView;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CustomRowViewNormalizer implements NormalizerInterface, NormalizerAwareInterface
+class CustomRowViewNormalizer implements NormalizerInterface
 {
-    use NormalizerAwareTrait;
-
     /**
      * @param CustomRowView $object
      * @param string        $format

@@ -62,7 +62,7 @@ interface EventRepositoryInterface
     /**
      * @param int $id
      *
-     * @return Event
+     * @return Event|null
      */
     public function getById($id);
 }

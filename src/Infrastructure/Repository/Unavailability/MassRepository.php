@@ -85,7 +85,24 @@ class MassRepository implements MassRepositoryInterface
             ->createQueryBuilder()
             ->select('mass')
             ->from(Mass::class, 'mass')
-            ->andWhere('mass.dispatch = TRUE')
+            ->andWhere('mass.dispatch = true')
+            ->andWhere('mass.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findNotDispatchedByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('mass')
+            ->from(Mass::class, 'mass')
+            ->andWhere('mass.dispatch = false')
             ->andWhere('mass.event = :event')
             ->setParameter('event', $event);
 

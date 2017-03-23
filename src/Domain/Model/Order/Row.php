@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 
+/**
+ * Line of a product on an order
+ */
 class Row
 {
     /**
@@ -41,6 +44,9 @@ class Row
     private $quantity;
 
     /**
+     * "Prix unitaire"
+     * "Unit price"
+     *
      * @var float
      */
     private $price;
