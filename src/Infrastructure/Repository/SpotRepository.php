@@ -57,7 +57,7 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findByEvent(Event $event, $active = true)
     {
         $queryBuilder = $this
             ->entityManager
@@ -65,8 +65,10 @@ class SpotRepository implements SpotRepositoryInterface
             ->select('spot')
             ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
+            ->andWhere('spot.active = :active')
             ->orderBy('spot.reference')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->setParameter('active', $active);
 
         return $queryBuilder->getQuery()->getResult();
     }

@@ -62,7 +62,7 @@ module.exports = {
         loadSpotDetail: function (spotId) {
             this.$http.get(api.getSpotsDetailEndpoint(spotId))
                 .then(function (response) {
-                    var spot = response.data.spot;
+                    var spot = response.data;
 
                     this.populateSpotAgenda(spot);
                 }.bind(this))

@@ -157,7 +157,9 @@ interface SpotRepositoryInterface
     /**
      * @param Event $event
      *
+     * @param bool  $active
+     *
      * @return Spot[]
      */
-    public function findByEvent(Event $event);
+    public function findByEvent(Event $event, $active = true);
 }

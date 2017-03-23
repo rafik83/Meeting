@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
+use Proximum\Vimeet\Application\View\Agenda\AgendaSpotView;
 use Proximum\Vimeet\Application\View\Spot\Agenda\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -197,7 +199,12 @@ class AgendaController extends Controller
             ],
         ];
 
-        return new JsonResponse($mock);
+        /** @var AgendaSpotView $agendaSpotView */
+        $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
+            new AgendaSpotViewQuery($spot, $event)
+        );
+
+        return new JsonResponse($agendaSpotView);
     }
 
     /**
