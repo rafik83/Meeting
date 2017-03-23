@@ -110,7 +110,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             22
         );
 
-        $dateFormatters[1] = IntlDateFormatter::create(
+        $dateFormatter = IntlDateFormatter::create(
             'fr',
             IntlDateFormatter::SHORT,
             IntlDateFormatter::NONE,
@@ -119,7 +119,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
 
         $exportViewDenormalizer = new ExportViewDenormalizer($sheetInfoGuesserCache->reveal(), $balance->reveal());
 
-        $context = ['locale' => 'fr', 'dateFormatters' => $dateFormatters, 'invoice' => $invoice->reveal()];
+        $context = ['locale' => 'fr', 'dateFormatter' => $dateFormatter, 'invoice' => $invoice->reveal()];
 
         $serializer = $this->prophesize(Serializer::class);
         $serializer->willImplement('Symfony\Component\Serializer\Normalizer\DenormalizerInterface');
