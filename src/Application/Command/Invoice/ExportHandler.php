@@ -59,21 +59,18 @@ class ExportHandler
     public function handle(Export $command)
     {
         $invoiceExportViews = [];
-        $dateFormatters     = [];
-        $events   = $this->eventRepository->getEventsByAdmin($command->admin);
 
-        foreach ($events as $event) {
+        $events   = $this->eventRepository->getEventsByAdmin($command->admin);
+        $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $command->endDate);
+
+        foreach ($invoices as $invoice) {
             $dateFormatter = IntlDateFormatter::create(
                 $command->admin->getLocale(),
                 IntlDateFormatter::SHORT,
                 IntlDateFormatter::NONE,
-                $event->getTimeZone()
+                $invoice->getEvent()->getTimeZone()
             );
-        }
 
-        $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $command->endDate);
-
-        foreach ($invoices as $invoice) {
             $invoiceExportViews[] = $this->serializer->deserialize(
                 $invoice->getData(),
                 ExportView::class,
