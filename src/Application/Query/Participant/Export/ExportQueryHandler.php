@@ -10,24 +10,26 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter;
 
 class ExportQueryHandler
 {
-    /** @var SerializerAdapter */
+    /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
     /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
     /**
-     * @param SerializerAdapter           $serializerAdapter
+     * @param SerializerAdapterInterface  $serializerAdapter
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
      */
-    public function __construct(SerializerAdapter $serializerAdapter, SheetSearchAdapterInterface $sheetSearchAdapter)
-    {
-        $this->serializerAdapter = $serializerAdapter;
+    public function __construct(
+        SerializerAdapterInterface $serializerAdapter,
+        SheetSearchAdapterInterface $sheetSearchAdapter
+    ) {
+        $this->serializerAdapter  = $serializerAdapter;
         $this->sheetSearchAdapter = $sheetSearchAdapter;
     }
 
