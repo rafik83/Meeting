@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 use Proximum\Vimeet\Application\View\Planner\MeetingView;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Exception\NotBooleanValueException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class MeetingNormalizer implements NormalizerInterface
@@ -27,7 +28,9 @@ class MeetingNormalizer implements NormalizerInterface
         $data = [
             '@id'             => $object->reference,
             'id'              => $object->id,
-            'isVisio'         => $object->isVisio ? 'true' : 'false',
+            'isVisio'         => $this->getBooleanValue($object->isVisio),
+            'blockedSpot'     => $this->getBooleanValue($object->blockedSpot),
+            'blockedSlot'     => $this->getBooleanValue($object->blockedSlot),
             'sheetList'       => [
                 'Sheet' => array_map(function (SheetView $sheet) {
                     return ['@reference' => $sheet->reference];
@@ -65,5 +68,20 @@ class MeetingNormalizer implements NormalizerInterface
     public function supportsNormalization($data, $format = null)
     {
         return $data instanceof MeetingView;
+    }
+
+    /**
+     * @param $value
+     *
+     * @return string
+     * @throws NotBooleanValueException
+     */
+    private function getBooleanValue($value)
+    {
+        if (!is_bool($value)) {
+            throw new NotBooleanValueException();
+        }
+
+        return $value === true ? 'true' : 'false';
     }
 }

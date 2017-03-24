@@ -93,15 +93,18 @@ class MeetingViewQueryHandler
                         $meetingView->slot = $this->getSlotById($meeting->getSlot()->getId());
                         $meetingView->spot = $this->getSpotById($meeting->getSpot()->getId());
 
-                        if ($meeting->isBlockedSlot()
-                            || $query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED
-                        ) {
-                            $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());
+                        if ($meeting->isBlockedSlot()) {
+                            $meetingView->lockedSlot  = $this->getSlotById($meeting->getSlot()->getId());
+                            $meetingView->blockedSlot = true;
                         }
 
-                        if ($meeting->isBlockedSpot()
-                            || $query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED
-                        ) {
+                        if ($meeting->isBlockedSpot()) {
+                            $meetingView->lockedSpot  = $this->getSpotById($meeting->getSpot()->getId());
+                            $meetingView->blockedSpot = true;
+                        }
+
+                        if ($query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED) {
+                            $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());
                             $meetingView->lockedSpot = $this->getSpotById($meeting->getSpot()->getId());
                         }
                     }

@@ -53,6 +53,18 @@ class MeetingView
     public $lockedSlot = null;
 
     /**
+     * Info if the slot was locked or not for the import
+     * @var bool
+     */
+    public $blockedSlot;
+
+    /**
+     * Info if the spot was locked or not for the import
+     * @var bool
+     */
+    public $blockedSpot;
+
+    /**
      * @param int               $id
      * @param SheetView[]       $sheetList
      * @param ParticipantView[] $participantList
@@ -65,6 +77,8 @@ class MeetingView
         $this->participantList = $participantList;
         $this->isVisio         = $isVisio;
         $this->reference       = sprintf('meeting%s', $id);
+        $this->blockedSpot     = false;
+        $this->blockedSlot     = false;
     }
 
     /**
