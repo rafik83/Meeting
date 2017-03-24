@@ -40,6 +40,7 @@ class ExportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $invoice = $this->prophesize(Invoice::class);
         $invoice->getData()->shouldBeCalled()->willReturn('');
+        $invoice->getEvent()->shouldBeCalled()->willReturn($event);
 
         $serializer        = $this->prophesize(SerializerAdapterInterface::class);
         $eventRepository   = $this->prophesize(EventRepositoryInterface::class);
@@ -48,7 +49,7 @@ class ExportHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->getEventsByAdmin($admin)->shouldBeCalled()->willReturn([$event]);
         $invoiceRepository->getFilteredByEvents([$event], $date, $date)->shouldBeCalled()->willReturn([$invoice]);
 
-        $dateFormatters[""] = IntlDateFormatter::create(
+        $dateFormatter = IntlDateFormatter::create(
             'fr',
             IntlDateFormatter::SHORT,
             IntlDateFormatter::NONE,
@@ -60,7 +61,7 @@ class ExportHandlerTest extends \PHPUnit_Framework_TestCase
                 '',
                 ExportView::class,
                 'json',
-                ['invoice' => $invoice, 'locale' => 'fr', 'dateFormatters' => $dateFormatters])
+                ['invoice' => $invoice, 'locale' => 'fr', 'dateFormatter' => $dateFormatter])
             ->shouldBeCalled()
         ;
 
