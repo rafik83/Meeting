@@ -43,11 +43,20 @@ class MeetingFactory
     }
 
     /**
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param array      $fromParticipant
+     * @param array      $toParticipant
+     *
      * @return Meeting
      */
-    public static function createMeeting()
-    {
-        $request   = self::createRequest();
+    public static function createMeeting(
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null,
+        array $fromParticipant = [],
+        array $toParticipant = []
+    ) {
+        $request   = self::createRequest($fromSheet, $toSheet);
         $slot      = SlotFactory::createSlot();
         $createdAt = new \DateTime();
         $spot      = SpotFactory::create();
@@ -56,9 +65,9 @@ class MeetingFactory
             $request,
             $slot,
             $request->getFromSheet(),
-            [],
+            $fromParticipant,
             $request->getToSheet(),
-            [],
+            $toParticipant,
             $createdAt,
             $spot,
             false,
