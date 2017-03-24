@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Spot;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaSpotView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class AgendaSpotViewQueryHandler
 {
