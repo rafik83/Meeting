@@ -1,0 +1,8 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.tips.list.title'|trans }}</h1>
+
+    <a href="{{ path('admin_tips_create') }}" class="btn btn-primary">{{ 'admin.tips.create.link'|trans }}</a>
+
+{% endblock %}

@@ -649,6 +649,10 @@ admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
+admin.tips.link: 'Messages d''aide'
+admin.tips.list.title: 'Messages d''aide'
+admin.tips.create.link: 'Nouveau'
+admin.tips.create.title: 'Nouveau message d''aide'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'

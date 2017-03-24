@@ -1294,3 +1294,16 @@ admin_order_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
+
+#
+# Tips
+#
+admin_tips_list:
+    path: /tips/list
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Tips:list }
+
+admin_tips_create:
+    path: /tips/create
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Tips:create }
