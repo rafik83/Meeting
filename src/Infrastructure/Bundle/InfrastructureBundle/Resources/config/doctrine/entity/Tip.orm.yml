@@ -1,0 +1,21 @@
+Proximum\Vimeet\Domain\Model\Tip:
+    type:  entity
+    table: tip
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        lang:
+            type: string
+        content:
+            type: text
+        onMeetingManagement:
+            type: boolean
+        onCatalog:
+            type: boolean
+        onPrintPlanning:
+            type: boolean
