@@ -262,6 +262,14 @@ class ImportHandler
             $spot
         );
 
+        if ($meetingResult->blockedSlot) {
+            $meeting->blockSlot();
+        }
+
+        if ($meetingResult->blockedSpot) {
+            $meeting->blockSpot();
+        }
+
         $this->entityManagerAdapter->persist($meeting);
 
         return $meeting;
