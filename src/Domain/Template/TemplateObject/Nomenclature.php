@@ -401,8 +401,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
 
         foreach ($this->getItems() as $itemKey) {
             foreach ($locales as $locale) {
-                $label = $this->getLabelForKey($itemKey, $locale);
-                $translations[$locale] = $label;
+                $translations[$locale] = $this->getLabelForKey($itemKey, $locale);
             }
         }
 

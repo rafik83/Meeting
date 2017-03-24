@@ -60,6 +60,7 @@ class CompanyType extends AbstractType
         ]);
         $resolver->setRequired(['template', 'locale', 'country', 'locales']);
         $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('locales', 'array');
         $resolver->setAllowedTypes('template', Template\TemplateData::class);
         $resolver->setAllowedTypes('country', 'string');
     }

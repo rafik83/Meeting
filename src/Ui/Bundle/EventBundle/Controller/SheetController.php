@@ -76,6 +76,7 @@ class SheetController extends Controller
             $locale
         );
 
+        // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
         $participantProductView = $this->get('tactician.commandbus.query')->handle(

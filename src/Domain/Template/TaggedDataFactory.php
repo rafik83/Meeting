@@ -66,16 +66,19 @@ class TaggedDataFactory
     {
         $registerTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
 
-        $objects      = $registerTemplateData->getObjects();
+        $objects      = $registerTemplateData->getContentObjects();
         $eventLocales = $sheet->getEvent()->getLocales();
 
+        /** @var TemplateObject|ContentObjectInterface $object */
         foreach ($objects as $object) {
             $tags = $object->getTags();
 
-            if (count($tags) === 0 || !$object instanceof ContentObjectInterface) {
+            if (count($tags) === 0) {
                 continue;
             }
 
+            // Filter only the object with SHEET_DATA setter,
+            // as they are the only one that can be display on the sheet
             if (!in_array(Tag::SHEET_DATA, $tags)) {
                 continue;
             }
@@ -121,13 +124,13 @@ class TaggedDataFactory
     }
 
     /**
-     * @param string         $forTag
+     * @param string         $tag
      * @param TaggedDataView $taggedDataView
      */
-    private function addTaggedDataView($forTag, $taggedDataView)
+    private function addTaggedDataView($tag, $taggedDataView)
     {
-        if (!isset($this->taggedDataViews[$forTag])) {
-            $this->taggedDataViews[$forTag] = $taggedDataView;
+        if (!isset($this->taggedDataViews[$tag])) {
+            $this->taggedDataViews[$tag] = $taggedDataView;
         }
     }
 }

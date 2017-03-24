@@ -158,6 +158,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject\ContentObjectInterface[]
+     */
+    public function getContentObjects()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\ContentObjectInterface;
+        });
+    }
+
+    /**
      * @return TemplateObject\ExportableObjectInterface[]
      */
     public function getExportableObjects()
