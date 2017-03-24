@@ -159,6 +159,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.tip.repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\TipRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
     repository.trace_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\TraceRepository
         arguments:
@@ -2330,6 +2335,12 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery }
+    query.tip.tip_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Tip\TipViewQueryHandler
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipViewQuery }
     query.type.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler
         arguments:
