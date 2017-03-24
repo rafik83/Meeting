@@ -452,8 +452,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-
-
     /**
      * {@inheritdoc}
      */
@@ -462,7 +460,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('participant') // missing sheet and typeTranslation
+            ->select('participant, sheet, type, typeTranslation')
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.enable = true AND sheet.event = :event')
             ->join('sheet.type', 'type')
