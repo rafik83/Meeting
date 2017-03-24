@@ -70,7 +70,7 @@ class ExportController extends Controller
 
         return new CsvFileResponse(
             $this->get('query.participant.export_handler')->handle($exportQuery),
-            sprintf('export_event_sheets_%s.csv', date("Y_m_d_His")),
+            sprintf('export_event_participants_%s.csv', date("Y_m_d_His")),
             Response::HTTP_OK,
             [],
             $exportQuery->charset
