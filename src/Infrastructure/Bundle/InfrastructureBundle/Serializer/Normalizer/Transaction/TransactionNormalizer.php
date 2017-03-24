@@ -59,7 +59,7 @@ class TransactionNormalizer implements NormalizerInterface
                 $this->translate('event.id', $object->adminLocale) => $view->eventId,
                 $this->translate('event.name', $object->adminLocale) => $view->eventName,
                 $this->translate('sheet.owner.id', $object->adminLocale) => $view->sheetOwnerId,
-                $this->translate('society.name', $object->adminLocale) => $view->societyName,
+                $this->translate('society.name', $object->adminLocale) => $view->companyName,
                 $this->translate('transaction_date', $object->adminLocale) => !$createdAt ? null : $createdAt,
                 $this->translate('transaction_type', $object->adminLocale) => $view->transactionType,
                 $this->translate('transaction_reference', $object->adminLocale) => $view->transactionReference,
