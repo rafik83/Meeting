@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
@@ -29,13 +31,22 @@ class TaggedDataFactory
     private $taggedDataViews = [];
 
     /**
+     * @var Applyer
+     */
+    private $applyer;
+
+    /**
      * TaggedDataFactory constructor.
      *
      * @param TemplateDataFactory $templateDataFactory
+     * @param Applyer             $applyer
      */
-    public function __construct(TemplateDataFactory $templateDataFactory)
-    {
+    public function __construct(
+        TemplateDataFactory $templateDataFactory,
+        Applyer $applyer
+    ) {
         $this->templateDataFactory = $templateDataFactory;
+        $this->applyer             = $applyer;
     }
 
     /**
@@ -43,13 +54,16 @@ class TaggedDataFactory
      *
      * @param Sheet  $sheet
      * @param string $locale
+     * @param array  $rules Current user rules
+     *
+     * @see RuleRepositoryInterface::getBySeerTypeAndSeeableType
      *
      * @return TemplateData sheetTemplate
      */
-    public function buildTaggedDataView(Sheet $sheet, $locale)
+    public function buildTaggedDataView(Sheet $sheet, $locale, array $rules = [])
     {
         $this->createTaggedDataView($sheet, $locale);
-        $sheetTemplateData = $this->attachTaggedDataView($sheet, $locale);
+        $sheetTemplateData = $this->attachTaggedDataView($sheet, $locale, $rules);
 
         return $sheetTemplateData;
     }
@@ -111,12 +125,19 @@ class TaggedDataFactory
     /**
      * @param Sheet  $sheet
      * @param string $locale
+     * @param array  $rules
+     *
+     * @see RuleRepositoryInterface::getBySeerTypeAndSeeableType
      *
      * @return TemplateData
      */
-    private function attachTaggedDataView(Sheet $sheet, $locale)
+    private function attachTaggedDataView(Sheet $sheet, $locale, $rules = [])
     {
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+        if (!empty($rules)) {
+            $this->applyer->applyRuleForTemplate($sheetTemplateData, $rules);
+        }
 
         $sheetTemplateData->setTaggedDataViews($this->taggedDataViews);
 

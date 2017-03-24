@@ -153,7 +153,8 @@ class SheetController extends Controller
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        // Build sheet template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,

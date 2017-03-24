@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -80,6 +81,7 @@ class TaggedDataFactoryTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $applyer = $this->prophesize(Applyer::class);
 
         $templateDataFactory
             ->createRegistrationFromSheet($sheet, $locale)
@@ -92,7 +94,11 @@ class TaggedDataFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($sheetTemplateData);
 
-        $taggedDataFactory = new TaggedDataFactory($templateDataFactory->reveal());
+        $taggedDataFactory = new TaggedDataFactory(
+            $templateDataFactory->reveal(),
+            $applyer->reveal()
+        );
+
         $sheetTemplateData = $taggedDataFactory->buildTaggedDataView($sheet, $locale);
 
         $objectEditableText1 = $sheetTemplateData->getObject('0aea62b2');
