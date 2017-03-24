@@ -30,6 +30,12 @@ class MeetingResult
     /** @var ParticipantResult[] */
     public $participants;
 
+    /** @var bool */
+    public $blockedSlot = false;
+
+    /** @var bool */
+    public $blockedSpot = false;
+
     /**
      * @param ParticipantResult $participantResult
      */
