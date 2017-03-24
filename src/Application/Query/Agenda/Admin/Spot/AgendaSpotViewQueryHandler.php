@@ -17,11 +17,6 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 class AgendaSpotViewQueryHandler
 {
     /**
-     * @var MeetingSlotRepositoryInterface
-     */
-    private $meetingSlotRepository;
-
-    /**
      * @var DayRepositoryInterface
      */
     private $dayRepository;
@@ -34,16 +29,13 @@ class AgendaSpotViewQueryHandler
     /**
      * AgendaSpotViewQueryHandler constructor.
      *
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      * @param DayRepositoryInterface         $dayRepository
      * @param DaySpotViewQueryHandler        $daySpotViewQueryHandler
      */
     public function __construct(
-        MeetingSlotRepositoryInterface $meetingSlotRepository,
         DayRepositoryInterface $dayRepository,
         DaySpotViewQueryHandler $daySpotViewQueryHandler
     ) {
-        $this->meetingSlotRepository   = $meetingSlotRepository;
         $this->dayRepository           = $dayRepository;
         $this->daySpotViewQueryHandler = $daySpotViewQueryHandler;
     }

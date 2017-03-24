@@ -2586,7 +2586,6 @@ services:
     query.agenda.admin.spot.agenda_spot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQueryHandler
         arguments:
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@repository.event.day_repository'
             - '@query.agenda.admin.spot.day_spot_view_query_handler'
         tags:

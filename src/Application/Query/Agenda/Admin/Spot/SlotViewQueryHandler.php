@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Spot;
 
-use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\SpotMeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\SpotSlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
