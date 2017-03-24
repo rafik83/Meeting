@@ -13,9 +13,6 @@ namespace Proximum\Vimeet\Domain\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
-use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class Block extends AbstractChild
 {
@@ -81,6 +78,7 @@ class Block extends AbstractChild
 
     /**
      * @param string $label
+     * @param string $locale
      */
     public function setLabel($label, $locale)
     {
@@ -248,7 +246,7 @@ class Block extends AbstractChild
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object instanceof TemplateObject\Image
-                   || $object instanceof EditableText
+                   || $object instanceof TemplateObject\EditableText
                    || $object instanceof TemplateObject\Participant;
         });
     }
@@ -554,7 +552,7 @@ class Block extends AbstractChild
     {
         /** @var TemplateObject $object */
         foreach ($this->getObjects() as $object) {
-            $tags = $object instanceof EditableText && !empty($object->getTag()) ? [$object->getTag()] : $object->getTags();
+            $tags = $object instanceof TemplateObject\EditableText && !empty($object->getTag()) ? [$object->getTag()] : $object->getTags();
 
             if (count($tags) === 0) {
                 continue;
