@@ -206,13 +206,13 @@
                         'accepted': 'warning',
                         'validated': 'success'
                     },
-                    sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                    sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
                     ) }}
                 </td>
                 <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                 <td>
                     <small>
-                        {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+                        {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     </small>
                 </td>
                 <td>

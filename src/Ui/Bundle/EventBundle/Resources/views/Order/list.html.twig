@@ -31,7 +31,7 @@
                                         <span class="label label-danger">{{ 'order.list.cancelled'|trans }}</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                                <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                                 <td>{{ order.total|localizedcurrency(order.currency) }}</td>
                                 <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
                             </tr>
@@ -75,7 +75,7 @@
             <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                    <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                     <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</td>
                     <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
@@ -116,7 +116,7 @@
             {% for invoiceView in invoiceViews %}
                 <tr>
                     <td>{{ invoiceView.number }}</td>
-                    <td>{{ invoiceView.createdAt|localizeddate('short', 'none', app.request.locale) }}</td>
+                    <td>{{ invoiceView.createdAt|localizeddate('short', 'none', app.request.locale, event.timeZone) }}</td>
                     <td>{{ invoiceView.total|format_amount|localizedcurrency(invoiceView.currency) }}</td>
                     <td>{{ invoiceView.totalWithVat|format_amount|localizedcurrency(invoiceView.currency) }}</td>
                     <td class="col-md-2 text-right">

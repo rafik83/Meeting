@@ -46,7 +46,7 @@
                 {% for order in orders %}
                     <tr>
                         <td>{{ order.reference }}</td>
-                        <td>{{ order.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td>{{ order.date|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                         <td>{{ order.paymentMode }}</td>
                         <td class="text-right">{{ (order.total)|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
@@ -85,9 +85,9 @@
                 {% for transaction in transactions %}
                     <tr>
                         <td>{{ transaction.reference }}</td>
-                        <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                         <td>{{ transaction.mode }}</td>
-                        <td class="text-right">{{ transaction.amount|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">{{ transaction.amount|number_format(2, ',', ' ') }} {{ event.currency|currency_symbol(app.request.locale) }}</td>
                         <td class="text-right">
                             <a href="{{ path('admin_sheet_transaction_update', { 'event': event.id, 'sheet': sheet.id, 'transaction': transaction.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
                             {{ macro.button(path('admin_sheet_transaction_remove', { 'event': event.id, 'sheet': sheet.id, 'transaction': transaction.id }), 'DELETE', 'Supprimer', { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'message.admin.transaction.remove.confirm'|trans }) }}
