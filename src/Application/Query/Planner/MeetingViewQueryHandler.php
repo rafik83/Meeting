@@ -84,23 +84,24 @@ class MeetingViewQueryHandler
                     $this->isVisio($participantsList)
                 );
 
-                if ($request->hasMeeting()) {
+                if ($query->exportSolutionType !== ExportSolutionType::SOLUTION_FROM_SCRATCH
+                    && $request->hasMeeting()
+                ) {
                     $meeting = $request->getMeeting();
 
                     if ($meeting !== null) {
                         $meetingView->slot = $this->getSlotById($meeting->getSlot()->getId());
                         $meetingView->spot = $this->getSpotById($meeting->getSpot()->getId());
 
-                        if ($meeting->isBlockedSlot()) {
+                        if ($meeting->isBlockedSlot()
+                            || $query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED
+                        ) {
                             $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());
                         }
 
-                        if ($meeting->isBlockedSpot()) {
-                            $meetingView->lockedSpot = $this->getSpotById($meeting->getSpot()->getId());
-                        }
-
-                        if ($query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED) {
-                            $meetingView->lockedSlot = $this->getSlotById($meeting->getSlot()->getId());
+                        if ($meeting->isBlockedSpot()
+                            || $query->exportSolutionType === ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED
+                        ) {
                             $meetingView->lockedSpot = $this->getSpotById($meeting->getSpot()->getId());
                         }
                     }
