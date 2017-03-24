@@ -15,16 +15,16 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 class SpotSlotView extends AbstractSlotView
 {
     /**
-     * @var array
+     * @var MeetingSlotView[]
      */
     public $meetings = [];
 
     /**
      * SpotSlotView constructor.
      *
-     * @param MeetingSlot $slot
-     * @param string      $type
-     * @param array       $meetings
+     * @param MeetingSlot       $slot
+     * @param string            $type
+     * @param MeetingSlotView[] $meetings
      */
     public function __construct(MeetingSlot $slot, $type, array $meetings = [])
     {
