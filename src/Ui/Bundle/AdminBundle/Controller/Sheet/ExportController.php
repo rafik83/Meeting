@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet;
 use Proximum\Vimeet\Application\Query\Participant;
 use Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportController extends Controller
@@ -40,16 +40,14 @@ class ExportController extends Controller
 
         $locale      = $event->getAvailableLocale($request->getLocale());
         $exportQuery = new Sheet\Export\ExportQuery($event, $this->getFilters($event, $user, $locale), $locale);
-        $response    = new Response($this->get('query.sheet.export_handler')->handle($exportQuery));
 
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_sheets_" . date("Y_m_d_His") . ".csv"
+        return new CsvFileResponse(
+            $this->get('query.sheet.export_handler')->handle($exportQuery),
+            sprintf('export_event_sheets_%s.csv', date("Y_m_d_His")),
+            Response::HTTP_OK,
+            [],
+            $exportQuery->charset
         );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $exportQuery->charset));
-
-        return $response;
     }
 
     /**
@@ -69,16 +67,14 @@ class ExportController extends Controller
 
         $locale      = $event->getAvailableLocale($request->getLocale());
         $exportQuery = new Participant\Export\ExportQuery($event, $this->getFilters($event, $user, $locale), $locale);
-        $response    = new Response($this->get('query.participant.export_handler')->handle($exportQuery));
 
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_participant_" . date("Y_m_d_His") . ".csv"
+        return new CsvFileResponse(
+            $this->get('query.participant.export_handler')->handle($exportQuery),
+            sprintf('export_event_sheets_%s.csv', date("Y_m_d_His")),
+            Response::HTTP_OK,
+            [],
+            $exportQuery->charset
         );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $exportQuery->charset));
-
-        return $response;
     }
 
     /**
