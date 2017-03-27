@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
