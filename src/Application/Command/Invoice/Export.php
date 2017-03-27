@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
 
 class Export
 {
     /**
-     * @var AdvancedUserInterface
+     * @var Admin
      */
     public $admin;
 
@@ -32,9 +32,9 @@ class Export
     /**
      * Export constructor.
      *
-     * @param AdvancedUserInterface $admin
+     * @param Admin $admin
      */
-    public function __construct(AdvancedUserInterface $admin)
+    public function __construct(Admin $admin)
     {
         $this->admin = $admin;
     }
