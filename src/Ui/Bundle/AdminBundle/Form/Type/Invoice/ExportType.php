@@ -30,7 +30,6 @@ class ExportType extends AbstractType
 
         $builder
             ->setAction($options['action'])
-            ->setMethod('POST')
             ->add('beginDate', DateType::class, [
                 'widget'      => 'single_text',
                 'format'      => 'dd/MM/yyyy',
