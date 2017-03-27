@@ -40,7 +40,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('invoice')
-            ->from(Invoice::class, 'invoice', 'invoice.id')
+            ->from(Invoice::class, 'invoice')
             ->where('invoice.event IN (:events)')
             ->andWhere('invoice.createdAt BETWEEN :beginDate and :endDate')
             ->setParameter('beginDate', $beginDate)
