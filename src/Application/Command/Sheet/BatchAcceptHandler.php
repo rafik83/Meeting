@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAcceptHandler
@@ -30,20 +31,28 @@ class BatchAcceptHandler
     private $datetime;
 
     /**
+     * @var BatchJobQueueInterface
+     */
+    private $batchJobQueue;
+
+    /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param AcceptHandler            $acceptHandler
      * @param \DateTimeInterface       $datetime
+     * @param BatchJobQueueInterface   $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         AcceptHandler $acceptHandler,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->acceptHandler   = $acceptHandler;
         $this->datetime        = $datetime;
+        $this->batchJobQueue   = $batchJobQueue;
     }
 
     /**
@@ -60,6 +69,8 @@ class BatchAcceptHandler
         foreach ($sheets as $sheet) {
             $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $this->datetime));
         }
+
+        $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin, null);
 
         return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');
     }

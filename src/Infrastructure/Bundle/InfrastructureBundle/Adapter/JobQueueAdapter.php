@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -91,6 +92,14 @@ class JobQueueAdapter implements JobQueueInterface
         $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
 
         $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function batchAction(BatchJobQueueInterface $batchJob, array $ids, Admin $admin, $locale)
+    {
+        $batchJob->createJob($ids, $admin, $locale);
     }
 
     /**

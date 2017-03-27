@@ -877,6 +877,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.accept_handler'
             - '@datetime'
+            - '@adapter_batch_job_queue.batch_accept_job_queue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAccept }
     command.admin.change_password_handler:
@@ -1569,6 +1570,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invo\BatchGenerateInvoice }
 
+
+    #
+    # Post Batch Action
+    #
+    command.sheet.post_batch.post_batch_accept_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchAcceptHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+
     #
     # Security
     #
@@ -1612,6 +1623,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter.job_queue_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_accept_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter.serializer_adapter:
@@ -2978,6 +2993,15 @@ services:
         arguments:
             - '@repository.admin_repository'
             - '@command.invoice.batch_generate_invoice_handler'
+        tags:
+            - { name: console.command }
+
+    command_batch.batch_accept_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchAcceptCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_accept_handler'
         tags:
             - { name: console.command }
 

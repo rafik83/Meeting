@@ -35,11 +35,20 @@ interface JobQueueInterface
      * @param Admin $admin
      */
     public function generateInvoice(array $sheetIds, Admin $admin);
-  
+
     /**
      * @param Event  $event
      * @param Admin  $admin
      * @param string $locale
      */
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
+
+    /**
+     * @param BatchJobQueueInterface $batchJob
+     * @param array                  $ids
+     * @param Admin                  $admin
+     * @param string                 $locale
+     *
+     */
+    public function batchAction(BatchJobQueueInterface $batchJob, array $ids, Admin $admin, $locale);
 }
