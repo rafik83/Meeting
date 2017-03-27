@@ -96,7 +96,7 @@
                             {{ form_errors(invoiceExportForm) }}
                             {{ form_row(invoiceExportForm.beginDate) }}
                             {{ form_row(invoiceExportForm.endDate) }}
-                            {{ form_row(invoiceExportForm.submit) }}
+                            {{ form_row(invoiceExportForm.submit, {'attr': {'class': 'pull-right col-md-2'}}) }}
                         {{ form_end(invoiceExportForm) }}
                     {% endif %}
                 </div>
