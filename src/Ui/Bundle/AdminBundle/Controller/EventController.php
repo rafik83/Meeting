@@ -67,7 +67,7 @@ class EventController extends Controller
             $transactionForm = $this->createForm(
                 FilterTransactionType::class,
                 $filterTransaction,
-                ['action' => $this->generateUrl('admin.event.transaction_export')]
+                ['action' => $this->generateUrl('admin_event_transaction_export')]
             );
             
             $find      = new Find($admin);
