@@ -43,6 +43,10 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.sheet.invoiced.subject: 'Téléchargez votre facture'
+mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre participation à l''événement %event% nous vous informons que votre facture est disponible :"
+mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
+mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
@@ -56,6 +60,9 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.order.export.intro: "Bonjour,\n\n Voici l'export des commandes pour l'événement %eventTitle% :\n"
+mail.order.export.link.click: 'Télécharger les commandes'
+mail.order.export.subject: 'Fichier d''export des commandes'
 mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
 mail.planning.print.link.intro: "Vous pouvez imprimer les plannings en cliquant ici :"
 mail.planning.print.link.click: 'Fichier de planning'

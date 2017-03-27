@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
@@ -50,7 +51,7 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getBySheets($sheets)
+    public function getBySheets(array $sheets)
     {
         $queryBuilder = $this
             ->entityManager
@@ -78,5 +79,21 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
     public function set(BillingInfo $billingInfo)
     {
         $this->entityManager->flush($billingInfo);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('billing_info, sheet')
+            ->from(BillingInfo::class, 'billing_info')
+            ->join('billing_info.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

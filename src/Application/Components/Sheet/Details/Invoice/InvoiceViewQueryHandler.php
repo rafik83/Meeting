@@ -56,10 +56,11 @@ class InvoiceViewQueryHandler
                 $invoiceViewQuery->sheet->getEvent(),
                 'event_invoice_show',
                 [
-                    'sheet' => $invoiceViewQuery->sheet->getId(),
+                    'sheet'   => $invoiceViewQuery->sheet->getId(),
                     'invoice' => $invoice->getId(),
-                    'hash' => $invoice->getHash(),
-                    'format' => 'pdf',
+                    'hash'    => $invoice->getHash(),
+                    'format'  => 'pdf',
+                    '_locale' => $invoice->getEvent()->getAvailableLocale($invoiceViewQuery->sheet->getOwnerLocale()),
                 ]
             );
 
