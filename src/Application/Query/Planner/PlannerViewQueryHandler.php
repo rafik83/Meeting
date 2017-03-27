@@ -100,7 +100,9 @@ class PlannerViewQueryHandler
         $slots          = $this->slotViewQueryHandler->handle(new SlotViewQuery($event, $days));
         $types          = $this->typeViewQueryHandler->handle(new TypeViewQuery($event, $query->locale));
         $typePriorities = $this->typePriorityViewQueryHandler->handle(new TypePriorityViewQuery($event, $types));
-        $sheets         = $this->sheetViewQueryHandler->handle(new SheetViewQuery($event, $types));
+        $sheets         = $this->sheetViewQueryHandler->handle(
+            new SheetViewQuery($event, $types, $query->exportSolutionType)
+        );
         $participants   = $this->participantViewQueryHandler->handle(new ParticipantViewQuery($event, $sheets, $slots));
         $spots          = $this->spotViewQueryHandler->handle(new SpotViewQuery($event, $sheets, $slots));
         $meetings       = $this->meetingViewQueryHandler->handle(

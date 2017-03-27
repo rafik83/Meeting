@@ -18,18 +18,21 @@ class SheetViewQuery
     /** @var Event */
     public $event;
 
-    /**
-     * @var TypeView[]
-     */
+    /** @var TypeView[] */
     public $types;
+
+    /** @var string */
+    public $exportSolutionType;
 
     /**
      * @param Event      $event
      * @param TypeView[] $types
+     * @param string     $exportSolutionType
      */
-    public function __construct(Event $event, array $types)
+    public function __construct(Event $event, array $types, $exportSolutionType)
     {
-        $this->event = $event;
-        $this->types = $types;
+        $this->event              = $event;
+        $this->types              = $types;
+        $this->exportSolutionType = $exportSolutionType;
     }
 }

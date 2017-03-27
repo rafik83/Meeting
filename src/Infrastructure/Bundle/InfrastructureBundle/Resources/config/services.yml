@@ -3462,6 +3462,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.planner.indicator_calculator'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     query.planner.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler

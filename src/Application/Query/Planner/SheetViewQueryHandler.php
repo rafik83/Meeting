@@ -13,36 +13,38 @@ namespace Proximum\Vimeet\Application\Query\Planner;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var TypeView[]
-     */
+    /** @var TypeView[] */
     private $types = [];
 
-    /**
-     * @var IndicatorCalculator
-     */
+    /** @var IndicatorCalculator */
     private $indicatorCalculator;
 
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param IndicatorCalculator      $indicatorCalculator
+     * @param SheetRepositoryInterface   $sheetRepository
+     * @param IndicatorCalculator        $indicatorCalculator
+     * @param MeetingRepositoryInterface $meetingRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        IndicatorCalculator $indicatorCalculator
+        IndicatorCalculator $indicatorCalculator,
+        MeetingRepositoryInterface $meetingRepository
     ) {
         $this->sheetRepository     = $sheetRepository;
         $this->indicatorCalculator = $indicatorCalculator;
+        $this->meetingRepository   = $meetingRepository;
     }
 
     /**
@@ -55,6 +57,12 @@ class SheetViewQueryHandler
         $this->orderTypeById($query);
         $sheets = $this->sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($query->event);
 
+        $meetingCount = [];
+
+        if ($query->exportSolutionType !== ExportSolutionType::SOLUTION_FROM_SCRATCH) {
+            $meetingCount = $this->meetingRepository->countMeetingsOfEvent($query->event);
+        }
+
         $sheetViews = [];
 
         /** @var Sheet $sheet */
@@ -62,11 +70,20 @@ class SheetViewQueryHandler
             $indicator = $this->indicatorCalculator->getIndicator($sheet);
 
             if ($indicator->possibleMeetingsQuantity > 0) {
+                $possibleMeetingQuantity = $indicator->possibleMeetingsQuantity;
+
+                if (!empty($meetingCount)
+                    && isset($meetingCount[$sheet->getId()])
+                    && isset($meetingCount[$sheet->getId()]['countMeetings'])
+                ) {
+                    $possibleMeetingQuantity = max($meetingCount[$sheet->getId()]['countMeetings'], $possibleMeetingQuantity);
+                }
+
                 $sheetViews[] = new SheetView(
                     $sheet->getId(),
                     $this->types[$sheet->getType()->getId()],
                     $indicator->sheetsPlanningQuantity,
-                    $indicator->possibleMeetingsQuantity
+                    $possibleMeetingQuantity
                 );
             }
         }

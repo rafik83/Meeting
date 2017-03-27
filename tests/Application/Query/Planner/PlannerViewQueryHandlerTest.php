@@ -75,7 +75,7 @@ class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$typePriorityView]);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($event, [$typeView]))
+            ->handle(new SheetViewQuery($event, [$typeView], 'moving_allowed'))
             ->shouldBeCalled()
             ->willReturn([$sheetView]);
         $participantViewQueryHandler

@@ -16,8 +16,10 @@ use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
 use Proximum\Vimeet\Domain\Planner\IndicatorView;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -65,16 +67,28 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $indicatorCalculator->getIndicator($sheet2)->shouldBeCalled()->willReturn($indicator2);
         $indicatorCalculator->getIndicator($sheet3)->shouldBeCalled()->willReturn($indicator3);
 
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository->countMeetingsOfEvent($event)->shouldBeCalled()->willReturn(
+            [
+                1 => ['countMeetings' => 2],
+                2 => ['countMeetings' => 2],
+                3 => ['countMeetings' => 12],
+            ]
+        );
 
         // Handler
-        $handler = new SheetViewQueryHandler($sheetRepository->reveal(), $indicatorCalculator->reveal());
-        $result  = $handler->handle(new SheetViewQuery($event, [$typeView, $typeView2]));
+        $handler = new SheetViewQueryHandler(
+            $sheetRepository->reveal(),
+            $indicatorCalculator->reveal(),
+            $meetingRepository->reveal()
+        );
+        $result  = $handler->handle(new SheetViewQuery($event, [$typeView, $typeView2], ExportSolutionType::SOLUTION_OPTIMIZE_MOVING));
 
         // Expected
         // The first sheet should be excluded as the possible meeting quantity is 0
         $expected = [
             new SheetView(2, $typeView, 2, 2),
-            new SheetView(3, $typeView2, 3, 3),
+            new SheetView(3, $typeView2, 3, 12),
         ];
 
         $this->assertEquals($expected, $result);
