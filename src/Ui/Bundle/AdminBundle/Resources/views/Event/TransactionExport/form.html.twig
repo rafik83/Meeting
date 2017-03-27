@@ -6,5 +6,8 @@
     {{ form_errors(form) }}
     {{ form_row(form.beginDate) }}
     {{ form_row(form.endDate) }}
-    {{ form_row(form.submit) }}
 {% endblock form_content %}
+
+{% block form_submit %}
+    {{ form_row(form.submit, {'class' : 'pull-right col-md-2'}) }}
+{% endblock %}
