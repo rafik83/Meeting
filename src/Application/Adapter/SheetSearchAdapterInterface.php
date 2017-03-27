@@ -48,12 +48,11 @@ interface SheetSearchAdapterInterface
     /**
      * @param Event  $event
      * @param array  $filters
-     * @param array  $fields
      * @param string $locale
      *
-     * @return Result[]
+     * @return array
      */
-    public function findAll(Event $event, array $filters, array $fields = [], $locale);
+    public function getSheetIds(Event $event, array $filters, $locale);
 
     /**
      * @param Event  $event

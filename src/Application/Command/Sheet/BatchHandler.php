@@ -103,8 +103,7 @@ class BatchHandler
     public function handle(Batch $batch)
     {
         if ($batch->selectionType === Batch::SELECTION_TYPE_ALL) {
-            $results    = $this->sheetSearchAdapter->findAll($batch->event, $batch->filters, ['id'], $batch->locale);
-            $batch->ids = $this->getIds($results);
+            $batch->ids = $this->sheetSearchAdapter->getSheetIds($batch->event, $batch->filters, $batch->locale);
         }
 
         if ($batch->validate) {
@@ -166,26 +165,5 @@ class BatchHandler
         }
 
         return new BatchResult(0, $batch->getMessage() . 'no_action');
-    }
-
-    /**
-     * Get IDs of ElasticSearch results sheet ID
-     *
-     * @param Result[] $results
-     *
-     * @return array
-     */
-    private function getIds(array $results)
-    {
-        $ids = [];
-
-        foreach ($results as $result) {
-            $fields = $result->getFields();
-            if (!empty($fields['id'])) {
-                $ids[] = reset($fields['id']);
-            }
-        }
-
-        return $ids;
     }
 }

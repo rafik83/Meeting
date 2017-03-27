@@ -127,13 +127,15 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll(Event $event, array $filters, array $fields = [], $locale)
+    public function getSheetIds(Event $event, array $filters, $locale)
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
-        $query->setFields($fields);
+        $query->setFields(['id']);
 
-        return $this->searchable->search($query, ['limit' => 100000])->getResults();
+        return array_map(function (Result $sheet) {
+            return $sheet->id;
+        }, $this->searchable->search($query, ['limit' => 100000])->getResults());
     }
 
     /**
