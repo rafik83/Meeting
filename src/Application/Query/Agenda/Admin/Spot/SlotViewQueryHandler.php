@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\SpotSlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\SpotUnavailability;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -72,15 +73,15 @@ class SlotViewQueryHandler
         $spotUnavailabilities = $this->spotUnavailabilityRepository->findBySpot($query->spot);
 
         $slots     = $this->meetingSlotRepository->findByEventAndDay($query->event, $query->day);
+        $meetings  = $this->getMeetingsBySlotId($query->spot);
         $slotViews = [];
 
         foreach ($slots as $slot) {
-            $meetings      = $this->meetingRepository->findBySpotAndSlotWithSheet($query->spot, $slot);
             $isUnavailable = $this->hasUnavailability($slot, $spotUnavailabilities);
 
             if ($isUnavailable) {
                 $type = SlotAvailability::UNAVAILABILITY;
-            } elseif (count($meetings) > 0) {
+            } elseif (!empty($meetings[$slot->getId()])) {
                 $type = SlotAvailability::MEETING_UNAVAILABILITY;
             } else {
                 $type = SlotAvailability::SLOT_AVAILABLE;
@@ -89,13 +90,34 @@ class SlotViewQueryHandler
             $slotView = new SpotSlotView(
                 $slot,
                 $type,
-                $this->buildMeetingView($meetings, $query->locale)
+                isset($meetings[$slot->getId()]) ?
+                    $this->buildMeetingView($meetings[$slot->getId()], $query->locale) :
+                    []
             );
 
             $slotViews[] = $slotView;
         }
 
         return $slotViews;
+    }
+
+    /**
+     * @param Spot $spot
+     *
+     * @return array
+     */
+    private function getMeetingsBySlotId(Spot $spot)
+    {
+        $meetings = $this->meetingRepository->findBySpotWithSheet($spot);
+
+        $meetingsIndexBySlotIds = [];
+
+        /** @var Meeting $meeting */
+        foreach ($meetings as $meeting) {
+            $meetingsIndexBySlotIds[$meeting->getSlot()->getId()][] = $meeting;
+        }
+
+        return $meetingsIndexBySlotIds;
     }
 
     /**

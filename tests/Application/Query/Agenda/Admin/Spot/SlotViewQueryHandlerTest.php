@@ -55,8 +55,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $unavailableSlot,
         ]);
 
-        $meetingRepository->findBySpotAndSlotWithSheet($spot, $slot)->shouldBeCalled()->willReturn([]);
-        $meetingRepository->findBySpotAndSlotWithSheet($spot, $unavailableSlot)->shouldBeCalled()->willReturn([]);
+        $meetingRepository->findBySpotWithSheet($spot)->shouldBeCalled()->willReturn([]);
 
         // Expected
         $expectedSpotSlotViews = [

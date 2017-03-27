@@ -34,7 +34,7 @@ class ListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $spot = new Spot('A01', $event, 20.0, 2, 6, true);
         $spotView = new SpotView(null, 'A01', false);
 
-        $spotRepository->findByEvent($event)->shouldBeCalled()->willReturn([$spot]);
+        $spotRepository->getActiveByEvent($event)->shouldBeCalled()->willReturn([$spot]);
         $spotViewQueryHandler->handle(Argument::type(SpotViewQuery::class))->willReturn($spotView);
 
         $query   = new ListViewQuery($event);
@@ -57,7 +57,7 @@ class ListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository       = $this->prophesize(SpotRepositoryInterface::class);
         $spotViewQueryHandler = $this->prophesize(SpotViewQueryHandler::class);
 
-        $spotRepository->findByEvent($event)->shouldBeCalled()->willReturn([]);
+        $spotRepository->getActiveByEvent($event)->shouldBeCalled()->willReturn([]);
         $spotViewQueryHandler->handle(Argument::type(SpotViewQuery::class))->shouldNotBeCalled();
 
         $query   = new ListViewQuery($event);
