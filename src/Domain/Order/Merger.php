@@ -12,21 +12,9 @@ namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 
 class Merger
 {
-    /** @var VatApplicable */
-    private $vatApplicable;
-
-    /**
-     * @param VatApplicable $vatApplicable
-     */
-    public function __construct(VatApplicable $vatApplicable)
-    {
-        $this->vatApplicable = $vatApplicable;
-    }
-
     /**
      * @param array $orders
      *
@@ -53,7 +41,6 @@ class Merger
 
         $orderMerged = new Order(
             $firstOrder->getSheet(),
-            $this->vatApplicable->onSheet($firstOrder->getSheet()),
             $firstOrder->getGroupsData(),
             $firstOrder->getCreatedAt()
         );

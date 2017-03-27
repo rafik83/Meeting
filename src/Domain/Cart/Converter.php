@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -36,11 +35,6 @@ class Converter
      * @var CartRowRepositoryInterface
      */
     private $cartRowRepository;
-
-    /**
-     * @var VatApplicable
-     */
-    private $vatApplicable;
 
     /**
      * @var \DateTimeInterface
@@ -68,7 +62,6 @@ class Converter
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
-     * @param VatApplicable                       $vatApplicable
      * @param \DateTimeInterface                  $datetime
      */
     public function __construct(
@@ -77,7 +70,6 @@ class Converter
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
-        VatApplicable $vatApplicable,
         \DateTimeInterface $datetime
     ) {
         $this->orderRepository            = $orderRepository;
@@ -85,7 +77,6 @@ class Converter
         $this->cartStepRepository         = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
         $this->promotionCodeRepository    = $promotionCodeRepository;
-        $this->vatApplicable              = $vatApplicable;
         $this->datetime                   = $datetime;
     }
 
@@ -102,7 +93,6 @@ class Converter
 
         $order = new Order(
             $sheet,
-            $this->vatApplicable->onSheet($sheet),
             $groupsData,
             $this->datetime
         );

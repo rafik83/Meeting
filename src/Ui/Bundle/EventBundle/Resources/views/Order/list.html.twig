@@ -23,17 +23,17 @@
                         <th>{{ 'order.list.column.pro_forma'|trans }}</th>
                     </thead>
                     <tbody>
-                        {% for order in orders %}
+                        {% for orderVatView in orderVatViews %}
                             <tr>
                                 <td>
-                                    {{ order.numero }}
-                                    {% if order.cancelled %}
+                                    {{ orderVatView.numero }}
+                                    {% if orderVatView.isCancelled %}
                                         <span class="label label-danger">{{ 'order.list.cancelled'|trans }}</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                                <td>{{ order.total|localizedcurrency(order.currency) }}</td>
-                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
+                                <td>{{ orderVatView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                                <td>{{ orderVatView.totalWithVat|format_amount|localizedcurrency(orderVatView.currency) }}</td>
+                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': orderVatView.sheetId, 'order': orderVatView.orderId}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -45,7 +45,7 @@
                         {{ 'order.list.remainingToPay'|trans }}
                     </div>
                     <div class="panel-body text-center h1">
-                        {{ remainingToPay|localizedcurrency(event.currency) }}
+                        {{ remainingToPay|format_amount|localizedcurrency(event.currency) }}
 
                         {% if 0 < remainingToPay and event.configuration.isAllowedToPayRemaining %}
                             <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'order.list.pay_remaining'|trans }}</a>

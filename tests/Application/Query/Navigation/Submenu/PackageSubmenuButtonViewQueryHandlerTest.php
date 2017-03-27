@@ -83,7 +83,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             new User('email@email.com', 'salt', 'password', 'fr'),
             $datetime
         );
-        $order       = new Order($sheet, true, '', new \DateTime());
+        $order       = new Order($sheet, '', new \DateTime());
         $sheet->addOrder($order);
 
         $package = new Package($event, 'Package', $datetime);

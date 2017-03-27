@@ -99,7 +99,7 @@ class PlanningQuantityGuesserTest extends \PHPUnit_Framework_TestCase
         $package = new Package($event, 'title', new \DateTime());
         $sheet->getType()->setPackage($package);
 
-        $order = new Order($sheet, true, [], new \DateTime());
+        $order = new Order($sheet, [], new \DateTime());
         $product = Product::createPlanning($event, 'name', 100, 10);
         $plan    = Product::createPlan($event, 'plan', '', 200, 20, 50);
         $plan->includeProduct($product, 1);

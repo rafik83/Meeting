@@ -40,13 +40,13 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $participant = Product::createParticipant($event, 'participant', 1789, 20);
         $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
 
-        $orderOne = new Order($sheet, true, '[]', $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
         $orderOne->addRow(new Order\Row($orderOne, 1, $option));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, true, '[]', $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
         $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
         $sheet->addOrder($orderTwo);
@@ -116,7 +116,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $option = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
 
-        $orderNegative = new Order($sheet, true, '[]', $datetime->modify('-5 day'));
+        $orderNegative = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderNegative->addRow(new Order\Row($orderNegative, -1, $option));
         $sheet->addOrder($orderNegative);
 
@@ -167,13 +167,13 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $orderOne = new Order($sheet, true, $groupsData, $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, $groupsData, $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
         $orderOne->addRow(new Order\Row($orderOne, 1, $option, $groupId));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, true, $groupsData, $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, $groupsData, $datetime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
 
         $optionRow = new Order\Row($orderTwo, 3, $option, $groupId);

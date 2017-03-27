@@ -2221,12 +2221,14 @@ services:
             - '@query.order.summary.promotion_code_view_query_handler'
     query.order.summary.custom_row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowViewQueryHandler
+
     query.order.summary_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
         arguments:
             - '@query.order.summary.groups_view_query_handler'
             - '@query.order.summary.promotion_codes_view_query_handler'
             - '@order.balance'
+            - '@query.order.order_vat_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
 
@@ -3075,7 +3077,6 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
             - '@repository.promotion_code_repository'
-            - '@package.specification.vat_applicable'
             - '@datetime'
 
     #
@@ -3139,8 +3140,6 @@ services:
 
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
-        arguments:
-            - '@package.specification.vat_applicable'
 
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser

@@ -65,7 +65,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         );
         $sheet = SheetFactory::create();
 
-        $order = new Order($sheet, true, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(false, Finder::isAllowedToAccess($admin, $order));
     }
@@ -85,7 +85,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         );
         $sheet   = SheetFactory::create();
 
-        $order = new Order($sheet, true, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(true, Finder::isAllowedToAccess($admin, $order));
     }
@@ -106,7 +106,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $event   = EventFactory::createEvent();
         $sheet   = SheetFactory::create($event);
 
-        $order = new Order($sheet, true, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(false, Finder::isAllowedToAccess($admin, $order));
     }
@@ -128,7 +128,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $sheet   = SheetFactory::create($event);
         $admin->addEvent($event);
 
-        $order = new Order($sheet, true, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(true, Finder::isAllowedToAccess($admin, $order));
     }

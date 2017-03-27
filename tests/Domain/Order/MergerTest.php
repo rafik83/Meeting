@@ -37,13 +37,13 @@ class MergerTest extends \PHPUnit_Framework_TestCase
         $option      = Product::createOption($event, 'option', '', 99, 50, 10, 20, true);
 
         // Setup
-        $orderOne = new Order($sheet, true, '[]', $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
         $orderOne->addRow(new Order\Row($orderOne, 1, $option));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, true, '[]', $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
         $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
         $sheet->addOrder($orderTwo);

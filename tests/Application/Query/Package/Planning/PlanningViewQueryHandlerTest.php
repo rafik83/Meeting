@@ -110,7 +110,6 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $order = new Order(
             $sheet,
-            true,
             '',
             $now
         );
@@ -246,7 +245,6 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $order = new Order(
             $sheet,
-            true,
             '',
             $now
         );
@@ -382,7 +380,6 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $order = new Order(
             $sheet,
-            true,
             '',
             $now
         );

@@ -41,7 +41,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $date        = new \DateTime();
         $this->event = EventFactory::createEvent();
         $this->sheet = SheetFactory::create($this->event);
-        $this->order = new Order($this->sheet, true, '', $date);
+        $this->order = new Order($this->sheet, '', $date);
     }
 
     public function testGenerate()

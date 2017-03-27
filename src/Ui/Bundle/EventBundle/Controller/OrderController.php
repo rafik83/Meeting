@@ -35,19 +35,19 @@ class OrderController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $balance = $this->get('order.balance');
-        $orders  = $balance->getOrders($sheet);
+        $orderVatViews = $balance->getOrders($sheet);
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
             || !$sheet->getPackage()->isPassable()
-            || empty($orders)
+            || empty($orderVatViews)
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'          => $eventDomain->getEvent(),
-            'orders'         => $orders,
+            'orderVatViews'  => $orderVatViews,
             'sheet'          => $sheet,
             'transactions'   => $balance->getTransactions($sheet),
             'remainingToPay' => $balance->getRemainingToPay($sheet),

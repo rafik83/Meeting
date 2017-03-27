@@ -73,7 +73,7 @@ class OrdersToInvoice
 
         $orderMerged = $this->orderMerger->merge($orders);
 
-        if ($orderMerged->getTotal() <= 0) {
+        if ($orderMerged->getTotalWithoutVat() <= 0) {
             return null;
         }
 

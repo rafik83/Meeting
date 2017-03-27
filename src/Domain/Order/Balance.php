@@ -15,9 +15,9 @@ use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHa
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 
@@ -131,19 +131,20 @@ class Balance
     }
 
     /**
+     * Get total with VAT for a sheet
+     *
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getTotal(Sheet $sheet)
     {
-        $orders = $this->getNotCancelledOrders($sheet);
-
+        $orderVatViews = $this->getNotCancelledOrders($sheet);
 
         $total = 0;
 
-        foreach ($orders as $order) {
-            $total += $order->getTotal();
+        foreach ($orderVatViews as $orderVatView) {
+            $total += $orderVatView->totalWithVat;
         }
 
         return $total;
@@ -152,16 +153,16 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getTotalWithoutVat(Sheet $sheet)
     {
-        $orders = $this->getNotCancelledOrders($sheet);
+        $orderVatViews = $this->getNotCancelledOrders($sheet);
 
         $totalWithoutVat = 0;
 
-        foreach ($orders as $order) {
-            $totalWithoutVat += $order->getTotalWithoutVat();
+        foreach ($orderVatViews as $orderVatView) {
+            $totalWithoutVat += $orderVatView->totalWithoutVat;
         }
 
         return $totalWithoutVat;
@@ -170,7 +171,7 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getBalance(Sheet $sheet)
     {
@@ -180,7 +181,7 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getRemainingToPay(Sheet $sheet)
     {
@@ -196,7 +197,7 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getTotalPaid(Sheet $sheet)
     {
@@ -209,7 +210,7 @@ class Balance
             }
         }
 
-        return $totalPaid;
+        return AmountFormatter::decimalToCentsAmount($totalPaid);
     }
 
     /**
@@ -217,17 +218,17 @@ class Balance
      */
     public function getNotCancelledOrdersFromEvent()
     {
-        if (!isset($this->or) || empty($this->orders)) {
+        if (!isset($this->orderVatViews) || empty($this->orderVatViews)) {
             return [];
         }
 
         $notCancelledOrdersFromEvent = [];
 
-        foreach ($this->orders as $sheetOrders) {
-            /** @var Order $order */
-            foreach ($sheetOrders as $order) {
-                if (!$order->isCancelled()) {
-                    $notCancelledOrdersFromEvent[] = $order;
+        foreach ($this->orderVatViews as $sheetOrderVatViews) {
+            /** @var OrderVatView $orderVatView */
+            foreach ($sheetOrderVatViews as $orderVatView) {
+                if (!$orderVatView->isCancelled) {
+                    $notCancelledOrdersFromEvent[] = $orderVatView;
                 }
             }
         }
@@ -236,7 +237,7 @@ class Balance
     }
 
     /**
-     * @return float
+     * @return int amount in cents
      */
     public function getTransactionsTotalPaidForEvent()
     {
@@ -251,27 +252,29 @@ class Balance
             }
         }
 
-        return $totalPaid;
+        return AmountFormatter::decimalToCentsAmount($totalPaid);
     }
 
     /**
-     * @return float
+     * Get total with VAT, if applicable, for all event
+     *
+     * @return int amount in cents
      */
     public function getOrdersTotalForEvent()
     {
-        $orders = $this->getNotCancelledOrdersFromEvent();
+        $orderVatViews = $this->getNotCancelledOrdersFromEvent();
 
         $total = 0;
 
-        foreach ($orders as $order) {
-            $total += $order->getTotal();
+        foreach ($orderVatViews as $orderVatView) {
+            $total += $orderVatView->totalWithVat;
         }
 
         return $total;
     }
 
     /**
-     * @return float
+     * @return int amount in cents
      */
     public function getOrdersTotalRemainingToPayForEvent()
     {

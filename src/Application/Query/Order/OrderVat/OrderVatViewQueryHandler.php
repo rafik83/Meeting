@@ -51,12 +51,14 @@ class OrderVatViewQueryHandler
             $order->getSheet()->getId(),
             $isVatApplicable,
             $order->getVatRate(),
+            $order->getVatMode(),
             $order->getCurrency(),
             $order->isCancelled(),
             $totalWithoutVat,
             $vatAmount,
             $totalWithVat,
-            $order->getCreatedAt()
+            $order->getCreatedAt(),
+            $order->getInvoice()
         );
     }
 }

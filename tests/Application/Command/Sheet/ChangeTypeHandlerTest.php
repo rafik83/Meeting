@@ -63,7 +63,6 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $order = new Order(
             $sheet,
-            true,
             '',
             $date
         );

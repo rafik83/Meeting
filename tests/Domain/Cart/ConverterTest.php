@@ -79,7 +79,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $expectedPromotionCode->setPromotion($chair, Promotion::TYPE_PERCENT_OFF, 50);
 
         $groupsData    = '';
-        $order         = new Order($sheet, true, $groupsData, $datetime);
+        $order         = new Order($sheet, $groupsData, $datetime);
         $planOrderRow  = new Order\Row($order, 1, $plan);
         $chairOrderRow = new Order\Row($order, 2, $chair);
         $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100);
@@ -90,15 +90,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         // Mock
         $orderRepository            = $this->prophesize(OrderRepositoryInterface::class);
         $cartRowRepository          = $this->prophesize(CartRowRepositoryInterface::class);
-        $vatApplicable              = $this->prophesize(VatApplicable::class);
         $cartStepRepository         = $this->prophesize(CartStepRepositoryInterface::class);
         $promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
         $promotionCodeRepository    = $this->prophesize(PromotionCodeRepositoryInterface::class);
 
         $orderRepository->add(Argument::that(function (Order $givenOrder) use ($order) {
-            return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotal() == $order->getTotal() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
+            return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotalWithoutVat() == $order->getTotalWithoutVat() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
         }))->shouldBeCalled();
-        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
+
         $cartRowRepository->deleteForSheet($sheet)->shouldBeCalled();
         $cartStepRepository->deleteForSheet($sheet)->shouldBeCalled();
         $promotionCodeRowRepository->deleteForSheet($sheet)->shouldBeCalled();
@@ -110,11 +109,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             $cartStepRepository->reveal(),
             $promotionCodeRowRepository->reveal(),
             $promotionCodeRepository->reveal(),
-            $vatApplicable->reveal(),
             $datetime
         );
 
         $converter->toOrder($cart);
     }
 }
-
