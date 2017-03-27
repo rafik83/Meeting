@@ -55,8 +55,8 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $transactionViewQuery   = new TransactionViewQuery(
             $transaction,
             $sheet,
-            $payment,
-            $event
+            $event,
+            $payment
         );
         
         $sheetInfoGuesser->guessSheetTitle($sheet)->shouldBeCalled();

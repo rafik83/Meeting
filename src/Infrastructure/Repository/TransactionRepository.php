@@ -165,7 +165,6 @@ class TransactionRepository implements TransactionRepositoryInterface
             )
             ->leftJoin('transaction.payment', 'payment')
             ->orderBy('transaction.date')
-            ->andWhere('transaction.state = :state')
             ->setParameters([
                 'state' => Transaction::STATE_PAID,
                 'beginDate' => $beginDate,

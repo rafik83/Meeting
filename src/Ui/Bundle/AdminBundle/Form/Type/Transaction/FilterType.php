@@ -25,14 +25,10 @@ class FilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $firstDay = new \DateTime();
-        $firstDay
-            ->modify('first day of last month')
-            ->setTime(0, 0);
+        $firstDay->modify('first day of last month 00:00:00');
         
         $lastDay = new \DateTime();
-        $lastDay
-            ->modify('last day of last month')
-            ->setTime(23, 59, 59);
+        $lastDay->modify('last day of last month 23:59:59');
         
         $builder
             ->add('beginDate', DateType::class, [

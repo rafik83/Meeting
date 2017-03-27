@@ -45,7 +45,7 @@ class TransactionViewQuery
      * @param Payment     $payment|null
      * @param Event       $event
      */
-    public function __construct(Transaction $transaction, Sheet $sheet, Payment $payment = null, Event $event)
+    public function __construct(Transaction $transaction, Sheet $sheet, Event $event, Payment $payment = null)
     {
         $this->transaction = $transaction;
         $this->sheet       = $sheet;

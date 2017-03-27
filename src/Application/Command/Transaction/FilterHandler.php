@@ -38,9 +38,9 @@ class FilterHandler
     /**
      * FindHandler constructor.
      *
-     * @param TransactionRepositoryInterface    $transactionRepository
-     * @param EventRepositoryInterface          $eventRepository
-     * @param TransactionViewQueryHandler       $transactionViewQueryHandler
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param EventRepositoryInterface       $eventRepository
+     * @param TransactionViewQueryHandler    $transactionViewQueryHandler
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
@@ -86,8 +86,8 @@ class FilterHandler
             $transactionViews[] = $this->transactionViewQueryHandler->handle(new TransactionViewQuery(
                     $transaction,
                     $transaction->getSheet(),
-                    $transaction->getPayment(),
-                    $transaction->getSheet()->getEvent()
+                    $transaction->getSheet()->getEvent(),
+                    $transaction->getPayment()
                 )
             );
         }

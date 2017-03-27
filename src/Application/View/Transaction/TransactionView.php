@@ -82,19 +82,19 @@ class TransactionView
     /**
      * TransactionView constructor.
      *
-     * @param Event                 $event
-     * @param int                   $sheetId
-     * @param int                   $eventId
-     * @param string                $eventName
-     * @param int                   $sheetOwnerId
-     * @param string                $companyName
-     * @param \DateTimeInterface    $transactionDate
-     * @param int                   $transactionType
-     * @param string|null           $transactionReference
-     * @param string|null           $transactionGateway
-     * @param float                 $transactionAmount
-     * @param string|null           $contactBillingInfoCountry
-     * @param string|null           $vatNumber
+     * @param Event              $event
+     * @param int                $sheetId
+     * @param int                $eventId
+     * @param string             $eventName
+     * @param int                $sheetOwnerId
+     * @param string             $companyName
+     * @param \DateTimeInterface $transactionDate
+     * @param int                $transactionType
+     * @param string|null        $transactionReference
+     * @param string|null        $transactionGateway
+     * @param float              $transactionAmount
+     * @param string|null        $contactBillingInfoCountry
+     * @param string|null        $vatNumber
      */
     public function __construct(
         Event $event,
@@ -108,21 +108,21 @@ class TransactionView
         $transactionReference,
         $transactionGateway,
         $transactionAmount,
-        $contactBillingInfoCountry,
-        $vatNumber
+        $contactBillingInfoCountry = null,
+        $vatNumber = null
     ) {
-        $this->event                        = $event;
-        $this->sheetId                      = $sheetId;
-        $this->eventId                      = $eventId;
-        $this->eventName                    = $eventName;
-        $this->sheetOwnerId                 = $sheetOwnerId;
-        $this->companyName                  = $companyName;
-        $this->transactionDate              = $transactionDate;
-        $this->transactionType              = $transactionType;
-        $this->transactionReference         = $transactionReference;
-        $this->transactionGateway           = $transactionGateway;
-        $this->transactionAmount            = $transactionAmount;
-        $this->contactBillingInfoCountry    = $contactBillingInfoCountry;
-        $this->vatNumber                    = $vatNumber;
+        $this->event                     = $event;
+        $this->sheetId                   = $sheetId;
+        $this->eventId                   = $eventId;
+        $this->eventName                 = $eventName;
+        $this->sheetOwnerId              = $sheetOwnerId;
+        $this->companyName               = $companyName;
+        $this->transactionDate           = $transactionDate;
+        $this->transactionType           = $transactionType;
+        $this->transactionReference      = $transactionReference;
+        $this->transactionGateway        = $transactionGateway;
+        $this->transactionAmount         = $transactionAmount;
+        $this->contactBillingInfoCountry = $contactBillingInfoCountry;
+        $this->vatNumber                 = $vatNumber;
     }
 }

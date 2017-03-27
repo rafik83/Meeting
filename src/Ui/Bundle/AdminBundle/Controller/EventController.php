@@ -58,9 +58,9 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($admin);
 
-        $orderForm                = null;
-        $formIsSubmitted          = false;
-        $transactionForm          = null;
+        $orderForm = null;
+        $formIsSubmitted = false;
+        $transactionForm = null;
 
         if (Finder::IsAllowedToFind($admin)) {
             $filterTransaction = new FilterTransaction($admin);
@@ -74,7 +74,7 @@ class EventController extends Controller
             $orderForm = $this->createForm(FindType::class, $find);
 
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
-    
+
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
                     /** @var FindResult $result */
