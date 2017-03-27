@@ -46,7 +46,7 @@ class ListViewQueryHandler
      */
     public function handle(ListViewQuery $query)
     {
-        $spots     = $this->spotRepository->findByEvent($query->event);
+        $spots     = $this->spotRepository->getActiveByEvent($query->event);
         $spotViews = [];
 
         foreach ($spots as $spot) {

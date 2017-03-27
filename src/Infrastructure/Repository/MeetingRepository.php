@@ -410,10 +410,8 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->createQueryBuilder()
             ->select('meeting')
             ->from(Meeting::class, 'meeting')
-            ->join('meeting.fromSheet', 'fromSheet')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'meeting.slot = :slot AND meeting.spot = :spot')
             ->join('meeting.toSheet', 'toSheet')
-            ->where('meeting.slot = :slot')
-            ->andWhere('meeting.spot = :spot')
             ->setParameter('slot', $meetingSlot)
             ->setParameter('spot', $spot);
 

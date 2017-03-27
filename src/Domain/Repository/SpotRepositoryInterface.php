@@ -153,13 +153,4 @@ interface SpotRepositoryInterface
         Sheet $toSheet = null,
         $visio = false
     );
-
-    /**
-     * @param Event $event
-     *
-     * @param bool  $active
-     *
-     * @return Spot[]
-     */
-    public function findByEvent(Event $event, $active = true);
 }

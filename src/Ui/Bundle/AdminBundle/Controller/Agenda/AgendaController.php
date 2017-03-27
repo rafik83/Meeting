@@ -130,6 +130,8 @@ class AgendaController extends Controller
      */
     public function spotDetailAction(Request $request, Event $event, Spot $spot)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         /** @var AgendaSpotView $agendaSpotView */
         $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
             new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))
