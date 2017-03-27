@@ -26,14 +26,15 @@ class ExportHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
-        $date  = new \DateTime('2016-06-23 12:00:00');
+        $beginDate  = new \DateTime('2016-06-23 12:00:00');
+        $endDate  = new \DateTime('2016-06-23 23:59:59.999');
 
         $admin = $this->prophesize(Admin::class);
         $admin->getLocale()->shouldBeCalled()->willReturn('fr');
 
         $export            = new Export($admin->reveal());
-        $export->beginDate = $date;
-        $export->endDate   = $date;
+        $export->beginDate = $beginDate;
+        $export->endDate   = $endDate;
 
         $invoice = $this->prophesize(Invoice::class);
         $invoice->getData()->shouldBeCalled()->willReturn('');
@@ -44,7 +45,7 @@ class ExportHandlerTest extends \PHPUnit_Framework_TestCase
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
 
         $eventRepository->getEventsByAdmin($admin)->shouldBeCalled()->willReturn([$event]);
-        $invoiceRepository->getFilteredByEvents([$event], $date, $date)->shouldBeCalled()->willReturn([$invoice]);
+        $invoiceRepository->getFilteredByEvents([$event], $beginDate, $endDate)->shouldBeCalled()->willReturn([$invoice]);
 
         $dateFormatter = IntlDateFormatter::create(
             'fr',
