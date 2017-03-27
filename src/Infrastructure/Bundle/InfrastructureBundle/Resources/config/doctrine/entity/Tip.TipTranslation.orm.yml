@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\Tip:
+Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
     type:  entity
-    table: tip
+    table: tip_translation
     id:
         id:
             type: integer
@@ -13,9 +13,8 @@ Proximum\Vimeet\Domain\Model\Tip:
             type: string
         content:
             type: text
-        onMeetingManagement:
-            type: boolean
-        onCatalog:
-            type: boolean
-        onPrintPlanning:
-            type: boolean
+    manyToOne:
+        tip:
+            targetEntity: Proximum\Vimeet\Domain\Model\Tip\Tip
+            inversedBy: translations
+
