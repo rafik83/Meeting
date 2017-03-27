@@ -41,6 +41,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventController extends Controller
 {
@@ -73,7 +74,7 @@ class EventController extends Controller
             $orderForm = $this->createForm(FindType::class, $find);
 
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
-            
+    
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
                     /** @var FindResult $result */
@@ -108,24 +109,22 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'                => $events,
-            'orderForm'             => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive'        => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
-            'transactionForm'       => $transactionForm !== null ? $transactionForm->createView() : null,
+            'events'          => $events,
+            'orderForm'       => $orderForm !== null ? $orderForm->createView() : null,
+            'orderTabActive'  => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'transactionForm' => $transactionForm !== null ? $transactionForm->createView() : null,
         ]);
     }
     
     /**
-     * @param Request $request
+     * @param UserInterface $admin
+     * @param Request       $request
      *
      * @return CsvFileResponse|RedirectResponse
      */
-    public function exportTransactionAction(Request $request)
+    public function exportTransactionAction(UserInterface $admin, Request $request)
     {
-        $admin = $this->getUser();
-        
         if (Finder::IsAllowedToFind($admin)) {
-            
             $filterTransaction = new FilterTransaction($admin);
             $transactionForm = $this->createForm(FilterTransactionType::class, $filterTransaction);
     

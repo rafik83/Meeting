@@ -40,14 +40,9 @@ class TransactionNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        if (!$object instanceof TransactionListViewQuery) {
-            throw new \Exception('Invalid object');
-        }
-        
         $data = [];
         
-        foreach($object->transactionsView as $view) {
-            
+        foreach ($object->transactionsView as $view) {
             $createdAt = $this->formatDate(
                 $view->transactionDate->getTimestamp(),
                 $view->event,
@@ -102,7 +97,7 @@ class TransactionNormalizer implements NormalizerInterface
     private function formatDate($dateTime, Event $event, $locale)
     {
         $timeFormatter = \IntlDateFormatter::create(
-            $event->getAvailableLocale($locale),
+            $locale,
             \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
             $event->getTimeZone()

@@ -67,9 +67,13 @@ class FilterHandler
             throw new EventsListEmptyException();
         }
         
+        // Set time to encompass the entire day
+        $beginDate = $command->beginDate->setTime(0, 0);
+        $endDate   = $command->endDate->setTime(23, 59, 59);
+        
         $transactions = $this->transactionRepository->findPaidByDateRange(
-            $command->beginDate,
-            $command->endDate
+            $beginDate,
+            $endDate
         );
 
         $this->transactionViewQueryHandler->preloadBillingInfo(array_map(function (Transaction $transaction) {

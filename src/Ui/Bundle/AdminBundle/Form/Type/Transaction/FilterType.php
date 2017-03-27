@@ -37,21 +37,17 @@ class FilterType extends AbstractType
         $builder
             ->add('beginDate', DateType::class, [
                 'widget'      => 'single_text',
-                'format'      => 'dd-MM-yyyy',
+                'format'      => 'dd/MM/yyyy',
                 'data'        => $firstDay,
                 'placeholder' => 'form.transaction_find.children.date.placeholder',
             ])
             ->add('endDate', DateType::class, [
                 'widget'      => 'single_text',
-                'format'      => 'dd-MM-yyyy',
+                'format'      => 'dd/MM/yyyy',
                 'data'        => $lastDay,
                 'placeholder' => 'form.transaction_find.children.date.placeholder',
             ])
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'pull-right col-md-2',
-                ],
-            ])
+            ->add('submit', SubmitType::class)
         ;
     }
     

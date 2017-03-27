@@ -139,7 +139,7 @@ admin.event.template.registration: Inscription
 admin.event.template.sheet: Présentation
 admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
-admin.event.transaction.export.title: 'Export des transactions'
+admin.event.transaction.export.title: 'Transactions'
 admin.event.page.transactionsExport.title: 'Export transactions'
 admin.event.update.link: Modifier
 admin.event.update.title: 'Modifier l''évènement'
@@ -938,8 +938,8 @@ admin.export.transaction.column.society.name: "Nom société"
 admin.export.transaction.column.transaction_date: "Date"
 admin.export.transaction.column.transaction_type: "Type"
 admin.export.transaction.column.transaction_reference: "Référence"
-admin.export.transaction.column.payment.gateway: "Gateway"
-admin.export.transaction.column.transaction_amount: "Montant"
+admin.export.transaction.column.payment.gateway: "N° transaction gateway"
+admin.export.transaction.column.transaction_amount: "Montant de la transaction"
 admin.export.transaction.column.billing_contact.country: "Pays contact facturation"
-admin.export.transaction.column.billing_contact.vat_number: "Tva contact facturation"
+admin.export.transaction.column.billing_contact.vat_number: "Numéro de TVA intracommunautaire"
 

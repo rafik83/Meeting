@@ -45,37 +45,4 @@ class PaymentRepository implements PaymentRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getByTransaction(Transaction $transaction)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('payment')
-            ->from(Payment::class, 'payment')
-            ->where('payment.transaction = :transaction')
-            ->setParameter('transaction', $transaction)
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getByTransactions(array $transactions)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('payment')
-            ->from(Payment::class, 'payment')
-            ->where('payment.transaction IN (:transactions)')
-            ->setParameter('transactions', $transactions);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
 }

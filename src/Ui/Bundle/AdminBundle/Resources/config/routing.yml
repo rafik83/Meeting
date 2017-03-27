@@ -117,8 +117,8 @@ admin_event_list:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:list }
 
-admin.event.transaction_export:
-    path: /event/transaction-export
+admin_event_transaction_export:
+    path: /event/transaction/export
     methods: [POST]
     defaults: { _controller: AdminBundle:Event:exportTransaction }
 

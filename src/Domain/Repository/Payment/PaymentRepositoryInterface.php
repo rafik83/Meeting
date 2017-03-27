@@ -22,18 +22,4 @@ interface PaymentRepositoryInterface
      * @return null|Payment
      */
     public function findById($id);
-
-    /**
-     * @param Transaction $transaction
-     *
-     * @return null|Payment
-     */
-    public function getByTransaction(Transaction $transaction);
-
-    /**
-     * @param array Transaction[]
-     *
-     * @return array Payment[]
-     */
-    public function getByTransactions(array $transactions);
 }

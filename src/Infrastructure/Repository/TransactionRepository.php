@@ -157,11 +157,15 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->createQueryBuilder()
             ->select('transaction, payment, sheet')
             ->from(Transaction::class, 'transaction')
+            ->join(
+                'transaction.sheet',
+                'sheet',
+                'WITH',
+                'transaction.date BETWEEN :beginDate and :endDate AND transaction.state = :state'
+            )
             ->leftJoin('transaction.payment', 'payment')
-            ->join('transaction.sheet', 'sheet')
-            ->where('transaction.date BETWEEN :beginDate and :endDate')
+            ->orderBy('transaction.date')
             ->andWhere('transaction.state = :state')
-            ->groupBy('transaction.id')
             ->setParameters([
                 'state' => Transaction::STATE_PAID,
                 'beginDate' => $beginDate,

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Transaction;
 
-
 use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Charset;

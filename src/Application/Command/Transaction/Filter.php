@@ -15,12 +15,12 @@ use Proximum\Vimeet\Domain\Model\Admin;
 class Filter
 {
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      */
     public $beginDate;
     
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      */
     public $endDate;
     
