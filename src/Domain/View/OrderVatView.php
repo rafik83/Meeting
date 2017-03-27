@@ -52,7 +52,7 @@ class OrderVatView
     public $createdAt;
 
     /** @var null|Invoice */
-    private $invoice;
+    public $invoice;
 
     /**
      * @param string             $numero
