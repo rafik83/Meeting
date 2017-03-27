@@ -10,50 +10,47 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice;
 
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportController extends Controller
 {
     /**
-     * @param Request $request
+     * @param UserInterface $admin
+     * @param Request       $request
      *
      * @return Response
      */
-    public function exportAction(Request $request, Admin $admin)
+    public function exportAction(UserInterface $admin, Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $response = new Response();
-        $export   = new Export($admin);
-        $form     = $this->createForm(ExportType::class, $export)->handleRequest($request);
+        $export        = new Export($admin);
+        $form          = $this->createForm(ExportType::class, $export)->handleRequest($request);
+        $exportContent = '';
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $charset        = Charset::WINDOWS_1252;
+        if ($form->isSubmitted()) {
+
+            if (!$form->isValid()) {
+                $this->addFlash('error', 'flash.admin.invoice.export.failed');
+
+                return $this->redirectToRoute('admin_event_list');
+            }
             $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
 
-            $serializer    = $this->get('serializer');
-            $exportContent = $serializer->serialize($invoicesNormaliserView, 'csv', [
+            $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
                 'locale'  => $request->getLocale(),
-                'charset' => $charset,
+                'charset' => Charset::WINDOWS_1252,
             ]);
-
-            $response->setContent($exportContent);
-            $disposition = $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                "export_invoices_" . date("Y_m_d_His") . ".csv"
-            );
-            $response->headers->set('Content-Disposition', $disposition);
-            $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
         }
 
-        return $response;
+        return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
     }
-
 }

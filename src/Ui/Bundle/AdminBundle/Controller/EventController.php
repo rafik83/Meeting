@@ -63,11 +63,10 @@ class EventController extends Controller
             $find      = new Find($admin);
             $invoiceExport    = new Export($admin);
             $orderForm = $this->createForm(FindType::class, $find);
-            $invoiceExportForm = $this->createForm(
-                ExportType::class,
-                $invoiceExport,
-                ['action' => $this->generateUrl('admin_invoice_export')]
-            );
+            $invoiceExportForm = $this->createForm(ExportType::class, $invoiceExport, [
+                'action' => $this->generateUrl('admin_invoice_export'),
+                'method' => 'POST'
+            ]);
             $invoiceExportForm->add('submit', SubmitType::class, [
                 'label' => 'form.invoice_export.children.submit.label',
             ]);
