@@ -102,7 +102,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             '23/06/16',
             5,
             10,
-            700,
+            7,
             0,
             'code',
             'FR',
