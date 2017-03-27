@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\ProductView;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
@@ -112,7 +111,6 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $order = new Order(
             $sheet,
             true,
-            new Order\BillingInfo('man', 'fN', 'lN', 'p', '', '', '', '', new Address('', '', '', ''), ''),
             '',
             $now
         );
@@ -249,7 +247,6 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $order = new Order(
             $sheet,
             true,
-            new Order\BillingInfo('man', 'fN', 'lN', 'p', '', '', '', '', new Address('', '', '', ''), ''),
             '',
             $now
         );
@@ -386,7 +383,6 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $order = new Order(
             $sheet,
             true,
-            new Order\BillingInfo('man', 'fN', 'lN', 'p', '', '', '', '', new Address('', '', '', ''), ''),
             '',
             $now
         );

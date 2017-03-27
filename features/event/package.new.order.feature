@@ -67,30 +67,14 @@ Feature: Edit my package
     And the "options[11]" field should contain "4"
     When I fill in "options[6]" with "0"
     And I fill in "options[7]" with "2"
-    Then I press "package.product.validate"
-    And I should be on this page "/fr/sheet/1/billing-info"
-    And I check the "gender.man" radio
-    And I fill in the following:
-      | form.billing_info_update.children.lastname.label  | Jean         |
-      | form.billing_info_update.children.firstname.label | Test         |
-      | form.billing_info_update.children.function.label  | DG           |
-      | form.billing_info_update.children.phone.label     | +33456789    |
-      | form.billing_info_update.children.mobile.label    | +33456789    |
-      | form.billing_info_update.children.email.label     | jean@test.fr |
-      | form.billing_info_update.children.company.label   | ELAO-TEST    |
-      | form.billing_info_update.children.street.label    | 10 Rue test  |
-      | form.billing_info_update.children.zipcode.label   | 75002        |
-      | form.billing_info_update.children.city.label      | PARIS        |
-      | form.billing_info_update.children.country.label   | FR           |
-      | form.billing_info_update.children.vatNumber.label | 123456789    |
-    And I press "form.billing_info_update.children.submit.label"
+    And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/summary"
 
   Scenario: I can see my updated package summary
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
-    When I am on this page "/fr"
-    Then I go to this page "/fr/sheet/1/package/summary"
-    And I should see "package.summary.title"
+    And I am on this page "/fr"
+    When I go to this page "/fr/sheet/1/package/summary"
+    Then I should see "package.summary.title"
     # participant supplementaire
     # planning supplementaire
     # option chaise

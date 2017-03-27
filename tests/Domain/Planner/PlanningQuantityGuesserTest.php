@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Planner;
 
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -18,7 +17,6 @@ use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Planner\PlanningQuantityGuesser;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Tests\Factory\Order\BillingInfoFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -101,7 +99,7 @@ class PlanningQuantityGuesserTest extends \PHPUnit_Framework_TestCase
         $package = new Package($event, 'title', new \DateTime());
         $sheet->getType()->setPackage($package);
 
-        $order = new Order($sheet, true, BillingInfoFactory::create(), [], new \DateTime());
+        $order = new Order($sheet, true, [], new \DateTime());
         $product = Product::createPlanning($event, 'name', 100, 10);
         $plan    = Product::createPlan($event, 'plan', '', 200, 20, 50);
         $plan->includeProduct($product, 1);

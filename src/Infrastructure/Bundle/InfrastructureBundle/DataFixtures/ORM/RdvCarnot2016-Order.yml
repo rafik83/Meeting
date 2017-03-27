@@ -1,3 +1,25 @@
+Proximum\Vimeet\Domain\Model\Address (local):
+    sheet_with_invoice_address:
+        __construct: false
+        street: <address()>
+        zipcode: <postcode()>
+        city: <city()>
+        country: FR
+
+Proximum\Vimeet\Domain\Model\BillingInfo:
+    sheet_asddays_empty_billing_info:
+        __construct: false
+        sheet: '@sheet_with_invoice'
+        gender: man
+        firstname: <firstName()>
+        lastname: <lastName()>
+        function: Directeur
+        phone: <phoneNumber()>
+        mobile: <mobileNumber()>
+        email: <safeEmail()>
+        company: <company()>
+        address: '@sheet_with_invoice_address'
+
 Proximum\Vimeet\Domain\Model\Invoice\Invoice:
     invoice_1:
         __construct:
@@ -17,37 +39,15 @@ Proximum\Vimeet\Domain\Model\Invoice\Invoice:
             - '[]'
             - <dateTime()>
 
-Proximum\Vimeet\Domain\Model\Address (local):
-    order_address:
-        __construct: false
-        street: 10 rue Saint Marc
-        zipcode: 75002
-        city: Paris
-        country: FR
-
-Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
-    order_billing_info:
-        __construct:
-            - 'man'
-            - Jean
-            - Test
-            - DG
-            - 0101010101
-            - 0101010101
-            - test@elao.com
-            - ELAO
-            - '@order_address'
-            - 123456789
-
 Proximum\Vimeet\Domain\Model\Order:
     order_invoiced:
         __construct:
             - '@sheet_with_invoice'
             - true
-            - '@order_billing_info'
             - '{"4":{"translations":{"fr":{"label":"Options d\u2019exposition"},"en":{"label":"Exhibiting options"}},"rank":1},"5":{"translations":{"fr":{"label":"Options d\u2019exposition et de communication"},"en":{"label":"Exhibiting and communication options"}},"rank":2},"6":{"translations":{"fr":{"label":"Options de communication"},"en":{"label":"Communication options"}},"rank":3}}'
             - <dateTimeBetween('-10days', 'now')>
         invoice: '@invoice_1'
+
 Proximum\Vimeet\Domain\Model\Order\Row:
     order_invoiced_row_1:
         __construct: false

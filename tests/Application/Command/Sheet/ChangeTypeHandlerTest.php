@@ -15,9 +15,7 @@ use Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
-use Proximum\Vimeet\Application\Event\Package\OrdersUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -66,18 +64,6 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $order = new Order(
             $sheet,
             true,
-            new Order\BillingInfo(
-                'gender',
-                'firstname',
-                'lastname',
-                'position',
-                'phone',
-                'mobile',
-                'email',
-                'company',
-                new Address('street', 'zipcode', 'city', 'country'),
-                'vatNumber'
-            ),
             '',
             $date
         );

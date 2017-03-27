@@ -38,6 +38,7 @@ class Order
     private $createdAt;
 
     /**
+     * @deprecated
      * @var bool
      */
     private $vatApplicable;
@@ -68,11 +69,6 @@ class Order
     private $promotionCodes = [];
 
     /**
-     * @var Order\BillingInfo
-     */
-    private $billingInfo;
-
-    /**
      * @var string
      */
     private $groupsData;
@@ -90,21 +86,18 @@ class Order
     /**
      * @param Sheet             $sheet
      * @param bool              $vatApplicable
-     * @param Order\BillingInfo $billingInfo
      * @param string            $groupsData
      * @param DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
         $vatApplicable,
-        Order\BillingInfo $billingInfo,
         $groupsData,
         DateTimeInterface $createdAt
     ) {
         $this->sheet          = $sheet;
         $this->createdAt      = $createdAt;
         $this->vatApplicable  = $vatApplicable;
-        $this->billingInfo    = $billingInfo;
         $this->groupsData     = $groupsData;
         $this->vatMode        = $sheet->getEvent()->getMode();
         $this->currency       = $sheet->getEvent()->getCurrency();
@@ -179,14 +172,6 @@ class Order
     }
 
     /**
-     * @return Order\BillingInfo
-     */
-    public function getBillingInfo()
-    {
-        return $this->billingInfo;
-    }
-
-    /**
      * @return DateTimeInterface
      */
     public function getCreatedAt()
@@ -195,6 +180,7 @@ class Order
     }
 
     /**
+     * @deprecated
      * @return boolean
      */
     public function isVatApplicable()
@@ -667,7 +653,6 @@ class Order
         return new self(
             $sheet,
             true,
-            new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), ''),
             [],
             $dateTime
         );

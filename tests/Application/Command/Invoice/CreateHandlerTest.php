@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Order\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -36,8 +35,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $user               = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet              = new Sheet($event, $type, [], $user, $date);
         $address            = new Address('test', 'test', 'test', 'test');
-        $billingInfo        = new BillingInfo('test', 'test', 'test', 'test', '0', '0', 'test@test.com', 'test', $address, 'FR42');
-        $order              = new Order($sheet, true, $billingInfo, 'test', $date);
+        //$billingInfo        = new BillingInfo('test', 'test', 'test', 'test', '0', '0', 'test@test.com', 'test', $address, 'FR42');
+        $order              = new Order($sheet, true, 'test', $date);
         $prefix             = new Prefix('Vimeet', 'Vi');
         $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, true, 'et', 20, 1000, 1200, 200, 'EUR', '[]', $date);
         $orderToInvoiceView = new OrdersToInvoiceView([$order], '[]', true, 'et', 20, 1000, 200, 1200, 'EUR');

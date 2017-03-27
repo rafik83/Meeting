@@ -2229,12 +2229,15 @@ services:
             - '@order.balance'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
+
     query.order.pro_forma_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
         arguments:
             - '@query.order.summary_query_handler'
+            - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\ProFormaQuery }
+
     query.order.order_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQueryHandler
         arguments:
@@ -3047,7 +3050,6 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
-            - '@repository.billing_info_repository'
             - '@repository.promotion_code_row_repository'
             - '@repository.promotion_code_repository'
             - '@package.specification.vat_applicable'
@@ -3111,8 +3113,12 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.transaction'
             - '@repository.invoice.invoice_repository'
+
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
+        arguments:
+            - '@package.specification.vat_applicable'
+
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
     order.orders_to_invoice:

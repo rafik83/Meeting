@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Order\Numero;
 
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -42,19 +41,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $date        = new \DateTime();
         $this->event = EventFactory::createEvent();
         $this->sheet = SheetFactory::create($this->event);
-        $billing     =  new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'position',
-            'phone',
-            'mobile',
-            'email@email.fr',
-            'company',
-            new Address('street', 'zipcode', 'city', 'country'),
-            'vatNumber'
-        );
-        $this->order = new Order($this->sheet, true, $billing, '', $date);
+        $this->order = new Order($this->sheet, true, '', $date);
     }
 
     public function testGenerate()
