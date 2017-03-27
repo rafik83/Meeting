@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\Mode;
 
 /**
@@ -264,7 +263,7 @@ class Transaction
     /**
      * @param Sheet              $sheet
      * @param User               $user
-     * @param int                $amount in cents
+     * @param float              $amount
      * @param \DateTimeInterface $date
      *
      * @return Transaction
@@ -273,7 +272,7 @@ class Transaction
     {
         return new self(
             $sheet,
-            AmountFormatter::centsToDecimalAmount($amount),
+            $amount,
             $date,
             Mode::PAYMENT_PAYPAL,
             null,
