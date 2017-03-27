@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +32,7 @@ class Order
     private $sheet;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
@@ -73,14 +72,14 @@ class Order
     private $invoice;
 
     /**
-     * @param Sheet             $sheet
-     * @param string            $groupsData
-     * @param DateTimeInterface $createdAt
+     * @param Sheet              $sheet
+     * @param string             $groupsData
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
         $groupsData,
-        DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt
     ) {
         $this->sheet          = $sheet;
         $this->createdAt      = $createdAt;
@@ -157,7 +156,7 @@ class Order
     }
 
     /**
-     * @return DateTimeInterface
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -609,8 +608,8 @@ class Order
     }
 
     /**
-     * @param Sheet             $sheet
-     * @param DateTimeInterface $dateTime
+     * @param Sheet              $sheet
+     * @param \DateTimeInterface $dateTime
      *
      * @return Order
      */
