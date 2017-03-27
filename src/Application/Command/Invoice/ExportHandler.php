@@ -58,10 +58,10 @@ class ExportHandler
      */
     public function handle(Export $command)
     {
-        $invoiceExportViews = [];
+        $endDate = new \DateTime($command->endDate->format('Y-m-d') . '23:59:59.999');
 
         $events   = $this->eventRepository->getEventsByAdmin($command->admin);
-        $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $command->endDate);
+        $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $endDate);
 
         foreach ($invoices as $invoice) {
             $dateFormatter = IntlDateFormatter::create(

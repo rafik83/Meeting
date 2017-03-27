@@ -36,7 +36,6 @@ class ExportController extends Controller
         $exportContent = '';
 
         if ($form->isSubmitted()) {
-
             if (!$form->isValid()) {
                 $this->addFlash('error', 'flash.admin.invoice.export.failed');
 
