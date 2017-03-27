@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\Tip;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 interface TipRepositoryInterface
 {
