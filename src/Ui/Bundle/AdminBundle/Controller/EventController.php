@@ -70,7 +70,6 @@ class EventController extends Controller
             );
             $invoiceExportForm->add('submit', SubmitType::class, [
                 'label' => 'form.invoice_export.children.submit.label',
-                'attr' => ['class' => 'pull-right col-md-2'],
             ]);
 
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted()
