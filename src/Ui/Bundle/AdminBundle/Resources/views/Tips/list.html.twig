@@ -19,17 +19,17 @@
             </tr>
             </thead>
                 <tbody>
-                {% for tip in tips %}
+                {% for tip in tips.results %}
                     <tr>
                         <td>{{ tip.title }}</td>
-                        <td>{{ tip.lang }}</td>
-                        <td>{{ tip.content|slice(0, 42) ~ '...' }}</td>
+                        <td>{{ tip.id }}</td>
+                        <td>{{ tip.id|slice(0, 42) ~ '...' }}</td>
                         <td>{{ tip.isOnMeetingManagement ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans }}</td>
                         <td>{{ tip.isOnCatalog ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans }}</td>
                         <td>{{ tip.isOnPrintPlanning ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans  }}</td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <a class="btn btn-default btn-sm" href="{{ path('') }}">
+                                <a class="btn btn-default btn-sm" href="#">
                                     {{ 'admin.tips.update.link'|trans }}
                                 </a>
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

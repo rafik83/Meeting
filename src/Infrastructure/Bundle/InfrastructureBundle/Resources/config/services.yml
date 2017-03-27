@@ -617,6 +617,12 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings }
+    command.tip.create_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\CreateHandler
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Create }
     command.transaction.create_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\CreateHandler
         arguments:

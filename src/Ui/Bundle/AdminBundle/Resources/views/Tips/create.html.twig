@@ -3,6 +3,14 @@
 {% block form_title 'admin.tips.create.title'|trans %}
 
 {% block form_content %}
+    {{ form_row(form.title) }}
+    {{ form_row(form.onCatalog) }}
+    {{ form_row(form.onMeetingManagement) }}
+    {{ form_row(form.onPrintPlanning) }}
+
+    {% for translation in form.translations %}
+        {{ form_row(form.translations) }}
+    {% endfor %}
 
 {% endblock form_content %}
 

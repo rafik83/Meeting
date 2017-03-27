@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Tip
 {
     /**
@@ -15,7 +17,7 @@ class Tip
     public $title;
     
     /**
-     * @var TipTranslation[]
+     * @var ArrayCollection
      */
     public $translations;
     
@@ -38,18 +40,35 @@ class Tip
      * Tip constructor.
      *
      * @param string            $title
-     * @param TipTranslation[]  $translations
      * @param bool              $onMeetingManagement
      * @param bool              $onCatalog
      * @param bool              $onPrintPlanning
      */
-    public function __construct($title, array $translations, $onMeetingManagement, $onCatalog, $onPrintPlanning)
+    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning)
     {
         $this->title                = $title;
-        $this->translations         = $translations;
         $this->onMeetingManagement  = $onMeetingManagement;
         $this->onCatalog            = $onCatalog;
         $this->onPrintPlanning      = $onPrintPlanning;
+        $this->translations         = new ArrayCollection();
+    }
+    
+    /**
+     * @param $locale
+     * @param $title
+     * @param $content
+     *
+     * @return $this
+     */
+    public function addTranslation($locale, $title, $content)
+    {
+        if ($this->translations->containsKey($locale)) {
+            $this->translations->get($locale)->update($title, $content);
+        } else {
+            $this->translations->set($locale, new TipTranslation($this, $locale, $title, $content));
+        }
+    
+        return $this;
     }
     
     /**
@@ -69,7 +88,7 @@ class Tip
     }
     
     /**
-     * @return TipTranslation[]
+     * @return ArrayCollection
      */
     public function getTranslations()
     {

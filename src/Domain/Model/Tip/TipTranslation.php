@@ -30,17 +30,17 @@ class TipTranslation
     /**
      * TipTranslation constructor.
      *
-     * @param Tip       $tip
-     * @param string    $title
-     * @param string    $lang
-     * @param string    $content
+     * @param Tip    $tip
+     * @param string $title
+     * @param string $lang
+     * @param string $content
      */
     public function __construct(Tip $tip, $title, $lang, $content)
     {
-        $this->tip                  = $tip;
-        $this->title                = $title;
-        $this->lang                 = $lang;
-        $this->content              = $content;
+        $this->tip     = $tip;
+        $this->title   = $title;
+        $this->lang    = $lang;
+        $this->content = $content;
     }
     
     /**

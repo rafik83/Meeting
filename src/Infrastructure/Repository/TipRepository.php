@@ -42,16 +42,17 @@ class TipRepository implements TipRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('tip')
-            ->from(Tip::class, 'tip')
+            ->from(Tip::class, 'tip', 'tip.id')
             ->orderBy('tip.id');
-    
-        return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip', 'id');
+        
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
     }
     
     /** {@inheritdoc} */
     public function add(Tip $tip)
     {
-        // TODO: Implement add() method.
+        $this->entityManager->persist($tip);
+        $this->entityManager->flush();
     }
     
     /** {@inheritdoc} */

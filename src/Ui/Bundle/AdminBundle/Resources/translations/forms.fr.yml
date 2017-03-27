@@ -638,6 +638,18 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
+form.tip_create.children.title.label: 'Libellé admin'
+form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_create.children.submit.label: 'Créer le message d''aide'
+form.tip_create.children.translations.label_add: 'Ajouter une traduction'
+form.tip_create.children.translations.label_delete: 'Retirer la traduction'
+form.tip_create.children.translations.label: 'Traductions'
+form.tip_create.children.translations.prototype.label: 'Traductions'
+form.tip_create.children.translations.prototype.children.title.label: 'Titre'
+form.tip_create.children.translations.prototype.children.lang.label: 'Langue'
+form.tip_create.children.translations.prototype.children.content.label: 'Contenu'
 form.transaction.children.state.cancelled: Annulé
 form.transaction.children.state.paid: Réglé
 form.transaction.children.state.pending: 'En attente'

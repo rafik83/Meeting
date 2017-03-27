@@ -44,8 +44,8 @@ class TipViewQueryHandler
             $tipListView->tipListView[] = new TipView(
                 $tip->getId(),
                 $tip->getTitle(),
-                $tip->getLang(),
-                $tip->getContent(),
+                null,
+                null,
                 $tip->isOnMeetingManagement(),
                 $tip->isOnCatalog(),
                 $tip->isOnPrintPlanning()

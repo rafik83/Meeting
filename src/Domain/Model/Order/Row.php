@@ -268,7 +268,7 @@ class Row
      *
      * @return Row
      */
-    public static function createCustomRowToGroup(
+    public static function wcreateCustomRowToGroup(
         Order $order,
         $quantity,
         $groupId,
