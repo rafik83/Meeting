@@ -2379,6 +2379,29 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
 
+    query.order.order_vat_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler
+        arguments:
+            - '@package.specification.vat_applicable'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery }
+
+    query.order.order_vat_views_by_event_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery }
+
+    query.order.order_vat_views_by_sheet_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery }
+
     #
     # Program query
     #

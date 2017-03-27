@@ -38,7 +38,6 @@ class Order
     private $createdAt;
 
     /**
-     * @deprecated
      * @var bool
      */
     private $vatApplicable;
@@ -180,7 +179,8 @@ class Order
     }
 
     /**
-     * @deprecated
+     * @deprecated use OrderVatView::isVatApplicable
+     *
      * @return boolean
      */
     public function isVatApplicable()
@@ -190,6 +190,8 @@ class Order
 
     /**
      * VAT mode of the total if applicable
+     *
+     * @deprecated
      *
      * @return string
      */
@@ -291,6 +293,8 @@ class Order
     }
 
     /**
+     * @deprecated use OrderVatView::vatAmount
+     *
      * @return float|int
      */
     public function getVatAmount()
@@ -305,6 +309,8 @@ class Order
     }
 
     /**
+     * @deprecated use OrderVatView::totalWithVat
+     *
      * @return float
      */
     public function getTotalWithVat()
@@ -319,6 +325,8 @@ class Order
     }
 
     /**
+     * @deprecated use OrderVatView::totalWithVat
+     *
      * @return float
      */
     public function getTotal()
