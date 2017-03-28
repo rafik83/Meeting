@@ -62,6 +62,7 @@ class ExportHandler
 
         $events   = $this->eventRepository->getEventsByAdmin($command->admin);
         $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $endDate);
+        $invoiceExportViews = [];
 
         foreach ($invoices as $invoice) {
             $dateFormatter = IntlDateFormatter::create(
