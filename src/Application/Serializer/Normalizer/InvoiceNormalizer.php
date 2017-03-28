@@ -48,7 +48,7 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
     }
 
     /**
-     * Normalizes an event's sheets for serialization
+     * Normalizes an invoice for serialization
      *
      * {@inheritdoc}
      *
