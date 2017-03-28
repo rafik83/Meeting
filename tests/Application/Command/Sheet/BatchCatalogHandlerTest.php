@@ -177,4 +177,71 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $result->count);
         $this->assertEquals("SheetName", $result->ignoredSheetsMessage);
     }
+
+    public function testHandleAddToCatalogWithIgnoredSheets()
+    {
+        $event = EventFactory::createEvent();
+        $type  = new Type($event);
+        $date  = new \DateTime();
+        $dateold = new \DateTime('2016-10-12 10:10');
+
+        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN',
+            new \DateTime());
+
+        // actual sheet
+        $user1  = new User('test@test.com', 'salt', 'password', 'fr');
+        $user2  = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheet1->setInCatalog(true);
+        $sheet1->setEnable(false);
+        $sheet1->setInCatalogAt($dateold);
+        $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
+        $sheet2->setInCatalog(true);
+        $sheet2->setInCatalogAt($dateold);
+
+        // expected sheet
+        $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
+        $expectedSheet1->setInCatalog(false);
+        $expectedSheet1->setInCatalogAt($date);
+
+        $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
+        $expectedSheet2->setInCatalog(false);
+        $expectedSheet2->setInCatalogAt($dateold);
+
+        $reflection  = new \ReflectionClass(Sheet::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheet1, 1);
+        $property->setValue($sheet2, 2);
+        $property->setValue($expectedSheet1, 1);
+        $property->setValue($expectedSheet2, 2);
+        $property->setAccessible(false);
+
+        // Mock
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+
+        $sheetRepository->getSheetsById([1, 2])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
+        $sheetRepository->set($sheet2)->shouldBeCalled();
+        $sheetInfoGuesser->guessSheetTitle($sheet1, 'fr')->shouldBeCalled()->willReturn("SheetName");
+        $enableDisableManager->update($sheet2, true)->shouldBeCalled();
+
+        // Command
+        $command = new BatchCatalog([1, 2], true, $admin);
+        $handler = new BatchCatalogHandler(
+            $sheetRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $date,
+            $meetingRepository->reveal(),
+            $sheetInfoGuesser->reveal(),
+            $enableDisableManager->reveal()
+        );
+
+        $result = $handler->handle($command);
+        $this->assertEquals(2, $result->count);
+        $this->assertEquals("SheetName", $result->ignoredSheetsMessage);
+    }
 }
