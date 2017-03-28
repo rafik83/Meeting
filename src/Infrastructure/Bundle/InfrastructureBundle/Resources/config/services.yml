@@ -1579,6 +1579,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+    command.sheet.post_batch.post_batch_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
 
     #
     # Security
@@ -3002,6 +3007,15 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_accept_handler'
+        tags:
+            - { name: console.command }
+
+    command_batch.batch_validate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchValidateCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_validate_handler'
         tags:
             - { name: console.command }
 

@@ -14,19 +14,20 @@ use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchAcceptCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchValidateCommand;
 
-class BatchAcceptJobQueue extends AbstractJobQueueAdapter implements BatchJobQueueInterface
+class BatchValidateJobQueue extends AbstractJobQueueAdapter implements BatchJobQueueInterface
 {
     /**
      * {@inheritdoc}
      */
     public function createJob(array $ids, Admin $admin, $locale, $options = [])
     {
-        $job = new Job(BatchAcceptCommand::NAME, [
+        $job = new Job(BatchValidateCommand::NAME, [
             'sheetIds' => implode(',', $ids),
             'adminId'  => $admin->getId(),
             'locale'   => $locale,
+            'comment'  => isset($options['comment']) ? $options['comment'] : null,
         ]);
 
         $this->setJob($job);
