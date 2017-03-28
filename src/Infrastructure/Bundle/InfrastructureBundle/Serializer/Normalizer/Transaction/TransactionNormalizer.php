@@ -20,10 +20,11 @@ class TransactionNormalizer implements NormalizerInterface
     const TRANSLATION_PREFIX = 'admin.export.transaction.column.';
     const TRANSLATION_DOMAIN = 'messages';
     
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     private $translator;
+    
+    /** @var array */
+    private $timeFormatter = [];
     
     /**
      * TransactionNormalizer constructor.
@@ -44,7 +45,7 @@ class TransactionNormalizer implements NormalizerInterface
         
         foreach ($object->transactionsView as $view) {
             $createdAt = $this->formatDate(
-                $view->transactionDate->getTimestamp(),
+                $view->transactionDate,
                 $view->event,
                 $object->adminLocale
             );
@@ -88,18 +89,16 @@ class TransactionNormalizer implements NormalizerInterface
     }
     
     /**
-     * @param int       $dateTime
-     * @param Event     $event
-     * @param string    $locale
+     * @param \DateTimeInterface $dateTime
+     * @param Event              $event
+     * @param string             $locale
      *
      * @return bool|string
      */
-    private function formatDate($dateTime, Event $event, $locale)
+    private function formatDate(\DateTimeInterface $dateTime, Event $event, $locale)
     {
-        $timeFormatter = [];
-        
-        if (!isset($timeFormatter[$event->getId()])) {
-            $timeFormatter[$event->getId()] = \IntlDateFormatter::create(
+        if (!isset($this->timeFormatter[$event->getId()])) {
+            $this->timeFormatter[$event->getId()] = \IntlDateFormatter::create(
                 $locale,
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::NONE,
@@ -107,6 +106,6 @@ class TransactionNormalizer implements NormalizerInterface
             );
         }
         
-        return $timeFormatter[$event->getId()]->format($dateTime);
+        return $this->timeFormatter[$event->getId()]->format($dateTime);
     }
 }
