@@ -54,26 +54,26 @@ class CreateHandler
     ) {
         $this->invoiceRepository = $invoiceRepository;
         $this->dateTime          = $dateTime;
-        $this->ordersToInvoice = $ordersToInvoice;
-        $this->orderRepository = $orderRepository;
+        $this->ordersToInvoice   = $ordersToInvoice;
+        $this->orderRepository   = $orderRepository;
     }
 
     /**
      * @param Create $create
      *
-     * @return bool
+     * @return Invoice[]
      */
     public function handle(Create $create)
     {
         // do not process disabled sheets
         if (false === $create->sheet->isEnabled()) {
-            return false;
+            return [];
         }
 
         $ordersToInvoiceView = $this->ordersToInvoice->getOrdersToInvoiceViewForSheet($create->sheet);
 
         if (null === $ordersToInvoiceView) {
-            return false;
+            return [];
         }
 
         $lastInvoiceForSheet = $this->invoiceRepository->getLastInvoiceForEventPrefix(
@@ -109,6 +109,6 @@ class CreateHandler
             $this->orderRepository->set($order);
         }
 
-        return true;
+        return [$invoice];
     }
 }

@@ -17,21 +17,21 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class CsvFileResponse extends Response
 {
     /**
-     * @param mixed  $file
+     * @param string $content
      * @param string $filename
      * @param int    $status
      * @param array  $headers
      * @param string $charset
      */
     public function __construct(
-        $file,
+        $content,
         $filename,
         $status = 200,
         $headers = [],
         $charset = Charset::WINDOWS_1252
     ) {
-        parent::__construct($file, $status, $headers);
-        
+        parent::__construct($content, $status, $headers);
+
         $disposition = $this->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
         $this->headers->set('Content-Disposition', $disposition);
         $this->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));

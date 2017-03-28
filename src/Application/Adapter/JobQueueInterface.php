@@ -31,6 +31,12 @@ interface JobQueueInterface
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
 
     /**
+     * @param int[] $sheetIds
+     * @param Admin $admin
+     */
+    public function generateInvoice(array $sheetIds, Admin $admin);
+  
+    /**
      * @param Event  $event
      * @param Admin  $admin
      * @param string $locale

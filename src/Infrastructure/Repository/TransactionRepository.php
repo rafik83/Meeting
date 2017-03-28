@@ -120,12 +120,33 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->createQueryBuilder()
             ->select('transaction, sheet')
             ->from(Transaction::class, 'transaction')
-            ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.enable = true')
-            ->where('sheet.event = :event')
+            ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
             ->setParameter('event', $event)
         ;
 
        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventAndSheetIds(Event $event, array $sheetIds)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('transaction, sheet')
+            ->from(Transaction::class, 'transaction')
+            ->join(
+                'transaction.sheet',
+                'sheet',
+                'WITH',
+                'sheet.id IN (:sheetIds) AND sheet.event = :event AND sheet.enable = true'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('sheetIds', $sheetIds)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

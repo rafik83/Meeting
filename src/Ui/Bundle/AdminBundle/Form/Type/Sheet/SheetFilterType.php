@@ -10,11 +10,23 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SheetFilterType extends AbstractFilterType
 {
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return [
+            'enabled' => true,
+            'orderBy' => Constant::ORDER_BY_CREATED_AT,
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
