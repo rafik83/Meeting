@@ -63,9 +63,9 @@ class OrderVatView
      * @param string             $vatMode
      * @param string             $currency
      * @param bool               $isCancelled
-     * @param int                $totalWithoutVat
-     * @param int                $vatAmount
-     * @param int                $totalWithVat
+     * @param int                $totalWithoutVat amount in cents
+     * @param int                $vatAmount amount in cents
+     * @param int                $totalWithVat amount in cents
      * @param \DateTimeInterface $createdAt
      * @param Invoice|null       $invoice
      */
