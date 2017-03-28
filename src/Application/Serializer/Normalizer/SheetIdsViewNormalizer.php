@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * Event sheets normalizer meant to be used as part of {Symfony's Serializer component @link
+ * Sheet list views normalizer meant to be used as part of {Symfony's Serializer component @link
  * http://symfony.com/doc/current/serializer.html}.
  *
  * Normalized sheets data are dispatched into three field groups:
@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * - registration fields ({@link self::$registrationFields})
  * - sheet fields ({@link self::$sheetFields})
  */
-class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInterface
+class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
     const TRANSLATION_COL       = 'admin.sheet.export.fields';
     const COL_EVENT_ID          = 'event_id';
@@ -115,21 +115,26 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
      *
      * {@inheritdoc}
      *
-     * @param Event $object
+     * @param SheetIdsView $object
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        $rawSheets = [];
-        $locale    = $context['locale'];
+        $sheetIds = $object->sheetIds;
+        $event    = $context['event'];
+        $locale   = $context['locale'];
+        $charset  = $context['charset'];
 
         // Preload transaction and order to avoid a query by sheet
-        $this->balance->loadAllForEvent($object);
+        $this->balance->loadAllForSheetIds($event, $sheetIds);
 
-        foreach ($this->sheetRepository->getEnabledSheetsByEvent($object) as $sheet) {
+        $sheets = $this->sheetRepository->getSheetsByEventAndIds($event, $sheetIds);
+
+        $rawSheets = [];
+
+        foreach ($sheets as $sheet) {
             $rawSheets[] = $this->getSheetRawData($sheet, $locale);
         }
 
-        $charset          = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedSheets = [];
 
         foreach ($rawSheets as $rawSheet) {
@@ -144,7 +149,7 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof Event && 'csv' === $format;
+        return $data instanceof SheetIdsView && 'csv' === $format;
     }
 
     /**

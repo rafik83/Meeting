@@ -67,6 +67,19 @@ class Balance
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
+     */
+    public function loadAllTransactionsForSheetIds(Event $event, array $sheetIds)
+    {
+        $transactions = $this->transactionRepository->findByEventAndSheetIds($event, $sheetIds);
+
+        foreach ($transactions as $transaction) {
+            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
+        }
+    }
+
+    /**
+     * @param Event $event
      */
     public function loadAllOrders(Event $event)
     {
@@ -79,11 +92,34 @@ class Balance
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
+     */
+    public function loadAllOrdersForSheetIds(Event $event, array $sheetIds)
+    {
+        $orders = $this->orderRepository->findByEventAndSheetIds($event, $sheetIds);
+
+        foreach ($orders as $order) {
+            $this->orders[$order->getSheet()->getId()][] = $order;
+        }
+    }
+
+    /**
+     * @param Event $event
      */
     public function loadAllForEvent(Event $event)
     {
         $this->loadAllOrders($event);
         $this->loadAllTransactions($event);
+    }
+
+    /**
+     * @param Event $event
+     * @param int[] $sheetIds
+     */
+    public function loadAllForSheetIds(Event $event, array $sheetIds)
+    {
+        $this->loadAllOrdersForSheetIds($event, $sheetIds);
+        $this->loadAllTransactionsForSheetIds($event, $sheetIds);
     }
 
     /**
