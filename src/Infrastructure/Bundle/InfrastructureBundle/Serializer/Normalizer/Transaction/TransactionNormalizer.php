@@ -96,13 +96,17 @@ class TransactionNormalizer implements NormalizerInterface
      */
     private function formatDate($dateTime, Event $event, $locale)
     {
-        $timeFormatter = \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::NONE,
-            $event->getTimeZone()
-        );
+        $timeFormatter = [];
         
-        return $timeFormatter->format($dateTime);
+        if (!isset($timeFormatter[$event->getId()])) {
+            $timeFormatter[$event->getId()] = \IntlDateFormatter::create(
+                $locale,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::NONE,
+                $event->getTimeZone()
+            );
+        }
+        
+        return $timeFormatter[$event->getId()]->format($dateTime);
     }
 }
