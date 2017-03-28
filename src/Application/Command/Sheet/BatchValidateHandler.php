@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -29,6 +30,11 @@ class BatchValidateHandler
      * @var \DateTimeInterface
      */
     private $datetime;
+    
+    /**
+     * @var BatchJobQueueInterface
+     */
+    private $batchJobQueue;
 
     /**
      * BatchValidateHandler constructor.
@@ -36,15 +42,18 @@ class BatchValidateHandler
      * @param SheetRepositoryInterface $sheetRepository
      * @param ValidateHandler          $validateHandler
      * @param \DateTimeInterface       $datetime
+     * @param BatchJobQueueInterface   $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ValidateHandler $validateHandler,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->validateHandler = $validateHandler;
         $this->datetime        = $datetime;
+        $this->batchJobQueue   = $batchJobQueue;
     }
 
     /**
@@ -62,6 +71,13 @@ class BatchValidateHandler
         foreach ($sheets as $sheet) {
             $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $this->datetime, $batchValidate->comment));
         }
+
+        $this->batchJobQueue->createJob(
+            $batchValidate->ids,
+            $batchValidate->admin,
+            null,
+            ['comment' => $batchValidate->comment]
+        );
 
         return new BatchResult(count($sheets), $batchValidate->getMessage() . 'validate.success');
     }

@@ -10,10 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ValidateHandler
 {
@@ -23,22 +20,13 @@ class ValidateHandler
     private $sheetRepository;
 
     /**
-     * @var DelayedEventDispatcher
-     */
-    private $eventDispatcher;
-
-    /**
      * ValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param DelayedEventDispatcher   $eventDispatcher
      */
-    public function __construct(
-        SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher
-    ) {
+    public function __construct(SheetRepositoryInterface $sheetRepository)
+    {
         $this->sheetRepository = $sheetRepository;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -51,15 +39,5 @@ class ValidateHandler
         }
 
         $this->sheetRepository->set($validate->sheet->markAsValidated());
-
-        $this->eventDispatcher->dispatch(
-            Events::SHEET_VALIDATED,
-            new SheetValidatedEvent(
-                $validate->sheet,
-                $validate->date,
-                $validate->comment,
-                $validate->admin
-            )
-        );
     }
 }

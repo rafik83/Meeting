@@ -708,7 +708,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\ValidateHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Validate }
     command.sheet.batch_validate_handler:
@@ -717,6 +716,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.validate_handler'
             - '@datetime'
+            - '@adapter_batch_job_queue.batch_validate_job_queue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
     command.sheet.batch_generate_invoice_handler:
@@ -868,7 +868,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Accept }
     command.sheet.batch_accept_handler:
@@ -1577,12 +1576,12 @@ services:
     command.sheet.post_batch.post_batch_accept_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchAcceptHandler
         arguments:
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@event_dispatcher'
             - '@datetime'
     command.sheet.post_batch.post_batch_validate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidateHandler
         arguments:
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@event_dispatcher'
             - '@datetime'
 
     #
@@ -1632,6 +1631,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_accept_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_validate_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidateJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter.serializer_adapter:

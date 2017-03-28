@@ -23,20 +23,13 @@ class AcceptHandler
     private $sheetRepository;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * AcceptHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, EventDispatcherInterface $eventDispatcher)
+    public function __construct(SheetRepositoryInterface $sheetRepository)
     {
         $this->sheetRepository = $sheetRepository;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -49,14 +42,5 @@ class AcceptHandler
         }
 
         $this->sheetRepository->set($accept->sheet->markAsAccepted());
-
-        $this->eventDispatcher->dispatch(
-            Events::SHEET_ACCEPTED,
-            new SheetAcceptedEvent(
-                $accept->sheet,
-                $accept->admin,
-                $accept->date
-            )
-        );
     }
 }
