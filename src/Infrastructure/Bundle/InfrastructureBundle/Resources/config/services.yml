@@ -1583,6 +1583,12 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@datetime'
+    command.sheet.post_batch.post_batch_catalog_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalogHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@sheet.request.enable_disable_manager'
+            - '@datetime'
 
     #
     # Security
@@ -1635,6 +1641,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_validate_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidateJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_catalog_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter.serializer_adapter:
@@ -3019,6 +3029,15 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_validate_handler'
+        tags:
+            - { name: console.command }
+
+    command_batch.batch_catalog_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchCatalogCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_catalog_handler'
         tags:
             - { name: console.command }
 
