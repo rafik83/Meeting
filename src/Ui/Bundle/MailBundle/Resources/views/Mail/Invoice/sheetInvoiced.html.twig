@@ -1,0 +1,27 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'mail.sheet.invoiced.body'|trans({
+        '%participant%': mail.firstname|capitalize ~ ' ' ~ mail.lastname|upper,
+        '%event%': mail.event.title,
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+
+    {% for invoiceUrlView in mail.invoiceUrlViews  %}
+        {{ macros.button(
+            'mail.sheet.invoiced.link'|trans({'%invoiceNumber%': invoiceUrlView.number}, 'mail', mail.locale),
+            invoiceUrlView.url
+        ) }}
+    {% endfor %}
+
+    <br>
+    <br>
+
+    {{ 'mail.sheet.invoiced.end'|trans({
+        '%ordersLink%': mail.ordersUrl
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

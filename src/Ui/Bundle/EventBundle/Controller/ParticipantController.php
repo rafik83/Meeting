@@ -229,12 +229,13 @@ class ParticipantController extends Controller
         $participant = $sheet->getUserParticipant($user);
         $template    = $this->get('template.template_data_factory')->createCompanyTemplate($sheet, $locale);
 
-        if (empty($template->getCompanyObjects())) {
+        if (empty($template->getEditableSheetDataExceptedImageObjects())) {
             throw $this->createNotFoundException('No company object in this template');
         }
 
         $form = $this->createForm(CompanyType::class, $template, [
             'locale'   => $locale,
+            'locales'  => $eventDomain->getEvent()->getLocales(),
             'template' => $template,
             'country'  => $eventDomain->getEvent()->getCountry(),
         ]);

@@ -205,11 +205,11 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param SheetInvoicedEvent $event
+     * @param SheetInvoicedEvent $sheetInvoicedEvent
      */
-    public function onSheetInvoiced(SheetInvoicedEvent $event)
+    public function onSheetInvoiced(SheetInvoicedEvent $sheetInvoicedEvent)
     {
-        $this->updateSheetIndexation($event->getSheets());
+        $this->updateSheetIndexation($sheetInvoicedEvent->getSheets());
     }
 
     /**

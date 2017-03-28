@@ -11,11 +11,9 @@
 namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
@@ -32,11 +30,6 @@ class Balance
     private $transactionRepository;
 
     /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
-
-    /**
      * @var array
      */
     private $transactions = [];
@@ -47,23 +40,15 @@ class Balance
     private $orders = [];
 
     /**
-     * @var array
-     */
-    private $invoices = [];
-
-    /**
-     * @param OrderRepositoryInterface $orderRepository
+     * @param OrderRepositoryInterface       $orderRepository
      * @param TransactionRepositoryInterface $transactionRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        TransactionRepositoryInterface $transactionRepository,
-        InvoiceRepositoryInterface $invoiceRepository
+        TransactionRepositoryInterface $transactionRepository
     ) {
-        $this->orderRepository        = $orderRepository;
-        $this->transactionRepository  = $transactionRepository;
-        $this->invoiceRepository      = $invoiceRepository;
+        $this->orderRepository       = $orderRepository;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -72,6 +57,19 @@ class Balance
     public function loadAllTransactions(Event $event)
     {
         $transactions = $this->transactionRepository->findByEvent($event);
+
+        foreach ($transactions as $transaction) {
+            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
+        }
+    }
+
+    /**
+     * @param Event $event
+     * @param int[] $sheetIds
+     */
+    public function loadAllTransactionsForSheetIds(Event $event, array $sheetIds)
+    {
+        $transactions = $this->transactionRepository->findByEventAndSheetIds($event, $sheetIds);
 
         foreach ($transactions as $transaction) {
             $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
@@ -92,13 +90,14 @@ class Balance
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
      */
-    public function loadAllInvoices(Event $event)
+    public function loadAllOrdersForSheetIds(Event $event, array $sheetIds)
     {
-        $invoices = $this->invoiceRepository->findByEvent($event);
+        $orders = $this->orderRepository->findByEventAndSheetIds($event, $sheetIds);
 
-        foreach ($invoices as $invoice) {
-            $this->invoices[$invoice->getSheet()->getId()][] = $invoice;
+        foreach ($orders as $order) {
+            $this->orders[$order->getSheet()->getId()][] = $order;
         }
     }
 
@@ -112,12 +111,13 @@ class Balance
     }
 
     /**
-     * @param Sheet $sheet
-     * @param array $orders
+     * @param Event $event
+     * @param int[] $sheetIds
      */
-    public function preloadOrdersForSheet(Sheet $sheet, array $orders)
+    public function loadAllForSheetIds(Event $event, array $sheetIds)
     {
-        $this->orders[$sheet->getId()] = $orders;
+        $this->loadAllOrdersForSheetIds($event, $sheetIds);
+        $this->loadAllTransactionsForSheetIds($event, $sheetIds);
     }
 
     /**
@@ -165,25 +165,20 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return Invoice[]
-     */
-    public function getInvoices(Sheet $sheet)
-    {
-        return $this->invoiceRepository->findBySheet($sheet);
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
      * @return float
      */
     public function getTotal(Sheet $sheet)
     {
         $orders = $this->getNotCancelledOrders($sheet);
 
-        return array_reduce($orders, function ($carry, Order $order) {
-            return $carry + $order->getTotal();
-        }, 0);
+
+        $total = 0;
+
+        foreach ($orders as $order) {
+            $total += $order->getTotal();
+        }
+
+        return $total;
     }
 
     /**
@@ -195,9 +190,13 @@ class Balance
     {
         $orders = $this->getNotCancelledOrders($sheet);
 
-        return array_reduce($orders, function ($carry, Order $order) {
-            return $carry + $order->getTotalWithoutVat();
-        }, 0);
+        $totalWithoutVat = 0;
+
+        foreach ($orders as $order) {
+            $totalWithoutVat += $order->getTotalWithoutVat();
+        }
+
+        return $totalWithoutVat;
     }
 
     /**
@@ -207,16 +206,7 @@ class Balance
      */
     public function getBalance(Sheet $sheet)
     {
-        $total        = $this->getTotal($sheet);
-        $transactions = $this->getTransactions($sheet);
-
-        return array_reduce($transactions, function ($carry, Transaction $transaction) {
-            if (!$transaction->isPaid()) {
-                return $carry;
-            }
-
-            return $carry - $transaction->getAmount();
-        }, $total);
+        return $this->getTotal($sheet) - $this->getTotalPaid($sheet);
     }
 
     /**
@@ -226,24 +216,13 @@ class Balance
      */
     public function getRemainingToPay(Sheet $sheet)
     {
-        $total        = $this->getTotal($sheet);
-        $transactions = $this->getTransactions($sheet);
+        $remainingToPay = $this->getBalance($sheet);
 
-        return array_reduce($transactions, function ($carry, Transaction $transaction) {
-            if ($carry < 0) {
-                return 0;
-            }
+        if ($remainingToPay < 0) {
+            return 0;
+        }
 
-            if (!$transaction->isPaid()) {
-                return $carry;
-            }
-
-            if (($carry - $transaction->getAmount()) < 0) {
-                return 0;
-            }
-
-            return $carry - $transaction->getAmount();
-        }, $total);
+        return $remainingToPay;
     }
 
     /**
@@ -314,9 +293,13 @@ class Balance
     {
         $orders = $this->getNotCancelledOrdersFromEvent();
 
-        return array_reduce($orders, function ($carry, Order $order) {
-            return $carry + $order->getTotal();
-        }, 0);
+        $total = 0;
+
+        foreach ($orders as $order) {
+            $total += $order->getTotal();
+        }
+
+        return $total;
     }
 
     /**
@@ -324,28 +307,12 @@ class Balance
      */
     public function getOrdersTotalRemainingToPayForEvent()
     {
-        $total = $this->getOrdersTotalForEvent();
+        $remainingToPay = $this->getOrdersTotalForEvent() - $this->getTransactionsTotalPaidForEvent();
 
-        $totalRemaining = $total;
-
-        foreach ($this->transactions as $sheetTransaction) {
-            $totalRemaining = array_reduce($sheetTransaction, function ($carry, Transaction $transaction) {
-                if ($carry < 0) {
-                    return 0;
-                }
-
-                if (!$transaction->isPaid()) {
-                    return $carry;
-                }
-
-                if (($carry - $transaction->getAmount()) < 0) {
-                    return 0;
-                }
-
-                return $carry - $transaction->getAmount();
-            }, $totalRemaining);
+        if (0 > $remainingToPay) {
+            return 0;
         }
 
-        return  $totalRemaining;
+        return $remainingToPay;
     }
 }

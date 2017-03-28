@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Event\Sheet;
 
+use Proximum\Vimeet\Application\View\Sheet\SheetInvoicedView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -21,38 +22,38 @@ class SheetInvoicedEvent extends EventDispatcher\Event
      * @var Admin
      */
     private $admin;
-    
+
     /**
      * @var Event
      */
     private $event;
-    
+
     /**
      * @var \DateTimeInterface
      */
     private $date;
-    
+
     /**
-     * @var Sheet[]
+     * @var SheetInvoicedView[]
      */
-    private $sheets;
-    
+    private $sheetInvoicedViews;
+
     /**
      * SheetInvoicedEvent constructor.
      *
-     * @param Admin              $admin
-     * @param Event              $event
-     * @param \DateTimeInterface $date
-     * @param Sheet[]            $sheets
+     * @param Admin               $admin
+     * @param Event               $event
+     * @param \DateTimeInterface  $date
+     * @param SheetInvoicedView[] $sheetInvoicedViews
      */
-    public function __construct(Admin $admin, Event $event, \DateTimeInterface $date, array $sheets)
+    public function __construct(Admin $admin, Event $event, \DateTimeInterface $date, array $sheetInvoicedViews)
     {
-        $this->admin  = $admin;
-        $this->event  = $event;
-        $this->date   = $date;
-        $this->sheets = $sheets;
+        $this->admin              = $admin;
+        $this->event              = $event;
+        $this->date               = $date;
+        $this->sheetInvoicedViews = $sheetInvoicedViews;
     }
-    
+
     /**
      * @return Admin
      */
@@ -60,7 +61,7 @@ class SheetInvoicedEvent extends EventDispatcher\Event
     {
         return $this->admin;
     }
-    
+
     /**
      * @return Event
      */
@@ -68,7 +69,7 @@ class SheetInvoicedEvent extends EventDispatcher\Event
     {
         return $this->event;
     }
-    
+
     /**
      * @return \DateTimeInterface
      */
@@ -76,12 +77,22 @@ class SheetInvoicedEvent extends EventDispatcher\Event
     {
         return $this->date;
     }
-    
+
+    /**
+     * @return SheetInvoicedView[]
+     */
+    public function getSheetInvoicedViews()
+    {
+        return $this->sheetInvoicedViews;
+    }
+
     /**
      * @return Sheet[]
      */
     public function getSheets()
     {
-        return $this->sheets;
+        return array_map(function (SheetInvoicedView $invoicedView) {
+            return $invoicedView->sheet;
+        }, $this->sheetInvoicedViews);
     }
 }

@@ -730,10 +730,7 @@ services:
     command.sheet.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.invoice.create_handler'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
     command.sheet.batch_enable_disable_handler:
@@ -1569,6 +1566,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }
 
+    command.invoice.batch_generate_invoice_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.invoice.create_handler'
+            - '@event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invo\BatchGenerateInvoice }
+
     #
     # Security
     #
@@ -1936,6 +1943,11 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+    template.tagged_data_factory:
+        class: Proximum\Vimeet\Domain\Template\TaggedDataFactory
+        arguments:
+            - '@template.template_data_factory'
+            - '@domain.rule.applyer'
     template.template_remove_field:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
@@ -2376,6 +2388,18 @@ services:
             - '@repository.messaging.campaign_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
+
+    query.sheet.export_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.sheet_search_adapter'
+
+    query.participant.export_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.sheet_search_adapter'
 
     #
     # Program query
@@ -2988,6 +3012,14 @@ services:
         tags:
             - { name: console.command }
 
+    command.generate_invoice_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@command.invoice.batch_generate_invoice_handler'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
@@ -3118,7 +3150,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.transaction'
-            - '@repository.invoice.invoice_repository'
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:
@@ -3324,7 +3355,7 @@ services:
         abstract: true
 
     serializer.normalizer.event_sheets:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\SheetIdsViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
@@ -3335,8 +3366,8 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    serializer.normalizer.event_participants:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantsNormalizer
+    serializer.normalizer.participants_sheet_ids_view:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\ParticipantsSheetIdsViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
@@ -3831,3 +3862,8 @@ services:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\RowViewDenormalizer
         tags:
             - { name: serializer.normalizer }
+
+    components.invoice.invoice_url_view_query_handler:
+        class: Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler
+        arguments:
+            - '@adapter.event_url_generator'

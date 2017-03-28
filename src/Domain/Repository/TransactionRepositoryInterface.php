@@ -61,6 +61,14 @@ interface TransactionRepositoryInterface
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
+     *
+     * @return Transaction[]
+     */
+    public function findByEventAndSheetIds(Event $event, array $sheetIds);
+
+    /**
+     * @param Event $event
      *
      * @return Transaction[]
      */

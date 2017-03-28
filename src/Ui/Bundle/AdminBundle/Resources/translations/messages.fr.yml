@@ -565,6 +565,7 @@ admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
+admin.sheet.export.help: 'L''export est fait selon les filtres sélectionnés'
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -583,6 +584,7 @@ admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
+admin.sheet.export.button.label: Exporter
 admin.sheet.export.participant.button.label: 'Exporter participants'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
 admin.sheet.export.yes: Oui
