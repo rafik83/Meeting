@@ -10,8 +10,7 @@
             <thead>
             <tr>
                 <th>{{ 'admin.tips.column.title'|trans }}</th>
-                <th>{{ 'admin.tips.column.lang'|trans }}</th>
-                <th>{{ 'admin.tips.column.content'|trans }}</th>
+                <th>{{ 'admin.tips.column.translation'|trans }}</th>
                 <th>{{ 'admin.tips.column.visible.meeting_management'|trans }}</th>
                 <th>{{ 'admin.tips.column.visible.catalog'|trans }}</th>
                 <th>{{ 'admin.tips.column.visible.print_planning'|trans }}</th>
@@ -22,14 +21,30 @@
                 {% for tip in tips.results %}
                     <tr>
                         <td>{{ tip.title }}</td>
-                        <td>{{ tip.id }}</td>
-                        <td>{{ tip.id|slice(0, 42) ~ '...' }}</td>
+                        <td>
+                            <table class="table">
+                                <tr>
+                                    <th>{{ 'admin.tips.column.lang'|trans }}</th>
+                                    <th>{{ 'admin.tips.column.content'|trans }}</th>
+                                </tr>
+                                {% for translation in tip.translations %}
+                                <tr>
+                                    <td>{{ translation.lang }}</td>
+                                    {% if translation.content|length > 100 %}
+                                        <td>{{ translation.content|slice(0, 100) ~ '...' }}</td>
+                                    {% else %}
+                                        <td>{{ translation.content }}</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
                         <td>{{ tip.isOnMeetingManagement ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans }}</td>
                         <td>{{ tip.isOnCatalog ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans }}</td>
                         <td>{{ tip.isOnPrintPlanning ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans  }}</td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <a class="btn btn-default btn-sm" href="#">
+                                <a class="btn btn-default btn-sm" href="{{ path('admin_tips_update', {'tip': tip.id}) }}">
                                     {{ 'admin.tips.update.link'|trans }}
                                 </a>
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

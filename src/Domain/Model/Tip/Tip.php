@@ -54,6 +54,33 @@ class Tip
     }
     
     /**
+     * Update Tip
+     *
+     * @param string          $title
+     * @param bool            $onMeetingManagement
+     * @param bool            $onCatalog
+     * @param bool            $onPrintPlanning
+     * @param ArrayCollection $translations
+     *
+     * @return Tip
+     */
+    public function update(
+        $title,
+        $onMeetingManagement,
+        $onCatalog,
+        $onPrintPlanning,
+        ArrayCollection $translations
+    ) {
+        $this->title               = $title;
+        $this->onMeetingManagement = $onMeetingManagement;
+        $this->onCatalog           = $onCatalog;
+        $this->onPrintPlanning     = $onPrintPlanning;
+        $this->translations        = $translations;
+        
+        return $this;
+    }
+    
+    /**
      * @param $locale
      * @param $title
      * @param $content

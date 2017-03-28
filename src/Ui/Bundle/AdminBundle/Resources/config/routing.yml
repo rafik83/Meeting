@@ -1307,3 +1307,10 @@ admin_tips_create:
     path: /tips/create
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Tips:create }
+
+admin_tips_update:
+    path: /tips/{tip}/update
+    requirements:
+        tip: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Tips:update }

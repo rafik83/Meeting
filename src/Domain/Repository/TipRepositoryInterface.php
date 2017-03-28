@@ -28,6 +28,11 @@ interface TipRepositoryInterface
     public function add(Tip $tip);
     
     /**
+     * @param Tip $tip
+     */
+    public function set(Tip $tip);
+    
+    /**
      * @param $id
      *
      * @return null|Tip
