@@ -75,7 +75,9 @@ class ExportHandler
             $this->lockMeetingRequestHandler->handle($command);
         }
 
-        $planner = $this->plannerHandler->handle(new PlannerViewQuery($export->event, $export->locale));
+        $planner = $this->plannerHandler->handle(
+            new PlannerViewQuery($export->event, $export->locale, $export->solutionType)
+        );
         $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => self::XML_ROOT_NODE]);
 
         return $content;

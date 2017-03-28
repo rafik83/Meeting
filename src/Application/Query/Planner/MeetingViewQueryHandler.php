@@ -196,6 +196,9 @@ class MeetingViewQueryHandler
         $this->calculateAssignation();
     }
 
+    /**
+     * @param MeetingViewQuery $query
+     */
     private function indexById(MeetingViewQuery $query)
     {
         $this->indexSheetsById($query);
