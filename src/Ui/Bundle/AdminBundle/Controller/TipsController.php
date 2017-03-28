@@ -92,7 +92,7 @@ class TipsController extends Controller
                 );
             } catch (TipException $exception) {
                 $this->addFlash(
-                    'success',
+                    'error',
                     $this->get('translator')->trans('flash.admin.tip.update.failure', [], 'flashes')
                 );
             }

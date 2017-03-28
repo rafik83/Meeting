@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 interface TipRepositoryInterface

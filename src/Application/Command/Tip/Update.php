@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
+use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 
 class Update
 {
@@ -30,7 +30,7 @@ class Update
     /** @var bool */
     public $onPrintPlanning;
     
-    /** @var TipTranslation[] */
+    /** @var PersistentCollection */
     public $translations;
     
     /**
@@ -40,6 +40,7 @@ class Update
      */
     public function __construct(Tip $tip)
     {
+        $this->tip                 = $tip;
         $this->title               = $tip->getTitle();
         $this->onMeetingManagement = $tip->isOnMeetingManagement();
         $this->onPrintPlanning     = $tip->isOnPrintPlanning();

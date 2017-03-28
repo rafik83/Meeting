@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -58,11 +60,13 @@ class TipRepository implements TipRepositoryInterface
     /** {@inheritdoc} */
     public function set(Tip $tip)
     {
+        $this->entityManager->persist($tip);
         $this->entityManager->flush($tip);
         
         foreach ($tip->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
+    
     }
     
     /** {@inheritdoc} */

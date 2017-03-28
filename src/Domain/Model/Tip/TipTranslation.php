@@ -13,19 +13,19 @@ namespace Proximum\Vimeet\Domain\Model\Tip;
 class TipTranslation
 {
     /** @var int */
-    private $id;
+    public $id;
     
     /** @var Tip */
-    private $tip;
+    public $tip;
     
     /** @var string  */
-    private $title;
+    public $title;
     
     /** @var string */
-    private $lang;
+    public $lang;
     
     /** @var string */
-    private $content;
+    public $content;
 
     /**
      * TipTranslation constructor.
@@ -35,11 +35,21 @@ class TipTranslation
      * @param string $lang
      * @param string $content
      */
-    public function __construct(Tip $tip, $title, $lang, $content)
+    public function __construct(Tip $tip = null, $title = null, $lang = null, $content = null)
     {
         $this->tip     = $tip;
         $this->title   = $title;
         $this->lang    = $lang;
+        $this->content = $content;
+    }
+    
+    /**
+     * @param string $title
+     * @param string $content
+     */
+    public function update($title, $content)
+    {
+        $this->title   = $title;
         $this->content = $content;
     }
     

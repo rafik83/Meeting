@@ -37,9 +37,9 @@ class CreateHandler
         
         foreach ($command->translations as $key => $translation) {
             $tip->addTranslation(
-                $translation['lang'],
-                $translation['title'],
-                $translation['content']
+                $translation->lang,
+                $translation->title,
+                $translation->content
             );
         }
         

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
+use Proximum\Vimeet\Application\Exception\Tip\TipException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class UpdateHandler
@@ -24,9 +25,25 @@ class UpdateHandler
     
     /**
      * @param Update $command
+     *
+     * @throws TipException
      */
     public function handle(Update $command)
     {
+        if (!$command->tip) {
+            throw new TipException();
+        }
+        
+        foreach($command->translations as $translation) {
+            $command->tip->addTranslation($translation->lang, $translation->title, $translation->content);
+        }
+    
+        foreach($command->tip->getTranslations() as $translation) {
+            if(!in_array($translation->id, $command->translations->getKeys())) {
+                $command->tip->removeTranslation($translation);
+            }
+        }
+        
         $this->tipRepository->set(
             $command->tip->update(
                 $command->title,
