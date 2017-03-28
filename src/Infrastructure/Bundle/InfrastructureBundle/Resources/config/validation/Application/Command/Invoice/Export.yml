@@ -4,3 +4,5 @@ Proximum\Vimeet\Application\Command\Invoice\Export:
             - NotBlank: ~
         endDate:
             - NotBlank: ~
+            - Expression:
+                expression: "this.beginDate < this.endDate"

@@ -39,8 +39,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('invoice')
+            ->select('invoice', 'sheet')
             ->from(Invoice::class, 'invoice')
+            ->join('invoice.sheet', 'sheet')
             ->where('invoice.event IN (:events)')
             ->andWhere('invoice.createdAt BETWEEN :beginDate and :endDate')
             ->setParameter('beginDate', $beginDate)
