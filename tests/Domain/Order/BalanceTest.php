@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Order;
 
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -37,6 +38,9 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
     /** @var OrderVatViewsBySheetQueryHandler */
     private $orderVatViewsBySheetQueryHandler;
 
+    /** @var OrderVatViewsBySheetIdsQueryHandler */
+    private $orderVatViewsBySheetIdsQueryHandler;
+
     /** @var TransactionRepositoryInterface */
     private $transactionRepository;
 
@@ -50,11 +54,13 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
 
         $this->orderVatViewsByEventQueryHandler = $this->prophesize(OrderVatViewsByEventQueryHandler::class);
         $this->orderVatViewsBySheetQueryHandler = $this->prophesize(OrderVatViewsBySheetQueryHandler::class);
+        $this->orderVatViewsBySheetIdsQueryHandler = $this->prophesize(OrderVatViewsBySheetIdsQueryHandler::class);
         $this->transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
 
         $this->balance = new Balance(
             $this->orderVatViewsByEventQueryHandler->reveal(),
             $this->orderVatViewsBySheetQueryHandler->reveal(),
+            $this->orderVatViewsBySheetIdsQueryHandler->reveal(),
             $this->transactionRepository->reveal()
         );
     }

@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -29,6 +31,9 @@ class Balance
     /** @var OrderVatViewsBySheetQueryHandler */
     private $orderVatViewsBySheetQueryHandler;
 
+    /** @var OrderVatViewsBySheetIdsQueryHandler */
+    private $orderVatViewsBySheetIdsQueryHandler;
+
     /** @var TransactionRepositoryInterface */
     private $transactionRepository;
 
@@ -39,18 +44,21 @@ class Balance
     private $transactions = [];
 
     /**
-     * @param OrderVatViewsByEventQueryHandler $orderVatViewsByEventQueryHandler
-     * @param OrderVatViewsBySheetQueryHandler $orderVatViewsBySheetQueryHandler
-     * @param TransactionRepositoryInterface   $transactionRepository
+     * @param OrderVatViewsByEventQueryHandler    $orderVatViewsByEventQueryHandler
+     * @param OrderVatViewsBySheetQueryHandler    $orderVatViewsBySheetQueryHandler
+     * @param OrderVatViewsBySheetIdsQueryHandler $orderVatViewsBySheetIdsQueryHandler
+     * @param TransactionRepositoryInterface      $transactionRepository
      */
     public function __construct(
         OrderVatViewsByEventQueryHandler $orderVatViewsByEventQueryHandler,
         OrderVatViewsBySheetQueryHandler $orderVatViewsBySheetQueryHandler,
+        OrderVatViewsBySheetIdsQueryHandler $orderVatViewsBySheetIdsQueryHandler,
         TransactionRepositoryInterface $transactionRepository
     ) {
-        $this->orderVatViewsByEventQueryHandler = $orderVatViewsByEventQueryHandler;
-        $this->orderVatViewsBySheetQueryHandler = $orderVatViewsBySheetQueryHandler;
-        $this->transactionRepository            = $transactionRepository;
+        $this->orderVatViewsByEventQueryHandler    = $orderVatViewsByEventQueryHandler;
+        $this->orderVatViewsBySheetQueryHandler    = $orderVatViewsBySheetQueryHandler;
+        $this->orderVatViewsBySheetIdsQueryHandler = $orderVatViewsBySheetIdsQueryHandler;
+        $this->transactionRepository               = $transactionRepository;
     }
 
     /**
@@ -96,10 +104,12 @@ class Balance
      */
     public function loadAllOrdersForSheetIds(Event $event, array $sheetIds)
     {
-        $orders = $this->orderRepository->findByEventAndSheetIds($event, $sheetIds);
+        $orderVatViews = $this->orderVatViewsBySheetIdsQueryHandler->handle(
+            new OrderVatViewsBySheetIdsQuery($event, $sheetIds)
+        );
 
-        foreach ($orders as $order) {
-            $this->orders[$order->getSheet()->getId()][] = $order;
+        foreach ($orderVatViews as $orderVatView) {
+            $this->orderVatViews[$orderVatView->sheetId][] = $orderVatView;
         }
     }
 
