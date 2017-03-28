@@ -1,19 +1,19 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2017 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EditableTextInputDataType extends AbstractEditableTextInputDataType
+class EditableTextTranslatableDataType extends AbstractEditableTextInputDataType
 {
     /**
      * {@inheritdoc}
@@ -21,11 +21,10 @@ class EditableTextInputDataType extends AbstractEditableTextInputDataType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', TemplateObject\EditableText::class);
+        $resolver->setAllowedTypes('object', EditableText::class);
         $resolver->setDefaults([
-            'data_class' => TemplateObject\EditableText::class,
-            'rows'       => 7,
-            'showLabel'  => true,
+            'rows'      => 7,
+            'showLabel' => false,
         ]);
     }
 
@@ -34,6 +33,6 @@ class EditableTextInputDataType extends AbstractEditableTextInputDataType
      */
     public function getBlockPrefix()
     {
-        return 'text_data';
+        return 'text_data_translatable';
     }
 }

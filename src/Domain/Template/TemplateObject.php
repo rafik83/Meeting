@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class TemplateObject extends AbstractChild
 {
@@ -35,6 +36,11 @@ class TemplateObject extends AbstractChild
      * @var string
      */
     protected $key;
+
+    /**
+     * @var TaggedDataView[]
+     */
+    protected $taggedDataViews = [];
 
     /**
      * @param string $key
@@ -287,6 +293,22 @@ class TemplateObject extends AbstractChild
     public function setSheet($sheet)
     {
         $this->sheet = $sheet;
+    }
+
+    /**
+     * @param TaggedDataView $taggedDataView
+     */
+    public function addTaggedDataView(TaggedDataView $taggedDataView)
+    {
+        $this->taggedDataViews[] = $taggedDataView;
+    }
+
+    /**
+     * @return TaggedDataView[]
+     */
+    public function getTaggedDataViews()
+    {
+        return $this->taggedDataViews;
     }
 
     /**

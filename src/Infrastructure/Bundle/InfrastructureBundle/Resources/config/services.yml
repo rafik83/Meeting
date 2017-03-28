@@ -1935,6 +1935,11 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+    template.tagged_data_factory:
+        class: Proximum\Vimeet\Domain\Template\TaggedDataFactory
+        arguments:
+            - '@template.template_data_factory'
+            - '@domain.rule.applyer'
     template.template_remove_field:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
