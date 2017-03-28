@@ -140,6 +140,11 @@ class EventController extends Controller
                 } catch (EventsListEmptyException $exception) {
                     $this->addFlash('error', 'flash.admin.event.empty_list');
                 }
+            } else {
+                $errors = $transactionForm->getErrors();
+                foreach($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
             }
         }
         
