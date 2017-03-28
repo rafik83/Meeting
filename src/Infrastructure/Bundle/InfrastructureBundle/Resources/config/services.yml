@@ -2376,6 +2376,18 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
 
+    query.sheet.export_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.sheet_search_adapter'
+
+    query.participant.export_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.sheet_search_adapter'
+
     #
     # Program query
     #
@@ -3110,7 +3122,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.transaction'
-            - '@repository.invoice.invoice_repository'
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:
@@ -3316,7 +3327,7 @@ services:
         abstract: true
 
     serializer.normalizer.event_sheets:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\SheetIdsViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
@@ -3327,8 +3338,8 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    serializer.normalizer.event_participants:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantsNormalizer
+    serializer.normalizer.participants_sheet_ids_view:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\ParticipantsSheetIdsViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
