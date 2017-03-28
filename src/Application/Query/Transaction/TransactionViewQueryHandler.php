@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Transaction;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
@@ -20,7 +20,7 @@ class TransactionViewQueryHandler
     const PAYPAL_TRANSACTION_ID_KEY = 'PAYMENTINFO_0_TRANSACTIONID';
     
     /**
-     * @var SheetInfoGuesser
+     * @var SheetInfoGuesserCache
      */
     private $sheetInfoGuesser;
     
@@ -37,11 +37,11 @@ class TransactionViewQueryHandler
     /**
      * TransactionViewQueryHandler constructor.
      *
-     * @param SheetInfoGuesser                  $sheetInfoGuesser
-     * @param BillingInfoRepositoryInterface    $billingInfoRepository
+     * @param SheetInfoGuesserCache          $sheetInfoGuesser
+     * @param BillingInfoRepositoryInterface $billingInfoRepository
      */
     public function __construct(
-        SheetInfoGuesser $sheetInfoGuesser,
+        SheetInfoGuesserCache $sheetInfoGuesser,
         BillingInfoRepositoryInterface $billingInfoRepository
     ) {
         $this->sheetInfoGuesser      = $sheetInfoGuesser;
@@ -77,7 +77,7 @@ class TransactionViewQueryHandler
             }
         }
 
-        $sheetTitle = $this->sheetInfoGuesser->guessSheetTitle($query->sheet);
+        $sheetTitle = $this->sheetInfoGuesser->guessSheetTitle($query->sheet, $query->locale);
         
         if (!isset($this->billingInfo[$query->sheet->getId()])) {
             $this->billingInfo[$query->sheet->getId()] = $this->billingInfoRepository->getBySheet($query->sheet);

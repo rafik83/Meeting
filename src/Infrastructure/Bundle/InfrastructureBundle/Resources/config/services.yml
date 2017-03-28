@@ -2834,7 +2834,7 @@ services:
     query.transaction.view_query_handler:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
         arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@command.planning.sheet_info_guesser_cache'
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Transaction;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
@@ -49,7 +49,7 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'FR42'
         );
         
-        $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesser::class);
+        $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesserCache::class);
         $billingInfosRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
         $paymentRepository      = $this->prophesize(PaymentRepositoryInterface::class);
         $transactionViewQuery   = new TransactionViewQuery(
@@ -59,7 +59,7 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $payment
         );
         
-        $sheetInfoGuesser->guessSheetTitle($sheet)->shouldBeCalled();
+        $sheetInfoGuesser->guessSheetTitle($sheet, $sheet->getEvent()->getFallback())->shouldBeCalled();
         $billingInfosRepository->getBySheet($sheet)->shouldBeCalled();
         
         $queryHandler = new TransactionViewQueryHandler(

@@ -14,28 +14,22 @@ use Proximum\Vimeet\Domain\Model\Admin;
 
 class Filter
 {
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     public $beginDate;
     
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     public $endDate;
     
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
     
     /**
      * Find constructor.
      *
-     * @param Admin $admin
+     * @param Admin  $admin
      */
     public function __construct(Admin $admin)
     {
-        $this->admin = $admin;
+        $this->admin  = $admin;
     }
 }

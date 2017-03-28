@@ -17,25 +17,20 @@ use Proximum\Vimeet\Domain\Model\Transaction;
 
 class TransactionViewQuery
 {
-    /**
-     * @var Transaction
-     */
+    /** @var Transaction */
     public $transaction;
     
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
     
-    /**
-     * @var Payment
-     */
+    /** @var Payment */
     public $payment;
     
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
+    
+    /** @var string */
+    public $locale;
     
     /**
      * TransactionViewQuery constructor.
@@ -51,5 +46,6 @@ class TransactionViewQuery
         $this->sheet       = $sheet;
         $this->payment     = $payment;
         $this->event       = $event;
+        $this->locale      = $sheet->getEvent()->getFallback();
     }
 }
