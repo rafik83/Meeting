@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -132,10 +133,11 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order, sheet, row')
+            ->select('_order, sheet, row, promotionCode')
             ->from(Order::class, '_order', '_order.id')
             ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
             ->join('_order.rows', 'row')
+            ->leftJoin('_order.promotionCodes', 'promotionCode')
             ->setParameter('event', $event)
         ;
 
