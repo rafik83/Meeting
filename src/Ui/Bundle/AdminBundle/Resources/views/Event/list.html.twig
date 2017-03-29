@@ -23,7 +23,7 @@
                         </a>
                     </li>
                 {% endif %}
-                {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                {% if invoiceExportForm is defined %}
                     <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
                         <a href="#invoice" aria-controls="profile" role="tab" data-toggle="tab">
                             {{ 'admin.event.page.invoice.title'|trans }}
@@ -91,7 +91,7 @@
                     </div>
                 {% endif %}
                 <div role="tabpanel" class="tab-pane" id="invoice">
-                    {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                    {% if invoiceExportForm is defined %}
                         {{ form_start(invoiceExportForm) }}
                             {{ form_errors(invoiceExportForm) }}
                             {{ form_row(invoiceExportForm.beginDate) }}
