@@ -32,6 +32,13 @@
   }
 
   .table-agenda-day {
+    tr.table-agenda-day-slot {
+      > td {
+        height: 90px;
+        max-height: 90px;
+        overflow-y: hidden;
+      }
+    }
     td {
       padding: 0 !important;
       border: 1px solid #ddd;
@@ -92,13 +99,15 @@
   }
 
   .spot-slot-meeting-table {
-    .sheet-title {
-      text-overflow: ellipsis;
-      /* Required for text-overflow to do anything */
-      white-space: nowrap;
-      overflow: hidden;
-      width: 100px;
-    }
+    padding: 0;
+    margin: 0;
+    //.sheet-title {
+    //  text-overflow: ellipsis;
+    //  /* Required for text-overflow to do anything */
+    //  white-space: nowrap;
+    //  overflow: hidden;
+    //  width: 100px;
+    //}
   }
 
   .sheets-list {

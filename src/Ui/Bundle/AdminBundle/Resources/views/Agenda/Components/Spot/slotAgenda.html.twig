@@ -21,9 +21,8 @@
                     <tr>
                         <td v-for="meeting in agendaSlot.meetings">
                             <div class="text-center">
-                                <span class="sheet-title">${ meeting.fromSheetTitle }</span>
-                                <i class="glyphicon glyphicon-arrow-down"></i>
-                                <span class="sheet-title">${ meeting.toSheetTitle }</span>
+                                <div>${ meeting.fromSheetTitle }</div>
+                                <div>${ meeting.toSheetTitle }</div>
                             </div>
                         </td>
                     </tr>
