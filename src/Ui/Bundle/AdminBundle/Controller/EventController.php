@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\Order\Find;
 use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
@@ -34,6 +35,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -61,19 +63,30 @@ class EventController extends Controller
         $orderForm = null;
         $formIsSubmitted = false;
         $transactionForm = null;
+        $invoiceExportForm = null;
 
         if (Finder::IsAllowedToFind($admin)) {
+            $find = new Find($admin);
+            $orderForm = $this->createForm(FindType::class, $find);
+
             $filterTransaction = new FilterTransaction($admin);
             $transactionForm = $this->createForm(
                 FilterTransactionType::class,
                 $filterTransaction,
-                ['action' => $this->generateUrl('admin_event_transaction_export')]
+                [
+                    'action' => $this->generateUrl('admin_event_transaction_export'),
+                    'submit' => true,
+                ]
             );
-            
-            $find      = new Find($admin);
-            $orderForm = $this->createForm(FindType::class, $find);
 
-            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
+            $invoiceExport    = new Export($admin);
+            $invoiceExportForm = $this->createForm(ExportType::class, $invoiceExport, [
+                'action' => $this->generateUrl('admin_invoice_export'),
+                'submit' => true,
+            ]);
+
+            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted()
+                               || $invoiceExportForm->handleRequest($request)->isSubmitted();
 
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
@@ -109,10 +122,11 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'          => $events,
-            'orderForm'       => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive'  => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
-            'transactionForm' => $transactionForm !== null ? $transactionForm->createView() : null,
+            'events'            => $events,
+            'orderForm'         => $orderForm !== null ? $orderForm->createView() : null,
+            'orderTabActive'    => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'transactionForm'   => $transactionForm !== null ? $transactionForm->createView() : null,
+            'invoiceExportForm' => $invoiceExportForm !== null ? $invoiceExportForm->createView() : null,
         ]);
     }
     
@@ -126,7 +140,7 @@ class EventController extends Controller
     {
         if (Finder::IsAllowedToFind($admin)) {
             $filterTransaction = new FilterTransaction($admin);
-            $transactionForm = $this->createForm(FilterTransactionType::class, $filterTransaction);
+            $transactionForm = $this->createForm(FilterTransactionType::class, $filterTransaction, ['submit' => true]);
     
             if ($transactionForm->handleRequest($request)->isSubmitted() && $transactionForm->isValid()) {
                 try {

@@ -1255,13 +1255,16 @@ admin_import_planner_data:
 #
 admin_invoice_globals_list:
     path: /invoice/prefix
-    defaults: { _controller: AdminBundle:Invoice:list }
+    defaults: { _controller: AdminBundle:Invoice/Prefix:list }
     methods: [GET]
-
 admin_invoice_globals_create:
     path: /invoice/prefix/create
-    defaults: { _controller: AdminBundle:Invoice:create }
+    defaults: { _controller: AdminBundle:Invoice/Prefix:create }
     methods: [GET, POST]
+admin_invoice_export:
+    path: /event/invoice/export
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Invoice/Export:export }
 
 
 #
