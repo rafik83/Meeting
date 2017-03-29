@@ -25,7 +25,7 @@ class SpotView
     /**
      * @var bool
      */
-    public $visio;
+    public $isVisio;
 
     /**
      * SpotView constructor.
@@ -38,6 +38,6 @@ class SpotView
     {
         $this->id        = $id;
         $this->reference = $reference;
-        $this->visio     = $visio;
+        $this->isVisio   = $visio;
     }
 }

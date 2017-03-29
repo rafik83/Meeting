@@ -12,7 +12,7 @@
                     <tr v-for="spot in spots">
                         <td class="spot-td" v-on:click="detailAction(spot)">
                             <strong>${ spot.reference }</strong>
-                            <i class="glyphicon glyphicon-facetime-video" v-if="spot.visio"></i>
+                            <i class="glyphicon glyphicon-facetime-video" v-if="spot.isVisio"></i>
                         </td>
                     </tr>
                     </tbody>

@@ -133,7 +133,7 @@ interface MeetingRepositoryInterface
      *
      * @return Meeting[]
      */
-    public function findBySpotWithSheet(Spot $spot);
+    public function findBySpotWithSheets(Spot $spot);
 
     /**
      * @param Sheet $sheet

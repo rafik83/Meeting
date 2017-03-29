@@ -114,9 +114,9 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         /** @var ListView $spots */
-        $listView = $this->get('tactician.commandbus.query')->handle(new ListViewQuery(
-            $event
-        ));
+        $listView = $this->get('tactician.commandbus.query')->handle(
+            new ListViewQuery($event)
+        );
 
         return new JsonResponse($listView->spotViews);
     }
@@ -132,7 +132,6 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        /** @var AgendaSpotView $agendaSpotView */
         $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
             new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))
         );

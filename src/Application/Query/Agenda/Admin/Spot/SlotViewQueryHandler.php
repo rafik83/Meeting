@@ -104,11 +104,11 @@ class SlotViewQueryHandler
     /**
      * @param Spot $spot
      *
-     * @return array
+     * @return array of Meeting[] indexed by Slot id
      */
     private function getMeetingsBySlotId(Spot $spot)
     {
-        $meetings = $this->meetingRepository->findBySpotWithSheet($spot);
+        $meetings = $this->meetingRepository->findBySpotWithSheets($spot);
 
         $meetingsIndexBySlotIds = [];
 
@@ -121,8 +121,8 @@ class SlotViewQueryHandler
     }
 
     /**
-     * @param MeetingSlot $slot
-     * @param array       $spotUnavailabilities
+     * @param MeetingSlot          $slot
+     * @param SpotUnavailability[] $spotUnavailabilities
      *
      * @return bool
      */
@@ -139,8 +139,8 @@ class SlotViewQueryHandler
     }
 
     /**
-     * @param array  $meetings
-     * @param string $locale
+     * @param Meeting[] $meetings
+     * @param string    $locale
      *
      * @return SpotMeetingSlotView[]
      */
