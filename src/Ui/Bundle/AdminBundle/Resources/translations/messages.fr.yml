@@ -139,8 +139,7 @@ admin.event.template.registration: Inscription
 admin.event.template.sheet: Présentation
 admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
-admin.event.transaction.export.title: 'Transactions'
-admin.event.page.transactionsExport.title: 'Export transactions'
+admin.event.page.transactions.title: 'Transactions'
 admin.event.update.link: Modifier
 admin.event.update.title: 'Modifier l''évènement'
 admin.event.vatMode.ati: TTC
