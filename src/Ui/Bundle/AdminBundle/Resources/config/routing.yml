@@ -838,7 +838,7 @@ admin_template_sheet_add_locale:
         template: \d+
 admin_template_sheet_preview_update:
     path: /template/sheet/{template}/preview
-    defaults: { _controller: AdminBundle:SheetTemplate:updatePreview }
+    defaults: { _controller: AdminBundle:Template\Sheet\Preview:updatePreview }
     methods: [GET, POST]
     requirements:
         template: \d+
