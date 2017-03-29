@@ -619,6 +619,14 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Create }
+    command.transaction.filter_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\FilterHandler
+        arguments:
+            - '@repository.transaction'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@query.transaction.view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Filter }
     command.transaction.update_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
         arguments:
@@ -2857,7 +2865,22 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
-
+    query.transaction.view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@repository.billing_info_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }
+    query.transaction.list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_transactions_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery }
     query.messaging.message.list_handler:
         class: Proximum\Vimeet\Application\Query\Messaging\Message\ListQueryHandler
         arguments:
@@ -3596,6 +3619,16 @@ services:
     #
     serializer_denormalizer_planner.planner_denormalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Denormalizer\Planner\PlannerDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
+    # Transaction Normalizer
+    #
+    serializer_normalizer_transaction.transaction_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Transaction\TransactionNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: serializer.normalizer }
 

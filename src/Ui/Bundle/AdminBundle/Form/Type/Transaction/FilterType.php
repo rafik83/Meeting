@@ -3,62 +3,63 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction;
 
-use Proximum\Vimeet\Application\Command\Invoice\Export;
+use Proximum\Vimeet\Application\Command\Transaction\Filter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ExportType extends AbstractType
+class FilterType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $firstDay = (new \DateTime())->modify('first day of last month 00:00:00.000');
-
-        $lastDay = (new \DateTime())->modify('last day of last month 23:59:59.999');
-
+        $firstDay = new \DateTime();
+        $firstDay->modify('first day of last month 00:00:00');
+        
+        $lastDay = new \DateTime();
+        $lastDay->modify('last day of last month 23:59:59');
+        
         $builder
-            ->setAction($options['action'])
             ->add('beginDate', DateType::class, [
                 'widget'      => 'single_text',
                 'format'      => 'dd/MM/yyyy',
                 'data'        => $firstDay,
-                'placeholder' => 'form.invoice_export.children.date.placeholder',
+                'placeholder' => 'form.transaction_find.children.date.placeholder',
             ])
             ->add('endDate', DateType::class, [
                 'widget'      => 'single_text',
                 'format'      => 'dd/MM/yyyy',
                 'data'        => $lastDay,
-                'placeholder' => 'form.invoice_export.children.date.placeholder',
+                'placeholder' => 'form.transaction_find.children.date.placeholder',
             ])
         ;
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'      => Export::class,
+            'data_class' => Filter::class,
         ]);
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public function getBlockPrefix()
     {
-        return 'invoice_export';
+        return 'transaction_find';
     }
 }

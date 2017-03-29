@@ -140,6 +140,7 @@ admin.event.template.registration: Inscription
 admin.event.template.sheet: Présentation
 admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
+admin.event.page.transactions.title: 'Transactions'
 admin.event.update.link: Modifier
 admin.event.update.title: 'Modifier l''évènement'
 admin.event.vatMode.ati: TTC
@@ -946,3 +947,16 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
+admin.export.transaction.column.sheet.id: "Id Fiche"
+admin.export.transaction.column.event.id: "Id évènement"
+admin.export.transaction.column.event.name: "Nom évènement"
+admin.export.transaction.column.sheet.owner.id: "Id propriétaire fiche"
+admin.export.transaction.column.society.name: "Nom société"
+admin.export.transaction.column.transaction_date: "Date"
+admin.export.transaction.column.transaction_type: "Type"
+admin.export.transaction.column.transaction_reference: "Référence"
+admin.export.transaction.column.payment.gateway: "N° transaction gateway"
+admin.export.transaction.column.transaction_amount: "Montant de la transaction"
+admin.export.transaction.column.billing_contact.country: "Pays contact facturation"
+admin.export.transaction.column.billing_contact.vat_number: "Numéro de TVA intracommunautaire"
+

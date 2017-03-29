@@ -32,7 +32,7 @@ class ExportController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $export        = new Export($admin);
-        $form          = $this->createForm(ExportType::class, $export)->handleRequest($request);
+        $form          = $this->createForm(ExportType::class, $export, ['submit' => true])->handleRequest($request);
         $exportContent = '';
 
         if ($form->isSubmitted()) {
@@ -41,6 +41,7 @@ class ExportController extends Controller
 
                 return $this->redirectToRoute('admin_event_list');
             }
+
             $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
 
             $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
