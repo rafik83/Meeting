@@ -62,9 +62,15 @@ class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
 
-        $translations[] = [
-            'label'  => 'labelTest',
-            'description' => 'descriptionTest'
+        $translations = [
+            'fr' => [
+                'label'  => 'labelTest',
+                'description' => 'descriptionTest'
+            ],
+            'en' => [
+                'label'  => 'labelTestEn',
+                'description' => 'descriptionTestEn'
+            ]
         ];
 
         $create = new Create($event);
