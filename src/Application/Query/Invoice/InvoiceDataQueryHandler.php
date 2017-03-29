@@ -22,13 +22,13 @@ class InvoiceDataQueryHandler
 {
     /** @var  BillingInfosQueryHandler */
     public $billingInfosQueryHandler;
-    
+
     /** @var  SummaryQueryHandler */
     public $summaryQueryHandler;
-    
+
     /** @var  Balance */
     public $balance;
-    
+
     /**
      * InvoiceDataQueryHandler constructor.
      *
@@ -59,7 +59,7 @@ class InvoiceDataQueryHandler
                     $invoiceDataQuery->sheet,
                     $invoiceDataQuery->order,
                     $invoiceDataQuery->locale
-               )
+                )
             ),
             $this->billingInfosQueryHandler->handle(
                 new BillingInfosQuery($invoiceDataQuery->sheet)

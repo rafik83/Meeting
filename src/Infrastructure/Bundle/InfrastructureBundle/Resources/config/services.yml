@@ -1558,6 +1558,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }
 
+    command.invoice_export_query_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\ExportHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.invoice.invoice_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Export }
+
     command.invoice.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler
         arguments:
@@ -3377,6 +3386,18 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.invoices:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\InvoiceNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@order.balance'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'
@@ -3793,6 +3814,14 @@ services:
 
     serializer.denormalizer.invoice_view:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.invoice_export_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\ExportViewDenormalizer
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 

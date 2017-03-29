@@ -23,6 +23,13 @@
                         </a>
                     </li>
                 {% endif %}
+                {% if invoiceExportForm is defined %}
+                    <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
+                        <a href="#invoice" aria-controls="profile" role="tab" data-toggle="tab">
+                            {{ 'admin.event.page.invoice.title'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane {% if not orderTabActive %}active{% endif %}" id="eventList">
@@ -83,6 +90,16 @@
                         {{ form_end(orderForm) }}
                     </div>
                 {% endif %}
+                <div role="tabpanel" class="tab-pane" id="invoice">
+                    {% if invoiceExportForm is defined %}
+                        {{ form_start(invoiceExportForm) }}
+                            {{ form_errors(invoiceExportForm) }}
+                            {{ form_row(invoiceExportForm.beginDate) }}
+                            {{ form_row(invoiceExportForm.endDate) }}
+                            {{ form_row(invoiceExportForm.submit, {'attr': {'class': 'pull-right col-md-2'}}) }}
+                        {{ form_end(invoiceExportForm) }}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
