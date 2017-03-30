@@ -70,8 +70,9 @@ class FilterHandler
         // Set time to encompass the entire day
         $beginDate = $command->beginDate->setTime(0, 0);
         $endDate   = $command->endDate->setTime(23, 59, 59);
-        
-        $transactions = $this->transactionRepository->findPaidByDateRange(
+
+        $transactions = $this->transactionRepository->getFilteredByEvents(
+            $events,
             $beginDate,
             $endDate
         );
@@ -83,7 +84,8 @@ class FilterHandler
         $transactionViews = [];
 
         foreach ($transactions as $transaction ) {
-            $transactionViews[] = $this->transactionViewQueryHandler->handle(new TransactionViewQuery(
+            $transactionViews[] = $this->transactionViewQueryHandler->handle(
+                new TransactionViewQuery(
                     $transaction,
                     $transaction->getSheet(),
                     $transaction->getSheet()->getEvent(),
