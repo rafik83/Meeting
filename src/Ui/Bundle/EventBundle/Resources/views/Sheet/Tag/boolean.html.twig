@@ -1,5 +1,5 @@
 {% if not isCatalog %}
-    <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
+    <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}">
 {% endif %}
 
 {% if taggedDataView.content is same as(true) %}
