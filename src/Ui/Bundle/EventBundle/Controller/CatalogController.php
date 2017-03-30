@@ -129,8 +129,9 @@ class CatalogController extends Controller
                     [
                         'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
                             'paginatedResult' => $paginatedResult,
-                            'viewer' =>  $sheet,
-                            'page'   => $page
+                            'viewer'          =>  $sheet,
+                            'page'            => $page,
+                            'isCatalog'       => true,
                         ]),
                         'seeMoreButton' => $seeMoreButton,
                     ]
