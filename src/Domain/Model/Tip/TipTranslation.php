@@ -22,7 +22,7 @@ class TipTranslation
     public $title;
     
     /** @var string */
-    public $lang;
+    public $locale;
     
     /** @var string */
     public $content;
@@ -32,14 +32,14 @@ class TipTranslation
      *
      * @param Tip    $tip
      * @param string $title
-     * @param string $lang
+     * @param string $locale
      * @param string $content
      */
-    public function __construct(Tip $tip = null, $title = null, $lang = null, $content = null)
+    public function __construct(Tip $tip = null, $title = null, $locale = null, $content = null)
     {
         $this->tip     = $tip;
         $this->title   = $title;
-        $this->lang    = $lang;
+        $this->locale  = $locale;
         $this->content = $content;
     }
     
@@ -80,9 +80,9 @@ class TipTranslation
     /**
      * @return string
      */
-    public function getLang()
+    public function getLocale()
     {
-        return $this->lang;
+        return $this->locale;
     }
     
     /**

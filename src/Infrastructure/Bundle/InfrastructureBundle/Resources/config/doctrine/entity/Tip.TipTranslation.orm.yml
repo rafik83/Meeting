@@ -9,7 +9,7 @@ Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
     fields:
         title:
             type: string
-        lang:
+        locale:
             type: string
         content:
             type: text

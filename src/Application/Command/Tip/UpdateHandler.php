@@ -35,7 +35,7 @@ class UpdateHandler
         }
         
         foreach($command->translations as $translation) {
-            $command->tip->addTranslation($translation->lang, $translation->title, $translation->content);
+            $command->tip->addTranslation($translation->locale, $translation->title, $translation->content);
         }
     
         foreach($command->tip->getTranslations() as $translation) {

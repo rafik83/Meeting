@@ -27,7 +27,7 @@ class TipTranslationType extends AbstractType
 
         $builder
             ->add('title', TextType::class)
-            ->add('locales', LocaleType::class, [
+            ->add('locale', LocaleType::class, [
                 'multiple'          => true,
                 'preferred_choices' => $preferred,
             ])
