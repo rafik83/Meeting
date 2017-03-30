@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
@@ -40,13 +41,21 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $acceptHandler = $this->prophesize(AcceptHandler::class);
+        $batchJobQueue = $this->prophesize(BatchAcceptJobQueue::class);
 
         $sheetRepository->getSheetsUnacceptedById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
         $acceptHandler->handle(Argument::type(Accept::class))->shouldBeCalledTimes(3);
 
+        $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
+
         $command = new BatchAccept([1, 2, 3], $admin);
 
-        $handler = new BatchAcceptHandler($sheetRepository->reveal(), $acceptHandler->reveal(), $date);
+        $handler = new BatchAcceptHandler(
+            $sheetRepository->reveal(),
+            $acceptHandler->reveal(),
+            $date,
+            $batchJobQueue->reveal()
+        );
         $result  = $handler->handle($command);
 
         $this->assertEquals(3, $result->count);
