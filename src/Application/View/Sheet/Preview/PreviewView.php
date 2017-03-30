@@ -73,14 +73,21 @@ class PreviewView
      * @param string     $content
      * @param string     $type
      * @param CardView[] $cardViews
-     * @param TagView[]  $tagViews
      */
-    public function __construct($id, $content, $type, array $cardViews = [], array $tagViews = [])
+    public function __construct($id, $content, $type, array $cardViews = [])
     {
         $this->id        = $id;
         $this->content   = $content;
         $this->type      = $type;
         $this->cardViews = $cardViews;
-        $this->tagViews  = $tagViews;
+        $this->tagViews  = [];
+    }
+
+    /**
+     * @param TagView $tagView
+     */
+    public function addTagView(TagView $tagView)
+    {
+        $this->tagViews[] = $tagView;
     }
 }

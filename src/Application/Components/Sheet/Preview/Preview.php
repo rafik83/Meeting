@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
+use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
@@ -97,13 +98,21 @@ class Preview
                 if ($object->getContentValue() === ''
                     && $object->getTag() !== null
                 ) {
+                    // In EditableText there is only one tag therefore it is not useful to add a comma
                     foreach ($object->getTaggedDataViews() as $taggedDataView) {
                         $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
                     }
                 } else {
                     $previewView->content = $object->getContentValue();
                 }
+            } elseif ($object instanceof TemplateObject\Tag) {
+                foreach ($object->getTaggedDataViews() as $taggedDataView) {
+                    $previewView->addTagView(
+                        new TagView($taggedDataView->type, $object->getLabel($locale), $taggedDataView->content)
+                    );
+                }
             }
+
 
             $previewObjects[] = $previewView;
         }
