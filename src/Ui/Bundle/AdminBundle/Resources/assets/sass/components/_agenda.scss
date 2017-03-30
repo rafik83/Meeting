@@ -101,13 +101,9 @@
   .spot-slot-meeting-table {
     padding: 0;
     margin: 0;
-    //.sheet-title {
-    //  text-overflow: ellipsis;
-    //  /* Required for text-overflow to do anything */
-    //  white-space: nowrap;
-    //  overflow: hidden;
-    //  width: 100px;
-    //}
+    td {
+      padding: 5px !important;
+    }
   }
 
   .sheets-list {
