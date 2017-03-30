@@ -89,7 +89,7 @@ class Balance
     /**
      * @param Event $event
      */
-    public function loadAllOrders(Event $event)
+    public function loadAllOrderVatViews(Event $event)
     {
         $orderVatViews = $this->orderVatViewsByEventQueryHandler->handle(new OrderVatViewsByEventQuery($event));
 
@@ -102,7 +102,7 @@ class Balance
      * @param Event $event
      * @param int[] $sheetIds
      */
-    public function loadAllOrdersForSheetIds(Event $event, array $sheetIds)
+    public function loadAllOrderVatViewsForSheetIds(Event $event, array $sheetIds)
     {
         $orderVatViews = $this->orderVatViewsBySheetIdsQueryHandler->handle(
             new OrderVatViewsBySheetIdsQuery($event, $sheetIds)
@@ -118,7 +118,7 @@ class Balance
      */
     public function loadAllForEvent(Event $event)
     {
-        $this->loadAllOrders($event);
+        $this->loadAllOrderVatViews($event);
         $this->loadAllTransactions($event);
     }
 
@@ -128,7 +128,7 @@ class Balance
      */
     public function loadAllForSheetIds(Event $event, array $sheetIds)
     {
-        $this->loadAllOrdersForSheetIds($event, $sheetIds);
+        $this->loadAllOrderVatViewsForSheetIds($event, $sheetIds);
         $this->loadAllTransactionsForSheetIds($event, $sheetIds);
     }
 
@@ -137,7 +137,7 @@ class Balance
      *
      * @return OrderVatView[]
      */
-    public function getOrders(Sheet $sheet)
+    public function getOrderVatViews(Sheet $sheet)
     {
         if (!isset($this->orderVatViews[$sheet->getId()])) {
             $this->orderVatViews[$sheet->getId()] = $this->orderVatViewsBySheetQueryHandler->handle(
@@ -153,9 +153,9 @@ class Balance
      *
      * @return OrderVatView[]
      */
-    public function getNotCancelledOrders(Sheet $sheet)
+    public function getNotCancelledOrderVatViews(Sheet $sheet)
     {
-        $orderVatViews = $this->getOrders($sheet);
+        $orderVatViews = $this->getOrderVatViews($sheet);
 
         return array_filter($orderVatViews, function (OrderVatView $orderVatView) {
             return !$orderVatView->isCancelled;
@@ -185,7 +185,7 @@ class Balance
      */
     public function getTotal(Sheet $sheet)
     {
-        $orderVatViews = $this->getNotCancelledOrders($sheet);
+        $orderVatViews = $this->getNotCancelledOrderVatViews($sheet);
 
         $total = 0;
 
@@ -203,7 +203,7 @@ class Balance
      */
     public function getTotalWithoutVat(Sheet $sheet)
     {
-        $orderVatViews = $this->getNotCancelledOrders($sheet);
+        $orderVatViews = $this->getNotCancelledOrderVatViews($sheet);
 
         $totalWithoutVat = 0;
 
@@ -262,7 +262,7 @@ class Balance
     /**
      * @return OrderVatView[]
      */
-    public function getNotCancelledOrdersFromEvent()
+    public function getNotCancelledOrderVatViewsFromEvent()
     {
         if (!isset($this->orderVatViews) || empty($this->orderVatViews)) {
             return [];
@@ -308,7 +308,7 @@ class Balance
      */
     public function getOrdersTotalForEvent()
     {
-        $orderVatViews = $this->getNotCancelledOrdersFromEvent();
+        $orderVatViews = $this->getNotCancelledOrderVatViewsFromEvent();
 
         $total = 0;
 
@@ -322,7 +322,7 @@ class Balance
     /**
      * @return int amount in cents
      */
-    public function getOrdersTotalRemainingToPayForEvent()
+    public function getTotalRemainingToPayForEvent()
     {
         $remainingToPay = $this->getOrdersTotalForEvent() - $this->getTransactionsTotalPaidForEvent();
 

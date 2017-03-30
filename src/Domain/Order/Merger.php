@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 class Merger
 {
     /**
-     * @param array $orders
+     * @param Order[] $orders
      *
      * @return Order
      *

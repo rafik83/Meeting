@@ -72,7 +72,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
         $this->balance->loadAllTransactions($this->event);
     }
 
-    public function testLoadAllOrders()
+    public function testLoadAllOrderVatViews()
     {
         $this->orderVatViewsByEventQueryHandler
             ->handle(new OrderVatViewsByEventQuery($this->event))
@@ -80,7 +80,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
             ->willReturn([])
         ;
 
-        $this->balance->loadAllOrders($this->event);
+        $this->balance->loadAllOrderVatViews($this->event);
     }
 
     public function testLoadAllForEvent()
@@ -100,7 +100,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
         $this->balance->loadAllForEvent($this->event);
     }
 
-    public function testGetOrders()
+    public function testGetOrderVatViews()
     {
         $orderVatView = $this->prophesize(OrderVatView::class);
 
@@ -109,7 +109,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$orderVatView->reveal()]);
 
-        $orderVatViews = $this->balance->getOrders($this->sheet);
+        $orderVatViews = $this->balance->getOrderVatViews($this->sheet);
         $expectedOrderVatViews = [$orderVatView->reveal()];
 
         $this->assertEquals($expectedOrderVatViews, $orderVatViews);
@@ -128,7 +128,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([0 => $orderVatViewCancelled->reveal(), 1 => $orderVatViewNotCancelled->reveal()]);
 
-        $orderVatViews = $this->balance->getNotCancelledOrders($this->sheet);
+        $orderVatViews = $this->balance->getNotCancelledOrderVatViews($this->sheet);
 
         // It is an array_filter, array keys are preserved.
         $expectedOrderVatViews = [1 => $orderVatViewNotCancelled->reveal()];
@@ -310,7 +310,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(30000, $totalPaid);
     }
 
-    public function testGetNotCancelledOrdersFromEvent()
+    public function testGetNotCancelledOrderVatViewsFromEvent()
     {
         $now = new \DateTime();
 
@@ -326,8 +326,8 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $this->balance->loadAllOrders($this->event);
-        $notCancelledOrdersFromEvent = $this->balance->getNotCancelledOrdersFromEvent();
+        $this->balance->loadAllOrderVatViews($this->event);
+        $notCancelledOrdersFromEvent = $this->balance->getNotCancelledOrderVatViewsFromEvent();
 
         $this->assertEquals(
             [
@@ -372,13 +372,13 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $this->balance->loadAllOrders($this->event);
+        $this->balance->loadAllOrderVatViews($this->event);
         $totalOrders = $this->balance->getOrdersTotalForEvent();
 
         $this->assertEquals(1440, $totalOrders);
     }
 
-    public function testGetOrdersTotalRemainingToPayForEvent()
+    public function testGetTotalRemainingToPayForEvent()
     {
         $now = new \DateTime();
 
@@ -402,7 +402,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->balance->loadAllForEvent($this->event);
-        $remainingToPayForEvent = $this->balance->getOrdersTotalRemainingToPayForEvent();
+        $remainingToPayForEvent = $this->balance->getTotalRemainingToPayForEvent();
 
         $this->assertEquals(600, $remainingToPayForEvent);
     }

@@ -35,7 +35,7 @@ class OrderController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $balance = $this->get('order.balance');
-        $orderVatViews = $balance->getOrders($sheet);
+        $orderVatViews = $balance->getOrderVatViews($sheet);
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
