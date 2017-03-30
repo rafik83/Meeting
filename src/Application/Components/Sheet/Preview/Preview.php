@@ -10,45 +10,48 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateType;
+use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class Preview
 {
-    /**
-     * @var TemplateDataFactory
-     */
-    private $templateDataFactory;
-
-    /**
-     * @var Applyer
-     */
+    /** @var Applyer */
     private $applyer;
 
-    /**
-     * @var CardViewQueryHandler
-     */
+    /** @var CardViewQueryHandler */
     private $cardViewQueryHandler;
 
+    /** @var TaggedDataFactory */
+    private $taggedDataFactory;
+
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
-     * @param TemplateDataFactory     $templateDataFactory
-     * @param CardViewQueryHandler    $cardViewQueryHandler
-     * @param Applyer                 $applyer
+     * @param TaggedDataFactory    $taggedDataFactory
+     * @param CardViewQueryHandler $cardViewQueryHandler
+     * @param Applyer              $applyer
+     * @param TranslatorInterface  $translator
      */
     public function __construct(
-        TemplateDataFactory $templateDataFactory,
+        TaggedDataFactory $taggedDataFactory,
         CardViewQueryHandler $cardViewQueryHandler,
-        Applyer $applyer
+        Applyer $applyer,
+        TranslatorInterface $translator
     ) {
-        $this->templateDataFactory     = $templateDataFactory;
+        $this->taggedDataFactory       = $taggedDataFactory;
         $this->applyer                 = $applyer;
         $this->cardViewQueryHandler    = $cardViewQueryHandler;
+        $this->translator              = $translator;
     }
 
     /**
@@ -63,8 +66,7 @@ class Preview
         $cardViews         = [];
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
-        $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
-        $taggedData        = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale)->getAllTaggedDatas();
+        $templateData      = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale, [$composedRule->rule]);
 
         foreach ($previewObjectKeys as $key) {
             $object = $templateData->getObject($key);
@@ -94,10 +96,10 @@ class Preview
 
                 if ($object->getContentValue() === ''
                     && $object->getTag() !== null
-                    && !empty($taggedData[$object->getTag()])
-                    && $this->isTagVisible($object->getTag(), $composedRule)
                 ) {
-                    $previewView->content = reset($taggedData[$object->getTag()]);
+                    foreach ($object->getTaggedDataViews() as $taggedDataView) {
+                        $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
+                    }
                 } else {
                     $previewView->content = $object->getContentValue();
                 }
@@ -110,17 +112,17 @@ class Preview
     }
 
     /**
-     * @param string            $tag
-     * @param ComposedRule|null $composedRule
+     * @param TaggedDataView $taggedDataView
+     * @param string         $locale
      *
-     * @return bool
+     * @return string
      */
-    private function isTagVisible($tag, ComposedRule $composedRule = null)
+    private function getTaggedDataViewContent(TaggedDataView $taggedDataView, $locale)
     {
-        if (null === $composedRule) {
-            return true;
+        if ($taggedDataView->type === TemplateType::TEMPLATE_OBJECT_TYPE_BOOLEAN) {
+            return $this->translator->trans(sprintf('gender.%s'), 'messages', $locale);
         }
 
-        return in_array($tag, $composedRule->tags);
+        return $taggedDataView->content;
     }
 }

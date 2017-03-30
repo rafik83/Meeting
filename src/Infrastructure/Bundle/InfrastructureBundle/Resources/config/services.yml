@@ -1697,9 +1697,10 @@ services:
     sheet.preview:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
-            - '@template.template_data_factory'
+            - '@template.tagged_data_factory'
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     #
     # Sheet Request
     #

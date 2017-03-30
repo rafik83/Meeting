@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
@@ -131,7 +130,7 @@ class TaggedDataFactory
      *
      * @return TemplateData
      */
-    private function attachTaggedDataView(Sheet $sheet, $locale, $rules = [])
+    private function attachTaggedDataView(Sheet $sheet, $locale, array $rules = [])
     {
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
