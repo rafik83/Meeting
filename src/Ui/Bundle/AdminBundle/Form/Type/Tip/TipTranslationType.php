@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip;
 
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\LanguageType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,9 +23,14 @@ class TipTranslationType extends AbstractType
     /** {@inheritdoc} */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $preferred      = ['fr', 'en', 'es', 'de', 'it', 'zh'];
+
         $builder
             ->add('title', TextType::class)
-            ->add('lang', LanguageType::class)
+            ->add('locales', LocaleType::class, [
+                'multiple'          => true,
+                'preferred_choices' => $preferred,
+            ])
             ->add('content', TextareaType::class);
     }
     
