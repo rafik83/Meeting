@@ -95,7 +95,7 @@ class CatalogController extends Controller
                     $event,
                     $filters,
                     $page,
-                    12,
+                    48,
                     $locale,
                     $sheet
                 )
