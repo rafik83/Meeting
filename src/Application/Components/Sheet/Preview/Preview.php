@@ -129,7 +129,7 @@ class Preview
     private function getTaggedDataViewContent(TaggedDataView $taggedDataView, $locale)
     {
         if ($taggedDataView->type === TemplateType::TEMPLATE_OBJECT_TYPE_BOOLEAN) {
-            return $this->translator->trans(sprintf('gender.%s'), 'messages', $locale);
+            return $this->translator->trans(sprintf('sheet.object.boolean.%s'), 'messages', $locale);
         }
 
         return $taggedDataView->content;
