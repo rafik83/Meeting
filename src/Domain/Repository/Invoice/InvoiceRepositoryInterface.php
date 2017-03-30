@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -53,4 +54,13 @@ interface InvoiceRepositoryInterface
      * @return bool
      */
     public function hasInvoice(Sheet $sheet);
+
+    /**
+     * @param Event[]            $events
+     * @param \DateTimeInterface $beginDate
+     * @param \DateTimeInterface $endDate
+     *
+     * @return Invoice[]
+     */
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate);
 }

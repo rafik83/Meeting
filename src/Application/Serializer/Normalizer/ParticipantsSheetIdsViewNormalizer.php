@@ -13,15 +13,15 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
-use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class EventParticipantsNormalizer extends AbstractNormalizer implements NormalizerInterface
+class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
     const COL_SHEET_ID               = 'sheet_id';
     const COL_SHEET_NAME             = 'sheet_name';
@@ -91,18 +91,26 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
      *
      * {@inheritdoc}
      *
-     * @param EventParticipantsNormalizerView $object
+     * @param ParticipantsSheetIdsView $object
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        $rawSheets = [];
-        $locale    = $context['locale'];
+        $participantsSheetIdsView = $object;
+        $rawSheets                = [];
+        $event                    = $context['event'];
+        $locale                   = $context['locale'];
+        $charset                  = $context['charset'];
 
-        foreach ($this->participantRepository->getParticipantsByEvent($object->event, $locale) as $participant) {
+        $participants = $this->participantRepository->getByEventAndSheetIds(
+            $event,
+            $participantsSheetIdsView->sheetIds,
+            $locale
+        );
+
+        foreach ($participants as $participant) {
             $rawSheets[] = $this->getParticipantRawData($participant, $locale);
         }
 
-        $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedParticipants = [];
 
         foreach ($rawSheets as $rawSheet) {
@@ -117,7 +125,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof EventParticipantsNormalizerView && 'csv' === $format;
+        return $data instanceof ParticipantsSheetIdsView && 'csv' === $format;
     }
 
     /**

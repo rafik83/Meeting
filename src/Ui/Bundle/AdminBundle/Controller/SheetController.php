@@ -24,7 +24,6 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
-use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -32,13 +31,11 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
@@ -48,7 +45,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class SheetController extends Controller
 {
@@ -71,7 +67,7 @@ class SheetController extends Controller
         if (!$this->isRequestContainFilters($request) && empty($this->get('filter.sheet_filter')->get())) {
             return $this->redirectToRoute('admin_sheet', array_merge(
                 ['event' => $event->getId(), 'page' => $selectedSheetsPage],
-                FilterFullType::getDefaultFilters()
+                SheetFilterType::getDefaultFilters()
             ));
         }
 
@@ -88,22 +84,22 @@ class SheetController extends Controller
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
-        $filters = FilterFullType::getDefaultFilters();
+        $filters = SheetFilterType::getDefaultFilters();
 
-        $sheetFilter = $this->createFilterForm(SheetFilterType::class, $filters, [
+        $sheetFilterForm = $this->createFilterForm(SheetFilterType::class, $filters, [
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'user'   => $this->getUser(),
         ]);
 
-        $isFiltered = $sheetFilter->handleRequest($request)->isSubmitted() && $sheetFilter->isValid();
+        $isFiltered = $sheetFilterForm->handleRequest($request)->isSubmitted() && $sheetFilterForm->isValid();
 
         if ($isFiltered) {
-            $filters = $sheetFilter->getData();
+            $filters = $sheetFilterForm->getData();
 
             // save filter into session
             $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
-                $sheetFilter,
+                $sheetFilterForm,
                 $request->query->all()
             ));
         }
@@ -142,7 +138,7 @@ class SheetController extends Controller
             ),
         ]);
 
-        $sheetFilterView = $sheetFilter->createView();
+        $sheetFilterView = $sheetFilterForm->createView();
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
@@ -153,7 +149,7 @@ class SheetController extends Controller
                 $request->getLocale()
             ),
             'batch_form'       => $batchForm->createView(),
-            'filter_form'      => $sheetFilter->createView(),
+            'filter_form'      => $sheetFilterView,
         ]);
     }
 
@@ -214,69 +210,6 @@ class SheetController extends Controller
         }
 
         return $this->redirectToRoute('admin_sheet', ['event' => $event->getId(), 'page' => $selectedSheetsPage]);
-    }
-
-    /**
-     * CSV export of event's sheets. Requires super admin or organizer role.
-     *
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function exportSheetAction(Request $request, Event $event)
-    {
-        // Only super admin & organizers are allowed to export sheets:
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $charset       = Charset::WINDOWS_1252;
-        $serializer    = $this->get('serializer');
-        $exportContent = $serializer->serialize($event, 'csv', [
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
-            'charset' => $charset,
-        ]);
-
-        $response    = new Response($exportContent);
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_sheets_" . date("Y_m_d_His") . ".csv"
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
-
-        return $response;
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function exportParticipantAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $charset        = Charset::WINDOWS_1252;
-        $normaliserView = new EventParticipantsNormalizerView($event);
-
-        $serializer    = $this->get('serializer');
-        $exportContent = $serializer->serialize($normaliserView, 'csv', [
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
-            'charset' => $charset,
-        ]);
-
-        $response    = new Response($exportContent);
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_participant_" . date("Y_m_d_His") . ".csv"
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
-
-        return $response;
     }
 
     /**

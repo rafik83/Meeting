@@ -275,8 +275,6 @@ get-preprod-db@vm:
 	  ssh vimeet-preprod "mysqldump --host localhost --port 3306 -u vimeet_preprod -p$$DBPWD vimeet_preprod > preprod.sql"; \
 	  scp vimeet-preprod:preprod.sql preprod.sql; \
 	  ssh vimeet-preprod "rm preprod.sql"; \
-	  bin/console doctrine:database:drop --force; \
-	  bin/console doctrine:database:create; \
 	  make import-preprod-db@vm; \
 	fi
 
@@ -287,17 +285,19 @@ get-prod-db@vm:
 	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$DBPWD vimeet_prod > prod.sql"; \
 	  scp vimeet-prod1:prod.sql prod.sql; \
 	  ssh vimeet-prod1 "rm prod.sql"; \
-	  bin/console doctrine:database:drop --force; \
-	  bin/console doctrine:database:create; \
 	  make import-prod-db@vm; \
 	fi
 
 import-preprod-db@vm:
+	bin/console doctrine:database:drop --force
+	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < preprod.sql
 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.dev')"
 	make post-import-db@vm
 
 import-prod-db@vm:
+	bin/console doctrine:database:drop --force
+	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < prod.sql
 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum.dev')"
 	make post-import-db@vm

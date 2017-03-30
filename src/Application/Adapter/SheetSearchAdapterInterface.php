@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Adapter;
 
 use Elastica\Result;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
+use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
@@ -62,6 +64,24 @@ interface SheetSearchAdapterInterface
      * @return SheetListView[]
      */
     public function getSheetListView(Event $event, array $filters, $locale);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return SheetIdsView
+     */
+    public function getSheetIdsView(Event $event, array $filters, $locale);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return ParticipantsSheetIdsView
+     */
+    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale);
 
     /**
      * @param Event  $event

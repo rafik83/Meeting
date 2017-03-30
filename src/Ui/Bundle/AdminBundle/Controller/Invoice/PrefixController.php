@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice;
 
 use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\InvoicePrefix\CreateType;
@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class InvoiceController extends Controller
+class PrefixController extends Controller
 {
     /**
      * @return Response

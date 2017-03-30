@@ -196,6 +196,13 @@ services:
         tags:
             - { name: form.type }
 
+    form_type_sheet_data.editable_text_translatable_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslatableDataType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
     form_type.catalog_search_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType
         arguments:

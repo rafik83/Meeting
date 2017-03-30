@@ -23,6 +23,22 @@
                         </a>
                     </li>
                 {% endif %}
+
+                {% if transactionForm is defined and transactionForm is not null %}
+                    <li role="presentation">
+                        <a href="#transaction" aria-controls="transactions" role="tab" data-toggle="tab">
+                            {{ 'admin.event.page.transactions.title'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if invoiceExportForm is defined and invoiceExportForm is not null %}
+                    <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
+                        <a href="#invoice" aria-controls="profile" role="tab" data-toggle="tab">
+                            {{ 'admin.event.page.invoice.title'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane {% if not orderTabActive %}active{% endif %}" id="eventList">
@@ -81,6 +97,29 @@
                                 </div>
                             </div>
                         {{ form_end(orderForm) }}
+                    </div>
+                {% endif %}
+
+                {% if transactionForm is defined and transactionForm is not null %}
+                    <div role="tabpanel" class="tab-pane" id="transaction">
+                        {{ include('AdminBundle:Event/TransactionExport:form.html.twig', {'form': transactionForm}) }}
+                    </div>
+                {% endif %}
+
+                {% if invoiceExportForm is defined and invoiceExportForm is not null %}
+                    <div role="tabpanel" class="tab-pane" id="invoice">
+                        {{ form_start(invoiceExportForm) }}
+                            {{ form_errors(invoiceExportForm) }}
+                            {{ form_row(invoiceExportForm.beginDate, {widget_columns: 2}) }}
+                            {{ form_row(invoiceExportForm.endDate, {widget_columns: 2}) }}
+
+                            <div class="row">
+                                <div class="col-md-9 col-md-offset-3">
+                                    {{ form_row(invoiceExportForm.submit) }}
+                                </div>
+                            </div>
+
+                        {{ form_end(invoiceExportForm) }}
                     </div>
                 {% endif %}
             </div>
