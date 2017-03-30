@@ -510,4 +510,25 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateInCatalogBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.inCatalog', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        if ($state === true) {
+            $queryBuilder->set('sheet.inCatalogAt', ':date')
+                ->setParameter('date', new \DateTime());
+        }
+
+        return $queryBuilder->getQuery()->execute();
+    }
 }

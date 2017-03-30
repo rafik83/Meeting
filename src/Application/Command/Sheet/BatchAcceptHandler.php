@@ -70,7 +70,7 @@ class BatchAcceptHandler
             $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $this->datetime));
         }
 
-        $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin, null);
+        $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
 
         return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');
     }

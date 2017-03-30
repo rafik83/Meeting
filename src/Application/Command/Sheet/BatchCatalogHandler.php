@@ -10,13 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchCatalogHandler
@@ -47,9 +45,9 @@ class BatchCatalogHandler
     private $sheetInfoGuesser;
 
     /**
-     * @var EnableDisableManager
+     * @var BatchJobQueueInterface
      */
-    private $enableDisableManager;
+    private $batchJobQueue;
 
     /**
      * BatchCatalogHandler constructor.
@@ -59,7 +57,7 @@ class BatchCatalogHandler
      * @param \DateTimeInterface         $datetime
      * @param MeetingRepositoryInterface $meetingRepository
      * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param EnableDisableManager       $enableDisableManager
+     * @param BatchJobQueueInterface     $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -67,14 +65,14 @@ class BatchCatalogHandler
         \DateTimeInterface $datetime,
         MeetingRepositoryInterface $meetingRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        EnableDisableManager $enableDisableManager
+        BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository   = $sheetRepository;
         $this->eventDispatcher   = $eventDispatcher;
         $this->datetime          = $datetime;
         $this->meetingRepository = $meetingRepository;
         $this->sheetInfoGuesser  = $sheetInfoGuesser;
-        $this->enableDisableManager = $enableDisableManager;
+        $this->batchJobQueue     = $batchJobQueue;
     }
 
     /**
@@ -84,10 +82,10 @@ class BatchCatalogHandler
      */
     public function handle(BatchCatalog $command)
     {
-        $sheets = $this->sheetRepository->getSheetsById($command->ids);
-        $ignoredSheets = [];
+        $sheets               = $this->sheetRepository->getSheetsById($command->ids);
+        $ignoredSheets        = [];
         $ignoredSheetsMessage = '';
-        $message = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
+        $message              = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
 
         foreach ($sheets as $sheet) {
             // If try to remove from catalog
@@ -98,33 +96,14 @@ class BatchCatalogHandler
                     continue;
                 }
             }
-
-            $sheet->setInCatalog($command->state);
-
-            if ($command->state === true) {
-                $sheet->setInCatalogAt($this->datetime);
-            }
-            $this->enableDisableManager->update($sheet, $command->state);
-
-            // trace state in catalog change only
-            if ($sheet->isInCatalog() !== $command->state) {
-                $this->eventDispatcher->dispatch(
-                    Events::SHEET_CATALOG,
-                    new SheetCatalogEvent(
-                        $sheet,
-                        $command->admin,
-                        $this->datetime,
-                        $command->state
-                    )
-                );
-            }
-
-            $this->sheetRepository->set($sheet);
         }
+
+        // update sheets in catalog state and set in catalog date
+        $this->sheetRepository->updateInCatalogBySheetsId($command->ids, $command->state);
 
         if (count($ignoredSheets) > 0) {
             $message = 'catalog.remove.warning';
-            $locale = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
+            $locale  = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($locale) {
                 return $this->sheetInfoGuesser->guessSheetTitle(
@@ -133,6 +112,10 @@ class BatchCatalogHandler
                 );
             }, $ignoredSheets));
         }
+
+        $this->batchJobQueue->createJob($command->ids, $command->admin, [
+            'state' => $command->state
+        ]);
 
         return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
     }

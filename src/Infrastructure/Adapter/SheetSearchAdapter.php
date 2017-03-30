@@ -134,7 +134,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query->setFields(['id']);
 
         return array_map(function (Result $sheet) {
-            return $sheet->id;
+            return $sheet->id[0];
         }, $this->searchable->search($query, ['limit' => 100000])->getResults());
     }
 

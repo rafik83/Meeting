@@ -30,6 +30,12 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
+     * @param array $ids
+     * @param bool  $state
+     */
+    public function updateInCatalogBySheetsId(array $ids, $state);
+
+    /**
      * @param Event $event
      *
      * @return Sheet[]

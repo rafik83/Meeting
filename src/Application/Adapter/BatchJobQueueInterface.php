@@ -17,8 +17,7 @@ interface BatchJobQueueInterface
     /**
      * @param array  $ids
      * @param Admin  $admin
-     * @param string $locale
      * @param array  $options
      */
-    public function createJob(array $ids, Admin $admin, $locale, $options = []);
+    public function createJob(array $ids, Admin $admin, $options = []);
 }

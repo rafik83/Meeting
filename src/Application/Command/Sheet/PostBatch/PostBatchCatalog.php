@@ -35,7 +35,7 @@ class PostBatchCatalog
      *
      * @param Sheet[] $sheets
      * @param Admin   $admin
-     * @param         $state
+     * @param bool    $state
      */
     public function __construct(array $sheets, Admin $admin, $state)
     {

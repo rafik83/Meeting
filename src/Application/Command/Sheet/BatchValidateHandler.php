@@ -75,7 +75,6 @@ class BatchValidateHandler
         $this->batchJobQueue->createJob(
             $batchValidate->ids,
             $batchValidate->admin,
-            null,
             ['comment' => $batchValidate->comment]
         );
 

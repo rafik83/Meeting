@@ -746,7 +746,7 @@ services:
             - '@datetime'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@sheet.request.enable_disable_manager'
+            - '@adapter_batch_job_queue.batch_catalog_job_queue'
 
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }

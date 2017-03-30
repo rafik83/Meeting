@@ -21,12 +21,11 @@ class BatchValidateJobQueue extends AbstractJobQueueAdapter implements BatchJobQ
     /**
      * {@inheritdoc}
      */
-    public function createJob(array $ids, Admin $admin, $locale, $options = [])
+    public function createJob(array $ids, Admin $admin, $options = [])
     {
         $job = new Job(BatchValidateCommand::NAME, [
             'sheetIds' => implode(',', $ids),
             'adminId'  => $admin->getId(),
-            'locale'   => $locale,
             'comment'  => isset($options['comment']) ? $options['comment'] : null,
         ]);
 

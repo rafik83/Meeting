@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
-use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
-use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -20,23 +18,8 @@ use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 
-class JobQueueAdapter implements JobQueueInterface
+class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterface
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * JobQueueAdapter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -92,22 +75,5 @@ class JobQueueAdapter implements JobQueueInterface
         $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
 
         $this->setJob($job);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function batchAction(BatchJobQueueInterface $batchJob, array $ids, Admin $admin, $locale)
-    {
-        $batchJob->createJob($ids, $admin, $locale);
-    }
-
-    /**
-     * @param Job $job
-     */
-    private function setJob(Job $job)
-    {
-        $this->entityManager->persist($job);
-        $this->entityManager->flush($job);
     }
 }
