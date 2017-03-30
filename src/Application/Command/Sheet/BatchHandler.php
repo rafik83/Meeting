@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Elastica\Result;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 
 class BatchHandler

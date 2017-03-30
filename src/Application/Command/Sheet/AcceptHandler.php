@@ -10,10 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AcceptHandler
 {

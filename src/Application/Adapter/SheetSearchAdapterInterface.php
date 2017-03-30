@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-use Elastica\Result;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
