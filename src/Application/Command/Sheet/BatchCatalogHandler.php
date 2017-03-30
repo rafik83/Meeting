@@ -126,6 +126,8 @@ class BatchCatalogHandler
     }
 
     /**
+     * Remove a specific sheet id from the pull of batch IDs
+     *
      * @param BatchCatalog $command
      * @param Sheet        $sheet
      */
