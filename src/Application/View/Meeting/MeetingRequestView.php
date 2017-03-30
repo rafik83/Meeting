@@ -60,6 +60,11 @@ class MeetingRequestView
      * @var bool
      */
     public $isMeetingRequestUpdateLocked;
+    
+    /**
+     * @var bool
+     */
+    public $isSheetSeeable;
 
     /**
      * MeetingRequestView constructor.
@@ -73,6 +78,7 @@ class MeetingRequestView
      * @param PreviewView[]      $previewViews
      * @param bool               $isMeetingPublished
      * @param bool               $isMeetingRequestUpdateLocked
+     * @param bool               $isSheetSeeable
      */
     public function __construct(
         Sheet $sheet,
@@ -83,7 +89,8 @@ class MeetingRequestView
         MeetingRequest $meetingRequest,
         array $previewViews,
         $isMeetingPublished = false,
-        $isMeetingRequestUpdateLocked = false
+        $isMeetingRequestUpdateLocked = false,
+        $isSheetSeeable = false
     ) {
         $this->sheet                        = $sheet;
         $this->sheetName                    = $sheetName;
@@ -94,6 +101,7 @@ class MeetingRequestView
         $this->previewViews                 = $previewViews;
         $this->isMeetingPublished           = $isMeetingPublished;
         $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
+        $this->isSheetSeeable               = $isSheetSeeable;
     }
 
     /**

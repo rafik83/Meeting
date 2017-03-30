@@ -25,6 +25,8 @@ use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
+use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
@@ -128,16 +130,39 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function getSheetListView(Event $event, array $filters, $locale)
     {
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $results = $this->getSearchResults($event, $filters, $locale);
 
-        $query = new Query($builder->getQuery());
-        $query->addSort(['sheetName' => 'asc']);
+        return array_map(function (Result $result) {
+            return new SheetListView($result->id, $result->sheetName);
+        }, $results);
+    }
 
-        $options = ["size" => 100000];
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetIdsView(Event $event, array $filters, $locale)
+    {
+        $results = $this->getSearchResults($event, $filters, $locale);
 
-        return array_map(function (Result $sheet) {
-            return new SheetListView($sheet->id, $sheet->sheetName);
-        }, $this->searchable->search($query, $options)->getResults());
+        $sheetIds = array_map(function (Result $result) {
+            return $result->id;
+        }, $results);
+
+        return new SheetIdsView($sheetIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale)
+    {
+        $results = $this->getSearchResults($event, $filters, $locale);
+
+        $sheetIds = array_map(function (Result $result) {
+            return $result->id;
+        }, $results);
+
+        return new ParticipantsSheetIdsView($sheetIds);
     }
 
     /**
@@ -239,6 +264,21 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $filterToRemove,
             self::ES_FIELD_POSITION
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getSearchResults(Event $event, array $filters, $locale)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+
+        $query = new Query($builder->getQuery());
+        $query->addSort(['sheetName' => 'asc']);
+
+        $options = ["size" => 100000];
+
+        return $this->searchable->search($query, $options)->getResults();
     }
 
     /**

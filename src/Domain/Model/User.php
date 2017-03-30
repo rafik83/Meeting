@@ -76,4 +76,28 @@ class User extends AbstractUser implements MailRecipientInterface
 
         return $this->account->getFirstName() . ' '  . $this->account->getLastname();
     }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getFirstName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getLastName();
+    }
 }

@@ -11,3 +11,4 @@ Proximum\Vimeet\Domain\Model\Payment\Payment:
             targetEntity: Proximum\Vimeet\Domain\Model\Transaction
             joinColumn:
                 onDelete: SET NULL
+            inversedBy: payment

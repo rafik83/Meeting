@@ -58,6 +58,11 @@ class MeetingView extends AbstractTimeEntityView
      * @var string
      */
     public $rightColor;
+    
+    /**
+     * @var bool
+     */
+    public $isSheetDetailsSeeAble;
 
     /**
      * @param int                      $sheetMetId
@@ -69,6 +74,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param string                   $leftColor
      * @param string                   $rightColor
      * @param MeetingParticipantView[] $participants
+     * @param bool                     $isSheetDetailsSeeAble
      */
     public function __construct(
         $sheetMetId,
@@ -79,17 +85,19 @@ class MeetingView extends AbstractTimeEntityView
         $timeZone,
         $leftColor,
         $rightColor,
-        array $participants
+        array $participants,
+        $isSheetDetailsSeeAble = false
     ) {
-        $this->sheetMetId    = $sheetMetId;
-        $this->sheetMetTitle = $sheetMetTitle;
-        $this->spotRef       = $spotRef;
-        $this->begin         = $begin;
-        $this->end           = $end;
-        $this->timeZone      = $timeZone;
-        $this->leftColor     = $leftColor;
-        $this->rightColor    = $rightColor;
-        $this->participants  = $participants;
+        $this->sheetMetId            = $sheetMetId;
+        $this->sheetMetTitle         = $sheetMetTitle;
+        $this->spotRef               = $spotRef;
+        $this->begin                 = $begin;
+        $this->end                   = $end;
+        $this->timeZone              = $timeZone;
+        $this->leftColor             = $leftColor;
+        $this->rightColor            = $rightColor;
+        $this->participants          = $participants;
+        $this->isSheetDetailsSeeAble = $isSheetDetailsSeeAble;
     }
 
     /**

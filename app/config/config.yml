@@ -309,6 +309,7 @@ infrastructure:
     font_path: "/assets/fonts"
     image_path: "/assets/images"
     print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
+    export_transactions_path: '%kernel.root_dir%/../web/uploads/export_transactions'
     export_order_path: '%kernel.root_dir%/../web/uploads/export_orders'
     package:
         default_labels:

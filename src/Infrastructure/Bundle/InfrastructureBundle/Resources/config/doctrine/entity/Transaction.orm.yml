@@ -29,3 +29,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: SET NULL
+    oneToOne:
+        payment:
+            targetEntity: Proximum\Vimeet\Domain\Model\Payment\Payment
+            mappedBy: transaction

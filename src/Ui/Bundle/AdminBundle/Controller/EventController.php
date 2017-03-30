@@ -16,27 +16,34 @@ use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\Order\Find;
+use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Application\Exception\Event\EventsListEmptyException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventController extends Controller
 {
@@ -53,14 +60,33 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($admin);
 
-        $orderForm       = null;
+        $orderForm = null;
         $formIsSubmitted = false;
+        $transactionForm = null;
+        $invoiceExportForm = null;
 
         if (Finder::IsAllowedToFind($admin)) {
-            $find      = new Find($admin);
+            $find = new Find($admin);
             $orderForm = $this->createForm(FindType::class, $find);
 
-            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
+            $filterTransaction = new FilterTransaction($admin);
+            $transactionForm = $this->createForm(
+                FilterTransactionType::class,
+                $filterTransaction,
+                [
+                    'action' => $this->generateUrl('admin_event_transaction_export'),
+                    'submit' => true,
+                ]
+            );
+
+            $invoiceExport    = new Export($admin);
+            $invoiceExportForm = $this->createForm(ExportType::class, $invoiceExport, [
+                'action' => $this->generateUrl('admin_invoice_export'),
+                'submit' => true,
+            ]);
+
+            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted()
+                               || $invoiceExportForm->handleRequest($request)->isSubmitted();
 
             if ($formIsSubmitted && $orderForm->isValid()) {
                 try {
@@ -96,10 +122,47 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'         => $events,
-            'orderForm'      => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive' => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'events'            => $events,
+            'orderForm'         => $orderForm !== null ? $orderForm->createView() : null,
+            'orderTabActive'    => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'transactionForm'   => $transactionForm !== null ? $transactionForm->createView() : null,
+            'invoiceExportForm' => $invoiceExportForm !== null ? $invoiceExportForm->createView() : null,
         ]);
+    }
+    
+    /**
+     * @param UserInterface $admin
+     * @param Request       $request
+     *
+     * @return CsvFileResponse|RedirectResponse
+     */
+    public function exportTransactionAction(UserInterface $admin, Request $request)
+    {
+        if (Finder::IsAllowedToFind($admin)) {
+            $filterTransaction = new FilterTransaction($admin);
+            $transactionForm = $this->createForm(FilterTransactionType::class, $filterTransaction, ['submit' => true]);
+    
+            if ($transactionForm->handleRequest($request)->isSubmitted() && $transactionForm->isValid()) {
+                try {
+                    $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
+                    $filePath = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
+                    
+                    return new CsvFileResponse(
+                        file_get_contents($this->getParameter('infrastructure.export_transactions_path') . $filePath),
+                        sprintf('export_transactions_%s.csv', date("Y_m_d_His"))
+                    );
+                } catch (EventsListEmptyException $exception) {
+                    $this->addFlash('error', 'flash.admin.event.empty_list');
+                }
+            } else {
+                $errors = $transactionForm->getErrors();
+                foreach($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+        
+        return $this->redirectToRoute('admin_event_list');
     }
 
     /**

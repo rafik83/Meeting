@@ -43,6 +43,10 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation sent'
 mail.sheet.change_type.body: "%firstname% %lastname%, \n\nYour participation has been converted from %fromType% to %toType%.\n\nRegards,"
 mail.sheet.change_type.end: 'Regards,'
 mail.sheet.change_type.subject: '[%event%] Your participation has been converted'
+mail.sheet.invoiced.body: "Hello %participant%,\n\nAs a follow-up to your participation in the event %event% we inform you that your invoice is available:"
+mail.sheet.invoiced.end: "Your invoice is also available in your member area by this link <a href=\"%ordersLink%\" target=\"_blank\">Invoice and list of orders</a>\n\nWe thank you for your participation."
+mail.sheet.invoiced.link: 'Download my invoice %invoiceNumber%'
+mail.sheet.invoiced.subject: 'Download your invoice'
 mail.sheet.show.link: 'See the presentation sheet'
 mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo acess the details of the presentation sheet, please click on the link below"
 mail.sheet.submitted.end: 'Regards,'
