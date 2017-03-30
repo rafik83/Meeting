@@ -80,22 +80,18 @@ class Tip
         
         return $this;
     }
-    
+
     /**
-     * @param $locale
-     * @param $title
-     * @param $content
+     * @param TipTranslation $tipTranslation
      *
      * @return $this
      */
-    public function addTranslation($locale, $title, $content)
+    public function addTranslation(TipTranslation $tipTranslation)
     {
-        if ($this->translations->containsKey($locale)) {
-            $this->translations->get($locale)->update($title, $content);
-        } else {
-            $this->translations->set($locale, new TipTranslation($this, $locale, $title, $content));
+        if (!$this->translations->containsKey($tipTranslation->locale)) {
+            $this->translations->set($tipTranslation->getLocale(), $tipTranslation);
         }
-    
+
         return $this;
     }
     

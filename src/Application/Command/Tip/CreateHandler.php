@@ -36,11 +36,8 @@ class CreateHandler
         );
         
         foreach ($command->translations as $key => $translation) {
-            $tip->addTranslation(
-                $translation->locale,
-                $translation->title,
-                $translation->content
-            );
+            $tip->addTranslation($translation);
+            $translation->tip = $tip;
         }
         
         $this->tipRepository->add($tip);

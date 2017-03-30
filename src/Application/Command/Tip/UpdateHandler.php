@@ -33,9 +33,10 @@ class UpdateHandler
         if (!$command->tip) {
             throw new TipException();
         }
-        
+
         foreach($command->translations as $translation) {
-            $command->tip->addTranslation($translation->locale, $translation->title, $translation->content);
+            $command->tip->addTranslation($translation);
+            $translation->tip = $command->tip;
         }
     
         foreach($command->tip->getTranslations() as $translation) {

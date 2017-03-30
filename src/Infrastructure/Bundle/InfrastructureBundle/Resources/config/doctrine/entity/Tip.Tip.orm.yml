@@ -19,4 +19,5 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Tip\TipTranslation
             mappedBy: tip
+            indexBy: locale
             cascade: ['persist', 'remove']

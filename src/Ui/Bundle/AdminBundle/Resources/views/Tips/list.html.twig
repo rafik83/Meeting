@@ -24,12 +24,12 @@
                         <td>
                             <table class="table">
                                 <tr>
-                                    <th>{{ 'admin.tips.column.lang'|trans }}</th>
+                                    <th>{{ 'admin.tips.column.locale'|trans }}</th>
                                     <th>{{ 'admin.tips.column.content'|trans }}</th>
                                 </tr>
                                 {% for translation in tip.translations %}
                                 <tr>
-                                    <td>{{ translation.lang }}</td>
+                                    <td>{{ translation.locale }}</td>
                                     {% if translation.content|length > 100 %}
                                         <td>{{ translation.content|slice(0, 100) ~ '...' }}</td>
                                     {% else %}

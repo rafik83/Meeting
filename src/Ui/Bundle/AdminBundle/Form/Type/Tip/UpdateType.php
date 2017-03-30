@@ -38,8 +38,8 @@ class UpdateType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type'   => TipTranslationType::class,
                 'allow_add'    => true,
-                'allow_delete' => true,
                 'label'        => false,
+                'by_reference' => false,
             ])
             ->add('submit', SubmitType::class);
     }

@@ -42,15 +42,15 @@ class TipTranslation
         $this->locale  = $locale;
         $this->content = $content;
     }
-    
+
     /**
-     * @param string $title
-     * @param string $content
+     * @param TipTranslation $tipTranslation
      */
-    public function update($title, $content)
+    public function update(TipTranslation $tipTranslation)
     {
-        $this->title   = $title;
-        $this->content = $content;
+        $this->title   = $tipTranslation->title;
+        $this->content = $tipTranslation->content;
+        $this->locale  = $tipTranslation->locale;
     }
     
     /**
