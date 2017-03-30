@@ -166,4 +166,32 @@ class TransactionRepository implements TransactionRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function findPaidByDateRange(
+        \DateTimeInterface $beginDate,
+        \DateTimeInterface $endDate
+    ) {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('transaction, payment, sheet')
+            ->from(Transaction::class, 'transaction')
+            ->join(
+                'transaction.sheet',
+                'sheet',
+                'WITH',
+                'transaction.date BETWEEN :beginDate and :endDate AND transaction.state = :state'
+            )
+            ->leftJoin('transaction.payment', 'payment')
+            ->orderBy('transaction.date')
+            ->setParameters([
+                'state' => Transaction::STATE_PAID,
+                'beginDate' => $beginDate,
+                'endDate' => $endDate,
+            ]);
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
