@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
@@ -65,22 +65,20 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(false);
 
         // Mock
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetRepository      = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher      = $this->prophesize(DelayedEventDispatcher::class);
+        $meetingRepository    = $this->prophesize(MeetingRepositoryInterface::class);
+        $sheetInfoGuesser     = $this->prophesize(SheetInfoGuesser::class);
+        $batchJobQueue        = $this->prophesize(BatchCatalogJobQueue::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
         $meetingRepository->countMeetingsOfSheet($sheet1)->shouldNotBeCalled();
         $meetingRepository->countMeetingsOfSheet($sheet2)->shouldNotBeCalled();
         $meetingRepository->countMeetingsOfSheet($sheet3)->shouldNotBeCalled();
-        $enableDisableManager->update($sheet1, true)->shouldBeCalled();
-        $enableDisableManager->update($sheet2, true)->shouldBeCalled();
-        $enableDisableManager->update($sheet3, true)->shouldBeCalled();
-        $sheetRepository->set($expectedSheet1)->shouldBeCalled();
-        $sheetRepository->set($expectedSheet2)->shouldBeCalled();
-        $sheetRepository->set($expectedSheet3)->shouldBeCalled();
+
+        $sheetRepository->updateInCatalogBySheetsId([1,2,3], true)->shouldBeCalled();
+
+        $batchJobQueue->createJob([1, 2 ,3], $admin, ['state' => true])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1, 2, 3], true, $admin);
@@ -90,7 +88,7 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
             $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $enableDisableManager->reveal()
+            $batchJobQueue->reveal()
         );
 
         $result = $handler->handle($command);
@@ -146,21 +144,22 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(false);
 
         // Mock
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository   = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
+        $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
-        $sheetRepository->set($sheet1)->shouldBeCalled();
-        $sheetRepository->set($sheet3)->shouldBeCalled();
+
         $meetingRepository->countMeetingsOfSheet($sheet1)->shouldBeCalled()->willReturn(0);
         $meetingRepository->countMeetingsOfSheet($sheet2)->shouldBeCalled()->willReturn(2);
         $meetingRepository->countMeetingsOfSheet($sheet3)->shouldBeCalled()->willReturn(0);
         $sheetInfoGuesser->guessSheetTitle($sheet2, 'fr')->shouldBeCalled()->willReturn("SheetName");
-        $enableDisableManager->update($sheet1, false)->shouldBeCalled();
-        $enableDisableManager->update($sheet3, false)->shouldBeCalled();
+
+        $sheetRepository->updateInCatalogBySheetsId([2,3], false)->shouldBeCalled();
+
+        $batchJobQueue->createJob([2 ,3], $admin, ['state' => false])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1, 2, 3], false, $admin);
@@ -170,7 +169,7 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
             $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $enableDisableManager->reveal()
+            $batchJobQueue->reveal()
         );
 
         $result = $handler->handle($command);
@@ -218,16 +217,18 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(false);
 
         // Mock
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository   = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
+        $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
 
         $sheetRepository->getSheetsById([1, 2])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
-        $sheetRepository->set($sheet2)->shouldBeCalled();
         $sheetInfoGuesser->guessSheetTitle($sheet1, 'fr')->shouldBeCalled()->willReturn("SheetName");
-        $enableDisableManager->update($sheet2, true)->shouldBeCalled();
+
+        $sheetRepository->updateInCatalogBySheetsId([1, 2], true)->shouldBeCalled();
+
+        $batchJobQueue->createJob([1 ,2], $admin, ['state' => true])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1, 2], true, $admin);
@@ -237,7 +238,7 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
             $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $enableDisableManager->reveal()
+            $batchJobQueue->reveal()
         );
 
         $result = $handler->handle($command);

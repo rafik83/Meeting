@@ -89,11 +89,15 @@ class BatchCatalogHandler
 
         foreach ($sheets as $sheet) {
             // If try to remove from catalog
-            if (!$command->state) {
+            if ($command->state === false) {
                 if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
+                    $ignoredSheets[]   = $sheet;
+                    $this->excludeSheetFromBatch($command, $sheet);
+                }
+            } elseif ($command->state === true) {
+                if (!$sheet->isEnabled()) {
                     $ignoredSheets[] = $sheet;
-
-                    continue;
+                    $this->excludeSheetFromBatch($command, $sheet);
                 }
             }
         }
@@ -119,5 +123,17 @@ class BatchCatalogHandler
         ]);
 
         return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
+    }
+
+    /**
+     * @param BatchCatalog $command
+     * @param Sheet        $sheet
+     */
+    private function excludeSheetFromBatch(BatchCatalog $command, Sheet $sheet)
+    {
+        $ignoredSheetIndex = array_search($sheet->getId(), $command->ids);
+        if ($ignoredSheetIndex !== false) {
+            $command->ids = array_slice($command->ids, $ignoredSheetIndex);
+        }
     }
 }
