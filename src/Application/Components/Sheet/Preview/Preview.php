@@ -115,7 +115,6 @@ class Preview
                     }
                 }
 
-
                 $previewObjects[] = $previewView;
             } catch (ObjectNotFoundException $exception) {
                 continue;
