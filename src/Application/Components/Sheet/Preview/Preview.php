@@ -18,9 +18,10 @@ use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
-use Proximum\Vimeet\Domain\Template\TemplateType;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class Preview
@@ -70,51 +71,55 @@ class Preview
         $templateData      = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale, [$composedRule->rule]);
 
         foreach ($previewObjectKeys as $key) {
-            $object = $templateData->getObject($key);
+            try {
+                $object = $templateData->getObject($key);
 
-            if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
-                $participants       = $sheet->getParticipants()->toArray();
-                $numberParticipants = $object->getNumberOfParticipantShown();
+                if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
+                    $participants       = $sheet->getParticipants()->toArray();
+                    $numberParticipants = $object->getNumberOfParticipantShown();
 
-                // Create card view for each participant limited by the number of participant shown
-                for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
-                    $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
+                    // Create card view for each participant limited by the number of participant shown
+                    for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
+                        $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
 
-                    if (null !== $composedRule && null !== $composedRule->rule) {
-                        $this->applyer->applyRuleForParticipantCard($cardView, [$composedRule->rule]);
+                        if (null !== $composedRule && null !== $composedRule->rule) {
+                            $this->applyer->applyRuleForParticipantCard($cardView, [$composedRule->rule]);
+                        }
+
+                        $cardViews[] = $cardView;
+                    }
+                }
+
+                $previewView = new PreviewView($object->getKey(), '', $object->getType(), $cardViews);
+
+                if ($object instanceof TemplateObject\ContentObjectInterface) {
+                    if ($object instanceof TemplateObject\EditableText && $object->isTitle()) {
+                        $previewView->strong = true;
                     }
 
-                    $cardViews[] = $cardView;
-                }
-            }
-
-            $previewView = new PreviewView($object->getKey(), '', $object->getType(), $cardViews);
-
-            if ($object instanceof TemplateObject\ContentObjectInterface) {
-                if ($object instanceof TemplateObject\EditableText && $object->isTitle()) {
-                    $previewView->strong = true;
-                }
-
-                if ($object->getContentValue() === ''
-                    && $object->getTag() !== null
-                ) {
-                    // In EditableText there is only one tag therefore it is not useful to add a comma
+                    if ($object->getContentValue() === ''
+                        && $object->getTag() !== null
+                    ) {
+                        // In EditableText there is only one tag therefore it is not useful to add a comma
+                        foreach ($object->getTaggedDataViews() as $taggedDataView) {
+                            $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
+                        }
+                    } else {
+                        $previewView->content = $object->getContentValue();
+                    }
+                } elseif ($object instanceof TemplateObject\Tag) {
                     foreach ($object->getTaggedDataViews() as $taggedDataView) {
-                        $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
+                        $previewView->addTagView(
+                            new TagView($taggedDataView->type, $object->getLabel($locale), $taggedDataView->content)
+                        );
                     }
-                } else {
-                    $previewView->content = $object->getContentValue();
                 }
-            } elseif ($object instanceof TemplateObject\Tag) {
-                foreach ($object->getTaggedDataViews() as $taggedDataView) {
-                    $previewView->addTagView(
-                        new TagView($taggedDataView->type, $object->getLabel($locale), $taggedDataView->content)
-                    );
-                }
+
+
+                $previewObjects[] = $previewView;
+            } catch (ObjectNotFoundException $exception) {
+                continue;
             }
-
-
-            $previewObjects[] = $previewView;
         }
 
         return $previewObjects;
@@ -128,7 +133,7 @@ class Preview
      */
     private function getTaggedDataViewContent(TaggedDataView $taggedDataView, $locale)
     {
-        if ($taggedDataView->type === TemplateType::TEMPLATE_OBJECT_TYPE_BOOLEAN) {
+        if ($taggedDataView->type === AbstractChild::TEMPLATE_OBJECT_TYPE_BOOLEAN) {
             return $this->translator->trans(
                 sprintf('sheet.object.boolean.%s', $taggedDataView->content ? 'true' : 'false'),
                 [],

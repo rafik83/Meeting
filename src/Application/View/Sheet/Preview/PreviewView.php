@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Sheet\Preview;
 
 use Proximum\Vimeet\Application\View\Participant\CardView;
-use Proximum\Vimeet\Domain\Template\TemplateType;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 
 class PreviewView
 {
@@ -41,7 +41,7 @@ class PreviewView
      */
     public function isImage()
     {
-        return $this->type === TemplateType::TEMPLATE_OBJECT_TYPE_IMAGE;
+        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE;
     }
 
     /**
@@ -49,7 +49,7 @@ class PreviewView
      */
     public function isParticipant()
     {
-        return $this->type === TemplateType::TEMPLATE_OBJECT_TYPE_PARTICIPANT;
+        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT;
     }
 
     /**
@@ -57,7 +57,7 @@ class PreviewView
      */
     public function isTag()
     {
-        return $this->type === TemplateType::TEMPLATE_OBJECT_TYPE_TAG;
+        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_TAG;
     }
 
     /**
