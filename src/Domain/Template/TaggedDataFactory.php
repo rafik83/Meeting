@@ -116,7 +116,7 @@ class TaggedDataFactory
                     $object instanceof EditableText ? $object->isTextarea() : false
                 );
 
-                $this->addTaggedDataView($tag, $taggedDataView);
+                $this->addTaggedDataView($sheet, $tag, $taggedDataView);
             }
         }
     }
@@ -138,19 +138,25 @@ class TaggedDataFactory
             $this->applyer->applyRuleForTemplate($sheetTemplateData, $rules);
         }
 
-        $sheetTemplateData->setTaggedDataViews($this->taggedDataViews);
+        $tags = [];
+        if (isset($this->taggedDataViews[$sheet->getId()])) {
+            $tags = $this->taggedDataViews[$sheet->getId()];
+        }
+
+        $sheetTemplateData->setTaggedDataViews($tags);
 
         return $sheetTemplateData;
     }
 
     /**
+     * @param Sheet          $sheet
      * @param string         $tag
      * @param TaggedDataView $taggedDataView
      */
-    private function addTaggedDataView($tag, $taggedDataView)
+    private function addTaggedDataView(Sheet $sheet, $tag, $taggedDataView)
     {
-        if (!isset($this->taggedDataViews[$tag])) {
-            $this->taggedDataViews[$tag] = $taggedDataView;
+        if (!isset($this->taggedDataViews[$sheet->getId()][$tag])) {
+            $this->taggedDataViews[$sheet->getId()][$tag] = $taggedDataView;
         }
     }
 }
