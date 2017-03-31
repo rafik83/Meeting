@@ -259,7 +259,12 @@ services:
             - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }
-
+    form_type.admin.tip_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\TipTranslationType
+        arguments:
+            - '%infrastructure.preferred_languages%'
+        tags:
+            - { name: form.type }
     #
     # Helper
     #

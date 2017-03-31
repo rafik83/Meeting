@@ -20,15 +20,28 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TipTranslationType extends AbstractType
 {
+    /**
+     * @var array
+     */
+    private $preferredLang;
+
+    /**
+     * TipTranslationType constructor.
+     *
+     * @param array $preferredLang
+     */
+    public function __construct(array $preferredLang)
+    {
+        $this->preferredLang = $preferredLang;
+    }
+
     /** {@inheritdoc} */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $preferred      = ['fr', 'en', 'es', 'de', 'it', 'zh'];
-
         $builder
             ->add('title', TextType::class)
             ->add('locale', LocaleType::class, [
-                'preferred_choices' => $preferred,
+                'preferred_choices' => $this->preferredLang,
             ])
             ->add('content', TextareaType::class);
     }
