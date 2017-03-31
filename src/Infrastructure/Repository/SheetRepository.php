@@ -546,4 +546,20 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->execute();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateEnableStateBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.enable', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
 }

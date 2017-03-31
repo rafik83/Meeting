@@ -36,6 +36,12 @@ interface SheetRepositoryInterface
     public function updateInCatalogBySheetsId(array $ids, $state);
 
     /**
+     * @param array $ids
+     * @param bool  $state
+     */
+    public function updateEnableStateBySheetsId(array $ids, $state);
+
+    /**
      * @param Event $event
      *
      * @return Sheet[]
