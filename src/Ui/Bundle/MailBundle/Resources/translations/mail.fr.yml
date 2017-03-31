@@ -27,11 +27,21 @@ mail.event.preregister.end: 'Bien cordialement,'
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: Contact
+mail.order.export.intro: "Bonjour,\n\n Voici l'export des commandes pour l'événement %eventTitle% :\n"
+mail.order.export.link.click: 'Télécharger les commandes'
+mail.order.export.subject: 'Fichier d''export des commandes'
 mail.orderConfirm.body: "Bonjour,\n\nVotre commande numéro %orderNumero% en date du %orderDate% a bien été enregistrée. Vous trouverez ci-dessous un lien vers la facture pro-forma. Une facture finale vous sera adressée à l'issue de l’événement."
 mail.orderConfirm.end: 'Cordialement,'
 mail.orderConfirm.linkToProForma: 'Voir la facture pro-forma'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'
 mail.participant.profile.link: 'Votre profil participant'
+mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
+mail.planning.print.link.click: 'Fichier de planning'
+mail.planning.print.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
+mail.planning.print.orderBy.participant_last_name: 'par nom de famille du participant'
+mail.planning.print.orderBy.sheet_title: 'par nom de société'
+mail.planning.print.orderBy.text: 'Le fichier est trié'
+mail.planning.print.subject: 'Fichier de plannings'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
 mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
@@ -43,6 +53,10 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre participation à l''événement %event% nous vous informons que votre facture est disponible :"
+mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
+mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
+mail.sheet.invoiced.subject: 'Téléchargez votre facture'
 mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
@@ -56,10 +70,3 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
-mail.planning.print.link.intro: "Vous pouvez imprimer les plannings en cliquant ici :"
-mail.planning.print.link.click: 'Fichier de planning'
-mail.planning.print.orderBy.sheet_title: par nom de société
-mail.planning.print.orderBy.participant_last_name: par nom de famille du participant
-mail.planning.print.orderBy.text: Le fichier est trié
-mail.planning.print.subject: Fichier de plannings

@@ -241,6 +241,19 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsByEventAndIds(Event $event, array $ids)
+    {
+        $queryBuilder = $this
+            ->findByIdsQueryBuilder($ids)
+            ->andWhere('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUnvalidatedSheetsById(array $ids)
     {
         $queryBuilder = $this->findByIdsQueryBuilder($ids);

@@ -30,9 +30,7 @@ class PaymentRepository implements PaymentRepositoryInterface
     }
 
     /**
-     * @param int $id
-     *
-     * @return null|Payment
+     * {@inheritdoc}
      */
     public function findById($id)
     {

@@ -120,9 +120,11 @@ admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
+admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
 admin.event.page.orderFinder.title: 'Recherche commande'
+admin.event.page.transactions.title: Transactions
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
@@ -144,6 +146,18 @@ admin.event.update.title: 'Modifier l''évènement'
 admin.event.vatMode.ati: TTC
 admin.event.vatMode.et: HT
 admin.events.link: 'Mes évènements'
+admin.export.transaction.column.billing_contact.country: 'Pays contact facturation'
+admin.export.transaction.column.billing_contact.vat_number: 'Numéro de TVA intracommunautaire'
+admin.export.transaction.column.event.id: 'Id évènement'
+admin.export.transaction.column.event.name: 'Nom évènement'
+admin.export.transaction.column.payment.gateway: 'N° transaction gateway'
+admin.export.transaction.column.sheet.id: 'Id Fiche'
+admin.export.transaction.column.sheet.owner.id: 'Id propriétaire fiche'
+admin.export.transaction.column.society.name: 'Nom société'
+admin.export.transaction.column.transaction_amount: 'Montant de la transaction'
+admin.export.transaction.column.transaction_date: Date
+admin.export.transaction.column.transaction_reference: Référence
+admin.export.transaction.column.transaction_type: Type
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
@@ -217,25 +231,34 @@ admin.happening.menu.link: Programme
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
-admin.transaction.column.date: Date
+admin.invoice.column.date: 'Date de création'
+admin.invoice.column.link: Lien
 admin.invoice.column.number: 'Numéro de facture'
 admin.invoice.column.orders: 'Commandes concernées'
-admin.invoice.column.date: 'Date de création'
 admin.invoice.column.total: 'Total HT'
-admin.invoice.column.link: 'Lien'
-admin.invoice.pdf: 'Voir la facture'
-admin.invoice.list.title: 'Nom backoffice'
-admin.invoice.list.prefix: 'Prefix'
-admin.invoice.list.isDefault: 'Par défaut'
-admin.invoice.title: 'Liste des préfixes de numéro de facture'
 admin.invoice.create.button: 'Nouveau préfixe'
 admin.invoice.create.title: 'Ajouter un nouveau préfixe'
+admin.invoice.export.fields.analytic_code: 'Code analytique'
+admin.invoice.export.fields.balance: 'Montant du solde'
+admin.invoice.export.fields.billing_contact_country: 'Pays contact facturation'
+admin.invoice.export.fields.event_id: 'Id événement'
+admin.invoice.export.fields.event_name: 'Nom événement'
+admin.invoice.export.fields.invoice_date: 'Date facturation'
+admin.invoice.export.fields.invoice_number: 'N° facture'
+admin.invoice.export.fields.owner_id: 'Id user propriétaire de la fiche'
+admin.invoice.export.fields.sheet_id: 'ID fiche'
+admin.invoice.export.fields.sheet_title: 'Nom société'
+admin.invoice.export.fields.total: 'Montant HT'
+admin.invoice.export.fields.total_with_vat: 'Montant TTC'
+admin.invoice.export.fields.vat_amount: 'Montant TVA'
+admin.invoice.export.fields.vat_number: 'Numéro de TVA intracommunautaire'
 admin.invoice.link: Facturation
 admin.invoice.list.isDefault: 'Par défaut'
 admin.invoice.list.prefix: Préfixe
 admin.invoice.list.title: 'Nom backoffice'
+admin.invoice.pdf: 'Voir la facture'
+admin.invoice.show: Voir
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
-admin.invoice.show: 'Voir'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
@@ -373,11 +396,12 @@ admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
 admin.order.cancelled: Annulée
-admin.order.invoiceNumber: Facture N°
 admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
+admin.order.export.button.label: 'Exporter les commandes'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
+admin.order.invoiceNumber: 'Facture N°'
 admin.order.link: Commandes
 admin.order.sheet: Fiche
 admin.order.title: 'Liste des commandes'
@@ -439,8 +463,8 @@ admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvell
 admin.planner.import.link: Importer
 admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
-admin.planning.export.title: Export des plannings en pdf
 admin.planning.export.link: Exporter
+admin.planning.export.title: 'Export des plannings en pdf'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -511,9 +535,7 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
-admin.sheet.registeredAt.all: 'Peu importe'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
-admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
@@ -537,7 +559,7 @@ admin.sheet.details.company.title: Société
 admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
-admin.sheet.details.invoices: 'Factures'
+admin.sheet.details.invoices: Factures
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
 admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'
@@ -578,6 +600,8 @@ admin.sheet.export.fields.sheet_state: Etat
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
+admin.sheet.export.help: 'L''export est fait selon les filtres sélectionnés'
+admin.sheet.export.invoice.button.label: 'Exporter factures'
 admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
@@ -586,20 +610,22 @@ admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.filter.template_filters: 'Filtres supplémentaires'
-admin.sheet.list.filters.label: 'Filtres avancés'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.import.button.label: Importer
+admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
+admin.sheet.list.filters.label: 'Filtres avancés'
 admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
 admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
 admin.sheet.participant.not_found: 'Ce participant n''existe pas'
 admin.sheet.read: Voir
+admin.sheet.registeredAt.all: 'Peu importe'
 admin.sheet.see_list: 'Voir liste des participations'
 admin.sheet.spot: Lieu
 admin.sheet.state: Etat
@@ -740,7 +766,7 @@ admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
 admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
-admin.user.events: 'Evenements'
+admin.user.events: Evenements
 admin.users.details: 'Voir le compte'
 admin.users.email: Email
 admin.users.firstName: Prénom
@@ -852,8 +878,8 @@ event.sheet.cart.label.billingStep: 'Passer à l''étape de facturation'
 event.sheet.cart.label.totalPrice: Total
 event.sheet.cart.title: 'Récapitulatif de votre panier'
 event.sheet.cart.totalWithoutTaxes: 'Total HT'
-event.sheet.completed.complete: Complète
 event.sheet.completed.all: 'Peu importe'
+event.sheet.completed.complete: Complète
 event.sheet.completed.incomplete: Incomplète
 event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active

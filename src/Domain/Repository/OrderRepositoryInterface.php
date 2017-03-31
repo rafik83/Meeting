@@ -75,10 +75,25 @@ interface OrderRepositoryInterface
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
+     *
+     * @return Order[]
+     */
+    public function findByEventAndSheetIds(Event $event, array $sheetIds);
+
+    /**
+     * @param Event $event
      *
      * @return Order[]
      */
     public function findNotCancelledByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledWithJoinRowAndPromotionCodeByEvent(Event $event);
 
     /**
      * @param Sheet $sheet
