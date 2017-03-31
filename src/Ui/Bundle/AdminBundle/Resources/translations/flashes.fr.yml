@@ -86,6 +86,7 @@ flash.admin.template.registration.update.error.nomenclatureNotFound: 'Un objet n
 flash.admin.template.registration.update.error.template: 'Il y a un problème avec votre template'
 flash.admin.template.registration.update.success: 'Template d''Inscription modifié avec succès'
 flash.admin.transaction.create.success: 'La transaction a été créée'
+flash.admin.transaction.export.failed: 'Il y a une erreur dans le formulaire d''export'
 flash.admin.transaction.remove.success: 'La transaction a été supprimée'
 flash.admin.transaction.update.success: 'La transaction a été mise à jour'
 flash.admin.type_template_field.create.success: 'Le champ a bien été créé'

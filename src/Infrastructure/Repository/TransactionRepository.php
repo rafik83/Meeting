@@ -170,10 +170,8 @@ class TransactionRepository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findPaidByDateRange(
-        \DateTimeInterface $beginDate,
-        \DateTimeInterface $endDate
-    ) {
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate)
+    {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select('transaction, payment, sheet')
@@ -182,11 +180,12 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'transaction.sheet',
                 'sheet',
                 'WITH',
-                'transaction.date BETWEEN :beginDate and :endDate AND transaction.state = :state'
+                'sheet.event IN (:events) AND transaction.date BETWEEN :beginDate and :endDate AND transaction.state = :state'
             )
             ->leftJoin('transaction.payment', 'payment')
             ->orderBy('transaction.date')
             ->setParameters([
+                'events' => $events,
                 'state' => Transaction::STATE_PAID,
                 'beginDate' => $beginDate,
                 'endDate' => $endDate,
