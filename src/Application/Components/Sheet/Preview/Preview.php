@@ -68,7 +68,8 @@ class Preview
         $cardViews         = [];
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
-        $templateData      = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale, [$composedRule->rule]);
+        $rules             = null !== $composedRule ? [$composedRule->rule] : [];
+        $templateData      = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale, $rules);
 
         foreach ($previewObjectKeys as $key) {
             try {
@@ -83,7 +84,7 @@ class Preview
                         $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
 
                         if (null !== $composedRule && null !== $composedRule->rule) {
-                            $this->applyer->applyRuleForParticipantCard($cardView, [$composedRule->rule]);
+                            $this->applyer->applyRuleForParticipantCard($cardView, $rules);
                         }
 
                         $cardViews[] = $cardView;
