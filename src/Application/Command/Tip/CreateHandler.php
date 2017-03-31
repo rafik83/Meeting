@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Tip;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class CreateHandler
@@ -37,13 +36,11 @@ class CreateHandler
         );
 
         foreach ($command->translations as $translation) {
-            $tip->setTranslation(
-                new TipTranslation(
-                    $tip,
-                    $translation['title'],
-                    $translation['locale'],
-                    $translation['content']
-                )
+            $tip->setTranslation([
+                    'title'   => $translation['title'],
+                    'locale'  => $translation['locale'],
+                    'content' => $translation['content'],
+                ]
             );
         }
 

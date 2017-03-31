@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 class Update
@@ -47,7 +46,11 @@ class Update
         $this->onCatalog           = $tip->isOnCatalog();
 
         foreach ($this->tip->getTranslations() as $translation) {
-            $this->translations[] = $translation;
+            $this->translations[$translation->getLocale()] = [
+                'title' => $translation->getTitle(),
+                'content' => $translation->getContent(),
+                'locale' => $translation->getLocale(),
+            ];
         }
     }
 }

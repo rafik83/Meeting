@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip;
 
 use Proximum\Vimeet\Application\Command\Tip\Create;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -36,10 +37,10 @@ class CreateType extends AbstractType
                 'required' => false,
             ])
             ->add('translations', CollectionType::class, [
-                'entry_type'   => TipTranslationType::class,
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'label'        => false,
+                'entry_type'    => TipTranslationType::class,
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'label'         => false,
             ])
             ->add('submit', SubmitType::class);
     }

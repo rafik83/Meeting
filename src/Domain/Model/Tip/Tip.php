@@ -78,11 +78,34 @@ class Tip
     }
 
     /**
-     * @param TipTranslation $tipTranslation
+     * @param array $tipTranslation
+     *
+     * @return Tip
      */
-    public function setTranslation(TipTranslation $tipTranslation)
+    public function setTranslation(array $tipTranslation)
     {
-        $this->translations->set($tipTranslation->getLocale(), $tipTranslation);
+        $translations = array_unique($tipTranslation, SORT_REGULAR);
+
+        while ($this->translations->count() > count($translations)) {
+            $this->translations->removeElement($this->translations->last());
+        }
+
+        foreach ($tipTranslation as $locale => $translation) {
+            if ($this->translations->get($locale)) {
+                $this->translations->get($locale)->update($translation['title'], $translation['content']);
+            } else {
+                $this->translations->add(
+                    new TipTranslation(
+                        $this,
+                        $tipTranslation['title'],
+                        $tipTranslation['locale'],
+                        $tipTranslation['content']
+                    )
+                );
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -92,7 +115,7 @@ class Tip
      */
     public function updateTranslation($locale, $title, $content)
     {
-        $this->translations->get($locale)->set($title, $content);
+        $this->translations->get($locale)->update($title, $content);
     }
 
     /**
