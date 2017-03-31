@@ -46,13 +46,7 @@ class TipTranslationType extends AbstractType
             ->add('content', TextareaType::class);
     }
     
-    /** {@inheritdoc} */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => TipTranslation::class,
-        ]);
-    }
+   
     
     /** {@inheritdoc} */
     public function getBlockPrefix()

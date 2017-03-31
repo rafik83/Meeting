@@ -13,19 +13,19 @@ namespace Proximum\Vimeet\Domain\Model\Tip;
 class TipTranslation
 {
     /** @var int */
-    public $id;
+    private $id;
     
     /** @var Tip */
-    public $tip;
+    private $tip;
     
     /** @var string  */
-    public $title;
+    private $title;
     
     /** @var string */
-    public $locale;
+    private $locale;
     
     /** @var string */
-    public $content;
+    private $content;
 
     /**
      * TipTranslation constructor.
@@ -35,7 +35,7 @@ class TipTranslation
      * @param string $locale
      * @param string $content
      */
-    public function __construct(Tip $tip = null, $title = null, $locale = null, $content = null)
+    public function __construct(Tip $tip, $title, $locale, $content)
     {
         $this->tip     = $tip;
         $this->title   = $title;
@@ -44,13 +44,17 @@ class TipTranslation
     }
 
     /**
-     * @param TipTranslation $tipTranslation
+     * @param $title
+     * @param $content
+     *
+     * @return $this
      */
-    public function update(TipTranslation $tipTranslation)
+    public function update($title, $content)
     {
-        $this->title   = $tipTranslation->title;
-        $this->content = $tipTranslation->content;
-        $this->locale  = $tipTranslation->locale;
+        $this->title   = $title;
+        $this->content = $content;
+
+        return $this;
     }
     
     /**
@@ -68,6 +72,18 @@ class TipTranslation
     {
         return $this->tip;
     }
+
+    /**
+     * @param Tip $tip
+     *
+     * @return $this
+     */
+    public function setTip(Tip $tip)
+    {
+        $this->tip = $tip;
+
+        return $this;
+    }
     
     /**
      * @return string
@@ -75,6 +91,18 @@ class TipTranslation
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @param $title
+     *
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
     }
     
     /**
@@ -84,6 +112,18 @@ class TipTranslation
     {
         return $this->locale;
     }
+
+    /**
+     * @param $locale
+     *
+     * @return $this
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
     
     /**
      * @return string
@@ -91,5 +131,17 @@ class TipTranslation
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @param $content
+     *
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
     }
 }

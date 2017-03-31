@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Tip;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class CreateHandler
@@ -34,12 +35,18 @@ class CreateHandler
             $command->onCatalog,
             $command->onPrintPlanning
         );
-        
+
         foreach ($command->translations as $translation) {
-            $tip->addTranslation($translation);
-            $translation->tip = $tip;
+            $tip->setTranslation(
+                new TipTranslation(
+                    $tip,
+                    $translation['title'],
+                    $translation['locale'],
+                    $translation['content']
+                )
+            );
         }
-        
+
         $this->tipRepository->add($tip);
     }
 }

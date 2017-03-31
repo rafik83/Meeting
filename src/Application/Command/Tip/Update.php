@@ -30,7 +30,7 @@ class Update
     /** @var bool */
     public $onPrintPlanning;
     
-    /** @var ArrayCollection */
+    /** @var array */
     public $translations;
     
     /**
@@ -45,6 +45,9 @@ class Update
         $this->onMeetingManagement = $tip->isOnMeetingManagement();
         $this->onPrintPlanning     = $tip->isOnPrintPlanning();
         $this->onCatalog           = $tip->isOnCatalog();
-        $this->translations        = $tip->getTranslations();
+
+        foreach ($this->tip->getTranslations() as $translation) {
+            $this->translations[] = $translation;
+        }
     }
 }

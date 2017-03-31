@@ -60,7 +60,6 @@ class Tip
      * @param bool                 $onMeetingManagement
      * @param bool                 $onCatalog
      * @param bool                 $onPrintPlanning
-     * @param ArrayCollection      $translations
      *
      * @return Tip
      */
@@ -68,40 +67,34 @@ class Tip
         $title,
         $onMeetingManagement,
         $onCatalog,
-        $onPrintPlanning,
-        ArrayCollection $translations
+        $onPrintPlanning
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
         $this->onCatalog           = $onCatalog;
         $this->onPrintPlanning     = $onPrintPlanning;
-        $this->translations        = $translations;
-        
+
         return $this;
     }
 
     /**
      * @param TipTranslation $tipTranslation
-     *
-     * @return $this
      */
-    public function addTranslation(TipTranslation $tipTranslation)
+    public function setTranslation(TipTranslation $tipTranslation)
     {
-        if (!$this->translations->containsKey($tipTranslation->locale)) {
-            $this->translations->set($tipTranslation->getLocale(), $tipTranslation);
-        }
+        $this->translations->set($tipTranslation->getLocale(), $tipTranslation);
+    }
 
-        return $this;
-    }
-    
     /**
-     * @param TipTranslation $translation
+     * @param $locale
+     * @param $title
+     * @param $content
      */
-    public function removeTranslation(TipTranslation $translation)
+    public function updateTranslation($locale, $title, $content)
     {
-        $this->translations->removeElement($translation);
+        $this->translations->get($locale)->set($title, $content);
     }
-    
+
     /**
      * @return int
      */

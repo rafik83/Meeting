@@ -49,7 +49,7 @@ class TipController extends Controller
     {
         $command = new Create();
         $form    = $this->createForm(CreateType::class, $command);
-        
+
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($command);
@@ -90,6 +90,8 @@ class TipController extends Controller
                     'success',
                     $this->get('translator')->trans('flash.admin.tip.update.success', [], 'flashes')
                 );
+
+                return $this->redirectToRoute('admin_tip_list');
             } catch (TipException $exception) {
                 $this->addFlash(
                     'error',

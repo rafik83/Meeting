@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
-use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
-
 class Create
 {
     /** @var string */
@@ -26,6 +24,6 @@ class Create
     /** @var bool */
     public $onPrintPlanning;
     
-    /** @var TipTranslation[] */
+    /** @var array */
     public $translations;
 }

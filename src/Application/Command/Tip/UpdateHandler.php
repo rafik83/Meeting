@@ -30,11 +30,9 @@ class UpdateHandler
      */
     public function handle(Update $command)
     {
-        foreach($command->translations as $translation) {
-            if (!$command->translations->containsKey($translation->locale)) {
-                $command->tip = $command->tip->addTranslation($translation);
-                $translation->tip = $command->tip;
-            }
+
+        foreach ($command->translations as $locale => $translation) {
+            $command->tip->updateTranslation($locale, $translation['title'], $translation['content']);
         }
 
         $this->tipRepository->set(
@@ -42,8 +40,7 @@ class UpdateHandler
                 $command->title,
                 $command->onMeetingManagement,
                 $command->onCatalog,
-                $command->onPrintPlanning,
-                $command->tip->translations
+                $command->onPrintPlanning
             )
         );
     }
