@@ -23,16 +23,16 @@ class TipTranslationType extends AbstractType
     /**
      * @var array
      */
-    private $preferredLang;
+    private $preferredLocales;
 
     /**
      * TipTranslationType constructor.
      *
-     * @param array $preferredLang
+     * @param array $preferredLocales
      */
-    public function __construct(array $preferredLang)
+    public function __construct(array $preferredLocales)
     {
-        $this->preferredLang = $preferredLang;
+        $this->preferredLocales = $preferredLocales;
     }
 
     /** {@inheritdoc} */
@@ -41,7 +41,7 @@ class TipTranslationType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('locale', LocaleType::class, [
-                'preferred_choices' => $this->preferredLang,
+                'preferred_choices' => $this->preferredLocales,
             ])
             ->add('content', TextareaType::class);
     }

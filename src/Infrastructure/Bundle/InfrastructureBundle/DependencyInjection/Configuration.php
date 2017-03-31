@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('eu_countries')
                     ->prototype('scalar')->end()
                 ->end()
-                ->arrayNode('preferred_languages')
+                ->arrayNode('preferred_locales')
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('supported_currencies')

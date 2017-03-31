@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\PersistentCollection;
 
 class Tip
 {
@@ -61,7 +60,7 @@ class Tip
      * @param bool                 $onMeetingManagement
      * @param bool                 $onCatalog
      * @param bool                 $onPrintPlanning
-     * @param PersistentCollection $translations
+     * @param ArrayCollection      $translations
      *
      * @return Tip
      */
@@ -70,7 +69,7 @@ class Tip
         $onMeetingManagement,
         $onCatalog,
         $onPrintPlanning,
-        PersistentCollection $translations
+        ArrayCollection $translations
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;

@@ -22,12 +22,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TipsController extends Controller
+class TipController extends Controller
 {
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request)
     {
@@ -35,7 +35,7 @@ class TipsController extends Controller
         
         $tipListView = $this->get('tactician.commandbus')->handle($tipViewQuery);
         
-        return $this->render('AdminBundle:Tips:list.html.twig',[
+        return $this->render('AdminBundle:Tip:list.html.twig',[
             'tips' => $tipListView,
         ]);
     }
@@ -58,7 +58,7 @@ class TipsController extends Controller
                     $this->get('translator')->trans('flash.admin.tip.create.success', [], 'flashes')
                 );
                 
-                return $this->redirectToRoute('admin_tips_list');
+                return $this->redirectToRoute('admin_tip_list');
             } catch (TipException $exception) {
                 $this->addFlash(
                     'error',
@@ -67,7 +67,7 @@ class TipsController extends Controller
             }
         }
         
-        return $this->render('AdminBundle:Tips:create.html.twig', [
+        return $this->render('AdminBundle:Tip:create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -81,7 +81,7 @@ class TipsController extends Controller
     public function updateAction(Request $request, Tip $tip)
     {
         $command = new Update($tip);
-        $form    = $this->createForm(UpdateType::class, $command, []);
+        $form    = $this->createForm(UpdateType::class, $command);
         
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -98,7 +98,7 @@ class TipsController extends Controller
             }
         }
         
-        return $this->render('AdminBundle:Tips:update.html.twig', [
+        return $this->render('AdminBundle:Tip:update.html.twig', [
             'form' => $form->createView()
         ]);
     }

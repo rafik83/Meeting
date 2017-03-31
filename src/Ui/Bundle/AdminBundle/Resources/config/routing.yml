@@ -1296,21 +1296,21 @@ admin_order_export_file:
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
 
 #
-# Tips
+# Tip
 #
-admin_tips_list:
-    path: /tips/list
+admin_tip_list:
+    path: /tip/list
     methods: [GET]
-    defaults: { _controller: AdminBundle:Tips:list }
+    defaults: { _controller: AdminBundle:Tip:list }
 
-admin_tips_create:
-    path: /tips/create
+admin_tip_create:
+    path: /tip/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tips:create }
+    defaults: { _controller: AdminBundle:Tip:create }
 
-admin_tips_update:
-    path: /tips/{tip}/update
+admin_tip_update:
+    path: /tip/{tip}/update
     requirements:
         tip: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tips:update }
+    defaults: { _controller: AdminBundle:Tip:update }

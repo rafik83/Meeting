@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -45,7 +43,7 @@ class TipRepository implements TipRepositoryInterface
             ->createQueryBuilder()
             ->select('tip')
             ->from(Tip::class, 'tip', 'tip.id')
-            ->orderBy('tip.id');
+            ->orderBy('tip.title');
         
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
     }
@@ -60,27 +58,11 @@ class TipRepository implements TipRepositoryInterface
     /** {@inheritdoc} */
     public function set(Tip $tip)
     {
-        $this->entityManager->persist($tip);
         $this->entityManager->flush($tip);
-        
+
         foreach ($tip->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
     
-    }
-    
-    /** {@inheritdoc} */
-    public function getById($id)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('tip')
-            ->from(Tip::class, 'tip')
-            ->where('tip.id = :id')
-            ->setParameter('id', $id)
-            ->setMaxResults(1);
-        
-        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

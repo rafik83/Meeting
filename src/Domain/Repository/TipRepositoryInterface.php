@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 interface TipRepositoryInterface
@@ -33,11 +31,4 @@ interface TipRepositoryInterface
      * @param Tip $tip
      */
     public function set(Tip $tip);
-    
-    /**
-     * @param $id
-     *
-     * @return null|Tip
-     */
-    public function getById($id);
 }

@@ -30,28 +30,20 @@ class UpdateHandler
      */
     public function handle(Update $command)
     {
-        if (!$command->tip) {
-            throw new TipException();
-        }
-
         foreach($command->translations as $translation) {
-            $command->tip->addTranslation($translation);
-            $translation->tip = $command->tip;
-        }
-    
-        foreach($command->tip->getTranslations() as $translation) {
-            if(!in_array($translation->id, $command->translations->getKeys())) {
-                $command->tip->removeTranslation($translation);
+            if (!$command->translations->containsKey($translation->locale)) {
+                $command->tip = $command->tip->addTranslation($translation);
+                $translation->tip = $command->tip;
             }
         }
-        
+
         $this->tipRepository->set(
             $command->tip->update(
                 $command->title,
                 $command->onMeetingManagement,
                 $command->onCatalog,
                 $command->onPrintPlanning,
-                $command->translations
+                $command->tip->translations
             )
         );
     }

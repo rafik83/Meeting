@@ -262,7 +262,7 @@ services:
     form_type.admin.tip_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\TipTranslationType
         arguments:
-            - '%infrastructure.preferred_languages%'
+            - '%infrastructure.preferred_locales%'
         tags:
             - { name: form.type }
     #

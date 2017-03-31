@@ -1,19 +1,19 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.tips.list.title'|trans }}</h1>
+    <h1 class="page-header">{{ 'admin.tip.list.title'|trans }}</h1>
 
-    <a href="{{ path('admin_tips_create') }}" class="btn btn-primary">{{ 'admin.tips.create.link'|trans }}</a>
+    <a href="{{ path('admin_tip_create') }}" class="btn btn-primary">{{ 'admin.tip.create.link'|trans }}</a>
 
     {% if tips.results is not empty %}
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>{{ 'admin.tips.column.title'|trans }}</th>
-                <th>{{ 'admin.tips.column.translation'|trans }}</th>
-                <th>{{ 'admin.tips.column.visible.meeting_management'|trans }}</th>
-                <th>{{ 'admin.tips.column.visible.catalog'|trans }}</th>
-                <th>{{ 'admin.tips.column.visible.print_planning'|trans }}</th>
+                <th>{{ 'admin.tip.column.title'|trans }}</th>
+                <th>{{ 'admin.tip.column.translation'|trans }}</th>
+                <th>{{ 'admin.tip.column.visible.meeting_management'|trans }}</th>
+                <th>{{ 'admin.tip.column.visible.catalog'|trans }}</th>
+                <th>{{ 'admin.tip.column.visible.print_planning'|trans }}</th>
                 <th></th>
             </tr>
             </thead>
@@ -24,8 +24,8 @@
                         <td>
                             <table class="table">
                                 <tr>
-                                    <th>{{ 'admin.tips.column.locale'|trans }}</th>
-                                    <th>{{ 'admin.tips.column.content'|trans }}</th>
+                                    <th>{{ 'admin.tip.column.locale'|trans }}</th>
+                                    <th>{{ 'admin.tip.column.content'|trans }}</th>
                                 </tr>
                                 {% for translation in tip.translations %}
                                 <tr>
@@ -39,17 +39,14 @@
                                 {% endfor %}
                             </table>
                         </td>
-                        <td>{{ tip.isOnMeetingManagement ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans }}</td>
-                        <td>{{ tip.isOnCatalog ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans }}</td>
-                        <td>{{ tip.isOnPrintPlanning ? 'admin.tips.visible'|trans : 'admin.tips.invisible'|trans  }}</td>
+                        <td>{{ tip.isOnMeetingManagement ? 'admin.tip.visible'|trans : 'admin.tip.invisible'|trans }}</td>
+                        <td>{{ tip.isOnCatalog ? 'admin.tip.visible'|trans : 'admin.tip.invisible'|trans }}</td>
+                        <td>{{ tip.isOnPrintPlanning ? 'admin.tip.visible'|trans : 'admin.tip.invisible'|trans  }}</td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <a class="btn btn-default btn-sm" href="{{ path('admin_tips_update', {'tip': tip.id}) }}">
-                                    {{ 'admin.tips.update.link'|trans }}
+                                <a class="btn btn-default btn-sm" href="{{ path('admin_tip_update', {'tip': tip.id}) }}">
+                                    {{ 'admin.tip.update.link'|trans }}
                                 </a>
-                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -58,7 +55,7 @@
             </table>
         {% else %}
             <div class="alert alert-info">
-                <p class="center">{{ 'admin.tips.empty'|trans }}</p>
+                <p class="center">{{ 'admin.tip.empty'|trans }}</p>
             </div>
         {% endif %}
 

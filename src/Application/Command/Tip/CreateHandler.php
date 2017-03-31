@@ -35,7 +35,7 @@ class CreateHandler
             $command->onPrintPlanning
         );
         
-        foreach ($command->translations as $key => $translation) {
+        foreach ($command->translations as $translation) {
             $tip->addTranslation($translation);
             $translation->tip = $tip;
         }

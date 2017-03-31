@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 class Update
@@ -30,7 +30,7 @@ class Update
     /** @var bool */
     public $onPrintPlanning;
     
-    /** @var PersistentCollection */
+    /** @var ArrayCollection */
     public $translations;
     
     /**
