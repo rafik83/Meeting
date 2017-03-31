@@ -102,12 +102,18 @@ class BatchEnableDisableHandler
             ) {
                 $ignoredSheets[] = $sheet;
                 $this->excludeSheetFromBatch($batchEnableDisable, $sheet);
-
-                continue;
             }
         }
 
-        $this->sheetRepository->updateEnableStateBySheetsId($batchEnableDisable->ids, $batchEnableDisable->state);
+        if (!empty($batchEnableDisable->ids)) {
+            $this->sheetRepository->updateEnableStateBySheetsId($batchEnableDisable->ids, $batchEnableDisable->state);
+
+            $this->batchJobQueue->createJob(
+                $batchEnableDisable->ids,
+                $batchEnableDisable->admin,
+                ['state' => $batchEnableDisable->state]
+            );
+        }
 
         if (count($ignoredSheets) > 0) {
             $message = 'disable.warning';
@@ -122,12 +128,6 @@ class BatchEnableDisableHandler
                 }, $ignoredSheets));
         }
 
-        $this->batchJobQueue->createJob(
-            $batchEnableDisable->ids,
-            $batchEnableDisable->admin,
-            ['state' => $batchEnableDisable->state]
-        );
-
         return new BatchResult(count($sheets), $batchEnableDisable->getMessage() . $message, $ignoredSheetsMessage);
     }
 
@@ -141,7 +141,7 @@ class BatchEnableDisableHandler
     {
         $ignoredSheetIndex = array_search($sheet->getId(), $command->ids);
         if ($ignoredSheetIndex !== false) {
-            $command->ids = array_slice($command->ids, $ignoredSheetIndex);
+            $command->ids = array_slice($command->ids, $ignoredSheetIndex, null, true);
         }
     }
 }

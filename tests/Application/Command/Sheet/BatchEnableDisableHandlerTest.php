@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
@@ -52,25 +54,28 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedSheet3->setEnable(false);
 
         // Mock
-        $sheetRepository      = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher      = $this->prophesize(DelayedEventDispatcher::class);
-        $batchCatalogHandler  = $this->prophesize(BatchCatalogHandler::class);
-        $enableDisableManager = $this->prophesize(EnableDisableManager::class);
-        $meetingRepository    = $this->prophesize(MeetingRepositoryInterface::class);
-        $sheetInfoGuesser     = $this->prophesize(SheetInfoGuesser::class);
+        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
+        $batchCatalogHandler = $this->prophesize(BatchCatalogHandler::class);
+        $meetingRepository   = $this->prophesize(MeetingRepositoryInterface::class);
+        $sheetInfoGuesser    = $this->prophesize(SheetInfoGuesser::class);
+        $batchJobQueue       = $this->prophesize(BatchJobQueueInterface::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1->setEnable(false), $sheet2->setEnable(false), $sheet3->setEnable(false)]);
+        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
+            $sheet1->setEnable(false),
+            $sheet2->setEnable(false),
+            $sheet3->setEnable(false),
+        ]);
+
         $meetingRepository->countMeetingsOfSheet($sheet3)->shouldBeCalled()->willReturn(0);
-
 
         foreach ([$expectedSheet1, $expectedSheet2, $expectedSheet3] as $expectedSheet) {
             $meetingRepository->countMeetingsOfSheet($expectedSheet)->shouldBeCalled()->willReturn(0);
-            $sheetRepository->set($expectedSheet)->shouldBeCalled();
-            $eventDispatcher->dispatch(Events::SHEET_ENABLE_DISABLE,
-                new SheetEnableDisableEvent($expectedSheet, $admin, $date, false)
-            )->shouldBeCalled();
-            $enableDisableManager->update($expectedSheet, false)->shouldBeCalled();
         }
+
+        $sheetRepository->updateEnableStateBySheetsId([1, 2, 3], false)->shouldBeCalled();
+
+        $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => false])->shouldBeCalled();
 
         // Command
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
@@ -79,9 +84,9 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher->reveal(),
             $batchCatalogHandler->reveal(),
             $date,
-            $enableDisableManager->reveal(),
             $meetingRepository->reveal(),
-            $sheetInfoGuesser->reveal()
+            $sheetInfoGuesser->reveal(),
+            $batchJobQueue->reveal()
         );
 
         $result = $handler->handle($command);
@@ -100,9 +105,15 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, $date);
-        $sheet2 = new Sheet($event, $type, [], $user2, $date);
-        $sheet3 = new Sheet($event, $type, [], $user3, $date);
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->willReturn(1);
+        $sheet1->getEvent()->willReturn($event);
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->willReturn(2);
+        $sheet2->getEvent()->willReturn($event);
+        $sheet3 = $this->prophesize(Sheet::class);
+        $sheet3->getId()->willReturn(3);
+        $sheet3->getEvent()->willReturn($event);
 
         // Expected
         $expectedSheet1 = new Sheet($event, $type, [], $user1, $date);
@@ -118,13 +129,25 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository      = $this->prophesize(SheetRepositoryInterface::class);
         $eventDispatcher      = $this->prophesize(DelayedEventDispatcher::class);
         $batchCatalogHandler  = $this->prophesize(BatchCatalogHandler::class);
-        $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $meetingRepository    = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetInfoGuesser     = $this->prophesize(SheetInfoGuesser::class);
+        $batchJobQueue        = $this->prophesize(BatchJobQueueInterface::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
-        $meetingRepository->countMeetingsOfSheet($sheet3)->willReturn(2);
-        $sheetInfoGuesser->guessSheetTitle($sheet3, 'fr')->shouldBeCalled()->willReturn("SheetName");
+        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
+            $sheet1->reveal(),
+            $sheet2->reveal(),
+            $sheet3->reveal()
+        ]);
+
+        $meetingRepository->countMeetingsOfSheet(Argument::type(Sheet::class))
+            ->shouldBeCalledTimes(3)->willReturn(2);
+
+        $sheetInfoGuesser->guessSheetTitle(Argument::type(Sheet::class), 'fr')
+            ->shouldBeCalledTimes(3)->willReturn("SheetName");
+
+        $sheetRepository->updateEnableStateBySheetsId([], false)->shouldNotBeCalled();
+
+        $batchJobQueue->createJob([], $admin, ['state' => false])->shouldNotBeCalled();
 
         // Command
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
@@ -133,9 +156,9 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher->reveal(),
             $batchCatalogHandler->reveal(),
             $date,
-            $enableDisableManager->reveal(),
             $meetingRepository->reveal(),
-            $sheetInfoGuesser->reveal()
+            $sheetInfoGuesser->reveal(),
+            $batchJobQueue->reveal()
         );
 
         $result = $handler->handle($command);
