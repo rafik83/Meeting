@@ -45,18 +45,26 @@ abstract class AbstractEventType extends AbstractType
     private $authorizationChecker;
 
     /**
+     * @var array
+     */
+    private $preferredLocales;
+
+    /**
      * @param array                         $supportedCurrencies
+     * @param array                         $preferredLocales
      * @param PrefixRepositoryInterface     $prefixRepository
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         array $supportedCurrencies,
+        array $preferredLocales,
         PrefixRepositoryInterface $prefixRepository,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->supportedCurrencies  = $supportedCurrencies;
         $this->prefixRepository     = $prefixRepository;
         $this->authorizationChecker = $authorizationChecker;
+        $this->preferredLocales = $preferredLocales;
     }
 
     /**
@@ -64,7 +72,6 @@ abstract class AbstractEventType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $prefered      = ['fr', 'en', 'es', 'de', 'it', 'zh'];
         $currentLocale = $options['currentLocale'];
 
         /** @var Event $event */
@@ -74,14 +81,14 @@ abstract class AbstractEventType extends AbstractType
             ->add('title', TextType::class)
             ->add('locales', LocaleType::class, [
                 'multiple'          => true,
-                'preferred_choices' => $prefered,
+                'preferred_choices' => $this->preferredLocales,
             ])
             ->add('domain', TextType::class, [
                 'placeholder' => 'form.event_create.children.domain.placeholder',
             ])
             ->add('timeZone', TimezoneType::class)
             ->add('fallback', LocaleType::class, [
-                'preferred_choices' => $prefered,
+                'preferred_choices' => $this->preferredLocales,
             ])
             ->add('logo', FileType::class, [
                 'required' => false,

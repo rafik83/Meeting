@@ -114,6 +114,7 @@ services:
             - '%infrastructure.supported_currencies%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
+            - '%infrastructure.preferred_locales%'
         tags:
             - { name: form.type }
     form_type_event.create_type:
@@ -122,6 +123,7 @@ services:
             - '%infrastructure.supported_currencies%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
+            - '%infrastructure.preferred_locales%'
         tags:
             - { name: form.type }
     form_type_type.type_update_type:
