@@ -1,4 +1,5 @@
-{% if not isCatalog and not taggedDataView.isTextarea %}
+{% set hideLinkToEdit = not (maskLinkToEdit is defined and maskLinkToEdit == true) %}
+{% if not isCatalog and not taggedDataView.isTextarea and hideLinkToEdit %}
     <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}">
 {% endif %}
 
@@ -16,10 +17,12 @@
 
 
 {% if taggedDataView.isTextarea and not isCatalog %}
-    <div>
-        <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}" class="edit-link">
-            <i class="icon-Note_2"></i> {{ 'sheet.object.action.edit'|trans }}
-            "{{ label }}"
-        </a>
-    </div>
+    {% if hideLinkToEdit %}
+        <div>
+            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}" class="edit-link">
+                <i class="icon-Note_2"></i> {{ 'sheet.object.action.edit'|trans }}
+                "{{ label }}"
+            </a>
+        </div>
+    {% endif %}
 {% endif %}

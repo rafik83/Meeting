@@ -220,6 +220,10 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getTranslations(array $locales = [])
     {
+        if (!is_array($this->data) || !isset($this->data['text'])) {
+            return [];
+        }
+
         if (!$this->isTranslatable() || !is_array($this->data['text'])) {
             return [];
         }
@@ -240,6 +244,10 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getTranslationsInput()
     {
+        if (!is_array($this->data) || !isset($this->data['text'])) {
+            return [];
+        }
+
         if (!$this->isTranslatable() || !is_array($this->data['text'])) {
             return [];
         }
