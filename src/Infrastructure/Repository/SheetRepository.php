@@ -541,4 +541,20 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type', 'WITH', 'type.registrationTemplate = :registrationTemplate')
+            ->setParameter('registrationTemplate', $registrationTemplate);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

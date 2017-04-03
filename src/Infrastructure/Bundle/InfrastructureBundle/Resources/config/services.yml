@@ -975,6 +975,15 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
+
+    command.sheet.template_registration.index_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\IndexHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Index }
+
     command.template.registration.add_locale_handler:
         class: Proximum\Vimeet\Application\Command\Template\Registration\AddLocaleHandler
         arguments:
@@ -3050,6 +3059,14 @@ services:
         arguments:
             - '@command.sheet.template.index_handler'
             - '@repository.template.sheet_template_repository'
+        tags:
+            - { name: console.command }
+
+    command.index_sheets_by_registration_template:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsByRegistrationTemplateCommand
+        arguments:
+            - '@command.sheet.template_registration.index_handler'
+            - '@repository.template.registration_template_repository'
         tags:
             - { name: console.command }
 

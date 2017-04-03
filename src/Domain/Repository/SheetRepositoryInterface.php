@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -217,4 +218,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getBySheetTemplate(SheetTemplate $sheetTemplate);
+
+    /**
+     * @param RegistrationTemplate $registrationTemplate
+     *
+     * @return Sheet[]
+     */
+    public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate);
 }
