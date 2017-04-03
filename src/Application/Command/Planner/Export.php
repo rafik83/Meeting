@@ -17,7 +17,7 @@ class Export
     /** @var bool */
     public $lockMeetingRequest = false;
 
-    /** @var string */
+    /** @var string one of SolutionType constants */
     public $solutionType;
 
     /** @var Event */
