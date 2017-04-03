@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Validate;
@@ -44,13 +45,25 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $validateHandler = $this->prophesize(ValidateHandler::class);
+        $batchJobQueue   = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getUnvalidatedSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
         $validateHandler->handle(Argument::type(Validate::class))->shouldBeCalledTimes(2);
 
+        $batchJobQueue->createJob(
+            [1, 2, 3],
+            $admin,
+            ['comment' => $comment]
+        )->shouldBeCalled();
+
         $command = new BatchValidate([1, 2, 3], $admin, $comment);
 
-        $handler = new BatchValidateHandler($sheetRepository->reveal(), $validateHandler->reveal(), $date);
+        $handler = new BatchValidateHandler(
+            $sheetRepository->reveal(),
+            $validateHandler->reveal(),
+            $date,
+            $batchJobQueue->reveal()
+        );
         $result  = $handler->handle($command);
 
         $this->assertEquals(2, $result->count);

@@ -30,7 +30,7 @@ class BatchValidateHandler
      * @var \DateTimeInterface
      */
     private $datetime;
-    
+
     /**
      * @var BatchJobQueueInterface
      */
@@ -69,7 +69,14 @@ class BatchValidateHandler
         // Validate sheets
         /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
-            $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $this->datetime, $batchValidate->comment));
+            $this->validateHandler->handle(
+                new Validate(
+                    $sheet,
+                    $batchValidate->admin,
+                    $this->datetime,
+                    $batchValidate->comment
+                )
+            );
         }
 
         $this->batchJobQueue->createJob(
