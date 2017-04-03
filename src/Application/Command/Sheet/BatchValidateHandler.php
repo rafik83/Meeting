@@ -22,11 +22,6 @@ class BatchValidateHandler
     private $sheetRepository;
 
     /**
-     * @var ValidateHandler
-     */
-    private $validateHandler;
-
-    /**
      * @var \DateTimeInterface
      */
     private $datetime;
@@ -40,18 +35,15 @@ class BatchValidateHandler
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param ValidateHandler          $validateHandler
      * @param \DateTimeInterface       $datetime
      * @param BatchJobQueueInterface   $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        ValidateHandler $validateHandler,
         \DateTimeInterface $datetime,
         BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->validateHandler = $validateHandler;
         $this->datetime        = $datetime;
         $this->batchJobQueue   = $batchJobQueue;
     }
@@ -66,18 +58,7 @@ class BatchValidateHandler
         // Get unvalidated sheets
         $sheets = $this->sheetRepository->getUnvalidatedSheetsById($batchValidate->ids);
 
-        // Validate sheets
-        /** @var Sheet $sheet */
-        foreach ($sheets as $sheet) {
-            $this->validateHandler->handle(
-                new Validate(
-                    $sheet,
-                    $batchValidate->admin,
-                    $this->datetime,
-                    $batchValidate->comment
-                )
-            );
-        }
+        $this->sheetRepository->updateStateBySheetsId($batchValidate->ids, Sheet::STATE_VALIDATED);
 
         $this->batchJobQueue->createJob(
             $batchValidate->ids,

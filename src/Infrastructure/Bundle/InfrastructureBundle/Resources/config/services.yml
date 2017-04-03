@@ -712,17 +712,10 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Speaker\Delete }
-    command.sheet.validate_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\ValidateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Validate }
     command.sheet.batch_validate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.sheet.validate_handler'
             - '@datetime'
             - '@adapter_batch_job_queue.batch_validate_job_queue'
         tags:

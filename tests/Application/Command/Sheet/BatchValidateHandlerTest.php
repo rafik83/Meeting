@@ -44,11 +44,11 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet3->markAsValidated();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $validateHandler = $this->prophesize(ValidateHandler::class);
         $batchJobQueue   = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getUnvalidatedSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
-        $validateHandler->handle(Argument::type(Validate::class))->shouldBeCalledTimes(2);
+
+        $sheetRepository->updateStateBySheetsId([1, 2, 3], Sheet::STATE_VALIDATED)->shouldBeCalled();
 
         $batchJobQueue->createJob(
             [1, 2, 3],
@@ -60,7 +60,6 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new BatchValidateHandler(
             $sheetRepository->reveal(),
-            $validateHandler->reveal(),
             $date,
             $batchJobQueue->reveal()
         );
