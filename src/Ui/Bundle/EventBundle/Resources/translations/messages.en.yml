@@ -54,6 +54,11 @@ gender.man: Mr
 gender.woman: Mrs
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
+invoice.list.column.number: 'N° invoice'
+invoice.list.column.totalExcludeTaxes: 'Total excl. tax'
+invoice.list.column.totalIncludeTaxes: 'Total incl. VAT'
+invoice.list.title: 'Your invoices'
+invoice.show: 'View final invoice (pdf)'
 login.connect: Login
 login.connection: Connexion
 login.forgot_password: 'Forgotten password?'
