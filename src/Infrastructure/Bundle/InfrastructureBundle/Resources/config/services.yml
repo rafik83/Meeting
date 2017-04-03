@@ -1606,6 +1606,7 @@ services:
             - '@command.sheet.batch_catalog_handler'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@sheet.request.enable_disable_manager'
 
     #
     # Security
