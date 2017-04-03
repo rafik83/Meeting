@@ -26,7 +26,7 @@ class PlannerViewQuery
     public $locale;
 
     /**
-     * @var string
+     * @var string one of SolutionType constants
      */
     public $exportSolutionType;
 
