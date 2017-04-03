@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplatePreviewResolver;
 
@@ -28,18 +29,24 @@ class SaveHandler
      */
     private $templatePreviewResolver;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
     /**
      * SaveHandler constructor.
      *
      * @param SheetTemplateRepositoryInterface $templateRepository
      * @param TemplatePreviewResolver          $templatePreviewResolver
+     * @param JobQueueInterface                $jobQueue
      */
     public function __construct(
         SheetTemplateRepositoryInterface $templateRepository,
-        TemplatePreviewResolver $templatePreviewResolver
+        TemplatePreviewResolver $templatePreviewResolver,
+        JobQueueInterface $jobQueue
     ) {
         $this->templateRepository      = $templateRepository;
         $this->templatePreviewResolver = $templatePreviewResolver;
+        $this->jobQueue                = $jobQueue;
     }
 
     /**
@@ -53,5 +60,7 @@ class SaveHandler
 
         // resolve preview objects
         $this->templatePreviewResolver->resolve($save->template);
+
+        $this->jobQueue->indexSheetsBySheetTemplate($save->template);
     }
 }

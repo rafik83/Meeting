@@ -945,6 +945,7 @@ services:
         arguments:
             - '@repository.template.sheet_template_repository'
             - '@template.template_preview_resolver'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
 

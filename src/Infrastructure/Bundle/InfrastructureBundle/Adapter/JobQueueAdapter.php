@@ -16,8 +16,10 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsBySheetTemplateCommand;
 
 class JobQueueAdapter implements JobQueueInterface
 {
@@ -90,6 +92,16 @@ class JobQueueAdapter implements JobQueueInterface
     {
         $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
 
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function indexSheetsBySheetTemplate(SheetTemplate $sheetTemplate)
+    {
+        $job = new Job(IndexSheetsBySheetTemplateCommand::NAME, [$sheetTemplate->getId()]);
+        $job->addRelatedEntity($sheetTemplate);
         $this->setJob($job);
     }
 
