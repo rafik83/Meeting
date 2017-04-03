@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
-use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
