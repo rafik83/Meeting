@@ -98,14 +98,6 @@
     }
   }
 
-  .spot-slot-meeting-table {
-    padding: 0;
-    margin: 0;
-    td {
-      padding: 5px !important;
-    }
-  }
-
   .sheets-list {
     position: fixed;
     left: 0;
@@ -127,6 +119,24 @@
       height: 50px;
       text-align: center;
       vertical-align: middle;
+    }
+  }
+
+  .agenda-slot-meeting-list {
+    li {
+      float: left;
+      width: 150px;
+      padding: 5px;
+      .title {
+        > a {
+          color: inherit;
+        }
+        color: inherit;
+        text-overflow: ellipsis;
+        /* Required for text-overflow to do anything */
+        white-space: nowrap;
+        overflow: hidden;
+      }
     }
   }
 

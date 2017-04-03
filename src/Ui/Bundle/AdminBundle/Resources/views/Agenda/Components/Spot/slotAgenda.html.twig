@@ -17,16 +17,18 @@
                 ${ agendaSlot.beginEndHour }
             </div>
             <div>
-                <table class="table spot-slot-meeting-table">
-                    <tr>
-                        <td v-for="meeting in agendaSlot.meetings">
-                            <div class="text-center">
-                                <div>${ meeting.fromSheetTitle }</div>
-                                <div>${ meeting.toSheetTitle }</div>
+                <ul class="agenda-slot-meeting-list">
+                    <li class="" v-for="meeting in agendaSlot.meetings">
+                        <div class="text-center">
+                            <div class="title">
+                                <a href="#" v-bind:title="meeting.fromSheetTitle">${ meeting.fromSheetTitle }</a>
                             </div>
-                        </td>
-                    </tr>
-                </table>
+                            <div class="title">
+                                <a href="#" v-bind:title="meeting.toSheetTitle">${ meeting.toSheetTitle }</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
 
