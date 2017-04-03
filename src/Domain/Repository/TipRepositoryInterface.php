@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 
 interface TipRepositoryInterface
 {
@@ -25,10 +26,10 @@ interface TipRepositoryInterface
     /**
      * @param Tip $tip
      */
-    public function add(Tip $tip);
-    
-    /**
-     * @param Tip $tip
-     */
     public function set(Tip $tip);
+
+    /**
+     * @param TipTranslation $translation
+     */
+    public function removeTranslation(TipTranslation $translation);
 }

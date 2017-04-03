@@ -93,7 +93,8 @@ class Tip
         if ($this->translations->get($tipTranslation['locale'])) {
             $this->translations->get($tipTranslation['locale'])->update($tipTranslation['title'], $tipTranslation['content']);
         } else {
-            $this->translations->add(
+            $this->translations->set(
+                $tipTranslation['locale'],
                 new TipTranslation(
                     $this,
                     $tipTranslation['title'],
@@ -108,12 +109,15 @@ class Tip
 
     /**
      * @param string $locale
-     * @param array  $tipTranslation
+     * @param array $tipTranslation
+     *
+     * @return mixed|null
      */
     public function updateTranslation($locale, array $tipTranslation)
     {
-        $this->translations->remove($locale);
         $this->setTranslation($tipTranslation);
+
+        return $this->translations->remove($locale);
     }
 
     /**
