@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplatePreviewResolver;
 
+/**
+ * Save SheetTemplate value
+ */
 class SaveHandler
 {
     /**
