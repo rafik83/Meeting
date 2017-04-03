@@ -384,12 +384,12 @@ form.participate_happening.children.submit.label: Participer
 form.payment_mode_choice.children.paymentMode.bank_check: Chèque
 form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_mode_choice.children.paymentMode.paypal: Paypal
-form.planner_export.children.lockMeetingRequest.label: 'Vérrouiller les demandes de rendez-vous'
+form.planner_export.children.lockMeetingRequest.label: 'Verrouiller les demandes de rendez-vous'
 form.planner_export.children.lockMeetingRequest.option.yes: 'Oui'
 form.planner_export.children.lockMeetingRequest.option.no: 'Non'
 form.planner_export.children.solutionType.label: 'Type de solution à exporter'
 form.planner_export.children.solutionType.option.from_scratch: 'Réinitialisation - les rdv déjà créés sont supprimés'
-form.planner_export.children.solutionType.option.moving_allowed: 'Optimiser en bougeant les rdv'
+form.planner_export.children.solutionType.option.moving_allowed: 'Optimiser en bougeant les rdvs (sauf ceux qui ont un lieu ou créneau bloqué)'
 form.planner_export.children.solutionType.option.locked: 'Optimiser sans bouger les rdv'
 form.planner_export.children.submit.label: 'Exporter'
 form.planner_import.children.file.label: 'Solution à importer'
