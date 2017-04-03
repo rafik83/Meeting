@@ -10,25 +10,25 @@
 
 namespace Proximum\Vimeet\Application\View\Invoice;
 
-use Proximum\Vimeet\Application\View\Order\SummaryView;
+use Proximum\Vimeet\Application\View\Order;
 
 class InvoiceDataView
 {
-    /** @var SummaryView */
+    /** @var Order\SummaryView */
     public $summaryView;
-    
+
     /** @var BillingInfosView */
     public $billingInfosView;
-    
+
     /** @var float */
     public $amountRemainToPay;
-    
+
     /**
-     * @param SummaryView       $summaryView
+     * @param Order\SummaryView $summaryView
      * @param BillingInfosView  $billingInfosView
      * @param float             $amountRemainToPay
      */
-    public function __construct(SummaryView $summaryView, BillingInfosView $billingInfosView, $amountRemainToPay)
+    public function __construct(Order\SummaryView $summaryView, BillingInfosView $billingInfosView, $amountRemainToPay)
     {
         $this->summaryView       = $summaryView;
         $this->billingInfosView  = $billingInfosView;

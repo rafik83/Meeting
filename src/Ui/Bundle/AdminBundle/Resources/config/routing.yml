@@ -120,7 +120,7 @@ admin_event_list:
 admin_event_transaction_export:
     path: /event/transaction/export
     methods: [POST]
-    defaults: { _controller: AdminBundle:Event:exportTransaction }
+    defaults: { _controller: AdminBundle:Transaction/Export:export }
 
 admin_event_read:
     path: /event/{event}

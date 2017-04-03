@@ -31,25 +31,22 @@ class ExportController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $export        = new Export($admin);
-        $form          = $this->createForm(ExportType::class, $export, ['submit' => true])->handleRequest($request);
-        $exportContent = '';
+        $export = new Export($admin);
+        $form   = $this->createForm(ExportType::class, $export, ['submit' => true])->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if (!$form->isValid()) {
-                $this->addFlash('error', 'flash.admin.invoice.export.failed');
-
-                return $this->redirectToRoute('admin_event_list');
-            }
-
+        if ($form->isSubmitted() && $form->isValid()) {
             $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
 
             $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
                 'locale'  => $request->getLocale(),
                 'charset' => Charset::WINDOWS_1252,
             ]);
+
+            return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
         }
 
-        return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
+        $this->addFlash('error', 'flash.admin.invoice.export.failed');
+
+        return $this->redirectToRoute('admin_event_list');
     }
 }
