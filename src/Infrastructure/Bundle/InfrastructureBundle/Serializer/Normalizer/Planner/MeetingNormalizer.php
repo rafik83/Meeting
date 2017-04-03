@@ -20,6 +20,8 @@ class MeetingNormalizer implements NormalizerInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @param MeetingView $object
      */
     public function normalize($object, $format = null, array $context = [])
     {
@@ -29,8 +31,8 @@ class MeetingNormalizer implements NormalizerInterface
             '@id'             => $object->reference,
             'id'              => $object->id,
             'isVisio'         => $this->getBooleanValue($object->isVisio),
-            'blockedSpot'     => $this->getBooleanValue($object->blockedSpot),
-            'blockedSlot'     => $this->getBooleanValue($object->blockedSlot),
+            'blockedSpot'     => $this->getBooleanValue($object->isBlockedSpot),
+            'blockedSlot'     => $this->getBooleanValue($object->isBlockedSlot),
             'sheetList'       => [
                 'Sheet' => array_map(function (SheetView $sheet) {
                     return ['@reference' => $sheet->reference];
@@ -71,7 +73,7 @@ class MeetingNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @return string
      * @throws NotBooleanValueException

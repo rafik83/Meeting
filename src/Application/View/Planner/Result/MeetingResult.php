@@ -31,10 +31,10 @@ class MeetingResult
     public $participants;
 
     /** @var bool */
-    public $blockedSlot = false;
+    public $isBlockedSlot = false;
 
     /** @var bool */
-    public $blockedSpot = false;
+    public $isBlockedSpot = false;
 
     /**
      * @param ParticipantResult $participantResult
