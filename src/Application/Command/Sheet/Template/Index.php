@@ -17,13 +17,13 @@ class Index
     /**
      * @var SheetTemplate
      */
-    public $template;
+    public $sheetTemplate;
 
     /**
-     * @param SheetTemplate $template
+     * @param SheetTemplate $sheetTemplate
      */
-    public function __construct(SheetTemplate $template)
+    public function __construct(SheetTemplate $sheetTemplate)
     {
-        $this->template = $template;
+        $this->sheetTemplate = $sheetTemplate;
     }
 }

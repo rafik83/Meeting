@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
-use FOS\ElasticaBundle\Persister\ObjectPersister;
-use Proximum\Vimeet\Application\Event\Template\SheetTemplate\SheetTemplateUpdatedEvent;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
+use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -19,13 +19,12 @@ class SheetPopulateEventSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     public function testOnSheetTemplateUpdated()
     {
-        $sheet1 = SheetFactory::create();
-        $sheet2 = SheetFactory::create();
-        $objectPersister = $this->prophesize(ObjectPersister::class);
+        $sheet = SheetFactory::create();
+        $sheetIndexerInterface = $this->prophesize(SheetIndexerInterface::class);
 
-        $objectPersister->replaceMany([$sheet1, $sheet2])->shouldBeCalled();
+        $sheetIndexerInterface->updateSheets([$sheet])->shouldBeCalled();
 
-        $sheetPopulateEventSubscriber = new SheetPopulateEventSubscriber($objectPersister->reveal());
-        $sheetPopulateEventSubscriber->onSheetTemplateUpdated(new SheetTemplateUpdatedEvent([$sheet1, $sheet2]));
+        $sheetPopulateEventSubscriber = new SheetPopulateEventSubscriber($sheetIndexerInterface->reveal());
+        $sheetPopulateEventSubscriber->onPackageStep(new StepDoneEvent($sheet));
     }
 }

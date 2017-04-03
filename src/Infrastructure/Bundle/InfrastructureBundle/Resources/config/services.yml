@@ -953,7 +953,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\IndexHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@event_dispatcher'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Index }
 
@@ -1660,6 +1660,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter
         arguments:
             - '@filesystem'
+
+    adapter.sheet_indexer:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
+        arguments:
+            - '@fos_elastica.object_persister.app.sheet'
 
     #
     # Components

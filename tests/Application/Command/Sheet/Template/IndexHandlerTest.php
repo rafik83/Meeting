@@ -10,13 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Template\SheetTemplate\SheetTemplateUpdatedEvent;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,19 +33,12 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = SheetFactory::create($event);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $sheetIndexerInterface = $this->prophesize(SheetIndexerInterface::class);
 
         $sheetRepository->getBySheetTemplate($sheetTemplate)->shouldBeCalled()->willReturn([$sheet]);
+        $sheetIndexerInterface->updateSheets([$sheet])->shouldBeCalled();
 
-        $eventDispatcher
-            ->dispatch(
-                Events::SHEET_TEMPLATE_UPDATED,
-                new SheetTemplateUpdatedEvent([$sheet])
-            )
-            ->shouldBeCalled();
-
-        // Handler
-        $indexHandler = new IndexHandler($sheetRepository->reveal(), $eventDispatcher->reveal());
+        $indexHandler = new IndexHandler($sheetRepository->reveal(), $sheetIndexerInterface->reveal());
         $indexHandler->handle(new Index($sheetTemplate));
     }
 }
