@@ -36,7 +36,7 @@ class UpdateType extends AbstractType
                 'required' => false,
             ])
             ->add('translations', CollectionType::class, [
-                'entry_type'   => TipTranslationUpdateType::class,
+                'entry_type'   => TipTranslationType::class,
                 'allow_add'    => true,
                 'label'        => false,
                 'by_reference' => false,

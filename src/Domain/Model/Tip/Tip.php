@@ -84,24 +84,17 @@ class Tip
      */
     public function setTranslation(array $tipTranslation)
     {
-        $translations = array_unique($tipTranslation, SORT_REGULAR);
-
-        while ($this->translations->count() > count($translations)) {
-            $this->translations->removeElement($this->translations->last());
-        }
-
-        if ($this->translations->get($tipTranslation['locale'])) {
-            $this->translations->get($tipTranslation['locale'])->update($tipTranslation['title'], $tipTranslation['content']);
+        if ($this->translations->contains($tipTranslation)) {
+            $this->translations
+                ->get($tipTranslation['locale'])
+                ->update($tipTranslation['title'], $tipTranslation['content']);
         } else {
-            $this->translations->set(
+            $this->translations->set($tipTranslation['locale'], new TipTranslation(
+                $this,
+                $tipTranslation['title'],
                 $tipTranslation['locale'],
-                new TipTranslation(
-                    $this,
-                    $tipTranslation['title'],
-                    $tipTranslation['locale'],
-                    $tipTranslation['content']
-                )
-            );
+                $tipTranslation['content']
+            ));
         }
 
         return $this;

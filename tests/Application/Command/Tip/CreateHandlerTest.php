@@ -10,6 +10,7 @@
 
 namespace Application\Command\Tip;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Application\Command\Tip\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -26,18 +27,18 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->onPrintPlanning = true;
         $command->title = 'tipTitle';
         $tip = new Tip('tipTitle', true, true, true);
-        $command->translations = new TipTranslation(
-            $tip,
-            'title_1',
-            'locale_1',
-            'content_1'
-        );
+        $command->translations = [
+            'locale_1' => [
+                'locale' => 'locale_1',
+                'content' => 'content_1',
+                'title' => 'title_1',
+            ],
+        ];
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
-
-        foreach ($command->translations as $translation) {
-            $tip->setTranslation($translation);
-        }
+        $tip->translations = new ArrayCollection([
+            'locale_1' => new TipTranslation($tip, 'title_1', 'locale_1', 'content_1')
+        ]);
 
         $tipRepository->set($tip)->shouldBeCalled();
 
