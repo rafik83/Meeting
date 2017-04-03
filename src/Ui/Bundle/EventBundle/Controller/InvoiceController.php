@@ -26,14 +26,16 @@ class InvoiceController extends Controller
      * @param Sheet       $sheet
      * @param Invoice     $invoice
      * @param string      $hash
-     *
      * @param string      $format 'html'|'pdf'
      *
      * @return Response
      */
     public function showAction(EventDomain $eventDomain, Sheet $sheet, Invoice $invoice, $hash, $format)
     {
-        if ($invoice->getSheet() !== $sheet || $invoice->getHash() !== $hash) {
+        if ($eventDomain->getEvent() !== $sheet->getEvent()
+            || $invoice->getSheet() !== $sheet
+            || $invoice->getHash() !== $hash
+        ) {
             throw $this->createNotFoundException();
         }
 

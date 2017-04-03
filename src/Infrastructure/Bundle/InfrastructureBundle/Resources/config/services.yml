@@ -2293,7 +2293,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery }
     query.billing_infos.billing_infos_query_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\BillingInfos\BillingInfosQueryHandler
+        class: Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQueryHandler
         arguments:
             - '@repository.billing_info_repository'
     query.sheet.sheet_validation_view_query_handler:
@@ -3842,8 +3842,14 @@ services:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
+            - '@query.billing_infos.billing_infos_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery }
+
+    serializer.denormalizer.billing_infos_view_denormalizer:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\BillingInfosViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
 
     serializer.denormalizer.invoice_view:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer

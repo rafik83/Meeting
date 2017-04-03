@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Invoice;
 
-use Proximum\Vimeet\Application\Query\Sheet\BillingInfos\BillingInfosQuery;
-use Proximum\Vimeet\Application\Query\Sheet\BillingInfos\BillingInfosQueryHandler;
+use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQuery;
+use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceDataView;
@@ -32,9 +32,9 @@ class InvoiceDataQueryHandler
     /**
      * InvoiceDataQueryHandler constructor.
      *
-     * @param BillingInfosQueryHandler  $billingInfosQueryHandler
-     * @param SummaryQueryHandler       $summaryQueryHandler
-     * @param Balance                   $balance
+     * @param BillingInfosQueryHandler $billingInfosQueryHandler
+     * @param SummaryQueryHandler      $summaryQueryHandler
+     * @param Balance                  $balance
      */
     public function __construct(
         BillingInfosQueryHandler $billingInfosQueryHandler,

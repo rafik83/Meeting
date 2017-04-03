@@ -25,6 +25,8 @@ class InvoiceViewDenormalizer implements DenormalizerInterface, DenormalizerAwar
 
     /**
      * {@inheritdoc}
+     *
+     * @param array $context should contain billingInfosViewOfSheet to be passed to the billingInfosViewDenormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
