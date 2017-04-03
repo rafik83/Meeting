@@ -81,7 +81,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onPackageStep(StepDoneEvent $event)
     {
-        $this->updateSheetIndexation($event->getSheet());
+        $this->updateSheetIndexation([$event->getSheet()]);
     }
 
     /**
@@ -89,7 +89,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
-        $this->updateSheetIndexation($event->getOrder()->getSheet());
+        $this->updateSheetIndexation([$event->getOrder()->getSheet()]);
     }
 
     /**
@@ -97,7 +97,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onOrderUpdated(OrderUpdatedEvent $event)
     {
-        $this->updateSheetIndexation($event->getOrder()->getSheet());
+        $this->updateSheetIndexation([$event->getOrder()->getSheet()]);
     }
 
     /**
@@ -105,7 +105,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionCreated(TransactionCreatedEvent $event)
     {
-        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
 
     /**
@@ -113,7 +113,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionUpdated(TransactionUpdatedEvent $event)
     {
-        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
 
     /**
@@ -121,7 +121,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionConfirmed(TransactionConfirmedEvent $event)
     {
-        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
 
     /**
@@ -129,7 +129,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionRemoved(TransactionRemovedEvent $event)
     {
-        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
 
     /**
@@ -137,7 +137,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onHappeningParticipated(ParticipateEvent $event)
     {
-        $this->updateSheetIndexation($event->getSheet());
+        $this->updateSheetIndexation([$event->getSheet()]);
     }
 
     /**
@@ -227,19 +227,19 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     private function updateSheetsIndexationFromRequest(Request $request)
     {
-        $this->updateSheetIndexation($request->getFromSheet());
-        $this->updateSheetIndexation($request->getToSheet());
+        $this->updateSheetIndexation(
+            [
+                $request->getFromSheet(),
+                $request->getToSheet(),
+            ]
+        );
     }
 
     /**
-     * @param Sheet|Sheet[] $sheet
+     * @param Sheet[] $sheets
      */
-    private function updateSheetIndexation($sheet)
+    private function updateSheetIndexation(array $sheets)
     {
-        if (is_array($sheet)) {
-            $this->persister->replaceMany($sheet);
-        } elseif ($sheet instanceof Sheet) {
-            $this->persister->replaceOne($sheet);
-        }
+        $this->persister->replaceMany($sheets);
     }
 }
