@@ -162,7 +162,7 @@ class ImportHandler
 
             // Each 1000 meetings, flush and clear to optimize the insertion
             if (0 === ($index % 1000)) {
-                $this->entityManagerAdapter->flush();
+                $this->entityManagerAdapter->flush($toFlush);
 
                 /** @var Meeting $flush */
                 foreach ($toFlush as $flush) {
@@ -262,11 +262,11 @@ class ImportHandler
             $spot
         );
 
-        if ($meetingResult->blockedSlot) {
+        if ($meetingResult->isBlockedSlot) {
             $meeting->blockSlot();
         }
 
-        if ($meetingResult->blockedSpot) {
+        if ($meetingResult->isBlockedSpot) {
             $meeting->blockSpot();
         }
 
