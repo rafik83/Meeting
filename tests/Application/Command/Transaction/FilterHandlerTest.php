@@ -37,10 +37,10 @@ class FilterHandlerTest extends \PHPUnit_Framework_TestCase
         
         $admin->setEvents([$event]);
         $admin->setTypeEvents([$type]);
-    
-        $eventRepository                = $this->prophesize(EventRepositoryInterface::class);
-        $transactionRepository          = $this->prophesize(TransactionRepositoryInterface::class);
-        $transactionViewQueryHandler    = $this->prophesize(TransactionViewQueryHandler::class);
+
+        $eventRepository             = $this->prophesize(EventRepositoryInterface::class);
+        $transactionRepository       = $this->prophesize(TransactionRepositoryInterface::class);
+        $transactionViewQueryHandler = $this->prophesize(TransactionViewQueryHandler::class);
         
         $eventRepository
             ->getEventsByAdmin($admin)
@@ -48,7 +48,7 @@ class FilterHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$event]);
     
         $transactionRepository
-            ->findPaidByDateRange($command->beginDate, $command->endDate)
+            ->getFilteredByEvents([$event], $command->beginDate, $command->endDate)
             ->shouldBeCalled()
             ->willReturn([$transaction]);
         
