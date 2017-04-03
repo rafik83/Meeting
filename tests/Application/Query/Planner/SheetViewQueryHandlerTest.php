@@ -62,7 +62,10 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
 
-        $sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($event)->shouldBeCalled()->willReturn([$sheet, $sheet2, $sheet3]);
+        $sheetRepository
+            ->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($event)
+            ->shouldBeCalled()
+            ->willReturn([$sheet, $sheet2, $sheet3]);
         $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn($indicator);
         $indicatorCalculator->getIndicator($sheet2)->shouldBeCalled()->willReturn($indicator2);
         $indicatorCalculator->getIndicator($sheet3)->shouldBeCalled()->willReturn($indicator3);
@@ -82,7 +85,9 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $indicatorCalculator->reveal(),
             $meetingRepository->reveal()
         );
-        $result  = $handler->handle(new SheetViewQuery($event, [$typeView, $typeView2], ExportSolutionType::SOLUTION_OPTIMIZE_MOVING));
+        $result  = $handler->handle(
+            new SheetViewQuery($event, [$typeView, $typeView2], ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED)
+        );
 
         // Expected
         // The first sheet should be excluded as the possible meeting quantity is 0

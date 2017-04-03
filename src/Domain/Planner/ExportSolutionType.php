@@ -15,13 +15,13 @@ class ExportSolutionType
     /**
      * This is to export a new planner file without the already planned meetings
      */
-    const SOLUTION_FROM_SCRATCH    = 'from_scratch';
+    const SOLUTION_FROM_SCRATCH = 'from_scratch';
 
     /**
      * This is to export a planner file with already planned meetings
      * But these meetings can be moved and deleted by planner
      */
-    const SOLUTION_OPTIMIZE_MOVING = 'moving_allowed';
+    const SOLUTION_OPTIMIZE_MOVING_ALLOWED = 'moving_allowed';
 
     /**
      * This is to export a planner file with already planned meetings
@@ -35,9 +35,9 @@ class ExportSolutionType
     public static function getExportSolutionTypes()
     {
         return [
-            self::SOLUTION_FROM_SCRATCH    => self::SOLUTION_FROM_SCRATCH,
-            self::SOLUTION_OPTIMIZE_MOVING => self::SOLUTION_OPTIMIZE_MOVING,
-            self::SOLUTION_OPTIMIZE_LOCKED => self::SOLUTION_OPTIMIZE_LOCKED,
+            self::SOLUTION_FROM_SCRATCH            => self::SOLUTION_FROM_SCRATCH,
+            self::SOLUTION_OPTIMIZE_MOVING_ALLOWED => self::SOLUTION_OPTIMIZE_MOVING_ALLOWED,
+            self::SOLUTION_OPTIMIZE_LOCKED         => self::SOLUTION_OPTIMIZE_LOCKED,
         ];
     }
 }

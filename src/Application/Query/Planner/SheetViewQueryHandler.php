@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Planner;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -59,7 +58,7 @@ class SheetViewQueryHandler
 
         $meetingCount = [];
 
-        if ($query->exportSolutionType !== ExportSolutionType::SOLUTION_FROM_SCRATCH) {
+        if (!$query->isSolutionFromScratch()) {
             $meetingCount = $this->meetingRepository->countMeetingsOfEvent($query->event);
         }
 
