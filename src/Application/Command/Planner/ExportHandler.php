@@ -69,8 +69,7 @@ class ExportHandler
         $this->dispatcherHandler->handle(new Dispatcher($export->event));
 
         if (true === $export->lockMeetingRequest) {
-            $command = new LockMeetingRequestUpdate($export->event);
-            $command->lock = true;
+            $command = new LockMeetingRequestUpdate($export->event, true);
 
             $this->lockMeetingRequestHandler->handle($command);
         }
