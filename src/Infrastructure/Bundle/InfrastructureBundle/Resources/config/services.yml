@@ -947,6 +947,15 @@ services:
             - '@template.template_preview_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
+
+    command.sheet.template.index_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\IndexHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Index }
+
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
         arguments:
@@ -3027,6 +3036,14 @@ services:
         arguments:
             - '@repository.admin_repository'
             - '@command.invoice.batch_generate_invoice_handler'
+        tags:
+            - { name: console.command }
+
+    command.index_sheets_by_sheet_template:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsBySheetTemplateCommand
+        arguments:
+            - '@command.sheet.template.index_handler'
+            - '@repository.template.sheet_template_repository'
         tags:
             - { name: console.command }
 

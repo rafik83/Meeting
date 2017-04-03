@@ -134,4 +134,20 @@ class SheetTemplateRepository implements SheetTemplateRepositoryInterface
     {
         $this->entityManager->flush($template);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findById($id)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(SheetTemplate::class, 'template')
+            ->where('template.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

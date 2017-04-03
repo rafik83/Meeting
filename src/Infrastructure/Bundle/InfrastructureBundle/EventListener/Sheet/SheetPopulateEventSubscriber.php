@@ -26,6 +26,7 @@ use Proximum\Vimeet\Application\Event\Order\OrderUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvoicedEvent;
+use Proximum\Vimeet\Application\Event\Template\SheetTemplate\SheetTemplateUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
@@ -72,7 +73,8 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_IMPORTED       => 'onParticipantImported',
             Events::SHEET_INVOICED             => 'onSheetInvoiced',
             Events::MEETING_CREATED            => 'onMeetingCreated',
-            Events::MEETING_REMOVED            => 'onMeetingRemoved'
+            Events::MEETING_REMOVED            => 'onMeetingRemoved',
+            Events::SHEET_TEMPLATE_UPDATED     => 'onSheetTemplateUpdated',
         ];
     }
 
@@ -144,6 +146,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      * @param MeetingRemovedEvent $event
      */
     public function onMeetingRemoved(MeetingRemovedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getSheets());
+    }
+
+    /**
+     * @param SheetTemplateUpdatedEvent $event
+     */
+    public function onSheetTemplateUpdated(SheetTemplateUpdatedEvent $event)
     {
         $this->updateSheetIndexation($event->getSheets());
     }
