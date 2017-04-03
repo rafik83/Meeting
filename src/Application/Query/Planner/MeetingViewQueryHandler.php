@@ -21,7 +21,6 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class MeetingViewQueryHandler
