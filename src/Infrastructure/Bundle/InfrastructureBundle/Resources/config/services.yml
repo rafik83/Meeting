@@ -3376,6 +3376,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@order.balance'
         tags:
