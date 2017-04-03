@@ -90,32 +90,30 @@ class Tip
             $this->translations->removeElement($this->translations->last());
         }
 
-        foreach ($tipTranslation as $locale => $translation) {
-            if ($this->translations->get($locale)) {
-                $this->translations->get($locale)->update($translation['title'], $translation['content']);
-            } else {
-                $this->translations->add(
-                    new TipTranslation(
-                        $this,
-                        $tipTranslation['title'],
-                        $tipTranslation['locale'],
-                        $tipTranslation['content']
-                    )
-                );
-            }
+        if ($this->translations->get($tipTranslation['locale'])) {
+            $this->translations->get($tipTranslation['locale'])->update($tipTranslation['title'], $tipTranslation['content']);
+        } else {
+            $this->translations->add(
+                new TipTranslation(
+                    $this,
+                    $tipTranslation['title'],
+                    $tipTranslation['locale'],
+                    $tipTranslation['content']
+                )
+            );
         }
 
         return $this;
     }
 
     /**
-     * @param $locale
-     * @param $title
-     * @param $content
+     * @param string $locale
+     * @param array  $tipTranslation
      */
-    public function updateTranslation($locale, $title, $content)
+    public function updateTranslation($locale, array $tipTranslation)
     {
-        $this->translations->get($locale)->update($title, $content);
+        $this->translations->remove($locale);
+        $this->setTranslation($tipTranslation);
     }
 
     /**

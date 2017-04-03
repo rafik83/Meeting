@@ -32,7 +32,7 @@ class UpdateHandler
     {
         foreach ($command->translations as $locale => $translation) {
             if ($command->tip->translations->containsKey($locale)) {
-                $command->tip->updateTranslation($locale, $translation['title'], $translation['content']);
+                $command->tip->updateTranslation($locale, $translation);
             } else {
                 $command->tip->setTranslation([
                     'title'   => $translation['title'],
