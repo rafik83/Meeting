@@ -13,7 +13,7 @@
         </meeting-update-modal>
 
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-tabs agenda-tab" role="tablist">
             <li role="presentation" class="active">
                 <a href="#sheet" aria-controls="sheet" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.sheet.title.label'|trans }}</a>
             </li>
@@ -23,7 +23,7 @@
         </ul>
 
         <!-- Tab panes -->
-        <div class="tab-content">
+        <div class="tab-content agenda-tab-content">
             {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
             <spot></spot>
         </div>
