@@ -123,6 +123,7 @@ form.happening_update.children.talkings.label: Speakers
 form.happening_update.children.talkings.label_add: Add
 form.happening_update.children.talkings.label_delete: Delete
 form.happening_update.children.talkings.prototype.children.speaker.label: Speaker
+form.invoice_export.children.submit.label: 'Export invoices'
 form.login.children.password.label: Password
 form.login.children.rememberMe.label: 'Remember me 30 days'
 form.login.children.submit.label: Login
@@ -184,22 +185,30 @@ form.position_meeting.children.toParticipants.label: Participants
 form.product_choice.group_by.type.plan: Formulas
 form.product_choice.group_by.type.planning: 'Package of meetings'
 form.product_create_option.children.submit.label: Save
+form.product_create_option.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_create_participant.children.submit.label: Save
+form.product_create_participant.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_create_plan.children.availabilityCurrent.label: 'Current stock'
 form.product_create_plan.children.features.label_add: 'Add included benefit'
 form.product_create_plan.children.features.label_delete: 'Delete option'
 form.product_create_plan.children.productIncluded.label_add: 'Add a product included in this formula'
 form.product_create_plan.children.productIncluded.label_delete: 'Delete option from formula'
 form.product_create_plan.children.submit.label: Save
+form.product_create_plan.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_create_planning.children.submit.label: save
+form.product_create_planning.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_option.children.submit.label: Save
+form.product_update_option.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_participant.children.submit.label: Save
+form.product_update_participant.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_plan.children.features.label_add: 'Add included benefit'
 form.product_update_plan.children.features.label_delete: 'Delete option'
 form.product_update_plan.children.productIncluded.label_add: 'Add a product included in this formula'
 form.product_update_plan.children.productIncluded.label_delete: 'Delete option from formula'
 form.product_update_plan.children.submit.label: Save
+form.product_update_plan.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_planning.children.submit.label: Save
+form.product_update_planning.children.unitPrice.label: 'Unit price (excl. tax)'
 form.promotion_code_create.children.promotions.label_add: Add
 form.promotion_code_create.children.promotions.label_delete: Delete
 form.promotion_code_create.children.submit.label: Save
@@ -273,6 +282,6 @@ form.update_transaction.children.submit.label: Save
 form.update_unavailability.children.submit.label: Modify
 form.update_unavailability.children.to.label: To
 form.user_filter.children.text_search.label: 'Last name, first name or email of user'
-form.vatMode.ati: 'Incl. Tax'
-form.vatMode.et: 'Ext. Tax'
+form.vatMode.ati: 'Incl. VAT'
+form.vatMode.et: 'Excl. Tax'
 form.who_see_who.children.submit.label: Add
