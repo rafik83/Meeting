@@ -37,9 +37,9 @@ class CreateHandler
 
         foreach ($command->translations as $translation) {
             $tip->setTranslation([
-                    'title'   => $translation['title'],
-                    'locale'  => $translation['locale'],
-                    'content' => $translation['content'],
+                    'title'   => $translation->getTitle(),
+                    'locale'  => $translation->getLocale(),
+                    'content' => $translation->getContent(),
                 ]
             );
         }

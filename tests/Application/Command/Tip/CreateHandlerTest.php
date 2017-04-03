@@ -13,36 +13,31 @@ namespace Application\Command\Tip;
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Application\Command\Tip\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $command = new Create();
-        $command->onCatalog = false;
+        $command = new Create(['fr' ,'en']);
+        $command->onCatalog = true;
         $command->onMeetingManagement = true;
         $command->onPrintPlanning = true;
         $command->title = 'tipTitle';
-        $command->translations = [
-            'locale_1' => [
-                'title'   => 'title_1',
-                'locale'  => 'locale_1',
-                'content' => 'content_1',
-            ],
-            'locale_2' => [
-                'title'   => 'title_2',
-                'locale'  => 'locale_2',
-                'content' => 'content_2',
-            ],
-        ];
-
-        $tip = new Tip('tipTitle', true, false, true);
+        $tip = new Tip('tipTitle', true, true, true);
+        $command->translations = new TipTranslation(
+            $tip,
+            'title_1',
+            'locale_1',
+            'content_1'
+        );
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip->setTranslation($command->translations['locale_1']);
-        $tip->setTranslation($command->translations['locale_2']);
+        foreach ($command->translations as $translation) {
+            $tip->setTranslation($translation);
+        }
 
         $tipRepository->set($tip)->shouldBeCalled();
 

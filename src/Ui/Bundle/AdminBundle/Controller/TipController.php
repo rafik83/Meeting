@@ -47,7 +47,7 @@ class TipController extends Controller
      */
     public function createAction(Request $request)
     {
-        $command = new Create();
+        $command = new Create($this->getParameter('infrastructure.default_locales'));
         $form    = $this->createForm(CreateType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

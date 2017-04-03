@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
+
 class Create
 {
     /** @var string */
@@ -26,4 +29,21 @@ class Create
     
     /** @var array */
     public $translations;
+
+    /**
+     * Create constructor.
+     *
+     * @param array $defaultLocales
+     */
+    public function __construct(array $defaultLocales)
+    {
+        foreach ($defaultLocales as $locale) {
+            $this->translations[] = new TipTranslation(
+                new Tip('', false, false, false),
+                '',
+                $locale,
+                ''
+            );
+        }
+    }
 }
