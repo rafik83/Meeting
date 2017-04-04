@@ -1,7 +1,7 @@
 <div class="col-md-4" data-meeting-request="{{ meetingRequestView.meetingRequest.getTypeOfRequest(sheet) }}">
     <div class="catalog__item">
         <div class="content__sheet-card">
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog }, false) }}
         </div>
         <footer>
             {% if meetingRequestView.isSheetSeeable == true %}
