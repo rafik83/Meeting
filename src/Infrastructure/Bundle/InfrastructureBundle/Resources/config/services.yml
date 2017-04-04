@@ -367,6 +367,15 @@ services:
                 - '@repository.rule_repository'
             tags:
                 - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Remove }
+
+    command.type.index_handler:
+            class: Proximum\Vimeet\Application\Command\Type\IndexHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.sheet_repository'
+                - '@adapter.sheet_indexer'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Index }
+
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
         class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
         arguments:
@@ -3056,7 +3065,7 @@ services:
             - { name: console.command }
 
     command.index_sheets_by_sheet_template:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsBySheetTemplateCommand
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand
         arguments:
             - '@command.sheet.template.index_handler'
             - '@repository.template.sheet_template_repository'
@@ -3064,10 +3073,18 @@ services:
             - { name: console.command }
 
     command.index_sheets_by_registration_template:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsByRegistrationTemplateCommand
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand
         arguments:
             - '@command.sheet.template_registration.index_handler'
             - '@repository.template.registration_template_repository'
+        tags:
+            - { name: console.command }
+
+    command.index_sheets_by_types:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand
+        arguments:
+            - '@command.type.index_handler'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: console.command }
 

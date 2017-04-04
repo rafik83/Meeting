@@ -225,4 +225,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate);
+
+    /**
+     * @param Type[] $types
+     *
+     * @return Sheet[]
+     */
+    public function getByTypes(array $types);
 }

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index;
 
 use Proximum\Vimeet\Application\Command\Template\Registration\Index;
 use Proximum\Vimeet\Application\Command\Template\Registration\IndexHandler;
