@@ -26,7 +26,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->onMeetingManagement = true;
         $command->onPrintPlanning = true;
         $command->title = 'tipTitle';
-        $tip = new Tip('tipTitle', true, true, true);
+        $tip = new Tip('tipTitle', true, true, true, new \DateTime());
         $command->translations = [
             'locale_1' => [
                 'locale' => 'locale_1',
@@ -37,7 +37,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tip->translations = new ArrayCollection([
-            'locale_1' => new TipTranslation($tip, 'title_1', 'locale_1', 'content_1')
+            'locale_1' => new TipTranslation($tip, new \DateTime(), 'title_1', 'locale_1', 'content_1')
         ]);
 
         $tipRepository->add($tip)->shouldBeCalled();
