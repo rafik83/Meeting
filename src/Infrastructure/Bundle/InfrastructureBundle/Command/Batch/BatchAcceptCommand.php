@@ -64,8 +64,7 @@ class BatchAcceptCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Batch accept sheet action')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids separated by a comma')
-            ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id')
-            ->addArgument('locale', InputArgument::REQUIRED, 'Locale');
+            ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id');
 
     }
 
