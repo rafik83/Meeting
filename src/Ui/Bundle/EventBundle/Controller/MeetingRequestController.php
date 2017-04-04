@@ -19,10 +19,12 @@ use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotFoundException;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
@@ -103,6 +105,13 @@ class MeetingRequestController extends Controller
 
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
+        try {
+            $tipQuery = new TipTranslationViewQuery($request->get('_route'), $request->getLocale());
+            $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
+        } catch (TipTranslationNotFoundException $exception) {
+            $tipView = null;
+        }
+
         return $this->render($template, [
             'event'              => $event,
             'sheet'              => $sheet,
@@ -113,6 +122,7 @@ class MeetingRequestController extends Controller
             'isMeeting'          => true,
             'isEventOpen'        => $isEventOpen,
             'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
+            'tipView'            => $tipView,
         ]);
     }
 

@@ -17,7 +17,7 @@ class TipView
     
     /** @var string */
     public $title;
-    
+
     /** @var array */
     public $pagesTranslations;
 

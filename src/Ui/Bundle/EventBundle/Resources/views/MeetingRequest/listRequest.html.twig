@@ -6,6 +6,7 @@
 
 {% block content %}
     <div class="catalog catalog--advanced">
+        {{ include('EventBundle:Tip:tip.html.twig', {tip: tipView}) }}
         {{ include('EventBundle:MeetingRequest/Partials:catalog.html.twig') }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}

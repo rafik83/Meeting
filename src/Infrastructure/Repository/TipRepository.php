@@ -74,4 +74,49 @@ class TipRepository implements TipRepositoryInterface
     {
         $this->entityManager->remove($translation);
     }
+
+    /** {@inheritdoc} */
+    public function findForCatalog()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, translations')
+            ->from(Tip::class, 'tip')
+            ->join('tip.translations', 'translations', 'WHERE', 'tip.onCatalog = true')
+            ->orderBy('tip.createdAt')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /** {@inheritdoc} */
+    public function findForMeetingManagement()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, translations')
+            ->from(Tip::class, 'tip')
+            ->join('tip.translations', 'translations', 'WHERE', 'tip.onMeetingManagement = true')
+            ->orderBy('tip.createdAt')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /** {@inheritdoc} */
+    public function findForPlanning()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, translations')
+            ->from(Tip::class, 'tip')
+            ->join('tip.translations', 'translations', 'WHERE', 'tip.onPrintPlanning = true')
+            ->orderBy('tip.createdAt')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

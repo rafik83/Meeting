@@ -105,6 +105,7 @@ class Tip
         } else {
             $this->translations->set($tipTranslation['locale'], new TipTranslation(
                 $this,
+                new \DateTime(),
                 $tipTranslation['title'],
                 $tipTranslation['locale'],
                 $tipTranslation['content']

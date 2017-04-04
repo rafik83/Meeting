@@ -27,6 +27,9 @@ class Create
     /** @var array */
     public $translations;
 
+    /** @var \DateTimeInterface */
+    public $dateTime;
+
     /**
      * Create constructor.
      *
@@ -34,6 +37,8 @@ class Create
      */
     public function __construct(array $defaultLocales)
     {
+        $this->dateTime = new \DateTime();
+
         foreach ($defaultLocales as $locale) {
             $this->translations[] = ['locale' => $locale];
         }

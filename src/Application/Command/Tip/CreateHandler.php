@@ -32,7 +32,8 @@ class CreateHandler
             $command->title,
             $command->onMeetingManagement,
             $command->onCatalog,
-            $command->onPrintPlanning
+            $command->onPrintPlanning,
+            $command->dateTime
         );
 
         foreach ($command->translations as $translation) {

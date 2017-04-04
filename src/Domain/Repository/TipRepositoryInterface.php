@@ -37,4 +37,19 @@ interface TipRepositoryInterface
      * @param TipTranslation $translation
      */
     public function removeTranslation(TipTranslation $translation);
+
+    /**
+     * @return Tip|null
+     */
+    public function findForPlanning();
+
+    /**
+     * @return Tip|null
+     */
+    public function findForMeetingManagement();
+
+    /**
+     * @return Tip|null
+     */
+    public function findForCatalog();
 }

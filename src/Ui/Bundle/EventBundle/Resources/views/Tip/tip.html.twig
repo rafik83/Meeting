@@ -1,0 +1,6 @@
+{% if tip is defined and tip is not null %}
+    <div class="alert alert-info" role="alert">
+        <h4>{{ tip.title }}</h4>
+        <p>{{ tip.content|html }}</p>
+    </div>
+{% endif %}
