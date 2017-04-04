@@ -13,6 +13,8 @@ Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
             type: string
         content:
             type: text
+        createdAt:
+            type: datetime
     manyToOne:
         tip:
             targetEntity: Proximum\Vimeet\Domain\Model\Tip\Tip

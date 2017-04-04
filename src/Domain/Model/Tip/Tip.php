@@ -42,22 +42,29 @@ class Tip
      * @var bool
      */
     public $onPrintPlanning;
-    
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $createdAt;
+
     /**
      * Tip constructor.
      *
-     * @param string            $title
-     * @param bool              $onMeetingManagement
-     * @param bool              $onCatalog
-     * @param bool              $onPrintPlanning
+     * @param string             $title
+     * @param bool               $onMeetingManagement
+     * @param bool               $onCatalog
+     * @param bool               $onPrintPlanning
+     * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning)
+    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning, \DateTimeInterface $createdAt)
     {
         $this->title                = $title;
         $this->onMeetingManagement  = $onMeetingManagement;
         $this->onCatalog            = $onCatalog;
         $this->onPrintPlanning      = $onPrintPlanning;
         $this->translations         = new ArrayCollection();
+        $this->createdAt            = $createdAt;
     }
     
     /**
@@ -166,6 +173,14 @@ class Tip
     public function isOnPrintPlanning()
     {
         return $this->onPrintPlanning;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 
     /**

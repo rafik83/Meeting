@@ -27,20 +27,25 @@ class TipTranslation
     /** @var string */
     private $content;
 
+    /** @var \DateTimeInterface */
+    private $createdAt;
+
     /**
      * TipTranslation constructor.
      *
-     * @param Tip    $tip
-     * @param string $title
-     * @param string $locale
-     * @param string $content
+     * @param Tip                $tip
+     * @param \DateTimeInterface $createdAt
+     * @param string             $title
+     * @param string             $locale
+     * @param string             $content
      */
-    public function __construct(Tip $tip, $title, $locale, $content)
+    public function __construct(Tip $tip, \DateTimeInterface $createdAt, $title, $locale, $content)
     {
-        $this->tip     = $tip;
-        $this->title   = $title;
-        $this->locale  = $locale;
-        $this->content = $content;
+        $this->tip       = $tip;
+        $this->createdAt = $createdAt;
+        $this->title     = $title;
+        $this->locale    = $locale;
+        $this->content   = $content;
     }
 
     /**
@@ -143,5 +148,13 @@ class TipTranslation
         $this->content = $content;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }
