@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,14 +22,15 @@ use Symfony\Component\HttpFoundation\Response;
 class InvoiceController extends Controller
 {
     /**
-     * @param Sheet   $sheet
-     * @param Invoice $invoice
-     * @param string  $hash
-     * @param string  $format 'html'|'pdf'
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param Invoice     $invoice
+     * @param string      $hash
+     * @param string      $format 'html'|'pdf'
      *
      * @return Response
      */
-    public function showAction(Sheet $sheet, Invoice $invoice, $hash, $format)
+    public function showAction(EventDomain $eventDomain, Sheet $sheet, Invoice $invoice, $hash, $format)
     {
         if ($invoice->getSheet() !== $sheet || $invoice->getHash() !== $hash) {
             throw $this->createNotFoundException();
