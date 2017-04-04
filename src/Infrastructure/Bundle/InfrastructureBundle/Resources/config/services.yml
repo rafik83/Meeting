@@ -426,6 +426,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Category\Update }
     vimeet_infrastructure.vimeet.application.command.category.create_handler:
