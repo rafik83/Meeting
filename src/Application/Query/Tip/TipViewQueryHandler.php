@@ -37,16 +37,17 @@ class TipViewQueryHandler
     public function handle(TipViewQuery $query)
     {
         $tips = $this->tipRepository->paginate($query->page);
-        
-        $tipListView = new TipListView();
+
+        $tipListView  = new TipListView();
         
         foreach($tips as $tip) {
+
+            $pagesTranslations = $tip->getPagesTranslations();
+
             $tipListView->tipListView[] = new TipView(
                 $tip->getId(),
                 $tip->getTitle(),
-                $tip->isOnMeetingManagement(),
-                $tip->isOnCatalog(),
-                $tip->isOnPrintPlanning()
+                $pagesTranslations
             );
         }
         

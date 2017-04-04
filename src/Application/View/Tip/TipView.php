@@ -18,30 +18,20 @@ class TipView
     /** @var string */
     public $title;
     
-    /** @var boolean */
-    public $isOnMeetingManagement;
-    
-    /** @var boolean */
-    public $isOnCatalog;
-    
-    /** @var boolean */
-    public $isOnPrintPlanning;
-    
+    /** @var array */
+    public $pagesTranslations;
+
     /**
      * TipView constructor.
      *
-     * @param int       $id
-     * @param string    $title
-     * @param bool      $isOnMeetingManagement
-     * @param bool      $isOnCatalog
-     * @param bool      $isOnPrintPlanning
+     * @param int    $id
+     * @param string $title
+     * @param array  $pagesTranslations
      */
-    public function __construct($id, $title, $isOnMeetingManagement, $isOnCatalog, $isOnPrintPlanning)
+    public function __construct($id, $title, array $pagesTranslations)
     {
-        $this->id                    = $id;
-        $this->title                 = $title;
-        $this->isOnMeetingManagement = $isOnMeetingManagement;
-        $this->isOnCatalog           = $isOnCatalog;
-        $this->isOnPrintPlanning     = $isOnPrintPlanning;
+        $this->id    = $id;
+        $this->title = $title;
+        $this->pagesTranslations = $pagesTranslations;
     }
 }

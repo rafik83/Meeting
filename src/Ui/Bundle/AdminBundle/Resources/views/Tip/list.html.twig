@@ -11,9 +11,7 @@
             <tr>
                 <th>{{ 'admin.tip.column.title'|trans }}</th>
                 <th>{{ 'admin.tip.column.translation'|trans }}</th>
-                <th>{{ 'admin.tip.column.visible.meeting_management'|trans }}</th>
-                <th>{{ 'admin.tip.column.visible.catalog'|trans }}</th>
-                <th>{{ 'admin.tip.column.visible.print_planning'|trans }}</th>
+                <th>{{ 'admin.tip.visible'|trans }}</th>
                 <th></th>
             </tr>
             </thead>
@@ -22,26 +20,17 @@
                     <tr>
                         <td>{{ tip.title }}</td>
                         <td>
-                            <table class="table">
-                                <tr>
-                                    <th>{{ 'admin.tip.column.locale'|trans }}</th>
-                                    <th>{{ 'admin.tip.column.content'|trans }}</th>
-                                </tr>
-                                {% for translation in tip.translations %}
-                                <tr>
-                                    <td>{{ translation.locale }}</td>
-                                    {% if translation.content|length > 100 %}
-                                        <td>{{ translation.content|slice(0, 100) ~ '...' }}</td>
-                                    {% else %}
-                                        <td>{{ translation.content }}</td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </table>
+                            {% for translation in tip.translations %}
+                                <span class="label label-primary">
+                                    {{ translation.locale|locale|capitalize }}
+                                </span>
+                            {% endfor %}
                         </td>
-                        <td>{{ tip.isOnMeetingManagement ? 'admin.tip.visible'|trans : 'admin.tip.invisible'|trans }}</td>
-                        <td>{{ tip.isOnCatalog ? 'admin.tip.visible'|trans : 'admin.tip.invisible'|trans }}</td>
-                        <td>{{ tip.isOnPrintPlanning ? 'admin.tip.visible'|trans : 'admin.tip.invisible'|trans  }}</td>
+                        <td>
+                            {% for page in tip.pagesTranslations %}
+                                {{ page|trans }}
+                            {% endfor %}
+                        </td>
                         <td class="text-right">
                             <div class="btn-group">
                                 <a class="btn btn-default btn-sm" href="{{ path('admin_tip_update', {'tip': tip.id}) }}">
