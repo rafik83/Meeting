@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -46,6 +47,12 @@ interface SheetRepositoryInterface
      * @param string $state
      */
     public function updateStateBySheetsId(array $ids, $state);
+
+    /**
+     * @param array $ids
+     * @param Admin $admin
+     */
+    public function batchAssignBySheetsId(array $ids, Admin $admin);
 
     /**
      * @param Event $event

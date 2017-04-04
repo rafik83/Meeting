@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -575,6 +576,22 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function batchAssignBySheetsId(array $ids, Admin $admin)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.follower', ':follower')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('follower', $admin);
 
         return $queryBuilder->getQuery()->execute();
     }

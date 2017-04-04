@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAssignHandler
@@ -33,16 +34,18 @@ class BatchAssignHandler
      * @param BatchAssign $batchAssign
      *
      * @return BatchResult
+     * @throws SheetException
      */
     public function handle(BatchAssign $batchAssign)
     {
         // Get sheets
         $sheets = $this->sheetRepository->getSheetsById($batchAssign->ids);
 
-        // Assign admin to sheets
-        foreach ($sheets as $sheet) {
-            $this->sheetRepository->set($sheet->assign($batchAssign->admin));
+        if (!$batchAssign->admin->isOrganizer() && !$batchAssign->admin->isOperator()) {
+            throw new SheetException('Follower must be an organizer or operator.');
         }
+
+        $this->sheetRepository->batchAssignBySheetsId($batchAssign->ids, $batchAssign->admin);
 
         return new BatchResult(count($sheets), $batchAssign->getMessage() . 'assign.success');
     }
