@@ -10,9 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
-use Prophecy\Argument;
-use Proximum\Vimeet\Application\Command\Sheet\Accept;
-use Proximum\Vimeet\Application\Command\Sheet\AcceptHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAccept;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -27,10 +24,10 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = EventFactory::createEvent();
-        $date  = new \DateTime();
-        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
-        $type  = new Type($event);
+        $event  = EventFactory::createEvent();
+        $date   = new \DateTime();
+        $admin  = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
+        $type   = new Type($event);
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
@@ -40,11 +37,14 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet3->markAsAccepted();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $acceptHandler = $this->prophesize(AcceptHandler::class);
-        $batchJobQueue = $this->prophesize(BatchAcceptJobQueue::class);
+        $batchJobQueue   = $this->prophesize(BatchAcceptJobQueue::class);
 
         $sheetRepository->getSheetsUnacceptedById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
-        $acceptHandler->handle(Argument::type(Accept::class))->shouldBeCalledTimes(3);
+
+        $sheetRepository->updateStateBySheetsId(
+            [1, 2, 3],
+            Sheet::STATE_ACCEPTED
+        )->shouldBeCalled();
 
         $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
 
@@ -52,7 +52,6 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new BatchAcceptHandler(
             $sheetRepository->reveal(),
-            $acceptHandler->reveal(),
             $date,
             $batchJobQueue->reveal()
         );

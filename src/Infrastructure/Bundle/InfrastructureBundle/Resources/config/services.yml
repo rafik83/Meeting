@@ -865,17 +865,10 @@ services:
             - '@command.sheet.batch_generate_invoice_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
-    command.sheet.accept_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Accept }
     command.sheet.batch_accept_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.sheet.accept_handler'
             - '@datetime'
             - '@adapter_batch_job_queue.batch_accept_job_queue'
         tags:

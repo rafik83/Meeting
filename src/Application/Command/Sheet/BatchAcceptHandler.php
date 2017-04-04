@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAcceptHandler
@@ -19,11 +20,6 @@ class BatchAcceptHandler
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var AcceptHandler
-     */
-    private $acceptHandler;
 
     /**
      * @var \DateTimeInterface
@@ -39,18 +35,15 @@ class BatchAcceptHandler
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param AcceptHandler            $acceptHandler
      * @param \DateTimeInterface       $datetime
      * @param BatchJobQueueInterface   $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        AcceptHandler $acceptHandler,
         \DateTimeInterface $datetime,
         BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->acceptHandler   = $acceptHandler;
         $this->datetime        = $datetime;
         $this->batchJobQueue   = $batchJobQueue;
     }
@@ -65,10 +58,10 @@ class BatchAcceptHandler
         // Get sheets unaccepted by id
         $sheets = $this->sheetRepository->getSheetsUnacceptedById($batchAccept->ids);
 
-        // Accept sheets
-        foreach ($sheets as $sheet) {
-            $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $this->datetime));
-        }
+        $this->sheetRepository->updateStateBySheetsId(
+            $batchAccept->ids,
+            Sheet::STATE_ACCEPTED
+        );
 
         $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
 
