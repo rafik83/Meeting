@@ -89,7 +89,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             '10 rue saint marc',
             '75002',
             'Paris',
-            'EN',
+            'GB',
             'vatNumber',
             null
         );
@@ -106,7 +106,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             'street'    => '10 rue saint marc',
             'zipcode'   => '75002',
             'city'      => 'Paris',
-            'country'   => 'EN',
+            'country'   => 'GB',
             'vatNumber' => 'vatNumber',
             'reference' => null,
         ];
@@ -125,7 +125,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             0,
             'code',
             'vatNumber',
-            'EN'
+            'GB'
         );
 
         $dateFormatter = IntlDateFormatter::create(
