@@ -54,4 +54,9 @@ interface JobQueueInterface
      * @param RegistrationTemplate $registrationTemplate
      */
     public function indexSheetsByRegistrationTemplate(RegistrationTemplate $registrationTemplate);
+
+    /**
+     * @param int[] $typeIds
+     */
+    public function indexSheetsByTypes(array $typeIds);
 }

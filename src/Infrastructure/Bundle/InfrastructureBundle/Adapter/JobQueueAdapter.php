@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsByRegistrationTemplateCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsBySheetTemplateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand;
 
 class JobQueueAdapter implements JobQueueInterface
 {
@@ -114,6 +115,15 @@ class JobQueueAdapter implements JobQueueInterface
     {
         $job = new Job(IndexSheetsByRegistrationTemplateCommand::NAME, [$registrationTemplate->getId()]);
         $job->addRelatedEntity($registrationTemplate);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function indexSheetsByTypes(array $typeIds)
+    {
+        $job = new Job(IndexSheetsByTypesCommand::NAME, [implode(',', $typeIds)]);
         $this->setJob($job);
     }
 
