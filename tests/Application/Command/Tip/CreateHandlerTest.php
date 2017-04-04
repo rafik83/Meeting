@@ -40,7 +40,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'locale_1' => new TipTranslation($tip, 'title_1', 'locale_1', 'content_1')
         ]);
 
-        $tipRepository->set($tip)->shouldBeCalled();
+        $tipRepository->add($tip)->shouldBeCalled();
 
         $handler = new CreateHandler($tipRepository->reveal());
         $handler->handle($command);

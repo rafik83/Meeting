@@ -44,6 +44,6 @@ class CreateHandler
             );
         }
 
-        $this->tipRepository->set($tip);
+        $this->tipRepository->add($tip);
     }
 }

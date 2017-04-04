@@ -50,14 +50,23 @@ class TipRepository implements TipRepositoryInterface
     }
     
     /** {@inheritdoc} */
-    public function set(Tip $tip)
+    public function add(Tip $tip)
     {
         $this->entityManager->persist($tip);
 
         foreach ($tip->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
-    
+    }
+
+    /** {@inheritdoc} */
+    public function set(Tip $tip)
+    {
+        $this->entityManager->flush($tip);
+
+        foreach ($tip->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /** {@inheritdoc} */

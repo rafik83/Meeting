@@ -22,7 +22,12 @@ interface TipRepositoryInterface
      * @return Tip[]
      */
     public function paginate($page, $limit = 20);
-    
+
+    /**
+     * @param Tip $tip
+     */
+    public function add(Tip $tip);
+
     /**
      * @param Tip $tip
      */
