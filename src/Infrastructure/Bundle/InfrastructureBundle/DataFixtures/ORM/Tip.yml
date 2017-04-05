@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Tip\Tip:
     tip_sample:
         __construct:
-            - 'sample'
+            - 'tip_sample'
             - true
             - true
             - true
@@ -12,14 +12,14 @@ Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
         __construct:
             - '@tip_sample'
             - <dateTime()>
-            - 'title_fr'
+            - 'tip_title_fr'
             - 'fr'
-            - 'content_fr'
+            - 'rip_content_fr'
 
 Proximum\Vimeet\Domain\Model\Tip\Tip:
     tip_1:
         __construct:
-            - "title"
+            - "tip_title"
             - true
             - true
             - true

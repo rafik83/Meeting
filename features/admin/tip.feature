@@ -7,7 +7,7 @@
     Given the database is purged
     And the following fixtures files are loaded:
       | Admin.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Tip.yml |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event"
     Then I should see "admin.tip.link"
@@ -17,7 +17,7 @@
     And I go to this page "/admin/fr/tip/list"
     Then the response status code should be 200
     And the response should contain "admin.tip.create.link"
-    And the response should contain "title"
+    And the response should contain "tip_sample"
     And the response should contain "Français"
 
   Scenario: I can create a new tip
@@ -57,12 +57,11 @@
     And I should see "form.tip_update.children.translations.prototype.label"
     And I should see "form.tip_update.children.translations.label"
     When I fill in the following:
-      | tip_update_title | title |
+      | tip_update_title | tip_updated_title |
       | tip_update_translations_fr_title | fr |
-      | tip_update_translations_fr_content | content |
-      | tip_update_translations_en_title | en |
-      | tip_update_translations_en_content | content |
+      | tip_update_translations_fr_content | tip_updated_content |
     And I check "tip_update_onCatalog"
     And I press "tip_update_submit"
     Then the response status code should be 200
     And I should see "flash.admin.tip.update.success"
+    And I should see "tip_updated_title"
