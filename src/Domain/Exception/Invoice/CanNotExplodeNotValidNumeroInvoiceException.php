@@ -1,0 +1,22 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Exception\Invoice;
+
+class CanNotExplodeNotValidNumeroInvoiceException extends InvoiceException
+{
+    /**
+     * @param string $numero
+     */
+    public function __construct($numero)
+    {
+        $this->message = sprintf('Can not expldoe not valide numero of invoice given %s', $numero);
+    }
+}
