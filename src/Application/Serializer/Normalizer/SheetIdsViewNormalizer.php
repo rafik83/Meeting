@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -114,7 +115,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->registrationFields  = [];
         $this->merger              = $merger;
         $this->balance             = $balance;
-        $this->orderRepository = $orderRepository;
+        $this->orderRepository     = $orderRepository;
     }
 
     /**
@@ -195,6 +196,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             }
         }
 
+        $totalWithoutVat = AmountFormatter::centsToDecimalAmount($this->balance->getTotalWithoutVat($sheet));
+        $remainingToPay  = AmountFormatter::centsToDecimalAmount($this->balance->getRemainingToPay($sheet));
+
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
             self::COL_EVENT_ID          => $event->getId(),
@@ -211,8 +215,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
             self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
             self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
-            self::COL_TOTAL_ORDER       => $this->balance->getTotalWithoutVat($sheet),
-            self::COL_REMAINING_TO_PAY  => $this->balance->getRemainingToPay($sheet),
+            self::COL_TOTAL_ORDER       => $totalWithoutVat,
+            self::COL_REMAINING_TO_PAY  => $remainingToPay,
         ];
 
         // 2. Registration data
