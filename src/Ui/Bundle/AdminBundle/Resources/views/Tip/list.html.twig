@@ -21,8 +21,8 @@
                         <td>{{ tip.title }}</td>
                         <td>
                             {% for translation in tip.translations %}
-                                <span class="label label-primary">
-                                    {{ translation.locale|locale|capitalize }}
+                                <span>
+                                    {{ translation.locale|locale|capitalize }}{{ not loop.last ? ', ' : '' }}
                                 </span>
                             {% endfor %}
                         </td>
