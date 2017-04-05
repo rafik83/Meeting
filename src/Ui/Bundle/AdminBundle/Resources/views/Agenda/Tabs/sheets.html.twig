@@ -182,7 +182,17 @@
         <mass-assignment-modal :show="showMassAssignmentModal" v-on:mass-assignment-updated="handleUpdateMassAssignment" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
 
         <sort-modal :sheets="sheets" :show="showSortModal" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
+
         <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
+
         <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
+
+        <meeting-update-modal
+                v-bind:meeting-to-update="meetingToUpdate"
+                v-on:close-modal="clearMeetingToUpdate"
+                v-on:meeting-updated="meetingUpdated"
+                v-on:meeting-updating="handleMeetingUpdating"
+                v-on:meeting-updated-error="handleMeetingUpdatedError">
+        </meeting-update-modal>
     </div>
 </script>
