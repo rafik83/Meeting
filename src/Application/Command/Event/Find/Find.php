@@ -1,0 +1,58 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Event\Find;
+
+use Proximum\Vimeet\Domain\Model\Admin;
+
+class Find
+{
+    const FIND_INVOICE = 'invoice';
+    const FIND_ORDER   = 'order';
+
+    /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var string
+     */
+    public $numero;
+
+    /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * @param Admin $admin
+     */
+    public function __construct(Admin $admin)
+    {
+        $this->admin = $admin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function findOrder()
+    {
+        return $this->type === self::FIND_ORDER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function findInvoice()
+    {
+        return $this->type === self::FIND_INVOICE;
+    }
+}

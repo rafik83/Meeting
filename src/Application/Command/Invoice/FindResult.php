@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Invoice;
+
+use Proximum\Vimeet\Application\Command\Event\Find\FindResult as EventFindResult;
+use Proximum\Vimeet\Application\Exception\Invoice\InvoiceNotFoundException;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
+class FindResult extends EventFindResult
+{
+    /**
+     * @var Sheet[]
+     */
+    public $sheets;
+
+    /**
+     * @param array $sheets
+     *
+     * @throws InvoiceNotFoundException
+     */
+    public function __construct(array $sheets)
+    {
+        $firstSheet = reset($sheets);
+
+        if ($firstSheet === false) {
+            throw new InvoiceNotFoundException();
+        }
+
+        parent::__construct(reset($sheets));
+
+        $this->sheets = $sheets;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOnlyOneSheet()
+    {
+        return count($this->sheets) === 1;
+    }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return $this->sheets;
+    }
+}
