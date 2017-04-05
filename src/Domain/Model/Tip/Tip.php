@@ -101,18 +101,9 @@ class Tip
     public function translate($locale, $title, $content)
     {
         if ($this->hasTranslation($locale)) {
-            $this->getTranslation($locale)->set($title, $content);
+            $this->getTranslation($locale)->set($locale, $title, $content);
         } else {
-            $this->translations->set(
-                $locale,
-                new TipTranslation(
-                    $this,
-                    new \DateTime(),
-                    $title,
-                    $locale,
-                    $content
-                )
-            );
+            $this->setTranslation($locale, $content, $title);
         }
 
         return $this;
@@ -120,10 +111,29 @@ class Tip
 
     /**
      * @param string $locale
+     * @param string $title
+     * @param string $content
+     */
+    public function setTranslation($locale, $title, $content)
+    {
+        $this->translations->set(
+            $locale,
+            new TipTranslation(
+                $this,
+                new \DateTime(),
+                $title,
+                $locale,
+                $content
+            )
+        );
+    }
+
+    /**
+     * @param string $locale
      *
      * @return bool
      */
-    protected function hasTranslation($locale)
+    public function hasTranslation($locale)
     {
         return $this->translations->containsKey($locale);
     }
@@ -133,7 +143,7 @@ class Tip
      *
      * @return TipTranslation
      */
-    protected function getTranslation($locale)
+    public function getTranslation($locale)
     {
         return $this->translations->get($locale);
     }
@@ -155,11 +165,11 @@ class Tip
     }
     
     /**
-     * @return ArrayCollection
+     * @return TipTranslation[]
      */
     public function getTranslations()
     {
-        return $this->translations;
+        return $this->translations->toArray();
     }
     
     /**

@@ -49,13 +49,15 @@ class TipTranslation
     }
 
     /**
-     * @param $title
-     * @param $content
+     * @param string $locale
+     * @param string $title
+     * @param string $content
      *
-     * @return $this
+     * @return TipTranslation $this
      */
-    public function set($title, $content)
+    public function set($locale, $title, $content)
     {
+        $this->locale  = $locale;
         $this->title   = $title;
         $this->content = $content;
 

@@ -35,7 +35,7 @@ class Create
     public function __construct(array $defaultLocales)
     {
         foreach ($defaultLocales as $locale) {
-            $this->translations[] = ['locale' => $locale];
+            $this->translations[$locale] = ['locale' => $locale];
         }
     }
 }
