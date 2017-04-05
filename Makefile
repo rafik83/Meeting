@@ -240,9 +240,7 @@ migrations:
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:diff
 
-## Provision supervisor
-provision-supervisor: export ANSIBLE_TAGS = manala_supervisor
-provision-supervisor: provision
+endif
 
 ##################################
 # Remote tasks on Vimeet Preprod #
