@@ -592,7 +592,7 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @return null|Prefix
+     * @return Prefix
      */
     public function getInvoicePrefix()
     {
