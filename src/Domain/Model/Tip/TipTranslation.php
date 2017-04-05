@@ -54,7 +54,7 @@ class TipTranslation
      *
      * @return $this
      */
-    public function update($title, $content)
+    public function set($title, $content)
     {
         $this->title   = $title;
         $this->content = $content;

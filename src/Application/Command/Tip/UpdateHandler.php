@@ -30,26 +30,12 @@ class UpdateHandler
      */
     public function handle(Update $command)
     {
-        $removedTranslations = [];
-
         foreach ($command->translations as $locale => $translation) {
-            if ($command->tip->translations->containsKey($locale)) {
-                $removedTranslations[] = $command->tip->updateTranslation($locale, [
-                    'title'   => $translation['title'],
-                    'locale'  => $translation['locale'],
-                    'content' => $translation['content'],
-                ]);
-            } else {
-                $command->tip->setTranslation([
-                    'title'   => $translation['title'],
-                    'locale'  => $translation['locale'],
-                    'content' => $translation['content'],
-                ]);
-            }
-        }
-
-        foreach($removedTranslations as $translation) {
-            $this->tipRepository->removeTranslation($translation);
+            $command->tip->translate(
+                $locale,
+                $translation['title'],
+                $translation['content']
+            );
         }
 
         $this->tipRepository->set(

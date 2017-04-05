@@ -621,6 +621,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Tip\CreateHandler
         arguments:
             - '@repository.tip.repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Create }
     command.tip.update_handler:

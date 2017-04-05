@@ -34,7 +34,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($tip->translations->containsKey('locale_2'));
 
-        $tipRepository->removeTranslation($tipTranslation1)->shouldBeCalled();
         $tipRepository->set($tip)->shouldBeCalled();
 
         $handler = new UpdateHandler($tipRepository->reveal());

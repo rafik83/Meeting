@@ -42,7 +42,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tipRepository->add($tip)->shouldBeCalled();
 
-        $handler = new CreateHandler($tipRepository->reveal());
+        $handler = new CreateHandler($tipRepository->reveal(), new \DateTime());
         $handler->handle($command);
     }
 }

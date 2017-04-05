@@ -17,10 +17,14 @@ class CreateHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
-    
-    public function __construct(TipRepositoryInterface $tipRepository)
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    public function __construct(TipRepositoryInterface $tipRepository, \DateTimeInterface $dateTime)
     {
         $this->tipRepository = $tipRepository;
+        $this->dateTime      = $dateTime;
     }
     
     /**
@@ -33,16 +37,11 @@ class CreateHandler
             $command->onMeetingManagement,
             $command->onCatalog,
             $command->onPrintPlanning,
-            $command->dateTime
+            $this->dateTime
         );
 
         foreach ($command->translations as $translation) {
-            $tip->setTranslation([
-                    'title'   => $translation['title'],
-                    'locale'  => $translation['locale'],
-                    'content' => $translation['content'],
-                ]
-            );
+            $tip->translate($translation['locale'], $translation['title'], $translation['content']);
         }
 
         $this->tipRepository->add($tip);
