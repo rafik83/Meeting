@@ -763,8 +763,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidateHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@adapter_batch_job_queue.batch_validation_validate_job_queue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidate }
     command.sheet.remove_image_handler:
@@ -1605,6 +1605,11 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@datetime'
+    command.sheet.post_batch.post_batch_validation_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidationValidateHandler
+        arguments:
+            - '@event_dispatcher'
+            - '@datetime'
 
     #
     # Security
@@ -1669,6 +1674,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_draft_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDraftJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_validation_validate_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidationValidateJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -3114,6 +3123,15 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_enable_disable_handler'
+        tags:
+            - { name: console.command }
+
+    command_batch.batch_validation_validate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchValidationValidateCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_validation_validate_handler'
         tags:
             - { name: console.command }
 
