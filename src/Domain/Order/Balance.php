@@ -37,11 +37,11 @@ class Balance
     /** @var TransactionRepositoryInterface */
     private $transactionRepository;
 
-    /** @var OrderVatView[] */
-    private $orderVatViews = [];
+    /** @var array of OrderVatView[] indexed by Sheet id */
+    private $orderVatViewsBySheet = [];
 
-    /** @var Transaction[] */
-    private $transactions = [];
+    /** @var array of Transaction[] indexed by Sheet id */
+    private $transactionsBySheet = [];
 
     /**
      * @param OrderVatViewsByEventQueryHandler    $orderVatViewsByEventQueryHandler
@@ -69,7 +69,7 @@ class Balance
         $transactions = $this->transactionRepository->findByEventAndEnabledSheets($event);
 
         foreach ($transactions as $transaction) {
-            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
+            $this->transactionsBySheet[$transaction->getSheet()->getId()][] = $transaction;
         }
     }
 
@@ -82,7 +82,7 @@ class Balance
         $transactions = $this->transactionRepository->findByEventAndSheetIds($event, $sheetIds);
 
         foreach ($transactions as $transaction) {
-            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
+            $this->transactionsBySheet[$transaction->getSheet()->getId()][] = $transaction;
         }
     }
 
@@ -94,7 +94,7 @@ class Balance
         $orderVatViews = $this->orderVatViewsByEventQueryHandler->handle(new OrderVatViewsByEventQuery($event));
 
         foreach ($orderVatViews as $orderVatView) {
-            $this->orderVatViews[$orderVatView->sheetId][] = $orderVatView;
+            $this->orderVatViewsBySheet[$orderVatView->sheetId][] = $orderVatView;
         }
     }
 
@@ -109,7 +109,7 @@ class Balance
         );
 
         foreach ($orderVatViews as $orderVatView) {
-            $this->orderVatViews[$orderVatView->sheetId][] = $orderVatView;
+            $this->orderVatViewsBySheet[$orderVatView->sheetId][] = $orderVatView;
         }
     }
 
@@ -139,13 +139,13 @@ class Balance
      */
     public function getOrderVatViews(Sheet $sheet)
     {
-        if (!isset($this->orderVatViews[$sheet->getId()])) {
-            $this->orderVatViews[$sheet->getId()] = $this->orderVatViewsBySheetQueryHandler->handle(
+        if (!isset($this->orderVatViewsBySheet[$sheet->getId()])) {
+            $this->orderVatViewsBySheet[$sheet->getId()] = $this->orderVatViewsBySheetQueryHandler->handle(
                 new OrderVatViewsBySheetQuery($sheet)
             );
         }
 
-        return $this->orderVatViews[$sheet->getId()];
+        return $this->orderVatViewsBySheet[$sheet->getId()];
     }
 
     /**
@@ -169,11 +169,11 @@ class Balance
      */
     public function getTransactions(Sheet $sheet)
     {
-        if (!isset($this->transactions[$sheet->getId()])) {
-            $this->transactions[$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
+        if (!isset($this->transactionsBySheet[$sheet->getId()])) {
+            $this->transactionsBySheet[$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
         }
 
-        return $this->transactions[$sheet->getId()];
+        return $this->transactionsBySheet[$sheet->getId()];
     }
 
     /**
@@ -264,17 +264,19 @@ class Balance
      */
     public function getNotCancelledOrderVatViewsFromEvent()
     {
-        if (!isset($this->orderVatViews) || empty($this->orderVatViews)) {
+        if (!isset($this->orderVatViewsBySheet) || empty($this->orderVatViewsBySheet)) {
             return [];
         }
 
         $notCancelledOrdersFromEvent = [];
 
-        foreach ($this->orderVatViews as $sheetOrderVatViews) {
-            /** @var OrderVatView $orderVatView */
-            foreach ($sheetOrderVatViews as $orderVatView) {
-                if (!$orderVatView->isCancelled) {
-                    $notCancelledOrdersFromEvent[] = $orderVatView;
+        /** @var OrderVatView[] $sheetOrderVatViews */
+        foreach ($this->orderVatViewsBySheet as $sheetOrderVatViews) {
+            if (is_array($sheetOrderVatViews)) {
+                foreach ($sheetOrderVatViews as $orderVatView) {
+                    if (!$orderVatView->isCancelled) {
+                        $notCancelledOrdersFromEvent[] = $orderVatView;
+                    }
                 }
             }
         }
@@ -289,11 +291,13 @@ class Balance
     {
         $totalPaid = 0;
 
-        foreach ($this->transactions as $sheetTransactions) {
-            /** @var Transaction $transaction */
-            foreach ($sheetTransactions as $transaction) {
-                if ($transaction->isPaid()) {
-                    $totalPaid += $transaction->getAmount();
+        /** @var Transaction[] $transactions */
+        foreach ($this->transactionsBySheet as $transactions) {
+            if (is_array($transactions)) {
+                foreach ($transactions as $transaction) {
+                    if ($transaction->isPaid()) {
+                        $totalPaid += $transaction->getAmount();
+                    }
                 }
             }
         }
