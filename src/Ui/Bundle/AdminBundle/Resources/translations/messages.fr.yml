@@ -407,6 +407,7 @@ admin.order.link: Commandes
 admin.order.sheet: Fiche
 admin.order.title: 'Liste des commandes'
 admin.order.total: Total
+admin.order.totalWithoutVat: Total HT
 admin.order.type: 'Type de participation'
 admin.organizer_template_list.table.column.action: Action
 admin.organizer_template_list.table.column.date: 'Date de création'

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Product;
 
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Order\Row;
@@ -106,19 +105,6 @@ class UpdatePriceResolverTest extends \PHPUnit_Framework_TestCase
         );
         $order = new Order(
             $sheet,
-            true,
-            new Order\BillingInfo(
-                'gender',
-                'firstname',
-                'lastname',
-                'position',
-                'phone',
-                'mobile',
-                'email',
-                'company',
-                new Address('street', 'zipcode', 'city', 'country'),
-                'vatNumber'
-            ),
             '',
             $date
         );

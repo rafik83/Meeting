@@ -16,9 +16,11 @@ use Proximum\Vimeet\Domain\Model\Order;
 class Merger
 {
     /**
-     * @param array $orders
+     * @param Order[] $orders
      *
      * @return Order
+     *
+     * @throws OrderMergerException
      */
     public function merge(array $orders)
     {
@@ -26,19 +28,21 @@ class Merger
             throw new OrderMergerException();
         }
 
-        if (count($orders) === 1) {
-            return reset($orders);
+        /** @var Order|false $firstOrder */
+        $firstOrder = reset($orders);
+
+        if (false === $firstOrder) {
+            throw new OrderMergerException();
         }
 
-        /** @var Order $orderPattern */
-        $orderPattern = reset($orders);
+        if (count($orders) === 1) {
+            return $firstOrder;
+        }
 
         $orderMerged = new Order(
-            $orderPattern->getSheet(),
-            $orderPattern->isVatApplicable(),
-            $orderPattern->getBillingInfo(),
-            $orderPattern->getGroupsData(),
-            $orderPattern->getCreatedAt()
+            $firstOrder->getSheet(),
+            $firstOrder->getGroupsData(),
+            $firstOrder->getCreatedAt()
         );
 
         foreach ($orders as $order) {

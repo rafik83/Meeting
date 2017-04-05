@@ -83,11 +83,10 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order, row')
+            ->select('_order, row, promotionCode')
             ->from(Order::class, '_order', '_order.id')
-            ->join('_order.rows', 'row')
-            ->where('_order.sheet = :sheet')
-            ->andWhere('_order.cancelled = false')
+            ->join('_order.rows', 'row', 'WITH', '_order.sheet = :sheet AND _order.cancelled = false')
+            ->leftJoin('_order.promotionCodes', 'promotionCode')
             ->setParameter('sheet', $sheet)
             ->orderBy('_order.createdAt', 'DESC');
 
@@ -127,15 +126,16 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findByEventAndEnabledSheets(Event $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order, sheet, row')
+            ->select('_order, sheet, row, promotionCode')
             ->from(Order::class, '_order', '_order.id')
             ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
             ->join('_order.rows', 'row')
+            ->leftJoin('_order.promotionCodes', 'promotionCode')
             ->setParameter('event', $event)
         ;
 
@@ -150,7 +150,7 @@ class OrderRepository implements OrderRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('_order, sheet, row')
+            ->select('_order, sheet, row, promotionCode')
             ->from(Order::class, '_order', '_order.id')
             ->join(
                 '_order.sheet',
@@ -159,6 +159,7 @@ class OrderRepository implements OrderRepositoryInterface
                 'sheet.id IN (:sheetIds) AND sheet.event = :event AND sheet.enable = true'
             )
             ->join('_order.rows', 'row')
+            ->leftJoin('_order.promotionCodes', 'promotionCode')
             ->setParameter('event', $event)
             ->setParameter('sheetIds', $sheetIds)
         ;

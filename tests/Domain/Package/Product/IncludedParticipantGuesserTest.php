@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\View\Package\Product\IncludedParticipantView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
@@ -34,7 +35,9 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         ParticipantFactory::create($sheet);
 
         $cartManager = $this->prophesize(CartManager::class);
-        $orderMerger = new Merger();
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+
+        $orderMerger = new Merger($vatApplicable->reveal());
 
         $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger);
 
@@ -58,7 +61,9 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         ParticipantFactory::create($sheet);
 
         $cartManager = $this->prophesize(CartManager::class);
-        $orderMerger = new Merger();
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+
+        $orderMerger = new Merger($vatApplicable->reveal());
 
         $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger);
 
@@ -87,7 +92,9 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         ParticipantFactory::create($sheet);
 
         $cartManager = $this->prophesize(CartManager::class);
-        $orderMerger = new Merger();
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+
+        $orderMerger = new Merger($vatApplicable->reveal());
 
         $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger);
 
