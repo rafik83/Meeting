@@ -50,3 +50,5 @@ parameters:
     phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
 
     assets_version: 1
+
+    admin_menu_color: #222
