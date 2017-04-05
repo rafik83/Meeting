@@ -583,6 +583,23 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function updateValidationState(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->andWhere('sheet.validationState != :state')
+            ->set('sheet.validationState', ':state')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function batchAssignBySheetsId(array $ids, Admin $admin)
     {
         $queryBuilder = $this->entityManager

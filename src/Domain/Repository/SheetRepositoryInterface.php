@@ -55,6 +55,12 @@ interface SheetRepositoryInterface
     public function batchAssignBySheetsId(array $ids, Admin $admin);
 
     /**
+     * @param array  $ids
+     * @param string $state
+     */
+    public function updateValidationState(array $ids, $state);
+
+    /**
      * @param Event $event
      *
      * @return Sheet[]

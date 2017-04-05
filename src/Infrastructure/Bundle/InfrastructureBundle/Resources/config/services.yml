@@ -755,8 +755,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchDraftHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@adapter_batch_job_queue.batch_draft_job_queue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchDraft }
     command.sheet.batch_validation_validate_handler:
@@ -1589,7 +1589,7 @@ services:
     command.sheet.post_batch.post_batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalogHandler
         arguments:
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@event_dispatcher'
             - '@sheet.request.enable_disable_manager'
             - '@datetime'
             - '@sheet.request.enable_disable_manager'
@@ -1597,9 +1597,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisableHandler
         arguments:
             - '@command.sheet.batch_catalog_handler'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@event_dispatcher'
             - '@datetime'
             - '@sheet.request.enable_disable_manager'
+    command.sheet.post_batch.post_batch_draft_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraftHandler
+        arguments:
+            - '@event_dispatcher'
+            - '@datetime'
 
     #
     # Security
@@ -1660,6 +1665,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_enable_disable_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchEnableDisableJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_draft_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDraftJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
 

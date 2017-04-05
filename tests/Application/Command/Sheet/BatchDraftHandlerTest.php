@@ -10,16 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchDraft;
 use Proximum\Vimeet\Application\Command\Sheet\BatchDraftHandler;
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
@@ -55,26 +53,24 @@ class BatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $batchJobQueue   = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])
             ->shouldBeCalled()
             ->willReturn([$sheet1, $sheet2, $sheet3]);
 
-        foreach ([$expectedSheet1, $expectedSheet2, $expectedSheet3] as $sheet) {
-            $sheetRepository->set($sheet)->shouldBeCalled();
+        $sheetRepository->updateValidationState(
+            [1, 2, 3],
+            Sheet::STATE_VALIDATION_DRAFT
+        )->shouldBeCalled();
 
-            $eventDispatcher->dispatch(Events::SHEET_VALIDATION_DRAFT,
-                new SheetDraftEvent($sheet, $admin, $date)
-            )->shouldBeCalled();
-        }
+        $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
 
         // Handler
-
         $handler = new BatchDraftHandler(
             $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $date
+            $date,
+            $batchJobQueue->reveal()
         );
 
         $result = $handler->handle($command);
