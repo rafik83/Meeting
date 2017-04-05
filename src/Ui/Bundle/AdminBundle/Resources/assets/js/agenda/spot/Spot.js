@@ -111,6 +111,13 @@ module.exports = {
             }
 
             return null;
+        },
+
+        /**
+         * @param {int} sheetId
+         */
+        showAgendaForSheetId: function (sheetId) {
+            this.$emit('show-agenda-for-sheet-id', sheetId)
         }
     }
 };

@@ -275,6 +275,14 @@ module.exports = {
                     }
                 }
             }
+        },
+
+        /**
+         * @param {int} spotId
+         * @see SlotAgenda
+         */
+        loadSpotDetail: function (spotId) {
+            this.$emit('load-spot-detail', spotId);
         }
     }
 };

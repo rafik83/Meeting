@@ -148,6 +148,15 @@ module.exports = {
          */
         showMassAssignment: function (massId) {
             this.$emit('show-mass-assignment', massId);
+        },
+
+        /**
+         * Emit event to show agenda of given sheet id
+         *
+         * @param {int} spotId
+         */
+        loadSpotDetail: function (spotId) {
+            this.$emit('load-spot-detail', spotId);
         }
     }
 };

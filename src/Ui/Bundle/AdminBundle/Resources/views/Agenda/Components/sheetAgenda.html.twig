@@ -34,6 +34,7 @@
                                                 v-on:show-available-meeting-slot="loadSlotsForMeeting"
                                                 v-on:meeting-moving="handleMeetingMoving"
                                                 v-on:meeting-removed-error="handleMeetingRemovedError"
+                                                v-on:load-spot-detail="loadSpotDetail(slot.spotId)"
                                                 v-on:show-mass-assignment="showMassAssignment(slot.massAssignmentId)">
                                             >
                                             </slot-agenda>

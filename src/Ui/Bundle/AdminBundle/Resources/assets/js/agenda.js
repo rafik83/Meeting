@@ -726,6 +726,16 @@ new Vue({
         },
 
         /**
+         * Show details of a spot
+         */
+        loadSpotDetail: function (spotId) {
+            var child = this.$refs.spot;
+            if (typeof child !== 'undefined') {
+                child.loadSpotDetail(spotId);
+            }
+        },
+
+        /**
          * Load slots available for given meetingRequest
          *
          * @param {Object} meetingRequest
