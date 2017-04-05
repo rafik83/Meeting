@@ -49,6 +49,8 @@ twig:
         timezone: Europe/Paris
     paths:
         "%kernel.root_dir%/../src/Ui/Resources/views": Ui
+    globals:
+        admin_menu_color: "%admin_menu_color%"
 
 # Doctrine Configuration
 doctrine:
