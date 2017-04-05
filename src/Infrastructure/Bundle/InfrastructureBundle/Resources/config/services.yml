@@ -343,6 +343,15 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
+
+    command.event.index_handler:
+        class: Proximum\Vimeet\Application\Command\Event\IndexHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Index }
+
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
         class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
         arguments:
@@ -3087,6 +3096,14 @@ services:
         arguments:
             - '@command.type.index_handler'
             - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: console.command }
+
+    command.index_in_catalog_sheets_by_event:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand
+        arguments:
+            - '@command.event.index_handler'
+            - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: console.command }
 
