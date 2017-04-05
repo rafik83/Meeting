@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
 {
-    const PATH_CATALOG            = '';
+    const PATH_CATALOG            = 'event_catalog_index';
     const PATH_MEETING_MANAGEMENT = 'event_meeting_list_request';
     const PATH_PRINT_PLANNING     = '';
 
@@ -64,7 +64,7 @@ class TipTranslationViewQueryHandler
     private function getRepositoryMethod(TipTranslationViewQuery $query)
     {
         if ($query->path === self::PATH_CATALOG) {
-            return 'findForMeeting';
+            return 'findForCatalog';
         }
 
         if ($query->path === self::PATH_MEETING_MANAGEMENT) {

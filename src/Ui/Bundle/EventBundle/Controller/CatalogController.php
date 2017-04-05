@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotFoundException;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -141,6 +143,13 @@ class CatalogController extends Controller
             $template = 'EventBundle:Catalog:index.html.twig';
         }
 
+        try {
+            $tipQuery = new TipTranslationViewQuery($request->get('_route'), $request->getLocale());
+            $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
+        } catch (TipTranslationNotFoundException $exception) {
+            $tipView = null;
+        }
+
         return $this->render($template, [
             'event'           => $event,
             'sheet'           => $sheet,
@@ -150,6 +159,7 @@ class CatalogController extends Controller
             'paginatedResult' => $paginatedResult,
             'seeMoreButton'   => $seeMoreButton,
             'searchForm'      => $searchForm->createView(),
+            'tipView'         => $tipView,
         ]);
     }
 
