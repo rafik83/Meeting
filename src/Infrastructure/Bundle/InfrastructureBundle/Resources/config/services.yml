@@ -1580,6 +1580,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeetingHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting }
 
