@@ -66,7 +66,7 @@ class Balance
      */
     public function loadAllTransactions(Event $event)
     {
-        $transactions = $this->transactionRepository->findByEvent($event);
+        $transactions = $this->transactionRepository->findByEventAndEnabledSheets($event);
 
         foreach ($transactions as $transaction) {
             $this->transactions[$transaction->getSheet()->getId()][] = $transaction;

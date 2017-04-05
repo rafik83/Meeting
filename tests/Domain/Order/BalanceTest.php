@@ -67,7 +67,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadAllTransactions()
     {
-        $this->transactionRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->transactionRepository->findByEventAndEnabledSheets($this->event)->shouldBeCalled()->willReturn([]);
 
         $this->balance->loadAllTransactions($this->event);
     }
@@ -86,7 +86,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
     public function testLoadAllForEvent()
     {
         $this->transactionRepository
-            ->findByEvent($this->event)
+            ->findByEventAndEnabledSheets($this->event)
             ->shouldBeCalled()
             ->willReturn([])
         ;
@@ -342,7 +342,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
     {
         $now = new \DateTime();
 
-        $this->transactionRepository->findByEvent($this->event)->shouldBeCalled()->willReturn(
+        $this->transactionRepository->findByEventAndEnabledSheets($this->event)->shouldBeCalled()->willReturn(
             [
                 new Transaction($this->sheet, 200, $now, 'paypal', '', 'paid', 'EUR'),
                 new Transaction($this->sheet, 100, $now, 'paypal', '', 'paid', 'EUR'),
@@ -393,7 +393,7 @@ class BalanceTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->transactionRepository->findByEvent($this->event)->shouldBeCalled()->willReturn(
+        $this->transactionRepository->findByEventAndEnabledSheets($this->event)->shouldBeCalled()->willReturn(
             [
                 new Transaction($this->sheet, 10, $now, 'paypal', '', 'paid', 'EUR'),
                 new Transaction($this->sheet, 20, $now, 'paypal', '', 'paid', 'EUR'),
