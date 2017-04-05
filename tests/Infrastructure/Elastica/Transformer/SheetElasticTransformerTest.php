@@ -36,6 +36,7 @@ class SheetElasticTransformerTest extends \PHPUnit_Framework_TestCase
         $sheet = SheetFactory::create($event);
 
         $registrationTemplateData = new TemplateData('type', [], 'fr', 'fr');
+        $sheetTemplateData = new TemplateData('type', [], 'fr', 'fr');
 
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet, $locale)->shouldBeCalled();
@@ -57,7 +58,7 @@ class SheetElasticTransformerTest extends \PHPUnit_Framework_TestCase
             ->createRegistrationFromSheet($sheet, $locale)
             ->shouldBeCalled()
             ->willReturn($registrationTemplateData);
-        $templateDataFactory->createFromSheet($sheet, $locale)->shouldBeCalled()->willReturn($registrationTemplateData);
+        $templateDataFactory->createFromSheet($sheet, $locale)->shouldBeCalled()->willReturn($sheetTemplateData);
 
         $balance = $this->prophesize(Balance::class);
         $balance->getRemainingToPay($sheet)->shouldBeCalled();
