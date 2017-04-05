@@ -31,15 +31,17 @@ class TipController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $tipViewQuery = new TipViewQuery($request->query->get('page', 1));
-        
+
         $tipListView = $this->get('tactician.commandbus')->handle($tipViewQuery);
-        
+
         return $this->render('AdminBundle:Tip:list.html.twig',[
             'tips' => $tipListView,
         ]);
     }
-    
+
     /**
      * @param Request $request
      *
@@ -47,6 +49,8 @@ class TipController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $command = new Create($this->getParameter('infrastructure.default_locales'));
         $form    = $this->createForm(CreateType::class, $command);
 
@@ -57,7 +61,7 @@ class TipController extends Controller
                     'success',
                     $this->get('translator')->trans('flash.admin.tip.create.success', [], 'flashes')
                 );
-                
+
                 return $this->redirectToRoute('admin_tip_list');
             } catch (TipException $exception) {
                 $this->addFlash(
@@ -66,12 +70,12 @@ class TipController extends Controller
                 );
             }
         }
-        
+
         return $this->render('AdminBundle:Tip:create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-    
+
     /**
      * @param Request $request
      * @param Tip     $tip
@@ -80,6 +84,8 @@ class TipController extends Controller
      */
     public function updateAction(Request $request, Tip $tip)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        
         $command = new Update($tip);
         $form    = $this->createForm(UpdateType::class, $command);
         

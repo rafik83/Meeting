@@ -28,7 +28,7 @@
                         </td>
                         <td>
                             {% for page in tip.pagesTranslations %}
-                                {{ page|trans }}
+                                {{ page|trans }}{{ not loop.last ? ', ' : '' }}
                             {% endfor %}
                         </td>
                         <td class="text-right">
