@@ -133,7 +133,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $results = $this->getSearchResults($event, $filters, $locale);
 
         return array_map(function (Result $result) {
-            return new SheetListView($result->id, $result->sheetName);
+            return new SheetListView($result->id, $result->sheetName, $result->ownerEmail );
         }, $results);
     }
 

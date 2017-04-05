@@ -200,6 +200,8 @@ fos_elastica:
                             type: integer
                         owner:
                             type: integer
+                        ownerEmail:
+                            type: string
                         lastLoginAt:
                             type: date
                         imported:

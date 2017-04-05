@@ -139,7 +139,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         try {
-            $owner = $sheet->getOwner()->getId();
+            $owner      = $sheet->getOwner()->getId();
+            $ownerEmail = $sheet->getOwner()->getEmail();
         } catch (\RuntimeException $e) {
             $owner = null;
         }
@@ -191,6 +192,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'participants'            => $participants,
                 'event'                   => $sheet->getEvent()->getId(),
                 'owner'                   => $owner,
+                'ownerEmail'              => $ownerEmail,
                 'remainingToPay'          => $this->orderBalance->getRemainingToPay($sheet),
                 'imported'                => $sheet->isImported(),
                 'lastLoginAt'             => $sheet->getLastLoginAt() ? $sheet->getLastLoginAt()->format('c') : null,
