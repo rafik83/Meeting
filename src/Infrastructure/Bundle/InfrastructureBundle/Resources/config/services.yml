@@ -3081,6 +3081,15 @@ services:
         tags:
             - { name: console.command }
 
+    command_batch.batch_draft_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchDraftCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_draft_handler'
+        tags:
+            - { name: console.command }
+
     command_batch.batch_validate_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchValidateCommand
         arguments:
