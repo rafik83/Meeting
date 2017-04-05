@@ -49,7 +49,7 @@ class IndexSheetsByRegistrationTemplateCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Index Sheets by SheetTemplate')
+            ->setDescription('Index Sheets by RegistrationTemplate')
             ->addArgument('registrationTemplateId', InputArgument::REQUIRED, 'RegistrationTemplate id')
         ;
     }
