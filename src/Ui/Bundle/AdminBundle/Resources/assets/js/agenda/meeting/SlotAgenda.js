@@ -1,5 +1,5 @@
-var options = require('../vueComponents/options'),
-    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
+var options = require('../../vueComponents/options'),
+    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
 

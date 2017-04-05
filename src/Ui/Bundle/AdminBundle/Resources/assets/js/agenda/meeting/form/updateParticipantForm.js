@@ -1,4 +1,4 @@
-var options = require('../vueComponents/options');
+var options = require('../../../vueComponents/options');
 
 module.exports = {
     template: '#update-participant-form',

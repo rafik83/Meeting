@@ -1,6 +1,6 @@
 var slotAgenda = require('./SlotAgenda'),
-    options = require('../vueComponents/options'),
-    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
+    options = require('../../vueComponents/options'),
+    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
 

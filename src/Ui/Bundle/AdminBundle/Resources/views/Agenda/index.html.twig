@@ -4,13 +4,13 @@
 
 {% block content %}
     <div id="agenda" class="agenda-container">
-        <meeting-update-modal
-                v-bind:meeting-to-update="meetingToUpdate"
-                v-on:close-modal="clearMeetingToUpdate"
-                v-on:meeting-updated="meetingUpdated"
-                v-on:meeting-updating="handleMeetingUpdating"
-                v-on:meeting-updated-error="handleMeetingUpdatedError">
-        </meeting-update-modal>
+        {#<meeting-update-modal#}
+                {#v-bind:meeting-to-update="meetingToUpdate"#}
+                {#v-on:close-modal="clearMeetingToUpdate"#}
+                {#v-on:meeting-updated="meetingUpdated"#}
+                {#v-on:meeting-updating="handleMeetingUpdating"#}
+                {#v-on:meeting-updated-error="handleMeetingUpdatedError">#}
+        {#</meeting-update-modal>#}
 
         <!-- Nav tabs -->
         <tabs inline-template>
@@ -21,16 +21,13 @@
                     </li>
                 </ul>
                 <tab name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
+                    <meeting></meeting>
                 </tab>
-                <tab-spot name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
-                </tab-spot>
+                <tab name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
+                    <spot></spot>
+                </tab>
             </div>
         </tabs>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-            {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
-        </div>
     </div>
 {% endblock %}
 
@@ -51,6 +48,7 @@
     {{ include('AdminBundle:Agenda/Components:sortSheetForm.html.twig') }}
 
     {{ include('AdminBundle:Agenda/Tabs:spots.html.twig') }}
+    {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
     {{ include('AdminBundle:Agenda/Components/Spot:spotAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components/Spot:slotAgenda.html.twig') }}
 
