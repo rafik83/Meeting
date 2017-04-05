@@ -1542,6 +1542,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@adapter.entity_manager_adapter'
+            - '@adapter.job_queue_adapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }

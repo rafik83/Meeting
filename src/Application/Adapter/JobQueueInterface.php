@@ -59,4 +59,9 @@ interface JobQueueInterface
      * @param int[] $typeIds
      */
     public function indexSheetsByTypes(array $typeIds);
+
+    /**
+     * @param Event $event
+     */
+    public function indexInCatalogSheetsByEvent(Event $event);
 }
