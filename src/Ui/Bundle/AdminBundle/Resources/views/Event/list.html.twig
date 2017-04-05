@@ -19,7 +19,7 @@
                 {% if orderForm is defined and orderForm is not null %}
                     <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
                         <a href="#orderFinder" aria-controls="profile" role="tab" data-toggle="tab">
-                            {{ 'admin.event.page.orderFinder.title'|trans }}
+                            {{ 'admin.event.page.orderInvoiceFinder.title'|trans }}
                         </a>
                     </li>
                 {% endif %}
@@ -83,20 +83,25 @@
                 </div>
                 {% if orderForm is defined and orderForm is not null %}
                     <div role="tabpanel" class="tab-pane {% if orderTabActive %}active{% endif %}" id="orderFinder">
-                        {{ 'admin.event.page.orderFinder.explanation'|trans }}
+                        {{ 'admin.event.page.orderInvoiceFinder.explanation'|trans }}
 
                         {{ form_start(orderForm) }}
-                            {{ form_label(orderForm.numero) }}
+                            {{ form_row(orderForm.type, {inline: true}) }}
+                            {{ form_row(orderForm.numero) }}
                             <div class="row">
-                                <div class="col-md-9">
-                                    {{ form_widget(orderForm.numero) }}
-                                    {{ form_errors(orderForm.numero) }}
-                                </div>
-                                <div class="col-md-3">
-                                    {{ form_widget(orderForm.submit) }}
+                                <div class="col-md-9 col-md-offset-3">
+                                    {{ form_row(orderForm.submit) }}
                                 </div>
                             </div>
                         {{ form_end(orderForm) }}
+
+                        {% if multipleSheetsView is not null %}
+                            <ul>
+                                {% for sheet in multipleSheetsView.sheets %}
+                                    <li><a href="{{ path('admin_sheet_details', {'event': sheet.eventId, 'sheet': sheet.sheetId}) }}">{{ sheet.eventTitle }}: {{ sheet.sheetTitle }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
                 {% endif %}
 
