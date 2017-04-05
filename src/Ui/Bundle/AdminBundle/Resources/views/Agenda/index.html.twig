@@ -13,19 +13,23 @@
         </meeting-update-modal>
 
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#sheet" aria-controls="sheet" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.sheet.title.label'|trans }}</a>
-            </li>
-            <li role="presentation">
-                <a href="#spot" aria-controls="spot" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.spot.title.label'|trans }}</a>
-            </li>
-        </ul>
+        <tabs inline-template>
+            <div>
+                <ul class="nav nav-tabs">
+                    <li v-for="tab in tabs" v-bind:class="{ active: tab.isActive }" v-on:click="selectTab(tab)">
+                        <a href="#" aria-controls="sheet">${ tab.name }</a>
+                    </li>
+                </ul>
+                <tab name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
+                </tab>
+                <tab-spot name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
+                </tab-spot>
+            </div>
+        </tabs>
 
         <!-- Tab panes -->
         <div class="tab-content">
             {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
-            <spot></spot>
         </div>
     </div>
 {% endblock %}

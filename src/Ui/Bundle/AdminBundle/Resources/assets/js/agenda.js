@@ -12,6 +12,8 @@ var Vue                    = require('vue'),
     spot                   = require('./agenda/spot/Spot'),
     AgendaApiEndpoints     = require('./components/_AgendaApiEndpoints');
 
+var tabs = require('./vueComponents/tabs');
+
 var api = new AgendaApiEndpoints();
 
 /**
@@ -33,6 +35,7 @@ new Vue({
     el: '#agenda',
     delimiters: options.delimiters,
     components: {
+        'tabs': tabs,
         'filter-modal': filterModal,
         'update-participant-modal': updateParticipantModal,
         'slot-agenda': slotAgenda,
