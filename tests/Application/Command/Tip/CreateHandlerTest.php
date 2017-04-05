@@ -36,14 +36,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $expected = $command->translations['locale_1'];
-
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tip->translations = new ArrayCollection([
             'locale_1' => new TipTranslation($tip, new \DateTime(), 'title_1', 'locale_1', 'content_1')
         ]);
 
-        $tipRepository->add(Argument::that(function (Tip $tip) use ($expected) {
+        $tipRepository->add(Argument::that(function (Tip $tip) {
             return
                 $tip->getTranslationTitle('locale_1') === 'title_1'
                 &&
