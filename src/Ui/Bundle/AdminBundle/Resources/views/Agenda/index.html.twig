@@ -4,14 +4,6 @@
 
 {% block content %}
     <div id="agenda" class="agenda-container">
-        {#<meeting-update-modal#}
-                {#v-bind:meeting-to-update="meetingToUpdate"#}
-                {#v-on:close-modal="clearMeetingToUpdate"#}
-                {#v-on:meeting-updated="meetingUpdated"#}
-                {#v-on:meeting-updating="handleMeetingUpdating"#}
-                {#v-on:meeting-updated-error="handleMeetingUpdatedError">#}
-        {#</meeting-update-modal>#}
-
         <!-- Nav tabs -->
         <tabs inline-template>
             <div>
@@ -49,6 +41,7 @@
 
     {{ include('AdminBundle:Agenda/Tabs:spots.html.twig') }}
     {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
+
     {{ include('AdminBundle:Agenda/Components/Spot:spotAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components/Spot:slotAgenda.html.twig') }}
 
