@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Payment\Mode;
 
 /**
@@ -67,6 +68,11 @@ class Transaction
      * @var User|null
      */
     private $user;
+    
+    /**
+     * @var Payment|null
+     */
+    private $payment;
 
     /**
      * Transaction constructor.
@@ -212,6 +218,14 @@ class Transaction
     public function getCurrency()
     {
         return $this->currency;
+    }
+    
+    /**
+     * @return null|Payment
+     */
+    public function getPayment()
+    {
+        return $this->payment;
     }
 
     /**

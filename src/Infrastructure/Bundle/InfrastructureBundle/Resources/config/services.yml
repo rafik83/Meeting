@@ -619,6 +619,14 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Create }
+    command.transaction.filter_handler:
+        class: Proximum\Vimeet\Application\Command\Transaction\FilterHandler
+        arguments:
+            - '@repository.transaction'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@query.transaction.view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Filter }
     command.transaction.update_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
         arguments:
@@ -1557,6 +1565,15 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Create }
+
+    command.invoice_export_query_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\ExportHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.invoice.invoice_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Export }
 
     command.invoice.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler
@@ -2829,6 +2846,7 @@ services:
         arguments:
             - '@sheet.preview'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@repository.rule_repository'
 
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler
@@ -2883,7 +2901,22 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
-
+    query.transaction.view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@repository.billing_info_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }
+    query.transaction.list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_transactions_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery }
     query.messaging.message.list_handler:
         class: Proximum\Vimeet\Application\Query\Messaging\Message\ListQueryHandler
         arguments:
@@ -3415,6 +3448,18 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.invoices:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\InvoiceNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@order.balance'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'
@@ -3613,6 +3658,16 @@ services:
     #
     serializer_denormalizer_planner.planner_denormalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Denormalizer\Planner\PlannerDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
+    # Transaction Normalizer
+    #
+    serializer_normalizer_transaction.transaction_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Transaction\TransactionNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: serializer.normalizer }
 
@@ -3831,6 +3886,14 @@ services:
 
     serializer.denormalizer.invoice_view:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.invoice_export_view:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\ExportViewDenormalizer
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@order.balance'
         tags:
             - { name: serializer.normalizer }
 

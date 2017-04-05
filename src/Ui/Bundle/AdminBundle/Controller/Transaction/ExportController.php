@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transaction;
+
+use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
+use Proximum\Vimeet\Application\Exception\Event\EventsListEmptyException;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+class ExportController extends Controller
+{
+    /**
+     * @param UserInterface $admin
+     * @param Request       $request
+     *
+     * @return CsvFileResponse|RedirectResponse
+     */
+    public function exportAction(UserInterface $admin, Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        $filterTransaction = new FilterTransaction($admin);
+        $transactionForm = $this
+            ->createForm(FilterTransactionType::class, $filterTransaction, ['submit' => true])
+            ->handleRequest($request);
+
+        if ($transactionForm->isSubmitted() && $transactionForm->isValid()) {
+            try {
+                $transactionListView = $this->get('tactician.commandbus')->handle($filterTransaction);
+                $filePath = $this->get('query.transaction.list_view_query_handler')->handle($transactionListView);
+
+                return new CsvFileResponse(
+                    file_get_contents($this->getParameter('infrastructure.export_transactions_path') . $filePath),
+                    sprintf('export_transactions_%s.csv', date("Y_m_d_His"))
+                );
+            } catch (EventsListEmptyException $exception) {
+                $this->addFlash('error', 'flash.admin.event.empty_list');
+            }
+        }
+
+        $this->addFlash('error', 'flash.admin.transaction.export.failed');
+
+        return $this->redirectToRoute('admin_event_list');
+    }
+}

@@ -73,4 +73,13 @@ interface TransactionRepositoryInterface
      * @return Transaction[]
      */
     public function findPaidByEvent(Event $event);
+
+    /**
+     * @param Event[]            $events
+     * @param \DateTimeInterface $beginDate
+     * @param \DateTimeInterface $endDate
+     *
+     * @return Transaction[]
+     */
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate);
 }

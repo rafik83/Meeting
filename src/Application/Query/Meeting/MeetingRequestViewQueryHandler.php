@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingRequestViewQueryHandler
 {
@@ -28,17 +29,27 @@ class MeetingRequestViewQueryHandler
      * @var SheetInfoGuesser
      */
     private $sheetInfoGuesser;
-
+    
+    /**
+     * @var RuleRepositoryInterface
+     */
+    private $ruleRepository;
+    
     /**
      * MeetingRequestViewQueryHandler constructor.
      *
-     * @param Preview          $preview
-     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param Preview                   $preview
+     * @param SheetInfoGuesser          $sheetInfoGuesser
+     * @param RuleRepositoryInterface   $ruleRepository
      */
-    public function __construct(Preview $preview, SheetInfoGuesser $sheetInfoGuesser)
-    {
+    public function __construct(
+        Preview $preview,
+        SheetInfoGuesser $sheetInfoGuesser,
+        RuleRepositoryInterface $ruleRepository
+    ) {
         $this->preview          = $preview;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->ruleRepository   = $ruleRepository;
     }
 
     /**
@@ -51,6 +62,12 @@ class MeetingRequestViewQueryHandler
         $sheet    = $this->getViewedSheet($query);
         $previews = $this->preview->getPreview($sheet, $query->locale);
 
+        $userSheet = $query->sheet;
+    
+        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+        
+        $isSheetSeeable = !empty($rules);
+        
         return new MeetingRequestView(
             $sheet,
             $this->sheetInfoGuesser->guessSheetTitle($sheet, $query->locale),
@@ -60,7 +77,8 @@ class MeetingRequestViewQueryHandler
             $query->meetingRequest,
             $previews,
             $query->isMeetingPublished,
-            $query->isMeetingRequestUpdateLocked
+            $query->isMeetingRequestUpdateLocked,
+            $isSheetSeeable
         );
     }
 
