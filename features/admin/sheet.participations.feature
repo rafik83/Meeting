@@ -36,7 +36,7 @@ Feature: Edit participant status
     And I should see "admin.sheet.title.count"
     Then I check "sheet_batch_ids_4"
     And I press "form.sheet_batch.children.validate.label"
-    Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+#    Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can enable or disable participant registration
     Given I am logged with "test@test.com" on admin
@@ -68,7 +68,7 @@ Feature: Edit participant status
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.validation.validate.success"
     And I should see "event.sheet.validationState.validated" in the "#sheet-7" element
-    And the "sheet.validation.validate" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+#    And the "sheet.validation.validate" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can put sheet participation to draft
     Given I am logged with "test@test.com" on admin
@@ -80,7 +80,7 @@ Feature: Edit participant status
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.draft.success"
     And I should see "event.sheet.validationState.draft" in the "#sheet-7" element
-    And the "sheet.validation.draft" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+#    And the "sheet.validation.draft" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can use filters, navigate on admin and see my filters was saved
     Given I am logged with "test@test.com" on admin
