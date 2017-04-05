@@ -11,6 +11,7 @@
 namespace Application\Command\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Application\Command\Tip\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -35,14 +36,23 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $expected = $command->translations['locale_1'];
+
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tip->translations = new ArrayCollection([
             'locale_1' => new TipTranslation($tip, new \DateTime(), 'title_1', 'locale_1', 'content_1')
         ]);
 
-        $tipRepository->add($tip)->shouldBeCalled();
+        $tipRepository->add(Argument::that(function (Tip $tip) use ($expected) {
+            return
+                $tip->getTranslationTitle('locale_1') === 'title_1'
+                &&
+                $tip->getTranslationContent('locale_1') === 'content_1';
+        }))
+        ->shouldBeCalled();
 
         $handler = new CreateHandler($tipRepository->reveal(), new \DateTime());
+
         $handler->handle($command);
     }
 }

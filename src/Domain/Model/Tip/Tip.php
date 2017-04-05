@@ -103,10 +103,30 @@ class Tip
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($locale, $title, $content);
         } else {
-            $this->setTranslation($locale, $content, $title);
+            $this->setTranslation($locale, $title, $content);
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getTranslationTitle($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getTitle() : null;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getTranslationContent($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getContent() : null;
     }
 
     /**
