@@ -51,26 +51,36 @@ FilterByType.prototype.filterByType = function (type, buttonClicked)
 
     if (type === this.filterByAllConstant) {
         this.requests.forEach(function (element) {
-            element.style.display = 'flex';
-        });
+            this.showElement(element);
+        }.bind(this));
         this.propositions.forEach(function (element) {
-            element.style.display = 'flex';
-        });
+            this.showElement(element);
+        }.bind(this));
     } else if (type === this.filterByRequestsConstant) {
         this.requests.forEach(function (element) {
-            element.style.display = 'flex';
-        });
+            this.showElement(element);
+        }.bind(this));
         this.propositions.forEach(function (element) {
-            element.style.display = 'none';
-        });
+            this.hideElement(element);
+        }.bind(this));
     } else if (type === this.filterByPropositionsConstant) {
         this.requests.forEach(function (element) {
-            element.style.display = 'none';
-        });
+            this.hideElement(element);
+        }.bind(this));
         this.propositions.forEach(function (element) {
-            element.style.display = 'flex';
-        });
+            this.showElement(element);
+        }.bind(this));
     }
+};
+
+FilterByType.prototype.hideElement = function (element)
+{
+    element.style.display = 'none';
+};
+
+FilterByType.prototype.showElement = function (element)
+{
+    element.style.display = 'flex';
 };
 
 module.exports = FilterByType;
