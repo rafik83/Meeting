@@ -62,7 +62,7 @@ class BatchEnableDisableCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Batch accept sheet action')
+            ->setDescription('Batch enable disable sheet action')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids separated by a comma')
             ->addArgument('state', InputArgument::REQUIRED, 'Batch state')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id');

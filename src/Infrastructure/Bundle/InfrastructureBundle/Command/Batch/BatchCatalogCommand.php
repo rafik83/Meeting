@@ -82,6 +82,8 @@ class BatchCatalogCommand extends Command
             throw new \Exception('Admin not found.');
         }
 
-        $this->postBatchCatalogHandler->handle(new PostBatchCatalog($sheets, $admin, $state));
+        $this->postBatchCatalogHandler->handle(
+            new PostBatchCatalog($sheets, $admin, $state)
+        );
     }
 }

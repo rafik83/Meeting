@@ -85,11 +85,7 @@ class BatchValidateCommand extends Command
         }
 
         $this->postBatchValidateHandler->handle(
-            new PostBatchValidate(
-                $sheets,
-                $admin,
-                $comment
-            )
+            new PostBatchValidate($sheets, $admin, $comment)
         );
     }
 }

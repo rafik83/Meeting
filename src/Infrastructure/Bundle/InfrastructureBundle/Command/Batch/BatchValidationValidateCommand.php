@@ -82,10 +82,7 @@ class BatchValidationValidateCommand extends Command
         }
 
         $this->postBatchValidationValidateHandler->handle(
-            new PostBatchValidationValidate(
-                $sheets,
-                $admin
-            )
+            new PostBatchValidationValidate($sheets, $admin)
         );
     }
 }
