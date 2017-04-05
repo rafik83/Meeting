@@ -41,7 +41,7 @@ class OrderVatViewsByEventQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $orderVatViewQueryHandler->reveal()
         );
 
-        $orderRepositoryInterface->findByEvent($event)->shouldBeCalled()->willReturn(
+        $orderRepositoryInterface->findByEventAndEnabledSheets($event)->shouldBeCalled()->willReturn(
             [
                 $order1,
                 $order2

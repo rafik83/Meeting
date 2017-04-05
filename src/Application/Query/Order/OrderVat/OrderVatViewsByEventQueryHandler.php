@@ -38,7 +38,7 @@ class OrderVatViewsByEventQueryHandler
      */
     public function handle(OrderVatViewsByEventQuery $orderVatViewsByEventQuery)
     {
-        $orders = $this->orderRepository->findByEvent($orderVatViewsByEventQuery->event);
+        $orders = $this->orderRepository->findByEventAndEnabledSheets($orderVatViewsByEventQuery->event);
 
         $orderVatViews = [];
 
