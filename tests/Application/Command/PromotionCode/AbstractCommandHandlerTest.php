@@ -82,7 +82,7 @@ class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
 
-        $uniqueCodeChecker = $this->getMockBuilder('Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker')
+        $uniqueCodeChecker = $this->getMockBuilder(UniqueCodeChecker::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;
