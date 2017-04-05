@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Order\Find:
+Proximum\Vimeet\Application\Command\Event\Find\Find:
     properties:
         type:
             - NotNull: ~
