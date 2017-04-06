@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 
 class DashboardTransactionViewQueryHandler
@@ -38,6 +39,8 @@ class DashboardTransactionViewQueryHandler
     public function handle(DashboardTransactionViewQuery $query)
     {
         $this->balance->loadAllForEvent($query->event);
+
+//        dump(AmountFormatter::centsToDecimalAmount($this->balance->getOrdersTotalWithoutVatForEvent()));
 
         $totalOrders         = $this->balance->getOrdersTotalForEvent();
         $totalPaid           = $this->balance->getTransactionsTotalPaidForEvent();
