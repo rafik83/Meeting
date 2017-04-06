@@ -76,7 +76,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@behat_manager.sheet'
+            - '@behat_manager.billing_info'
             - '@datetime'
+
+    behat_manager.billing_info:
+        class: Proximum\Vimeet\Behat\Service\Manager\BillingInfoManager
+        arguments:
+            - '@repository.billing_info_repository'
 
     #
     # Proxies

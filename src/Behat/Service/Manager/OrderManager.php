@@ -23,18 +23,27 @@ class OrderManager
     /** @var SheetManager */
     private $sheetManager;
 
+    /** @var BillingInfoManager */
+    private $billingInfoManager;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
     /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SheetManager             $sheetManager
+     * @param BillingInfoManager       $billingInfoManager
      * @param \DateTimeInterface       $dateTime
      */
-    public function __construct(OrderRepositoryInterface $orderRepository, SheetManager $sheetManager, \DateTimeInterface $dateTime)
-    {
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        SheetManager $sheetManager,
+        BillingInfoManager $billingInfoManager,
+        \DateTimeInterface $dateTime
+    ) {
         $this->orderRepository = $orderRepository;
         $this->sheetManager = $sheetManager;
+        $this->billingInfoManager = $billingInfoManager;
         $this->dateTime = $dateTime;
     }
 
@@ -49,6 +58,7 @@ class OrderManager
     {
         if (null === $sheet) {
             $sheet = $this->sheetManager->create($event);
+            $this->billingInfoManager->create($sheet);
         }
 
         $order = new Order($sheet, '', $this->dateTime);
