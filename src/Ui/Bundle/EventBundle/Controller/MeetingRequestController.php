@@ -105,12 +105,8 @@ class MeetingRequestController extends Controller
 
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
-        try {
-            $tipQuery = new TipTranslationViewQuery($request->get('_route'), $request->getLocale());
-            $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
-        } catch (TipTranslationNotFoundException $exception) {
-            $tipView = null;
-        }
+        $tipQuery = new TipTranslationViewQuery($request->get('_route'), $request->getLocale());
+        $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
 
         return $this->render($template, [
             'event'              => $event,

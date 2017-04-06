@@ -143,12 +143,8 @@ class CatalogController extends Controller
             $template = 'EventBundle:Catalog:index.html.twig';
         }
 
-        try {
-            $tipQuery = new TipTranslationViewQuery($request->get('_route'), $request->getLocale());
-            $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
-        } catch (TipTranslationNotFoundException $exception) {
-            $tipView = null;
-        }
+        $tipQuery = new TipTranslationViewQuery($request->get('_route'), $request->getLocale());
+        $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
 
         return $this->render($template, [
             'event'           => $event,

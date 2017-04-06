@@ -52,8 +52,8 @@ class TipTranslationViewQueryHandler
         $repositoryMethod = $this->getRepositoryMethod($query);
         $tip = $this->tipRepository->$repositoryMethod($query->path);
 
-        if ($tip->translations->get($query->locale) === null) {
-            throw new TipTranslationNotFoundException();
+        if (!$tip) {
+            return null;
         }
 
         $tipTranslation = $tip->translations->get($query->locale);
