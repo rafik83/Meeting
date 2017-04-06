@@ -680,7 +680,7 @@ form.tip_update.children.onMeetingManagement.label: 'Visible sur la gestion des 
 form.tip_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
 form.tip_update.children.translations.prototype.label: 'Traductions'
 form.tip_update.children.translations.prototype.children.title.label: 'Libellé'
-form.tip_update.children.translations.prototype.children.lang.label: 'Langue'
+form.tip_update.children.translations.prototype.children.locale.label: 'Langue'
 form.tip_update.children.translations.prototype.children.content.label: 'Contenu'
 form.tip_update.children.translations.label_delete: 'Supprimer la traduction'
 form.tip_update.children.translations.label_add: 'Ajouter une traduction'

@@ -40,7 +40,9 @@ class TipTranslationType extends AbstractType
             ->add('locale', LocaleType::class, [
                 'preferred_choices' => $this->preferredLocales,
             ])
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'required' => false
+            ])
             ->add('content', TextareaType::class);
     }
 

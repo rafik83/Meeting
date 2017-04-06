@@ -7,8 +7,6 @@ Proximum\Vimeet\Application\Command\Tip\Update:
             - All:
                 - Collection:
                     fields:
-                        title:
-                            - NotBlank: ~
                         locale:
                             - NotBlank: ~
                         content:
