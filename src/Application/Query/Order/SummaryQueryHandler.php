@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Order;
 
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;
@@ -35,19 +37,28 @@ class SummaryQueryHandler
     private $balance;
 
     /**
+     * @var OrderVatViewQueryHandler
+     */
+    private $orderVatViewQueryHandler;
+
+    /**
      * @param GroupsViewQueryHandler         $groupsViewQueryHandler
      * @param PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
      * @param Balance                        $balance
+     * @param OrderVatViewQueryHandler       $orderVatViewQueryHandler
      */
     public function __construct(
         GroupsViewQueryHandler $groupsViewQueryHandler,
         PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler,
-        Balance $balance
+        Balance $balance,
+        OrderVatViewQueryHandler $orderVatViewQueryHandler
     ) {
         $this->groupsViewQueryHandler         = $groupsViewQueryHandler;
         $this->promotionCodesViewQueryHandler = $promotionCodesViewQueryHandler;
         $this->balance                        = $balance;
+        $this->orderVatViewQueryHandler       = $orderVatViewQueryHandler;
     }
+
     /**
      * @param SummaryQuery $summaryQuery
      *
@@ -55,6 +66,8 @@ class SummaryQueryHandler
      */
     public function handle(SummaryQuery $summaryQuery)
     {
+        $orderVatView = $this->orderVatViewQueryHandler->handle(new OrderVatViewQuery($summaryQuery->order));
+
         return new SummaryView(
             $this->groupsViewQueryHandler->handle(
                 new GroupsViewQuery(
@@ -69,13 +82,12 @@ class SummaryQueryHandler
                     $summaryQuery->locale
                 )
             ),
-            $summaryQuery->order->isVatApplicable(),
+            $orderVatView->isVatApplicable,
             $summaryQuery->order->getVatRate(),
-            $summaryQuery->order->getVatAmount(),
-            $summaryQuery->order->getVatMode(),
-            $summaryQuery->order->getTotalVatMode(),
-            $summaryQuery->order->getTotalWithoutVat(),
-            $summaryQuery->order->getTotalWithVat(),
+            $orderVatView->vatAmount,
+            $orderVatView->vatMode,
+            $orderVatView->totalWithoutVat,
+            $orderVatView->totalWithVat,
             $summaryQuery->order->getCurrency(),
             $this->balance->getRemainingToPay($summaryQuery->sheet),
             $summaryQuery->sheet

@@ -3,7 +3,7 @@
         {{ 'admin.sheet.details.orders'|trans }}
     </div>
     <div class="panel-body">
-        {% if orders|length > 0 %}
+        {% if orderVatViews|length > 0 %}
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -14,30 +14,30 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for order in orders %}
+                {% for orderVatView in orderVatViews %}
                     <tr>
                         <td>
-                            {{ order.numero }}
-                            {% if order.cancelled %}
+                            {{ orderVatView.numero }}
+                            {% if orderVatView.isCancelled %}
                                 <span class="label label-danger">{{ 'admin.order.cancelled'|trans }}</span>
                             {% endif %}
                         </td>
                         <td>
-                            {{ order.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                            {{ orderVatView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                         </td>
                         <td class="text-right">
-                            {{ order.total|localizedcurrency(order.currency) }}
-                            {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
+                            {{ orderVatView.totalWithVat|format_amount|localizedcurrency(orderVatView.currency) }}
+                            {{ ('admin.event.vatMode.' ~ orderVatView.totalVatMode)|trans }}
                         </td>
                         <td class="text-right">
-                            {% if not order.hasInvoice %}
-                                <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: order.id }) }}" class="btn btn-default btn-sm">
+                            {% if not orderVatView.hasInvoice %}
+                                <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: orderVatView.orderId }) }}" class="btn btn-default btn-sm">
                                     {{ 'admin.order_edit.link'|trans }}
                                 </a>
                             {% else %}
                                 <span class="label label-success">
                                     {{ 'admin.order.invoiceNumber'|trans }}
-                                    {{ order.invoice.number }}
+                                    {{ orderVatView.invoice.number }}
                                 </span>
                             {% endif %}
                         </td>

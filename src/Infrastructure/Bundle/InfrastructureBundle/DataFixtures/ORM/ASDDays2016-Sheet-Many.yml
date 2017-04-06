@@ -40,7 +40,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: '<randomElement(["FR", "ES", "DE", "US"])>' }
             57da9df7ced30: { boolean: '<boolean()>' }
             57da8f210fbf2: { text: "<sentence()>" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTimeBetween("-50 days", "now")>

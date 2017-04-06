@@ -10,60 +10,55 @@
 
 namespace Proximum\Vimeet\Domain\Order;
 
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQueryHandler;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Domain\View\OrderVatView;
 
 class Balance
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
+    /** @var OrderVatViewsByEventQueryHandler */
+    private $orderVatViewsByEventQueryHandler;
 
-    /**
-     * @var TransactionRepositoryInterface
-     */
+    /** @var OrderVatViewsBySheetQueryHandler */
+    private $orderVatViewsBySheetQueryHandler;
+
+    /** @var OrderVatViewsBySheetIdsQueryHandler */
+    private $orderVatViewsBySheetIdsQueryHandler;
+
+    /** @var TransactionRepositoryInterface */
     private $transactionRepository;
 
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
+    /** @var array of OrderVatView[] indexed by Sheet id */
+    private $orderVatViewsBySheet = [];
+
+    /** @var array of Transaction[] indexed by Sheet id */
+    private $transactionsBySheet = [];
 
     /**
-     * @var array
-     */
-    private $transactions = [];
-
-    /**
-     * @var array
-     */
-    private $orders = [];
-
-    /**
-     * @var array
-     */
-    private $invoices = [];
-
-    /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param TransactionRepositoryInterface $transactionRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param OrderVatViewsByEventQueryHandler    $orderVatViewsByEventQueryHandler
+     * @param OrderVatViewsBySheetQueryHandler    $orderVatViewsBySheetQueryHandler
+     * @param OrderVatViewsBySheetIdsQueryHandler $orderVatViewsBySheetIdsQueryHandler
+     * @param TransactionRepositoryInterface      $transactionRepository
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        TransactionRepositoryInterface $transactionRepository,
-        InvoiceRepositoryInterface $invoiceRepository
+        OrderVatViewsByEventQueryHandler $orderVatViewsByEventQueryHandler,
+        OrderVatViewsBySheetQueryHandler $orderVatViewsBySheetQueryHandler,
+        OrderVatViewsBySheetIdsQueryHandler $orderVatViewsBySheetIdsQueryHandler,
+        TransactionRepositoryInterface $transactionRepository
     ) {
-        $this->orderRepository        = $orderRepository;
-        $this->transactionRepository  = $transactionRepository;
-        $this->invoiceRepository      = $invoiceRepository;
+        $this->orderVatViewsByEventQueryHandler    = $orderVatViewsByEventQueryHandler;
+        $this->orderVatViewsBySheetQueryHandler    = $orderVatViewsBySheetQueryHandler;
+        $this->orderVatViewsBySheetIdsQueryHandler = $orderVatViewsBySheetIdsQueryHandler;
+        $this->transactionRepository               = $transactionRepository;
     }
 
     /**
@@ -71,34 +66,50 @@ class Balance
      */
     public function loadAllTransactions(Event $event)
     {
-        $transactions = $this->transactionRepository->findByEvent($event);
+        $transactions = $this->transactionRepository->findByEventAndEnabledSheets($event);
 
         foreach ($transactions as $transaction) {
-            $this->transactions[$transaction->getSheet()->getId()][] = $transaction;
+            $this->transactionsBySheet[$transaction->getSheet()->getId()][] = $transaction;
+        }
+    }
+
+    /**
+     * @param Event $event
+     * @param int[] $sheetIds
+     */
+    public function loadAllTransactionsForSheetIds(Event $event, array $sheetIds)
+    {
+        $transactions = $this->transactionRepository->findByEventAndSheetIds($event, $sheetIds);
+
+        foreach ($transactions as $transaction) {
+            $this->transactionsBySheet[$transaction->getSheet()->getId()][] = $transaction;
         }
     }
 
     /**
      * @param Event $event
      */
-    public function loadAllOrders(Event $event)
+    public function loadAllOrderVatViews(Event $event)
     {
-        $orders = $this->orderRepository->findByEvent($event);
+        $orderVatViews = $this->orderVatViewsByEventQueryHandler->handle(new OrderVatViewsByEventQuery($event));
 
-        foreach ($orders as $order) {
-            $this->orders[$order->getSheet()->getId()][] = $order;
+        foreach ($orderVatViews as $orderVatView) {
+            $this->orderVatViewsBySheet[$orderVatView->sheetId][] = $orderVatView;
         }
     }
 
     /**
      * @param Event $event
+     * @param int[] $sheetIds
      */
-    public function loadAllInvoices(Event $event)
+    public function loadAllOrderVatViewsForSheetIds(Event $event, array $sheetIds)
     {
-        $invoices = $this->invoiceRepository->findByEvent($event);
+        $orderVatViews = $this->orderVatViewsBySheetIdsQueryHandler->handle(
+            new OrderVatViewsBySheetIdsQuery($event, $sheetIds)
+        );
 
-        foreach ($invoices as $invoice) {
-            $this->invoices[$invoice->getSheet()->getId()][] = $invoice;
+        foreach ($orderVatViews as $orderVatView) {
+            $this->orderVatViewsBySheet[$orderVatView->sheetId][] = $orderVatView;
         }
     }
 
@@ -107,44 +118,47 @@ class Balance
      */
     public function loadAllForEvent(Event $event)
     {
-        $this->loadAllOrders($event);
+        $this->loadAllOrderVatViews($event);
         $this->loadAllTransactions($event);
     }
 
     /**
-     * @param Sheet $sheet
-     * @param array $orders
+     * @param Event $event
+     * @param int[] $sheetIds
      */
-    public function preloadOrdersForSheet(Sheet $sheet, array $orders)
+    public function loadAllForSheetIds(Event $event, array $sheetIds)
     {
-        $this->orders[$sheet->getId()] = $orders;
+        $this->loadAllOrderVatViewsForSheetIds($event, $sheetIds);
+        $this->loadAllTransactionsForSheetIds($event, $sheetIds);
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return Order[]
+     * @return OrderVatView[]
      */
-    public function getOrders(Sheet $sheet)
+    public function getOrderVatViews(Sheet $sheet)
     {
-        if (!isset($this->orders[$sheet->getId()])) {
-            $this->orders[$sheet->getId()] = $this->orderRepository->findBySheet($sheet);
+        if (!isset($this->orderVatViewsBySheet[$sheet->getId()])) {
+            $this->orderVatViewsBySheet[$sheet->getId()] = $this->orderVatViewsBySheetQueryHandler->handle(
+                new OrderVatViewsBySheetQuery($sheet)
+            );
         }
 
-        return $this->orders[$sheet->getId()];
+        return $this->orderVatViewsBySheet[$sheet->getId()];
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return Order[]
+     * @return OrderVatView[]
      */
-    public function getNotCancelledOrders(Sheet $sheet)
+    public function getNotCancelledOrderVatViews(Sheet $sheet)
     {
-        $orders = $this->getOrders($sheet);
+        $orderVatViews = $this->getOrderVatViews($sheet);
 
-        return array_filter($orders, function (Order $order) {
-            return !$order->isCancelled();
+        return array_filter($orderVatViews, function (OrderVatView $orderVatView) {
+            return !$orderVatView->isCancelled;
         });
     }
 
@@ -155,101 +169,81 @@ class Balance
      */
     public function getTransactions(Sheet $sheet)
     {
-        if (!isset($this->transactions[$sheet->getId()])) {
-            $this->transactions[$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
+        if (!isset($this->transactionsBySheet[$sheet->getId()])) {
+            $this->transactionsBySheet[$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
         }
 
-        return $this->transactions[$sheet->getId()];
+        return $this->transactionsBySheet[$sheet->getId()];
     }
 
     /**
+     * Get total with VAT for a sheet
+     *
      * @param Sheet $sheet
      *
-     * @return Invoice[]
-     */
-    public function getInvoices(Sheet $sheet)
-    {
-        return $this->invoiceRepository->findBySheet($sheet);
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return float
+     * @return int amount in cents
      */
     public function getTotal(Sheet $sheet)
     {
-        $orders = $this->getNotCancelledOrders($sheet);
+        $orderVatViews = $this->getNotCancelledOrderVatViews($sheet);
 
-        return array_reduce($orders, function ($carry, Order $order) {
-            return $carry + $order->getTotal();
-        }, 0);
+        $total = 0;
+
+        foreach ($orderVatViews as $orderVatView) {
+            $total += $orderVatView->totalWithVat;
+        }
+
+        return $total;
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getTotalWithoutVat(Sheet $sheet)
     {
-        $orders = $this->getNotCancelledOrders($sheet);
+        $orderVatViews = $this->getNotCancelledOrderVatViews($sheet);
 
-        return array_reduce($orders, function ($carry, Order $order) {
-            return $carry + $order->getTotalWithoutVat();
-        }, 0);
+        $totalWithoutVat = 0;
+
+        foreach ($orderVatViews as $orderVatView) {
+            $totalWithoutVat += $orderVatView->totalWithoutVat;
+        }
+
+        return $totalWithoutVat;
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getBalance(Sheet $sheet)
     {
-        $total        = $this->getTotal($sheet);
-        $transactions = $this->getTransactions($sheet);
-
-        return array_reduce($transactions, function ($carry, Transaction $transaction) {
-            if (!$transaction->isPaid()) {
-                return $carry;
-            }
-
-            return $carry - $transaction->getAmount();
-        }, $total);
+        return $this->getTotal($sheet) - $this->getTotalPaid($sheet);
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getRemainingToPay(Sheet $sheet)
     {
-        $total        = $this->getTotal($sheet);
-        $transactions = $this->getTransactions($sheet);
+        $remainingToPay = $this->getBalance($sheet);
 
-        return array_reduce($transactions, function ($carry, Transaction $transaction) {
-            if ($carry < 0) {
-                return 0;
-            }
+        if ($remainingToPay < 0) {
+            return 0;
+        }
 
-            if (!$transaction->isPaid()) {
-                return $carry;
-            }
-
-            if (($carry - $transaction->getAmount()) < 0) {
-                return 0;
-            }
-
-            return $carry - $transaction->getAmount();
-        }, $total);
+        return $remainingToPay;
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return int amount in cents
      */
     public function getTotalPaid(Sheet $sheet)
     {
@@ -262,25 +256,27 @@ class Balance
             }
         }
 
-        return $totalPaid;
+        return AmountFormatter::decimalToCentsAmount($totalPaid);
     }
 
     /**
-     * @return Order[]
+     * @return OrderVatView[]
      */
-    public function getNotCancelledOrdersFromEvent()
+    public function getNotCancelledOrderVatViewsFromEvent()
     {
-        if (!isset($this->orders) || empty($this->orders)) {
+        if (!isset($this->orderVatViewsBySheet) || empty($this->orderVatViewsBySheet)) {
             return [];
         }
 
         $notCancelledOrdersFromEvent = [];
 
-        foreach ($this->orders as $sheetOrders) {
-            /** @var Order $order */
-            foreach ($sheetOrders as $order) {
-                if (!$order->isCancelled()) {
-                    $notCancelledOrdersFromEvent[] = $order;
+        /** @var OrderVatView[] $sheetOrderVatViews */
+        foreach ($this->orderVatViewsBySheet as $sheetOrderVatViews) {
+            if (is_array($sheetOrderVatViews)) {
+                foreach ($sheetOrderVatViews as $orderVatView) {
+                    if (!$orderVatView->isCancelled) {
+                        $notCancelledOrdersFromEvent[] = $orderVatView;
+                    }
                 }
             }
         }
@@ -289,63 +285,55 @@ class Balance
     }
 
     /**
-     * @return float
+     * @return int amount in cents
      */
     public function getTransactionsTotalPaidForEvent()
     {
         $totalPaid = 0;
 
-        foreach ($this->transactions as $sheetTransactions) {
-            /** @var Transaction $transaction */
-            foreach ($sheetTransactions as $transaction) {
-                if ($transaction->isPaid()) {
-                    $totalPaid += $transaction->getAmount();
+        /** @var Transaction[] $transactions */
+        foreach ($this->transactionsBySheet as $transactions) {
+            if (is_array($transactions)) {
+                foreach ($transactions as $transaction) {
+                    if ($transaction->isPaid()) {
+                        $totalPaid += $transaction->getAmount();
+                    }
                 }
             }
         }
 
-        return $totalPaid;
+        return AmountFormatter::decimalToCentsAmount($totalPaid);
     }
 
     /**
-     * @return float
+     * Get total with VAT, if applicable, for all event
+     *
+     * @return int amount in cents
      */
     public function getOrdersTotalForEvent()
     {
-        $orders = $this->getNotCancelledOrdersFromEvent();
+        $orderVatViews = $this->getNotCancelledOrderVatViewsFromEvent();
 
-        return array_reduce($orders, function ($carry, Order $order) {
-            return $carry + $order->getTotal();
-        }, 0);
+        $total = 0;
+
+        foreach ($orderVatViews as $orderVatView) {
+            $total += $orderVatView->totalWithVat;
+        }
+
+        return $total;
     }
 
     /**
-     * @return float
+     * @return int amount in cents
      */
-    public function getOrdersTotalRemainingToPayForEvent()
+    public function getTotalRemainingToPayForEvent()
     {
-        $total = $this->getOrdersTotalForEvent();
+        $remainingToPay = $this->getOrdersTotalForEvent() - $this->getTransactionsTotalPaidForEvent();
 
-        $totalRemaining = $total;
-
-        foreach ($this->transactions as $sheetTransaction) {
-            $totalRemaining = array_reduce($sheetTransaction, function ($carry, Transaction $transaction) {
-                if ($carry < 0) {
-                    return 0;
-                }
-
-                if (!$transaction->isPaid()) {
-                    return $carry;
-                }
-
-                if (($carry - $transaction->getAmount()) < 0) {
-                    return 0;
-                }
-
-                return $carry - $transaction->getAmount();
-            }, $totalRemaining);
+        if (0 > $remainingToPay) {
+            return 0;
         }
 
-        return  $totalRemaining;
+        return $remainingToPay;
     }
 }

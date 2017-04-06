@@ -204,6 +204,7 @@ class Event implements EventInterface, TraceableInterface
         $this->organiserName  = $organiserName;
         $this->emailTeam      = $emailTeam;
         $this->invoicePrefix  = $invoicePrefix;
+        $this->assetPath      = '';
     }
 
     /**
@@ -591,7 +592,7 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @return null|Prefix
+     * @return Prefix
      */
     public function getInvoicePrefix()
     {

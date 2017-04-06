@@ -76,7 +76,8 @@ class SheetController extends Controller
             $locale
         );
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        // Build sheet template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
         $participantProductView = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
@@ -152,7 +153,8 @@ class SheetController extends Controller
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        // Build sheet template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
@@ -387,6 +389,10 @@ class SheetController extends Controller
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
+
+        if (!$object instanceof Template\TemplateObject\Image) {
+            throw $this->createNotFoundException('The key given is not an image');
+        }
 
         $removeImage = new RemoveImage($object, $sheet, $templateData);
         $this->get('tactician.commandbus')->handle($removeImage);

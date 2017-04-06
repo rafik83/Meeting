@@ -86,7 +86,8 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
-            ->from(Event::class, 'event');
+            ->from(Event::class, 'event')
+            ->orderBy('event.title');
 
         if ($admin->hasEvents()) {
             $queryBuilder
@@ -106,7 +107,8 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
-            ->from(Event::class, 'event', 'event.id');
+            ->from(Event::class, 'event', 'event.id')
+            ->orderBy('event.title');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -120,7 +122,8 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
-            ->from(Event::class, 'event');
+            ->from(Event::class, 'event')
+            ->orderBy('event.title');
 
         return $queryBuilder->getQuery()->getResult();
     }

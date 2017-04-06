@@ -36,7 +36,7 @@
             <th>{{ 'admin.order.type'|trans }}</th>
             <th>{{ 'admin.order.follower'|trans }}</th>
             <th>{{ 'admin.order.createdAt'|trans }}</th>
-            <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+            <th class="text-right">{{ 'admin.order.totalWithoutVat'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -61,7 +61,7 @@
                     {{ order.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                 </td>
                 <td class="text-right">
-                    {{ order.total|localizedcurrency(order.currency) }}
+                    {{ order.totalWithoutVat|localizedcurrency(order.currency) }}
                 </td>
                 <td class="text-right">
                     {% if order.isInvoiced == false %}

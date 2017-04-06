@@ -77,4 +77,12 @@ class Prefix
     {
         return $this->isDefault;
     }
+
+    /**
+     * @return string
+     */
+    public function getPrefixExample()
+    {
+        return sprintf('%s (%s%s-%s)', $this->title, $this->prefix, date('Y'), '0001');
+    }
 }

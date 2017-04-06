@@ -11,22 +11,27 @@
     <tbody>
     {{ include('EventBundle:Order/Summary:groups.html.twig', {groups: summary.groups, order: order}) }}
     {{ include('EventBundle:Order/Summary:promotion_codes.html.twig', {promotionCodes: summary.promotionCodes}) }}
+
     {% if summary.vatApplicable %}
         <tr>
             <td colspan="2"></td>
             <td><strong>{{ 'summary.total'|trans }}</strong></td>
-            <td class="text-center">{{ summary.totalWithoutVat|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.vatMode)|trans }}</td>
+            <td class="text-center">{{ summary.totalWithoutVat|format_amount|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.vatMode)|trans }}</td>
         </tr>
         <tr>
             <td colspan="2"></td>
             <td><strong>{{ 'summary.vatRate'|trans({'%vatRate%': summary.vatRate }) }}</strong></td>
-            <td class="text-center">{{ summary.vatAmount|localizedcurrency(summary.currency) }}</td>
+            <td class="text-center">{{ summary.vatAmount|format_amount|localizedcurrency(summary.currency) }}</td>
         </tr>
     {% endif %}
+
     <tr>
         <td colspan="2"></td>
         <td><strong>{{ 'summary.totalToPay'|trans }}</strong></td>
-        <td class="text-center">{{ summary.totalWithVat|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.totalVatMode)|trans }}</td>
+        <td class="text-center">
+            {{ summary.totalWithVat|format_amount|localizedcurrency(summary.currency) }}
+            {{ ('package.vatMode.' ~ summary.totalVatMode)|trans }}
+        </td>
     </tr>
     </tbody>
 </table>

@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Transaction\Filter:
+    properties:
+        beginDate:
+            - NotBlank: ~
+            - Date: ~
+        endDate:
+            - NotBlank: ~
+            - Date: ~
+    constraints:
+        - Expression:
+            expression: "this.beginDate < this.endDate"
+            message: "validators.transaction.startTimeMustBeBeforeEndTime"

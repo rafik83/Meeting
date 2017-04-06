@@ -129,8 +129,9 @@ class CatalogController extends Controller
                     [
                         'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
                             'paginatedResult' => $paginatedResult,
-                            'viewer' =>  $sheet,
-                            'page'   => $page
+                            'viewer'          =>  $sheet,
+                            'page'            => $page,
+                            'isCatalog'       => true,
                         ]),
                         'seeMoreButton' => $seeMoreButton,
                     ]
@@ -257,7 +258,10 @@ class CatalogController extends Controller
             $sheet,
             $locale
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        // Build sheet template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')
+            ->buildTaggedDataView($sheet, $locale, $rules);
 
         $ruleApplyer = $this->get('domain.rule.applyer');
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);

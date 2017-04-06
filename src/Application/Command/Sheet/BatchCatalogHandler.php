@@ -99,11 +99,16 @@ class BatchCatalogHandler
                 }
             }
 
-            $sheet->setInCatalog($command->state);
-
             if ($command->state === true) {
+                if (!$sheet->isEnabled()) {
+                    $ignoredSheets[] = $sheet;
+
+                    continue;
+                }
                 $sheet->setInCatalogAt($this->datetime);
             }
+            $sheet->setInCatalog($command->state);
+
             $this->enableDisableManager->update($sheet, $command->state);
 
             // trace state in catalog change only
@@ -123,7 +128,7 @@ class BatchCatalogHandler
         }
 
         if (count($ignoredSheets) > 0) {
-            $message = 'catalog.remove.warning';
+            $message = $command->state ? 'catalog.add.warning' : 'catalog.remove.warning';
             $locale = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($locale) {

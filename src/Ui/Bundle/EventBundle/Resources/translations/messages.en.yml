@@ -54,6 +54,11 @@ gender.man: Mr
 gender.woman: Mrs
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
+invoice.list.column.number: 'N° invoice'
+invoice.list.column.totalExcludeTaxes: 'Total excl. tax'
+invoice.list.column.totalIncludeTaxes: 'Total incl. VAT'
+invoice.list.title: 'Your invoices'
+invoice.show: 'View final invoice (pdf)'
 login.connect: Login
 login.connection: Connexion
 login.forgot_password: 'Forgotten password?'
@@ -145,7 +150,7 @@ order.transaction.mode.bank_check: Cheque
 order.transaction.mode.bank_transfer: Transfer
 order.transaction.mode.paypal: Paypal
 order.transaction.no: None
-order.transaction.paypal.description: '%eventId%-%sheetId% : Participation of %sheetName% on the event "%eventName%"'
+order.transaction.paypal.description: '%eventId%-%sheetId% : Participation of %sheetName% on the event %eventName%'
 order.transaction.state.cancelled: Cancelled
 order.transaction.state.paid: Paid
 order.transaction.state.pending: Pending
@@ -173,7 +178,7 @@ package.planning.total: Total
 package.planning.unitPrice: 'Unit price'
 package.plans.seeMore: 'View more benefits'
 package.plans.validate: Validate
-package.product.availability: '%availabilityCurrent% sur %availabilityMax%'
+package.product.availability: '%availabilityCurrent% out of %availabilityMax%'
 package.product.available: Available
 package.product.buyableUntil: 'purchasable until %date%'
 package.product.deletableUntil: 'Can be removed until %date%'
