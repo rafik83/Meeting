@@ -96,11 +96,14 @@
                         {{ form_end(orderForm) }}
 
                         {% if multipleSheetsView is not null %}
-                            <ul>
-                                {% for sheet in multipleSheetsView.sheets %}
-                                    <li><a href="{{ path('admin_sheet_details', {'event': sheet.eventId, 'sheet': sheet.sheetId}) }}">{{ sheet.eventTitle }}: {{ sheet.sheetTitle }}</a></li>
-                                {% endfor %}
-                            </ul>
+                            <div class="alert alert-success mg-tp">
+                                {{ 'admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation'|trans({'%numero%' : multipleSheetsView.numero}) }}
+                                <ul>
+                                    {% for sheet in multipleSheetsView.sheets %}
+                                        <li><a href="{{ path('admin_sheet_details', {'event': sheet.eventId, 'sheet': sheet.sheetId, '_fragment': 'sheetOrders'}) }}">{{ sheet.eventTitle }}: {{ sheet.sheetTitle }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         {% endif %}
                     </div>
                 {% endif %}

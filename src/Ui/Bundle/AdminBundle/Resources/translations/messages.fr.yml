@@ -124,6 +124,7 @@ admin.event.languages: Langues
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
+admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
 admin.event.page.orderInvoiceFinder.title: 'Recherche commande/facture'
 admin.event.page.transactions.title: Transactions
 admin.event.paymentConditions.link: 'Conditions de paiement'
