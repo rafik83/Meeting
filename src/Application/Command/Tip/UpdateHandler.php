@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
-use Proximum\Vimeet\Application\Exception\Tip\TipException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class UpdateHandler
@@ -25,8 +24,6 @@ class UpdateHandler
     
     /**
      * @param Update $command
-     *
-     * @throws TipException
      */
     public function handle(Update $command)
     {

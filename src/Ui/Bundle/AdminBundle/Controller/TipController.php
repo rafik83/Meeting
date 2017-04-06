@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Application\Command\Tip\Update;
-use Proximum\Vimeet\Application\Exception\Tip\TipException;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\CreateType;
@@ -55,20 +54,13 @@ class TipController extends Controller
         $form    = $this->createForm(CreateType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($command);
-                $this->addFlash(
-                    'success',
-                    $this->get('translator')->trans('flash.admin.tip.create.success', [], 'flashes')
-                );
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash(
+                'success',
+                $this->get('translator')->trans('flash.admin.tip.create.success', [], 'flashes')
+            );
 
-                return $this->redirectToRoute('admin_tip_list');
-            } catch (TipException $exception) {
-                $this->addFlash(
-                    'error',
-                    $this->get('translator')->trans('flash.admin.tip.create.failure', [], 'flashes')
-                );
-            }
+            return $this->redirectToRoute('admin_tip_list');
         }
 
         return $this->render('AdminBundle:Tip:create.html.twig', [
@@ -90,20 +82,13 @@ class TipController extends Controller
         $form    = $this->createForm(UpdateType::class, $command);
         
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($command);
-                $this->addFlash(
-                    'success',
-                    $this->get('translator')->trans('flash.admin.tip.update.success', [], 'flashes')
-                );
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash(
+                'success',
+                $this->get('translator')->trans('flash.admin.tip.update.success', [], 'flashes')
+            );
 
-                return $this->redirectToRoute('admin_tip_list');
-            } catch (TipException $exception) {
-                $this->addFlash(
-                    'error',
-                    $this->get('translator')->trans('flash.admin.tip.update.failure', [], 'flashes')
-                );
-            }
+            return $this->redirectToRoute('admin_tip_list');
         }
         
         return $this->render('AdminBundle:Tip:update.html.twig', [
