@@ -246,8 +246,10 @@ class Block extends AbstractChild
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object instanceof TemplateObject\Image
-                   || $object instanceof TemplateObject\EditableText
-                   || $object instanceof TemplateObject\Participant;
+                || $object instanceof TemplateObject\EditableText
+                || $object instanceof TemplateObject\Participant
+                || $object instanceof TemplateObject\Tag
+            ;
         });
     }
 

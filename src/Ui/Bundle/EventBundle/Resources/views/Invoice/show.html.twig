@@ -5,7 +5,7 @@
     <script type="text/javascript">
         var PhantomJSPrinting = {
             header: {
-                height: "2cm",
+                height: "3.5cm",
                 contents: function(pageNum, numPages) { return '{{ include('EventBundle:Invoice/Partial:header.html.twig', {invoiceView: invoiceView})|escape('js') }}'; }
             },
             footer: {
@@ -24,7 +24,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-offset-8 col-md-4">
+            <div class="col-md-offset-6 col-md-6">
                 <strong>{{ invoiceView.billingInfosView.company }}</strong><br>
                 {{ ('invoice.gender.' ~ invoiceView.billingInfosView.gender)|trans({}, "invoices", invoiceView.eventDefaultLocale) }} {{ invoiceView.billingInfosView.firstname }} {{ invoiceView.billingInfosView.lastname }}<br>
                 {{ invoiceView.billingInfosView.street }}<br>
