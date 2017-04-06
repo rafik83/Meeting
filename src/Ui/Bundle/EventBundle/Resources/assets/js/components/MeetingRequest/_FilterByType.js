@@ -31,6 +31,14 @@ function FilterByType(element, buttonsZone)
             || attribute === this.filterByRequestsConstant
             || attribute === this.filterByPropositionsConstant
         ) {
+            if (attribute === this.filterByRequestsConstant) {
+                this.addContentToButton(element, '(' + this.requests.length + ')');
+            }
+
+            if (attribute === this.filterByPropositionsConstant) {
+                this.addContentToButton(element, '(' + this.propositions.length + ')');
+            }
+
             element.addEventListener('click', function () {
                 this.filterByType(attribute, element);
             }.bind(this));
@@ -39,6 +47,11 @@ function FilterByType(element, buttonsZone)
         this.buttons.push(element);
     }.bind(this));
 }
+
+FilterByType.prototype.addContentToButton = function (element, content)
+{
+    element.innerHTML = element.innerHTML + ' ' + content;
+};
 
 FilterByType.prototype.filterByType = function (type, buttonClicked)
 {
