@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Components\Order;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Order\OrdersToInvoice;
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler;
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -37,30 +36,17 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $orderBillingInfo = new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'function',
-            'phone',
-            'mobile',
-            'company',
-            'email@email.com',
-            new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
-        );
-
         $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
         $participant = Product::createParticipant($event, 'participant', 1789, 20);
         $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
 
-        $orderOne = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
         $orderOne->addRow(new Order\Row($orderOne, 1, $option));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
         $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
         $sheet->addOrder($orderTwo);
@@ -75,7 +61,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger(),
+            new Merger($vatApplicable->reveal()),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -107,7 +93,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger(),
+            new Merger($vatApplicable->reveal()),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -128,22 +114,9 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $orderBillingInfo = new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'function',
-            'phone',
-            'mobile',
-            'company',
-            'email@email.com',
-            new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
-        );
-
         $option = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
 
-        $orderNegative = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-5 day'));
+        $orderNegative = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderNegative->addRow(new Order\Row($orderNegative, -1, $option));
         $sheet->addOrder($orderNegative);
 
@@ -156,7 +129,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger(),
+            new Merger($vatApplicable->reveal()),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -177,19 +150,6 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $orderBillingInfo = new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'function',
-            'phone',
-            'mobile',
-            'company',
-            'email@email.com',
-            new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
-        );
-
         $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
         $participant = Product::createParticipant($event, 'participant', 1789, 20);
         $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
@@ -207,13 +167,13 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $orderOne = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, $groupsData, $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
         $orderOne->addRow(new Order\Row($orderOne, 1, $option, $groupId));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, $groupsData, $datetime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
 
         $optionRow = new Order\Row($orderTwo, 3, $option, $groupId);
@@ -237,7 +197,7 @@ class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger(),
+            new Merger($vatApplicable->reveal()),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()

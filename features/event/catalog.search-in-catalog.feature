@@ -3,7 +3,7 @@ Feature: Search sheet in catalog
   As a participant, I can filter the sheet list in catalog by position
 
   Scenario: I can search and filter sheet by catalog by position
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

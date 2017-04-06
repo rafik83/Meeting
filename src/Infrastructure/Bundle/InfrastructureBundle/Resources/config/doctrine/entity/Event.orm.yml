@@ -74,5 +74,6 @@ Proximum\Vimeet\Domain\Model\Event:
     manyToOne:
         invoicePrefix:
             targetEntity: Proximum\Vimeet\Domain\Model\Invoice\Prefix
+            cascade: ["persist"]
             joinColumn:
                 nullable: false

@@ -62,7 +62,7 @@ class PaginatedOrderListViewQueryHandler
                     $order->getSheet()->getType()->getTitle($query->locale),
                     $order->getSheet()->getFollower() ? $order->getSheet()->getFollower()->getDisplayName() : '',
                     $order->getCreatedAt(),
-                    $order->getTotal(),
+                    $order->getTotalWithoutVat(),
                     $order->getVatMode(),
                     $order->getCurrency(),
                     $order->hasInvoice()

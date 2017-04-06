@@ -49,19 +49,29 @@
                             </div>
                             <div class="col-md-4 sum">
                                 <ul>
-                                    <li>{{ 'summary.total'|trans }}
-                                        <span>{{ view.totalWithoutVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.vatMode)|trans }}</span>
-                                    </li>
-                                    <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vatRate }) }}
-                                        <span>
+                                    {% if view.vatApplicable %}
+                                        <li>
+                                            {{ 'summary.total'|trans }}
+                                            <span>
+                                                {{ view.totalWithoutVat|format_amount|localizedcurrency(view.currency) }}
+                                                {{ ('package.vatMode.' ~ view.vatMode)|trans }}
+                                            </span>
+                                        </li>
+                                        <li>
+                                            {{ 'package.summary.totalVat'|trans({'%vat%': view.vatRate }) }}
+                                            <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
-                                                    '%price%': view.vatAmount|localizednumber,
+                                                    '%price%': view.vatAmount|format_amount|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
-                                    </li>
+                                        </li>
+                                    {% endif %}
+
                                     <li class="total">{{ 'summary.totalToPay'|trans }}
-                                        <span>{{ view.totalWithVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
+                                        <span>
+                                            {{ view.totalWithVat|format_amount|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}
+                                        </span>
                                     </li>
                                 </ul>
                             </div>

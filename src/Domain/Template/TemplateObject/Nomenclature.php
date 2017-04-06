@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag as SheetTag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
+use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
-class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface
+class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
     /**
      * Need and supply objectives constants
@@ -276,9 +277,9 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     {
         $tags = $this->getTags();
 
-        return !in_array(Tag::PARTICIPANT_POSITION, $tags)
-            && !in_array(Tag::SHEET_ORGANIZATION_STAFF, $tags)
-            && !in_array(Tag::SHEET_ORGANIZATION_TURNOVER, $tags)
+        return !in_array(SheetTag::PARTICIPANT_POSITION, $tags)
+            && !in_array(SheetTag::SHEET_ORGANIZATION_STAFF, $tags)
+            && !in_array(SheetTag::SHEET_ORGANIZATION_TURNOVER, $tags)
         ;
     }
 
@@ -389,5 +390,21 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }
 
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslations(array $locales = [])
+    {
+        $translations = [];
+
+        foreach ($this->getItems() as $itemKey) {
+            foreach ($locales as $locale) {
+                $translations[$locale] = $this->getLabelForKey($itemKey, $locale);
+            }
+        }
+
+        return $translations;
     }
 }

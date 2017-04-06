@@ -13,11 +13,11 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\View\OrderVatView;
 
 class SheetDetailsView
 {
@@ -101,9 +101,9 @@ class SheetDetailsView
     public $traces;
 
     /**
-     * @var Order[]
+     * @var OrderVatView[]
      */
-    public $orders;
+    public $orderVatViews;
 
     /**
      * @var Transaction[]
@@ -150,7 +150,7 @@ class SheetDetailsView
      * @param int               $refusedPropositions
      * @param Comment[]         $comments
      * @param Trace[]           $traces
-     * @param Order[]           $orders
+     * @param OrderVatView[]    $orderVatViews
      * @param Transaction[]     $transactions
      * @param InvoiceView[]     $invoiceViews
      * @param float             $total
@@ -171,7 +171,7 @@ class SheetDetailsView
         $refusedPropositions,
         array $comments,
         array $traces,
-        array $orders,
+        array $orderVatViews,
         array $transactions,
         array $invoiceViews,
         $total,
@@ -191,7 +191,7 @@ class SheetDetailsView
         $this->refusedPropositions  = $refusedPropositions;
         $this->comments             = $comments;
         $this->traces               = $traces;
-        $this->orders               = $orders;
+        $this->orderVatViews        = $orderVatViews;
         $this->transactions         = $transactions;
         $this->invoiceViews         = $invoiceViews;
         $this->total                = $total;

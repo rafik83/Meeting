@@ -196,6 +196,13 @@ services:
         tags:
             - { name: form.type }
 
+    form_type_sheet_data.editable_text_translatable_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslatableDataType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
     form_type.catalog_search_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType
         arguments:
@@ -318,6 +325,17 @@ services:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@repository.transaction'
             - '@order.balance'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    event_listener.sheet_invoiced_event_listener:
+        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SheetInvoicedEventSubscriber
+        arguments:
+            - '@components.invoice.invoice_url_view_query_handler'
+            - '@repository.billing_info_repository'
+            - '@adapter.mailer_adapter'
+            - '@event_sender'
+            - '@adapter.event_url_generator'
         tags:
             - { name: kernel.event_subscriber }
 

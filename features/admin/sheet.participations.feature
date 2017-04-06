@@ -117,3 +117,12 @@ Feature: Edit participant status
     And I press "form.sheet_batch.children.disable"
     Then I should be on this page "/admin/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
     And I should see "flash.admin.sheet_batch.disable.warning"
+
+  Scenario: I should see a warning message on add to catalog batch when some sheets are disabled
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to "/admin/fr/event/1/sheet?enabled="
+    And I check "sheet_batch_ids_4"
+    And I press "form.sheet_batch.children.addCatalog.label"
+    Then I should be on this page "/admin/fr/event/1/sheet"
+    And I should see "flash.admin.sheet_batch.catalog.add.warning"

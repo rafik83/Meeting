@@ -30,7 +30,7 @@ class DashboardTransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
 
         $balance->getOrdersTotalForEvent()->shouldBeCalled()->willReturn(100);
         $balance->getTransactionsTotalPaidForEvent()->shouldBeCalled()->willReturn(75);
-        $balance->getOrdersTotalRemainingToPayForEvent()->shouldBeCalled()->willReturn(25);
+        $balance->getTotalRemainingToPayForEvent()->shouldBeCalled()->willReturn(25);
 
         $handler = new DashboardTransactionViewQueryHandler($balance->reveal());
 

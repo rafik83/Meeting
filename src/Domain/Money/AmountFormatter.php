@@ -45,6 +45,6 @@ class AmountFormatter
      */
     public static function calculateRateAmount($amount, $rate)
     {
-        return (int) ($amount * $rate / 100);
+        return (int) round($amount * $rate / 100);
     }
 }

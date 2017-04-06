@@ -139,4 +139,8 @@
   .sheet-header, .header, .sub-header, .btn, .edit-link, .tabs a, .link-show-more {
     display: none !important;
   }
+
+  .table-sm > tbody > tr > td {
+    padding: 4px;
+  }
 }

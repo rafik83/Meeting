@@ -110,7 +110,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'leftColor',
             'rightColor',
-            $participants
+            $participants,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -195,7 +196,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'leftColor',
             'rightColor',
-            $participants
+            $participants,
+            true
         );
 
         $this->assertEquals($expected, $result);

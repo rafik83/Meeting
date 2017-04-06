@@ -20,6 +20,10 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetSubmittedMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Notify follower or all organizers allowed to manage this sheet
+ * when user submit its sheet
+ */
 class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
 {
     /**

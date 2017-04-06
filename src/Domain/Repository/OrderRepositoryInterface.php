@@ -71,7 +71,15 @@ interface OrderRepositoryInterface
      *
      * @return Order[]
      */
-    public function findByEvent(Event $event);
+    public function findByEventAndEnabledSheets(Event $event);
+
+    /**
+     * @param Event $event
+     * @param int[] $sheetIds
+     *
+     * @return Order[]
+     */
+    public function findByEventAndSheetIds(Event $event, array $sheetIds);
 
     /**
      * @param Event $event

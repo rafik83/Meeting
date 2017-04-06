@@ -1,0 +1,5 @@
+{% if tag.content is same as(true) %}
+    {{ 'sheet.object.boolean.true'|trans }}
+{% elseif tag.content is same as(false) %}
+    {{ 'sheet.object.boolean.false'|trans }}
+{% endif %}

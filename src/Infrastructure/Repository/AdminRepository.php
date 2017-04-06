@@ -76,6 +76,23 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findById($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin')
+            ->where('admin.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEmail($email)
     {
         $queryBuilder = $this
@@ -219,5 +236,22 @@ class AdminRepository implements AdminRepositoryInterface
             ->setParameter('role', Admin::ROLE_ORGANIZER);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneByRole($role)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin')
+            ->where('admin.role = :role')
+            ->setParameter('role', $role)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

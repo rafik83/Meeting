@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 
 class JobQueueAdapter implements JobQueueInterface
 {
@@ -42,8 +43,7 @@ class JobQueueAdapter implements JobQueueInterface
     {
         $job = new Job('vimeet:campaign:send', [$campaign->getId()]);
         $job->addRelatedEntity($campaign);
-        $this->entityManager->persist($job);
-        $this->entityManager->flush($job);
+        $this->setJob($job);
     }
 
     /**
@@ -67,8 +67,20 @@ class JobQueueAdapter implements JobQueueInterface
             )
         );
 
-        $this->entityManager->persist($job);
-        $this->entityManager->flush($job);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateInvoice(array $sheetIds, Admin $admin)
+    {
+        $job = new Job(GenerateInvoiceCommand::NAME, [
+            'adminId'  => $admin->getId(),
+            'sheetIds' => implode(',', $sheetIds),
+        ]);
+
+        $this->setJob($job);
     }
 
     /**
@@ -78,6 +90,14 @@ class JobQueueAdapter implements JobQueueInterface
     {
         $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
 
+        $this->setJob($job);
+    }
+
+    /**
+     * @param Job $job
+     */
+    private function setJob(Job $job)
+    {
         $this->entityManager->persist($job);
         $this->entityManager->flush($job);
     }

@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
-use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -76,25 +75,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $currentStep = 4;
         $cart  = new Cart($sheet, [$planRow, $chairRow], [$promotionCodeRow], $currentStep);
 
-        // Expected
-        $orderBillingInfo = new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'function',
-            'phone',
-            'mobile',
-            'company',
-            'email@email.com',
-            new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
-        );
-
         $expectedPromotionCode = new PromotionCode($event, 'title', 'code', 19, null);
         $expectedPromotionCode->setPromotion($chair, Promotion::TYPE_PERCENT_OFF, 50);
 
         $groupsData    = '';
-        $order         = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime);
+        $order         = new Order($sheet, $groupsData, $datetime);
         $planOrderRow  = new Order\Row($order, 1, $plan);
         $chairOrderRow = new Order\Row($order, 2, $chair);
         $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100);
@@ -105,17 +90,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         // Mock
         $orderRepository            = $this->prophesize(OrderRepositoryInterface::class);
         $cartRowRepository          = $this->prophesize(CartRowRepositoryInterface::class);
-        $vatApplicable              = $this->prophesize(VatApplicable::class);
-        $billingInfoRepository      = $this->prophesize(BillingInfoRepositoryInterface::class);
         $cartStepRepository         = $this->prophesize(CartStepRepositoryInterface::class);
         $promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
         $promotionCodeRepository    = $this->prophesize(PromotionCodeRepositoryInterface::class);
 
         $orderRepository->add(Argument::that(function (Order $givenOrder) use ($order) {
-            return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotal() == $order->getTotal() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
+            return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotalWithoutVat() == $order->getTotalWithoutVat() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
         }))->shouldBeCalled();
-        $billingInfoRepository->getBySheet($sheet)->shouldBeCalled()->willReturn($billingInfo);
-        $vatApplicable->onSheet($sheet)->shouldBeCalled()->willReturn(true);
+
         $cartRowRepository->deleteForSheet($sheet)->shouldBeCalled();
         $cartStepRepository->deleteForSheet($sheet)->shouldBeCalled();
         $promotionCodeRowRepository->deleteForSheet($sheet)->shouldBeCalled();
@@ -125,14 +107,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             $orderRepository->reveal(),
             $cartRowRepository->reveal(),
             $cartStepRepository->reveal(),
-            $billingInfoRepository->reveal(),
             $promotionCodeRowRepository->reveal(),
             $promotionCodeRepository->reveal(),
-            $vatApplicable->reveal(),
             $datetime
         );
 
         $converter->toOrder($cart);
     }
 }
-

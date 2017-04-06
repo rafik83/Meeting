@@ -1,0 +1,61 @@
+<?php
+
+namespace Proximum\Vimeet\Behat\Service\Manager;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+
+class ParticipantManager
+{
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
+    /** @var SheetManager */
+    private $sheetManager;
+
+    /** @var UserManager */
+    private $userManager;
+
+    /**
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param SheetManager                   $sheetManager
+     * @param UserManager                    $userManager
+     */
+    public function __construct(
+        ParticipantRepositoryInterface $participantRepository,
+        SheetManager $sheetManager,
+        UserManager $userManager
+    ) {
+        $this->participantRepository = $participantRepository;
+        $this->sheetManager          = $sheetManager;
+        $this->userManager           = $userManager;
+    }
+
+    /**
+     * @param Event      $event
+     * @param Sheet|null $sheet
+     * @param User|null  $user
+     *
+     * @return Participant
+     */
+    public function create(Event $event, Sheet $sheet = null, User $user = null)
+    {
+        if (null === $sheet) {
+            $sheet = $this->sheetManager->create($event);
+        }
+
+        if (null === $user) {
+            $user = $this->userManager->create();
+        }
+
+        $participant = ParticipantFactory::create($sheet, $user);
+        $participant->setData([]);
+        $this->participantRepository->add($participant);
+
+        return $participant;
+    }
+}

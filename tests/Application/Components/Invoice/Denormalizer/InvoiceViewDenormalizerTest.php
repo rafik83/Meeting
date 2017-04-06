@@ -1,0 +1,269 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Components\Invoice\Denormalizer;
+
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupsViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionCodesViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionCodeViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionProductRowViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\RowViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\SummaryViewDenormalizer;
+use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
+use Proximum\Vimeet\Application\View\Invoice\CustomRowView;
+use Proximum\Vimeet\Application\View\Invoice\GroupsView;
+use Proximum\Vimeet\Application\View\Invoice\GroupView;
+use Proximum\Vimeet\Application\View\Invoice\IncludedProductView;
+use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
+use Proximum\Vimeet\Application\View\Invoice\PromotionCodesView;
+use Proximum\Vimeet\Application\View\Invoice\PromotionCodeView;
+use Proximum\Vimeet\Application\View\Invoice\PromotionProductRowView;
+use Proximum\Vimeet\Application\View\Invoice\RowView;
+use Proximum\Vimeet\Application\View\Invoice\SummaryView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+/**
+ * WARNING:
+ * This test ensure that Invoice data are always deserialized in the right way
+ * It should never changed because it is an extract of real invoice
+ * If the code should changed, this test must always pass without changes
+ */
+class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testDenormalizeInvoiceView()
+    {
+        $event  = EventFactory::createEvent('My Event', 'fr');
+        $sheet  = SheetFactory::create();
+        $prefix = new Prefix('Vimeet', 'Vi');
+        $date   = new \DateTime('2016-12-25 08:00:00');
+
+        /**
+         * This json data must not changes because it is an extract of real invoice data
+         */
+        $data = "{\"summaryView\":{\"groups\":{\"groups\":[{\"groupId\":null,\"label\":\"Exposant - stand 4m\\u00b2\",\"type\":\"plan\",\"products\":[{\"label\":\"Exposant - stand 4m\\u00b2\",\"quantity\":1,\"price\":265000,\"total\":265000,\"productId\":10,\"customRows\":[{\"label\":\"4m\\u00b2 suppl\\u00e9mentaires - remis\\u00e9\",\"quantity\":1,\"price\":50000,\"total\":50000}],\"includedProducts\":[{\"label\":\"Participant inclus\",\"quantity\":1,\"price\":0,\"total\":0},{\"label\":\"Pack de rendez-vous\",\"quantity\":1,\"price\":0,\"total\":0}]}],\"customRows\":[]},{\"groupId\":null,\"label\":\"Participant suppl\\u00e9mentaire\",\"type\":\"participant\",\"products\":[{\"label\":\"Participant suppl\\u00e9mentaire\",\"quantity\":3,\"price\":9500,\"total\":28500,\"productId\":34,\"customRows\":[],\"includedProducts\":[]}],\"customRows\":[]},{\"groupId\":5,\"label\":\"Communication\",\"type\":\"option\",\"products\":[{\"label\":\"LOGO sur votre fiche de pr\\u00e9sentation\",\"quantity\":1,\"price\":12500,\"total\":12500,\"productId\":4,\"customRows\":[{\"label\":\"Custom row for a product\",\"quantity\":1,\"price\":-5000,\"total\":-5000}],\"includedProducts\":[]}],\"customRows\":[]},{\"groupId\":6,\"label\":\"Sous-\\u00e9v\\u00e9nements\",\"type\":\"option\",\"products\":[],\"customRows\":[{\"label\":\"Custom row for a group\",\"quantity\":2,\"price\":9900,\"total\":19800}]},{\"groupId\":7,\"label\":\"Mobiliers suppl\\u00e9mentaires\",\"type\":\"option\",\"products\":[],\"customRows\":[]}]},\"promotionCodes\":{\"promotionCodes\":[{\"label\":\"Offre sp\\u00e9ciale\",\"description\":\"- 2 participants offerts - Logo offert\",\"quantity\":1,\"total\":-31500,\"promotionProductRowViews\":[{\"product\":\"LOGO\",\"promotionType\":\"free\",\"discountValue\":0,\"quantity\":1},{\"product\":\"Participant suppl\\u00e9mentaire - PO\\\/SR\",\"promotionType\":\"free\",\"discountValue\":0,\"quantity\":3}]}]},\"vatMode\":\"et\",\"currency\":\"EUR\"},\"billingInfosView\":{\"gender\":\"man\",\"lastname\":\"DUPOND\",\"firstname\":\"Laurent\",\"function\":\"Directeur\",\"phone\":\"+33122334455\",\"mobile\":\"+33611223344\",\"email\":\"my-email@example.net\",\"company\":\"My company\",\"vatNumber\":\"My vat number\",\"street\":\"10 rue Saint Marc\",\"zipcode\":\"75002\",\"city\":\"Paris\",\"country\":\"FR\",\"reference\":\"My reference\"},\"amountRemainToPay\":17760}";
+
+        $invoice = new Invoice(
+            $event,
+            $sheet,
+            $prefix,
+            'Vi',
+            2016,
+            7,
+            true,
+            Event::VAT_MODE_ET,
+            20,
+            339300,
+            407160,
+            67860,
+            'EUR',
+            $data,
+            $date
+        );
+
+        $serializer = new Serializer(
+            [
+                new InvoiceViewDenormalizer(),
+                new SummaryViewDenormalizer(),
+                new GroupsViewDenormalizer(),
+                new GroupViewDenormalizer(),
+                new RowViewDenormalizer(),
+                new PromotionCodesViewDenormalizer(),
+                new PromotionCodeViewDenormalizer(),
+                new PromotionProductRowViewDenormalizer(),
+                new ObjectNormalizer(),
+            ],
+            [
+                new JsonEncoder(),
+            ]
+        );
+
+        $invoiceView = $serializer->deserialize(
+            $invoice->getData(),
+            InvoiceView::class,
+            'json',
+            ['invoice' => $invoice]
+        );
+
+        /**
+         * This InvoiceView should never changed because it is the representation of Invoice data
+         */
+        $expectedInvoiceView = new InvoiceView(
+            'Vi2016-0007',
+            true,
+            'et',
+            20,
+            339300,
+            407160,
+            67860,
+            'EUR',
+            'My Event',
+            null,
+            $date,
+            'fr',
+            '',
+            '',
+            '',
+            '',
+            new SummaryView(
+                new GroupsView(
+                    [
+                        new GroupView(
+                            'Exposant - stand 4m²',
+                            'plan',
+                            null,
+                            [
+                                new RowView(
+                                    'Exposant - stand 4m²',
+                                    1,
+                                    265000,
+                                    265000,
+                                    10,
+                                    [
+                                        new CustomRowView(
+                                            '4m² supplémentaires - remisé',
+                                            50000,
+                                            1,
+                                            50000
+                                        ),
+                                    ],
+                                    [
+                                        new IncludedProductView(
+                                            'Participant inclus',
+                                            1,
+                                            0,
+                                            0
+                                        ),
+                                        new IncludedProductView(
+                                            'Pack de rendez-vous',
+                                            1,
+                                            0,
+                                            0
+                                        ),
+                                    ]
+                                ),
+                            ],
+                            []
+                        ),
+                        new GroupView(
+                            'Participant supplémentaire',
+                            'participant',
+                            null,
+                            [
+                                new RowView(
+                                    'Participant supplémentaire',
+                                    3,
+                                    9500,
+                                    28500,
+                                    34
+                                ),
+                            ]
+                        ),
+                        new GroupView(
+                            'Communication',
+                            'option',
+                            5,
+                            [
+                                new RowView(
+                                    'LOGO sur votre fiche de présentation',
+                                    1,
+                                    12500,
+                                    12500,
+                                    4,
+                                    [
+                                        new CustomRowView(
+                                            'Custom row for a product',
+                                            -5000,
+                                            1,
+                                            -5000
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                        new GroupView(
+                            'Sous-événements',
+                            'option',
+                            6,
+                            [],
+                            [
+                                new CustomRowView(
+                                    'Custom row for a group',
+                                    9900,
+                                    2,
+                                    19800
+                                ),
+                            ]
+                        ),
+                        new GroupView(
+                            'Mobiliers supplémentaires',
+                            'option',
+                            7
+                        ),
+                    ]
+                ),
+                new PromotionCodesView(
+                    [
+                        new PromotionCodeView(
+                            'Offre spéciale',
+                            '- 2 participants offerts - Logo offert',
+                            -31500,
+                            1,
+                            [
+                                new PromotionProductRowView(
+                                    'LOGO',
+                                    'free',
+                                    0,
+                                    1
+
+                                ),
+                                new PromotionProductRowView(
+                                    'Participant supplémentaire - PO\/SR',
+                                    'free',
+                                    0,
+                                    3
+                                ),
+                            ]
+                        ),
+                    ]
+                ),
+                'et',
+                'EUR'
+            ),
+            new BillingInfosView(
+                'man',
+                'DUPOND',
+                'Laurent',
+                'Directeur',
+                '+33122334455',
+                '+33611223344',
+                'my-email@example.net',
+                'My company',
+                '10 rue Saint Marc',
+                '75002',
+                'Paris',
+                'FR',
+                'My vat number',
+                'My reference'
+            ),
+            17760
+        );
+
+        $this->assertEquals($expectedInvoiceView, $invoiceView);
+    }
+}

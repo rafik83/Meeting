@@ -25,8 +25,6 @@ class BatchGenerateInvoice extends AbstractBatch
     public $admin;
 
     /**
-     * BatchAccept constructor.
-     *
      * @param array $ids
      * @param Admin $admin
      */
