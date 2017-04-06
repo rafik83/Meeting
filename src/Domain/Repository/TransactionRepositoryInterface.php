@@ -57,7 +57,15 @@ interface TransactionRepositoryInterface
      *
      * @return Transaction[]
      */
-    public function findByEvent(Event $event);
+    public function findByEventAndEnabledSheets(Event $event);
+
+    /**
+     * @param Event $event
+     * @param int[] $sheetIds
+     *
+     * @return Transaction[]
+     */
+    public function findByEventAndSheetIds(Event $event, array $sheetIds);
 
     /**
      * @param Event $event
@@ -65,4 +73,13 @@ interface TransactionRepositoryInterface
      * @return Transaction[]
      */
     public function findPaidByEvent(Event $event);
+
+    /**
+     * @param Event[]            $events
+     * @param \DateTimeInterface $beginDate
+     * @param \DateTimeInterface $endDate
+     *
+     * @return Transaction[]
+     */
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate);
 }

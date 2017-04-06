@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Order\BillingInfo;
+use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class ProFormaView

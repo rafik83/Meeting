@@ -57,6 +57,7 @@ validators.sheet.messaging_campaign.create.sheetIds: 'Veuillez sélectionner au 
 validators.sheet.messaging_campaign.message: 'Veuillez sélectionner un message'
 validators.sheet.messaging_campaign.recipients: 'Veuillez sélectionner un destinataire au moins'
 validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
+validators.transaction.startTimeMustBeBeforeEndTime: 'La date de début doit être avant la date de fin'
 validators.unavailability.mass.children.time_slots.range_error: 'Le début doit être avant la fin'
 validators.unavailability.messageLength: 'Le nombre de caractères ne doit pas être supérieur à 150'
 validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'

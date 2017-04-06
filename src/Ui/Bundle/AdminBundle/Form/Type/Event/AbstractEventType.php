@@ -169,7 +169,7 @@ abstract class AbstractEventType extends AbstractType
 
         $invoicePrefixOptions['choice_label'] = function ($prefix = null) {
             if ($prefix instanceof Prefix) {
-                return $prefix->getTitle() . ' : ' . $prefix->getPrefix() . date('Y') . '-00001';
+                return $prefix->getPrefixExample();
             }
 
             return null;

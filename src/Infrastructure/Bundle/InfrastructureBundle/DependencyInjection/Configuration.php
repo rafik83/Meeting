@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('font_path')->end()
                 ->scalarNode('image_path')->end()
                 ->scalarNode('print_planning_path')->end()
+                ->scalarNode('export_transactions_path')->end()
                 ->scalarNode('export_order_path')->end()
                 ->arrayNode('package')
                     ->children()

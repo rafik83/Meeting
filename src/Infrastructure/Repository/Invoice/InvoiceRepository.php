@@ -36,6 +36,25 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice', 'sheet')
+            ->from(Invoice::class, 'invoice')
+            ->join('invoice.sheet', 'sheet')
+            ->where('invoice.event IN (:events)')
+            ->andWhere('invoice.createdAt BETWEEN :beginDate and :endDate')
+            ->setParameter('beginDate', $beginDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('events', $events)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(Invoice $invoice)
     {
         $this->entityManager->persist($invoice);
@@ -75,11 +94,12 @@ class InvoiceRepository implements InvoiceRepositoryInterface
                 'invoice_prefix' => $prefix->getPrefix(),
                 'invoice_year'   => $year
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */

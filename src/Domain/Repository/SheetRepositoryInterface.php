@@ -117,6 +117,14 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
+     * @param Event $event
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByEventAndIds(Event $event, array $ids);
+
+    /**
      * @param array $ids
      *
      * @return Sheet[]

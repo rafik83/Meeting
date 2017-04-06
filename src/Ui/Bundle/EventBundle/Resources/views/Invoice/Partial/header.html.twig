@@ -1,4 +1,4 @@
 {% if invoiceView.invoiceLogo is not null %}
     {# It must be an absolute url to render image in header #}
-    <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ asset(invoiceView.invoiceLogo) }}" style="max-width: 10cm; max-height: 1cm;">
+    <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ asset(invoiceView.invoiceLogo) }}" style="max-width: 10cm; max-height: 2.5cm;">
 {% endif %}

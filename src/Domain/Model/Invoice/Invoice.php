@@ -41,13 +41,13 @@ class Invoice
     /** @var int */
     private $invoiceIncrement;
 
-    /** @var int */
+    /** @var int in cents */
     private $total;
 
-    /** @var int */
+    /** @var int in cents */
     private $totalWithVat;
 
-    /** @var int */
+    /** @var int in cents */
     private $vatAmount;
 
     /** @var string 3-letter ISO 4217 currency name */

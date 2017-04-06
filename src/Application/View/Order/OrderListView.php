@@ -48,9 +48,11 @@ class OrderListView
     public $createdAt;
 
     /**
+     * Amount without VAT
+     *
      * @var float
      */
-    public $total;
+    public $totalWithoutVat;
 
     /**
      * @var string
@@ -75,7 +77,7 @@ class OrderListView
      * @param string             $sheetType
      * @param string             $follower
      * @param \DateTimeInterface $createdAt
-     * @param float              $total
+     * @param float              $totalWithoutVat Amount without VAT
      * @param string             $vatMode
      * @param string             $currency
      * @param bool               $isInvoiced
@@ -88,21 +90,21 @@ class OrderListView
         $sheetType,
         $follower,
         \DateTimeInterface $createdAt,
-        $total,
+        $totalWithoutVat,
         $vatMode,
         $currency,
         $isInvoiced
     ) {
-        $this->id         = $id;
-        $this->numero     = $numero;
-        $this->sheetId    = $sheetId;
-        $this->sheetTitle = $sheetTitle;
-        $this->sheetType  = $sheetType;
-        $this->follower   = $follower;
-        $this->createdAt  = $createdAt;
-        $this->total      = $total;
-        $this->vatMode    = $vatMode;
-        $this->currency   = $currency;
-        $this->isInvoiced = $isInvoiced;
+        $this->id              = $id;
+        $this->numero          = $numero;
+        $this->sheetId         = $sheetId;
+        $this->sheetTitle      = $sheetTitle;
+        $this->sheetType       = $sheetType;
+        $this->follower        = $follower;
+        $this->createdAt       = $createdAt;
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->vatMode         = $vatMode;
+        $this->currency        = $currency;
+        $this->isInvoiced      = $isInvoiced;
     }
 }

@@ -11,40 +11,37 @@
 namespace Proximum\Vimeet\Application\View\Sheet\Preview;
 
 use Proximum\Vimeet\Application\View\Participant\CardView;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 
 class PreviewView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $content;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $type;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $strong = false;
 
-    /**
-     * @var array|CardView[]
-     */
+    /** @var CardView[] */
     public $cardViews;
+
+    /** @var bool */
+    public $link = false;
+
+    /** @var TagView[] */
+    public $tagViews;
 
     /**
      * @return bool
      */
     public function isImage()
     {
-        return $this->type === 'image';
+        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE;
     }
 
     /**
@@ -52,7 +49,15 @@ class PreviewView
      */
     public function isParticipant()
     {
-        return $this->type === 'participant';
+        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTag()
+    {
+        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_TAG;
     }
 
     /**
@@ -75,5 +80,14 @@ class PreviewView
         $this->content   = $content;
         $this->type      = $type;
         $this->cardViews = $cardViews;
+        $this->tagViews  = [];
+    }
+
+    /**
+     * @param TagView $tagView
+     */
+    public function addTagView(TagView $tagView)
+    {
+        $this->tagViews[] = $tagView;
     }
 }

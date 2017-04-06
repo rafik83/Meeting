@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,19 +32,9 @@ class Order
     private $sheet;
 
     /**
-     * @var DateTimeInterface
+     * @var \DateTimeInterface
      */
     private $createdAt;
-
-    /**
-     * @var bool
-     */
-    private $vatApplicable;
-
-    /**
-     * @var string
-     */
-    private $vatMode;
 
     /**
      * @var float
@@ -68,11 +57,6 @@ class Order
     private $promotionCodes = [];
 
     /**
-     * @var Order\BillingInfo
-     */
-    private $billingInfo;
-
-    /**
      * @var string
      */
     private $groupsData;
@@ -83,30 +67,23 @@ class Order
     private $cancelled = false;
 
     /**
-     * @var Invoice
+     * @var Invoice|null
      */
     private $invoice;
 
     /**
-     * @param Sheet             $sheet
-     * @param bool              $vatApplicable
-     * @param Order\BillingInfo $billingInfo
-     * @param string            $groupsData
-     * @param DateTimeInterface $createdAt
+     * @param Sheet              $sheet
+     * @param string             $groupsData
+     * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
-        $vatApplicable,
-        Order\BillingInfo $billingInfo,
         $groupsData,
-        DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt
     ) {
         $this->sheet          = $sheet;
         $this->createdAt      = $createdAt;
-        $this->vatApplicable  = $vatApplicable;
-        $this->billingInfo    = $billingInfo;
         $this->groupsData     = $groupsData;
-        $this->vatMode        = $sheet->getEvent()->getMode();
         $this->currency       = $sheet->getEvent()->getCurrency();
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
@@ -151,13 +128,13 @@ class Order
     }
 
     /**
-     * Get vatMode
+     * Get Event vatMode
      *
      * @return string
      */
     public function getVatMode()
     {
-        return $this->vatMode;
+        return $this->getSheet()->getEvent()->getMode();
     }
 
     /**
@@ -179,15 +156,7 @@ class Order
     }
 
     /**
-     * @return Order\BillingInfo
-     */
-    public function getBillingInfo()
-    {
-        return $this->billingInfo;
-    }
-
-    /**
-     * @return DateTimeInterface
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -195,25 +164,19 @@ class Order
     }
 
     /**
-     * @return boolean
+     * @deprecated use OrderVatView::isVatApplicable
      */
     public function isVatApplicable()
     {
-        return $this->vatApplicable;
+        throw new \Exception('Order::isVatApplicable() is a deprecated method');
     }
 
     /**
-     * VAT mode of the total if applicable
-     *
-     * @return string
+     * @deprecated
      */
     public function getTotalVatMode()
     {
-        if ($this->vatApplicable) {
-            return Event::VAT_MODE_ATI;
-        }
-
-        return $this->getVatMode();
+        throw new \Exception('Order::getTotalVatMode() is a deprecated method');
     }
 
     /**
@@ -305,39 +268,27 @@ class Order
     }
 
     /**
-     * @return float|int
+     * @deprecated use OrderVatView::vatAmount
      */
     public function getVatAmount()
     {
-        $total = $this->getTotalWithoutVat();
-
-        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            return $total * $this->vatRate / 100;
-        }
-
-        return 0;
+        throw new \Exception('Order::getVatAmount() is a deprecated method');
     }
 
     /**
-     * @return float
+     * @deprecated use OrderVatView::totalWithVat
      */
     public function getTotalWithVat()
     {
-        $total = $this->getTotalWithoutVat();
-
-        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            $total += $this->getVatAmount();
-        }
-
-        return $total;
+        throw new \Exception('Order::getTotalWithVat() is a deprecated method');
     }
 
     /**
-     * @return float
+     * @deprecated use OrderVatView::totalWithVat
      */
     public function getTotal()
     {
-        return $this->getTotalWithVat();
+        throw new \Exception('Order::getTotal() is a deprecated method');
     }
 
     /**
@@ -633,7 +584,7 @@ class Order
     }
 
     /**
-     * @return Invoice
+     * @return Invoice|null
      */
     public function getInvoice()
     {
@@ -657,8 +608,8 @@ class Order
     }
 
     /**
-     * @param Sheet             $sheet
-     * @param DateTimeInterface $dateTime
+     * @param Sheet              $sheet
+     * @param \DateTimeInterface $dateTime
      *
      * @return Order
      */
@@ -666,8 +617,6 @@ class Order
     {
         return new self(
             $sheet,
-            true,
-            new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), ''),
             [],
             $dateTime
         );

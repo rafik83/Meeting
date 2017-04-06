@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface
+use Proximum\Vimeet\Domain\Template\TranslatableInterface;
+
+class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
     /**
      * @param string|null locale
+     *
      * @return null|string
      */
     public function getContent($locale = null)
@@ -210,5 +213,65 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         }
 
         return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslations(array $locales = [])
+    {
+        if (!is_array($this->data) || !isset($this->data['text'])) {
+            return [];
+        }
+
+        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach ($this->data['text'] as $locale => $content) {
+            $translations[$locale] = $content;
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @see EditableTextTranslationType
+     *
+     * @return array
+     */
+    public function getTranslationsInput()
+    {
+        if (!is_array($this->data) || !isset($this->data['text'])) {
+            return [];
+        }
+
+        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach ($this->data['text'] as $locale => $content) {
+            $translations[$locale]['content'] = $content;
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @param array $translations "['fr' => ['content' => 'content_here']]"
+     *
+     * @see EditableTextTranslationType
+     */
+    public function setTranslationsInput(array $translations = [])
+    {
+        $this->data['text'] = []; // erase previous untranslatable value
+
+        foreach ($translations as $locale => $translation) {
+            $this->data['text'][$locale] = $translation['content'];
+        }
     }
 }

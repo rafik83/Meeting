@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
@@ -144,7 +145,13 @@ class PaymentController extends Controller
             return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
         }
 
-        $transaction = Transaction::createForPaypal($sheet, $this->getUser(), $remainingToPay, new \DateTime());
+        $transaction = Transaction::createForPaypal(
+            $sheet,
+            $this->getUser(),
+            AmountFormatter::centsToDecimalAmount($remainingToPay),
+            new \DateTime()
+        );
+
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute('event_package_payment_prepare_paypal', [

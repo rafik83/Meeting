@@ -138,8 +138,8 @@ class SheetDetailsViewFactory
             $this->commentRepository->getCommentsBySheet($sheet),
             // Trace for accepted
             $this->traceRepository->getAllTracesByObject($sheet),
-            // Orders
-            $this->balance->getOrders($sheet),
+            // OrderVatView[]
+            $this->balance->getOrderVatViews($sheet),
             // Transactions
             $this->balance->getTransactions($sheet),
             // InvoiceView[]

@@ -44,6 +44,7 @@ admin.event.configure_dates: 'Key dates'
 admin.event.create.title: 'Create an event'
 admin.event.dashboard.title: Dashboard
 admin.event.languages: Language
+admin.event.page.invoice.title: Invoices
 admin.event.page.list.title: 'List of my events'
 admin.event.practicalInfo.link: 'Practical informations'
 admin.event.practicalInfo.update.title: 'Update practical informations'
@@ -84,6 +85,7 @@ admin.happening.add: Add
 admin.happening.link: Conferences
 admin.happening.menu.link: Programme
 admin.happening.update: Modify
+admin.invoice.pdf: 'View final invoice'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request.from: From
 admin.meeting_request.link: 'Meeting requests'
@@ -139,11 +141,13 @@ admin.schedule.link: Planning
 admin.schedule.title: Planning
 admin.sheet.change.type.link: Change
 admin.sheet.change.type.title: 'Change the type of participation'
+admin.sheet.details.invoices: Invoices
 admin.sheet.details.meeting.proposition.refused: 'Refused proposals'
 admin.sheet.details.meeting.proposition.title: 'Meetings requests'
 admin.sheet.details.meeting.request.pending: 'Pending requests'
 admin.sheet.details.meeting.request.refused: 'Refused requests'
 admin.sheet.details.transactions: Transactions
+admin.sheet.export.invoice.button.label: 'Export Invoices'
 admin.sheet.export.no: 'No'
 admin.sheet.link: 'Participation sheets'
 admin.sheet.read: See

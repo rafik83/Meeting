@@ -71,7 +71,7 @@ interface SpotRepositoryInterface
      * @param Event  $event
      * @param string $reference
      *
-     * @return Spot
+     * @return Spot|null
      */
     public function findByReference(Event $event, $reference);
 
