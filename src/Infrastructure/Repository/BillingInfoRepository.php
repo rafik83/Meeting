@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
@@ -50,6 +51,22 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getBySheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('billing_info')
+            ->from(BillingInfo::class, 'billing_info')
+            ->where('billing_info.sheet IN (:sheets)')
+            ->setParameter('sheets', $sheets);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(BillingInfo $billingInfo)
     {
         $this->entityManager->persist($billingInfo);
@@ -62,5 +79,21 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
     public function set(BillingInfo $billingInfo)
     {
         $this->entityManager->flush($billingInfo);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('billing_info, sheet')
+            ->from(BillingInfo::class, 'billing_info')
+            ->join('billing_info.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

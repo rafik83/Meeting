@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\AdminMail;
 use Proximum\Vimeet\Application\Event\Events;
 
-class ResetPasswordMail extends Mail
+class ResetPasswordMail extends AdminMail
 {
     /**
      * @var string

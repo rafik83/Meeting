@@ -1,0 +1,29 @@
+Proximum\Vimeet\Domain\Model\MeetingSlot:
+    meeting_slot_day_one_1:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 08:00:00'))>, <(new DateTime('2016-10-12 08:30:00'))>]
+    meeting_slot_day_one_2:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 08:30:00'))>, <(new DateTime('2016-10-12 09:00:00'))>]
+    meeting_slot_day_one_3:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 09:00:00'))>, <(new DateTime('2016-10-12 09:30:00'))>]
+    meeting_slot_day_one_4:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 09:30:00'))>, <(new DateTime('2016-10-12 10:00:00'))>]
+    meeting_slot_day_one_5:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 10:00:00'))>, <(new DateTime('2016-10-12 10:30:00'))>]
+    meeting_slot_day_one_6:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 10:30:00'))>, <(new DateTime('2016-10-12 11:00:00'))>]
+    meeting_slot_day_one_7:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 11:00:00'))>, <(new DateTime('2016-10-12 11:30:00'))>]
+    meeting_slot_day_one_8:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 11:30:00'))>, <(new DateTime('2016-10-12 12:00:00'))>]
+    meeting_slot_day_one_9:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 12:00:00'))>, <(new DateTime('2016-10-12 12:30:00'))>]
+    meeting_slot_day_one_10:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-12 12:30:00'))>, <(new DateTime('2016-10-12 13:00:00'))>]
+    meeting_slot_day_two_1:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-13 09:00:00'))>, <(new DateTime('2016-10-13 09:30:00'))>]
+    meeting_slot_day_two_2:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-13 09:30:00'))>, <(new DateTime('2016-10-13 10:00:00'))>]
+    meeting_slot_day_two_3:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-13 10:30:00'))>, <(new DateTime('2016-10-13 11:00:00'))>]
+    meeting_slot_day_two_4:
+        __construct: ['@event_asddays_2016', <(new DateTime('2016-10-13 11:30:00'))>, <(new DateTime('2016-10-13 12:00:00'))>]

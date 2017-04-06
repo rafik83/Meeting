@@ -23,8 +23,11 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler;
+use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 
 class CategoryViewQueryHandler
 {
@@ -64,6 +67,11 @@ class CategoryViewQueryHandler
     private $packageViewQueryHandler;
 
     /**
+     * @var ProgramViewQueryHandler
+     */
+    private $programViewQueryHandler;
+
+    /**
      * CategoryViewQueryHandler constructor.
      *
      * @param MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler
@@ -73,6 +81,7 @@ class CategoryViewQueryHandler
      * @param PlanningViewQueryHandler    $planningViewQueryHandler
      * @param SheetViewQueryHandler       $sheetViewQueryHandler
      * @param PackageViewQueryHandler     $packageViewQueryHandler
+     * @param ProgramViewQueryHandler     $programViewQueryHandler
      */
     public function __construct(
         MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler,
@@ -81,7 +90,8 @@ class CategoryViewQueryHandler
         MeetingViewQueryHandler $meetingViewQueryHandler,
         PlanningViewQueryHandler $planningViewQueryHandler,
         SheetViewQueryHandler $sheetViewQueryHandler,
-        PackageViewQueryHandler $packageViewQueryHandler
+        PackageViewQueryHandler $packageViewQueryHandler,
+        ProgramViewQueryHandler $programViewQueryHandler
     ) {
         $this->memberSpaceViewQueryHandler = $memberSpaceViewQueryHandler;
         $this->billingViewQueryHandler     = $billingViewQueryHandler;
@@ -90,12 +100,13 @@ class CategoryViewQueryHandler
         $this->planningViewQueryHandler    = $planningViewQueryHandler;
         $this->sheetViewQueryHandler       = $sheetViewQueryHandler;
         $this->packageViewQueryHandler     = $packageViewQueryHandler;
+        $this->programViewQueryHandler     = $programViewQueryHandler;
     }
 
     /**
      * @param CategoryViewQuery $categoryViewQuery
      *
-     * @return \Proximum\Vimeet\Application\View\Navigation\CategoryView
+     * @return CategoryView|null
      */
     public function handle(CategoryViewQuery $categoryViewQuery)
     {
@@ -106,49 +117,50 @@ class CategoryViewQueryHandler
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::BILLING:
                 return $this->billingViewQueryHandler->handle(new BillingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::SHEET:
                 return $this->sheetViewQueryHandler->handle(new SheetViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::CATALOG:
                 return $this->catalogViewQueryHandler->handle(new CatalogViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::MEETING:
                 return $this->meetingViewQueryHandler->handle(new MeetingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
             case Category::PACKAGE:
                 return $this->packageViewQueryHandler->handle(new PackageViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale
                 ));
-                break;
+            case Category::PROGRAM:
+                return $this->programViewQueryHandler->handle(new ProgramViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
         }
+
+        return null;
     }
 }

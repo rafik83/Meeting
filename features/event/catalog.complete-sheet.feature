@@ -22,9 +22,9 @@ Feature: Display complete sheet from catalog
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
     When I follow "navigation.links.catalog.available_date"
-    Then I should see "Onera"
+    Then I should see "Aanera"
     When I go to this page "/fr/catalog/sheet/1"
-    Then I should see "Onera"
+    Then I should see "Aanera"
     And I should not see "sheet.object.action.edit"
     And I should see "catalog.meeting_request.create"
 

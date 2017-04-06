@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,7 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 
 class MailerAdapter implements MailerInterface
 {
@@ -45,9 +46,9 @@ class MailerAdapter implements MailerInterface
     /**
      * Send Mail via Swift Mailer
      *
-     * @param Mail $mail
+     * @param AbstractMail $mail
      */
-    public function send(Mail $mail)
+    public function send(AbstractMail $mail)
     {
         /** @var \Twig_Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
@@ -61,10 +62,13 @@ class MailerAdapter implements MailerInterface
 
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom($mail->getSender())
-            ->setTo($mail->getReceiver());
+            ->setFrom($mail->getSender());
 
-        if ($mail->sendToEmailTeam() === true && null !== $mail->getEvent()->getEmailTeam()) {
+        foreach ($mail->getReceivers() as $receiver) {
+            $message->addTo($receiver);
+        }
+
+        if ($mail->sendToEmailTeam() === true && $mail instanceof UserMail) {
             $message->setBcc($mail->getEvent()->getEmailTeam());
         }
 
@@ -75,5 +79,10 @@ class MailerAdapter implements MailerInterface
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
         $this->mailer->send($message);
+    }
+
+    protected function getMailer()
+    {
+        return $this->mailer;
     }
 }

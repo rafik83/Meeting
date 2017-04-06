@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Nomenclature\Export;
 
 
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 

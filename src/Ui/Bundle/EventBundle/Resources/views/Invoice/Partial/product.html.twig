@@ -1,0 +1,25 @@
+{% if rowView is defined %}
+    <tr>
+        <td>{{ rowView.label }}</td>
+
+        <td class="text-right">
+            {{ rowView.price|format_amount|localizedcurrency(currency, eventDefaultLocale) }}
+        </td>
+
+        <td class="text-right">
+            {{ rowView.quantity }}
+        </td>
+
+        <td class="text-right">
+            {{ rowView.total|format_amount|localizedcurrency(currency, eventDefaultLocale) }}
+        </td>
+
+        {% for includedProductView in rowView.includedProductViews %}
+            {{ include('EventBundle:Invoice/Partial:included.html.twig', {
+                includedProductView: includedProductView,
+                eventDefaultLocale: invoiceView.eventDefaultLocale,
+                currency: invoiceView.currency
+            }) }}
+        {% endfor %}
+    </tr>
+{% endif %}

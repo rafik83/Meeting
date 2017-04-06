@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Order;
 
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Order\Finder;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -66,20 +64,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase
             $date
         );
         $sheet = SheetFactory::create();
-        $billing =  new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'position',
-            'phone',
-            'mobile',
-            'email@email.fr',
-            'company',
-            new Address('street', 'zipcode', 'city', 'country'),
-            'vatNumber'
-        );
 
-        $order = new Order($sheet, true, $billing, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(false, Finder::isAllowedToAccess($admin, $order));
     }
@@ -98,20 +84,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase
             $date
         );
         $sheet   = SheetFactory::create();
-        $billing =  new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'position',
-            'phone',
-            'mobile',
-            'email@email.fr',
-            'company',
-            new Address('street', 'zipcode', 'city', 'country'),
-            'vatNumber'
-        );
 
-        $order = new Order($sheet, true, $billing, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(true, Finder::isAllowedToAccess($admin, $order));
     }
@@ -131,20 +105,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         );
         $event   = EventFactory::createEvent();
         $sheet   = SheetFactory::create($event);
-        $billing =  new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'position',
-            'phone',
-            'mobile',
-            'email@email.fr',
-            'company',
-            new Address('street', 'zipcode', 'city', 'country'),
-            'vatNumber'
-        );
 
-        $order = new Order($sheet, true, $billing, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(false, Finder::isAllowedToAccess($admin, $order));
     }
@@ -164,21 +126,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         );
         $event   = EventFactory::createEvent();
         $sheet   = SheetFactory::create($event);
-        $billing =  new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'position',
-            'phone',
-            'mobile',
-            'email@email.fr',
-            'company',
-            new Address('street', 'zipcode', 'city', 'country'),
-            'vatNumber'
-        );
         $admin->addEvent($event);
 
-        $order = new Order($sheet, true, $billing, '', $date);
+        $order = new Order($sheet, '', $date);
 
         $this->assertEquals(true, Finder::isAllowedToAccess($admin, $order));
     }

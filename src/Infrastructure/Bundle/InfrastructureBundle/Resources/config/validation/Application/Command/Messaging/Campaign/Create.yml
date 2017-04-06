@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Messaging\Campaign\Create:
+    properties:
+        sheetIds:
+            - NotBlank: { message: validators.sheet.messaging_campaign.create.sheetIds }
+        name:
+            - NotBlank: { message: validators.sheet.messaging_campaign.create.name }

@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Dashboard;
+
+use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
+use Proximum\Vimeet\Domain\Order\Balance;
+
+class DashboardTransactionViewQueryHandler
+{
+    /**
+     * @var Balance
+     */
+    private $balance;
+
+    /**
+     * DashboardViewQueryHandler constructor.
+     *
+     * @param Balance $balance
+     */
+    public function __construct(Balance $balance)
+    {
+        $this->balance = $balance;
+    }
+
+    /**
+     * @param DashboardTransactionViewQuery $query
+     *
+     * @return DashboardTransactionView
+     */
+    public function handle(DashboardTransactionViewQuery $query)
+    {
+        $this->balance->loadAllForEvent($query->event);
+
+        $totalOrders         = $this->balance->getOrdersTotalForEvent();
+        $totalPaid           = $this->balance->getTransactionsTotalPaidForEvent();
+        $totalRemainingToPay = $this->balance->getTotalRemainingToPayForEvent();
+
+        return new DashboardTransactionView($totalOrders, $totalRemainingToPay, $totalPaid);
+    }
+}

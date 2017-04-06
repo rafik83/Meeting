@@ -2,9 +2,10 @@
 
 {% block body %}
     {{ 'mail.sheet.add_participant_confirmation.body'|trans({
-        '%firstname%': mail.user.account.firstname|capitalize,
-        '%lastname%': mail.user.account.lastname|upper,
-        '%guestEmail%': mail.guest.user.email,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType,
+        '%guestEmail%': mail.guest.email,
         '%event%': mail.event.title
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

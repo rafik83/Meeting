@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
@@ -58,6 +59,11 @@ class CreateHandler
         );
 
         $this->transactionRepository->add($transaction);
+
+        if ($transaction->isPaid()) {
+            $event = new TransactionConfirmedEvent($transaction->getUser(), $transaction);
+            $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $event);
+        }
 
         $this->eventDispatcher->dispatch(
             Events::TRANSACTION_CREATED,

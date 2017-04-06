@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -48,9 +48,11 @@ class OrderListView
     public $createdAt;
 
     /**
+     * Amount without VAT
+     *
      * @var float
      */
-    public $total;
+    public $totalWithoutVat;
 
     /**
      * @var string
@@ -63,6 +65,11 @@ class OrderListView
     public $currency;
 
     /**
+     * @var bool
+     */
+    public $isInvoiced;
+
+    /**
      * @param int                $id
      * @param string             $numero
      * @param int                $sheetId
@@ -70,9 +77,10 @@ class OrderListView
      * @param string             $sheetType
      * @param string             $follower
      * @param \DateTimeInterface $createdAt
-     * @param float              $total
+     * @param float              $totalWithoutVat Amount without VAT
      * @param string             $vatMode
      * @param string             $currency
+     * @param bool               $isInvoiced
      */
     public function __construct(
         $id,
@@ -82,19 +90,21 @@ class OrderListView
         $sheetType,
         $follower,
         \DateTimeInterface $createdAt,
-        $total,
+        $totalWithoutVat,
         $vatMode,
-        $currency
+        $currency,
+        $isInvoiced
     ) {
-        $this->id         = $id;
-        $this->numero     = $numero;
-        $this->sheetId    = $sheetId;
-        $this->sheetTitle = $sheetTitle;
-        $this->sheetType  = $sheetType;
-        $this->follower   = $follower;
-        $this->createdAt  = $createdAt;
-        $this->total      = $total;
-        $this->vatMode    = $vatMode;
-        $this->currency   = $currency;
+        $this->id              = $id;
+        $this->numero          = $numero;
+        $this->sheetId         = $sheetId;
+        $this->sheetTitle      = $sheetTitle;
+        $this->sheetType       = $sheetType;
+        $this->follower        = $follower;
+        $this->createdAt       = $createdAt;
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->vatMode         = $vatMode;
+        $this->currency        = $currency;
+        $this->isInvoiced      = $isInvoiced;
     }
 }

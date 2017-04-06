@@ -97,14 +97,14 @@ class PaginatedSheetListViewQueryHandler
      */
     public function handle(PaginatedSheetListViewQuery $query)
     {
-        if ($query->admin->hasAllowedTypes() && !isset($query->filters['type'])) {
+        if ($query->admin->hasAllowedTypes() && empty($query->filters['type'])) {
             $query->filters['type'] = $this->typeRepository->getAllowedTypesByEvent($query->admin, $query->event);
         }
 
         $sheets = $this->sheetSearchAdapter->find(
             $query->event,
             $query->filters,
-            null,
+            isset($query->filters['orderBy']) ? $query->filters['orderBy'] : null,
             $query->page,
             $query->limit,
             $query->locale,
@@ -167,6 +167,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),
+            $sheet->countParticipant(),
             $sheet->getSpot() !== null ? $sheet->getSpot()->getReference() : null,
             $trace
         );

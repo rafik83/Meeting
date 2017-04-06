@@ -3,7 +3,6 @@ var $                       = require('jquery'),
     tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
     CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
-    Sortable                = require('./components/_Sortable'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
     Batch                   = require('./components/_Batch'),
@@ -12,11 +11,13 @@ var $                       = require('jquery'),
     SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
-    AnchorFocuser           = require('./components/_AnchorFocuser');
+    AnchorFocuser           = require('./components/_AnchorFocuser'),
+    DateTimePicker          = require('./components/_DateTimePicker'),
+    MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
+    ParticipantVisio        = require('./components/_ParticipantVisio');
 
 require('elao-form.js');
 require('select2');
-require('eonasdan-bootstrap-datetimepicker');
 require('moment/locale/fr');
 require('moment/locale/en-gb');
 require('./vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox');
@@ -70,21 +71,8 @@ function init(target) {
         });
     });
 
-    $('[data-datatimepicker]').datetimepicker({
-        locale: 'fr',
-        sideBySide: true,
-        allowInputToggle: true,
-        icons: {
-            time: 'glyphicon glyphicon-time',
-            date: 'glyphicon glyphicon-calendar',
-            up: 'glyphicon glyphicon-chevron-up',
-            down: 'glyphicon glyphicon-chevron-down',
-            previous: 'glyphicon glyphicon-chevron-left',
-            next: 'glyphicon glyphicon-chevron-right',
-            today: 'glyphicon glyphicon-screenshot',
-            clear: 'glyphicon glyphicon-trash',
-            close: 'glyphicon glyphicon-remove'
-        }
+    [].forEach.call($('[data-datatimepicker]'), function (element) {
+        new DateTimePicker(element);
     });
 
     /* tablesort */
@@ -164,7 +152,15 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {
         new AnchorFocuser(element, location);
-    })
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-message-preview]'), function (element) {
+        new MessagingMessagePreview(element, target.querySelector('#message_preview_iframe'), target.querySelector('#no_preview_text'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.form-participant-visio'), function (element) {
+        new ParticipantVisio(element);
+    });
 }
 
 // Call init function when element is added to DOM

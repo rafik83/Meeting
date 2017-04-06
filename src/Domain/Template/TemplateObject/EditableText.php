@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface
+use Proximum\Vimeet\Domain\Template\TranslatableInterface;
+
+class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
     /**
      * @param string|null locale
+     *
      * @return null|string
      */
     public function getContent($locale = null)
@@ -180,5 +183,95 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
     public function getSearchableContent()
     {
         return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent(array $taggedData = [])
+    {
+        $result = $this->getContentValue();
+
+        if (!empty($result)) {
+            return $result;
+        }
+
+        if (isset($taggedData[$this->getTag()])) {
+            if (is_array($taggedData[$this->getTag()])) {
+                return implode(', ', $taggedData[$this->getTag()]);
+            }
+
+            return $taggedData[$this->getTag()];
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslations(array $locales = [])
+    {
+        if (!is_array($this->data) || !isset($this->data['text'])) {
+            return [];
+        }
+
+        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach ($this->data['text'] as $locale => $content) {
+            $translations[$locale] = $content;
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @see EditableTextTranslationType
+     *
+     * @return array
+     */
+    public function getTranslationsInput()
+    {
+        if (!is_array($this->data) || !isset($this->data['text'])) {
+            return [];
+        }
+
+        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach ($this->data['text'] as $locale => $content) {
+            $translations[$locale]['content'] = $content;
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @param array $translations "['fr' => ['content' => 'content_here']]"
+     *
+     * @see EditableTextTranslationType
+     */
+    public function setTranslationsInput(array $translations = [])
+    {
+        $this->data['text'] = []; // erase previous untranslatable value
+
+        foreach ($translations as $locale => $translation) {
+            $this->data['text'][$locale] = $translation['content'];
+        }
     }
 }

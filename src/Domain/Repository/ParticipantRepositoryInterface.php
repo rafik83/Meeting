@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\ParticipantView;
 
@@ -31,11 +33,42 @@ interface ParticipantRepositoryInterface
     public function delete(Participant $participant);
 
     /**
+     * @param Event $event
+     *
+     * @return Participant[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param int[]  $sheetIds
+     * @param string $locale
+     *
+     * @return Participant[]
+     */
+    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale);
+
+    /**
+     * @param Event $event
+     * @param Mass  $mass
+     *
+     * @return Participant[]
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass);
+
+    /**
      * @param int $id
      *
      * @return Participant
      */
     public function findById($id);
+
+    /**
+     * @param array $ids array of participant ids
+     *
+     * @return Participant[]
+     */
+    public function findByIds(array $ids);
 
     /**
      * @param Participant $participant
@@ -54,7 +87,7 @@ interface ParticipantRepositoryInterface
      * @param User  $user
      * @param Sheet $sheet
      *
-     * @return Participant
+     * @return Participant|null
      */
     public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 
@@ -95,4 +128,104 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEnabledSheet(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function countByTypeWithEnabledSheet(Event $event, $locale);
+
+    /**
+     * @param Participant[]      $participants
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param Meeting|null       $exceptedMeeting
+     * @param Happening|null     $exceptedHappening
+     * @param bool               $exceptAllUnavailabilities
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipants(
+        array $participants,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        Meeting $exceptedMeeting = null,
+        Happening $exceptedHappening = null,
+        $exceptAllUnavailabilities = false
+    );
+
+    /**
+     * @param array   $participants
+     * @param Meeting $meeting
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting);
+
+    /**
+     * @param array     $participants
+     * @param Happening $happening
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipantsForHappening(array $participants, Happening $happening);
+
+    /**
+     * @param Sheet     $sheet
+     * @param Happening $happening
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
+
+    /**
+     * @param int $id
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsBySheetId($id);
+
+    /**
+     * @param array
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsWithSheetInCatalogAndActiveByTypeIds(array $ids);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsByEvent(Event $event, $locale);
+
+    /**
+     * @param Participant[]      $participants
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsWithoutMeetingAndHappening(
+        array $participants,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end
+    );
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipantBySheet(Sheet $sheet);
 }

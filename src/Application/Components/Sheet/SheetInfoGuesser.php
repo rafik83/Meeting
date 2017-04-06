@@ -82,13 +82,17 @@ class SheetInfoGuesser
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param string|null $locale
      *
      * @return string
      */
-    public function guessSheetTitle(Sheet $sheet, $locale)
+    public function guessSheetTitle(Sheet $sheet, $locale = null)
     {
+        if (null === $locale) {
+            $locale = $sheet->getEvent()->getFallback();
+        }
+
         $template = $sheet->getType()->getRegistrationTemplate();
 
         if (null === $template) {
@@ -118,15 +122,31 @@ class SheetInfoGuesser
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param string|null $locale
      *
-     * @return string
-     *
-     * @deprecated Must be rewrited in order to get Sheet productsSelectionTemplate and corresponding data
+     * @return array
      */
-    public function guessSheetPackage(Sheet $sheet, $locale)
+    public function guessSheetInfos(Sheet $sheet, $locale = null)
     {
-        return '';
+        $tags  = Tag::getSheetTags();
+        $infos = [];
+
+        if (null === $locale) {
+            $locale = $sheet->getEvent()->getFallback();
+        }
+
+        $template = $sheet->getType()->getRegistrationTemplate();
+
+        foreach ($tags as $tag) {
+            $infos[$tag] = $this->taggedInfoGuesser->guessFirst(
+                $template,
+                $sheet->getRegistrationData(),
+                $tag,
+                $locale
+            );
+        }
+
+        return $infos;
     }
 }

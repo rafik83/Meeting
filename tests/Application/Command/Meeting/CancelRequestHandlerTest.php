@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +41,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
 
         // Dependencies
-
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->remove($request)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
@@ -51,6 +52,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CancelRequestHandler(
             $requestRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
         $handler->handle($cancelRequest);
@@ -73,7 +75,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
 
         // Dependencies
-
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->remove($request)->shouldNotBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
@@ -83,6 +85,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CancelRequestHandler(
             $requestRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
         $handler->handle($cancelRequest);
@@ -105,6 +108,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
 
         // Dependencies
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->remove($request)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
@@ -115,6 +119,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CancelRequestHandler(
             $requestRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
         $handler->handle($cancelRequest);

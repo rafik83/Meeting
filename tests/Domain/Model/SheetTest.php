@@ -60,19 +60,27 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserParticipant()
     {
+        $reflection = new \ReflectionClass(User::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+
         $event = EventFactory::createEvent();
         $type  = new Type($event);
         $user1 = new User('user1@test.com', '', '', 'fr');
+        $property->setValue($user1, 1);
         $sheet = new Sheet($event, $type, [], $user1, new \DateTime());
 
         $user2 = new User('user2@test.com', '', '', 'fr');
+        $property->setValue($user2, 2);
+
         $user3 = new User('user3@test.com', '', '', 'fr');
+        $property->setValue($user3, 3);
+
         $user4 = new User('user4@test.com', '', '', 'fr');
 
         $participant1 = new Participant($sheet, $user1, [], true, true);
         $participant2 = new Participant($sheet, $user2, [], true, true);
         $participant3 = new Participant($sheet, $user3, [], true, true);
-
 
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);
@@ -82,6 +90,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($participant2, $sheet->getUserParticipant($user2));
         $this->assertEquals($participant3, $sheet->getUserParticipant($user3));
         $this->assertNull($sheet->getUserParticipant($user4));
+
+        $property->setAccessible(false);
     }
 
     public function testAssignOrganizer()

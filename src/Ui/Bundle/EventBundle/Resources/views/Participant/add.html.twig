@@ -10,29 +10,37 @@
         <div class="inputs">
             {{ form_errors(form) }}
 
-            {{ form_row(form.firstName) }}
-            {{ form_row(form.lastName) }}
+            {% if form.firstName is defined %}
+                {{ form_row(form.firstName) }}
+            {% endif %}
+
+            {% if form.lastName is defined %}
+                {{ form_row(form.lastName) }}
+            {% endif %}
+
             {{ form_row(form.email) }}
 
-
-            {% if participantProduct is not null %}
+            {% if participantProductView is not null %}
                 <table class="table">
                     <tbody>
                         <tr>
                             <td class="col-xs-9">
                                 <div class="buyable-product-row">
-                                    {{ participantProduct.title(app.request.locale) }}
+                                    {{ participantProductView.title }}
                                 </div>
                             </td>
                             <td class="col-xs-3">
                                 <div class="buyable-product-row product-price">
-                                    {{ 'package.product.unitPrice'|trans({
-                                        '%price%': participantProduct.unitPrice,
-                                        '%currency%': participantProduct.currency|currency_symbol,
-                                        '%vatMode%': ('package.vatMode.' ~ participantProduct.vatMode)|trans
-                                    })|html }}
+                                    {% if participantProductView.isIncluded %}
+                                        {{ 'package.participants.included'|trans }}
+                                    {% else %}
+                                        {{ 'package.product.unitPrice'|trans({
+                                            '%price%': participantProductView.unitPrice,
+                                            '%currency%': participantProductView.currency|currency_symbol,
+                                            '%vatMode%': ('package.vatMode.' ~ participantProductView.vatMode)|trans
+                                        })|html }}
+                                    {% endif %}
                                 </div>
-
                             </td>
                         </tr>
                     </tbody>

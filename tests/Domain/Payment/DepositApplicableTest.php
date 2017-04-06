@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Payment;
 
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DepositApplicableTest extends \PHPUnit_Framework_TestCase
@@ -19,6 +20,7 @@ class DepositApplicableTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $event->getConfiguration()->updatePaymentConditions(
+            [Mode::PAYMENT_BANK_CARD],
             false,
             new \DateTime('10/10/2010 10:10:10'),
             3000,
@@ -37,6 +39,7 @@ class DepositApplicableTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $event->getConfiguration()->updatePaymentConditions(
+            [Mode::PAYMENT_BANK_CARD],
             true,
             new \DateTime('10/10/2020 10:10:10'),
             200,
@@ -56,6 +59,7 @@ class DepositApplicableTest extends \PHPUnit_Framework_TestCase
         $now   = new \DateTime();
         $total = 2000;
         $event->getConfiguration()->updatePaymentConditions(
+            [Mode::PAYMENT_BANK_CARD],
             true,
             new \DateTime('10/10/2020 10:10:10'),
             200,
@@ -72,6 +76,7 @@ class DepositApplicableTest extends \PHPUnit_Framework_TestCase
         $now   = new \DateTime();
         $total = 2000;
         $event->getConfiguration()->updatePaymentConditions(
+            [Mode::PAYMENT_BANK_CARD],
             false,
             new \DateTime('10/10/2020 10:10:10'),
             200,

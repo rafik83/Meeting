@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
+use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQuery;
+use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
@@ -54,6 +56,11 @@ class SheetDetailsViewFactory
     private $balance;
 
     /**
+     * @var InvoiceViewQueryHandler
+     */
+    private $invoiceViewQueryHandler;
+
+    /**
      * SheetDetailsViewFactory constructor.
      *
      * @param SheetInfoGuesser           $sheetInfoGuesser
@@ -62,6 +69,7 @@ class SheetDetailsViewFactory
      * @param CommentRepositoryInterface $commentRepository
      * @param TraceRepositoryInterface   $traceRepository
      * @param Balance                    $balance
+     * @param InvoiceViewQueryHandler    $invoiceViewQueryHandler
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -69,14 +77,16 @@ class SheetDetailsViewFactory
         TemplateDataFactory $templateDataFactory,
         CommentRepositoryInterface $commentRepository,
         TraceRepositoryInterface $traceRepository,
-        Balance $balance
+        Balance $balance,
+        InvoiceViewQueryHandler $invoiceViewQueryHandler
     ) {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->requestRepository      = $requestRepository;
-        $this->templateDataFactory    = $templateDataFactory;
-        $this->commentRepository      = $commentRepository;
-        $this->traceRepository        = $traceRepository;
-        $this->balance                = $balance;
+        $this->sheetInfoGuesser        = $sheetInfoGuesser;
+        $this->requestRepository       = $requestRepository;
+        $this->templateDataFactory     = $templateDataFactory;
+        $this->commentRepository       = $commentRepository;
+        $this->traceRepository         = $traceRepository;
+        $this->balance                 = $balance;
+        $this->invoiceViewQueryHandler = $invoiceViewQueryHandler;
     }
 
     /**
@@ -91,7 +101,7 @@ class SheetDetailsViewFactory
 
         return new SheetDetailsView(
             // Title
-            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
             // State
             $sheet->getState(),
             new OwnerView(
@@ -108,7 +118,8 @@ class SheetDetailsViewFactory
                 return new ParticipantView(
                     $participant->getId(),
                     $templateDataFactory->createRegistrationFromParticipant($participant, $locale),
-                    $participant->isOwnerParticipant()
+                    $participant->isOwnerParticipant(),
+                    $participant->isVisio()
                 );
             }, $sheet->getParticipants()->toArray()),
             // Approved requests
@@ -127,10 +138,12 @@ class SheetDetailsViewFactory
             $this->commentRepository->getCommentsBySheet($sheet),
             // Trace for accepted
             $this->traceRepository->getAllTracesByObject($sheet),
-            // Orders
-            $this->balance->getOrders($sheet),
+            // OrderVatView[]
+            $this->balance->getOrderVatViews($sheet),
             // Transactions
             $this->balance->getTransactions($sheet),
+            // InvoiceView[]
+            $this->invoiceViewQueryHandler->handle(new InvoiceViewQuery($sheet)),
             // Total of orders
             $this->balance->getTotal($sheet),
             // Remaining to pay
@@ -138,7 +151,7 @@ class SheetDetailsViewFactory
             // Completeness
             $sheet->getCompleteness(),
             // Company Objects
-            $templateDataFactory->createCompanyTemplate($sheet, $locale)->getCompanyObjects()
+            $templateDataFactory->createCompanyTemplate($sheet, $locale)->getEditableSheetDataExceptedImageObjects()
         );
     }
 }

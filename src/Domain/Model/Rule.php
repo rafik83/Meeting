@@ -51,17 +51,24 @@ class Rule
     private $what;
 
     /**
+     * @var int
+     */
+    private $priority;
+
+    /**
      * Rule constructor.
      *
      * @param Event        $event
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
      * @param array        $what
+     * @param int          $priority
      */
-    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what)
+    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what, $priority = 0)
     {
-        $this->event = $event;
-        $this->what  = $what;
+        $this->event    = $event;
+        $this->what     = $what;
+        $this->priority = $priority;
 
         if ($seer instanceof Type) {
             $this->seerType = $seer;
@@ -178,5 +185,23 @@ class Rule
     public function getSeeable()
     {
         return $this->seeableCategory ?: $this->seeableType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param array $what
+     * @param int   $priority
+     */
+    public function update(array $what, $priority)
+    {
+        $this->what     = $what;
+        $this->priority = $priority;
     }
 }

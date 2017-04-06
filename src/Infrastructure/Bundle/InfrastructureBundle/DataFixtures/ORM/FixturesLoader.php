@@ -34,6 +34,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
         $files = [
             __DIR__ . '/User.yml',
             __DIR__ . '/Nomenclature.yml',
+            __DIR__ . '/InvoicePrefix.yml',
             __DIR__ . '/Template/SheetTemplate.yml',
             __DIR__ . '/Template/RegistrationTemplate.yml',
             __DIR__ . '/RdvCarnot2016-Event.yml',
@@ -57,14 +58,21 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/ASDDays2016-Order.yml',
             __DIR__ . '/ASDDays2016-Rule.yml',
             __DIR__ . '/ASDDays2016-Notifications.yml',
+            __DIR__ . '/ASDDays2016-SearchFacet.yml',
+            __DIR__ . '/ASDDays2016-Happening.yml',
+            __DIR__ . '/ASDDays2016-Messaging-Campaign.yml',
+            __DIR__ . '/ASDDays2016-MeetingSlot.yml',
+            __DIR__ . '/ASDDays2016-Spot.yml',
             __DIR__ . '/Spanish-Event.yml',
             __DIR__ . '/Spanish-Nomenclature.yml',
             __DIR__ . '/Spanish-Template.yml',
             __DIR__ . '/Spanish-Type.yml',
             __DIR__ . '/Meeting/RdvCarnot2016-Request.yml',
             __DIR__ . '/Meeting/RdvCarnot2016-Message.yml',
+            __DIR__ . '/Meeting/ASDDays2016-Meeting.yml',
             __DIR__ . '/Admin.yml',
             __DIR__ . '/AdminWithType.yml',
+            __DIR__ . '/ASDDays2016-Invoice.yml',
         ];
 
         $options = [

@@ -69,40 +69,42 @@ class PreparePayment
      */
     public function process(Transaction $transaction, $locale)
     {
-        $billingInfo = $this->billingInfoRepository->getBySheet($transaction->getSheet());
+        $sheet = $transaction->getSheet();
+        $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
 
         if (null === $billingInfo) {
             throw new \Exception('Billing info is required');
         }
 
+        $event = $sheet->getEvent();
+
         $storage = $this->payum->getStorage(Payment::class);
 
         $description = $this->translator->trans('order.transaction.paypal.description', [
-            '%sheetName%' => $this->sheetInfoGuesser->guessSheetName(
-                $transaction->getSheet(),
-                $locale
-            ),
-            '%sheetId%'   => $transaction->getSheet()->getId(),
-            '%eventName%' => $transaction->getSheet()->getEvent()->getTitle(),
+            '%sheetName%' => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+            '%sheetId%'   => $sheet->getId(),
+            '%eventId%'   => $event->getId(),
+            '%eventName%' => $event->getTitle(),
         ]);
 
         $amount = $transaction->getAmountInCents();
+        $number = sprintf('%s-%s-%s-%s', $event->getId(), $sheet->getId(), $transaction->getId(), uniqid());
 
         /** @var Payment $payment */
         $payment = $storage->create();
-        $payment->setNumber(uniqid());
-        $payment->setCurrencyCode($transaction->getCurrency());
-        $payment->setTotalAmount($amount);
-        $payment->setClientId($transaction->getSheet()->getId());
-        $payment->setClientEmail($billingInfo->getEmail());
         $payment->setTransaction($transaction);
-        $payment->setDescription($description);
+        $payment->setTotalAmount($amount);
+        $payment->setNumber($this->truncateSingleByte127($number));
+        $payment->setCurrencyCode($transaction->getCurrency());
+        $payment->setClientId($sheet->getId());
+        $payment->setClientEmail($this->truncateSingleByte127($billingInfo->getEmail()));
+        $payment->setDescription($this->truncateSingleByte127($description));
 
         $payment->setDetails(
             [
                 'NOSHIPPING'  => '1',
-                'FIRSTNAME'   => $billingInfo->getFirstname(),
-                'LASTNAME'    => $billingInfo->getLastname(),
+                'FIRSTNAME'   => $this->truncateDoubleByte64($billingInfo->getFirstname()),
+                'LASTNAME'    => $this->truncateDoubleByte64($billingInfo->getLastname()),
                 'COUNTRYCODE' => $billingInfo->getAddress()->getCountry(),
                 'LOCALECODE'  => strtoupper($locale),
             ]
@@ -114,7 +116,31 @@ class PreparePayment
             self::GATEWAY_NAME,
             $payment,
             'event_package_payment_done', // the route to redirect after capture
-            ['sheet' => $transaction->getSheet()->getId()]
+            ['sheet' => $sheet->getId()]
         );
+    }
+
+    /**
+     * Paypal has for some fields a character length and limitations: 127 single-byte alphanumeric characters.
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    private function truncateSingleByte127($value)
+    {
+        return substr($value, 0, 127);
+    }
+
+    /**
+     * Paypal has for some fields a character length and limitations: 64 double-byte characters.
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    private function truncateDoubleByte64($value)
+    {
+        return mb_substr($value, 0, 64);
     }
 }

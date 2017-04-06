@@ -34,10 +34,12 @@ class UpdateHandler
     {
         $category = $update->category;
         $category->setPicto($update->picto);
-        $category->setPosition($update->position);
+        $category->setRank($update->rank);
+        $category->setLeftColor($update->leftColor);
+        $category->setRightColor($update->rightColor);
 
         foreach ($update->translations as $locale => $translation) {
-            $category->getTranslations()->get($locale)->update($translation['title']);
+            $category->update($locale, $translation['title']);
         }
 
         $this->categoryRepository->set($category);

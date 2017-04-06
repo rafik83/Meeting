@@ -10,7 +10,9 @@ parameters:
 
 framework:
     #esi:             ~
-    translator:      { fallbacks: ["%locale%"] }
+    translator:
+        fallbacks: ["%locale%"]
+        logging: false
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -18,10 +20,9 @@ framework:
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
-    #serializer:      { enable_annotations: true }
+    serializer:      { enable_annotations: false }
     templating:
         engines: ['twig']
-        #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: "%trusted_proxies%"
@@ -33,7 +34,10 @@ framework:
         gc_maxlifetime: 86400
     fragments:       ~
     http_method_override: true
-    assets: ~
+    assets:
+        version: "%assets_version%"
+    php_errors:
+        log: true
 
 # Twig Configuration
 twig:
@@ -196,8 +200,14 @@ fos_elastica:
                             type: integer
                         owner:
                             type: integer
+                        lastLoginAt:
+                            type: date
+                        imported:
+                            type: boolean
                         createdAt:
                             type: date
+                        remainingToPay:
+                            type: float
                         inCatalog:
                             type: boolean
                         inCatalogAt:
@@ -206,10 +216,30 @@ fos_elastica:
                             type: boolean
                         hasCart:
                             type: boolean
+                        hasHappeningParticipation:
+                            type: boolean
+                        hasMeetingRequest:
+                            type: boolean
+                        hasPendingMeetingProposition:
+                            type: boolean
+                        hasScheduledMeeting:
+                            type: boolean
+                        hasInvoice:
+                            type: boolean
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
                         nomenclatureItems:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        nomenclatureItemsSupply:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        nomenclatureItemsNeeds:
                             type: nested
                             properties:
                                 key:
@@ -267,9 +297,9 @@ elao_form_translation:
 
 services:
     twig.extension.text:
-       class: Twig_Extension_StringLoader
-       tags:
-           - { name: twig.extension }
+        class: Twig_Extension_StringLoader
+        tags:
+            - { name: twig.extension }
 
 infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
@@ -278,6 +308,9 @@ infrastructure:
     bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
+    print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
+    export_transactions_path: '%kernel.root_dir%/../web/uploads/export_transactions'
+    export_order_path: '%kernel.root_dir%/../web/uploads/export_orders'
     package:
         default_labels:
             plans:
@@ -326,6 +359,10 @@ liip_imagine:
                 thumbnail: { size: [160, 160], mode: outbound }
                 # fix orientation issue for example for iOS photo
                 auto_rotate: ~
+        program_company_logo:
+            quality: 100
+            filters:
+                thumbnail:  { size: [250, 100], mode: inset }
 
 # Doctrine migrations configuration
 doctrine_migrations:

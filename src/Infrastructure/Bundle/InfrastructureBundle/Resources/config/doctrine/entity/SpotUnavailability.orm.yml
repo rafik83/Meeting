@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\SpotUnavailability:
+    type:  entity
+    table: spot_unavailability
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        spot:
+            targetEntity: Proximum\Vimeet\Domain\Model\Spot
+            inversedBy: spotUnavailabilities
+            joinColumn:
+                onDelete: CASCADE
+        slot:
+            targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+            joinColumn:
+                onDelete: CASCADE

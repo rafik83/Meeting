@@ -10,11 +10,26 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag as SheetTag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
+use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
-class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface
+class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
+    /**
+     * Need and supply objectives constants
+     */
+    const OBJECTIVE_NONE   = 'none';
+    const OBJECTIVE_SUPPLY = 'supply';
+    const OBJECTIVE_NEED   = 'need';
+
+    /**
+     * Singles, checkboxes and radios display mode
+     */
+    const MODE_SINGLES    = 'singles';
+    const MODE_CHECKBOXES = 'checkboxes';
+    const MODE_RADIOS     = 'radios';
+
     /**
      * @var NomenclatureModel
      */
@@ -212,7 +227,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSingles()
     {
-        return $this->getMode() === 'singles';
+        return $this->getMode() === self::MODE_SINGLES;
     }
 
     /**
@@ -220,7 +235,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isRadios()
     {
-        return $this->getMode() === 'radios';
+        return $this->getMode() === self::MODE_RADIOS;
     }
 
     /**
@@ -228,7 +243,31 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isCheckboxes()
     {
-        return $this->getMode() === 'checkboxes';
+        return $this->getMode() === self::MODE_CHECKBOXES;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjective()
+    {
+        return null !== $this->getOption('objective') ? $this->getOption('objective') : self::OBJECTIVE_NONE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNeed()
+    {
+        return $this->getObjective() === self::OBJECTIVE_NEED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSupply()
+    {
+        return $this->getObjective() === self::OBJECTIVE_SUPPLY;
     }
 
     /**
@@ -238,9 +277,9 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     {
         $tags = $this->getTags();
 
-        return !in_array(Tag::PARTICIPANT_POSITION, $tags)
-            && !in_array(Tag::SHEET_ORGANIZATION_STAFF, $tags)
-            && !in_array(Tag::SHEET_ORGANIZATION_TURNOVER, $tags)
+        return !in_array(SheetTag::PARTICIPANT_POSITION, $tags)
+            && !in_array(SheetTag::SHEET_ORGANIZATION_STAFF, $tags)
+            && !in_array(SheetTag::SHEET_ORGANIZATION_TURNOVER, $tags)
         ;
     }
 
@@ -271,6 +310,60 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @return bool
+     */
+    public function isRequired()
+    {
+        return (bool) $this->getOption('required');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent(array $taggedData = [])
+    {
+        if (empty($this->getItems())) {
+            return '';
+        }
+
+        $nomenclatureLabels = $this->getNomenclatureLabels();
+        // Leaf elements are the ones with the longest path (max depth):
+        $maxDepth = 1;
+        $allItemPaths = [];
+
+        foreach ($this->getItems() as $item) {
+            $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
+            $allItemPaths[] = $currentItemLabels;
+            $currentItemLabelCount = count($currentItemLabels);
+            // Update $maxDepth if current item's depth is greater than current $maxDepth:
+            if ($currentItemLabelCount > $maxDepth) {
+                $maxDepth = $currentItemLabelCount;
+            }
+        }
+
+        // Filter items to keep only lowest-level ones (items with the max depth):
+        $leaves = array_filter($allItemPaths, function ($item) use ($maxDepth) {
+            return count($item) === $maxDepth;
+        });
+
+        // Implode inner content (each item's path):
+        $leaves = array_map(function ($leave) {
+            return implode('>', str_replace('>', '', $leave));
+        }, $leaves);
+
+        // Implode outer content (all item paths):
+        return implode(";", $leaves);
+    }
+
+    /**
      * @param array  $nomenclatureLabels
      * @param string $item
      *
@@ -297,5 +390,21 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }
 
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslations(array $locales = [])
+    {
+        $translations = [];
+
+        foreach ($this->getItems() as $itemKey) {
+            foreach ($locales as $locale) {
+                $translations[$locale] = $this->getLabelForKey($itemKey, $locale);
+            }
+        }
+
+        return $translations;
     }
 }

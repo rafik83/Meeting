@@ -31,16 +31,35 @@ class MeetingRequestViewQuery
     public $locale;
 
     /**
+     * @var bool
+     */
+    public $isMeetingPublished;
+
+    /**
+     * @var bool
+     */
+    public $isMeetingRequestUpdateLocked;
+
+    /**
      * MeetingRequestViewQuery constructor.
      *
      * @param MeetingRequest $meetingRequest
      * @param Sheet          $sheet
      * @param string         $locale
+     * @param bool           $isMeetingPublished
+     * @param bool           $isMeetingRequestUpdateLocked
      */
-    public function __construct(MeetingRequest $meetingRequest, Sheet $sheet, $locale)
-    {
-        $this->meetingRequest = $meetingRequest;
-        $this->locale         = $locale;
-        $this->sheet          = $sheet;
+    public function __construct(
+        MeetingRequest $meetingRequest,
+        Sheet $sheet,
+        $locale,
+        $isMeetingPublished,
+        $isMeetingRequestUpdateLocked
+    ) {
+        $this->meetingRequest               = $meetingRequest;
+        $this->locale                       = $locale;
+        $this->sheet                        = $sheet;
+        $this->isMeetingPublished           = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
     }
 }

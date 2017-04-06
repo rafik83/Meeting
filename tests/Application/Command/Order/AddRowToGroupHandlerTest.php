@@ -14,11 +14,13 @@ use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddRowToGroupTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $order           = $this->prophesize(Order::class);
 
@@ -27,7 +29,7 @@ class AddRowToGroupTest extends \PHPUnit_Framework_TestCase
         $add = new AddRowToGroup($order->reveal(), '5');
 
         // Handler
-        $handler = new AddRowToGroupHandler($orderRepository->reveal());
+        $handler = new AddRowToGroupHandler($orderRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($add);
     }
 }

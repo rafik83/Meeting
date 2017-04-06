@@ -1,3 +1,16 @@
+template.action.close: Close
 template.action.save: Save
+template.help.title: Help
+template.nomenclature.objective.need: Need
+template.nomenclature.objective.none: None
+template.nomenclature.objective.title: Objective
+template.nomenclature.title: Nomenclature
+template.object.button-link: Link
+template.object.collection: Collection
 template.object.editable-text: 'Editable text'
+template.object.image: Image
+template.object.media: Media
+template.object.nomenclature: Nomenclature
+template.object.participant: Participant
+template.required.title: Required
 template.tag.participant_gender: 'Participant gender'

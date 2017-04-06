@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Payment\Mode;
 
 /**
@@ -42,6 +43,8 @@ class Transaction
     private $date;
 
     /**
+     * See Mode constants
+     *
      * @var string
      */
     private $mode;
@@ -65,6 +68,11 @@ class Transaction
      * @var User|null
      */
     private $user;
+    
+    /**
+     * @var Payment|null
+     */
+    private $payment;
 
     /**
      * Transaction constructor.
@@ -72,7 +80,7 @@ class Transaction
      * @param Sheet              $sheet
      * @param float              $amount
      * @param \DateTimeInterface $date
-     * @param string             $mode
+     * @param string             $mode one of Mode constants
      * @param null|string        $reference
      * @param string             $state
      * @param string             $currency
@@ -155,7 +163,7 @@ class Transaction
      */
     public function getAmountInCents()
     {
-        return (int) ($this->amount * 100);
+        return (int) round(100 * $this->amount);
     }
 
     /**
@@ -210,6 +218,14 @@ class Transaction
     public function getCurrency()
     {
         return $this->currency;
+    }
+    
+    /**
+     * @return null|Payment
+     */
+    public function getPayment()
+    {
+        return $this->payment;
     }
 
     /**

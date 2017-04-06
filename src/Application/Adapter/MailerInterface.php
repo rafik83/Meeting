@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 
 interface MailerInterface
 {
     /**
-     * @param Mail $mail
+     * @param AbstractMail $mail
      */
-    public function send(Mail $mail);
+    public function send(AbstractMail $mail);
 }

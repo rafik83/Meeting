@@ -1,19 +1,18 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.rule.list.title'|trans %}
+
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>Ajouter une règle</h2>
-
+    <h2>{{ 'admin.rule.list.add.title'|trans }}</h2>
     {{ form(form) }}
 
     <h2>{{ 'admin.rule.list.title'|trans }}</h2>
-
     <table class="table">
         <thead>
             <tr>
                 <th>{{ 'admin.rule.list.column.who'|trans }}</th>
                 <th>{{ 'admin.rule.list.column.see'|trans }}</th>
+                <th>{{ 'admin.rule.list.column.priority'|trans }}</th>
                 <th>{{ 'admin.rule.list.column.actions'|trans }}</th>
             </tr>
         </thead>
@@ -22,18 +21,19 @@
                 <tr>
                     <td>
                         {% if rule.seerType %}
-                            Type "{{ rule.seerType.getTitle(locale) }}"
+                            {{ 'admin.rule.list.content.type'|trans }} "{{ rule.seerType.getTitle(locale) }}"
                         {% elseif rule.seerCategory %}
-                            Catégorie "{{ rule.seerCategory.getTitle(locale) }}"
+                            {{ 'admin.rule.list.content.category'|trans }} "{{ rule.seerCategory.getTitle(locale) }}"
                         {% endif %}
                     </td>
                     <td>
                         {% if rule.seeableType %}
-                            Type "{{ rule.seeableType.getTitle(locale) }}"
+                            {{ 'admin.rule.list.content.type'|trans }} "{{ rule.seeableType.getTitle(locale) }}"
                         {% elseif rule.seeableCategory %}
-                            Catégorie "{{ rule.seeableCategory.getTitle(locale) }}"
+                            {{ 'admin.rule.list.content.category'|trans }} "{{ rule.seeableCategory.getTitle(locale) }}"
                         {% endif %}
                     </td>
+                    <td>{{ rule.priority }}</td>
                     <td>
                         <a href="{{ path('admin_rule_see_what', { 'event': event.id, 'rule': rule.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.rule.list.action.seeWhat'|trans }}</a>
                         <form action="{{ path('admin_rule_delete', { 'event': event.id, 'rule': rule.id }) }}" method="POST" style="display: inline">

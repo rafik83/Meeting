@@ -1,0 +1,196 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Query\Navigation\Category;
+
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Components\Navigation\Category;
+use Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler;
+use Proximum\Vimeet\Application\View\Navigation\CategoryView;
+use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
+
+class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var ObjectProphecy
+     */
+    private $navigationBuilder;
+
+    /**
+     * @var ObjectProphecy
+     */
+    private $happeningsAccessChecker;
+
+    /**
+     * @var ObjectProphecy
+     */
+    private $meetingPublishedAccessChecker;
+
+    public function setUp()
+    {
+        $this->navigationBuilder             = $this->prophesize(NavigationBuilderInterface::class);
+        $this->happeningsAccessChecker       = $this->prophesize(HappeningsAccessChecker::class);
+        $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
+    }
+
+    public function testHandleWithoutDate()
+    {
+        $event = EventFactory::createEvent();
+        $user  = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+
+        $this->navigationBuilder->getRoute(Argument::any())->shouldNotBeCalled();
+        $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+        $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+
+        $handler = new PlanningViewQueryHandler(
+            $this->navigationBuilder->reveal(),
+            $this->happeningsAccessChecker->reveal(),
+            $this->meetingPublishedAccessChecker->reveal()
+        );
+        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+
+        $linkView = new LinkView('navigation.links.incoming', null);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithHappeningDateNotPassed()
+    {
+        $event = EventFactory::createEvent();
+        $user  = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+        $date  = new \DateTime('2016-10-12 10:00:00.000');
+        $event->getConfiguration()->setDates(null, $date, null);
+
+        $this->navigationBuilder->getRoute(Argument::any())->shouldNotBeCalled();
+        $this->happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+
+        $handler = new PlanningViewQueryHandler(
+            $this->navigationBuilder->reveal(),
+            $this->happeningsAccessChecker->reveal(),
+            $this->meetingPublishedAccessChecker->reveal()
+        );
+        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+
+        $linkView = new LinkView(
+            'navigation.links.planning.available_date',
+            null,
+            null,
+            new StateButtonView(false, '12 octobre 2016')
+        );
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithHappeningDatePassed()
+    {
+        $event = EventFactory::createEvent();
+        $user  = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+        $date  = new \DateTime('2016-10-12 10:00:00.000');
+        $event->getConfiguration()->setDates(null, $date, null);
+
+        $this->navigationBuilder->getRoute('event_agenda')->shouldBeCalled()->willReturn('route');
+        $this->happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+
+        $handler = new PlanningViewQueryHandler(
+            $this->navigationBuilder->reveal(),
+            $this->happeningsAccessChecker->reveal(),
+            $this->meetingPublishedAccessChecker->reveal()
+        );
+        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+
+        $linkView = new LinkView(
+            'navigation.links.planning.available_date',
+            'route',
+            null,
+            new StateButtonView(false, '12 octobre 2016')
+        );
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithMeetingPublishedDateNotPassed()
+    {
+        $event = EventFactory::createEvent();
+        $user  = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+        $date  = new \DateTime('2016-10-12 10:00:00.000');
+        $event->getConfiguration()->setDates(null, null, $date);
+
+        $this->navigationBuilder->getRoute(Argument::any())->shouldNotBeCalled();
+        $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+        $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+
+        $handler = new PlanningViewQueryHandler(
+            $this->navigationBuilder->reveal(),
+            $this->happeningsAccessChecker->reveal(),
+            $this->meetingPublishedAccessChecker->reveal()
+        );
+        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+
+        $linkViewHappening = new LinkView('navigation.links.incoming', null);
+        $linkView = new LinkView(
+            'navigation.links.planning.final_date',
+            null,
+            null,
+            new StateButtonView(false, '12 octobre 2016')
+        );
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkViewHappening, $linkView]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithMeetingPublishedDatePassed()
+    {
+        $event = EventFactory::createEvent();
+        $user  = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+        $date  = new \DateTime('2016-10-12 10:00:00.000');
+        $event->getConfiguration()->setDates(null, null, $date);
+
+        $this->navigationBuilder->getRoute('event_agenda')->shouldBeCalled()->willReturn('route');
+        $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+        $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+
+        $handler = new PlanningViewQueryHandler(
+            $this->navigationBuilder->reveal(),
+            $this->happeningsAccessChecker->reveal(),
+            $this->meetingPublishedAccessChecker->reveal()
+        );
+        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+
+        $linkViewHappening = new LinkView('navigation.links.incoming', null);
+        $linkView = new LinkView(
+            'navigation.links.planning.final_date',
+            'route',
+            null,
+            new StateButtonView(false, '12 octobre 2016')
+        );
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkViewHappening, $linkView]);
+
+        $this->assertEquals($expected, $result);
+    }
+}

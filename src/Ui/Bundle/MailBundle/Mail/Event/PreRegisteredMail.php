@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 
-class PreRegisteredMail extends Mail
+class PreRegisteredMail extends UserMail
 {
     /**
      * @var string
@@ -49,26 +49,25 @@ class PreRegisteredMail extends Mail
     protected $sendToEmailTeam = true;
 
     /**
-     * @param Participant $participant
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $locale
-     * @param User        $receiverUser
+     * @param Participant         $participant
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Participant $participant,
         $sender,
         $receiver,
         $locale,
-        User $receiverUser
+        ParticipantInfoView $participantInfoView
     ) {
         parent::__construct(
             $sender,
             $receiver,
             $locale,
-            null,
-            $participant->getUser(),
-            $participant->getSheet()->getEvent()
+            $participant->getSheet()->getEvent(),
+            $participantInfoView
         );
 
         $this->sheet       = $participant->getSheet();

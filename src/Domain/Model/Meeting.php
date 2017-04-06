@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class Meeting implements MessageSubjectInterface
 {
@@ -59,29 +60,61 @@ class Meeting implements MessageSubjectInterface
     private $state = self::STATE_SCHEDULED;
 
     /**
+     * @var Spot
+     */
+    private $spot;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var bool
+     */
+    private $blockedSpot = false;
+
+    /**
+     * @var bool
+     */
+    private $blockedSlot = false;
+
+    /**
      * Meeting constructor.
      *
+     * @param Request            $request
      * @param MeetingSlot        $slot
      * @param Sheet              $fromSheet
      * @param array              $fromParticipants
      * @param Sheet              $toSheet
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
+     * @param Spot               $spot
+     * @param bool               $blockedSpot
+     * @param bool               $blockedSlot
      */
     public function __construct(
+        Request $request,
         MeetingSlot $slot,
         Sheet $fromSheet,
         array $fromParticipants,
         Sheet $toSheet,
         array $toParticipants,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        Spot $spot,
+        $blockedSpot = false,
+        $blockedSlot = false
     ) {
+        $this->request          = $request;
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
         $this->toSheet          = $toSheet;
         $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->createdAt        = $createdAt;
+        $this->spot             = $spot;
+        $this->blockedSpot      = $blockedSpot;
+        $this->blockedSlot      = $blockedSlot;
     }
 
     /**
@@ -230,5 +263,136 @@ class Meeting implements MessageSubjectInterface
         $this->state = self::STATE_CANCELED;
 
         return $this;
+    }
+
+    /**
+     * @return Spot
+     */
+    public function getSpot()
+    {
+        return $this->spot;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Guess what sheet is met by the given sheet
+     *
+     * @param Sheet $sheet
+     *
+     * @return Sheet|null
+     */
+    public function getSheetMet(Sheet $sheet)
+    {
+        if ($this->fromSheet === $sheet) {
+            return $this->toSheet;
+        }
+
+        return $this->fromSheet;
+    }
+
+    /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
+    }
+
+    /**
+     * @param Spot $spot
+     * @param bool $blockedSpot
+     * @param bool $blockedSlot
+     */
+    public function updateSpot(Spot $spot, $blockedSpot, $blockedSlot)
+    {
+        $this->spot        = $spot;
+        $this->blockedSpot = $blockedSpot;
+        $this->blockedSlot = $blockedSlot;
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param Spot        $spot
+     */
+    public function updateSlotAndSpot(MeetingSlot $slot, Spot $spot)
+    {
+        $this->slot = $slot;
+        $this->spot = $spot;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSpot()
+    {
+        return $this->blockedSpot;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSlot()
+    {
+        return $this->blockedSlot;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    public function getParticipants(Sheet $sheet)
+    {
+        if ($sheet === $this->fromSheet) {
+            return $this->getFromParticipants()->toArray();
+        } elseif ($sheet === $this->toSheet) {
+            return $this->getToParticipants()->toArray();
+        }
+
+        return [];
+    }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return [$this->fromSheet, $this->toSheet];
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getAllParticipants()
+    {
+        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+    }
+
+    /**
+     * @return int[] array of all participants id
+     */
+    public function getParticipantsId()
+    {
+        return array_map(
+            function (Participant $participant) {
+                return $participant->getId();
+            },
+            $this->getAllParticipants()
+        );
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->slot->getEvent();
     }
 }

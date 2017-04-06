@@ -58,20 +58,20 @@ class MenuHeaderViewQueryHandler
     {
         $routes = [];
 
+        foreach ($query->event->getLocales() as $locale) {
+            if ($locale !== $query->locale) {
+                $routes[$locale] = $this->router->generate($query->route, array_merge(
+                    $query->routeParameters,
+                    ['_locale' => $locale]
+                ));
+            }
+        }
+
         // use dynamic header menu if user is logged in and not in registration funnel
         if ($query->user !== null && $query->registration === false) {
             try {
                 $sheet           = $this->sheetGuesser->getUserSheet($query->user, $query->event, $query->locale);
                 $hasNotification = $this->notificationRepository->sheetHasNotification($sheet);
-
-                foreach ($query->event->getLocales() as $locale) {
-                    if ($locale !== $query->locale) {
-                        $routes[$locale] = $this->router->generate($query->route, array_merge(
-                            $query->routeParameters,
-                            ['_locale' => $locale]
-                        ));
-                    }
-                }
 
                 return new MenuHeaderView($query->event, $routes, $sheet, $hasNotification);
             } catch (\Exception $exception) {

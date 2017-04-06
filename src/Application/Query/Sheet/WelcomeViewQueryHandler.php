@@ -11,9 +11,23 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\View\Sheet\WelcomeView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 
 class WelcomeViewQueryHandler
 {
+    /**
+     * @var HappeningsAccessChecker
+     */
+    private $happeningsAccessChecker;
+
+    /**
+     * @param HappeningsAccessChecker $happeningsAccessChecker
+     */
+    public function __construct(HappeningsAccessChecker $happeningsAccessChecker)
+    {
+        $this->happeningsAccessChecker = $happeningsAccessChecker;
+    }
+
     /**
      * @param WelcomeViewQuery $welcomeViewQuery
      *
@@ -22,9 +36,12 @@ class WelcomeViewQueryHandler
     public function handle(WelcomeViewQuery $welcomeViewQuery)
     {
         $welcomeView = new WelcomeView();
+        $sheet       = $welcomeViewQuery->sheet;
 
-        $welcomeView->hasPackage = null !== $welcomeViewQuery->sheet->getPackage()
-            && $welcomeViewQuery->sheet->getPackage()->isPassable();
+        $welcomeView->hasPackage = null !== $sheet->getPackage()
+            && $sheet->getPackage()->isPassable();
+
+        $welcomeView->hasProgram = $this->happeningsAccessChecker->allowedToAccess($sheet->getEvent());
 
         return $welcomeView;
     }

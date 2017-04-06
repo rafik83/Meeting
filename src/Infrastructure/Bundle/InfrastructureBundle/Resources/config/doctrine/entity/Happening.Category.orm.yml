@@ -9,8 +9,12 @@ Proximum\Vimeet\Domain\Model\Happening\Category:
     fields:
         picto:
             type: string
-        position:
+        rank:
             type: integer
+        leftColor:
+            type: string
+        rightColor:
+            type: string
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation

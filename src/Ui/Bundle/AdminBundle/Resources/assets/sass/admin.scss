@@ -1,9 +1,11 @@
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
 @import "eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
+@import "components/agenda";
 @import "components/template-builder";
 @import "components/package";
-@import "components/_select2";
+@import "components/select2";
 @import "vendor/bootstrap-duallistbox/_bootstrap-duallistbox";
+@import "base/fonts";
 
 body {
   margin: 70px 0 0;
@@ -284,3 +286,15 @@ table th.sort-up:after {
   border-width:4px 4px 0;
 }
 /* tablesort */
+
+.col-custom-7 {
+  width: 14.2857142857%;
+}
+
+.pagination {
+  margin: 0 !important;
+}
+
+.pagination ul {
+  margin-bottom: 0 !important;
+}

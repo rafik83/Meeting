@@ -14,9 +14,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\Talking;
 
+/**
+ * Domain language: "Conférence"  (aka "Sous-événement")
+ */
 class Happening
 {
     /**
@@ -55,27 +59,61 @@ class Happening
     private $talkings;
 
     /**
+     * @var bool
+     */
+    private $questionAllowed = false;
+
+    /**
+     * @var int|null
+     */
+    private $limitParticipant;
+
+    /**
+     * array of HappeningParticipation
+     *
+     * @var ArrayCollection
+     */
+    private $participations;
+
+    /**
+     * Question[]
+     *
+     * @var ArrayCollection
+     */
+    private $questions;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param bool               $questionAllowed
+     * @param int|null           $limitParticipant
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
-    {
-        $this->event        = $event;
-        $this->begin        = $begin;
-        $this->end          = $end;
-        $this->category     = $category;
-        $this->translations = new ArrayCollection();
-        $this->talkings     = new ArrayCollection();
+    public function __construct(
+        Event $event,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        CategoryHappening $category,
+        $questionAllowed = false,
+        $limitParticipant = null
+    ) {
+        $this->event            = $event;
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->category         = $category;
+        $this->translations     = new ArrayCollection();
+        $this->talkings         = new ArrayCollection();
+        $this->participations   = new ArrayCollection();
+        $this->questions        = new ArrayCollection();
+        $this->questionAllowed  = $questionAllowed;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
-     * Get id.
-     *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -144,10 +182,22 @@ class Happening
 
     /**
      * @param string $locale
+     *
+     * @return string
      */
     public function getTitle($locale)
     {
-        return $this->getTranslations()->get($locale)->getTitle();
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -170,12 +220,21 @@ class Happening
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param bool               $questionAllowed
+     * @param int|null           $limitParticipant
      */
-    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
-    {
-        $this->begin    = $begin;
-        $this->end      = $end;
-        $this->category = $category;
+    public function update(
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        CategoryHappening $category,
+        $questionAllowed,
+        $limitParticipant
+    ) {
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->category         = $category;
+        $this->questionAllowed  = $questionAllowed;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
@@ -204,7 +263,9 @@ class Happening
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) { return $talking->getSpeaker(); })
+            ->map(function (Talking $talking) {
+                return $talking->getSpeaker();
+            })
             ->toArray();
     }
 
@@ -233,5 +294,69 @@ class Happening
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isQuestionAllowed()
+    {
+        return $this->questionAllowed;
+    }
+
+    /**
+     * @param bool $questionAllowed
+     */
+    public function setQuestionAllowed($questionAllowed)
+    {
+        $this->questionAllowed = $questionAllowed;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParticipantLimited()
+    {
+        return $this->limitParticipant !== null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLimitParticipant()
+    {
+        return $this->limitParticipant;
+    }
+
+    /**
+     * @param int|null $limitParticipant
+     */
+    public function setLimitParticipant($limitParticipant)
+    {
+        $this->limitParticipant = $limitParticipant;
+    }
+
+    /**
+     * @return HappeningParticipation[]
+     */
+    public function getParticipations()
+    {
+        return $this->participations->toArray();
+    }
+
+    /**
+     * @return Happening\Question[]
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param HappeningParticipation[] $participations
+     */
+    public function setParticipations(array $participations)
+    {
+        $this->participations = new ArrayCollection($participations);
     }
 }

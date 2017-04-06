@@ -45,13 +45,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@event_asddays_2016_type_fournisseur'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
+                dcc42d3d: { text: { fr: "L'Aanera est le centre français de la recherche aéronautique, spaciale et de défense." } }
                 # Image
-                1b9a00b3: { file: "onera.jpg" }
+                1b9a00b3: { file: "Aanera.jpg" }
                 # Lien
-                90713a3d: { url: "http://www.onera.fr/" }
+                90713a3d: { url: "http://www.aanera.fr/" }
                 # Description d'activité
-                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
+                d691d21c: { text: { fr: "L'Aanera est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
                 # Compétence
                 e438c993: { items: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"] }
                 # Client de référence
@@ -67,18 +67,18 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 # Certification
                 a23a2f5d: { items: [{ title: { fr: "EN9100" } }, { title: { fr: "ISO14001" } }, { title: { fr: "OHSAS18001" } }, { title: { fr: "CAP26000" } }, { title: { fr: "ISO14001" } }, { title: { fr: "CAP26000" } } ] }
                 # Media
-                211efd1f: { medias: [{ title: { fr: "Brochure de présentation" }, url: "http://www.onera.fr/brochure-presentation.pdf", type: "document" }, { title: { fr: "Projet Horizon 2020" }, url: "http://www.onera.fr/projet-horizon-2020.pdf", type: "document" }] }
+                211efd1f: { medias: [{ title: { fr: "Brochure de présentation" }, url: "http://www.aanera.fr/brochure-presentation.pdf", type: "document" }, { title: { fr: "Projet Horizon 2020" }, url: "http://www.aanera.fr/projet-horizon-2020.pdf", type: "document" }] }
                 # Offre
-                03b394ac: { items: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"] }
+                03b394ac: { items: ["ab93de01","ab93de02","ab93de03","ab93de04"] }
                 # Besoins
-                63ccc105: { items: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"] }
+                63ccc105: { items: ["ab93de05","ab93de06","ab93de07"] }
                 # Description
                 d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
             - '@user_asddays_1'
             - <dateTime()>
         completeness: 67
         registrationData:
-            3ad4b72f: { text: "Onera" }
+            3ad4b72f: { text: "Aanera" }
             97ed778d: { items: ["category2"] }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
@@ -93,7 +93,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_asddays_2016'
             - '@event_asddays_2016_type_fournisseur'
-            - []
+            -
+                # Offre
+                03b394ac: { items: ["ab93de06","ab93de05"] }
+                # Besoins
+                63ccc105: { items: [] }
             - '@user_asddays_2'
             - <dateTime()>
         registrationData:
@@ -113,14 +117,18 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_asddays_2016'
             - '@event_asddays_2016_type_investisseur'
-            - []
+            -
+                # Offre
+                03b394ac: { items: ["ab93de07","ab93de01"] }
+                # Besoins
+                63ccc105: { items: ["ab93de04","ab93de07"] }
             - '@user_asddays_3'
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: "World Company Inc" }
             97ed778d: { items: ["category2"] }
             93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
+            de66af5d: { text: "69000" }
             d224f0e7: { text: "Lyon" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
@@ -188,7 +196,7 @@ Proximum\Vimeet\Domain\Model\User\Account (local):
         phone: "+33668973246"
         mobile: "+33668973246"
         position: "Consultant"
-        company: "Onera"
+        company: "Aanera"
         website: "http://www.monsite.fr"
         address: "10 rue des lilas"
         zipcode: "75002"

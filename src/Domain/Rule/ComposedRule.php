@@ -10,12 +10,19 @@
 
 namespace Proximum\Vimeet\Domain\Rule;
 
+use Proximum\Vimeet\Domain\Model\Rule;
+
 class ComposedRule
 {
     /**
      * @var array
      */
     public $tags;
+
+    /**
+     * @var Rule
+     */
+    public $rule;
 
     /**
      * @param string $tag

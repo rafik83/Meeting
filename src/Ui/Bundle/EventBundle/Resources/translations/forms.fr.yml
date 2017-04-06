@@ -20,14 +20,23 @@ form.catalog_edit_meeting_request.pending.request.children.submit.label: 'Modifi
 form.catalog_edit_meeting_request.proposition.children.submit.label: Modifier
 form.catalog_edit_meeting_request.request.children.submit.label: Modifier
 form.catalog_refuse_meeting_request.children.message.label: 'Motiver votre refus ?'
-form.catalog_refuse_meeting_request.children.message.placeholder: 'Ecrire une message'
+form.catalog_refuse_meeting_request.children.message.placeholder: 'Ecrire un message'
 form.catalog_refuse_meeting_request.children.submit.label: 'Refuser la proposition'
-form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Annuler la proposition'
+form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Annuler mon acceptation'
 form.catalog_un_refuse_meeting_request.children.submit.label: 'Annuler votre refus'
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.change_password_user.children.submit.label: Envoyer
+form.create_unavailability.children.day.label: Le
+form.create_unavailability.children.message.label: Commentaire
+form.create_unavailability.children.participants.label: 'Indisponible:'
+form.create_unavailability.children.submit.label: Ajouter
+form.create_unavailability.children.time.children.begin.label: de
+form.create_unavailability.children.time.children.end.label: à
+form.create_unavailability.data.maxLength.translations.plural: 'caractères restants'
+form.create_unavailability.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
+form.create_unavailability.data.maxLength.translations.singular: 'caractère restant'
 form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
@@ -36,6 +45,11 @@ form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.participate.children.participants.label: 'Qui participe ?'
+form.participate.children.participants.unavailable: Indisponible
+form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'
+form.participate.children.submit.label: Participer
+form.participate.children.submitUpdate.label: Modifier
 form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''accompte'
 form.payment_choice_with_deposit.children.depositMode.deposit: Accompte
 form.payment_choice_with_deposit.children.depositMode.total: Total
@@ -47,21 +61,24 @@ form.payment_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bancaire'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
-form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'
+form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.searching: 'Recherche en cours...'
 form.search.content.label: 'Mots clés'
-form.search.localization.label: 'Zones géographiques'
-form.search.localization.search.placeholder: '69, Lyon, France...'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
+form.search.localization.label: 'Zones géographiques'
+form.search.localization.search.placeholder: '69, Lyon, France'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
 form.search.meeting.state.label: 'Gestion de RDV'
 form.search.meeting.state.receive: 'Propositions reçues'
 form.search.meeting.state.refused: Refusées
-form.search.meeting.state.sent: 'Demandes en attente'
+form.search.meeting.state.sent: 'Vos demandes en attente'
 form.search.meeting.type.label: 'Gestion de RDV'
+form.search.objective.label: Objectifs
+form.search.objective.need: 'Répondre à mes besoins'
+form.search.objective.supply: 'Rechercher mes offres'
 form.search.orderBy.alphabetical: 'Ordre alphabétique'
 form.search.orderBy.createdAt: 'Ordre chronologique'
 form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
@@ -78,7 +95,7 @@ form.sheet_editable_text_data.children.submit.label: Enregistrer
 form.sheet_editable_text_data.data.maxLength.translations.plural: 'caractères restants'
 form.sheet_editable_text_data.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
 form.sheet_editable_text_data.data.maxLength.translations.singular: 'caractère restant'
-form.sheet_image_data.children.selectedProduct.label: 'Produits liées'
+form.sheet_image_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_image_data.children.submit.label: Enregistrer
 form.sheet_item_collection_data.children.items.label_add: Ajouter
 form.sheet_item_collection_data.children.items.label_delete: '&times;'
@@ -89,7 +106,7 @@ form.sheet_media_collection_data.children.medias.label_delete: '&times;'
 form.sheet_media_collection_data.children.medias.prototype.children.title.label: Titre
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
-form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liées'
+form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_media_collection_data.children.submit.label: Enregistrer
 gender.man: Monsieur
 gender.woman: Madame

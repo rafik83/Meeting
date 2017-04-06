@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class Block extends AbstractChild
 {
@@ -68,6 +67,8 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $locale
+     *
      * @return string
      */
     public function getLabel($locale)
@@ -77,6 +78,7 @@ class Block extends AbstractChild
 
     /**
      * @param string $label
+     * @param string $locale
      */
     public function setLabel($label, $locale)
     {
@@ -154,6 +156,26 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject\ContentObjectInterface[]
+     */
+    public function getContentObjects()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\ContentObjectInterface;
+        });
+    }
+
+    /**
+     * @return TemplateObject\ExportableObjectInterface[]
+     */
+    public function getExportableObjects()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\ExportableObjectInterface;
+        });
+    }
+
+    /**
      * @return TemplateObject[]
      */
     public function getEditableObjects()
@@ -176,11 +198,35 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
-    public function getCompanyObjects()
+    public function getEditableSheetDataExceptedImageObjects()
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof TemplateObject\Image;
         });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getParticipantAndSheetDataExceptedImageObject()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            if ($object instanceof TemplateObject\Image) {
+                return false;
+            }
+
+            return $object->isEditable() && ($object->hasTag(Tag::SHEET_DATA) || $object->hasTag(Tag::PARTICIPANT_DATA));
+        });
+    }
+
+    /**
+     * @deprecated Use {@link Block::getEditableSheetDataExceptedImageObjects()} instead
+     *
+     * @return TemplateObject[]
+     */
+    public function getCompanyObjects()
+    {
+        return $this->getEditableSheetDataExceptedImageObjects();
     }
 
     /**
@@ -198,8 +244,12 @@ class Block extends AbstractChild
      */
     public function getPreviewAvailableObjects()
     {
-        return array_filter($this->getObjects(), function(TemplateObject $object) {
-            return $object instanceof TemplateObject\Image || $object instanceof TemplateObject\EditableText;
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\Image
+                || $object instanceof TemplateObject\EditableText
+                || $object instanceof TemplateObject\Participant
+                || $object instanceof TemplateObject\Tag
+            ;
         });
     }
 
@@ -251,7 +301,7 @@ class Block extends AbstractChild
     public function getBlock($index)
     {
         $blocks = $this->getBlocks();
-        $index  = (int) $index - 1;
+        $index  = (int)$index - 1;
 
         return isset($blocks[$index]) ? $blocks[$index] : null;
     }
@@ -395,6 +445,18 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $objective
+     *
+     * @return TemplateObject\Nomenclature[]
+     */
+    public function getNomenclatureObjectsByObjective($objective)
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) use ($objective) {
+            return $object instanceof TemplateObject\Nomenclature && $object->getObjective() === $objective;
+        });
+    }
+
+    /**
      * @param $locale
      *
      * @return null|string
@@ -456,6 +518,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * Clear objects data
+     */
+    public function clear()
+    {
+        array_map(function (TemplateObject $object) {
+            $object->setData([]);
+        }, $this->getObjects());
+    }
+
+    /**
      * @param array $data
      *
      * @return Block
@@ -474,6 +546,37 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param array $taggedDataViews
+     *
+     * @return Block
+     */
+    public function setTaggedDataViews(array $taggedDataViews)
+    {
+        /** @var TemplateObject $object */
+        foreach ($this->getObjects() as $object) {
+            $tags = $object instanceof TemplateObject\EditableText && !empty($object->getTag()) ? [$object->getTag()] : $object->getTags();
+
+            if (count($tags) === 0) {
+                continue;
+            }
+
+            foreach ($tags as $tagData) {
+                $tag = isset($tagData['tag']) ? $tagData['tag'] : $tagData;
+
+                if (in_array($tag, Tag::getSetters())) {
+                    continue;
+                }
+
+                if (!empty($taggedDataViews[$tag])) {
+                    $object->addTaggedDataView($taggedDataViews[$tag]);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string            $fieldName
      * @param array|string|null $emptyValue
      */
@@ -484,5 +587,23 @@ class Block extends AbstractChild
                 $object->setOption($fieldName, $emptyValue);
             }
         }
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getUserIdentityObjects()
+    {
+        $objects = [];
+
+        foreach ($this->getObjects() as $object) {
+            foreach (Tag::getParticipantIdentityTags() as $tag) {
+                if ($object->hasTag($tag)) {
+                    $objects[$tag] = $object;
+                }
+            }
+        }
+
+        return $objects;
     }
 }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
@@ -25,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -80,11 +80,13 @@ class CatalogController extends Controller
 
         $filters = $this->getDefaultFilters($typeViews);
 
-        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews);
+        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews, $event, $locale);
 
         if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
             $filters = $searchForm->getData();
         }
+
+        $page = $request->query->getInt('page', 1);
 
         try {
             /** @var PaginatedResult $paginatedResult */
@@ -92,14 +94,20 @@ class CatalogController extends Controller
                 new PaginatedCatalogSheetPreviewViewQuery(
                     $event,
                     $filters,
-                    $request->query->getInt('page', 1),
-                    100,
+                    $page,
+                    48,
                     $locale,
                     $sheet
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
+        }
+
+        $seeMoreButton = false;
+
+        if ($paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page)) {
+            $seeMoreButton = true;
         }
 
         $searchForm = $this->getFilteredSearchForm(
@@ -115,6 +123,21 @@ class CatalogController extends Controller
 
         if ($request->isXmlHttpRequest()) {
             $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
+
+            if ($page > 1) {
+                return new JsonResponse(
+                    [
+                        'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
+                            'paginatedResult' => $paginatedResult,
+                            'viewer'          =>  $sheet,
+                            'page'            => $page,
+                            'isCatalog'       => true,
+                        ]),
+                        'seeMoreButton' => $seeMoreButton,
+                    ]
+                );
+            }
+
         } else {
             $template = 'EventBundle:Catalog:index.html.twig';
         }
@@ -122,9 +145,11 @@ class CatalogController extends Controller
         return $this->render($template, [
             'event'           => $event,
             'sheet'           => $sheet,
+            'page'            => 1,
             'isCatalog'       => true,
             'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
+            'seeMoreButton'   => $seeMoreButton,
             'searchForm'      => $searchForm->createView(),
         ]);
     }
@@ -222,8 +247,7 @@ class CatalogController extends Controller
 
         $rules = $this
             ->get('repository.rule_repository')
-            ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType())
-        ;
+            ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
 
         if (empty($rules)) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
@@ -234,11 +258,17 @@ class CatalogController extends Controller
             $sheet,
             $locale
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        // Build sheet template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')
+            ->buildTaggedDataView($sheet, $locale, $rules);
 
         $ruleApplyer = $this->get('domain.rule.applyer');
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);
         $ruleApplyer->applyRuleForCardList($participants, $rules);
+
+        $isMeetingPublished           = false;
+        $isMeetingRequestUpdateLocked = false;
 
         if ($sheet === $userSheet) {
             $meetingRequest = null;
@@ -246,19 +276,25 @@ class CatalogController extends Controller
             $meetingRequest = $this
                 ->get('vimeet_infrastructure.repository.meeting.request_repository')
                 ->getRequestBetweenSheets($sheet, $userSheet);
+            $isMeetingPublished = $this
+                ->get('domain.key_dates.checker.meeting_published_access_checker')
+                ->allowedToAccess($event);
+            $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'          => $eventDomain->getEvent(),
-            'sheet'          => $sheet,
-            'taggedData'     => $taggedData,
-            'locale'         => $locale,
-            'nomenclatures'  => $nomenclatures,
-            'participants'   => $participants,
-            'templateData'   => $templateData,
-            'isCatalog'      => true,
-            'userSheet'      => $userSheet,
-            'meetingRequest' => $meetingRequest,
+            'event'                        => $event,
+            'sheet'                        => $sheet,
+            'taggedData'                   => $taggedData,
+            'locale'                       => $locale,
+            'nomenclatures'                => $nomenclatures,
+            'participants'                 => $participants,
+            'templateData'                 => $templateData,
+            'isCatalog'                    => true,
+            'userSheet'                    => $userSheet,
+            'meetingRequest'               => $meetingRequest,
+            'isMeetingPublished'           => $isMeetingPublished,
+            'isMeetingRequestUpdateLocked' => $isMeetingRequestUpdateLocked,
         ]);
     }
 
@@ -271,7 +307,11 @@ class CatalogController extends Controller
      */
     private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        try {
+            $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        } catch (SheetNotFoundException $exception) {
+            throw $this->createNotFoundException('Sheet not found');
+        }
 
         if (!$this->get('catalog.sheet_access_checker')->checkAccess($userSheet, $sheet)) {
             throw $this->createAccessDeniedException();
@@ -405,6 +445,8 @@ class CatalogController extends Controller
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param Event                      $event
+     * @param string                     $locale
      *
      * @return FormInterface
      */
@@ -412,24 +454,28 @@ class CatalogController extends Controller
         array $filters,
         array $typeViews,
         array $organizationCategoryViews,
-        array $positionViews
+        array $positionViews,
+        Event $event,
+        $locale
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index'),
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
+            'event'                     => $event,
+            'locale'                    => $locale,
         ]);
     }
 
     /**
-     * @param Event          $event
-     * @param array          $visibleTypes
-     * @param array          $filters
-     * @param array          $currentAggregations
-     * @param TypeView[]     $typeViews
-     * @param CategoryView[] $organizationCategoryViews
-     * @param PositionView[] $positionViews
+     * @param Event                      $event
+     * @param array                      $visibleTypes
+     * @param array                      $filters
+     * @param array                      $currentAggregations
+     * @param TypeView[]                 $typeViews
+     * @param OrganizationCategoryView[] $organizationCategoryViews
+     * @param PositionView[]             $positionViews
      *
      * @return FormInterface
      */
@@ -496,7 +542,9 @@ class CatalogController extends Controller
             $filters,
             $filteredTypeViews,
             $filteredOrganizationCategoryViews,
-            $filteredPositionViews
+            $filteredPositionViews,
+            $event,
+            $locale
         );
     }
 }

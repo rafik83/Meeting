@@ -1,0 +1,32 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Factory;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Spot;
+
+final class SpotFactory
+{
+    /**
+     * @param Event|null $event
+     * @param string     $ref
+     *
+     * @return Spot
+     */
+    public static function create(Event $event = null, $ref = 'ref')
+    {
+        if ($event === null) {
+            $event = EventFactory::createEvent();
+        }
+
+        return new Spot($ref, $event, 2, 3, 4, true);
+    }
+}

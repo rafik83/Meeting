@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 
-class TransactionConfirmMail extends Mail
+class TransactionConfirmMail extends UserMail
 {
     /**
      * @var string
@@ -48,22 +49,34 @@ class TransactionConfirmMail extends Mail
     protected $sendToEmailTeam = true;
 
     /**
+     * @var string
+     */
+    protected $firstname;
+
+    /**
+     * @var string
+     */
+    protected $lastname;
+
+    /**
      * TransactionConfirmEvent constructor.
      *
-     * @param Transaction $transaction
-     * @param User        $user
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $locale
+     * @param Transaction         $transaction
+     * @param User                $user
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Transaction $transaction,
         User $user,
         $sender,
         $receiver,
-        $locale
+        $locale,
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, null, null, $transaction->getSheet()->getEvent());
+        parent::__construct($sender, $receiver, $locale, $transaction->getSheet()->getEvent(), $participantInfoView);
 
         $this->user        = $user;
         $this->transaction = $transaction;

@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class HappeningParticipationRepository implements HappeningParticipationRepositoryInterface
@@ -62,6 +64,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->where('participation.happening = :happening')
             ->setParameter('happening', $happening)
             ->andWhere('participation.participant = :participant')
+            ->andWhere('participation.disabled = false')
             ->setParameter('participant', $participant)
             ->setMaxResults(1);
 
@@ -71,7 +74,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function findByParticipant(Participant $participant)
+    public function findByParticipant(Participant $participant, array $filters = [])
     {
         $queryBuilder = $this
             ->entityManager
@@ -83,6 +86,210 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('participant', $participant)
         ;
 
+        if (isset($filters['disabled'])) {
+            $queryBuilder
+                ->andWhere('participation.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled'])
+            ;
+        }
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipants(array $participants)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation, happening')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->join('participation.participant', 'participant', 'WITH', 'participant.id IN (:participants) AND participation.disabled = false')
+            ->setParameter('participants', $participants)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation, happening')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->join('participation.participant', 'participant')
+            ->where('participation.disabled = false')
+            ->andWhere('participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkAnyParticipation(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation.id')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->where('participation.participant = :participant')
+            ->andWhere('participation.disabled = false')
+            ->setParameter('participant', $participant)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipationByHappening(Happening $happening)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(participation)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening  = :happening')
+            ->andWhere('participation.disabled = false')
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation, happening')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->where('happening.event = :event')
+            ->andWhere('participation.disabled = false')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipationByEvent(Event $event)
+    {
+        $participationCounts = [];
+
+        $results = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening.id, COUNT(participation)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.disabled = false')
+            ->join('participation.happening', 'happening', 'WITH', 'happening = participation.happening')
+            ->join('happening.event', 'event', 'WITH', 'event = :event')
+            ->setParameter('event', $event)
+            ->groupBy('happening.id')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        //  Reformat the array to key (happening id) => value (count participation)
+        foreach ($results as $result) {
+            $participationCounts[$result['id']] = $result[1];
+        }
+
+        return $participationCounts;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipationsBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(participation.id)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.disabled = false')
+            ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasParticipationsBySheet(Sheet $sheet)
+    {
+        return $this->countParticipationsBySheet($sheet) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipationsForSheet(Sheet $sheet, $happenings)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.disabled = false')
+            ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->join('participation.happening', 'happening', 'WITH', 'happening IN (:happenings)')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('happenings', $happenings)
+            ->groupBy('participation.happening, participation.participant')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeParticipantForHappening(Participant $participant, Happening $happening)
+    {
+        $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete(HappeningParticipation::class, 'participation')
+            ->where('participation.participant = :participant')
+            ->andWhere('participation.disabled = false')
+            ->andWhere('participation.happening = :happening')
+            ->setParameter('participant', $participant)
+            ->setParameter('happening', $happening)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param HappeningParticipation $happeningParticipation
+     */
+    public function update(HappeningParticipation $happeningParticipation)
+    {
+        $this->entityManager->flush($happeningParticipation);
     }
 }

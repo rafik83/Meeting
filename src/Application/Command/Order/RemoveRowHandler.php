@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Order\OrderUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Order\RemoveProductNotAllowedException;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RemoveRowHandler
 {
@@ -21,11 +24,18 @@ class RemoveRowHandler
     private $rowRepository;
 
     /**
-     * @param RowRepositoryInterface $rowRepository
+     * @var DelayedEventDispatcher
      */
-    public function __construct(RowRepositoryInterface $rowRepository)
+    private $eventDispatcher;
+
+    /**
+     * @param RowRepositoryInterface $rowRepository
+     * @param DelayedEventDispatcher $eventDispatcher
+     */
+    public function __construct(RowRepositoryInterface $rowRepository, DelayedEventDispatcher $eventDispatcher)
     {
-        $this->rowRepository = $rowRepository;
+        $this->rowRepository   = $rowRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -39,6 +49,10 @@ class RemoveRowHandler
             throw new RemoveProductNotAllowedException('Delete a product row is not allowed');
         }
 
+        $order = $removeRow->row->getOrder();
+
         $this->rowRepository->remove($removeRow->row);
+
+        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, new OrderUpdatedEvent($order));
     }
 }

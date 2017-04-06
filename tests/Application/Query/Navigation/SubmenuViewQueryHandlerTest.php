@@ -11,17 +11,19 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -87,7 +89,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $package  = new Package($event, 'package', $datetime);
         $type->setPackage($package);
-        
+
         $locale = 'fr';
         $route  = 'event_catalog_index';
 
@@ -99,30 +101,69 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::SHEET_ICON,
                 'sheet.title',
                 'sheet.title.link',
-                true
-            ),
-            new SubmenuButtonView(
-                Category::PACKAGE_ICON,
-                'package.title',
-                'package.title.link',
-                false,
-                null
+                false
             ),
         ];
 
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
 
         $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
-        $navigationBuilder->getRoute('event_package')->shouldBeCalled()
-            ->willReturn('package.title.link');
+        $handler = new SheetSubmenuViewQueryHandler($navigationBuilder->reveal());
 
-        $handler = new SheetSubmenuViewQueryHandler(
+        $menuButtonViews = $handler->handle($query);
+
+        $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
+    }
+
+    public function testAgendaHandle()
+    {
+        $datetime = new \DateTime();
+        $event    = EventFactory::createEvent();
+        $type     = new Type($event);
+        $user     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
+        $package  = new Package($event, 'package', $datetime);
+        $type->setPackage($package);
+
+        $locale = 'fr';
+        $route  = 'event_agenda';
+
+        $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet, $route);
+
+        // Expected
+        $expectedSubmenuButtonViews = [
+            new SubmenuButtonView(
+                Category::AGENDA_ICON,
+                'agenda.title',
+                'agenda.title.link',
+                true
+            ),
+            new SubmenuButtonView(
+                Category::PLANNING_ICON,
+                'program.title',
+                'program.title.link',
+                false
+            ),
+        ];
+
+        // Mock
+        $navigationBuilder      = $this->prophesize(NavigationBuilderInterface::class);
+        $happeningAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
+
+        $happeningAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+
+        $navigationBuilder->getRoute('event_agenda')->shouldBeCalled()
+            ->willReturn('agenda.title.link');
+
+        $navigationBuilder->getRoute('happening_program')->shouldBeCalled()
+            ->willReturn('program.title.link');
+
+        $handler = new AgendaSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $cartRowRepository->reveal()
+            $happeningAccessChecker->reveal()
         );
 
         $menuButtonViews = $handler->handle($query);

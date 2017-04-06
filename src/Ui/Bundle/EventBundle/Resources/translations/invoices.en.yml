@@ -1,0 +1,5 @@
+invoice.gender.man: Mr
+invoice.gender.woman: Mrs
+invoice.number.title: 'N° invoice'
+invoice.summary.totalExcludeTaxes: 'Total excl. tax'
+invoice.summary.totalIncludeTaxes: 'Total incl. VAT'

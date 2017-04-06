@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
 
 /**
  * Calculate the completeness of translations for each locales of a template.
+ * @deprecated
  */
 class CompletenessCalculator
 {

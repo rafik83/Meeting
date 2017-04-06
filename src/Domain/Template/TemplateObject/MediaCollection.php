@@ -148,4 +148,12 @@ class MediaCollection extends TemplateObject
     {
         return $this->getOption('max');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExportable()
+    {
+        return false;
+    }
 }

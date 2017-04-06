@@ -5,6 +5,8 @@ namespace Proximum\Vimeet\Behat\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -44,6 +46,18 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     protected function getSpoolDir()
     {
         return $this->kernel->getContainer()->getParameter('swiftmailer.spool.default.file.path');
+    }
+
+    /**
+     * Convert "vimeet" string to Vimeet sender mail
+     *
+     * @param string $mail
+     *
+     * @return string
+     */
+    protected function evaluateMail($mail)
+    {
+        return $mail === 'vimeet' ? $this->kernel->getContainer()->getParameter('mailer_sender') : $mail;
     }
 
     /**
@@ -122,6 +136,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     private function checkMailSendToRecipient($type, $email, $recipient, $senderEmail)
     {
+        $email       = $this->evaluateMail($email);
+        $senderEmail = $this->evaluateMail($senderEmail);
+
         $spoolDir = $this->getSpoolDir();
 
         $filesystem = new Filesystem();
@@ -515,7 +532,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     /**
      * @Given I am logged with :email on admin
      */
-    public function iAmLoggedAsAdmin($email)
+    public function iAmLoggedAsAdminWithGivenEmail($email)
     {
         $this->setBaseUrl('http://vimeet.proximum.dev');
         $driver = $this->getSession()->getDriver();
@@ -537,6 +554,35 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
+    }
+
+    /**
+     * @Given I am logged as admin
+     */
+    public function iAmLoggedAsAdmin()
+    {
+        /** @var AdminRepositoryInterface $adminRepository */
+        $adminRepository = $this->kernel->getContainer()->get('repository.admin_repository');
+        $admin = $adminRepository->findOneByRole('ROLE_SUPER_ADMIN');
+
+        if (null !== $admin) {
+            return $this->iAmLoggedAsAdminWithGivenEmail($admin->getEmail());
+        }
+
+        $email = sprintf('%s@example.net', uniqid());
+        $admin = new Admin(
+            $email,
+            'D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO',
+            'YzzBNEhw7I6H5xPuziQEAPAsg5g=',
+            'fr',
+            'Firstname',
+            'Lastname',
+            'ROLE_SUPER_ADMIN',
+            new \DateTime()
+        );
+        $adminRepository->add($admin);
+
+        return $this->iAmLoggedAsAdminWithGivenEmail($email);
     }
 
     /**

@@ -14,8 +14,8 @@
     <br>
 
     {{ macros.button(
-        'mail.sheet.submitted.link'|trans({}, 'mail', mail.locale),
-        url('admin_sheet_details', {'event': mail.event.id, 'sheet': mail.sheet.id})
+        'mail.sheet.show.link'|trans({}, 'mail', mail.locale),
+        url('event_sheet', {'event': mail.event.id, 'sheet': mail.sheet.id})
     ) }}
 
     <br>

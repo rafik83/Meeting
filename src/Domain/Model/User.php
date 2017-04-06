@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\User\Account;
 /**
  * "Compte utilisateur".
  */
-class User extends AbstractUser
+class User extends AbstractUser implements MailRecipientInterface
 {
     /**
      * @var Account
@@ -63,5 +63,41 @@ class User extends AbstractUser
         $this->welcomed = true;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullname()
+    {
+        if (null === $this->account) {
+            return $this->email;
+        }
+
+        return $this->account->getFirstName() . ' '  . $this->account->getLastname();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getFirstName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getLastName();
     }
 }

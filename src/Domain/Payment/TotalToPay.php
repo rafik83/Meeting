@@ -46,7 +46,7 @@ class TotalToPay
     public function getTotal(Sheet $sheet)
     {
         $cart          = $this->cartManager->getCart($sheet);
-        $vatApplicable = $this->vatApplicable->onCart($cart);
+        $vatApplicable = $this->vatApplicable->onSheet($sheet);
         $total         = $cart->getTotal() + $cart->getTotalDiscount();
         $vatToPay      = 0;
 

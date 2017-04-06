@@ -52,6 +52,21 @@ class MeetingRequestView
     public $sheetName;
 
     /**
+     * @var bool
+     */
+    public $isMeetingPublished;
+
+    /**
+     * @var bool
+     */
+    public $isMeetingRequestUpdateLocked;
+    
+    /**
+     * @var bool
+     */
+    public $isSheetSeeable;
+
+    /**
      * MeetingRequestView constructor.
      *
      * @param Sheet              $sheet
@@ -61,6 +76,9 @@ class MeetingRequestView
      * @param \DateTimeInterface $createdAt
      * @param MeetingRequest     $meetingRequest
      * @param PreviewView[]      $previewViews
+     * @param bool               $isMeetingPublished
+     * @param bool               $isMeetingRequestUpdateLocked
+     * @param bool               $isSheetSeeable
      */
     public function __construct(
         Sheet $sheet,
@@ -69,15 +87,21 @@ class MeetingRequestView
         $type,
         \DateTimeInterface $createdAt,
         MeetingRequest $meetingRequest,
-        array $previewViews
+        array $previewViews,
+        $isMeetingPublished = false,
+        $isMeetingRequestUpdateLocked = false,
+        $isSheetSeeable = false
     ) {
-        $this->sheet          = $sheet;
-        $this->sheetName      = $sheetName;
-        $this->state          = $state;
-        $this->type           = $type;
-        $this->createdAt      = $createdAt;
-        $this->meetingRequest = $meetingRequest;
-        $this->previewViews   = $previewViews;
+        $this->sheet                        = $sheet;
+        $this->sheetName                    = $sheetName;
+        $this->state                        = $state;
+        $this->type                         = $type;
+        $this->createdAt                    = $createdAt;
+        $this->meetingRequest               = $meetingRequest;
+        $this->previewViews                 = $previewViews;
+        $this->isMeetingPublished           = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
+        $this->isSheetSeeable               = $isSheetSeeable;
     }
 
     /**

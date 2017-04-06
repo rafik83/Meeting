@@ -21,4 +21,12 @@ class Participant extends TemplateObject
     {
         return isset($this->config['numberOfParticipantShown']) ? $this->config['numberOfParticipantShown'] : INF;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExportable()
+    {
+        return false;
+    }
 }

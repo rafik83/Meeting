@@ -6,27 +6,38 @@
 
 {% block list_title 'admin.order.title'|trans %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 {% block content %}
-    <h1 class="page-header">{{ block('list_title') }}</h1>
+    <h1 class="page-header">
+        {{ block('list_title') }}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+        <form action="{{ path('admin_order_export', { 'event': event.id }) }}" method="GET" class="pull-right" style="margin-left: 10px;">
+            <input type="submit" value="{{ 'admin.order.export.button.label'|trans }}" class="btn btn-sm btn-default"/>
+        </form>
+        {% endif %}
+    </h1>
+
+    {{ form_start(filterPartForm) }}
+        {{ form_row(filterPartForm.product, { 'group_attr': { 'class': 'col-md-8' } }) }}
+        {{ form_row(filterPartForm.enabled) }}
+
+        <div class="col-md-2">
+            <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+        </div>
+    {{ form_end(filterPartForm) }}
 
     {{ form_start(filterForm) }}
-    {{ form_row(filterForm.product, { 'group_attr': { 'class': 'col-md-8' } }) }}
-
-    <div class="col-md-2">
-        <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-    </div>
-
-    {{ form_end(filterForm) }}
-
     <table class="table table-hover">
         <thead>
         <tr>
             <th>{{ 'admin.order.id'|trans }}</th>
-            <th>{{ 'admin.order.sheet'|trans }}</th>
+            <th>{{ macro.choice_as_dropdown(filterForm.enabled, false, false, false, false) }}</th>
             <th>{{ 'admin.order.type'|trans }}</th>
             <th>{{ 'admin.order.follower'|trans }}</th>
             <th>{{ 'admin.order.createdAt'|trans }}</th>
-            <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+            <th class="text-right">{{ 'admin.order.totalWithoutVat'|trans }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -50,10 +61,12 @@
                     {{ order.createdAt|localizeddate('medium', 'short') }}
                 </td>
                 <td class="text-right">
-                    {{ order.total|localizedcurrency(order.currency) }}
+                    {{ order.totalWithoutVat|localizedcurrency(order.currency) }}
                 </td>
                 <td class="text-right">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">{{ 'admin.order_edit.link'|trans }}</a>
+                    {% if order.isInvoiced == false %}
+                        <a class="btn btn-default btn-sm" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">{{ 'admin.order_edit.link'|trans }}</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -64,5 +77,6 @@
         </tbody>
     </table>
 
+    {{ form_end(filterForm, {'render_rest': false}) }}
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': orders }) }}
 {% endblock content %}

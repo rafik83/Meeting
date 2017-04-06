@@ -30,6 +30,11 @@ class AppKernel extends Kernel
             new Liip\ImagineBundle\LiipImagineBundle(),
             new Payum\Bundle\PayumBundle\PayumBundle(),
 
+            // JMS Job Queue
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\AopBundle\JMSAopBundle(),
+            new JMS\JobQueueBundle\JMSJobQueueBundle(),
+
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
             new Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle(),

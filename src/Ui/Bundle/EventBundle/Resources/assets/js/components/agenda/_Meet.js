@@ -1,0 +1,204 @@
+var EventEmitter = require('./_EventEmitter');
+
+/**
+ * Meet
+ *
+ * @param {Agenda} agenda
+ * @param {Element} element
+ */
+function Meet(agenda, element) {
+    EventEmitter.call(this, element);
+
+    this.agenda   = agenda;
+    this.header   = this.element.querySelector('header');
+    this.details  = this.element.querySelector('.details');
+    this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
+    this.start    = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
+    this.end      = this.start + this.duration;
+    this.slots    = [];
+    this.scale    = 1;
+    this.layer    = 0;
+    this.open     = false;
+
+    this.toggleOpen = this.toggleOpen.bind(this);
+    this.setLayer   = this.setLayer.bind(this);
+
+    if (this.element.classList.contains('has-details')) {
+        this.header.addEventListener('click', this.toggleOpen);
+    }
+    this.element.agendaMeet = this;
+}
+
+Meet.prototype = Object.create(EventEmitter.prototype);
+Meet.prototype.constructor = Meet;
+
+/**
+ * Margin: Top + Bottom padding of the ".meet" element.
+ *
+ * @type {Number}
+ */
+Meet.prototype.margin = 3;
+
+/**
+ * Display
+ */
+Meet.prototype.display = function() {
+    this.element.style.top   = this.getTop() + 'px';
+    this.element.style.left  = this.getLeft() + '%';
+    this.element.style.width = this.getWidth() + '%';
+    this.header.style.height = (this.getHeight() - this.margin) + 'px';
+
+    if (this.open) {
+        this.element.classList.add('open');
+        this.element.classList.remove('collapsed');
+    } else {
+        this.element.classList.remove('open');
+
+        if (this.group.isExpanded()) {
+            this.element.classList.add('collapsed');
+        } else {
+            this.element.classList.remove('collapsed');
+        }
+    }
+
+    this.updateScale();
+};
+
+/**
+ * Toggle details
+ *
+ * @param {Event} event
+ */
+Meet.prototype.toggleOpen = function(event) {
+    event.preventDefault();
+    this.open = !this.open;
+    this.emit('change');
+};
+
+/**
+ * Close
+ */
+Meet.prototype.close = function() {
+    this.open = false;
+};
+
+/**
+ * Update scale
+ */
+Meet.prototype.updateScale = function() {
+    var scale = this.resolveScale();
+
+    if (scale !== this.scale) {
+        this.scale = scale;
+        this.emit('scale');
+    }
+};
+
+/**
+ * Resovle scale
+ *
+ * @return {Number}
+ */
+Meet.prototype.resolveScale = function() {
+    if (!this.open) {
+        return 1;
+    }
+
+    return this.element.offsetHeight / (this.duration * this.agenda.scale);
+};
+
+/**
+ * Is open
+ *
+ * @return {Boolean}
+ */
+Meet.prototype.isOpen = function() {
+    return this.open;
+};
+
+/**
+ * Get top position in pixel
+ *
+ * @return {Number}
+ */
+Meet.prototype.getTop = function() {
+    return this.agenda.getY(this.start);
+};
+
+/**
+ * Get top position in pixel
+ *
+ * @return {Number}
+ */
+Meet.prototype.getLeft = function() {
+    if (!this.group) {
+        return 0;
+    }
+
+    return this.group.getLayerLeft(this.layer);
+};
+
+/**
+ * Get width in pixel
+ *
+ * @return {Number}
+ */
+Meet.prototype.getWidth = function() {
+    if (!this.group) {
+        return 100;
+    }
+
+    return this.group.getLayerWidth(this.layer);
+};
+
+/**
+ * Get height in pixel
+ *
+ * @return {Number}
+ */
+Meet.prototype.getHeight = function() {
+    return this.agenda.getY(this.end) - this.agenda.getY(this.start);
+};
+
+/**
+ * Set group
+ *
+ * @param {Group} group
+ */
+Meet.prototype.setGroup = function(group) {
+    this.group = group;
+};
+
+/**
+ * Set layer
+ *
+ * @param {Number} layer
+ */
+Meet.prototype.setLayer = function(layer) {
+    this.layer = layer;
+};
+
+/**
+ * Meet overlap?
+ *
+ * @param {Meet} meet
+ *
+ * @return {Boolean}
+ */
+Meet.prototype.overlap = function(meet) {
+    return this.timeOverlarp(meet.start, meet.end);
+};
+
+/**
+ * Time overlap?
+ *
+ * @param {Date} from
+ * @param {Date} to
+ *
+ * @return {Boolean}
+ */
+Meet.prototype.timeOverlarp = function(from, to) {
+    return this.start < to && this.end > from;
+};
+
+module.exports = Meet;

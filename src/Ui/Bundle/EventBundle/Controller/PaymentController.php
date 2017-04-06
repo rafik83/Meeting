@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
@@ -83,10 +84,14 @@ class PaymentController extends Controller
 
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
-            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
+            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
+                'event' => $eventDomain->getEvent(),
+            ]);
         } else {
             $paymentChoice = new Choice($sheet, $this->getUser());
-            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
+            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
+                'event' => $eventDomain->getEvent(),
+            ]);
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -124,52 +129,35 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
      * @return RedirectResponse
      */
-    public function payRemainingAction(
-        Request $request,
-        EventDomain $eventDomain,
-        Sheet $sheet
-    ) {
+    public function payRemainingAction(EventDomain $eventDomain, Sheet $sheet)
+    {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 
-        if (0 >= $remainingToPay) {
+        if (0 >= $remainingToPay || !$eventDomain->getEvent()->getConfiguration()->isAllowedToPayRemaining()) {
             return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
         }
 
-        $transaction = Transaction::createForPaypal($sheet, $this->getUser(), $remainingToPay, new \DateTime());
+        $transaction = Transaction::createForPaypal(
+            $sheet,
+            $this->getUser(),
+            AmountFormatter::centsToDecimalAmount($remainingToPay),
+            new \DateTime()
+        );
+
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute('event_package_payment_prepare_paypal', [
             'sheet'       => $sheet->getId(),
             'transaction' => $transaction->getId(),
         ]);
-    }
-
-    /**
-     * Only for debug
-     */
-    public function createTempTransactionAction(
-        Request $request,
-        EventDomain $eventDomain,
-        Sheet $sheet
-    ) {
-        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
-
-        $transaction = Transaction::createForPaypal($sheet, $this->getUser(), rand(1, 200), new \DateTime());
-        $this->get('repository.transaction')->add($transaction);
-
-        return $this->redirectToRoute(
-            'event_package_payment_prepare_paypal',
-            ['sheet' => $sheet->getId(), 'transaction' => $transaction->getId()]
-        );
     }
 
     /**

@@ -169,7 +169,7 @@ event_sheet_add_participant:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:addParticipant }
+    defaults: { _controller: EventBundle:SheetParticipant:addParticipant }
 
 event_sheet_handle_participant:
     path:   /sheet/{locale}/{key}/participant/add
@@ -177,7 +177,7 @@ event_sheet_handle_participant:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:handleAddParticipant }
+    defaults: { _controller: EventBundle:SheetParticipant:handleAddParticipant }
 
 event_sheet_remove_participant:
     path:   /sheet/{locale}/{key}/participant/remove/form
@@ -185,7 +185,7 @@ event_sheet_remove_participant:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:removeParticipant }
+    defaults: { _controller: EventBundle:SheetParticipant:removeParticipant }
 
 event_sheet_remove_image:
     path: /sheet/{locale}/{key}/image/remove
@@ -201,7 +201,7 @@ event_sheet_handle_remove_participant:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
+    defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
 
 event_sheet_submit_validation:
     path: /sheet/{sheet}/validate
@@ -308,6 +308,7 @@ event_catalog_sheet_meeting_request:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
+
 #
 # Schedule
 #
@@ -318,13 +319,6 @@ event_sheet_schedule:
         sheet: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Schedule:display }
-
-event_sheet_schedule_add_unavailability:
-    path: /sheet/{sheet}/schedule/unavailability/add
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Schedule:addUnavailability }
 
 event_sheet_schedule_update_unavailability:
     path: /sheet/{sheet}/schedule/unavailability/{unavailability}/update
@@ -341,23 +335,6 @@ event_sheet_schedule_remove_unavailability:
         unavailability: \d+
     methods:  [DELETE]
     defaults: { _controller: EventBundle:Schedule:removeUnavailability }
-
-event_sheet_schedule_participate_happening:
-    path: /sheet/{sheet}/happening/{happening}/participate
-    requirements:
-        sheet: \d+
-        happening: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Schedule:participateHappening }
-
-event_sheet_schedule_unparticipate_happening:
-    path: /sheet/{sheet}/happening/{happening}/unparticipate/{participant}
-    requirements:
-        sheet: \d+
-        happening: \d+
-        participant: \d+
-    methods:  [POST]
-    defaults: { _controller: EventBundle:Schedule:unparticipateHappening }
 
 #
 # Meeting
@@ -427,6 +404,11 @@ event_meeting_request_edit:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:editRequest }
 
+event_meeting_request_export_contact:
+    path: /export-contacts.csv
+    methods: [GET]
+    defaults: { _controller: EventBundle:MeetingRequest:exportContact }
+
 #
 # Notification
 #
@@ -468,7 +450,7 @@ event_package_step:
 
 event_package_add_participant:
     path: /sheet/{sheet}/package/step/{step}/participant/add
-    defaults: { _controller: EventBundle:Package:addParticipant }
+    defaults: { _controller: EventBundle:PackageParticipant:addParticipant }
     requirements:
         sheet: \d+
         step: \d+
@@ -476,7 +458,7 @@ event_package_add_participant:
 
 event_package_remove_participant:
     path: /sheet/{sheet}/package/step/{step}/participant/remove
-    defaults: { _controller: EventBundle:Package:removeParticipant }
+    defaults: { _controller: EventBundle:PackageParticipant:removeParticipant }
     requirements:
         sheet: \d+
         step: \d+
@@ -535,13 +517,6 @@ event_package_payment_pay_remaining:
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:payRemaining }
 
-create_transaction:
-    path: /sheet/{sheet}/create-transaction
-    requirements:
-        sheet: \d+
-    methods: [GET]
-    defaults: { _controller: EventBundle:Payment:createTempTransaction }
-
 event_payment_info:
     path: /sheet/payment
     methods: [GET]
@@ -571,3 +546,57 @@ event_order_summary_total:
         sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Order:summaryTotal }
+
+# This route is available publicly, without authentication
+event_invoice_show:
+    path: /invoice/{sheet}/{hash}z{invoice}.{format} # "z" is a separator
+    requirements:
+        sheet: \d+
+        invoice: \d+
+        format: (html|pdf)
+    methods: [GET]
+    defaults: { _controller: EventBundle:Invoice:show }
+
+#
+# Agenda
+#
+event_agenda:
+    path: /agenda
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:index }
+
+event_agenda_participant:
+    path: /agenda/participant/{participant}
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:participant }
+
+happening_program:
+    path: /program
+    methods: [GET]
+    defaults: { _controller: EventBundle:Program:index }
+
+#
+# Happening
+#
+event_sheet_happening_participate:
+    path: /sheet/{sheet}/happening/{happening}/participate
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Happening:participate }
+
+#
+# Unavailability
+#
+event_unavailability_create:
+    path: /agenda/participant/{participant}/unavailability/create
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Unavailability:create }
+
+event_unavailability_remove:
+    path: /agenda/participant/{participant}/unavailability/{unavailability}/remove
+    methods: [DELETE]
+    requirements:
+        unavailability: \d+
+    defaults: { _controller: EventBundle:Unavailability:remove }

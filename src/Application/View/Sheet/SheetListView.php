@@ -122,6 +122,11 @@ class SheetListView
     public $spotReference;
 
     /**
+     * @var int
+     */
+    public $countParticipant;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
@@ -138,6 +143,7 @@ class SheetListView
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
+     * @param int                  $countParticipant
      * @param string|null          $spotReference
      * @param Trace|null           $trace
      */
@@ -154,8 +160,9 @@ class SheetListView
         SheetParticipantView $owner,
         $follower,
         \DateTimeInterface $createdAt,
-        \DateTimeInterface $lastLoginAt,
+        \DateTimeInterface $lastLoginAt = null,
         $impersonationToken,
+        $countParticipant,
         $spotReference = null,
         Trace $trace = null
     ) {
@@ -174,6 +181,7 @@ class SheetListView
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
         $this->spotReference      = $spotReference;
+        $this->countParticipant   = $countParticipant;
 
         if (null !== $trace) {
             $this->traceAction = $trace->getAction();

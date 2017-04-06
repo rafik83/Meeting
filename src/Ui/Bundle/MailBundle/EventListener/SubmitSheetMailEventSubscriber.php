@@ -20,6 +20,10 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetSubmittedMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Notify follower or all organizers allowed to manage this sheet
+ * when user submit its sheet
+ */
 class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
 {
     /**
@@ -105,14 +109,10 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         if ($follower !== null) {
             $admins[] = $follower;
         } else {
-            // notify all organizer and partner allowed to manage this sheet
+            // notify all organizer allowed to manage this sheet
             $admins = array_merge($admins,
                 $this->adminRepository->getAllowedOrganizer(
                     $event->getSheet()->getEvent()
-                ),
-                $this->adminRepository->getAllowedPartner(
-                    $event->getSheet()->getEvent(),
-                    $event->getSheet()->getType()
                 )
             );
         }

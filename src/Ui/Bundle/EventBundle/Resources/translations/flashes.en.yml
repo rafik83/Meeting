@@ -1,3 +1,5 @@
+flash.meeting_request.approved.request.edit.success: 'You have changed the meeting request'
+flash.meeting_request.pending.request.edit.success: 'You have changed the meeting request'
 flash.package.promotionCode.error.alreadyExist: 'Promotional code already used'
 flash.package.promotionCode.error.codeConflict: 'Code in conflict with existing code'
 flash.package.promotionCode.error.negativeRow: 'The promotional code can not be applied to a negative balance'

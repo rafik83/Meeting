@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class AddRowToProductTest extends \PHPUnit_Framework_TestCase
@@ -45,10 +46,12 @@ class AddRowToProductTest extends \PHPUnit_Framework_TestCase
 
         $orderRepository->set($order->reveal())->shouldBeCalled();
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         $add = new AddRowToProduct($order->reveal(), $row);
 
         // Handler
-        $handler = new AddRowToProductHandler($orderRepository->reveal());
+        $handler = new AddRowToProductHandler($orderRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($add);
     }
 }

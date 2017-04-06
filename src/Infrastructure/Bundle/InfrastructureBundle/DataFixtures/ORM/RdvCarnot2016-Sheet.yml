@@ -6,52 +6,47 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_exposant'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
-                # Image
-                1b9a00b3: { file: "onera.jpg" }
+                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
                 # Lien
-                90713a3d: { url: "http://www.onera.fr/" }
+                90713a3d: { url: "<url()>" }
                 # Description d'activité
-                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
+                d691d21c: { text: { fr: "<sentence()>" } }
             - '@user_test'
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: 'WorldCompanyInc' }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
+            57da8f210fbf2: { text: "<sentence()>" }
         owner: '@user_test'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        inCatalog: true
 
     # Proximum sheets
     proximum_sheet_visiteur:
         __construct:
-         - '@event_rdv_carnot_2016'
-         - '@type_visiteur'
-         -
-             # Titre de la fiche
-             dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
-             # Image
-             1b9a00b3: { file: "onera.jpg" }
-             # Lien
-             90713a3d: { url: "http://www.onera.fr/" }
-             # Description d'activité
-             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
-         - '@proximum_user_visiteur'
-         - <dateTime()>
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur'
+            -
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                # Lien
+                90713a3d: { url: "<url()>" }
+                # Description d'activité
+                d691d21c: { text: { fr: "<sentence()>" } }
+            - '@proximum_user_visiteur'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
+            57da8f210fbf2: { text: "<sentence()>" }
         lastLoginAt: <dateTime()>
     proximum_sheet_exposant:
         __construct:
@@ -59,25 +54,23 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_institute_carnot'
             -
             # Titre de la fiche
-                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
-                # Image
-                1b9a00b3: { file: "onera.jpg" }
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
                 # Lien
-                90713a3d: { url: "http://www.onera.fr/" }
+                90713a3d: { url: "<url()>" }
                 # Description d'activité
-                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
+                d691d21c: { text: { fr: "<sentence()>" } }
             - '@proximum_user_exposant'
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
+            57da8f210fbf2: { text: "<sentence()>" }
         owner: '@proximum_user_exposant'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_carnot:
         __construct:
@@ -88,14 +81,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
+            57da8f210fbf2: { text: "<sentence()>" }
         owner: '@proximum_user_carnot'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_admin:
         __construct:
@@ -106,14 +98,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
+            57da8f210fbf2: { text: "<sentence()>" }
         owner: '@proximum_user_admin'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_test:
         __construct:
@@ -124,13 +115,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
+            57da8f210fbf2: { text: "<sentence()>" }
         lastLoginAt: <dateTime()>
     proximum_sheet_ui:
         __construct:
@@ -141,14 +131,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-            93de093f: { text: "10 rue saint marc" }
-            de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
-            57da8f210fbf2: { text: "Mon activité" }
+            57da8f210fbf2: { text: "<sentence()>" }
         owner: '@proximum_user_ui'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     # Random
@@ -157,19 +146,18 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@event_rdv_carnot_2016'
             - '@type_exposant'
             -
-            # Titre de la fiche
-                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
-                # Image
-                1b9a00b3: { file: "onera.jpg" }
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
                 # Lien
-                90713a3d: { url: "http://www.onera.fr/" }
+                90713a3d: { url: "<url()>" }
                 # Description d'activité
-                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
+                d691d21c: { text: { fr: "<sentence()>" } }
             - '@user_random_1'
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_exposant2:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -180,6 +168,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_exposant3:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -190,6 +179,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_exposant4:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -200,6 +190,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_exposant5:
         __construct:
              - '@event_rdv_carnot_2016'
@@ -210,6 +201,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_exposant6:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -220,6 +212,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_exposant7:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -241,6 +234,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_investisseur2:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -262,6 +256,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_visiteur2:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -283,6 +278,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: <company()> }
         lastLoginAt: <dateTime()>
+
     sheet_visiteur_visio2:
         __construct:
             - '@event_rdv_carnot_2016'
@@ -292,4 +288,28 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+        lastLoginAt: <dateTime()>
+
+    # Sheet with invoice
+    sheet_with_invoice:
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur'
+            -
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                # Lien
+                90713a3d: { url: "<url()>" }
+                # Description d'activité
+                d691d21c: { text: { fr: "<sentence()>" } }
+            - '@proximum_user_visiteur'
+            - <dateTime()>
+        registrationData:
+            3ad4b72f: { text: <company()> }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "<sentence()>" }
         lastLoginAt: <dateTime()>

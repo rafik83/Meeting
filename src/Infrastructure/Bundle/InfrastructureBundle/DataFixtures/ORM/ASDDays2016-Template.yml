@@ -128,6 +128,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                     fr: ''
                                 required: false
                                 default: 1
+                                objective: none
                         75adad94:
                             component: block
                             type: 6-6
@@ -609,6 +610,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             placeholder:
                                                 en: Your offers
                                                 fr: Vos offres
+                                            objective: supply
                                     63ccc105:
                                         component: object
                                         type: nomenclature
@@ -625,6 +627,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             placeholder:
                                                 en: Your needs
                                                 fr: Vos besoins
+                                            objective: need
                             config:
                                 style: style-2
                 config:

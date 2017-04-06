@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class Gender extends EditableObject implements ContentObjectInterface
+class Gender extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
     const MAN   = 'man';
     const WOMAN = 'woman';
@@ -76,5 +76,35 @@ class Gender extends EditableObject implements ContentObjectInterface
     public function setContentValue($value)
     {
         $this->setGender($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent(array $taggedData = [])
+    {
+        $result = $this->getContentValue();
+
+        if (!empty($result)) {
+            return $result;
+        }
+
+        if (isset($taggedData[$this->getTag()])) {
+            if (is_array($taggedData[$this->getTag()])) {
+                return implode(', ', $taggedData[$this->getTag()]);
+            }
+
+            return $taggedData[$this->getTag()];
+        }
+
+        return '';
     }
 }

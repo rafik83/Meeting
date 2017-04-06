@@ -43,16 +43,38 @@ class MeetingView
     public $createdAt;
 
     /**
+     * @var int
+     */
+    public $sheetFromId;
+
+    /**
+     * @var int
+     */
+    public $sheetToId;
+
+    /**
      * @param int                $id
+     * @param int                $sheetFromId
+     * @param int                $sheetToId
      * @param string             $sheetNameFrom
      * @param string             $sheetNameTo
      * @param \DateTimeInterface $createdAt
      * @param \DateTimeInterface $slotBegin
      * @param \DateTimeInterface $slotEnd
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, \DateTimeInterface $createdAt, \DateTimeInterface $slotBegin, \DateTimeInterface $slotEnd)
-    {
+    public function __construct(
+        $id,
+        $sheetFromId,
+        $sheetToId,
+        $sheetNameFrom,
+        $sheetNameTo,
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $slotBegin,
+        \DateTimeInterface $slotEnd
+    ) {
         $this->id            = $id;
+        $this->sheetFromId   = $sheetFromId;
+        $this->sheetToId     = $sheetToId;
         $this->sheetNameFrom = $sheetNameFrom;
         $this->sheetNameTo   = $sheetNameTo;
         $this->createdAt     = $createdAt;

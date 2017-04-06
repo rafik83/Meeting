@@ -16,7 +16,9 @@ use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\Order\Find;
+use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -31,7 +33,9 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,13 +57,37 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($admin);
 
-        $orderForm       = null;
+        $transactionForm = null;
+        $invoiceExportForm = null;
+
+        if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+            $filterTransaction = new FilterTransaction($admin);
+            $transactionForm   = $this->createForm(
+                FilterTransactionType::class,
+                $filterTransaction,
+                [
+                    'action' => $this->generateUrl('admin_event_transaction_export'),
+                    'submit' => true,
+                ]
+            );
+
+            $invoiceExport     = new Export($admin);
+            $invoiceExportForm = $this->createForm(
+                ExportType::class,
+                $invoiceExport,
+                [
+                    'action' => $this->generateUrl('admin_invoice_export'),
+                    'submit' => true,
+                ]
+            );
+        }
+
+        $orderForm = null;
         $formIsSubmitted = false;
 
         if (Finder::IsAllowedToFind($admin)) {
-            $find      = new Find($admin);
+            $find = new Find($admin);
             $orderForm = $this->createForm(FindType::class, $find);
-
             $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
 
             if ($formIsSubmitted && $orderForm->isValid()) {
@@ -96,9 +124,11 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'         => $events,
-            'orderForm'      => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive' => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'events'            => $events,
+            'orderForm'         => $orderForm !== null ? $orderForm->createView() : null,
+            'orderTabActive'    => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
+            'transactionForm'   => $transactionForm !== null ? $transactionForm->createView() : null,
+            'invoiceExportForm' => $invoiceExportForm !== null ? $invoiceExportForm->createView() : null,
         ]);
     }
 
@@ -167,7 +197,8 @@ class EventController extends Controller
 
         $form = $this->createForm(UpdateType::class, $update, [
             'locales'       => $event->getLocales(),
-            'currentLocale' => $request->getLocale(),
+            'currentLocale' => $event->getAvailableLocale($request->getLocale()),
+            'event'         => $event,
             'submit'        => true,
             'action'        => $this->generateUrl('admin_event_update', ['event' => $event->getId()]),
         ]);

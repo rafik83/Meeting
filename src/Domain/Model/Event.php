@@ -11,12 +11,15 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
+use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 
 /**
  * "Evènement".
  */
-class Event implements EventInterface
+class Event implements EventInterface, TraceableInterface
 {
     /**
      * All Taxes Include : prices include taxes, no additional taxes computed
@@ -26,7 +29,7 @@ class Event implements EventInterface
     /**
      * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
      */
-    const VAT_MODE_ET  = 'et';
+    const VAT_MODE_ET = 'et';
 
     /**
      * @var int
@@ -47,6 +50,16 @@ class Event implements EventInterface
      * @var string
      */
     private $logo;
+
+    /**
+     * @var string
+     */
+    private $invoiceLogo;
+
+    /**
+     * @var string
+     */
+    private $invoiceLogoExtension;
 
     /**
      * @var string
@@ -89,7 +102,7 @@ class Event implements EventInterface
     private $legalInformation;
 
     /**
-     * @var string
+     * @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const
      */
     private $mode;
 
@@ -138,6 +151,16 @@ class Event implements EventInterface
     private $emailTeam;
 
     /**
+     * @var ArrayCollection
+     */
+    private $days;
+
+    /**
+     * @var null|Prefix
+     */
+    private $invoicePrefix;
+
+    /**
      * @param string      $title
      * @param string      $fallback
      * @param array       $locales
@@ -149,6 +172,7 @@ class Event implements EventInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
+     * @param Prefix $invoicePrefix
      */
     public function __construct(
         $title,
@@ -161,11 +185,13 @@ class Event implements EventInterface
         $timeZone,
         $domain,
         $organiserName,
-        $emailTeam
+        $emailTeam,
+        Prefix $invoicePrefix
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
         $this->paymentAddress = new Address('', '', '', '');
+        $this->days           = new ArrayCollection();
         $this->title          = $title;
         $this->fallback       = $fallback;
         $this->locales        = $locales;
@@ -177,6 +203,8 @@ class Event implements EventInterface
         $this->domain         = $domain;
         $this->organiserName  = $organiserName;
         $this->emailTeam      = $emailTeam;
+        $this->invoicePrefix  = $invoicePrefix;
+        $this->assetPath      = '';
     }
 
     /**
@@ -380,6 +408,32 @@ class Event implements EventInterface
     }
 
     /**
+     * @return string
+     */
+    public function getInvoiceLogo()
+    {
+        return $this->invoiceLogo;
+    }
+
+    /**
+     * @param string $invoiceLogo
+     * @param string $invoiceLogoExtension
+     */
+    public function setInvoiceLogo($invoiceLogo, $invoiceLogoExtension)
+    {
+        $this->invoiceLogo = $invoiceLogo;
+        $this->invoiceLogoExtension = $invoiceLogoExtension;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceLogoExtension()
+    {
+        return $this->invoiceLogoExtension;
+    }
+
+    /**
      * @return string|null
      */
     public function getEmailTeam()
@@ -399,6 +453,7 @@ class Event implements EventInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
+     * @param null|Prefix $invoicePrefix
      */
     public function update(
         $title,
@@ -411,7 +466,8 @@ class Event implements EventInterface
         $timeZone,
         $domain,
         $organiserName,
-        $emailTeam
+        $emailTeam,
+        Prefix $invoicePrefix
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
@@ -424,6 +480,7 @@ class Event implements EventInterface
         $this->domain        = $domain;
         $this->organiserName = $organiserName;
         $this->emailTeam     = $emailTeam;
+        $this->invoicePrefix = $invoicePrefix;
     }
 
     /**
@@ -493,13 +550,21 @@ class Event implements EventInterface
     }
 
     /**
-     * Get mode
+     * Get VAT mode
      *
      * @return string
      */
     public function getMode()
     {
         return $this->mode;
+    }
+
+    /**
+     * Set Vat mode to VAT_MODE_ET
+     */
+    public function setVatModeToExclusiveOfTaxes()
+    {
+        $this->mode = self::VAT_MODE_ET;
     }
 
     /**
@@ -527,6 +592,14 @@ class Event implements EventInterface
     }
 
     /**
+     * @return Prefix
+     */
+    public function getInvoicePrefix()
+    {
+        return $this->invoicePrefix;
+    }
+
+    /**
      * @return string
      */
     public function getCurrency()
@@ -548,5 +621,69 @@ class Event implements EventInterface
     public function isSvgLogo()
     {
         return $this->logoExtension === 'svg';
+    }
+
+    /**
+     * @param Event\Day[] $days
+     */
+    public function setDays(array $days)
+    {
+        foreach ($days as $day) {
+            $this->days->add($day);
+        }
+    }
+
+    /**
+     * @return Event\Day[]
+     */
+    public function getDays()
+    {
+        $days = $this->days->toArray();
+
+        usort($days, function (Day $day1, Day $day2) {
+            return $day1->getDay() > $day2->getDay();
+        });
+
+        return $days;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceableName()
+    {
+        return 'event';
+    }
+
+    /**
+     * @return Event\Day
+     *
+     * @throws DayNotDefinedException
+     */
+    public function getFirstDay()
+    {
+        $days = $this->days->toArray();
+
+        if (empty($days)) {
+            throw new DayNotDefinedException();
+        }
+
+        usort($days, function (Day $day1, Day $day2) {
+            return $day1->getDay() > $day2->getDay();
+        });
+
+        return reset($days);
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getOpenDate()
+    {
+        try {
+            return $this->getFirstDay()->getStartTime();
+        } catch (DayNotDefinedException $exception) {
+            return null;
+        }
     }
 }

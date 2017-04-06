@@ -1,0 +1,6 @@
+gender.man: Mr
+gender.woman: Mrs
+order.column.product.quantity: '%productTitle% : quantity (excl. tax)'
+order.column.product.total: '%productTitle% : calculated price (excl. tax)'
+order.column.product.unitPrice: '%productTitle% : unit price (excl. tax)'
+order.column.promotionCode.total: '%promotionCodeTitle% : Total (excl. tax)'

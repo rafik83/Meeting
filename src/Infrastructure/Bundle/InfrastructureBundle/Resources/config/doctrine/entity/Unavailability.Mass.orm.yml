@@ -1,0 +1,43 @@
+Proximum\Vimeet\Domain\Model\Unavailability\Mass:
+    type:  entity
+    table: mass_unavailability
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        begin:
+            type: datetime
+        end:
+            type: datetime
+        blocking:
+            type: boolean
+            options:
+                default: true
+        dispatch:
+            type: boolean
+            options:
+                default: false
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\MassTranslation
+            mappedBy: mass
+            indexBy: locale
+            cascade: ['persist']
+        timeSlots:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\MassTimeSlot
+            mappedBy: mass
+            cascade: ['persist', 'remove']
+            orphanRemoval: true
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+        category:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Category
+            joinColumn:
+                onDelete: CASCADE

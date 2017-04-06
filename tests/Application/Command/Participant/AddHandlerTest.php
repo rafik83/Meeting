@@ -103,7 +103,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $event,
             $expectedActivateAccountToken,
             'fr',
-            $user
+            $user,
+            $sheet
         );
 
         $sheetAddConfirmationEvent = new SheetAddParticipantEvent(

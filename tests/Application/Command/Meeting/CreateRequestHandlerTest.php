@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -60,8 +61,16 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         // Handler
-        $handler = new CreateRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $dateTime);
+        $handler = new CreateRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $dateTime
+        );
+
         $result = $handler->handle($createRequest);
 
         $meetingRequestResult = new CreateRequestResult($expectedRequest);

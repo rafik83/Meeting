@@ -1,0 +1,39 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'admin.messaging.campaign.recipients.title'|trans }}
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ 'admin.messaging.campaign.recipients.title'|trans }}</h1>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            {{ form_start(form) }}
+            {{ form_row(form.recipients, {'label': false}) }}
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-md-4">
+            <h2>{{ 'admin.messaging.campaign.selected_sheets'|trans }}</h2>
+            <ul>
+                {% for sheet in campaign.getSheets %}
+                    <li>{{ sheet.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-8">
+            <h2>{{ 'admin.messaging.campaign.selected_filters'|trans }}</h2>
+            <div class="filters-summary">
+                {% for criterion, value in campaign.filters %}
+                    <span class="label label-default">{{ criterion }}: {{ value }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

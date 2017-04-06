@@ -7,36 +7,16 @@
     {% endif %}
     <div class="section__content">
         <ul>
-            {% for tag in item.tags %}
-                <li class="highlight">
-                    {% set value = taggedData[tag.tag]|default([])|join(', ') %}
-                    {% if tag.tag in ["sheet_country", "participant_country"] %}
-                        {% for taggedInfo in taggedData[tag.tag]|default([]) %}
-                            {% if not isCatalog %}
-                                <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
-                            {% endif %}
-
-                            {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
-
-                            {% if not isCatalog %}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {% if value is url %}
-                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}</a>
-                        {% else %}
-                            {% if not isCatalog %}
-                                <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
-                            {% endif %}
-
-                            {{ value }}
-
-                            {% if not isCatalog %}
-                                </a>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
+            {% for taggedDataView in item.taggedDataViews %}
+                <li class="{{ taggedDataView.isTextarea == false ? 'highlight' : '' }}" style="{{ taggedDataView.isTextarea ? 'color: #333333 !important': '' }}">
+                    {{ include('EventBundle:Sheet/Tag:' ~ taggedDataView.type ~ '.html.twig', {
+                        'sheet': sheet,
+                        'taggedDataView': taggedDataView,
+                        'locale': locale,
+                        'label': label,
+                        'isCatalog': isCatalog,
+                        'loop': loop
+                    }, false) }}
                 </li>
             {% endfor %}
         </ul>

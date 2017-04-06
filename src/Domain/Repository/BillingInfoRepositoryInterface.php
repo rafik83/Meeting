@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface BillingInfoRepositoryInterface
@@ -18,9 +19,16 @@ interface BillingInfoRepositoryInterface
     /**
      * @param Sheet $sheet
      *
-     * @return BillingInfo
+     * @return null|BillingInfo
      */
     public function getBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet[] $sheets
+     *
+     * @return BillingInfo[]
+     */
+    public function getBySheets(array $sheets);
 
     /**
      * @param BillingInfo $billingInfo
@@ -31,4 +39,11 @@ interface BillingInfoRepositoryInterface
      * @param BillingInfo $billingInfo
      */
     public function set(BillingInfo $billingInfo);
+
+    /**
+     * @param Event $event
+     *
+     * @return BillingInfo[]
+     */
+    public function findByEvent(Event $event);
 }

@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class CompleteProfileMail extends Mail
+class CompleteProfileMail extends UserMail
 {
     /**
      * @var string
@@ -42,14 +43,36 @@ class CompleteProfileMail extends Mail
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Participant $participant
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $locale
+     * @var string
      */
-    public function __construct(Participant $participant, $sender, $receiver, $locale)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $participant->getSheet()->getEvent());
+    protected $firstname;
+
+    /**
+     * @var string
+     */
+    protected $lastname;
+
+    /**
+     * @param Participant         $participant
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
+     */
+    public function __construct(
+        Participant $participant,
+        $sender,
+        $receiver,
+        $locale,
+        ParticipantInfoView $participantInfoView
+    ) {
+        parent::__construct(
+            $sender,
+            $receiver,
+            $locale,
+            $participant->getSheet()->getEvent(),
+            $participantInfoView
+        );
 
         $this->participant = $participant;
     }

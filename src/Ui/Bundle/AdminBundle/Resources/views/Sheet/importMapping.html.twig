@@ -1,0 +1,9 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.participant_import_mapping.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.mappings) }}
+{% endblock %}
+
+{% block goback_link path('admin_sheet', {event: event.id}) %}

@@ -10,16 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Happening\Participate;
-use Proximum\Vimeet\Application\Command\Happening\Unparticipate;
-use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateHappeningType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
-use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -28,6 +21,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @deprecated See ProgramController and HappeningController
+ */
 class ScheduleController extends Controller
 {
     /**
@@ -61,43 +57,6 @@ class ScheduleController extends Controller
             'event'                => $eventDomain->getEvent(),
             'participantSchedules' => $participantSchedules,
             'sheet'                => $sheet,
-        ]);
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function addUnavailabilityAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if ($sheet->getEvent() !== $eventDomain->getEvent() || null === $sheet->getUserParticipant($this->getUser())) {
-            throw $this->createNotFoundException('The current User is not allowed to create an unavailibity');
-        }
-
-        $command = new Add();
-        $form    = $this->createForm(AddUnavailabilityType::class, $command, [
-            'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', ['sheet' => $sheet->getId()]),
-            'method' => 'POST',
-            'sheet'  => $sheet,
-            'locale' => $request->getLocale(),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.event.schedule.unavailability.add.success');
-
-            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
-        }
-
-        return $this->render('EventBundle:Schedule:addUnavailability.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
         ]);
     }
 
@@ -163,88 +122,6 @@ class ScheduleController extends Controller
         $command = new Remove($unavailability);
         $this->get('tactician.commandbus')->handle($command);
         $this->addFlash('success', 'flash.event.schedule.unavailability.remove.success');
-
-        return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
-     * @param Happening $happening
-     *
-     * @return RedirectResponse|Response
-     */
-    public function participateHappeningAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$this
-            ->get('domain.key_dates.checker.happenings_access_checker')
-            ->allowedToAccess($eventDomain->getEvent())
-        ) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
-            || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
-            || null === $sheet->getUserParticipant($this->getUser())
-        ) {
-            throw $this->createNotFoundException('Event not linked to this happening');
-        }
-
-        // Get user participant
-        $participant = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
-
-        // Command and form
-        $command = new Participate($happening, [$participant]);
-        $form    = $this->createForm(ParticipateHappeningType::class, $command, [
-            'sheet'     => $sheet,
-            'happening' => $happening,
-            'locale'    => $request->getLocale(),
-            'submit'    => true,
-        ]);
-
-        // Handle form
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-
-            $this->addFlash('success', 'flash.event.schedule.happening.participate.success');
-
-            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
-        }
-
-        return $this->render('EventBundle:Schedule:participateHappening.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'sheet'     => $sheet,
-            'happening' => $happening,
-            'form'      => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param EventDomain   $eventDomain
-     * @param Sheet       $sheet
-     * @param Happening   $happening
-     * @param Participant $participant
-     *
-     * @return RedirectResponse
-     */
-    public function unparticipateHappeningAction(EventDomain $eventDomain, Sheet $sheet, Happening $happening, Participant $participant)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
-            || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
-            || null === $sheet->getUserParticipant($this->getUser())
-        ) {
-            throw $this->createNotFoundException('Event not linked to this happening');
-        }
-
-        $this->get('tactician.commandbus')->handle(new Unparticipate($happening, $participant));
-        $this->addFlash('success', 'flash.event.schedule.happening.unparticipate.success');
 
         return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
     }

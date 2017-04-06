@@ -12,6 +12,12 @@ namespace Proximum\Vimeet\Application\Components\Navigation;
 
 final class Route
 {
+    const SHEET = [
+        'event_sheet',
+        'event_sheet_locale',
+        'event_sheet_update',
+    ];
+
     const CATALOG = [
         'event_catalog_index',
         'event_catalog_complete_sheet',
@@ -45,8 +51,28 @@ final class Route
     ];
 
     const NOTIFICATION = [
-        'event_notification_list'
+        'event_notification_list',
     ];
+
+    const AGENDA = [
+        'event_agenda',
+        'event_agenda_participant',
+        'event_unavailability_create',
+    ];
+
+    const PROGRAM = [
+        'happening_program',
+    ];
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isSheet($route)
+    {
+        return in_array($route, self::SHEET);
+    }
 
     /**
      * @param string $route
@@ -86,5 +112,25 @@ final class Route
     public static function isNotification($route)
     {
         return in_array($route, self::NOTIFICATION);
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isAgenda($route)
+    {
+        return in_array($route, self::AGENDA);
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isProgram($route)
+    {
+        return in_array($route, self::PROGRAM);
     }
 }

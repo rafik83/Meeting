@@ -17,15 +17,20 @@ use Elastica\Filter\Query as FilterQuery;
 use Elastica\Filter\Term;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
+use Elastica\Result;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
+use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -62,19 +67,23 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $limit,
         $locale,
         $getAggregations,
-        array $nomenclatureItems = []
+        $nomenclatureItems = []
     ) {
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, count($nomenclatureItems));
+        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])) ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]) : 0;
+
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
-            $query   = new Query($builder->getQuery());
+            $query = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
 
-        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
+        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy &&
+            isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+        ) {
             $functionScore = new FunctionScore();
             $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
 
-            foreach ($nomenclatureItems as $key) {
+            foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
                 $nested = new \Elastica\Filter\Nested();
                 $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
                 $nested->setPath('nomenclatureItems');
@@ -84,9 +93,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query = $functionScore->setQuery($builder->getQuery());
             $query = new Query($query);
             $query->addSort(['_score' => 'desc']);
-
-        } else {
+        } elseif (Constant::ORDER_BY_CREATED_AT === $orderBy) {
             $query   = new Query($builder->getQuery());
+            $query->addSort(['createdAt' => 'desc']);
+        } else {
+            $query = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
         }
 
@@ -117,9 +128,55 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetListView(Event $event, array $filters, $locale)
+    {
+        $results = $this->getSearchResults($event, $filters, $locale);
+
+        return array_map(function (Result $result) {
+            return new SheetListView($result->id, $result->sheetName);
+        }, $results);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetIdsView(Event $event, array $filters, $locale)
+    {
+        $results = $this->getSearchResults($event, $filters, $locale);
+
+        $sheetIds = array_map(function (Result $result) {
+            return $result->id;
+        }, $results);
+
+        return new SheetIdsView($sheetIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale)
+    {
+        $results = $this->getSearchResults($event, $filters, $locale);
+
+        $sheetIds = array_map(function (Result $result) {
+            return $result->id;
+        }, $results);
+
+        return new ParticipantsSheetIdsView($sheetIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalization(Event $event, $filter, $locale)
     {
-        $query = new Query();
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $locale
+        );
+
+        $query = new Query($builder->getQuery());
         $query->addAggregation($this->findCityQuery($event, $filter))
             ->addAggregation($this->findCountryQuery($event, $filter, $locale))
             ->setSize(0);
@@ -132,6 +189,12 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function findKeyword(Event $event, $filter, $locale)
     {
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $locale
+        );
+
         $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
@@ -159,7 +222,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterKeywordsEvent = new Filter('keywords', $filterEventQuery);
         $filterKeywordsEvent->addAggregation($nestedKeywordsAggregations);
 
-        $query = new Query();
+        $query = new Query($builder->getQuery());
         $query->addAggregation($filterKeywordsEvent)
             ->addAggregation($this->findSheetnameQuery($event, $filter))
             ->setSize(0);
@@ -201,6 +264,21 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $filterToRemove,
             self::ES_FIELD_POSITION
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getSearchResults(Event $event, array $filters, $locale)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+
+        $query = new Query($builder->getQuery());
+        $query->addSort(['sheetName' => 'asc']);
+
+        $options = ["size" => 100000];
+
+        return $this->searchable->search($query, $options)->getResults();
     }
 
     /**

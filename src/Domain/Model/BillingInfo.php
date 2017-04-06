@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class BillingInfo
+class BillingInfo implements MailRecipientInterface
 {
     /**
      * @var int
@@ -91,6 +91,11 @@ class BillingInfo
     private $gender;
 
     /**
+     * @var string
+     */
+    private $reference;
+
+    /**
      * BillingInfo constructor.
      *
      * @param Sheet $sheet
@@ -112,6 +117,7 @@ class BillingInfo
      * @param string  $company
      * @param Address $address
      * @param string  $vatNumber
+     * @param string  $reference
      */
     public function update(
         $gender,
@@ -123,7 +129,8 @@ class BillingInfo
         $email,
         $company,
         Address $address,
-        $vatNumber
+        $vatNumber,
+        $reference
     ) {
         $this->gender    = $gender;
         $this->lastname  = $lastname;
@@ -135,6 +142,7 @@ class BillingInfo
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
+        $this->reference = $reference;
     }
 
     /**
@@ -183,6 +191,14 @@ class BillingInfo
     public function getCompleteName()
     {
         return $this->firstname . ' ' .  $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullname()
+    {
+        return $this->getCompleteName();
     }
 
     /**
@@ -264,6 +280,14 @@ class BillingInfo
     }
 
     /**
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
      * @param string  $firstname
      * @param string  $lastname
      * @param string  $function
@@ -314,5 +338,13 @@ class BillingInfo
             && null !== $this->address->getZipcode()
             && null !== $this->address->getCity()
             && null !== $this->address->getCountry();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->getSheet()->getOwnerLocale();
     }
 }

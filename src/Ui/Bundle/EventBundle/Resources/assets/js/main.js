@@ -12,10 +12,13 @@ var $                     = require('jquery'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
+    Agenda                = require('./components/agenda/_Agenda'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
-    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
+    Happening             = require('./components/_Happening'),
+    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
+    CatalogPagination     = require('./components/_CatalogPagination');
 
 require('bootstrap');
 require('elao-form.js');
@@ -25,7 +28,6 @@ require('select2');
 function init (target) {
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
-    $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
@@ -38,7 +40,7 @@ function init (target) {
             allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
-    
+
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
         var anchor         = window.location.hash.substring(1);
         var anchorElements = target.getElementsByName(anchor);
@@ -70,6 +72,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
         new CatalogSheetCard(element, document.getElementById('request-modal'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.agenda'), function (element) {
+        new Agenda(element);
     });
 
     $('.dropdown-menu', target).on('click', function (e) {
@@ -152,8 +158,16 @@ function init (target) {
         new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
     });
 
+    [].forEach.call(target.querySelectorAll('.happening'), function (element) {
+        new Happening(element, document.getElementById('happening-modal'));
+    });
+
     [].forEach.call(target.querySelectorAll('form'), function (element) {
         new PreventMultipleSubmit(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-page]'), function (element) {
+        new CatalogPagination(element);
     });
 }
 

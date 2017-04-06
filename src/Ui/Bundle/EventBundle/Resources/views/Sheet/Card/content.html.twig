@@ -1,10 +1,22 @@
 {% for object in preview %}
     {% if object.isImage %}
         {% if object.content is not empty %}
-            <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+            <div class="image-placeholder">
+                <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+            </div>
         {% else %}
             <h3>{{ title }}</h3>
         {% endif %}
+    {% elseif object.isParticipant %}
+        <div class="list list--users">
+            {% for participant in object.cardViews %}
+                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog}) }}
+            {% endfor %}
+        </div>
+    {% elseif object.isTag %}
+        {% for tag in object.tagViews %}
+            {{ include('EventBundle:Sheet/Card/Tag:' ~ tag.type ~ '.html.twig', {'tag': tag}, false) }}
+        {% endfor %}
     {% else %}
         {% if object.isStrong %}
             <p><strong>{{ object.content }}</strong></p>

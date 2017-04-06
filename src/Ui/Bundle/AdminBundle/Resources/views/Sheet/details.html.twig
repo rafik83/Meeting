@@ -28,7 +28,7 @@
 
             {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
                 <span class="label label-{{ details.remainingToPay == 0 ? 'success' : 'danger' }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.remainingToPay'|trans }}">
-                    {{ details.remainingToPay|localizedcurrency(event.currency) }}
+                    {{ details.remainingToPay|format_amount|localizedcurrency(event.currency) }}
                 </span>
             {% endif %}
             <span class="label label-{{ details.completenessStatus }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.completeness'|trans }}">
@@ -69,9 +69,11 @@
 
                 {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
                     <div role="tabpanel" class="tab-pane" id="sheetOrders">
-                        {{ include('AdminBundle:Sheet/Partial:orders.html.twig', { event: event, sheet: sheet, orders: details.orders }, false) }}
+                        {{ include('AdminBundle:Sheet/Partial:orders.html.twig', { event: event, sheet: sheet, orderVatViews: details.orderVatViews }, false) }}
 
                         {{ include('AdminBundle:Sheet/Partial:transactions.html.twig', { event: event, sheet: sheet, transactions: details.transactions }, false) }}
+
+                        {{ include('AdminBundle:Sheet/Partial:invoices.html.twig', { event: event, sheet: sheet, invoiceViews: details.invoiceViews }, false) }}
                     </div>
                 {% endif %}
 

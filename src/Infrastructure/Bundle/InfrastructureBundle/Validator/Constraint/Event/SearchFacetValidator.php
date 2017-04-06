@@ -1,0 +1,36 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event;
+
+use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
+
+class SearchFacetValidator extends ConstraintValidator
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($searchFacet, Constraint $constraint)
+    {
+        if ($searchFacet instanceof SearchFacet && $searchFacet->isEnabled() === true) {
+            foreach ($searchFacet->getTranslations() as $translation) {
+                if (empty($translation->getLabel())) {
+                    $this->context
+                        ->buildViolation('validators.searchFacet.translations.label.empty')
+                        ->atPath('enabled')
+                        ->addViolation();
+                    break;
+                }
+            }
+        }
+    }
+}

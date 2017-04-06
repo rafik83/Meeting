@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
+use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
@@ -32,7 +35,43 @@ interface SheetSearchAdapterInterface
      *
      * @return PaginatedResult
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations, array $nomenclatureItems = []);
+    public function find(
+        Event $event,
+        array $filters,
+        $orderBy,
+        $page,
+        $limit,
+        $locale,
+        $getAggregations,
+        $nomenclatureItems = []
+    );
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return SheetListView[]
+     */
+    public function getSheetListView(Event $event, array $filters, $locale);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return SheetIdsView
+     */
+    public function getSheetIdsView(Event $event, array $filters, $locale);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return ParticipantsSheetIdsView
+     */
+    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale);
 
     /**
      * @param Event  $event

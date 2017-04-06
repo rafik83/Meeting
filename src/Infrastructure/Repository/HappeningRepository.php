@@ -109,7 +109,45 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->from(Happening::class, 'happening')
             ->join('happening.translations', 'translations')
             ->where('happening.event = :event')
+            ->orderBy('happening.begin')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event                   $event
+     * @param \DateTimeInterface      $day
+     * @param Happening\Category|null $category
+     *
+     * @return Happening[]
+     */
+    public function findByEventAndDayAndCategory(
+        Event $event,
+        \DateTimeInterface $day,
+        Happening\Category $category = null
+    ) {
+        $date = clone $day;
+
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translations')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translations')
+            ->where('happening.event = :event')
+            ->andWhere('happening.begin >= :startDay')
+            ->andWhere('happening.begin < :endDay')
+            ->orderBy('happening.begin')
+            ->setParameter('event', $event)
+            ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
+            ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')));
+
+        if ($category !== null) {
+            $queryBuilder
+                ->andWhere('happening.category = :category')
+                ->setParameter('category', $category);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -129,6 +167,30 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('happening.talkings', 'talking')
             ->join('talking.speaker', 'speaker', 'WITH', 'talking.speaker = :speaker')
             ->setParameter('speaker', $speaker);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Happening[]
+     */
+    public function findHappeningParticipant(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translations')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translations')
+            ->join('happening.participations', 'participations')
+            ->join('participations.participant', 'participant')
+            ->join('participant.user', 'user')
+            ->where('happening.event = :event')
+            ->andWhere('participations.disabled = false')
+            ->orderBy('happening.begin')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

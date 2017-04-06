@@ -24,7 +24,7 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         data: [],
         delay: 250,
         minimumInputLength: this.element.dataset.minimumInputLength,
-        placeholder: this.element.dataset.placeholder,
+        placeholder: this.parentInput.dataset.placeholder,
         tokenSeparators: [','],
         language: {
             noResults: function () {
@@ -74,7 +74,10 @@ AjaxAutocomplete.prototype.updateParentInput = function () {
     ).join(',');
 
     this.parentInput.value = tags.toString();
-    this.parentInput.dispatchEvent(new Event('change'));
+    var htmlEvent = document.createEvent('HTMLEvents');
+    htmlEvent.initEvent('change', true, true);
+
+    this.parentInput.dispatchEvent(htmlEvent);
 };
 
 AjaxAutocomplete.prototype.prefill = function () {

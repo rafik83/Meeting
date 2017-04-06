@@ -1,0 +1,13 @@
+{% if invoiceView.summaryView.promotionCodesView.promotionCodeViews is not empty %}
+    <tr>
+        <td colspan="4" class="active"><b>{{ 'invoice.summary.promotionCode.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</b></td>
+    </tr>
+
+    {% for promotionCodeView in invoiceView.summaryView.promotionCodesView.promotionCodeViews %}
+        {{ include('EventBundle:Invoice/Partial:promotion_code.html.twig', {
+            promotionCodeView: promotionCodeView,
+            eventDefaultLocale: invoiceView.eventDefaultLocale,
+            currency: invoiceView.currency
+        }) }}
+    {% endfor %}
+{% endif %}

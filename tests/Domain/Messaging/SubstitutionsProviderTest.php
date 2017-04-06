@@ -1,0 +1,143 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet website.
+ *
+ * Copyright © Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Messaging;
+
+use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
+use Proximum\Vimeet\Application\View\Sheet\Planning\SheetPlanningView;
+use Proximum\Vimeet\Domain\Messaging\InvalidMessagePlaceholderException;
+use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
+use Proximum\Vimeet\Domain\Model\Messaging\Compose;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
+
+class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var SubstitutionsProvider */
+    private $substitutionProvider;
+
+    /** @var Event\EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
+
+    /** @var ParticipantInfoGuesser */
+    private $participantInfoGuesser;
+
+    /** @var ActivateAccountTokenGenerator */
+    private $activateAccountTokenGenerator;
+
+    public function setUp()
+    {
+        $this->eventUrlGenerator             = $this->prophesize(Event\EventUrlGeneratorInterface::class);
+        $this->participantInfoGuesser        = $this->prophesize(ParticipantInfoGuesser::class);
+        $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $this->sheetPlanningViewQueryHandler = $this->prophesize(SheetPlanningViewQueryHandler::class);
+
+        $this->substitutionProvider = new SubstitutionsProvider(
+            $this->eventUrlGenerator->reveal(),
+            $this->participantInfoGuesser->reveal(),
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->sheetPlanningViewQueryHandler->reveal()
+        );
+    }
+
+    /**
+     * @dataProvider providePlaceholdersData
+     */
+    public function testFindPlaceholdersInMessage($messageBody, $expectedPlaceholders)
+    {
+        $this->assertEquals($this->substitutionProvider->findPlaceholdersInMessage($messageBody), $expectedPlaceholders);
+    }
+
+    public function providePlaceholdersData()
+    {
+        return [
+            [
+                sprintf('%s %s %s', Compose::TAG_EVENT_NAME, Compose::LINK_PACKAGE, Compose::LINK_AGENDA),
+                [Compose::TAG_EVENT_NAME, Compose::LINK_AGENDA, Compose::LINK_PACKAGE]
+            ],
+            [
+                sprintf('%s %s', Compose::LINK_SHEET, Compose::TAG_PARTICIPANT),
+                [Compose::TAG_PARTICIPANT, Compose::LINK_SHEET]
+            ],
+        ];
+    }
+
+    public function testExceptionIfInvalidPlaceholder()
+    {
+        $this->expectException(InvalidMessagePlaceholderException::class);
+
+        $locale    = 'fr';
+        $recipient = $this->prophesize(MailRecipientInterface::class)->reveal();
+        $sheet     = $this->prophesize(Sheet::class);
+        $event     = $this->prophesize(Event::class);
+        $sheet->getEvent()->willReturn($event);
+
+        $placeholders = [Compose::TAG_EVENT_NAME, "%INVALID-PLACEHOLDER%"];
+
+        $this->substitutionProvider->getSubstitutions($recipient, $sheet->reveal(), $locale, $placeholders);
+    }
+
+    public function testGetSubstitutionsForParticipant()
+    {
+        $recipient = $this->prophesize(Participant::class);
+        $sheet     = $this->prophesize(Sheet::class);
+        $event     = $this->prophesize(Event::class);
+        $sheet->getEvent()->willReturn($event->reveal());
+        $locale    = 'fr';
+        $event->getAvailableLocale($locale)->willReturn($locale);
+
+        $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA];
+        $this->participantInfoGuesser->guessParticipantCompleteName($recipient->reveal(), $locale)->willReturn('Henri Désiré Landru');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['_locale' => 'fr'])->willReturn('url-to-event-agenda');
+
+        $this->assertEquals(
+            [
+                Compose::TAG_PARTICIPANT => 'Henri Désiré Landru',
+                Compose::LINK_AGENDA     => 'url-to-event-agenda',
+            ],
+            $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
+        );
+    }
+
+    public function testGetSubstitutionsPlanning()
+    {
+        $event     = EventFactory::createEvent();
+        $sheet     = SheetFactory::create($event);
+        $user      = UserFactory::create('email@email.fr');
+        $recipient = ParticipantFactory::create($sheet, $user);
+        $locale    = 'fr';
+
+        $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_SHEET_PLANNING];
+        $this->participantInfoGuesser->guessParticipantCompleteName($recipient, $locale)->willReturn('Henri Désiré Landru');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['_locale' => 'fr'])->willReturn('url-to-event-agenda');
+        $this->sheetPlanningViewQueryHandler
+            ->handle(new SheetPlanningViewQuery($sheet, $locale, $recipient))
+            ->shouldBeCalled()
+            ->willReturn(new SheetPlanningView('<p>PLANNING</p>'));
+
+        $this->assertEquals(
+            [
+                Compose::TAG_PARTICIPANT    => 'Henri Désiré Landru',
+                Compose::LINK_AGENDA        => 'url-to-event-agenda',
+                Compose::TAG_SHEET_PLANNING => '<p>PLANNING</p>'
+            ],
+            $this->substitutionProvider->getSubstitutions($recipient, $sheet, $locale, $placeholders)
+        );
+    }
+}

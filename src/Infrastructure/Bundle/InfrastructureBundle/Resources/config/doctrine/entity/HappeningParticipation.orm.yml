@@ -11,12 +11,19 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        disabled:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            inversedBy: participations
             joinColumn:
                 onDelete: CASCADE
         participant:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            inversedBy: happeningParticipations
             joinColumn:
                 onDelete: CASCADE

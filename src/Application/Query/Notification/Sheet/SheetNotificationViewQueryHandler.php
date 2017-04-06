@@ -42,7 +42,7 @@ class SheetNotificationViewQueryHandler
     /**
      * @param SheetNotificationViewQuery $query
      *
-     * @return NotificationView[];
+     * @return NotificationView[]
      */
     public function handle(SheetNotificationViewQuery $query)
     {

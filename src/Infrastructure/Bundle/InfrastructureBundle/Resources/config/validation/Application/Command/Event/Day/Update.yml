@@ -1,0 +1,16 @@
+Proximum\Vimeet\Application\Command\Event\Day\Update:
+    properties:
+        days:
+            - All:
+                - Collection:
+                    startTime:
+                        - NotNull: ~
+                        - Type: { type: datetime }
+                    endTime:
+                        - NotNull: ~
+                        - Type: { type: datetime }
+                - Expression:
+                    expression: "value['startTime'] < value['endTime']"
+                    message: "validators.schedule_day.startTimeMustBeBeforeEndTime"
+    constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event\HoursOnSameDayConstraint: ~

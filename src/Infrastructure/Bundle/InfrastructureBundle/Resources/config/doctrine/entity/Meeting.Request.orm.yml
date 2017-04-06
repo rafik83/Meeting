@@ -13,11 +13,15 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: datetime
         stateUpdatedAt:
             type: datetime
-    manyToOne:
+        disabled:
+            type: boolean
+            options:
+                default: false
+    oneToMany:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
-            joinColumn:
-                onDelete: SET NULL
+            mappedBy: request
+    manyToOne:
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:

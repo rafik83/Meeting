@@ -1,0 +1,48 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_request_01:
+        __construct:
+            - '@sheet_asddays_1'
+            - ['@participant_asddays_1']
+            - '@sheet_asddays_empty'
+            - ['@participant_asddays_2']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@user_test'
+        state: 'approved'
+    meeting_request_02:
+        __construct:
+            - '@sheet_asddays_1'
+            - ['@participant_asddays_1']
+            - '@sheet_asddays_empty_with_tag'
+            - ['@participant_asddays_3']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@user_test'
+        state: 'approved'
+
+Proximum\Vimeet\Domain\Model\Meeting:
+    asddays_meeting_01:
+        __construct: false
+        request: '@meeting_request_01'
+        slot: '@meeting_slot_day_one_1'
+        fromSheet: '@sheet_asddays_1'
+        fromParticipants: ['@participant_asddays_1']
+        toSheet: '@sheet_asddays_empty'
+        toParticipants: ['@participant_asddays_2']
+        createdAt: <(new DateTime('2016-10-12 09:00:00'))>
+        spot: '@asddays_spot_1'
+    asddays_meeting_02:
+        __construct: false
+        request: '@meeting_request_02'
+        slot: '@meeting_slot_day_one_2'
+        fromSheet: '@sheet_asddays_1'
+        fromParticipants: ['@participant_asddays_1']
+        toSheet: '@sheet_asddays_empty_with_tag'
+        toParticipants: ['@participant_asddays_3']
+        createdAt: <(new DateTime('2016-10-12 11:00:00'))>
+        spot: '@asddays_spot_1'
+
+Proximum\Vimeet\Domain\Model\Unavailability:
+    unavailability_01:
+        __construct:
+            - '@participant_asddays_1'
+            - <(new DateTime('2016-10-12 10:00:00'))>
+            - <(new DateTime('2016-10-12 11:00:00'))>

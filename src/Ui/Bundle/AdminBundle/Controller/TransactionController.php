@@ -51,7 +51,7 @@ class TransactionController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($sheet, $request->getLocale());
+            ->guessSheetTitle($sheet, $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('AdminBundle:Transaction:create.html.twig', [
             'form'       => $form->createView(),

@@ -6,5 +6,15 @@ Proximum\Vimeet\Application\Command\Happening\Category\Update:
                     fields:
                         title:
                             - NotBlank: ~
-        position:
+        rank:
             - NotNull: ~
+        leftColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        rightColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal

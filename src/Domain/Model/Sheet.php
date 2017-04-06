@@ -103,7 +103,7 @@ class Sheet implements TraceableInterface
     /**
      * "Suivi commercial"
      *
-     * @var Admin
+     * @var Admin|null
      */
     private $follower;
 
@@ -126,6 +126,11 @@ class Sheet implements TraceableInterface
      * @var Spot
      */
     private $spot;
+
+    /**
+     * @var bool
+     */
+    private $imported = false;
 
     /**
      * Sheet constructor.
@@ -456,7 +461,8 @@ class Sheet implements TraceableInterface
     public function getUserParticipant(User $user)
     {
         foreach ($this->participants as $participant) {
-            if ($participant->getUser() === $user) {
+            // To avoid __isInitialized__: false
+            if ($participant->getUser()->getId() === $user->getId()) {
                 return $participant;
             }
         }
@@ -642,7 +648,7 @@ class Sheet implements TraceableInterface
     /**
      * Get follower
      *
-     * @return Admin
+     * @return Admin|null
      */
     public function getFollower()
     {
@@ -777,6 +783,31 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isImported()
+    {
+        return $this->imported;
+    }
+
+    /**
+     * @param bool $imported
+     *
+     * @return $this
+     */
+    public function setImported($imported)
+    {
+        $this->imported = $imported;
+
+        // Imported sheet don't have last login yet
+        if ($imported) {
+            $this->lastLoginAt = null;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Sheet
      */
     public function submitToValidation()
@@ -784,5 +815,13 @@ class Sheet implements TraceableInterface
         $this->validationState = self::STATE_VALIDATION_PENDING;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerLocale()
+    {
+        return $this->getOwner()->getLocale();
     }
 }

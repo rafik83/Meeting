@@ -35,9 +35,16 @@ interface AdminRepositoryInterface
     public function set(Admin $admin);
 
     /**
+     * @param int $id
+     *
+     * @return Admin|null
+     */
+    public function findById($id);
+
+    /**
      * @param string $email
      *
-     * @return Admin
+     * @return Admin|null
      */
     public function findByEmail($email);
 
@@ -86,4 +93,11 @@ interface AdminRepositoryInterface
      * @return Admin[]
      */
     public function getAllowedOrganizer(Event $event);
+
+    /**
+     * @param $role
+     *
+     * @return null|Admin
+     */
+    public function findOneByRole($role);
 }

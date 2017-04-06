@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
@@ -61,7 +61,7 @@ class UpdateHandler
         // if transaction was not paid and now it is paid
         // then send a notification to that user
         if ($wasNotPaid && Transaction::STATE_PAID === $update->state) {
-            $event = new TransactionConfirmEvent($update->transaction->getUser(), $update->transaction);
+            $event = new TransactionConfirmedEvent($update->transaction->getUser(), $update->transaction);
             $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $event);
         }
 

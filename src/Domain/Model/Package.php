@@ -480,7 +480,11 @@ class Package
     }
 
     /**
-     * @param array $groupLabels
+     * @param array $groupLabels indexed by rank and containing array of labels indexed by locale
+     *              Example : [
+     *                  1 => ['fr' => 'French label 1', 'en' => 'English label 1'],
+     *                  2 => ['fr' => 'French label 2', 'en' => 'English label 2'],
+     *              ]
      *
      * @return Package
      */
@@ -500,7 +504,12 @@ class Package
     }
 
     /**
-     * @param array $groupOptions
+     * @param array $groupOptions indexed by rank containing array of Products
+     *              Example : [
+     *                  1 => [Product(), Product(), ...]
+     *                  2 => [Product(), Product(), ...]
+     *              ]
+     *
      *
      * @return Package
      */
@@ -511,7 +520,9 @@ class Package
                 $this->groups->set($rank, new PackageGroup($this, $rank));
             }
 
-            $this->groups->get($rank)->setOptions(is_array($options) ? $options : []);
+            /** @var PackageGroup $packageGroup */
+            $packageGroup = $this->groups->get($rank);
+            $packageGroup->setOptions(is_array($options) ? $options : []);
         }
 
         return $this;

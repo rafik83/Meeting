@@ -1,0 +1,262 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Happening;
+
+use DateInterval;
+
+class HappeningView
+{
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $beginHour;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $endHour;
+
+    /**
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     */
+    private $picture;
+
+    /**
+     * @var HappeningSpeakerView[]
+     */
+    private $speakers;
+
+    /**
+     * @var HappeningCategoryView
+     */
+    private $category;
+
+    /**
+     * If participants of the current sheet participate
+     *
+     * @var bool
+     */
+    private $hasParticipations = false;
+
+    /**
+     * If the current user participates
+     *
+     * @var bool
+     */
+    private $currentUserParticipate = false;
+
+    /**
+     * @var bool
+     */
+    private $isFull;
+
+    /**
+     * @var int|null
+     */
+    public $limitParticipant;
+
+    /**
+     * @var string
+     */
+    public $timeZone;
+
+    /**
+     * HappeningView constructor.
+     *
+     * @param int                    $id
+     * @param HappeningCategoryView  $category
+     * @param \DateTimeInterface     $beginHour
+     * @param \DateTimeInterface     $endHour
+     * @param string                 $title
+     * @param string                 $description
+     * @param string|null            $picture
+     * @param HappeningSpeakerView[] $speakers
+     * @param string                 $timeZone
+     * @param null|int               $limitParticipant
+     * @param bool                   $isFull
+     */
+    public function __construct(
+        $id,
+        HappeningCategoryView $category,
+        \DateTimeInterface $beginHour,
+        \DateTimeInterface $endHour,
+        $title,
+        $description,
+        $picture,
+        array $speakers,
+        $timeZone,
+        $limitParticipant = null,
+        $isFull = false
+    ) {
+        $this->id               = $id;
+        $this->category         = $category;
+        $this->beginHour        = $beginHour;
+        $this->endHour          = $endHour;
+        $this->title            = $title;
+        $this->description      = $description;
+        $this->picture          = $picture;
+        $this->speakers         = $speakers;
+        $this->isFull           = $isFull;
+        $this->limitParticipant = $limitParticipant;
+        $this->timeZone         = $timeZone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return DateInterval
+     */
+    public function getDuration()
+    {
+        return $this->endHour->diff($this->beginHour);
+    }
+
+    /**
+     * @return HappeningCategoryView
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getBeginHour()
+    {
+        return $this->beginHour;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * @return HappeningSpeakerView[]
+     */
+    public function getSpeakers()
+    {
+        return $this->speakers;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPicture()
+    {
+        return $this->picture !== null;
+    }
+
+    /**
+     * @param bool $currentUserParticipate
+     */
+    public function setCurrentUserParticipate($currentUserParticipate)
+    {
+        $this->currentUserParticipate = $currentUserParticipate;
+    }
+
+    /**
+     * @param bool $hasParticipations
+     */
+    public function setHasParticipation($hasParticipations)
+    {
+        $this->hasParticipations = $hasParticipations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function doesCurrentUserParticipate()
+    {
+        return $this->currentUserParticipate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParticipations()
+    {
+        return $this->hasParticipations;
+    }
+
+    /**
+     * Set isFull to true
+     */
+    public function setFull()
+    {
+        $this->isFull = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFull()
+    {
+        return $this->isFull;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicto()
+    {
+        return $this->getCategory()->getPicto();
+    }
+}

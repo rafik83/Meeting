@@ -1,8 +1,8 @@
 <div class="col-md-4">
     <div class="catalog__item {#catalog__item--checked#}">
-        <header></header>
-        <div class="content">
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview }, false) }}
+        {#<header></header>#}
+        <div class="content__sheet-card">
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog }, false) }}
         </div>
         <footer>
             <div class="actions">
@@ -17,6 +17,8 @@
                         'meetingRequest': catalogSheetPreviewView.meetingRequest,
                         'viewed': catalogSheetPreviewView.sheet,
                         'viewer': viewer,
+                        'isMeetingPublished': catalogSheetPreviewView.isMeetingPublished,
+                        'isMeetingRequestUpdateLocked': catalogSheetPreviewView.isMeetingRequestUpdateLocked|default(false),
                     }) }}
                 </div>
             {% endif %}

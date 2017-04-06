@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * "Participant".
  */
-class Participant
+class Participant implements MailRecipientInterface
 {
     /**
      * @var int
@@ -41,11 +43,6 @@ class Participant
     private $active;
 
     /**
-     * @var Order
-     */
-    private $order;
-
-    /**
      * @var int
      */
     private $registrationStep;
@@ -56,6 +53,21 @@ class Participant
     private $registrationComplete = false;
 
     /**
+     * @var ArrayCollection
+     */
+    private $happeningParticipations;
+
+    /**
+     * @var bool
+     */
+    private $imported = false;
+
+    /**
+     * @var bool
+     */
+    private $visio = false; 
+
+    /**
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
@@ -63,10 +75,11 @@ class Participant
      */
     public function __construct(Sheet $sheet, User $user, array $data, $active)
     {
-        $this->sheet  = $sheet;
-        $this->user   = $user;
-        $this->data   = $data;
-        $this->active = $active;
+        $this->sheet                   = $sheet;
+        $this->user                    = $user;
+        $this->data                    = $data;
+        $this->active                  = $active;
+        $this->happeningParticipations = new ArrayCollection();
     }
 
     /**
@@ -167,22 +180,6 @@ class Participant
     }
 
     /**
-     * @return Order
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param Order $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    /**
      * @return int
      */
     public function getRegistrationStep()
@@ -220,5 +217,65 @@ class Participant
         $this->registrationComplete = $registrationComplete;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getHappeningParticipations()
+    {
+        return $this->happeningParticipations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImported()
+    {
+        return $this->imported;
+    }
+
+    /**
+     * @param bool $imported
+     *
+     * @return $this
+     */
+    public function setImported($imported)
+    {
+        $this->imported = $imported;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVisio()
+    {
+        return $this->visio;
+    }
+
+    /**
+     * @param boolean $visio
+     */
+    public function setVisio($visio)
+    {
+        $this->visio = $visio;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullname()
+    {
+        return $this->user->getFullname();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->user->getEmail();
     }
 }

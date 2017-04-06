@@ -3,7 +3,8 @@
 {% block body %}
     {{ 'mail.register.body'|trans({
         '%event%': mail.event.title,
-        '%firstname%': mail.receiverUser.account.firstname|capitalize,
-        '%lastname%': mail.receiverUser.account.lastname|upper,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

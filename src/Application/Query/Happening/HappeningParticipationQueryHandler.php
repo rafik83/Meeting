@@ -1,0 +1,67 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Happening;
+
+use Proximum\Vimeet\Application\View\Happening\HappeningView;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+
+class HappeningParticipationQueryHandler
+{
+    /**
+     * @var HappeningParticipationRepositoryInterface
+     */
+    private $happeningParticipationRepository;
+
+    /**
+     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
+     */
+    public function __construct(HappeningParticipationRepositoryInterface $happeningParticipationRepository)
+    {
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
+    }
+
+    /**
+     * @param HappeningParticipationQuery $happeningParticipationQuery
+     */
+    public function handle(HappeningParticipationQuery $happeningParticipationQuery)
+    {
+        $sheet       = $happeningParticipationQuery->sheet;
+        $user        = $happeningParticipationQuery->currentUser;
+        $participant = $sheet->getUserParticipant($user);
+
+        $happeningList = [];
+        /** @var HappeningView[] $happenings */
+        $happenings    = [];
+
+        foreach ($happeningParticipationQuery->programView->days as $day) {
+            foreach ($day->happenings as $happening) {
+                $happeningList[]                 = $happening->getId();
+                $happenings[$happening->getId()] = $happening;
+            }
+        }
+
+        $happeningParticipations = $this
+            ->happeningParticipationRepository
+            ->getParticipationsForSheet($sheet, $happeningList);
+
+        /** @var HappeningParticipation $participation */
+        foreach ($happeningParticipations as $participation) {
+            if (isset($happenings[$participation->getHappening()->getId()])) {
+                $happenings[$participation->getHappening()->getId()]->setHasParticipation(true);
+
+                if ($participant !== null && $participation->getParticipant() === $participant) {
+                    $happenings[$participation->getHappening()->getId()]->setCurrentUserParticipate(true);
+                }
+            }
+        }
+    }
+}

@@ -55,8 +55,8 @@ class QuantityMaxGuesser
         $countParticipants = $sheet->getParticipants()->count();
         $remainingQuantity = INF;
 
-        if ($sheet->hasOrders()) {
-            $order        = $this->merger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $order        = $this->merger->merge($sheet->getNotCancelledOrders());
             $selectedPlan = $order->getPlan();
         }
 

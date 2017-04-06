@@ -11,13 +11,14 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Category;
 
 use Proximum\Vimeet\Domain\Model\Happening\Category;
+use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 
 class Update
 {
     /**
      * @var int
      */
-    public $position;
+    public $rank;
 
     /**
      * @var Category
@@ -35,16 +36,29 @@ class Update
     public $translations = [];
 
     /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
      * Update constructor.
      *
      * @param Category $category
      */
     public function __construct(Category $category)
     {
-        $this->category = $category;
-        $this->picto    = $category->getPicto();
-        $this->position = $category->getPosition();
+        $this->category   = $category;
+        $this->picto      = $category->getPicto();
+        $this->rank       = $category->getRank();
+        $this->leftColor  = $category->getLeftColor();
+        $this->rightColor = $category->getRightColor();
 
+        /** @var CategoryTranslation $translation */
         foreach ($category->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
                 'title' => $translation->getTitle(),

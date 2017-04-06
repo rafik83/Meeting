@@ -41,8 +41,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
-        $passwordEncoder->encode(Argument::that(function (Admin $admin) use ($admin) {
-            return $admin->getEmail() === $admin->getEmail();
+        $passwordEncoder->encode(Argument::that(function (Admin $user) use ($admin) {
+            return $user->getEmail() === $admin->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
@@ -78,8 +78,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
-        $passwordEncoder->encode(Argument::that(function (Admin $admin) use ($admin) {
-            return $admin->getEmail() === $admin->getEmail();
+        $passwordEncoder->encode(Argument::that(function (Admin $user) use ($admin) {
+            return $user->getEmail() === $admin->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);

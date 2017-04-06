@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 
 interface UnavailabilityRepositoryInterface
@@ -31,11 +33,39 @@ interface UnavailabilityRepositoryInterface
     public function remove(Unavailability $unavailability);
 
     /**
+     * @param Event $event
+     *
+     * @return Unavailability[]
+     */
+    public function getByEvent(Event $event);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return int
+     */
+    public function countByParticipant(Participant $participant);
+
+    /**
      * @param Participant $participant
      *
      * @return Unavailability[]
      */
     public function findByParticipant(Participant $participant);
+
+    /**
+     * @param Participant[] $participants
+     *
+     * @return Unavailability[]
+     */
+    public function findByParticipants(array $participants);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Unavailability[]
+     */
+    public function findBySheet(Sheet $sheet);
 
     /**
      * @param Unavailability $unavailability

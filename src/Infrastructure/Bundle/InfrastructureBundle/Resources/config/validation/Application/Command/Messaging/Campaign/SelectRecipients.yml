@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients:
+    properties:
+        recipients:
+            - NotBlank: { message: 'validators.sheet.messaging_campaign.recipients' }

@@ -25,11 +25,17 @@ class SeeWhat
     public $seeWhat;
 
     /**
+     * @var int
+     */
+    public $priority;
+
+    /**
      * @param Rule $rule
      */
     public function __construct(Rule $rule)
     {
-        $this->rule    = $rule;
-        $this->seeWhat = $rule->getWhat();
+        $this->rule     = $rule;
+        $this->priority = $rule->getPriority();
+        $this->seeWhat  = $rule->getWhat();
     }
 }

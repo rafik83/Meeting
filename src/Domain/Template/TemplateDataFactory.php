@@ -32,7 +32,7 @@ class TemplateDataFactory
         'media'                 => TemplateObject\MediaCollection::class,
         'nomenclature'          => TemplateObject\Nomenclature::class,
         'participant'           => TemplateObject\Participant::class,
-        'tag'                   => TemplateObject::class,
+        'tag'                   => TemplateObject\Tag::class,
         'text'                  => TemplateObject\Text::class,
         'carousel'              => TemplateObject::class,
         'telephone'             => TemplateObject\Telephone::class,

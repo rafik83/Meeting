@@ -42,6 +42,24 @@ services:
             - '@components.security.admin_sheet_access'
         tags:
             - { name: security.voter }
+    security_voter.happening_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.happenings_access_checker'
+        tags:
+            - { name: security.voter }
+    security_voter.event_open_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\EventOpenAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.event_open_access_checker'
+        tags:
+            - { name: security.voter }
+    security_voter.participant_import_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ParticipantImportAccessVoter
+        arguments:
+            - '@adapter.session'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -178,21 +196,60 @@ services:
         tags:
             - { name: form.type }
 
+    form_type_sheet_data.editable_text_translatable_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslatableDataType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
     form_type.catalog_search_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType
+        arguments:
+            - '@query.catalog.search_facet_view_query_handler'
+        tags:
+            - { name: form.type }
+
+    form_type.happening_participate_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: form.type }
+    form_type_unavailability.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
+    form_type.participant.add:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType
+        arguments:
+            - '@template.template_data_factory'
         tags:
             - { name: form.type }
 
     #
     # Event Listener
     #
-    vimeet_app.domain_event_listener:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
+    event_listener.abstract_redirect_to_event_listener:
+        abstract: true
         arguments:
             - '@router.default'
             - '@vimeet_infrastructure.repository.event_repository'
+    vimeet_app.domain_event_listener:
+        parent: event_listener.abstract_redirect_to_event_listener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
+    event_listener.sheet_not_found_exception_listener:
+        parent: event_listener.abstract_redirect_to_event_listener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetNotFoundExceptionListener
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.exception' }
     event_listener.login_event_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LoginEventListener
         arguments:
@@ -214,6 +271,7 @@ services:
         arguments:
             - '@adapter.mailer_adapter'
             - '@event_sender'
+            - '@query.mail.participant_mail_view_query_handler'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.submit_sheet_mail_event_subscriber:
@@ -267,6 +325,17 @@ services:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@repository.transaction'
             - '@order.balance'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    event_listener.sheet_invoiced_event_listener:
+        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SheetInvoicedEventSubscriber
+        arguments:
+            - '@components.invoice.invoice_url_view_query_handler'
+            - '@repository.billing_info_repository'
+            - '@adapter.mailer_adapter'
+            - '@event_sender'
+            - '@adapter.event_url_generator'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -367,5 +436,11 @@ services:
             - '@datetime'
             - '@order.merger'
             - '@cart_manager'
+        tags:
+            - { name: validator.constraint_validator }
+    validator_constraint_event.update_invoice_prefix_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event\UpdateInvoicePrefixValidator
+        arguments:
+            - '@security.authorization_checker'
         tags:
             - { name: validator.constraint_validator }

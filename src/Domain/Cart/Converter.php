@@ -12,12 +12,8 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
-use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
-use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -41,19 +37,9 @@ class Converter
     private $cartRowRepository;
 
     /**
-     * @var VatApplicable
-     */
-    private $vatApplicable;
-
-    /**
      * @var \DateTimeInterface
      */
     private $datetime;
-
-    /**
-     * @var BillingInfoRepositoryInterface
-     */
-    private $billingInfoRepository;
 
     /**
      * @var CartStepRepositoryInterface
@@ -74,36 +60,28 @@ class Converter
      * @param OrderRepositoryInterface            $orderRepository
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
-     * @param BillingInfoRepositoryInterface      $billingInfoRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
-     * @param VatApplicable                       $vatApplicable
      * @param \DateTimeInterface                  $datetime
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
-        BillingInfoRepositoryInterface $billingInfoRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
-        VatApplicable $vatApplicable,
         \DateTimeInterface $datetime
     ) {
         $this->orderRepository            = $orderRepository;
         $this->cartRowRepository          = $cartRowRepository;
         $this->cartStepRepository         = $cartStepRepository;
-        $this->billingInfoRepository      = $billingInfoRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
         $this->promotionCodeRepository    = $promotionCodeRepository;
-        $this->vatApplicable              = $vatApplicable;
         $this->datetime                   = $datetime;
     }
 
     /**
      * @param Cart $cart
-     *
-     * @throws MissingBillingInfoException
      *
      * @return Order
      */
@@ -111,39 +89,14 @@ class Converter
     {
         $sheet = $cart->getSheet();
 
-        $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
-
-        if (null === $billingInfo) {
-            throw new MissingBillingInfoException('Can not convert cart to order, missing billing info');
-        }
-
-        $orderBillingInfo = new Order\BillingInfo(
-            $billingInfo->getGender(),
-            $billingInfo->getLastname(),
-            $billingInfo->getFirstname(),
-            $billingInfo->getFunction(),
-            $billingInfo->getPhone(),
-            $billingInfo->getMobile(),
-            $billingInfo->getEmail(),
-            $billingInfo->getCompany(),
-            new Address(
-                $billingInfo->getAddress()->getStreet(),
-                $billingInfo->getAddress()->getZipcode(),
-                $billingInfo->getAddress()->getCity(),
-                $billingInfo->getAddress()->getCountry()
-            ),
-            $billingInfo->getVatNumber()
-        );
-
         $groupsData = $sheet->getPackage()->serializeData();
 
         $order = new Order(
             $sheet,
-            $this->vatApplicable->onCart($cart),
-            $orderBillingInfo,
             $groupsData,
             $this->datetime
         );
+        $sheet->addOrder($order);
 
         foreach ($cart->getRows() as $cartRow) {
             $order->addRow($this->convertToRow($order, $cartRow));

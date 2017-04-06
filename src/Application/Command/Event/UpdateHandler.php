@@ -90,9 +90,12 @@ class UpdateHandler
             $update->timeZone,
             $update->domain,
             $update->organiserName,
-            $update->emailTeam
+            $update->emailTeam,
+            $update->invoicePrefix
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
+
+        $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);
 
         if (null !== $update->logo) {
             $toRemove      = $event->getLogo();

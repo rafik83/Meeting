@@ -264,6 +264,14 @@ class Product
     }
 
     /**
+     * @param ArrayCollection $translations
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
+    }
+
+    /**
      * @return array
      */
     public function getTranslationsData()
@@ -595,6 +603,18 @@ class Product
     }
 
     /**
+     * Get the number of planning included in this product
+     *
+     * @return int
+     */
+    public function getIncludedPlanningQuantity()
+    {
+        $included = $this->getIncludedPlanningProduct();
+
+        return $included ? $included->getQuantity() : 0;
+    }
+
+    /**
      * @return boolean|ProductIncluded
      */
     public function getIncludedPlanningProduct()
@@ -673,8 +693,8 @@ class Product
             $image,
             $unitPrice,
             1,
-            $availabilityCurrent,
-            $availabilityMax,
+            (int) $availabilityCurrent,
+            (int) $availabilityMax,
             false,
             null
         );
@@ -815,8 +835,8 @@ class Product
             $image,
             $unitPrice,
             $quantityMax,
-            $availabilityCurrent,
-            $availabilityMax,
+            (int) $availabilityCurrent,
+            (int) $availabilityMax,
             $updatable,
             $deletableUntil,
             $subjectedToValidation,

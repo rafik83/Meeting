@@ -29,7 +29,12 @@ assets.config({
         },
         files: {
             groups: {
-                'intl-input-tel': {src: 'intl-tel-input/build/img/*.png', dest: 'img'}
+                'intl-input-tel': {src: 'intl-tel-input/build/img/*.png', dest: 'img'},
+                'tinymce': {src: 'tinymce/tinymce.js', dest: 'tinymce'},
+                'tinymce/themes': {src: 'tinymce/themes/**', dest: 'tinymce/themes'},
+                'tinymce/skins': {src: 'tinymce/skins/**', dest: 'tinymce/skins'},
+                'tinymce/plugins': {src: 'tinymce/plugins/**', dest: 'tinymce/plugins'},
+                'tinymce/templates': {src: 'tinymce/templates/**', dest: 'tinymce/templates'}
             }
         }
     }

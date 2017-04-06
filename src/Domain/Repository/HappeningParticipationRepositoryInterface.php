@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface HappeningParticipationRepositoryInterface
 {
@@ -30,7 +32,90 @@ interface HappeningParticipationRepositoryInterface
      * @param Happening   $happening
      * @param Participant $participant
      *
-     * @return HappeningParticipation
+     * @return null|HappeningParticipation
      */
     public function findByHappeningAndParticipant(Happening $happening, Participant $participant);
+
+    /**
+     * @param Participant $participant
+     * @param array       $filters
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByParticipant(Participant $participant, array $filters = []);
+
+    /**
+     * @param Participant[] $participants
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByParticipants(array $participants);
+
+    /**
+     * @param Happening $happening
+     *
+     * @return int
+     */
+    public function countParticipationByHappening(Happening $happening);
+
+    /**
+     * @param Event $event
+     *
+     * @return HappeningParticipation[]
+     */
+    public function getByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findBySheet(Sheet $sheet);
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function countParticipationByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipationsBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasParticipationsBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet       $sheet
+     * @param Happening[] $happenings
+     *
+     * @return HappeningParticipation[]
+     */
+    public function getParticipationsForSheet(Sheet $sheet, $happenings);
+
+    /**
+     * @param Participant $participant
+     * @param Happening   $happening
+     */
+    public function removeParticipantForHappening(Participant $participant, Happening $happening);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return null|int
+     */
+    public function checkAnyParticipation(Participant $participant);
+
+    /**
+     * @param HappeningParticipation $happeningParticipation
+     */
+    public function update(HappeningParticipation $happeningParticipation);
 }

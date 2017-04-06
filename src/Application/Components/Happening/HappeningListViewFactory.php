@@ -23,22 +23,13 @@ class HappeningListViewFactory
     private $happeningRepository;
 
     /**
-     * @var HappeningPermissionManager
-     */
-    private $happeningPermissionManager;
-
-    /**
      * HappeningListViewFactory constructor.
      *
      * @param HappeningRepositoryInterface $happeningRepository
-     * @param HappeningPermissionManager   $happeningPermissionManager
      */
-    public function __construct(
-        HappeningRepositoryInterface $happeningRepository,
-        HappeningPermissionManager $happeningPermissionManager
-    ) {
-        $this->happeningRepository        = $happeningRepository;
-        $this->happeningPermissionManager = $happeningPermissionManager;
+    public function __construct(HappeningRepositoryInterface $happeningRepository)
+    {
+        $this->happeningRepository = $happeningRepository;
     }
 
     /**
@@ -51,9 +42,6 @@ class HappeningListViewFactory
     {
         // Get happenings
         $happenings = $this->happeningRepository->findListByEvent($event, $locale);
-
-        // Load permissions
-        $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
 
         return $this->createFromHappenings($happenings, $locale);
     }
@@ -68,9 +56,6 @@ class HappeningListViewFactory
     {
         // Get happenings
         $happenings = $this->happeningRepository->findBySpeaker($speaker, $locale);
-
-        // Load permissions
-        $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
 
         return $this->createFromHappenings($happenings, $locale);
     }
@@ -92,17 +77,24 @@ class HappeningListViewFactory
      * @param Happening $happening
      * @param string    $locale
      *
-     * @return array
+     * @return HappeningListView
      */
     private function createFromHappening(Happening $happening, $locale)
     {
         return new HappeningListView(
             $happening->getId(),
+            $happening->getCategory()->getTitle($locale),
             $happening->getBegin(),
             $happening->getEnd(),
             $happening->getTitle($locale),
-            array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
-            $this->happeningPermissionManager->isAllowedToBeModified($happening)
+            $happening->isQuestionAllowed(),
+            array_map(
+                function (Speaker $speaker) {
+                    return $speaker->getName();
+                },
+                $happening->getSpeakers()
+            ),
+            true
         );
     }
 }

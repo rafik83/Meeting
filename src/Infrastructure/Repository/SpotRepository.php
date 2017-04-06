@@ -12,9 +12,13 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\FilteredQueryBuilder;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Spot\SpotQueryBuilder;
 
 class SpotRepository implements SpotRepositoryInterface
 {
@@ -30,7 +34,7 @@ class SpotRepository implements SpotRepositoryInterface
      */
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -53,7 +57,7 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, $id)
+    public function find(Event $event, $id, $visio = false)
     {
         $queryBuilder = $this
             ->entityManager
@@ -61,12 +65,49 @@ class SpotRepository implements SpotRepositoryInterface
             ->select('spot')
             ->from(Spot::class, 'spot')
             ->where('spot.event = :event')
-            ->setParameter('event', $event)
             ->andWhere('spot.id = :id')
+            ->setParameter('event', $event)
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
+        if ($visio === true) {
+            $queryBuilder
+                ->andWhere('spot.visio = :visio')
+                ->setParameter('visio', $visio);
+        }
+
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findMany(Event $event, array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in('spot.id', $ids)
+        );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getActiveByEvent(Event $event)
+    {
+        $queryBuilder = new FilteredQueryBuilder($this->entityManager);
+        $queryBuilder->hasEvent($event)->filter(['active' => true]);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -102,7 +143,24 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function removeBatchSpot(array $ids, Event $event)
+    public function getSpotsByIds(array $spotsIds = [])
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spots')
+            ->from(Spot::class, 'spots')
+            ->where('spots.id IN (:spotsIds)')
+            ->setParameter('spotsIds', $spotsIds)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeBatchSpot(array $spots, Event $event)
     {
         $queryBuilder = $this
             ->entityManager
@@ -112,8 +170,10 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ;
+            ->setParameter('ids', array_map(function (Spot $spot) {
+                    return $spot->getId();
+                }, $spots)
+            );
 
         $queryBuilder->getQuery()->execute();
     }
@@ -131,8 +191,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
     }
@@ -150,9 +209,182 @@ class SpotRepository implements SpotRepositoryInterface
             ->where('spot.event = :event')
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotsForMeeting(Meeting $meeting, $visio = false)
+    {
+        return $this->getSpotsForSlotAndParticipantsQuantity(
+            $meeting->getSlot(),
+            $meeting->countParticipants(),
+            $meeting,
+            null,
+            null,
+            $visio
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSpotsForMeeting(Meeting $meeting, $visio = false)
+    {
+        return $this->hasSpotsForSlotAndParticipantsQuantity(
+            $meeting->getSlot(),
+            $meeting->countParticipants(),
+            $meeting,
+            null,
+            null,
+            $visio
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeeting(Spot $spot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.spot = :spot_id')
+            ->setParameter('spot_id', $spot->getId())
+            ->setMaxResults(1)
+        ;
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult() === 0 ? false : true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null,
+        $visio = false
+    ) {
+        $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+            $slot,
+            $participantsQuantity,
+            $exceptMeeting,
+            $fromSheet,
+            $toSheet,
+            $visio
+        );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null,
+        $visio = false
+    ) {
+        $queryBuilder = $this->getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+            $slot,
+            $participantsQuantity,
+            $exceptMeeting,
+            $fromSheet,
+            $toSheet,
+            $visio
+        );
+
+        $queryBuilder->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     * @param Sheet|null $fromSheet
+     * @param Sheet|null $toSheet
+     * @param bool $visio
+     *
+     * @return SpotQueryBuilder
+     */
+    private function getSpotsForSlotAndParticipantsQuantityQueryBuilder(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null,
+        Sheet $fromSheet = null,
+        Sheet $toSheet = null,
+        $visio = false
+    ) {
+        $queryBuilder = new SpotQueryBuilder($this->entityManager);
+
+        $queryBuilder
+            ->filterByEvent($slot->getEvent())
+            ->active()
+            ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
+            ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants');
+
+        // If meeting has a blocked spot, check only meeting's spot availability
+        if (null !== $exceptMeeting && $exceptMeeting->isBlockedSpot()) {
+            $queryBuilder
+                ->andWhere('spot.id = :spotId')
+                ->setParameter('spotId', $exceptMeeting->getSpot()->getId());
+        }
+
+        // Get meetings and participants count assigned to this spot on current slot
+        $queryBuilder
+            ->leftJoin(
+                Meeting::class,
+                'meeting',
+                'WITH',
+                sprintf(
+                    'meeting.spot = spot AND meeting.state = :state AND meeting.slot = :slot %s',
+                    // Exclude $exceptMeeting
+                    null !== $exceptMeeting ? 'AND meeting != :exceptMeeting' : ''
+                )
+            )
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setParameter('slot', $slot)
+            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
+            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->groupBy('spot.id')
+            ->andHaving('countMeetings < spot.meetingCapacity')
+            ->andHaving('(countParticipants + :participantsQuantity) <= spot.seatCapacity')
+            ->setParameter('participantsQuantity', $participantsQuantity);
+
+        if (null !== $exceptMeeting) {
+            $queryBuilder
+                ->setParameter('exceptMeeting', $exceptMeeting)
+            ;
+
+            if ($fromSheet === null && $toSheet === null) {
+                $fromSheet = $exceptMeeting->getFromSheet();
+                $toSheet   = $exceptMeeting->getToSheet();
+            }
+        }
+
+        if ($fromSheet !== null && $toSheet !== null) {
+            $queryBuilder->meetingSheets($fromSheet, $toSheet);
+        }
+
+        $queryBuilder
+            ->visio($visio)
+            ->hasNotSpotUnavailability($slot)
+            ->addOrderBy('spot.reference')
+        ;
+
+        return $queryBuilder;
     }
 }

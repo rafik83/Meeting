@@ -48,8 +48,11 @@ class RequestRepository implements RequestRepositoryInterface
      * @param Paginator        $paginator
      * @param SheetInfoGuesser $sheetInfoGuesser
      */
-    public function __construct(EntityManager $entityManager, Paginator $paginator, SheetInfoGuesser $sheetInfoGuesser)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        Paginator $paginator,
+        SheetInfoGuesser $sheetInfoGuesser
+    ) {
         $this->entityManager    = $entityManager;
         $this->paginator        = $paginator;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
@@ -90,6 +93,21 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getRequest(Request $request)
+    {
+        $requestQueryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        $request = $requestQueryBuilder
+            ->where('request = :request')
+            ->setParameter('request', $request)
+        ;
+
+        return $request->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
@@ -115,7 +133,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function getPropositionReceivedBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->receivedBy($sheet)->mostRecentFirst();
+        $queryBuilder->receivedBy($sheet)->isEnabled()->mostRecentFirst();
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -126,7 +144,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function getApprovedPropositionReceivedBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->receivedBy($sheet)->approved();
+        $queryBuilder->receivedBy($sheet)->approved()->isEnabled();
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -138,7 +156,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->sendBy($sheet)->approved()->count()->getIntResult();
+        return $queryBuilder->sendBy($sheet)->approved()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -148,7 +166,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->sendBy($sheet)->pending()->count()->getIntResult();
+        return $queryBuilder->sendBy($sheet)->pending()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -158,7 +176,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->sendBy($sheet)->refused()->count()->getIntResult();
+        return $queryBuilder->sendBy($sheet)->refused()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -168,7 +186,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->approved()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->approved()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -178,7 +196,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->refused()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->refused()->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -188,7 +206,43 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->pending()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        return $this->countPendingPropositionReceivedBySheet($sheet) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRequestSentBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->sendBy($sheet)->isEnabled()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRequestSentBySheet(Sheet $sheet)
+    {
+        return $this->countRequestSentBySheet($sheet) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->receivedBy($sheet)->isEnabled()->count()->getIntResult();
     }
 
     /**
@@ -200,7 +254,13 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
+            ->from(Request::class, 'request')
+        ;
+
+        if (!empty($filters) && isset($filters['disabled'])) {
+            $queryBuilder->where('request.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled']);
+        }
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -219,8 +279,9 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event)
-            ->where('request.meeting IS NULL');
+            ->setParameter('event', $event);
+
+        $this->requestsWithoutMeeting($queryBuilder);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -237,14 +298,39 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event)
-            ->where('request.meeting IS NULL')
-            ->orderBy('request.createdAt', 'DESC');
+            ->where('request.disabled = FALSE')
+            ->setParameter('event', $event);
 
-        if (!empty($filter) && isset($filter['state'])) {
+        $this->requestsWithoutMeeting($queryBuilder);
+
+        if (!empty($filter)) {
+            if (isset($filter['state'])) {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', $filter['state']);
+            }
+
+            if (!empty($filter['orderBy']) && in_array($filter['orderBy'], $this->getOrderBy())) {
+                if ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
+                    $queryBuilder
+                        ->orderBy('request.createdAt', 'ASC');
+                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
+                    $queryBuilder
+                        ->orderBy('request.createdAt', 'DESC');
+                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
+                    $queryBuilder
+                        ->orderBy('request.stateUpdatedAt', 'ASC');
+                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
+                    $queryBuilder
+                        ->orderBy('request.stateUpdatedAt', 'DESC');
+                }
+            } else {
+                $queryBuilder
+                    ->orderBy('request.stateUpdatedAt', 'DESC');
+            }
+        } else {
             $queryBuilder
-                ->andWhere('request.state = :state')
-                ->setParameter('state', $filter['state']);
+                ->orderBy('request.stateUpdatedAt', 'DESC');
         }
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
@@ -253,14 +339,39 @@ class RequestRepository implements RequestRepositoryInterface
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
                 $request->getState(),
                 $request->getCreatedAt(),
+                $request->getStateUpdatedAt(),
                 ''
             );
         }, $results), $page, $limit, $count);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllAcceptedByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request', 'request.id')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true')
+            ->join('fromSheet.participants', 'fromParticipants')
+            ->join('toSheet.participants', 'toParticipants')
+            ->where('request.state = :approved')
+            ->andWhere('request.disabled = false')
+            ->setParameter('event', $event)
+            ->setParameter('approved', Request::STATE_APPROVED);
+
+        // avoid returning requests already transformed into meeting?
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -280,6 +391,27 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('event', $event)
             ->join('toSheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.to = :sheet OR request.from = :sheet')
+            ->andWhere('request.state = :state')
+            ->andWhere('request.disabled = false')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', $state);
+
+        $this->requestsWithoutMeeting($queryBuilder);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -321,7 +453,13 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
+            ->from(Request::class, 'request')
+        ;
+
+        if (!empty($filters) && isset($filters['disabled'])) {
+            $queryBuilder->where('request.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled']);
+        }
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -401,5 +539,57 @@ class RequestRepository implements RequestRepositoryInterface
             // set sheet
             $queryBuilder->setParameter('sheet', $sheet);
         }
+    }
+
+    /**
+     * Filter Requests that are not attached to Meeting
+     *
+     * @param QueryBuilder $queryBuilder
+     */
+    private function requestsWithoutMeeting(QueryBuilder &$queryBuilder)
+    {
+        $queryBuilder->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Request $request)
+    {
+        $this->entityManager->flush($request);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function findAccepted(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.to = :sheet OR request.from = :sheet')
+            ->andWhere('request.state = :state')
+            ->andWhere('request.disabled = false')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', Request::STATE_APPROVED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrderBy()
+    {
+        return [
+            RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC,
+            RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC,
+            RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC,
+            RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC,
+        ];
     }
 }

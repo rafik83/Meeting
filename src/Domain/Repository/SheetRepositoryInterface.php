@@ -37,6 +37,20 @@ interface SheetRepositoryInterface
     public function getByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
+
+    /**
      * @param Type $type
      *
      * @return bool
@@ -61,12 +75,24 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
+     * Get only enabled sheet by user or user's participant
+     *
      * @param User  $user
      * @param Event $event
      *
      * @return Sheet[]
      */
     public function getSheetsByUserAndEvent(User $user, Event $event);
+
+    /**
+     * Get all sheets whatever its enabled state by user or user's participant
+     *
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getAllSheetsByUserAndEvent(User $user, Event $event);
 
     /**
      * @param User           $user
@@ -91,6 +117,28 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
+     * @param Event $event
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByEventAndIds(Event $event, array $ids);
+
+    /**
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getUnvalidatedSheetsById(array $ids);
+  
+    /**
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsUnacceptedById(array $ids);
+
+    /**
      * @param User  $user
      * @param array $types
      *
@@ -113,6 +161,13 @@ interface SheetRepositoryInterface
     public function findSheets(array $sheets);
 
     /**
+     * @param array $sheetIds
+     *
+     * @return Sheet[]
+     */
+    public function findByIds(array $sheetIds);
+
+    /**
      * @param array $sheets
      *
      * @return Sheet[]
@@ -125,4 +180,33 @@ interface SheetRepositoryInterface
      * @return int
      */
     public function countByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getEnabledSheetsByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countEnabledSheetsByEvent(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function countEnabledSheetsTypeByEvent(Event $event, $locale);
+
+    /**
+     * @param User $user
+     *
+     * @return Sheet[]
+     */
+    public function getByUser(User $user);
 }

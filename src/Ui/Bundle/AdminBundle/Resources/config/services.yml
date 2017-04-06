@@ -112,12 +112,16 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '@repository.invoice.prefix_repository'
+            - '@security.authorization_checker'
         tags:
             - { name: form.type }
     form_type_event.create_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '@repository.invoice.prefix_repository'
+            - '@security.authorization_checker'
         tags:
             - { name: form.type }
     form_type_type.type_update_type:
@@ -190,6 +194,71 @@ services:
             - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }
+    form_type_unavailability_category.choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\ChoiceType
+        arguments:
+            - '@repository.unavailability.category_repository'
+        tags:
+            - { name: form.type }
+    form_type_participant.import_mapping_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType
+        tags:
+            - { name: form.type }
+
+    form_type_messaging_message.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type }
+
+    form_type_messaging_message.update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\UpdateType
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type }
+
+    form_type_sheet.message_campaign_filters_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\TargetFilterType
+        parent: form_type_sheet.abstract_filter_type
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@infrastructure.service.boolean_filters_builder'
+        tags:
+            - { name: form.type }
+
+    form_type_sheet.messaging_message_entity_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\MessageEntityType
+        arguments:
+            - '@repository.messaging.message_repository'
+            - '@router'
+        tags:
+            - { name: form.type }
+    form_type_spot.unavailability_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\UnavailabilityType }
+
+    form_type_sheet.abstract_filter_type:
+        abstract: true
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\AbstractFilterType
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@infrastructure.service.boolean_filters_builder'
+        tags:
+            - { name: form.type }
+
+    form_type_sheet.sheet_filter_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType
+        parent: form_type_sheet.abstract_filter_type
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@infrastructure.service.boolean_filters_builder'
+        tags:
+            - { name: form.type }
 
     #
     # Helper
@@ -198,6 +267,11 @@ services:
         class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
         arguments:
             - '@twig.extension.intl'
+
+    ui.helper.messaging_message_placeholder_helper:
+        class: Proximum\Vimeet\Ui\Helper\Messaging\MessagePlaceholderHelper
+        arguments:
+            - '@translator'
 
     #
     # Subscriber

@@ -12,16 +12,25 @@ namespace Proximum\Vimeet\Tests\Application\Components\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Tests\Factory\SpotFactory;
 
 class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @varObjectProphecy
+     */
+    public $meetingPublishedAccessChecker;
+
     /**
      * @var ObjectProphecy
      */
@@ -37,8 +46,9 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $this->sheetManager      = $this->prophesize(SheetManager::class);
+        $this->requestRepository             = $this->prophesize(RequestRepositoryInterface::class);
+        $this->sheetManager                  = $this->prophesize(SheetManager::class);
+        $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
     }
 
     /**
@@ -48,7 +58,8 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
     {
         return new RequestPermissionManager(
             $this->requestRepository->reveal(),
-            $this->sheetManager->reveal()
+            $this->sheetManager->reveal(),
+            $this->meetingPublishedAccessChecker->reveal()
         );
     }
 
@@ -256,6 +267,74 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testIsAllowedToEditApprovedTureAsRequestIsPlacedButMeetingNotPublished()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
+        $request->setMeeting($meeting);
+
+        $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToEditApproved(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToEditApprovedFalseAsMeetingRequestUpdateIsLocked()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $sheet->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToEditApprovedFalseAsRequestIsPlacedAndMeetingPublished()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+        $request->setMeeting($meeting);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
     public function testIsAllowedToEditApprovedTrueForSheetFromAndApprovedRequest()
     {
         list(
@@ -342,6 +421,74 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+
+        $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToCancel(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToCancelFalseAsMeetingRequestUpdateIsLocked()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $sheet->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToCancelFalseAsRequestIsPlacedAndMeetingPublished()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+        $request->setMeeting($meeting);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToCancelTrueAsRequestIsPlacedAndMeetingNotPublished()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
+        $request->setMeeting($meeting);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToCancel(
             $user,
@@ -525,7 +672,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet,
             $sheet2,
             $request
-            ) = $this->getInitialsValue();
+        ) = $this->getInitialsValue();
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToSee(
             $user,
@@ -543,7 +690,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet,
             $sheet2,
             $request
-            ) = $this->getInitialsValue();
+        ) = $this->getInitialsValue();
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToSee(
             $user2,
@@ -787,6 +934,77 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
         $request->approve($datetime);
+
+        $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user2,
+            $request,
+            $sheet2
+        ));
+    }
+
+    public function testIsAllowedToUnApproveFalseAsMeetingRequestUpdateAreLocked()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $sheet2->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user2,
+            $request,
+            $sheet2
+        ));
+    }
+
+    public function testIsAllowedToUnApproveFalseAsMeetingsArePublished()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+        $request->setMeeting($meeting);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user2,
+            $request,
+            $sheet2
+        ));
+    }
+
+
+    public function testIsAllowedToUnApproveTrueAsMeetingsAreNotPublished()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
+        $request->setMeeting($meeting);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $user2,

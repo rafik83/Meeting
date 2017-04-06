@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class ActivateAccountPassword
@@ -25,10 +26,17 @@ class ActivateAccountPassword
     public $password;
 
     /**
-     * @param User $user
+     * @var Sheet
      */
-    public function __construct(User $user)
+    public $sheet;
+
+    /**
+     * @param User  $user
+     * @param Sheet $sheet
+     */
+    public function __construct(User $user, Sheet $sheet)
     {
-        $this->user = $user;
+        $this->user  = $user;
+        $this->sheet = $sheet;
     }
 }

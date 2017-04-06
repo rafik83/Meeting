@@ -1,16 +1,16 @@
 Proximum\Vimeet\Domain\Model\Happening\Category:
     category_conference:
-        __construct: ['@event_rdv_carnot_2016', 'picto1', 1]
+        __construct: ['@event_rdv_carnot_2016', 'Dejeuner', 1, '#59a4aa', '#59a4bb']
     category_flash:
-        __construct: ['@event_rdv_carnot_2016', 'picto2', 2]
+        __construct: ['@event_rdv_carnot_2016', 'Conference', 2, '#59a4cc', '#59a4ff']
     category_workshop:
-        __construct: ['@event_rdv_carnot_2016', 'picto3', 3]
+        __construct: ['@event_rdv_carnot_2016', 'Cafe_1', 3, '#59a4dd', '#59a4cf']
     category_cocktail:
-        __construct: ['@event_rdv_carnot_2016', 'picto4', 4]
+        __construct: ['@event_rdv_carnot_2016', 'RDV', 4, '#59a4aa', '#59a4ff']
     category_meeting:
-        __construct: ['@event_rdv_carnot_2016', 'picto1', 5]
+        __construct: ['@event_rdv_carnot_2016', 'Cocktail', 5, '#59a4aa', '#59a4aa']
     category_round_table:
-        __construct: ['@event_rdv_carnot_2016', 'picto2', 6]
+        __construct: ['@event_rdv_carnot_2016', 'PresFlash_2', 6, '#59a4aa', '#59a4aa']
 
 Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation:
     category_conference_fr:

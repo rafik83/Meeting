@@ -1,0 +1,5 @@
+Proximum\Vimeet\Application\Command\Happening\Participate:
+    properties:
+        question:
+            - Length:
+                max: 300

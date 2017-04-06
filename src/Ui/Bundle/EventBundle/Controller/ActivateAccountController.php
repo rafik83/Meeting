@@ -51,7 +51,7 @@ class ActivateAccountController extends Controller
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
-        $command = new ActivateAccountPassword($user);
+        $command = new ActivateAccountPassword($user, $sheet);
         $form    = $this->createForm(ActivateAccountPasswordType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

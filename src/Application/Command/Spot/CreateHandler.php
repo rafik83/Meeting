@@ -48,7 +48,9 @@ class CreateHandler
             $create->size,
             $create->meetingCapacity,
             $create->seatCapacity,
-            $create->active
+            $create->active,
+            $create->priority,
+            $create->visio
         );
 
         $this->spotRepository->add($spot);

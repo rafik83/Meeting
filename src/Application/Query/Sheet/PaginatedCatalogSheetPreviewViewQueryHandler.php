@@ -82,7 +82,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             function (Sheet $sheet) use ($query) {
                 return $this
                     ->sheetPreviewViewQueryHandler
-                    ->handle(new SheetPreviewViewQuery($sheet, $query->locale, $query->viewer));
+                    ->handle(new SheetPreviewViewQuery($query->event, $sheet, $query->locale, $query->viewer));
             },
             $paginatedResult->results
         );
@@ -98,13 +98,22 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     private function getNomenclatureItems(Sheet $sheet, $locale)
     {
-        $nomenclatureItems = [];
-        $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
-        foreach ($templateData->getNomenclatureObjects() as $nomenclatureObject) {
+        $nomenclatureItems   = [];
+        $nomenclatureObjects = $templateData->getNomenclatureObjects();
+
+        foreach ($nomenclatureObjects as $nomenclatureObject) {
             $items = $nomenclatureObject->getData();
             if (isset($items['items'])) {
-                $nomenclatureItems = array_merge($nomenclatureItems, $items['items']);
+                if (!isset($nomenclatureItems[$nomenclatureObject->getObjective()])) {
+                    $nomenclatureItems[$nomenclatureObject->getObjective()] = [];
+                }
+
+                $nomenclatureItems[$nomenclatureObject->getObjective()] = array_merge(
+                    $nomenclatureItems[$nomenclatureObject->getObjective()],
+                    $items['items']
+                );
             }
         }
 

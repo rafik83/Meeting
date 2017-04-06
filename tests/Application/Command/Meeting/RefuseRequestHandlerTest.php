@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
-use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -47,7 +47,7 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
         $expectedRequest->refuse($dateTime);
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'this is a test', $dateTime);
-        $exectedEvent    = new RequestRefusedEvent($user, $request, $dateTime, 'this is a test');
+        $exectedEvent    = new RefusedRequestEvent($user, $request, $dateTime, 'this is a test');
 
         // Dependencies
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);

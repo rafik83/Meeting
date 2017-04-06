@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQuery;
 use Proximum\Vimeet\Application\Query\Order\ProFormaQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -34,22 +35,25 @@ class OrderController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $balance = $this->get('order.balance');
-        $orders  = $balance->getOrders($sheet);
+        $orderVatViews = $balance->getOrderVatViews($sheet);
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
             || !$sheet->getPackage()->isPassable()
-            || empty($orders)
+            || empty($orderVatViews)
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'          => $eventDomain->getEvent(),
-            'orders'         => $orders,
+            'orderVatViews'  => $orderVatViews,
             'sheet'          => $sheet,
             'transactions'   => $balance->getTransactions($sheet),
             'remainingToPay' => $balance->getRemainingToPay($sheet),
+            'invoiceViews'   => $this->get('sheet.sheet_details.invoice_view_query_handler')->handle(
+                new InvoiceViewQuery($sheet)
+            ),
         ]);
     }
 

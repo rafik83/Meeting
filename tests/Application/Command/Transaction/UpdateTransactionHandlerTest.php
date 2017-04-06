@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -63,7 +63,7 @@ class UpdateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventDispatcher->dispatch(
             Events::TRANSACTION_CONFIRMED,
-            new TransactionConfirmEvent($user, $expectedTransaction)
+            new TransactionConfirmedEvent($user, $expectedTransaction)
         )->shouldBeCalled();
 
         $eventDispatcher->dispatch(
