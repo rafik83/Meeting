@@ -251,6 +251,8 @@ REMOTE_INSTALL_DIR = /var/www/proximum-vimeet.project.local/htdocs/current
 init-db@preprod:
 	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && make init-db"
 
+# npm in tmp
+
 clean-npm-tmp@preprod:
 	read -p "You are about to remove npm directories in /tmp on preprod, please confirm (y/n)?" CONFIRM; \
 	if [ "$$CONFIRM" = "y" ]; then \
@@ -260,8 +262,25 @@ clean-npm-tmp@preprod:
 clean-npm-tmp@prod:
 	read -p "You are about to remove npm directories in /tmp on prod, please confirm (y/n)?" CONFIRM; \
 	if [ "$$CONFIRM" = "y" ]; then \
-	  ssh vimeet-prod "cd /tmp && rm -rf npm-*"; \
+	  ssh vimeet-prod1 "cd /tmp && rm -rf npm-*"; \
+	  ssh vimeet-prod2 "cd /tmp && rm -rf npm-*"; \
 	fi
+
+# Build guideline asset
+
+event-build-guideline-asset@preprod:
+	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
+
+event-build-guideline-asset@prod:
+	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
+
+# Elastica populate
+
+elastica-populate@preprod:
+	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
+
+elastica-populate@prod:
+	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
 
 # next targets must be run in VM
 ifeq ($(HOST), vimeet.proximum.dev)
