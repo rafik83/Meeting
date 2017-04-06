@@ -37,10 +37,10 @@ class TipTranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
             ->add('locale', LocaleType::class, [
                 'preferred_choices' => $this->preferredLocales,
             ])
+            ->add('title', TextType::class)
             ->add('content', TextareaType::class);
     }
 
