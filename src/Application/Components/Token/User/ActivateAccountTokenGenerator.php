@@ -23,17 +23,25 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      */
     private $respository;
 
+    /** @var string */
+    private $userActivateAccountTokenExpiration;
+
     /**
      * ActivateAccountTokenGenerator constructor.
      *
      * @param ActivateAccountTokenRepositoryInterface $respository
      * @param \DateTimeImmutable                      $dateTime
+     * @param string                                  $userActivateAccountTokenExpiration
      */
-    public function __construct(ActivateAccountTokenRepositoryInterface $respository, \DateTimeImmutable $dateTime)
-    {
-        parent::__construct($dateTime);
+    public function __construct(
+        ActivateAccountTokenRepositoryInterface $respository,
+        \DateTimeImmutable $dateTime,
+        $userActivateAccountTokenExpiration
+    ) {
+        $this->userActivateAccountTokenExpiration = $userActivateAccountTokenExpiration;
+        $this->respository                        = $respository;
 
-        $this->respository = $respository;
+        parent::__construct($dateTime);
     }
 
     /**
@@ -52,5 +60,13 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
         $this->respository->create($token);
 
         return $token;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    protected function getLifetime()
+    {
+        return new \DateInterval($this->userActivateAccountTokenExpiration);
     }
 }

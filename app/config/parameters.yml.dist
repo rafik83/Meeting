@@ -50,3 +50,4 @@ parameters:
     phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
 
     assets_version: 1
+    user_activate_account_token_expiration: 'P7D'
