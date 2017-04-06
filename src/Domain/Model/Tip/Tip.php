@@ -239,7 +239,7 @@ class Tip
             $pagesTranslations[] = self::TRANS_VISIBLE_MEETING_MANAGEMENT;
         }
 
-        if ($this->onPrintPlanning) {
+        if ($this->isOnPrintPlanning()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_PRINT_PLANNING;
         }
 

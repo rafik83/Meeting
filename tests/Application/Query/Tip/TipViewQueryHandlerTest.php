@@ -25,7 +25,7 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
 
         $tips = [
-            new Tip('tip_1', true, true, true, $dateTime),
+            new Tip('tip_1', false, true, false, $dateTime),
             new Tip('tip_2', false, false, true, $dateTime),
             new Tip('tip_3', true, false, true, $dateTime),
         ];
@@ -33,15 +33,13 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedTipListView = new TipListView();
         $expectedTipListView->tipListView = [
             new TipView(null, 'tip_1', [
-                'admin.tip.column.visible.meeting_management',
                 'admin.tip.column.visible.catalog',
-                'admin.tip.column.visible.print_planning',
             ]),
             new TipView(null, 'tip_2', [
                 'admin.tip.column.visible.print_planning'
             ]),
             new TipView(null, 'tip_3', [
-                'admin.tip.column.visible.catalog',
+                'admin.tip.column.visible.meeting_management',
                 'admin.tip.column.visible.print_planning',
             ]),
         ];
