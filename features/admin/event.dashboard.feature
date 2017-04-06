@@ -5,12 +5,12 @@ Feature: See the dashboard of an event
   Scenario: See dashboard of event
     Given the database is purged
     And the event "Best of web" is created
-    And there is an order in the amount of 1000
+    And there is an order in the amount of 123
     And I am logged as admin
     When I go to this page "/admin/fr/event/1/dashboard"
     Then I should see "admin.event.dashboard.title"
-    And I should see "0,00 €" in the ".dashboard-total-orders" element
+    And I should see "123,00 €" in the ".dashboard-total-orders" element
     And I should see "0,00 €" in the ".dashboard-total-paid" element
-    And I should see "0,00 €" in the ".dashboard-total-remaining-to-pay" element
+    And I should see "123,00 €" in the ".dashboard-total-remaining-to-pay" element
     And I should see "admin.sheet.dashboard.totalSheet"
     And I should see "admin.sheet.dashboard.totalParticipants"
