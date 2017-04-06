@@ -49,6 +49,7 @@ class InvoiceViewDenormalizer implements DenormalizerInterface, DenormalizerAwar
             $event->getInvoiceLogo(),
             $invoice->getCreatedAt(),
             $eventDefaultLocale,
+            $event->getTimeZone(),
             $event->getBillingAddress($eventDefaultLocale),
             $event->getBankInfo($eventDefaultLocale),
             $event->getPaymentCondition($eventDefaultLocale),
