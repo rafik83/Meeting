@@ -391,3 +391,4 @@ payum:
 # Sentry configuration (Data source name)
 sentry:
     dsn: "%sentry_dsn%"
+    environment: "%kernel.environment%"
