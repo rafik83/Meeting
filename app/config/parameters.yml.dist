@@ -50,3 +50,5 @@ parameters:
     phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
 
     assets_version: 1
+
+    sentry_dsn: "https://eff6dd84b3cf46fa852f1f1bb5190d4f:f947b7f4fabb4091944c2967e6f9a0c3@sentry.io/154059"

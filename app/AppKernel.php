@@ -35,6 +35,9 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
 
+            // Sentry
+            new Sentry\SentryBundle\SentryBundle(),
+
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
             new Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle(),
