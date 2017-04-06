@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
@@ -117,7 +116,7 @@ class TaggedDataFactory
                     $object instanceof EditableText ? $object->isTextarea() : false
                 );
 
-                $this->addTaggedDataView($tag, $taggedDataView);
+                $this->addTaggedDataView($sheet, $tag, $taggedDataView);
             }
         }
     }
@@ -131,7 +130,7 @@ class TaggedDataFactory
      *
      * @return TemplateData
      */
-    private function attachTaggedDataView(Sheet $sheet, $locale, $rules = [])
+    private function attachTaggedDataView(Sheet $sheet, $locale, array $rules = [])
     {
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
@@ -139,19 +138,25 @@ class TaggedDataFactory
             $this->applyer->applyRuleForTemplate($sheetTemplateData, $rules);
         }
 
-        $sheetTemplateData->setTaggedDataViews($this->taggedDataViews);
+        $tags = [];
+        if (isset($this->taggedDataViews[$sheet->getId()])) {
+            $tags = $this->taggedDataViews[$sheet->getId()];
+        }
+
+        $sheetTemplateData->setTaggedDataViews($tags);
 
         return $sheetTemplateData;
     }
 
     /**
+     * @param Sheet          $sheet
      * @param string         $tag
      * @param TaggedDataView $taggedDataView
      */
-    private function addTaggedDataView($tag, $taggedDataView)
+    private function addTaggedDataView(Sheet $sheet, $tag, $taggedDataView)
     {
-        if (!isset($this->taggedDataViews[$tag])) {
-            $this->taggedDataViews[$tag] = $taggedDataView;
+        if (!isset($this->taggedDataViews[$sheet->getId()][$tag])) {
+            $this->taggedDataViews[$sheet->getId()][$tag] = $taggedDataView;
         }
     }
 }
