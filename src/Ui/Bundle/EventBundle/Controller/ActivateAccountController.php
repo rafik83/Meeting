@@ -47,7 +47,9 @@ class ActivateAccountController extends Controller
         }
 
         if ($activateAccountToken->isExpired(new \DateTime())) {
-            throw $this->createNotFoundException('The token is expired.');
+            return $this->redirectToRoute('event_activate_account_expired', [
+                'token' => $activateAccountToken->getToken(),
+            ]);
         }
 
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -99,10 +101,13 @@ class ActivateAccountController extends Controller
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
-        $command = new ReSendActivateAccountToken($sheet, $user);
+        $command = new ReSendActivateAccountToken($sheet, $user, $request->getLocale());
 
         if ($request->isMethod('POST')) {
             $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.user.activate_account.token_re_send');
+
+            return $this->redirectToRoute('event', []);
         }
 
         return $this->render('EventBundle:ActivateAccount:expired.html.twig', [

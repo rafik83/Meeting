@@ -675,6 +675,15 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccountPassword }
+
+    command.user.activate_account.re_send_activate_account_token_handler:
+        class: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountTokenHandler
+        arguments:
+            - '@components.token.user.activate_account_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken }
+
     command.user.change_mail_handler:
         class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
         arguments:
