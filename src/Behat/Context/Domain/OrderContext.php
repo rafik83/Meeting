@@ -27,11 +27,30 @@ class OrderContext implements Context
     }
 
     /**
-     * @Given /^there is an order in the amount of (?P<total>\d+)$/
+     * @Given /^there is an order with the amount of (?P<total>\d+) and VAT is applicable$/
      *
      * @param float $total
      */
-    public function thereIsAnOrder($total)
+    public function thereIsAnOrderAndVatIsApplicable($total)
+    {
+        $this->createOrder($total, true);
+    }
+
+    /**
+     * @Given /^there is an order with the amount of (?P<total>\d+) and VAT is not applicable$/
+     *
+     * @param float $total
+     */
+    public function thereIsAnOrderAndVatIsNotApplicable($total)
+    {
+        $this->createOrder($total, false);
+    }
+
+    /**
+     * @param float $total
+     * @param bool  $isVatApplicable
+     */
+    private function createOrder($total, $isVatApplicable = true)
     {
         $event = $this->orderContextProxy->getStorage()->get('event');
 
@@ -41,7 +60,7 @@ class OrderContext implements Context
 
         $orderManager = $this->orderContextProxy->getOrderManager();
 
-        $order = $orderManager->createOrderOfGivenTotal($event, $total);
+        $order = $orderManager->createOrderOfGivenTotal($event, $total, $isVatApplicable);
         $this->orderContextProxy->getStorage()->set('order', $order);
     }
 }

@@ -50,15 +50,26 @@ class OrderManager
     /**
      * @param Event      $event
      * @param float      $total
+     * @param bool       $isVatApplicable
      * @param Sheet|null $sheet
      *
      * @return Order
+     * @throws \Exception
      */
-    public function createOrderOfGivenTotal(Event $event, $total, Sheet $sheet = null)
+    public function createOrderOfGivenTotal(Event $event, $total, $isVatApplicable, Sheet $sheet = null)
     {
         if (null === $sheet) {
             $sheet = $this->sheetManager->create($event);
-            $this->billingInfoManager->create($sheet);
+
+            if ($event->getCountry() !== 'FR') {
+                throw new \Exception('Event must have country=FR in order to manage is VAT applicable or not.');
+            }
+
+            if (true === $isVatApplicable) {
+                $this->billingInfoManager->create($sheet, 'FR');
+            } else {
+                $this->billingInfoManager->create($sheet, 'US');
+            }
         }
 
         $order = new Order($sheet, '', $this->dateTime);

@@ -19,20 +19,25 @@ class EventFactory
 
     /**
      * @param string|null $eventTitle
-     *
      * @param string      $fallbackLocale
+     * @param string[]    $locales
+     * @param string      $vatMode
      *
      * @return Event
      */
-    public static function createEvent($eventTitle = null, $fallbackLocale = self::FALLBACK_LOCALE_DEFAULT)
-    {
+    public static function createEvent(
+        $eventTitle = null,
+        $fallbackLocale = self::FALLBACK_LOCALE_DEFAULT,
+        array $locales = ['fr', 'en'],
+        $vatMode = Event::VAT_MODE_ET
+    ) {
         $prefix = self::createInvoicePrefix();
 
         return new Event(
             null === $eventTitle ? 'super event' : $eventTitle,
             $fallbackLocale,
-            ['fr', 'en'],
-            Event::VAT_MODE_ATI,
+            $locales,
+            $vatMode,
             20,
             'FR',
             'EUR',
