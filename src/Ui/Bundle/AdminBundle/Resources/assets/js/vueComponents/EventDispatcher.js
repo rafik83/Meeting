@@ -16,7 +16,7 @@ EventDispatcher.prototype.dispatch = function (event, parameters) {
 
 /**
  * @param {string} event
- * @param {callback} callback
+ * @param {function} callback
  */
 EventDispatcher.prototype.listen = function (event, callback) {
     this.vue.$on(event, callback);
