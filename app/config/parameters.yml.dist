@@ -51,4 +51,4 @@ parameters:
 
     assets_version: 1
 
-    admin_menu_color: #222
+    admin_menu_color: "#222"
