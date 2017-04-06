@@ -16,6 +16,9 @@ use Proximum\Vimeet\Application\View\Event\Find\SheetFoundView;
 
 class MultipleSheetFoundViewQueryHandler
 {
+    /** @var SheetInfoGuesser */
+    private $guesser;
+
     /**
      * @param SheetInfoGuesser $guesser
      */
