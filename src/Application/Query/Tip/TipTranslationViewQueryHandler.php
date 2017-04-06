@@ -15,22 +15,23 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
 {
+    const CONTEXT_CATALOG            = 'event_catalog_index';
+    const CONTEXT_MEETING_MANAGEMENT = 'event_meeting_list_request';
+    const CONTEXT_PRINT_PLANNING     = 'print_planning';
+
     /**
      * keys are context, value are table fields
      *
      * @var array
      */
     private static $contextsMapping = [
-        'event_catalog_index'        => 'onCatalog',
-        'event_meeting_list_request' => 'onMeetingManagement',
-        'print_planning'             => 'onPrintPlanning',
+        self::CONTEXT_CATALOG            => 'onCatalog',
+        self::CONTEXT_MEETING_MANAGEMENT => 'onMeetingManagement',
+        self::CONTEXT_PRINT_PLANNING     => 'onPrintPlanning',
     ];
 
     /** @var TipRepositoryInterface */
     private $tipRepository;
-
-    /** @var array */
-    private $tipTranslationListView = [];
 
     /**
      * TipTranslationViewQueryHandler constructor.
@@ -59,10 +60,12 @@ class TipTranslationViewQueryHandler
             return null;
         }
 
+        $tipTranslationListView = [];
+
         foreach ($tipTranslations as $translation) {
-            $this->tipTranslationListView[] = $translation;
+            $tipTranslationListView[] = $translation;
         }
 
-        return $this->tipTranslationListView;
+        return $tipTranslationListView;
     }
 }

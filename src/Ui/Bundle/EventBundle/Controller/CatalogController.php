@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -143,7 +144,10 @@ class CatalogController extends Controller
             $template = 'EventBundle:Catalog:index.html.twig';
         }
 
-        $tipQuery = new TipTranslationViewQuery("event_catalog_index", $request->getLocale());
+        $tipQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_CATALOG,
+            $request->getLocale()
+        );
         $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
 
         return $this->render($template, [

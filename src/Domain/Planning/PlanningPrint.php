@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Planning;
 
+use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+
 class PlanningPrint
 {
     /** @var string */
@@ -57,22 +59,26 @@ class PlanningPrint
     /** @var null|string */
     public $eventLogo;
 
+    /** @var TipTranslationView[] */
+    public $tipTranslationViews;
+
     /**
-     * @param string      $sheetTitle
-     * @param string      $participantName
-     * @param string      $planning
-     * @param string      $participantLocale
-     * @param string      $leftColor
-     * @param string      $rightColor
-     * @param string      $eventTitle
-     * @param string      $eventDescription
-     * @param string      $eventDomain
+     * @param string $sheetTitle
+     * @param string $participantName
+     * @param string $planning
+     * @param string $participantLocale
+     * @param string $leftColor
+     * @param string $rightColor
+     * @param string $eventTitle
+     * @param string $eventDescription
+     * @param string $eventDomain
      * @param string|null $eventLogo
      * @param string|null $organiserWebsite
      * @param string|null $contactFirstName
      * @param string|null $contactLastName
      * @param string|null $organiserPhone
      * @param string|null $organiserEmail
+     * @param TipTranslationView[] $tipTranslationViews
      */
     public function __construct(
         $sheetTitle,
@@ -89,7 +95,8 @@ class PlanningPrint
         $contactFirstName = null,
         $contactLastName = null,
         $organiserPhone = null,
-        $organiserEmail = null
+        $organiserEmail = null,
+        $tipTranslationViews
 
     ) {
         $this->sheetTitle        = $sheetTitle;
@@ -107,5 +114,6 @@ class PlanningPrint
         $this->contactLastName   = $contactLastName;
         $this->organiserPhone    = $organiserPhone;
         $this->organiserEmail    = $organiserEmail;
+        $this->tipTranslationViews = $tipTranslationViews;
     }
 }

@@ -3866,6 +3866,7 @@ services:
             - '%mailer_sender%'
             - '@repository.file_repository'
             - '@datetime'
+            - '@query.tip.tip_translation_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
     ###### Job

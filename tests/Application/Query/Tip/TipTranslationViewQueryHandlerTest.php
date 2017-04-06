@@ -10,8 +10,6 @@
 
 namespace Application\Query\Tip;
 
-
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;

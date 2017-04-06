@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
@@ -104,7 +105,10 @@ class MeetingRequestController extends Controller
 
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
-        $tipQuery = new TipTranslationViewQuery('event_meeting_list_request', $request->getLocale());
+        $tipQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
+            $request->getLocale()
+        );
         $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
 
         return $this->render($template, [

@@ -26,7 +26,7 @@ class TipTranslationViewQuery
      */
     public function __construct($context, $locale)
     {
-        $this->context   = $context;
-        $this->locale = $locale;
+        $this->context = $context;
+        $this->locale  = $locale;
     }
 }
