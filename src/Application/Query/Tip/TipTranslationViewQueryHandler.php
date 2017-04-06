@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
-use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotFoundException;
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
@@ -44,8 +43,6 @@ class TipTranslationViewQueryHandler
      * @param TipTranslationViewQuery $query
      *
      * @return TipTranslationView
-     *
-     * @throws TipTranslationNotFoundException
      */
     public function handle(TipTranslationViewQuery $query)
     {

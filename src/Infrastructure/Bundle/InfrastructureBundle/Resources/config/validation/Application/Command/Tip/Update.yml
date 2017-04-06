@@ -1,0 +1,15 @@
+Proximum\Vimeet\Application\Command\Tip\Update:
+    properties:
+        title:
+            - NotBlank: ~
+
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        locale:
+                            - NotBlank: ~
+                        content:
+                            - NotBlank: ~
