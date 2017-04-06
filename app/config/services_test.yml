@@ -71,6 +71,13 @@ services:
             - '@behat_manager.slot'
             - '@behat_manager.spot'
 
+    behat_manager.order:
+        class: Proximum\Vimeet\Behat\Service\Manager\OrderManager
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@behat_manager.sheet'
+            - '@datetime'
+
     #
     # Proxies
     #
@@ -109,3 +116,9 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.meeting'
+
+    behat_proxy.order_context:
+        class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.order'

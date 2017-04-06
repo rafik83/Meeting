@@ -5,6 +5,7 @@ Feature: See the dashboard of an event
   Scenario: See dashboard of event
     Given the database is purged
     And the event "Best of web" is created
+    And there is an order in the amount of 1000
     And I am logged as admin
     When I go to this page "/admin/fr/event/1/dashboard"
     Then I should see "admin.event.dashboard.title"
