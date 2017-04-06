@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ReSendActivateAccountType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,10 +42,11 @@ class ActivateAccountController extends Controller
         // We must refresh sheet to make behat feature working ...
         $this->getDoctrine()->getManager()->refresh($sheet);
 
-        if ($activateAccountToken->isExpired(new \DateTime())
-            || !$sheet->hasUser($user)
-            || $activateAccountToken->getSheet()->getEvent() !== $eventDomain->getEvent()
-        ) {
+        if (!$sheet->hasUser($user) || $activateAccountToken->getSheet()->getEvent() !== $eventDomain->getEvent()) {
+            throw $this->createNotFoundException('Token invalid');
+        }
+
+        if ($activateAccountToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token is expired.');
         }
 
@@ -67,6 +70,44 @@ class ActivateAccountController extends Controller
         return $this->render('EventBundle:ActivateAccount:password.html.twig', [
             'event' => $eventDomain->getEvent(),
             'form'  => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param Request              $request
+     * @param EventDomain          $eventDomain
+     * @param ActivateAccountToken $activateAccountToken
+     *
+     * @return RedirectResponse|Response
+     */
+    public function expiredTokenAction(
+        Request $request,
+        EventDomain $eventDomain,
+        ActivateAccountToken $activateAccountToken
+    ) {
+        $sheet = $activateAccountToken->getSheet();
+        $user  = $activateAccountToken->getUser();
+
+        // We must refresh sheet to make behat feature working ...
+        $this->getDoctrine()->getManager()->refresh($sheet);
+
+        if (!$sheet->hasUser($user) || $activateAccountToken->getSheet()->getEvent() !== $eventDomain->getEvent()) {
+            throw $this->createNotFoundException('Token invalid');
+        }
+
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $this->get('adapter.authentication_manager')->disconnect();
+        }
+
+        $command = new ReSendActivateAccountToken($sheet, $user);
+
+        if ($request->isMethod('POST')) {
+            $this->get('tactician.commandbus')->handle($command);
+        }
+
+        return $this->render('EventBundle:ActivateAccount:expired.html.twig', [
+            'event' => $eventDomain->getEvent(),
+            'token' => $activateAccountToken->getToken(),
         ]);
     }
 

@@ -72,6 +72,13 @@ event_activate_account:
         token: \w+
     defaults: { _controller: EventBundle:ActivateAccount:password }
 
+event_activate_account_expired:
+    path: /activate/{token}/expired
+    methods: [GET, POST]
+    requirements:
+        token: \w+
+    defaults: { _controller: EventBundle:ActivateAccount:expiredToken }
+
 event_activate_account_already_known:
     path: /complete-profile/{participant}
     methods: [GET]
