@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Tip;
 class TipTranslationViewQuery
 {
     /** @var string */
-    public $path;
+    public $context;
 
     /** @var string */
     public $locale;
@@ -21,12 +21,12 @@ class TipTranslationViewQuery
     /**
      * TipTranslationViewQuery constructor.
      *
-     * @param string $path
+     * @param string $context
      * @param string $locale
      */
-    public function __construct($path, $locale)
+    public function __construct($context, $locale)
     {
-        $this->path   = $path;
+        $this->context   = $context;
         $this->locale = $locale;
     }
 }

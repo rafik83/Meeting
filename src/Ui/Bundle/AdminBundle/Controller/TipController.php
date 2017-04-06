@@ -37,7 +37,7 @@ class TipController extends Controller
         $tipListView = $this->get('tactician.commandbus')->handle($tipViewQuery);
 
         return $this->render('AdminBundle:Tip:list.html.twig',[
-            'tips' => $tipListView,
+            'tipListView' => $tipListView,
         ]);
     }
 

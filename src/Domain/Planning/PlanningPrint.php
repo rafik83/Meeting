@@ -90,6 +90,7 @@ class PlanningPrint
         $contactLastName = null,
         $organiserPhone = null,
         $organiserEmail = null
+
     ) {
         $this->sheetTitle        = $sheetTitle;
         $this->participantName   = $participantName;

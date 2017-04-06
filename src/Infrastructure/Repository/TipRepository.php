@@ -76,47 +76,17 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function findForCatalog()
+    public function getByContext($context, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip, translations')
+            ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.title, tipTranslation.content)')
             ->from(Tip::class, 'tip')
-            ->join('tip.translations', 'translations', 'WHERE', 'tip.onCatalog = true')
+            ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
             ->orderBy('tip.createdAt')
-            ->setMaxResults(1);
+            ->setParameter('locale', $locale);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /** {@inheritdoc} */
-    public function findForMeetingManagement()
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('tip, translations')
-            ->from(Tip::class, 'tip')
-            ->join('tip.translations', 'translations', 'WHERE', 'tip.onMeetingManagement = true')
-            ->orderBy('tip.createdAt')
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /** {@inheritdoc} */
-    public function findForPlanning()
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('tip, translations')
-            ->from(Tip::class, 'tip')
-            ->join('tip.translations', 'translations', 'WHERE', 'tip.onPrintPlanning = true')
-            ->orderBy('tip.createdAt')
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 }

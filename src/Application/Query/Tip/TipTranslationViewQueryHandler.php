@@ -15,19 +15,22 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
 {
-    const PATH_CATALOG            = 'event_catalog_index';
-    const PATH_MEETING_MANAGEMENT = 'event_meeting_list_request';
-    const PATH_PRINT_PLANNING     = '';
-
     /**
-     * Constant that define TipRepositoryInterface methods to be called
+     * keys are context, value are table fields
+     *
+     * @var array
      */
-    const METHOD_PLANNING           = 'findForPlanning';
-    const METHOD_MEETING_MANAGEMENT = 'findForMeetingManagement';
-    const METHOD_CATALOG            = 'findForCatalog';
+    private static $contextsMapping = [
+        'event_catalog_index'        => 'onCatalog',
+        'event_meeting_list_request' => 'onMeetingManagement',
+        'print_planning'             => 'onPrintPlanning',
+    ];
 
     /** @var TipRepositoryInterface */
     private $tipRepository;
+
+    /** @var array */
+    private $tipTranslationListView = [];
 
     /**
      * TipTranslationViewQueryHandler constructor.
@@ -42,35 +45,24 @@ class TipTranslationViewQueryHandler
     /**
      * @param TipTranslationViewQuery $query
      *
-     * @return TipTranslationView
+     * @return TipTranslationView[]
      */
     public function handle(TipTranslationViewQuery $query)
     {
-        $repositoryMethod = $this->getRepositoryMethod($query);
-        $tip = $this->tipRepository->$repositoryMethod($query->path);
-
-        if (!$tip) {
+        if(!isset(self::$contextsMapping[$query->context])) {
             return null;
         }
 
-        $tipTranslation = $tip->translations->get($query->locale);
+        $tipTranslations = $this->tipRepository->getByContext(self::$contextsMapping[$query->context], $query->locale);
 
-        return new TipTranslationView($tipTranslation->getTitle(), $tipTranslation->getContent());
+        if (!$tipTranslations) {
+            return null;
+        }
+
+        foreach ($tipTranslations as $translation) {
+            $this->tipTranslationListView[] = $translation;
+        }
+
+        return $this->tipTranslationListView;
     }
-
-    private function getRepositoryMethod(TipTranslationViewQuery $query)
-    {
-        if ($query->path === self::PATH_CATALOG) {
-            return 'findForCatalog';
-        }
-
-        if ($query->path === self::PATH_MEETING_MANAGEMENT) {
-            return 'findForMeetingManagement';
-        }
-
-        if ($query->path === self::PATH_PRINT_PLANNING) {
-            return 'findForPlanning';
-        }
-    }
-
 }

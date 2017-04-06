@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 
@@ -39,17 +40,10 @@ interface TipRepositoryInterface
     public function removeTranslation(TipTranslation $translation);
 
     /**
-     * @return Tip|null
+     * @param $context
+     * @param $locale
+     *
+     * @return null|TipTranslationView[]
      */
-    public function findForPlanning();
-
-    /**
-     * @return Tip|null
-     */
-    public function findForMeetingManagement();
-
-    /**
-     * @return Tip|null
-     */
-    public function findForCatalog();
+    public function getByContext($context, $locale);
 }
