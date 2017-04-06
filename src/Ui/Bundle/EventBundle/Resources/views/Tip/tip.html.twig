@@ -1,6 +1,25 @@
 {% if tip is defined and tip is not null %}
     <div class="alert alert-info" role="alert">
-        <h4>{{ tip.title }}</h4>
-        <p>{{ tip.content|html }}</p>
+        <a href="#" data-toggle="modal" data-target="#tipModal">
+            <i class="glyphicon glyphicon-warning-sign"></i>{{ tip.title }}
+        </a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.close'|trans }}"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="tipModal">{{ tip.title }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ tip.content|html }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.close'|trans }}</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endif %}

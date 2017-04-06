@@ -9,8 +9,8 @@ class Tip
     /**
      * Translations keys for visible pages @see AdminBundle/Resources/translations/messages.fr.yml
      */
-    const TRANS_VISIBLE_CATALOG = 'admin.tip.column.visible.meeting_management';
-    const TRANS_VISIBLE_MEETING_MANAGEMENT = 'admin.tip.column.visible.catalog';
+    const TRANS_VISIBLE_CATALOG = 'admin.tip.column.visible.catalog';
+    const TRANS_VISIBLE_MEETING_MANAGEMENT = 'admin.tip.column.visible.meeting_management';
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
 
     /**
