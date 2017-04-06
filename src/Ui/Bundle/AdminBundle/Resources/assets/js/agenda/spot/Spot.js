@@ -1,6 +1,7 @@
 var options = require('../../vueComponents/options');
 var AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
 var spotAgenda = require('./SpotAgenda.js');
+var eventDispatcher = require('../../vueComponents/EventDispatcher');
 
 var api = new AgendaApiEndpoints();
 
@@ -18,6 +19,10 @@ module.exports = {
     },
     mounted: function () {
         this.loadSpots();
+
+        eventDispatcher.listen('load-spot-detail', function (spotId) {
+            this.loadSpotDetail(spotId);
+        }.bind(this));
     },
     computed: {
         noSpots: function () {
@@ -117,7 +122,8 @@ module.exports = {
          * @param {int} sheetId
          */
         showAgendaForSheetId: function (sheetId) {
-            this.$emit('show-agenda-for-sheet-id', sheetId)
+            eventDispatcher.dispatch('show-agenda-for-sheet-id', sheetId);
+            eventDispatcher.dispatch('toggleTab', 'sheetTab');
         }
     }
 };

@@ -6,6 +6,7 @@ var massAssignmentModal = require('./modal/massAssignmentModal');
 var updateParticipantModal = require('./modal/updateParticipantModal');
 var sortModal = require('./modal/sortModal');
 var _ = require('lodash');
+var eventDispatcher = require('../../vueComponents/EventDispatcher');
 
 var AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
 var Vue = require('vue');
@@ -58,6 +59,10 @@ module.exports = {
         this.$nextTick(function () {
             this.init();
         });
+
+        eventDispatcher.listen('show-agenda-for-sheet-id', function (sheetId) {
+            this.showAgendaForSheetId(sheetId);
+        }.bind(this));
     },
 
     /**

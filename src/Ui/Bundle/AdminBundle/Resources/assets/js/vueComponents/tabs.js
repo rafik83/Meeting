@@ -1,11 +1,15 @@
 var options = require('../vueComponents/options');
 var Vue = require('vue');
+var eventDispatcher = require('./EventDispatcher');
 
 var tab = {
     delimiters: options.delimiters,
     template: '<div v-show="isActive"><slot></slot></div>',
     props: {
         name: {
+            required: true
+        },
+        reference: {
             required: true
         },
         selected: {
@@ -31,6 +35,13 @@ var tabs = {
         return {
             tabs: []
         }
+    },
+    mounted: function () {
+        eventDispatcher.listen('toggleTab', function(reference) {
+            this.tabs.forEach(function (tab) {
+                tab.isActive = (tab.reference === reference);
+            });
+        }.bind(this));
     },
     created: function () {
         this.tabs = this.$children;

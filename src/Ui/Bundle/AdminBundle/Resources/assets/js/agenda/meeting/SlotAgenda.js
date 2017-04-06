@@ -1,5 +1,6 @@
 var options = require('../../vueComponents/options'),
-    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
+    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
+    eventDispatcher = require('../../vueComponents/EventDispatcher');
 
 var api = new AgendaApiEndpoints();
 
@@ -156,7 +157,8 @@ module.exports = {
          * @param {int} spotId
          */
         loadSpotDetail: function (spotId) {
-            this.$emit('load-spot-detail', spotId);
+            eventDispatcher.dispatch('load-spot-detail', spotId);
+            eventDispatcher.dispatch('toggleTab', 'spotTab');
         }
     }
 };

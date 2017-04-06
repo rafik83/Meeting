@@ -12,10 +12,10 @@
                         <a href="#" aria-controls="sheet">${ tab.name }</a>
                     </li>
                 </ul>
-                <tab name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
+                <tab reference="sheetTab" name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
                     <meeting></meeting>
                 </tab>
-                <tab name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
+                <tab reference="spotTab" name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
                     <spot></spot>
                 </tab>
             </div>
