@@ -21,18 +21,13 @@ class ReSendActivateAccountToken
     /** @var User */
     public $user;
 
-    /** @var string */
-    public $locale;
-
     /**
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
+     * @param Sheet $sheet
+     * @param User  $user
      */
-    public function __construct(Sheet $sheet, User $user, $locale)
+    public function __construct(Sheet $sheet, User $user)
     {
         $this->sheet  = $sheet;
         $this->user   = $user;
-        $this->locale = $locale;
     }
 }
