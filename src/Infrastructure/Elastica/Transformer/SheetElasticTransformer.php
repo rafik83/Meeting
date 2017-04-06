@@ -142,7 +142,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $owner      = $sheet->getOwner()->getId();
             $ownerEmail = $sheet->getOwner()->getEmail();
         } catch (\RuntimeException $e) {
-            $owner = null;
+            $owner      = null;
+            $ownerEmail = null;
         }
 
         $categories = $this->buildCategories($sheet);
