@@ -3,22 +3,13 @@
 app_options:
 
   php:                   true
-  php_version:           '5.6'
+  php_version:           '7.1'
   nodejs:                true
   nodejs_version:        '4'
   mysql:                 true
   mysql_version:         '5.6'
-  mongodb:               false
-  mongodb_version:       '3.2'
-  mariadb:               false
-  mariadb_version:       '10.1'
-  postgresql:            false
-  postgresql_version:    '9.5'
   elasticsearch:         true
   elasticsearch_version: '1.7'
-  redis:                 false
-  influxdb:              false
-  java:                  false
 
 app_patterns:
 
@@ -86,13 +77,6 @@ app_patterns:
     - Host proximum-es-01:
       - User:         www-data
       - ProxyCommand: ssh proximum-gw nc es-01
-
-  ########
-  # Motd #
-  ########
-
-  motd_template: template/elao.j2
-  motd_message:  California - 1993
 
   #########
   # Files #
