@@ -79,6 +79,11 @@ event_activate_account_expired:
         token: \w+
     defaults: { _controller: EventBundle:ActivateAccount:expiredToken }
 
+event_actiavet_account_re_send_token_confirm:
+    path: /activate/expired/resend
+    methods: [GET]
+    defaults: { _controller: EventBundle:ActivateAccount:confirmReSendToken }
+
 event_activate_account_already_known:
     path: /complete-profile/{participant}
     methods: [GET]
