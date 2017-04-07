@@ -20,13 +20,13 @@ class InvoiceDataView
     /** @var BillingInfosView */
     public $billingInfosView;
 
-    /** @var float */
+    /** @var int amount in cents */
     public $amountRemainToPay;
 
     /**
      * @param Order\SummaryView $summaryView
      * @param BillingInfosView  $billingInfosView
-     * @param float             $amountRemainToPay
+     * @param int               $amountRemainToPay amount in cents
      */
     public function __construct(Order\SummaryView $summaryView, BillingInfosView $billingInfosView, $amountRemainToPay)
     {
