@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\Sheet\Group:
+    type: entity
+    table: sheet_group
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: text
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        manager:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE

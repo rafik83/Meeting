@@ -1,0 +1,89 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Model\Sheet;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+
+/**
+ * "Entité multi-fiches"
+ */
+class Group
+{
+    /** @var int */
+    private $id;
+
+    /** @var Event */
+    private $event;
+
+    /** @var User */
+    private $manager;
+
+    /** @var \DateTimeInterface */
+    private $createdAt;
+
+    /** @var string */
+    private $title;
+
+    /**
+     * @param Event              $event
+     * @param User               $manager
+     * @param string             $title
+     * @param \DateTimeInterface $createdAt
+     */
+    public function __construct(Event $event, User $manager, $title, \DateTimeInterface $createdAt)
+    {
+        $this->event = $event;
+        $this->manager = $manager;
+        $this->title = $title;
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @return User
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+}
