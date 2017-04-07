@@ -114,7 +114,7 @@ class TransactionRepository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findByEventAndEnabledSheets(Event $event)
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()

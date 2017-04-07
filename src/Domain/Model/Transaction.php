@@ -43,6 +43,8 @@ class Transaction
     private $date;
 
     /**
+     * See Mode constants
+     *
      * @var string
      */
     private $mode;
@@ -78,7 +80,7 @@ class Transaction
      * @param Sheet              $sheet
      * @param float              $amount
      * @param \DateTimeInterface $date
-     * @param string             $mode
+     * @param string             $mode one of Mode constants
      * @param null|string        $reference
      * @param string             $state
      * @param string             $currency

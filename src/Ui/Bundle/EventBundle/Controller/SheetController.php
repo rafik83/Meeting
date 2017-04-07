@@ -390,6 +390,10 @@ class SheetController extends Controller
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
 
+        if (!$object instanceof Template\TemplateObject\Image) {
+            throw $this->createNotFoundException('The key given is not an image');
+        }
+
         $removeImage = new RemoveImage($object, $sheet, $templateData);
         $this->get('tactician.commandbus')->handle($removeImage);
 

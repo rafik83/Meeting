@@ -41,7 +41,7 @@ class DashboardTransactionViewQueryHandler
 
         $totalOrders         = $this->balance->getOrdersTotalForEvent();
         $totalPaid           = $this->balance->getTransactionsTotalPaidForEvent();
-        $totalRemainingToPay = $this->balance->getOrdersTotalRemainingToPayForEvent();
+        $totalRemainingToPay = $this->balance->getTotalRemainingToPayForEvent();
 
         return new DashboardTransactionView($totalOrders, $totalRemainingToPay, $totalPaid);
     }

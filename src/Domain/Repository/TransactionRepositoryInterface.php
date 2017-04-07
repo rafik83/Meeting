@@ -57,7 +57,7 @@ interface TransactionRepositoryInterface
      *
      * @return Transaction[]
      */
-    public function findByEvent(Event $event);
+    public function findByEventAndEnabledSheets(Event $event);
 
     /**
      * @param Event $event

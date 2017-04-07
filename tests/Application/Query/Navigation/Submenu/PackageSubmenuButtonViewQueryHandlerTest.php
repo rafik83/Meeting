@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
-use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -84,8 +83,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             new User('email@email.com', 'salt', 'password', 'fr'),
             $datetime
         );
-        $billingInfo = new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), '');
-        $order       = new Order($sheet, true, $billingInfo, '', new \DateTime());
+        $order       = new Order($sheet, '', new \DateTime());
         $sheet->addOrder($order);
 
         $package = new Package($event, 'Package', $datetime);

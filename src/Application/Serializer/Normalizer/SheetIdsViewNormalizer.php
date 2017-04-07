@@ -15,8 +15,10 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
@@ -60,6 +62,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
+
     /**
      * List of all sheet fields (merging of the sheet data fields of all normalized sheets)
      *
@@ -90,6 +95,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * @param TranslatorInterface      $translator
      * @param SheetRepositoryInterface $sheetRepository
      * @param TemplateDataFactory      $templateDataFactory
+     * @param OrderRepositoryInterface $orderRepository
      * @param Merger                   $merger
      * @param Balance                  $balance
      */
@@ -97,6 +103,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
+        OrderRepositoryInterface $orderRepository,
         Merger $merger,
         Balance $balance
     ) {
@@ -108,6 +115,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->registrationFields  = [];
         $this->merger              = $merger;
         $this->balance             = $balance;
+        $this->orderRepository     = $orderRepository;
     }
 
     /**
@@ -178,21 +186,18 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         ));
 
         $promotionCodes      = [];
-        $totalOrder          = 0;
-        $totalRemainingToPay = 0;
-        $notCancelledOrders  = $this->balance->getNotCancelledOrders($sheet);
+        $notCancelledOrders  = $this->orderRepository->findNotCancelledBySheet($sheet);
 
         if (!empty($notCancelledOrders)) {
-            $orders = $notCancelledOrders;
-            $order  = $this->merger->merge($orders);
+            $order = $this->merger->merge($notCancelledOrders);
 
             foreach($order->getPromotionCodes() as $orderPromotionCode) {
                 $promotionCodes[] = $orderPromotionCode->getPromotionCode()->getCode();
             }
-
-            $totalOrder = $this->balance->getTotalWithoutVat($sheet);
-            $totalRemainingToPay = $this->balance->getRemainingToPay($sheet);
         }
+
+        $totalWithoutVat = AmountFormatter::centsToDecimalAmount($this->balance->getTotalWithoutVat($sheet));
+        $remainingToPay  = AmountFormatter::centsToDecimalAmount($this->balance->getRemainingToPay($sheet));
 
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
@@ -210,8 +215,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
             self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
             self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
-            self::COL_TOTAL_ORDER       => $totalOrder,
-            self::COL_REMAINING_TO_PAY  => $totalRemainingToPay,
+            self::COL_TOTAL_ORDER       => $totalWithoutVat,
+            self::COL_REMAINING_TO_PAY  => $remainingToPay,
         ];
 
         // 2. Registration data

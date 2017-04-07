@@ -1765,9 +1765,10 @@ services:
     sheet.preview:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
-            - '@template.template_data_factory'
+            - '@template.tagged_data_factory'
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     #
     # Sheet Request
     #
@@ -2294,20 +2295,25 @@ services:
             - '@query.order.summary.promotion_code_view_query_handler'
     query.order.summary.custom_row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowViewQueryHandler
+
     query.order.summary_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
         arguments:
             - '@query.order.summary.groups_view_query_handler'
             - '@query.order.summary.promotion_codes_view_query_handler'
             - '@order.balance'
+            - '@query.order.order_vat_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
+
     query.order.pro_forma_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
         arguments:
             - '@query.order.summary_query_handler'
+            - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\ProFormaQuery }
+
     query.order.order_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQueryHandler
         arguments:
@@ -2344,7 +2350,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery }
     query.billing_infos.billing_infos_query_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\BillingInfos\BillingInfosQueryHandler
+        class: Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQueryHandler
         arguments:
             - '@repository.billing_info_repository'
     query.sheet.sheet_validation_view_query_handler:
@@ -2448,6 +2454,37 @@ services:
             - '@repository.messaging.campaign_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
+
+    query.order.order_vat_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler
+        arguments:
+            - '@package.specification.vat_applicable'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery }
+
+    query.order.order_vat_views_by_event_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery }
+
+    query.order.order_vat_views_by_sheet_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery }
+
+    query.order.order_vat_views_by_sheet_ids_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQuery }
 
     query.sheet.export_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
@@ -2862,6 +2899,7 @@ services:
             - '@sheet.preview'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@repository.rule_repository'
+            - '@domain.rule.composer'
 
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler
@@ -3202,10 +3240,8 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
-            - '@repository.billing_info_repository'
             - '@repository.promotion_code_row_repository'
             - '@repository.promotion_code_repository'
-            - '@package.specification.vat_applicable'
             - '@datetime'
 
     #
@@ -3263,10 +3299,14 @@ services:
     order.balance:
         class: Proximum\Vimeet\Domain\Order\Balance
         arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_views_by_event_query_handler'
+            - '@query.order.order_vat_views_by_sheet_query_handler'
+            - '@query.order.order_vat_views_by_sheet_ids_query_handler'
             - '@repository.transaction'
+
     order.merger:
         class: Proximum\Vimeet\Domain\Order\Merger
+
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
     order.orders_to_invoice:
@@ -3476,6 +3516,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@order.balance'
         tags:
@@ -3947,8 +3988,14 @@ services:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
+            - '@query.billing_infos.billing_infos_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery }
+
+    serializer.denormalizer.billing_infos_view_denormalizer:
+        class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\BillingInfosViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
 
     serializer.denormalizer.invoice_view:
         class: Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer
