@@ -105,23 +105,23 @@ class MeetingRequestController extends Controller
 
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
-        $tipQuery = new TipTranslationViewQuery(
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
             TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
             $request->getLocale()
         );
-        $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
-            'event'              => $event,
-            'sheet'              => $sheet,
-            'meetingRequestView' => $meetingRequestListView,
-            'stateListsView'     => $stateListsView,
-            'searchForm'         => $searchForm->createView(),
-            'isCatalog'          => true, // set menu link visible,
-            'isMeeting'          => true,
-            'isEventOpen'        => $isEventOpen,
-            'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
-            'tipView'            => $tipView,
+            'event'               => $event,
+            'sheet'               => $sheet,
+            'meetingRequestView'  => $meetingRequestListView,
+            'stateListsView'      => $stateListsView,
+            'searchForm'          => $searchForm->createView(),
+            'isCatalog'           => true, // set menu link visible,
+            'isMeeting'           => true,
+            'isEventOpen'         => $isEventOpen,
+            'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 

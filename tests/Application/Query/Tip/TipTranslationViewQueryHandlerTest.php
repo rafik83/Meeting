@@ -32,8 +32,8 @@ class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $tip2->translations = [
             'fr' => new TipTranslation($tip2, $dateTime, 'title2', 'fr', 'content2'),
         ];
-        $tipView1 = new TipTranslationView('title', 'content');
-        $tipView2 = new TipTranslationView('title1', 'content2');
+        $tipView1 = new TipTranslationView(1, 'title', 'content');
+        $tipView2 = new TipTranslationView(2, 'title1', 'content2');
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 

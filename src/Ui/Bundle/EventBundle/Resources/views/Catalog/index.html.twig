@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="catalog catalog--advanced">
-        {{ include('EventBundle:Tip:tip.html.twig', {tip: tipView}) }}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
             searchForm: searchForm,
             typeViews: typeViews,

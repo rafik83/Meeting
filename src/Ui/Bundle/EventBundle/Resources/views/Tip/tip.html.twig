@@ -1,21 +1,21 @@
-{% if tip is defined and tip is not empty %}
-    {% for translation in tip %}
-        <div class="alert alert-info" role="alert">
-            <a href="#" data-toggle="modal" data-target="#tipModal-{{ translation.title }}">
-                <i class="glyphicon glyphicon-warning-sign"></i>{{ translation.title }}
+{% if tipTranslationViews is defined and tipTranslationViews is not empty %}
+    {% for tipTranslationView in tipTranslationViews %}
+        <div class="important" role="alert">
+            <a href="#" data-toggle="modal" data-target="#tipModal-{{ tipTranslationView.id }}">
+                <i class=".icon-Alerter_1"></i> {{ tipTranslationView.title }}
             </a>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="tipModal-{{ translation.title }}" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel-{{ translation.title }}">
+        <div class="modal fade" id="tipModal-{{ tipTranslationView.id }}" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel-{{ tipTranslationView.id }}">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.close'|trans }}"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="tipModal-{{ translation.title }}-title">{{ translation.title }}</h4>
+                        <h4 class="modal-title" id="tipModal-{{ tipTranslationView.id }}-title">{{ tipTranslationView.title }}</h4>
                     </div>
                     <div class="modal-body">
-                        {{ translation.content|html }}
+                        {{ tipTranslationView.content|html }}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.close'|trans }}</button>

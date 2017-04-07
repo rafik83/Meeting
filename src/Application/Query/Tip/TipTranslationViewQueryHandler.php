@@ -54,16 +54,16 @@ class TipTranslationViewQueryHandler
             return null;
         }
 
-        $tipTranslations = $this->tipRepository->getByContext(self::$contextsMapping[$query->context], $query->locale);
+        $tipTranslationViews = $this->tipRepository->getByContext(self::$contextsMapping[$query->context], $query->locale);
 
-        if (empty($tipTranslations)) {
+        if (empty($tipTranslationViews)) {
             return null;
         }
 
         $tipTranslationListView = [];
 
-        foreach ($tipTranslations as $translation) {
-            $tipTranslationListView[] = $translation;
+        foreach ($tipTranslationViews as $tipTranslationView) {
+            $tipTranslationListView[] = $tipTranslationView;
         }
 
         return $tipTranslationListView;

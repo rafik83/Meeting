@@ -144,22 +144,22 @@ class CatalogController extends Controller
             $template = 'EventBundle:Catalog:index.html.twig';
         }
 
-        $tipQuery = new TipTranslationViewQuery(
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
             TipTranslationViewQueryHandler::CONTEXT_CATALOG,
             $request->getLocale()
         );
-        $tipView = $this->get('tactician.commandbus.query')->handle($tipQuery);
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
-            'event'           => $event,
-            'sheet'           => $sheet,
-            'page'            => 1,
-            'isCatalog'       => true,
-            'typeViews'       => $typeViews,
-            'paginatedResult' => $paginatedResult,
-            'seeMoreButton'   => $seeMoreButton,
-            'searchForm'      => $searchForm->createView(),
-            'tipView'         => $tipView,
+            'event'               => $event,
+            'sheet'               => $sheet,
+            'page'                => 1,
+            'isCatalog'           => true,
+            'typeViews'           => $typeViews,
+            'paginatedResult'     => $paginatedResult,
+            'seeMoreButton'       => $seeMoreButton,
+            'searchForm'          => $searchForm->createView(),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 

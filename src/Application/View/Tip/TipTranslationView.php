@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Application\View\Tip;
 
 class TipTranslationView
 {
+    /** @var int */
+    public $id;
+
     /** @var string */
     public $title;
 
@@ -21,12 +24,14 @@ class TipTranslationView
     /**
      * TipTranslationView constructor.
      *
-     * @param $title
-     * @param $content
+     * @param int    $id
+     * @param string $title
+     * @param string $content
      */
-    public function __construct($title, $content)
+    public function __construct($id, $title, $content)
     {
-        $this->title = $title;
+        $this->id      = $id;
+        $this->title   = $title;
         $this->content = $content;
     }
 }
