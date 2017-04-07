@@ -17,6 +17,6 @@ class CanNotExplodeNotValidNumeroInvoiceException extends InvoiceException
      */
     public function __construct($numero)
     {
-        $this->message = sprintf('Can not expldoe not valide numero of invoice given %s', $numero);
+        $this->message = sprintf('Can not explode not valid numero of invoice given %s', $numero);
     }
 }
