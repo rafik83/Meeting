@@ -37,6 +37,15 @@
 
   .table-agenda-day {
     tr.table-agenda-day-slot {
+      &.table-slot-spot {
+        > td {
+          height: 55px;
+          overflow-y: hidden;
+        }
+        .slot {
+          min-height: 55px;
+        }
+      }
       > td {
         height: 80px;
         overflow-y: hidden;
@@ -113,7 +122,7 @@
   .spots-list {
     position: fixed;
     left: 0;
-    height:  calc(100% - 150px);
+    height: calc(100% - 150px);
     width: 17%;
     overflow-y: scroll;
     padding: 0 0 0 10px;
@@ -128,17 +137,23 @@
   .agenda-slot-meeting-list {
     li {
       float: left;
-      width: 150px;
       padding: 5px;
       .title {
         > a {
+          width: 100px;
           color: inherit;
+          text-overflow: ellipsis;
+          /* Required for text-overflow to do anything */
+          white-space: nowrap;
+          overflow: hidden;
+          display: block;
         }
-        color: inherit;
-        text-overflow: ellipsis;
-        /* Required for text-overflow to do anything */
-        white-space: nowrap;
-        overflow: hidden;
+        float: left;
+        width: 100px;
+      }
+      .separator {
+        float: left;
+        width: 10px;
       }
     }
   }
@@ -200,13 +215,13 @@
 .agenda-tab {
   position: fixed;
   width: 100%;
-  top: 75px;
+  top: 60px;
   left: 15px;
 }
 
 .agenda-tab-content {
   position: fixed;
   width: 100%;
-  top: 150px;
+  top: 105px;
   left: 15px;
 }

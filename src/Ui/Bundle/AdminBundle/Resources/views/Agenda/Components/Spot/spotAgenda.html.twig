@@ -13,7 +13,7 @@
                         <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day + 1 }</div>
                         <table class="table-agenda-day table table-bordered table-condensed">
                             <tr v-for="slot in day.slots"
-                                class="table-agenda-day-slot"
+                                class="table-agenda-day-slot table-slot-spot"
                                 v-bind:class="{ 'slot meeting' : slot.type === 'meeting_unavailability'}">
                                 <spot-slot-agenda v-bind:agendaSlot="slot"></spot-slot-agenda>
                             </tr>
