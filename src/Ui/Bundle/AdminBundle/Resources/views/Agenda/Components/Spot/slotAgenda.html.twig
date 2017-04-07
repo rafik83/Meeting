@@ -17,17 +17,19 @@
                 ${ agendaSlot.beginEndHour }
             </div>
             <div>
-                <table class="table spot-slot-meeting-table">
-                    <tr>
-                        <td v-for="meeting in agendaSlot.meetings">
-                            <div class="text-center">
-                                <a href="#sheet" aria-controls="sheet" role="tab" data-toggle="tab" class="sheet-title" v-on:click="showAgendaForSheetId(meeting.fromSheetId)">${ meeting.fromSheetTitle }</a>
-                                <i class="glyphicon glyphicon-arrow-down"></i>
-                                <a href="#sheet" aria-controls="sheet" role="tab" data-toggle="tab" class="sheet-title" v-on:click="showAgendaForSheetId(meeting.toSheetId)">${ meeting.toSheetTitle }</a>
+                <ul class="agenda-slot-meeting-list">
+                    <li class="" v-for="meeting in agendaSlot.meetings">
+                        <div class="text-center">
+                            <div class="title">
+                                <a href="#" v-bind:title="meeting.fromSheetTitle" v-on:click="showAgendaForSheetId(meeting.fromSheetId)">${ meeting.fromSheetTitle }</a>
                             </div>
-                        </td>
-                    </tr>
-                </table>
+                            <div class="separator">/</div>
+                            <div class="title">
+                                <a href="#" v-bind:title="meeting.toSheetTitle" v-on:click="showAgendaForSheetId(meeting.toSheetId)">${ meeting.toSheetTitle }</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
 

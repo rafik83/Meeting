@@ -7,15 +7,15 @@
         <!-- Nav tabs -->
         <tabs inline-template>
             <div>
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs agenda-tab">
                     <li v-for="tab in tabs" v-bind:class="{ active: tab.isActive }" v-on:click="selectTab(tab)">
                         <a href="#" aria-controls="sheet">${ tab.name }</a>
                     </li>
                 </ul>
-                <tab reference="sheetTab" name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
+                <tab class="agenda-tab-content" reference="sheetTab" name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
                     <meeting></meeting>
                 </tab>
-                <tab reference="spotTab" name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
+                <tab class="agenda-tab-content" reference="spotTab" name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
                     <spot></spot>
                 </tab>
             </div>
