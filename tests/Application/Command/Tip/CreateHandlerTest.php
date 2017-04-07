@@ -39,7 +39,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tip->translations = new ArrayCollection([
-            'locale_1' => new TipTranslation($tip, $dateTime), 'title_1', 'locale_1', 'content_1')
+            'locale_1' => new TipTranslation($tip, $dateTime, 'title_1', 'locale_1', 'content_1')
         ]);
 
         $tipRepository->add(Argument::that(function (Tip $tip) {

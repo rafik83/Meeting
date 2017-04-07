@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
     fields:
         title:
             type: string
+            nullable: true
         locale:
             type: string
         content:

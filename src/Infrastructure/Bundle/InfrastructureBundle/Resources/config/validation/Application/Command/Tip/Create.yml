@@ -6,6 +6,7 @@ Proximum\Vimeet\Application\Command\Tip\Create:
             - All:
                 - Collection:
                     fields:
+                        title: ~
                         locale:
                             - NotBlank: ~
                         content:

@@ -39,7 +39,7 @@ class TipTranslation
      * @param string             $locale
      * @param string             $content
      */
-    public function __construct(Tip $tip, \DateTimeInterface $createdAt, $title, $locale, $content)
+    public function __construct(Tip $tip, \DateTimeInterface $createdAt, $title = '', $locale, $content)
     {
         $this->tip       = $tip;
         $this->createdAt = $createdAt;
