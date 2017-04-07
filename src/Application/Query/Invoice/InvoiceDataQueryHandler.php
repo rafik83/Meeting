@@ -15,18 +15,17 @@ use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQueryHand
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceDataView;
-use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 
 class InvoiceDataQueryHandler
 {
-    /** @var  BillingInfosQueryHandler */
+    /** @var BillingInfosQueryHandler */
     public $billingInfosQueryHandler;
 
-    /** @var  SummaryQueryHandler */
+    /** @var SummaryQueryHandler */
     public $summaryQueryHandler;
 
-    /** @var  Balance */
+    /** @var Balance */
     public $balance;
 
     /**
@@ -64,7 +63,7 @@ class InvoiceDataQueryHandler
             $this->billingInfosQueryHandler->handle(
                 new BillingInfosQuery($invoiceDataQuery->sheet)
             ),
-            AmountFormatter::decimalToCentsAmount($this->balance->getRemainingToPay($invoiceDataQuery->sheet))
+            $this->balance->getRemainingToPay($invoiceDataQuery->sheet)
         );
     }
 }
