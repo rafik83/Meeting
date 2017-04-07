@@ -17,19 +17,13 @@ class Find
     const FIND_INVOICE = 'invoice';
     const FIND_ORDER   = 'order';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $numero;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
     /**
