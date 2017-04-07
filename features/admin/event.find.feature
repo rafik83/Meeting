@@ -17,16 +17,16 @@ Feature: Find a sheet with an order numero or an invoice numero
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | Admin.yml                                                                |
-    When I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
+    And I am logged with "test@test.com" on admin
+    When I am on this page "/admin/fr/event"
     Then I should see "admin.event.page.orderInvoiceFinder.title"
     And I should see "admin.event.page.orderInvoiceFinder.explanation"
-    Then I fill in "form.order_invoice_find.children.numero.label" with "test"
+    When I fill in "form.order_invoice_find.children.numero.label" with "test"
     And I check the "form.order_invoice_find.children.type.choices.order" radio
     And I press "form.order_invoice_find.children.submit.label"
     Then I should be on this page "/admin/fr/event"
     And I should see "validators.order.numeroNotValid"
-    Then I fill in "form.order_invoice_find.children.numero.label" with "01-01-03"
+    When I fill in "form.order_invoice_find.children.numero.label" with "01-01-03"
     And I press "form.order_invoice_find.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/sheet/1#sheetOrders"
     And I should see "Aanera"
@@ -38,15 +38,15 @@ Feature: Find a sheet with an order numero or an invoice numero
     And there is a sheet
     And there is an invoice with the numero "Vi2017-0001" for this sheet
     And I am logged as admin
-    And I am on this page "/admin/fr/event"
+    When I am on this page "/admin/fr/event"
     Then I should see "admin.event.page.orderInvoiceFinder.title"
     And I should see "admin.event.page.orderInvoiceFinder.explanation"
-    Then I fill in "form.order_invoice_find.children.numero.label" with "test"
+    When I fill in "form.order_invoice_find.children.numero.label" with "test"
     And I check the "form.order_invoice_find.children.type.choices.invoice" radio
     And I press "form.order_invoice_find.children.submit.label"
     Then I should be on this page "/admin/fr/event"
     And I should see "validators.invoice.numeroNotValid"
-    Then I fill in "form.order_invoice_find.children.numero.label" with "Vi2017-0001"
+    When I fill in "form.order_invoice_find.children.numero.label" with "Vi2017-0001"
     And I check the "form.order_invoice_find.children.type.choices.invoice" radio
     And I press "form.order_invoice_find.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/sheet/1#sheetOrders"
