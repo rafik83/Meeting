@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation:
+    type:  entity
+    table: messaging_message_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        subject:
+            type: string
+        content:
+            type: text
+        locale:
+            type: string
+        createdAt:
+            type: datetime
+    manyToOne:
+        message:
+            targetEntity: Proximum\Vimeet\Domain\Model\Messaging\Message
+            joinColumn:
+                onDelete: CASCADE
