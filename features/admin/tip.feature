@@ -15,7 +15,6 @@
   Scenario: I can see the tip list on admin
     Given I am logged with "test@test.com" on admin
     And I go to this page "/admin/fr/tip/list"
-    Then the response status code should be 200
     And the response should contain "admin.tip.create.link"
     And the response should contain "tip_sample"
     And the response should contain "Français"
@@ -23,7 +22,6 @@
   Scenario: I can create a new tip
     Given I am logged with "test@test.com" on admin
     And I go to this page "/admin/fr/tip/create"
-    Then the response status code should be 200
     And I should see "form.tip_create.children.title.label"
     And I should see "form.tip_create.children.onCatalog.label"
     And I should see "form.tip_create.children.translations.prototype.children.title.label"
@@ -47,7 +45,6 @@
   Scenario: I can update an existent tip
     Given I am logged with "test@test.com" on admin
     And I go to this page "/admin/fr/tip/1/update"
-    Then the response status code should be 200
     And I should see "form.tip_update.children.title.label"
     And I should see "form.tip_update.children.onCatalog.label"
     And I should see "form.tip_update.children.translations.prototype.children.title.label"
