@@ -64,7 +64,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->join('invoice.sheet', 'sheet', 'WITH', 'invoice.invoicePrefix = :prefix AND invoice.invoiceYear = :year AND invoice.invoiceIncrement = :increment')
             ->setParameter('prefix', $invoiceNumeroView->prefix)
             ->setParameter('year', $invoiceNumeroView->year)
-            ->setParameter('increment',$invoiceNumeroView->increment)
+            ->setParameter('increment', $invoiceNumeroView->increment)
         ;
 
         return $queryBuilder->getQuery()->getResult();
