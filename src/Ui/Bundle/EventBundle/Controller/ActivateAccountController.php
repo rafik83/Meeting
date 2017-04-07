@@ -106,7 +106,7 @@ class ActivateAccountController extends Controller
             $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.user.activate_account.token_re_send');
 
-            return $this->redirectToRoute('event', []);
+            return $this->redirectToRoute('event');
         }
 
         return $this->render('EventBundle:ActivateAccount:expired.html.twig', [
