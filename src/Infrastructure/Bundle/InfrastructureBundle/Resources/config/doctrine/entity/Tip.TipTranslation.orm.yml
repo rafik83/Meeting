@@ -19,4 +19,3 @@ Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
         tip:
             targetEntity: Proximum\Vimeet\Domain\Model\Tip\Tip
             inversedBy: translations
-

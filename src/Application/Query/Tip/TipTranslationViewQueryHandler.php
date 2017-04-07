@@ -50,13 +50,13 @@ class TipTranslationViewQueryHandler
      */
     public function handle(TipTranslationViewQuery $query)
     {
-        if(!isset(self::$contextsMapping[$query->context])) {
+        if (!isset(self::$contextsMapping[$query->context])) {
             return null;
         }
 
         $tipTranslations = $this->tipRepository->getByContext(self::$contextsMapping[$query->context], $query->locale);
 
-        if (!$tipTranslations) {
+        if (empty($tipTranslations)) {
             return null;
         }
 

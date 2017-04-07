@@ -43,7 +43,7 @@ interface TipRepositoryInterface
      * @param $context
      * @param $locale
      *
-     * @return null|TipTranslationView[]
+     * @return TipTranslationView[]
      */
     public function getByContext($context, $locale);
 }

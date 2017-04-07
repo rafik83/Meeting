@@ -21,6 +21,12 @@ class CreateHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /**
+     * CreateHandler constructor.
+     *
+     * @param TipRepositoryInterface $tipRepository
+     * @param \DateTimeInterface     $dateTime
+     */
     public function __construct(TipRepositoryInterface $tipRepository, \DateTimeInterface $dateTime)
     {
         $this->tipRepository = $tipRepository;

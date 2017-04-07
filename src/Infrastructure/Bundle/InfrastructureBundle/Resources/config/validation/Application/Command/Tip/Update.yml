@@ -2,7 +2,6 @@ Proximum\Vimeet\Application\Command\Tip\Update:
     properties:
         title:
             - NotBlank: ~
-
         translations:
             - All:
                 - Collection:

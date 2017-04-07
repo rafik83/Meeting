@@ -22,12 +22,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $dateTime = new \DateTime();
         $command = new Create(['fr' ,'en']);
         $command->onCatalog = true;
         $command->onMeetingManagement = true;
         $command->onPrintPlanning = true;
         $command->title = 'tipTitle';
-        $tip = new Tip('tipTitle', true, true, true, new \DateTime());
+        $tip = new Tip('tipTitle', true, true, true, $dateTime);
         $command->translations = [
             'locale_1' => [
                 'locale' => 'locale_1',
@@ -38,7 +39,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tip->translations = new ArrayCollection([
-            'locale_1' => new TipTranslation($tip, new \DateTime(), 'title_1', 'locale_1', 'content_1')
+            'locale_1' => new TipTranslation($tip, $dateTime), 'title_1', 'locale_1', 'content_1')
         ]);
 
         $tipRepository->add(Argument::that(function (Tip $tip) {
@@ -49,7 +50,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         }))
         ->shouldBeCalled();
 
-        $handler = new CreateHandler($tipRepository->reveal(), new \DateTime());
+        $handler = new CreateHandler($tipRepository->reveal(), $dateTime);
 
         $handler->handle($command);
     }
