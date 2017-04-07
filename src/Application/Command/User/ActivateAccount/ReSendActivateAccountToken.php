@@ -27,7 +27,7 @@ class ReSendActivateAccountToken
      */
     public function __construct(Sheet $sheet, User $user)
     {
-        $this->sheet  = $sheet;
-        $this->user   = $user;
+        $this->sheet = $sheet;
+        $this->user  = $user;
     }
 }

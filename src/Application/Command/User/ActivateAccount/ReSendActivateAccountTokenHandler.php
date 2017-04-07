@@ -32,7 +32,7 @@ class ReSendActivateAccountTokenHandler
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
-        $this->eventDispatcher              = $eventDispatcher;
+        $this->eventDispatcher               = $eventDispatcher;
     }
 
     /**
