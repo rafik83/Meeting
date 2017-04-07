@@ -201,7 +201,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'inCatalog'               => $sheet->isInCatalog(),
                 'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                 'booleanFilter'           => $filtersValue,
-                'hasOrder'                => $sheet->hasNotCancelledOrders(),
+                'hasOrder'                => $this->orderBalance->getTotalWithoutVat($sheet) > 0,
                 'hasCart'                 => $hasCart,
                 'organizationCategory'    => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'                 => implode(' ', $content),
