@@ -95,6 +95,13 @@ interface MeetingRepositoryInterface
     public function countMeetingsOfSheet(Sheet $sheet);
 
     /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function countMeetingsOfSheetByIds(array $ids);
+
+    /**
      * @param Event $event
      *
      * @return int[]

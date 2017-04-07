@@ -40,28 +40,12 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
         $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
 
-        // expected sheet
-        $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $expectedSheet1->setInCatalog(true);
-        $expectedSheet1->setInCatalogAt($date);
-
-        $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $expectedSheet2->setInCatalog(true);
-        $expectedSheet2->setInCatalogAt($date);
-
-        $expectedSheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
-        $expectedSheet3->setInCatalog(true);
-        $expectedSheet3->setInCatalogAt($date);
-
         $reflection  = new \ReflectionClass(Sheet::class);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($sheet1, 1);
         $property->setValue($sheet2, 2);
         $property->setValue($sheet3, 3);
-        $property->setValue($expectedSheet1, 1);
-        $property->setValue($expectedSheet2, 2);
-        $property->setValue($expectedSheet3, 3);
         $property->setAccessible(false);
 
         // Mock
@@ -71,14 +55,16 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser     = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue        = $this->prophesize(BatchCatalogJobQueue::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
-            1 => $sheet1,
-            2 => $sheet2,
-            3 => $sheet3
-        ]);
-        $meetingRepository->countMeetingsOfSheet($sheet1)->shouldNotBeCalled();
-        $meetingRepository->countMeetingsOfSheet($sheet2)->shouldNotBeCalled();
-        $meetingRepository->countMeetingsOfSheet($sheet3)->shouldNotBeCalled();
+        $sheetRepository
+            ->getSheetsById([1, 2, 3])
+            ->shouldBeCalled()
+            ->willReturn([
+                1 => $sheet1,
+                2 => $sheet2,
+                3 => $sheet3,
+            ]);
+
+        $meetingRepository->countMeetingsOfSheetByIds([1, 2, 3])->shouldBeCalled();
 
         $sheetRepository->updateInCatalogBySheetsId([1,2,3], true)->shouldBeCalled();
 
@@ -123,28 +109,12 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet3->setInCatalog(true);
         $sheet3->setInCatalogAt($dateold);
 
-        // expected sheet
-        $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $expectedSheet1->setInCatalog(false);
-        $expectedSheet1->setInCatalogAt($date);
-
-        $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $expectedSheet2->setInCatalog(false);
-        $expectedSheet2->setInCatalogAt($dateold);
-
-        $expectedSheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
-        $expectedSheet3->setInCatalog(true);
-        $expectedSheet3->setInCatalogAt($date);
-
         $reflection  = new \ReflectionClass(Sheet::class);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($sheet1, 1);
         $property->setValue($sheet2, 2);
         $property->setValue($sheet3, 3);
-        $property->setValue($expectedSheet1, 1);
-        $property->setValue($expectedSheet2, 2);
-        $property->setValue($expectedSheet3, 3);
         $property->setAccessible(false);
 
         // Mock
@@ -154,15 +124,24 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
 
-        $sheetRepository->getSheetsById([1 => 1, 2 => 2, 3 => 3])->shouldBeCalled()->willReturn([
-            1 => $sheet1,
-            2 => $sheet2,
-            3 => $sheet3
-        ]);
+        $sheetRepository
+            ->getSheetsById([1 => 1, 2 => 2, 3 => 3])
+            ->shouldBeCalled()
+            ->willReturn([
+                1 => $sheet1,
+                2 => $sheet2,
+                3 => $sheet3,
+            ]);
 
-        $meetingRepository->countMeetingsOfSheet($sheet1)->shouldBeCalled()->willReturn(0);
-        $meetingRepository->countMeetingsOfSheet($sheet2)->shouldBeCalled()->willReturn(2);
-        $meetingRepository->countMeetingsOfSheet($sheet3)->shouldBeCalled()->willReturn(0);
+        $meetingRepository
+            ->countMeetingsOfSheetByIds([1 => 1, 2 => 2, 3 => 3])
+            ->shouldBeCalled()
+            ->willReturn([
+                1 => 0,
+                2 => 2,
+                3 => 0,
+            ]);
+
         $sheetInfoGuesser->guessSheetTitle($sheet2, 'fr')->shouldBeCalled()->willReturn("SheetName");
 
         $sheetRepository->updateInCatalogBySheetsId([1 => 1, 3 => 3], false)->shouldBeCalled();

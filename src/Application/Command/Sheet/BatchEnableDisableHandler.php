@@ -95,12 +95,15 @@ class BatchEnableDisableHandler
         $ignoredSheets        = [];
         $ignoredSheetsMessage = '';
 
+        $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($batchEnableDisable->ids);
+
         foreach ($batchEnableDisable->ids as $index => $id) {
             if (isset($sheets[$id])) {
                 $sheet = $sheets[$id];
 
                 if ($batchEnableDisable->state === false
-                    && $this->meetingRepository->countMeetingsOfSheet($sheet) > 0
+                    && isset($meetings[$id])
+                    && $meetings[$id] > 0
                 ) {
                     $ignoredSheets[] = $sheet;
                     $this->excludeSheetFromBatch($batchEnableDisable, $index);

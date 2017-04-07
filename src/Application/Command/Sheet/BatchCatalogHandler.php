@@ -87,12 +87,14 @@ class BatchCatalogHandler
         $ignoredSheetsMessage = '';
         $message              = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
 
+        $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($command->ids);
+
         foreach ($command->ids as $index => $id) {
             if (isset($sheets[$id])) {
                 $sheet = $sheets[$id];
                 // If try to remove from catalog
                 if ($command->state === false) {
-                    if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
+                    if (isset($meetings[$id]) && $meetings[$id] > 0) {
                         $ignoredSheets[] = $sheet;
                         $this->excludeSheetFromBatch($command, $index);
                     }
