@@ -71,7 +71,11 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser     = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue        = $this->prophesize(BatchCatalogJobQueue::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
+        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
+            1 => $sheet1,
+            2 => $sheet2,
+            3 => $sheet3
+        ]);
         $meetingRepository->countMeetingsOfSheet($sheet1)->shouldNotBeCalled();
         $meetingRepository->countMeetingsOfSheet($sheet2)->shouldNotBeCalled();
         $meetingRepository->countMeetingsOfSheet($sheet3)->shouldNotBeCalled();
@@ -150,19 +154,23 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
 
-        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
+        $sheetRepository->getSheetsById([1 => 1, 2 => 2, 3 => 3])->shouldBeCalled()->willReturn([
+            1 => $sheet1,
+            2 => $sheet2,
+            3 => $sheet3
+        ]);
 
         $meetingRepository->countMeetingsOfSheet($sheet1)->shouldBeCalled()->willReturn(0);
         $meetingRepository->countMeetingsOfSheet($sheet2)->shouldBeCalled()->willReturn(2);
         $meetingRepository->countMeetingsOfSheet($sheet3)->shouldBeCalled()->willReturn(0);
         $sheetInfoGuesser->guessSheetTitle($sheet2, 'fr')->shouldBeCalled()->willReturn("SheetName");
 
-        $sheetRepository->updateInCatalogBySheetsId([2,3], false)->shouldBeCalled();
+        $sheetRepository->updateInCatalogBySheetsId([1 => 1, 3 => 3], false)->shouldBeCalled();
 
-        $batchJobQueue->createJob([2 ,3], $admin, ['state' => false])->shouldBeCalled();
+        $batchJobQueue->createJob([1 => 1, 3 => 3], $admin, ['state' => false])->shouldBeCalled();
 
         // Command
-        $command = new BatchCatalog([1, 2, 3], false, $admin);
+        $command = new BatchCatalog([1 => 1, 2 => 2, 3 => 3], false, $admin);
         $handler = new BatchCatalogHandler(
             $sheetRepository->reveal(),
             $eventDispatcher->reveal(),
@@ -191,29 +199,18 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheet1->setInCatalog(true);
+        $sheet1->setInCatalog(false);
         $sheet1->setEnable(false);
         $sheet1->setInCatalogAt($dateold);
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $sheet2->setInCatalog(true);
+        $sheet2->setInCatalog(false);
         $sheet2->setInCatalogAt($dateold);
-
-        // expected sheet
-        $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $expectedSheet1->setInCatalog(false);
-        $expectedSheet1->setInCatalogAt($date);
-
-        $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $expectedSheet2->setInCatalog(false);
-        $expectedSheet2->setInCatalogAt($dateold);
 
         $reflection  = new \ReflectionClass(Sheet::class);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($sheet1, 1);
         $property->setValue($sheet2, 2);
-        $property->setValue($expectedSheet1, 1);
-        $property->setValue($expectedSheet2, 2);
         $property->setAccessible(false);
 
         // Mock
@@ -223,15 +220,18 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
 
-        $sheetRepository->getSheetsById([1, 2])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
+        $sheetRepository->getSheetsById([1 => 1, 2 => 2])->shouldBeCalled()->willReturn([
+            1 => $sheet1,
+            2 => $sheet2
+        ]);
         $sheetInfoGuesser->guessSheetTitle($sheet1, 'fr')->shouldBeCalled()->willReturn("SheetName");
 
-        $sheetRepository->updateInCatalogBySheetsId([1, 2], true)->shouldBeCalled();
+        $sheetRepository->updateInCatalogBySheetsId([2 => 2], true)->shouldBeCalled();
 
-        $batchJobQueue->createJob([1 ,2], $admin, ['state' => true])->shouldBeCalled();
+        $batchJobQueue->createJob([2 => 2], $admin, ['state' => true])->shouldBeCalled();
 
         // Command
-        $command = new BatchCatalog([1, 2], true, $admin);
+        $command = new BatchCatalog([1 => 1, 2 => 2], true, $admin);
         $handler = new BatchCatalogHandler(
             $sheetRepository->reveal(),
             $eventDispatcher->reveal(),

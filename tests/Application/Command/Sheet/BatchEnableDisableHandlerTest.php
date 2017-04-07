@@ -62,9 +62,9 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $batchJobQueue       = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
-            $sheet1->setEnable(false),
-            $sheet2->setEnable(false),
-            $sheet3->setEnable(false),
+            1 => $sheet1->setEnable(false),
+            2 => $sheet2->setEnable(false),
+            3 => $sheet3->setEnable(false),
         ]);
 
         $meetingRepository->countMeetingsOfSheet($sheet3)->shouldBeCalled()->willReturn(0);
@@ -134,9 +134,9 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $batchJobQueue        = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
-            $sheet1->reveal(),
-            $sheet2->reveal(),
-            $sheet3->reveal()
+            1 => $sheet1->reveal(),
+            2 => $sheet2->reveal(),
+            3 => $sheet3->reveal()
         ]);
 
         $meetingRepository->countMeetingsOfSheet(Argument::type(Sheet::class))
