@@ -51,3 +51,4 @@ parameters:
 
     assets_version: 1
     user_activate_account_token_expiration: 'P7D'
+    admin_menu_color: "#222"

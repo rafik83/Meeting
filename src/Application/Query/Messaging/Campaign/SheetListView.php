@@ -18,13 +18,18 @@ class SheetListView
     /** @var string */
     public $name;
 
+    /** @var string */
+    public $ownerEmail;
+
     /**
      * @param int    $id
      * @param string $name
+     * @param string $ownerEmail
      */
-    public function __construct($id, $name)
+    public function __construct($id, $name, $ownerEmail)
     {
-        $this->id   = $id;
-        $this->name = $name;
+        $this->id         = $id;
+        $this->name       = $name;
+        $this->ownerEmail = $ownerEmail;
     }
 }
