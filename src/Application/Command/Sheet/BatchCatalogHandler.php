@@ -87,17 +87,20 @@ class BatchCatalogHandler
         $ignoredSheetsMessage = '';
         $message              = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
 
-        foreach ($sheets as $sheet) {
-            // If try to remove from catalog
-            if ($command->state === false) {
-                if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
-                    $ignoredSheets[]   = $sheet;
-                    $this->excludeSheetFromBatch($command, $sheet);
-                }
-            } elseif ($command->state === true) {
-                if (!$sheet->isEnabled()) {
-                    $ignoredSheets[] = $sheet;
-                    $this->excludeSheetFromBatch($command, $sheet);
+        foreach ($command->ids as $index => $id) {
+            if (isset($sheets[$id])) {
+                $sheet = $sheets[$id];
+                // If try to remove from catalog
+                if ($command->state === false) {
+                    if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
+                        $ignoredSheets[] = $sheet;
+                        $this->excludeSheetFromBatch($command, $index);
+                    }
+                } elseif ($command->state === true) {
+                    if (!$sheet->isEnabled()) {
+                        $ignoredSheets[] = $sheet;
+                        $this->excludeSheetFromBatch($command, $index);
+                    }
                 }
             }
         }
@@ -107,7 +110,7 @@ class BatchCatalogHandler
 
         if (count($ignoredSheets) > 0) {
             $message = $command->state ? 'catalog.add.warning' : 'catalog.remove.warning';
-            $locale = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
+            $locale  = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
 
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($locale) {
@@ -119,7 +122,7 @@ class BatchCatalogHandler
         }
 
         $this->batchJobQueue->createJob($command->ids, $command->admin, [
-            'state' => $command->state
+            'state' => $command->state,
         ]);
 
         return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
@@ -129,13 +132,10 @@ class BatchCatalogHandler
      * Remove a specific sheet id from the pull of batch IDs
      *
      * @param BatchCatalog $command
-     * @param Sheet        $sheet
+     * @param int        $index
      */
-    private function excludeSheetFromBatch(BatchCatalog $command, Sheet $sheet)
+    private function excludeSheetFromBatch(BatchCatalog $command, $index)
     {
-        $ignoredSheetIndex = array_search($sheet->getId(), $command->ids);
-        if ($ignoredSheetIndex !== false) {
-            $command->ids = array_slice($command->ids, $ignoredSheetIndex);
-        }
+        unset($command->ids[$index]);
     }
 }

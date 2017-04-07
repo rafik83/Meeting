@@ -121,7 +121,7 @@ class Batch extends AbstractBatch
      * @param string $locale
      * @param array  $filters
      */
-    public function __construct(Event $event, Admin $admin, $locale, $filters = [])
+    public function __construct(Event $event, Admin $admin, $locale, array $filters = [])
     {
         $this->admin   = $admin;
         $this->filters = $filters;

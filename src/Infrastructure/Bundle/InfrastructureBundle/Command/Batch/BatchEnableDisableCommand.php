@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchEnableDisableCommand extends Command
 {
-    const NAME = 'vimeet:batch:enable-disable';
+    const NAME = 'vimeet:sheets:enable-disable';
 
     /**
      * @var AdminRepositoryInterface

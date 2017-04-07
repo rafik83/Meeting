@@ -95,13 +95,16 @@ class BatchEnableDisableHandler
         $ignoredSheets        = [];
         $ignoredSheetsMessage = '';
 
-        foreach ($sheets as $sheet) {
+        foreach ($batchEnableDisable->ids as $index => $id) {
+            if (isset($sheets[$id])) {
+                $sheet = $sheets[$id];
 
-            if ($batchEnableDisable->state === false
-                && $this->meetingRepository->countMeetingsOfSheet($sheet) > 0
-            ) {
-                $ignoredSheets[] = $sheet;
-                $this->excludeSheetFromBatch($batchEnableDisable, $sheet);
+                if ($batchEnableDisable->state === false
+                    && $this->meetingRepository->countMeetingsOfSheet($sheet) > 0
+                ) {
+                    $ignoredSheets[] = $sheet;
+                    $this->excludeSheetFromBatch($batchEnableDisable, $index);
+                }
             }
         }
 
@@ -135,13 +138,10 @@ class BatchEnableDisableHandler
      * Remove a specific sheet id from the pull of batch IDs
      *
      * @param BatchEnableDisable $command
-     * @param Sheet              $sheet
+     * @param int                $index
      */
-    private function excludeSheetFromBatch(BatchEnableDisable $command, Sheet $sheet)
+    private function excludeSheetFromBatch(BatchEnableDisable $command, $index)
     {
-        $ignoredSheetIndex = array_search($sheet->getId(), $command->ids);
-        if ($ignoredSheetIndex !== false) {
-            $command->ids = array_slice($command->ids, $ignoredSheetIndex, null, true);
-        }
+        unset($command->ids[$index]);
     }
 }

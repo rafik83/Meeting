@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 interface BatchJobQueueInterface
 {
     /**
-     * @param array  $ids
+     * @param int[]  $ids
      * @param Admin  $admin
      * @param array  $options
      */

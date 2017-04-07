@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchDraftCommand extends Command
 {
-    const NAME = 'vimeet:batch:draft';
+    const NAME = 'vimeet:sheets:draft';
 
     /**
      * @var AdminRepositoryInterface

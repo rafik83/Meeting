@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchCatalogCommand extends Command
 {
-    const NAME = 'vimeet:batch:catalog';
+    const NAME = 'vimeet:sheets:catalog';
 
     /**
      * @var AdminRepositoryInterface

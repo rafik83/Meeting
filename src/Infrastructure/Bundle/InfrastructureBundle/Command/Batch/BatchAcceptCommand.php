@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchAcceptCommand extends Command
 {
-    const NAME = 'vimeet:batch:accept';
+    const NAME = 'vimeet:sheets:accept';
 
     /**
      * @var AdminRepositoryInterface

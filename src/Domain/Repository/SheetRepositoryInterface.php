@@ -31,31 +31,31 @@ interface SheetRepositoryInterface
     public function set(Sheet $sheet);
 
     /**
-     * @param array $ids
+     * @param int[] $ids
      * @param bool  $state
      */
     public function updateInCatalogBySheetsId(array $ids, $state);
 
     /**
-     * @param array $ids
+     * @param int[] $ids
      * @param bool  $state
      */
     public function updateEnableStateBySheetsId(array $ids, $state);
 
     /**
-     * @param array  $ids
+     * @param int[]  $ids
      * @param string $state
      */
     public function updateStateBySheetsId(array $ids, $state);
 
     /**
-     * @param array $ids
+     * @param int[] $ids
      * @param Admin $admin
      */
     public function batchAssignBySheetsId(array $ids, Admin $admin);
 
     /**
-     * @param array  $ids
+     * @param int[]  $ids
      * @param string $state
      */
     public function updateValidationState(array $ids, $state);

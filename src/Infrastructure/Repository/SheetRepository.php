@@ -235,6 +235,7 @@ class SheetRepository implements SheetRepositoryInterface
     public function getSheetsById(array $ids)
     {
         $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder->orderBy('sheet.id');
 
         return $queryBuilder->getQuery()->getResult();
     }

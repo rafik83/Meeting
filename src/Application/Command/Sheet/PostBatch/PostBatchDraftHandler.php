@@ -47,7 +47,6 @@ class PostBatchDraftHandler
     {
         foreach ($command->sheets as $sheet) {
             if (!$sheet->isValidationDraft()) {
-
                 $this->eventDispatcher->dispatch(
                     Events::SHEET_VALIDATION_DRAFT,
                     new SheetDraftEvent(

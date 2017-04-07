@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchValidationValidateCommand extends Command
 {
-    const NAME = 'vimeet:batch:validation-validate';
+    const NAME = 'vimeet:sheets:validation-validate';
 
     /**
      * @var AdminRepositoryInterface
@@ -65,7 +65,6 @@ class BatchValidationValidateCommand extends Command
             ->setDescription('Batch validation validate sheet action')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids separated by a comma')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id');
-
     }
 
     /**

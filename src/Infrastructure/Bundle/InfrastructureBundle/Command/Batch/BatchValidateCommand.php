@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchValidateCommand extends Command
 {
-    const NAME = 'vimeet:batch:validate';
+    const NAME = 'vimeet:sheets:validate';
 
     /**
      * @var AdminRepositoryInterface
