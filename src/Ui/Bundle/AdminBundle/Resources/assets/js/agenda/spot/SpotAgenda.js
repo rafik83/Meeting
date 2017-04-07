@@ -16,13 +16,6 @@ module.exports = {
     methods: {
         close: function () {
             this.$emit('close-spot-agenda', this.spot);
-        },
-
-        /**
-         * @param {int} sheetId
-         */
-        showAgendaForSheetId: function (sheetId) {
-            this.$emit('show-agenda-for-sheet-id', sheetId)
         }
     }
 };

@@ -116,14 +116,6 @@ module.exports = {
             }
 
             return null;
-        },
-
-        /**
-         * @param {int} sheetId
-         */
-        showAgendaForSheetId: function (sheetId) {
-            eventDispatcher.dispatch('show-agenda-for-sheet-id', sheetId);
-            eventDispatcher.dispatch('toggleTab', 'sheetTab');
         }
     }
 };

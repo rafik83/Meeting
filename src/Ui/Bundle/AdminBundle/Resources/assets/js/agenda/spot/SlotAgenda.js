@@ -1,4 +1,5 @@
 var options = require('../../vueComponents/options');
+var eventDispatcher = require('../../vueComponents/EventDispatcher');
 
 module.exports = {
     template: '#spot-slot-agenda',
@@ -12,7 +13,8 @@ module.exports = {
          * @param {int} sheetId
          */
         showAgendaForSheetId: function (sheetId) {
-            this.$emit('show-agenda-for-sheet-id', sheetId)
+            eventDispatcher.dispatch('show-agenda-for-sheet-id', sheetId);
+            eventDispatcher.dispatch('toggleTab', 'sheetTab');
         }
     }
 };

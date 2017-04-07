@@ -25,7 +25,6 @@
                 <li v-for="spot in openedSpots">
                     <spot-agenda
                             v-bind:spot="spot"
-                            v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
                             v-on:close-spot-agenda="closeSpotAgenda">
                     </spot-agenda>
                 </li>
