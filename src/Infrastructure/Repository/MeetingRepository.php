@@ -353,7 +353,7 @@ class MeetingRepository implements MeetingRepositoryInterface
                 Meeting::class,
                 'meeting',
                 'WITH',
-                'sheet.ids IN (:ids) AND meeting.state = :state AND (meeting.fromSheet = sheet OR meeting.toSheet = sheet)'
+                'sheet.id IN (:ids) AND meeting.state = :state AND (meeting.fromSheet = sheet OR meeting.toSheet = sheet)'
             )
             ->groupBy('sheet.id')
             ->setParameter('ids', $ids)
