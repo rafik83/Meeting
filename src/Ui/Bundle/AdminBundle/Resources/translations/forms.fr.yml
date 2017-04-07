@@ -339,7 +339,7 @@ form.order_filter.children.sheet.enabled.label: Fiche
 form.order_invoice_find.children.type.label: 'Chercher'
 form.order_invoice_find.children.type.choices.invoice: 'Facture'
 form.order_invoice_find.children.type.choices.order: 'Commande'
-form.order_invoice_find.children.numero.label: 'Entrer le numéro de la commande/facture'
+form.order_invoice_find.children.numero.label: 'Numéro de la commande/facture'
 form.order_invoice_find.children.submit.label: Rechercher
 form.order_row.children.description.label: Description
 form.order_row.children.label.label: Intitulé
