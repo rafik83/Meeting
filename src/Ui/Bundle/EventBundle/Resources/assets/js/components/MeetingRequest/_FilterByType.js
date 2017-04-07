@@ -33,15 +33,25 @@ function FilterByType(element, buttonsZone)
         ) {
             if (attribute === this.filterByRequestsConstant) {
                 this.addContentToButton(element, '(' + this.requests.length + ')');
+
+                if (this.requests.length === 0) {
+                    element.disabled = true;
+                }
             }
 
             if (attribute === this.filterByPropositionsConstant) {
                 this.addContentToButton(element, '(' + this.propositions.length + ')');
+
+                if (this.propositions.length === 0) {
+                    element.disabled = true;
+                }
             }
 
-            element.addEventListener('click', function () {
-                this.filterByType(attribute, element);
-            }.bind(this));
+            if (element.disabled !== true) {
+                element.addEventListener('click', function () {
+                    this.filterByType(attribute, element);
+                }.bind(this));
+            }
         }
 
         this.buttons.push(element);
