@@ -34,7 +34,7 @@ class FindResult extends EventFindResult
             throw new InvoiceNotFoundException();
         }
 
-        parent::__construct(reset($sheets));
+        parent::__construct($firstSheet);
 
         $this->sheets = $sheets;
     }
