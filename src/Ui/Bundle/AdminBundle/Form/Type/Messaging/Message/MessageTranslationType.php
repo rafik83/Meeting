@@ -33,7 +33,7 @@ class MessageTranslationType extends AbstractType
      */
     public function __construct(array $preferredLocales, MessagePlaceholderHelper $placeholderHelper)
     {
-        $this->preferredLocales = $preferredLocales;
+        $this->preferredLocales  = $preferredLocales;
         $this->placeholderHelper = $placeholderHelper;
     }
 

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Messaging;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation;
 use Proximum\Vimeet\Domain\Repository\Messaging\MessageRepositoryInterface;
 
 class MessageRepository implements MessageRepositoryInterface
@@ -36,7 +37,10 @@ class MessageRepository implements MessageRepositoryInterface
     public function add(Message $message)
     {
         $this->entityManager->persist($message);
-        $this->entityManager->flush($message);
+
+        foreach ($message->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**
@@ -45,6 +49,10 @@ class MessageRepository implements MessageRepositoryInterface
     public function set(Message $message)
     {
         $this->entityManager->flush($message);
+
+        foreach ($message->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**
@@ -62,5 +70,13 @@ class MessageRepository implements MessageRepositoryInterface
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeTranslation(MessageTranslation $messageTranslation)
+    {
+        $this->entityManager->remove($messageTranslation);
     }
 }

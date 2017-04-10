@@ -33,8 +33,29 @@ class UpdateHandler
     public function handle(Update $command)
     {
         $message = $command->getMessage();
-        $message->update($command->name, $command->subject, $command->content);
 
-        $this->messageRepository->set($message);
+        foreach ($message->getTranslations() as $locale => $translation) {
+            // Remove translation if it was deleted
+            if (!isset($command->translations[$locale])) {
+                $this->messageRepository->removeTranslation($translation);
+                $message->translations->remove($locale);
+            }
+        }
+
+        foreach ($command->translations as $locale => $translation) {
+            // Remove translation if locale was updated
+            if ($message->translations->containsKey($locale)) {
+                $this->messageRepository->removeTranslation($message->getTranslation($locale));
+                $message->translations->remove($locale);
+            }
+
+            $message->translate(
+                $translation['locale'],
+                $translation['subject'],
+                $translation['content']
+            );
+        }
+
+        $this->messageRepository->set($message->update($command->name));
     }
 }

@@ -314,10 +314,6 @@ form.messaging_create_message.children.content.label: Contenu
 form.messaging_create_message.children.name.label: 'Nom emailing'
 form.messaging_create_message.children.subject.label: Sujet
 form.messaging_create_message.children.submit.label: Enregistrer
-form.messaging_update_message.children.content.label: Contenu
-form.messaging_update_message.children.name.label: 'Nom emailing'
-form.messaging_update_message.children.subject.label: Sujet
-form.messaging_update_message.children.submit.label: Enregistrer
 form.messaging_create_message.children.translations.prototype.label: 'Traduction'
 form.messaging_create_message.children.translations.prototype.children.locale.label: 'Langue'
 form.messaging_create_message.children.translations.prototype.children.subject.label: 'Sujet'

@@ -38,7 +38,7 @@ class Message
     /**
      * @var ArrayCollection
      */
-    private $translations;
+    public $translations;
 
     /**
      * @var string
@@ -60,10 +60,14 @@ class Message
 
     /**
      * @param string $name
+     *
+     * @return Message $this
      */
     public function update($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -106,11 +110,19 @@ class Message
     /**
      * @param string $locale
      *
-     * @return MessageTranslation
+     * @return MessageTranslation|null
      */
     public function getTranslation($locale)
     {
         return $this->translations->get($locale);
+    }
+
+    /**
+     * @return MessageTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations->toArray();
     }
 
     /**

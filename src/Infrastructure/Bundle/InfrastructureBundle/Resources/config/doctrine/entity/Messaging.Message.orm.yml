@@ -16,3 +16,9 @@ Proximum\Vimeet\Domain\Model\Messaging\Message:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation
+            mappedBy: message
+            indexBy: locale
+            cascade: ['persist', 'remove']

@@ -40,4 +40,9 @@ abstract class AbstractMessageType extends AbstractType
     {
         $resolver->setDefault('csrf_token_id', 'messaging_message_create');
     }
+
+    public function getBlockPrefix()
+    {
+        return 'messaging_create_message';
+    }
 }
