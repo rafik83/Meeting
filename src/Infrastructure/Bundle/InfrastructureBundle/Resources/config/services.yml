@@ -1383,8 +1383,17 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\FindHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+    command.invoice.find_handler:
+        class: Proximum\Vimeet\Application\Command\Invoice\FindHandler
+        arguments:
+            - '@repository.invoice.invoice_repository'
+    command.event.find.find_handler:
+        class: Proximum\Vimeet\Application\Command\Event\Find\FindHandler
+        arguments:
+            - '@command.order.find_handler'
+            - '@command.invoice.find_handler'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Find }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Find\Find }
     command.event.day.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\Day\UpdateHandler
         arguments:
@@ -2657,6 +2666,32 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery }
 
+    query.agenda.admin.spot.slot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.spot_unavailability_repository'
+            - '@query.agenda.admin.spot.meeting_slot_view_query_handler'
+
+    query.agenda.admin.spot.day_spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\DaySpotViewQueryHandler
+        arguments:
+            - '@query.agenda.admin.spot.slot_view_query_handler'
+
+    query.agenda.admin.spot.agenda_spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQueryHandler
+        arguments:
+            - '@repository.event.day_repository'
+            - '@query.agenda.admin.spot.day_spot_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery }
+
+    query.agenda.admin.spot.meeting_slot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+
     ##
     # Navigation builder
     ##
@@ -2912,6 +2947,15 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
+    query.spot.agenda.spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\Agenda\SpotViewQueryHandler
+    query.spot.agenda.list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@query.spot.agenda.spot_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery }
     query.transaction.view_query_handler:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
         arguments:
@@ -2946,6 +2990,14 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\Details\MeetingViewQuery }
+
+    query.event.find.multiple_sheet_found_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery }
+
 
     #
     # Order Export Queries

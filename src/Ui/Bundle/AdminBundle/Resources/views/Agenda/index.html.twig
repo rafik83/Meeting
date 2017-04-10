@@ -3,190 +3,31 @@
 {% block title 'admin.agenda.title'|trans %}
 
 {% block content %}
-<div id="agenda" class="agenda-container">
-    <meeting-update-modal
-        v-bind:meeting-to-update="meetingToUpdate"
-        v-on:close-modal="clearMeetingToUpdate"
-        v-on:meeting-updated="meetingUpdated"
-        v-on:meeting-updating="handleMeetingUpdating"
-        v-on:meeting-updated-error="handleMeetingUpdatedError"
-    >
-    </meeting-update-modal>
+    <div id="agenda" class="agenda-container">
+        <meeting-update-modal
+                v-bind:meeting-to-update="meetingToUpdate"
+                v-on:close-modal="clearMeetingToUpdate"
+                v-on:meeting-updated="meetingUpdated"
+                v-on:meeting-updating="handleMeetingUpdating"
+                v-on:meeting-updated-error="handleMeetingUpdatedError">
+        </meeting-update-modal>
 
-    <div class="row" v-cloak>
-        <div class="col-xs-2" style="margin: 0; padding: 0;">
-            <div class="sheets-header">
-                <table class="table-no-margin-bottom table">
-                    <thead>
-                    <tr>
-                        <td>
-                            <button class="btn btn-default btn-xs" v-on:click="showSheetFilter">
-                                <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }} <span class="badge">${ countFilteredSheets }</span>
-                            </button>
-                            <button class="btn btn-default btn-xs" v-on:click="resetSheetFilter">
-                                <i class="glyphicon glyphicon-remove"></i> {{ 'admin.agenda.filters.reset.label'|trans }}
-                            </button>
-                            <button class="btn btn-default btn-xs" v-on:click="showSort">
-                                </i> {{ 'admin.agenda.sort.title.label'|trans }}
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ 'admin.agenda.indicators-caption'|trans }}
-                            <table class="table-no-margin-bottom table table-condensed table-bordered">
-                                <tr>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.countRequest'|trans }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
-                                    </td>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.countProposition'|trans }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
-                                    </td>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.countValidatedRequest'|trans }}"><span class="glyphicon glyphicon-resize-horizontal"></span></a>
-                                    </td>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.countSlots'|trans }}"><span class="glyphicon glyphicon-align-justify"></span></a>
-                                    </td>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.usableSlots'|trans }}"><span class="glyphicon glyphicon-tasks"></span></a>
-                                    </td>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.countPlacedMeetings'|trans }}"><span class="glyphicon glyphicon-ok-circle"></span></a>
-                                    </td>
-                                    <td class="text-center col-custom-7">
-                                        <a href="#" title="{{ 'admin.agenda.countPendingProposition'|trans }}"><span class="glyphicon glyphicon-question-sign"></span></a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <p class="text-muted">
-                                <small>
-                                    <span class="glyphicon glyphicon-info-sign"></span> {{ 'admin.agenda.indicators-help'|trans }}
-                                </small>
-                            </p>
-                        </td>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-            <div class="sheets-list">
-                <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
-                    <tbody>
-                        <tr v-if="noSheets">
-                            <td><div class="alert alert-warning">{{ 'admin.agenda.sheet.loader'|trans }}</div></td>
-                        </tr>
-                        <tr v-for="sheet in sheetsIterator" v-on:refresh-list="refreshList">
-                            <td>
-                                <span class="label label-info pull-right" v-if="sheet.countParticipant > 1"><i class="icon icon-Profil_1"></i> ${ sheet.countParticipant }</span>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs agenda-tab" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#sheet" aria-controls="sheet" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.sheet.title.label'|trans }}</a>
+            </li>
+            <li role="presentation">
+                <a href="#spot" aria-controls="spot" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.spot.title.label'|trans }}</a>
+            </li>
+        </ul>
 
-                                <a v-bind:href="sheet.url" target="_blank" title="{{ 'admin.agenda.sheet.see'|trans }}" class="link-to-sheet"><span class="glyphicon"></span></a>
-                                <a href="#" class="sheet-title" v-bind:title="sheet.title" v-on:click="showAndFocusAgenda(sheet)">${ sheet.title }</a>
-
-                                <small>${ sheet.type }</small>
-
-                                <div v-if="sheet.follower != null"><small><span class="glyphicon glyphicon-arrow-right"></span> ${ sheet.follower }</small></div>
-
-                                <table class="table-no-margin-bottom table table-condensed table-bordered">
-                                    <tr>
-                                        <td class="text-center col-custom-7">${ sheet.countRequest }</td>
-                                        <td class="text-center col-custom-7">${ sheet.countProposition }</td>
-                                        <td class="text-center col-custom-7">${ sheet.countValidatedRequest }</td>
-                                        <td class="text-center col-custom-7">${ sheet.countSlots }</td>
-                                        <td class="text-center col-custom-7">${ sheet.usableSlots }</td>
-                                        <td class="text-center col-custom-7">${ sheet.countPlacedMeetings }</td>
-                                        <td class="text-center col-custom-7">${ sheet.countPendingPropositions }</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-xs-10">
-            {% if isMeetingRequestUpdateLocked == true %}
-                <div style="height: 50px" class="bg-danger alert alert-danger">
-                    {{ 'admin.agenda.event.configuration.isMeetingRequestLocked'|trans }}
-                </div>
-            {% endif %}
-            <div class="requests-list" v-if="focusedSheet" ref="focusedSheetRequestList">
-                <p>
-                    <b>${ focusedSheet.title }</b>
-                    <br>{{ 'admin.agenda.requestsList.title'|trans }}
-                </p>
-
-                <div class="requests-list-scrollable">
-                    <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
-                        <tr v-show="focusedSheet.requests && focusedSheet.requests.length === 0">
-                            <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
-                        </tr>
-                        <tr v-for="request in focusedSheet.requests">
-                            <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request }">
-                                <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" class="pull-right" v-on:click="showParticipants(request)">
-                                    <span class="glyphicon glyphicon-cog"></span>
-                                </a>
-                                <a href="#"
-                                   title="{{ 'admin.agenda.request.transformIntoMeeting.label'|trans }}"
-                                   class="pull-right"
-                                   v-on:click="loadSlotsForRequest(request)"
-                                   v-show="request.isTransformableIntoMeeting && !focusedSheet.isAgendaLoading && null === meetingRequestToTransformIntoMeeting">
-                                    <span class="glyphicon glyphicon-move"></span>
-                                </a>
-
-                                <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.cancel'|trans }}" v-on:click="cancelSlotAction()" class="pull-right" v-show="meetingRequestToTransformIntoMeeting === request">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </a>
-
-                                <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)">
-                                    ${ request.sheetMetTitle }
-                                </a>
-                                <br>
-
-                                <i class="icon icon-Profil_1"></i>
-                                ${ request.participantsName }
-
-                                <span v-if="request.participants.length == 0">
-                                    {{ 'admin.agenda.requestsList.noPreference'|trans }}
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="agenda-horizontal">
-                <ul>
-                {% set table = 1 %}
-                    <li v-for="sheet in openedSheets">
-                        <sheet-agenda
-                            ref="childSheetAgenda"
-                            v-bind:sheet="sheet"
-                            v-bind:focused-sheet="focusedSheet"
-                            v-on:close-sheet-agenda="closeAgenda"
-                            v-on:load-sheets="loadSheets"
-                            v-on:focus-sheet="focusSheet"
-                            v-on:show-meeting-update-modal="showMeetingUpdateModal"
-                            v-on:refresh-agenda="refreshAgenda"
-                            v-on:refresh-both-agenda="handleRefreshBothAgenda"
-                            v-on:show-agenda-for-sheet-id="showAgendaForSheetId"
-                            v-on:schedule-meeting="transformRequestIntoMeeting"
-                            v-on:show-mass-assignment="showMassAssignment">
-                        >
-                        </sheet-agenda>
-                    </li>
-                </ul>
-            </div>
+        <!-- Tab panes -->
+        <div class="tab-content agenda-tab-content">
+            {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
+            <spot></spot>
         </div>
     </div>
-
-    <filter-modal :sheets="sheets" :show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
-
-    <mass-assignment-modal :show="showMassAssignmentModal" v-on:mass-assignment-updated="handleUpdateMassAssignment" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
-
-    <sort-modal :sheets="sheets" :show="showSortModal" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
-    <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
-    <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
-</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -204,6 +45,10 @@
     {{ include('AdminBundle:Agenda/Components:massAssignmentForm.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sortModal.html.twig') }}
     {{ include('AdminBundle:Agenda/Components:sortSheetForm.html.twig') }}
+
+    {{ include('AdminBundle:Agenda/Tabs:spots.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components/Spot:spotAgenda.html.twig') }}
+    {{ include('AdminBundle:Agenda/Components/Spot:slotAgenda.html.twig') }}
 
     <!-- template for the Modal component -->
     <script type="x/template" id="modal-template">

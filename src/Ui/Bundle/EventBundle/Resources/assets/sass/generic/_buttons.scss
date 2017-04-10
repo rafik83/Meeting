@@ -6,7 +6,7 @@ button, a {
 }
 
 .btn {
-    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-no-style, &.btn-lg, &.btn-black {
+    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-no-style, &.btn-lg, &.btn-black, &.btn-default {
         position: relative;
         font-size: 15px;
         line-height: 22px;
@@ -26,7 +26,8 @@ button, a {
         }
 
         &:hover,
-        &:active {
+        &:active,
+        &:focus {
             color: $button-text-color;
             @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
         }
