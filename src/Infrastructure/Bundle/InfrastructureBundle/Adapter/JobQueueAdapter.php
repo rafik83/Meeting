@@ -95,7 +95,6 @@ class JobQueueAdapter implements JobQueueInterface
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale)
     {
         $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
-
         $this->setJob($job);
     }
 
@@ -105,7 +104,6 @@ class JobQueueAdapter implements JobQueueInterface
     public function indexSheetsBySheetTemplate(SheetTemplate $sheetTemplate)
     {
         $job = new Job(IndexSheetsBySheetTemplateCommand::NAME, [$sheetTemplate->getId()]);
-        $job->addRelatedEntity($sheetTemplate);
         $this->setJob($job);
     }
 
@@ -115,7 +113,6 @@ class JobQueueAdapter implements JobQueueInterface
     public function indexSheetsByRegistrationTemplate(RegistrationTemplate $registrationTemplate)
     {
         $job = new Job(IndexSheetsByRegistrationTemplateCommand::NAME, [$registrationTemplate->getId()]);
-        $job->addRelatedEntity($registrationTemplate);
         $this->setJob($job);
     }
 
@@ -134,7 +131,6 @@ class JobQueueAdapter implements JobQueueInterface
     public function indexInCatalogSheetsByEvent(Event $event)
     {
         $job = new Job(IndexInCatalogSheetsByEventCommand::NAME, [$event->getId()]);
-        $job->addRelatedEntity($event);
         $this->setJob($job);
     }
 
