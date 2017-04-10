@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazy
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
-use Proximum\Vimeet\Application\View\Agenda\AgendaSpotView;
 use Proximum\Vimeet\Application\View\Spot\Agenda\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
