@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Query\Event;
 
+use Proximum\Vimeet\Application\View\Event\DayView;
 use Proximum\Vimeet\Application\View\Event\EventListsView;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\View\EventListView;
 
@@ -60,7 +62,10 @@ class EventListQueryHandler
                 $event->getTitle(),
                 $event->getDomain(),
                 $event->getLocales(),
-                $event->getFallback()
+                $event->getFallback(),
+                array_map(function (Day $day) {
+                    return new DayView($day->getStartTime(), $day->getEndTime());
+                }, $event->getDays())
             );
 
             // past event

@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Query\Event\EventListQueryHandler;
 use Proximum\Vimeet\Domain\View\EventListView;
 
 /**
- * EventListsView contains a list of actual events and a list of past events
+ * EventListsView contains a list of current events and a list of past events based on current date
  *
  * @see EventListQueryHandler::handle()
  */
