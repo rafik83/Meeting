@@ -42,7 +42,7 @@ class HomeController extends Controller
                 ->getByEventAndManager($event, $user);
 
             if (null !== $group) {
-                return $this->redirectToRoute('event_sheet_group_index', ['group' => $group->getId()]);
+                return $this->redirectToRoute('event_sheet_group_index', ['sheetGroup' => $group->getId()]);
             }
 
             // User has a sheet
