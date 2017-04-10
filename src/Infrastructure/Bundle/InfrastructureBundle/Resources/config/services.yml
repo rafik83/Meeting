@@ -2298,6 +2298,8 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
             - '@template.template_data_factory'
+            - '@domain.key_dates.checker.close_meeting_request_access_checker'
+            - '@domain.key_dates.checker.close_answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
     query.invoice.invoice_data_query_handler:
