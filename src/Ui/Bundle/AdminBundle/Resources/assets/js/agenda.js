@@ -9,11 +9,10 @@ var Vue                    = require('vue'),
     sheetAgenda            = require('./agenda/SheetAgenda'),
     slotAgenda             = require('./agenda/SlotAgenda'),
     sortModal              = require('./agenda/sortModal'),
-    UrlParameterGuesser = require('./components/_UrlParameterGuesser'),
+    spot                   = require('./agenda/spot/Spot'),
     AgendaApiEndpoints     = require('./components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
-var urlParameterGuesser = new UrlParameterGuesser();
 
 /**
  * Pass axios to Vue
@@ -40,7 +39,8 @@ new Vue({
         'sheet-agenda': sheetAgenda,
         'MeetingUpdateModal': meetingUpdateModal,
         'mass-assignment-modal': massAssignmentModal,
-        'sort-modal': sortModal
+        'sort-modal': sortModal,
+        'spot': spot
     },
     data: {
         sheets: [], /** {array} Sheet */

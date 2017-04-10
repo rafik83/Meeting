@@ -24,4 +24,11 @@ interface SpotUnavailabilityRepositoryInterface
      * @param Spot $spot
      */
     public function remove(Spot $spot);
+
+    /**
+     * @param Spot $spot
+     *
+     * @return SpotUnavailability[]
+     */
+    public function findBySpot(Spot $spot);
 }
