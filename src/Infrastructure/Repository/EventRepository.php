@@ -87,7 +87,7 @@ class EventRepository implements EventRepositoryInterface
             ->createQueryBuilder()
             ->select('event', 'days')
             ->from(Event::class, 'event')
-            ->join('event.days', 'days')
+            ->leftJoin('event.days', 'days')
             ->addOrderBy('event.title')
             ->addOrderBy('days.endTime', 'DESC');
 

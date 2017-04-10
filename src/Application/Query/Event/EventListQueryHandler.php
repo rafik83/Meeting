@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Event;
 
 use Proximum\Vimeet\Application\View\Event\DayView;
 use Proximum\Vimeet\Application\View\Event\EventListsView;
+use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\View\EventListView;
@@ -55,8 +56,6 @@ class EventListQueryHandler
         $pastEvents    = [];
 
         foreach ($events as $event) {
-            $lastDay = $event->getLastDay();
-
             $eventListView = new EventListView(
                 $event->getId(),
                 $event->getTitle(),
@@ -68,7 +67,13 @@ class EventListQueryHandler
                 }, $event->getDays())
             );
 
-            // past event
+            try {
+                $lastDay = $event->getLastDay();
+            } catch (DayNotDefinedException $dayNotDefinedException) {
+                $actualEvents[] = $eventListView;
+                continue;
+            }
+
             if ($lastDay->getEndTime() <= $pastEventDate) {
                 $pastEvents[] = $eventListView;
             } else {
