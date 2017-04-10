@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\View\Event\Find;
 
 class SheetFoundView
 {
-    /** @var string */
+    /** @var int */
     public $eventId;
 
     /** @var string */
