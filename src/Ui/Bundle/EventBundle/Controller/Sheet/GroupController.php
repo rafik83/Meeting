@@ -20,20 +20,20 @@ class GroupController extends Controller
 {
     /**
      * @param EventDomain $eventDomain
-     * @param Group       $group
+     * @param Group       $sheetGroup
      *
      * @return Response
      */
-    public function indexAction(EventDomain $eventDomain, Group $group)
+    public function indexAction(EventDomain $eventDomain, Group $sheetGroup)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $group);
+        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
 
         $event = $eventDomain->getEvent();
 
         return $this->render('EventBundle:Sheet/Group:index.html.twig', [
             'event' => $event,
-            'group' => $group,
+            'group' => $sheetGroup,
         ]);
     }
 }

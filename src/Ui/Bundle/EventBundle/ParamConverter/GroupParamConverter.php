@@ -37,7 +37,7 @@ class GroupParamConverter implements ParamConverterInterface
     {
         /** @var null|EventDomain $eventDomain */
         $eventDomain = $request->attributes->get('eventDomain');
-        $group = $this->groupRepository->getById($request->attributes->get('group'));
+        $group = $this->groupRepository->getById($request->attributes->get('sheetGroup'));
 
         if (null === $group) {
             throw new NotFoundHttpException('Group not found');

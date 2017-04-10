@@ -232,9 +232,9 @@ event_sheet_internal_print:
 #
 
 event_sheet_group_index:
-    path:     /sheets-group/{group}
+    path:     /sheets-group/{sheetGroup}
     requirements:
-        group: \d+
+        sheetGroup: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet/Group:index }
 
