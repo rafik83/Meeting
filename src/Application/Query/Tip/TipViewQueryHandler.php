@@ -36,7 +36,7 @@ class TipViewQueryHandler
      */
     public function handle(TipViewQuery $query)
     {
-        $tips = $this->tipRepository->paginate($query->page);
+        $tips = $this->tipRepository->paginate($query->page, $query->limit);
 
         $tipListView = new TipListView();
         

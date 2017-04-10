@@ -49,9 +49,9 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $tips[2],
         ];
 
-        $query = new TipViewQuery(1);
+        $query = new TipViewQuery(1, 20);
 
-        $tipRepository->paginate(1)->shouldBeCalled()->willReturn($tips);
+        $tipRepository->paginate(1, 20)->shouldBeCalled()->willReturn($tips);
 
         $handler = new TipViewQueryHandler($tipRepository->reveal());
         $tipListView = $handler->handle($query);
