@@ -46,7 +46,7 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
         __construct:
             - '@event_rdv_carnot_2016'
             - '@rdv_carnot_group_user_manager'
-            - 'Mon entité'
+            - 'Entité Institut Carnot'
             - <dateTime()>
 
 Proximum\Vimeet\Domain\Model\Sheet:
@@ -79,7 +79,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@event_rdv_carnot_2016'
             - '@type_institute_carnot'
             -
-            # Titre de la fiche
                 # Titre de la fiche
                 dcc42d3d: { text: { fr: "<catchPhrase()>" } }
                 # Lien
