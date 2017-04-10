@@ -30,12 +30,12 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      * ActivateAccountTokenGenerator constructor.
      *
      * @param ActivateAccountTokenRepositoryInterface $respository
-     * @param \DateTimeImmutable                      $dateTime
+     * @param \DateTimeInterface                      $dateTime
      * @param string                                  $userActivateAccountTokenExpiration
      */
     public function __construct(
         ActivateAccountTokenRepositoryInterface $respository,
-        \DateTimeImmutable $dateTime,
+        \DateTimeInterface $dateTime,
         $userActivateAccountTokenExpiration
     ) {
         $this->userActivateAccountTokenExpiration = $userActivateAccountTokenExpiration;

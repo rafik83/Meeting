@@ -26,9 +26,9 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      * ActivateAccountTokenGenerator constructor.
      *
      * @param ActivateAccountTokenRepositoryInterface $respository
-     * @param \DateTimeImmutable                      $dateTime
+     * @param \DateTimeInterface                      $dateTime
      */
-    public function __construct(ActivateAccountTokenRepositoryInterface $respository, \DateTimeImmutable $dateTime)
+    public function __construct(ActivateAccountTokenRepositoryInterface $respository, \DateTimeInterface $dateTime)
     {
         parent::__construct($dateTime);
 
