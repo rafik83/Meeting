@@ -58,7 +58,7 @@ class GroupVoter extends Voter
                 return $this->canManage($subject, $user);
         }
 
-        throw new \LogicException('This code should not be reached!');
+        return false;
     }
 
     /**
