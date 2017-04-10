@@ -22,23 +22,41 @@ class ConfigureDates
     /**
      * "la date de mise en ligne du catalogue"
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     public $catalogOnlineDate;
 
     /**
      * "la date d'ouverture des inscriptions au s-event"
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     public $happeningsOpenDate;
 
     /**
      * "la date de publication des agendas définitifs (RDV)"
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     public $schedulePublishDate;
+
+    /**
+     * "Bloquer la demande de rendez-vous"
+     *
+     * Date after which users can not request a meeting with other users on this event
+     *
+     * @var \DateTimeInterface|null
+     */
+    public $closeMeetingRequestDate;
+
+    /**
+     * "Bloquer les acceptations/refus des RDV"
+     *
+     * Date after which the state of the meeting requests can not be changed
+     *
+     * @var \DateTimeInterface|null
+     */
+    public $closeAnsweringMeetingRequestDate;
 
     /**
      * ConfigureDates constructor.
@@ -47,9 +65,11 @@ class ConfigureDates
      */
     public function __construct(Event $event)
     {
-        $this->event               = $event;
-        $this->catalogOnlineDate   = $event->getConfiguration()->getCatalogOnlineDate();
-        $this->happeningsOpenDate  = $event->getConfiguration()->getHappeningsOpenDate();
-        $this->schedulePublishDate = $event->getConfiguration()->getSchedulePublishDate();
+        $this->event                            = $event;
+        $this->catalogOnlineDate                = $event->getConfiguration()->getCatalogOnlineDate();
+        $this->happeningsOpenDate               = $event->getConfiguration()->getHappeningsOpenDate();
+        $this->schedulePublishDate              = $event->getConfiguration()->getSchedulePublishDate();
+        $this->closeMeetingRequestDate          = $event->getConfiguration()->getCloseMeetingRequestDate();
+        $this->closeAnsweringMeetingRequestDate = $event->getConfiguration()->getCloseAnsweringMeetingRequestDate();
     }
 }

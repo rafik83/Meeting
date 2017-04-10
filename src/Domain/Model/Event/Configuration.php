@@ -118,11 +118,19 @@ class Configuration
     private $analyticsCode;
 
     /**
+     * "Bloquer la demande de rendez-vous"
+     *
+     * Date after which users can not request a meeting with other users on this event
+     *
      * @var \DateTimeInterface|null
      */
     private $closeMeetingRequestDate;
 
     /**
+     * "Bloquer les acceptations/refus des RDV"
+     *
+     * Date after which the state of the meeting requests can not be changed
+     *
      * @var \DateTimeInterface|null
      */
     private $closeAnsweringMeetingRequestDate;
