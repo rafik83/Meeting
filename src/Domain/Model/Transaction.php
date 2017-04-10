@@ -77,7 +77,7 @@ class Transaction
     /**
      * @var bool
      */
-    private $hidden;
+    private $hidden = false;
 
     /**
      * Transaction constructor.
