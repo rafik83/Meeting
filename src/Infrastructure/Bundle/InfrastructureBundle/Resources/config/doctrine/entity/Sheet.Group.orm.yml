@@ -26,3 +26,8 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
         sheets:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             mappedBy: group
+    uniqueConstraints:
+        unique_manager_event:
+            columns:
+                - event_id
+                - manager_id
