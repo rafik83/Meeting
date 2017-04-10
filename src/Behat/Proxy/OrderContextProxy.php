@@ -10,26 +10,26 @@
 
 namespace Proximum\Vimeet\Behat\Proxy;
 
-use Proximum\Vimeet\Behat\Context\Domain\Proxy\EventContextProxyInterface;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\OrderContextProxyInterface;
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
-use Proximum\Vimeet\Behat\Service\Manager\EventManager;
+use Proximum\Vimeet\Behat\Service\Manager\OrderManager;
 
-class EventContextProxy implements EventContextProxyInterface
+class OrderContextProxy implements OrderContextProxyInterface
 {
     /** @var StorageInterface */
     private $storage;
 
-    /** @var EventManager */
-    private $eventManager;
+    /** @var OrderManager */
+    private $orderManager;
 
     /**
      * @param StorageInterface $storage
-     * @param EventManager     $eventManager
+     * @param OrderManager     $orderManager
      */
-    public function __construct(StorageInterface $storage, EventManager $eventManager)
+    public function __construct(StorageInterface $storage, OrderManager $orderManager)
     {
         $this->storage      = $storage;
-        $this->eventManager = $eventManager;
+        $this->orderManager = $orderManager;
     }
 
     /**
@@ -41,10 +41,10 @@ class EventContextProxy implements EventContextProxyInterface
     }
 
     /**
-     * @return EventManager
+     * {@inheritdoc}
      */
-    public function getEventManager()
+    public function getOrderManager()
     {
-        return $this->eventManager;
+        return $this->orderManager;
     }
 }

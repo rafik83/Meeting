@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Behat\Context\Domain\Proxy;
 
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
-use Proximum\Vimeet\Behat\Service\Manager\SheetManager;
+use Proximum\Vimeet\Behat\Service\Manager\OrderManager;
 
-interface SheetContextProxyInterface
+interface OrderContextProxyInterface
 {
     /**
      * @return StorageInterface
@@ -21,7 +21,7 @@ interface SheetContextProxyInterface
     public function getStorage();
 
     /**
-     * @return SheetManager
+     * @return OrderManager
      */
-    public function getSheetManager();
+    public function getOrderManager();
 }

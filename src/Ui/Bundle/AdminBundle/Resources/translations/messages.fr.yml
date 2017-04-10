@@ -589,6 +589,7 @@ admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
 admin.sheet.export.fields.category: Catégorie
+admin.sheet.export.fields.balance: 'Balance TTC'
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
@@ -598,7 +599,6 @@ admin.sheet.export.fields.owner_email: 'Email propriétaire'
 admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
 admin.sheet.export.fields.registration_date: 'Date inscription'
-admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
 admin.sheet.export.fields.status: 'Statut fiche'
