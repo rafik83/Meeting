@@ -1,35 +1,76 @@
 <script type="x/template" id="filter-sheet-form">
-    <form>
-        <div class="form-group">
-            <label for="selectedTypes">{{ 'admin.agenda.filters.type'|trans }}</label>
-            <div class="checkbox" v-for="type in types">
-                <label>
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.selectedTypes" :value="type">
-                    ${ type }
+<div class="row">
+    <div class="col-md-12">
+        <form>
+            <div class="form-group">
+                <label for="selectedTypes">
+                    {{ 'admin.agenda.filters.type'|trans }}
                 </label>
+                <div class="checkbox" v-for="type in types">
+                    <label>
+                        <input name="selectedTypes" type="checkbox" v-model:value="filters.selectedTypes" :value="type">
+                        ${ type }
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="selectedTypes">{{ 'admin.agenda.filters.indicators.label'|trans }}</label>
-            <div class="checkbox">
-                <label>
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasNotSentMeetingRequest" v-bind:value="true">
+            <b>{{ 'admin.agenda.filters.indicators.label'|trans }}</b>
+            <div class="form-group row radio">
+                <div class="col-md-6">
                     {{ 'admin.agenda.filters.hasSentMeetingRequest.label'|trans }}
-                </label>
+                </div>
+                <div class="col-md-6">
+                    <fieldset>
+                        <label class="radio-inline">
+                            <input name="hasSentMeetingRequest" type="radio" v-model:value="filters.hasSentMeetingRequest" v-bind:value="true">
+                            {{ 'admin.agenda.filters.hasSentMeetingRequest.yes'|trans }}
+                        </label>
+                        <label class="radio-inline">
+                            <input name="hasSentMeetingRequest" type="radio" v-model:value="filters.hasSentMeetingRequest" v-bind:value="false">
+                            {{ 'admin.agenda.filters.hasSentMeetingRequest.no'|trans }}
+                        </label>
+                        <label class="radio-inline">
+                            <input name="hasSentMeetingRequest" type="radio" v-model:value="filters.hasSentMeetingRequest" value="">
+                            {{ 'admin.agenda.filters.hasSentMeetingRequest.all'|trans }}
+                        </label>
+                    </fieldset>
+                </div>
             </div>
-            <div class="checkbox">
-                <label>
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasMeetingToApprove" v-bind:value="true">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    {{ 'admin.agenda.filters.hasScheduledMeeting.label'|trans }}
+                </div>
+                <div class="col-md-6">
+                    <label class="radio-inline">
+                        <input name="hasScheduledMeeting" type="radio" v-model:value="filters.hasScheduledMeetings" v-bind:value="true">
+                        {{ 'admin.agenda.filters.hasScheduledMeeting.yes'|trans }}
+                    </label>
+                    <label class="radio-inline">
+                        <input name="hasScheduledMeeting" type="radio" v-model:value="filters.hasScheduledMeetings" v-bind:value="false">
+                        {{ 'admin.agenda.filters.hasScheduledMeeting.no'|trans }}
+                    </label>
+                    <label class="radio-inline">
+                        <input name="hasScheduledMeeting" type="radio" v-model:value="filters.hasScheduledMeeting" value="">
+                        {{ 'admin.agenda.filters.hasScheduledMeeting.all'|trans }}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
                     {{ 'admin.agenda.filters.hasMeetingToApprove.label'|trans }}
-                </label>
+                </div>
+                <div class="col-md-6">
+                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasMeetingToApprove" v-bind:value="true">
+                </div>
             </div>
-            <div class="checkbox">
-                <label>
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasNotEnoughAvailableSlot" v-bind:value="true">
+            <div class="form-group row">
+                <div class="col-md-6">
                     {{ 'admin.agenda.filters.hasNotEnoughtAvailableSlot.label'|trans }}
-                </label>
+                </div>
+                <div class="col-md-6">
+                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasNotEnoughAvailableSlot" v-bind:value="true">
+                </div>
             </div>
-            </ul>
-        </div>
-    </form>
+        </form>
+    </div>
+</div>
 </script>
