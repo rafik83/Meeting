@@ -75,6 +75,11 @@ class Transaction
     private $payment;
 
     /**
+     * @var bool
+     */
+    private $hidden;
+
+    /**
      * Transaction constructor.
      *
      * @param Sheet              $sheet
@@ -85,6 +90,7 @@ class Transaction
      * @param string             $state
      * @param string             $currency
      * @param User|null          $user
+     * @param bool               $hidden
      */
     public function __construct(
         Sheet $sheet,
@@ -94,7 +100,8 @@ class Transaction
         $reference,
         $state,
         $currency,
-        User $user = null
+        User $user = null,
+        $hidden = false
     ) {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
@@ -104,6 +111,7 @@ class Transaction
         $this->state     = $state;
         $this->currency  = $currency;
         $this->user      = $user;
+        $this->hidden    = $hidden;
     }
 
     /**
@@ -277,6 +285,22 @@ class Transaction
     }
 
     /**
+     * @return bool
+     */
+    public function isHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * Change the option hidden to false
+     */
+    public function unHide()
+    {
+        $this->hidden = false;
+    }
+
+    /**
      * @param Sheet              $sheet
      * @param User               $user
      * @param float              $amount
@@ -294,7 +318,8 @@ class Transaction
             null,
             self::STATE_PENDING,
             $sheet->getEvent()->getCurrency(),
-            $user
+            $user,
+            true
         );
     }
 }
