@@ -84,21 +84,21 @@ class Configuration
     /**
      * "la date de mise en ligne du catalogue"
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     private $catalogOnlineDate;
 
     /**
      * "la date d'ouverture des inscriptions au s-event"
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     private $happeningsOpenDate;
 
     /**
      * "la date de publication des agendas définitifs (RDV)"
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     private $schedulePublishDate;
 
@@ -116,6 +116,16 @@ class Configuration
      * @var string
      */
     private $analyticsCode;
+
+    /**
+     * @var \DateTimeInterface|null
+     */
+    private $closeMeetingRequestDate;
+
+    /**
+     * @var \DateTimeInterface|null
+     */
+    private $closeAnsweringMeetingRequestDate;
 
     /**
      * @param string $leftColor
@@ -311,20 +321,26 @@ class Configuration
     }
 
     /**
-     * @param \DateTimeInterface $catalogOnlineDate
-     * @param \DateTimeInterface $happeningsOpenDate
-     * @param \DateTimeInterface $schedulePublishDate
+     * @param \DateTimeInterface|null $catalogOnlineDate
+     * @param \DateTimeInterface|null $happeningsOpenDate
+     * @param \DateTimeInterface|null $schedulePublishDate
+     * @param \DateTimeInterface|null $closeMeetingRequestDate
+     * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
      *
      * @return Configuration
      */
     public function setDates(
         \DateTimeInterface $catalogOnlineDate = null,
         \DateTimeInterface $happeningsOpenDate = null,
-        \DateTimeInterface $schedulePublishDate = null
+        \DateTimeInterface $schedulePublishDate = null,
+        \DateTimeInterface $closeMeetingRequestDate = null,
+        \DateTimeInterface $closeAnsweringMeetingRequestDate = null
     ) {
-        $this->catalogOnlineDate   = $catalogOnlineDate;
-        $this->happeningsOpenDate  = $happeningsOpenDate;
-        $this->schedulePublishDate = $schedulePublishDate;
+        $this->catalogOnlineDate                = $catalogOnlineDate;
+        $this->happeningsOpenDate               = $happeningsOpenDate;
+        $this->schedulePublishDate              = $schedulePublishDate;
+        $this->closeMeetingRequestDate          = $closeMeetingRequestDate;
+        $this->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
 
         return $this;
     }
@@ -357,6 +373,22 @@ class Configuration
     public function getSchedulePublishDate()
     {
         return $this->schedulePublishDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getCloseMeetingRequestDate()
+    {
+        return $this->closeMeetingRequestDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getCloseAnsweringMeetingRequestDate()
+    {
+        return $this->closeAnsweringMeetingRequestDate;
     }
 
     /**
