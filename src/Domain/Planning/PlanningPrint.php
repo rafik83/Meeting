@@ -96,7 +96,7 @@ class PlanningPrint
         $contactLastName = null,
         $organiserPhone = null,
         $organiserEmail = null,
-        $tipTranslationViews
+        array $tipTranslationViews
     ) {
         $this->sheetTitle        = $sheetTitle;
         $this->participantName   = $participantName;

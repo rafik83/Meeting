@@ -55,10 +55,7 @@ class TipController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash(
-                'success',
-                $this->get('translator')->trans('flash.admin.tip.create.success', [], 'flashes')
-            );
+            $this->addFlash('success', 'flash.admin.tip.create.success');
 
             return $this->redirectToRoute('admin_tip_list');
         }
@@ -83,10 +80,7 @@ class TipController extends Controller
         
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash(
-                'success',
-                $this->get('translator')->trans('flash.admin.tip.update.success', [], 'flashes')
-            );
+            $this->addFlash('success', 'flash.admin.tip.update.success');
 
             return $this->redirectToRoute('admin_tip_list');
         }

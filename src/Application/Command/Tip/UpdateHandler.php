@@ -16,7 +16,12 @@ class UpdateHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
-    
+
+    /**
+     * UpdateHandler constructor.
+     *
+     * @param TipRepositoryInterface $tipRepository
+     */
     public function __construct(TipRepositoryInterface $tipRepository)
     {
         $this->tipRepository = $tipRepository;

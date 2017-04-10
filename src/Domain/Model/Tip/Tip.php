@@ -70,10 +70,10 @@ class Tip
     /**
      * Update Tip
      *
-     * @param string               $title
-     * @param bool                 $onMeetingManagement
-     * @param bool                 $onCatalog
-     * @param bool                 $onPrintPlanning
+     * @param string $title
+     * @param bool   $onMeetingManagement
+     * @param bool   $onCatalog
+     * @param bool   $onPrintPlanning
      *
      * @return Tip
      */
