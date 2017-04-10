@@ -6,7 +6,10 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
+ * Warning: This migration is irreversible !
  * Create table messaging_message_translation for Message translation
+ * Transfer `messaging_message.subject` and `messaging_message.content`on messaging_message_translation
+ * Drop `messaging_message.subject` and `messaging_message.content`
  */
 class Version20170407152027 extends AbstractMigration
 {
@@ -22,8 +25,42 @@ class Version20170407152027 extends AbstractMigration
     /**
      * @param Schema $schema
      */
+    public function postUp(Schema $schema)
+    {
+        //$this->skipIf($this->version->isMigrated() !== true, 'postUp can only apply if migration completes.');
+
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select('event.id as eventId, event.locales as eventLocales')
+            ->from('event', 'event')
+            ->leftJoin('event', 'messaging_message', 'message', 'message.event_id = event.id')
+            ->groupBy('event.id');
+        $events = $queryBuilder->execute()->fetchAll();
+
+        foreach ($events as $parameters) {
+            foreach (json_decode($parameters['eventLocales']) as $locale) {
+                $this->connection->executeQuery(
+                    sprintf(
+                        "INSERT INTO messaging_message_translation (subject, content, message_id, locale, created_at)
+                          SELECT subject, content, id, '%s', created_at 
+                          FROM messaging_message
+                          WHERE messaging_message.event_id = %s",
+                        $locale,
+                        $parameters['eventId']
+                    )
+                );
+            }
+        }
+
+        $this->write('Migrated datas from messaging_message to messaging_message_translation');
+        $this->connection->executeQuery('ALTER TABLE messaging_message DROP subject, DROP content');
+    }
+
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
         $this->addSql('DROP TABLE messaging_message_translation');
+        $this->connection->executeQuery('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
     }
 }

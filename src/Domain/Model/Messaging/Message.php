@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Messaging;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class Message
@@ -30,19 +31,14 @@ class Message
     private $name;
 
     /**
-     * @var string
-     */
-    private $subject;
-
-    /**
-     * @var string
-     */
-    private $content;
-
-    /**
      * @var \DateTimeInterface
      */
     private $createdAt;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $translations;
 
     /**
      * @var string
@@ -53,28 +49,78 @@ class Message
      * @param Event              $event
      * @param \DateTimeInterface $createdAt
      * @param string             $name
-     * @param string             $subject
-     * @param string             $content
      */
-    public function __construct(Event $event, \DateTimeInterface $createdAt, $name, $subject, $content)
+    public function __construct(Event $event, \DateTimeInterface $createdAt, $name)
     {
-        $this->event     = $event;
-        $this->name      = $name;
-        $this->subject   = $subject;
-        $this->content   = $content;
-        $this->createdAt = $createdAt;
+        $this->event        = $event;
+        $this->name         = $name;
+        $this->createdAt    = $createdAt;
+        $this->translations = new ArrayCollection();
     }
 
     /**
      * @param string $name
+     */
+    public function update($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $locale
+     * @param string $subject
+     * @param string $content
+     *
+     * @return Message $this
+     */
+    public function translate($locale, $subject, $content)
+    {
+        if ($this->hasTranslation($locale)) {
+            $this->getTranslation($locale)->set($locale, $subject, $content);
+        } else {
+            $this->setTranslation($locale, $subject, $content);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $locale
      * @param string $subject
      * @param string $content
      */
-    public function update($name, $subject, $content)
+    public function setTranslation($locale, $subject, $content)
     {
-        $this->name    = $name;
-        $this->subject = $subject;
-        $this->content = $content;
+        $this->translations->set(
+            $locale,
+            new MessageTranslation(
+                $subject,
+                $content,
+                $locale,
+                $this,
+                new \DateTime()
+            )
+        );
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return MessageTranslation
+     */
+    public function getTranslation($locale)
+    {
+        return $this->translations->get($locale);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasTranslation($locale)
+    {
+        return $this->translations->containsKey($locale);
     }
 
     /**
@@ -102,19 +148,27 @@ class Message
     }
 
     /**
-     * @return string
+     * Get translation subject
+     *
+     * @param string $locale
+     *
+     * @return string|null
      */
-    public function getSubject()
+    public function getSubject($locale)
     {
-        return $this->subject;
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getSubject() : null;
     }
 
     /**
-     * @return string
+     * Get translation content
+     *
+     * @param string $locale
+     *
+     * @return string|null
      */
-    public function getContent()
+    public function getContent($locale)
     {
-        return $this->content;
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getContent() : null;
     }
 
     /**

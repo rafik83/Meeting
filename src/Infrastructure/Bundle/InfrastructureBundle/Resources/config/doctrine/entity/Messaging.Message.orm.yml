@@ -9,10 +9,6 @@ Proximum\Vimeet\Domain\Model\Messaging\Message:
     fields:
         name:
             type: string
-        subject:
-            type: string
-        content:
-            type: text
         createdAt:
             type: datetime
     manyToOne:

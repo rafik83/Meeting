@@ -82,4 +82,20 @@ class MessageTranslation
     {
         return $this->createdAt;
     }
+
+    /**
+     * @param string $locale
+     * @param string $subject
+     * @param string $content
+     *
+     * @return MessageTranslation
+     */
+    public function set($locale, $subject, $content)
+    {
+        $this->locale  = $locale;
+        $this->subject = $subject;
+        $this->content = $content;
+
+        return $this;
+    }
 }
