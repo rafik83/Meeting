@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 /**
@@ -33,6 +35,9 @@ class Group
     /** @var string */
     private $title;
 
+    /** @var ArrayCollection of Sheet */
+    private $sheets;
+
     /**
      * @param Event              $event
      * @param User               $manager
@@ -45,6 +50,7 @@ class Group
         $this->manager = $manager;
         $this->title = $title;
         $this->createdAt = $createdAt;
+        $this->sheets = new ArrayCollection();
     }
 
     /**
@@ -85,5 +91,13 @@ class Group
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return $this->sheets->toArray();
     }
 }

@@ -2453,6 +2453,14 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.sheet_search_adapter'
 
+    query.sheet.group.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
+
     #
     # Program query
     #

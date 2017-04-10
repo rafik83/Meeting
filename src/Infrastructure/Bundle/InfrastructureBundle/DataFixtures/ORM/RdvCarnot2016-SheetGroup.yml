@@ -63,6 +63,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 d691d21c: { text: { fr: "<sentence()>" } }
             - '@rdv_carnot_group_sheet_1_owner_user'
             - <dateTime()>
+            - '@rdv_carnot_group'
         registrationData:
             3ad4b72f: { text: 'Institut Carnot Fiche 1' }
             93de093f: { text: "<address()>" }
@@ -87,6 +88,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 d691d21c: { text: { fr: "<sentence()>" } }
             - '@rdv_carnot_group_sheet_2_owner_user'
             - <dateTime()>
+            - '@rdv_carnot_group'
         registrationData:
             3ad4b72f: { text: 'Institut Carnot Fiche 2' }
             93de093f: { text: "<address()>" }

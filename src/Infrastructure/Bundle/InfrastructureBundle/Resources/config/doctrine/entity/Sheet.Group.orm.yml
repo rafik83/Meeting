@@ -22,3 +22,7 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
             joinColumn:
                 nullable: false
                 onDelete: CASCADE
+    oneToMany:
+        sheets:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            mappedBy: group
