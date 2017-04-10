@@ -3335,6 +3335,16 @@ services:
         arguments:
             - '@datetime'
 
+    domain.key_dates.checker.close_meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CloseMeetingRequestAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.close_answering_meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CloseAnsweringMeetingRequestAccessChecker
+        arguments:
+            - '@datetime'
+
     #
     # Nomenclature
     #
