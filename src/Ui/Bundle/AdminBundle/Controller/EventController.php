@@ -18,13 +18,13 @@ use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalI
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\Order\Find;
-use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
+use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Application\Query\Event\EventListQuery;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
@@ -53,9 +53,7 @@ class EventController extends Controller
     {
         /** @var Admin $admin */
         $admin  = $this->getUser();
-        $events = $this
-            ->get('vimeet_infrastructure.repository.event_repository')
-            ->getListByAdmin($admin);
+        $events = $this->get('tactician.commandbus.query')->handle(new EventListQuery($admin));
 
         $transactionForm = null;
         $invoiceExportForm = null;

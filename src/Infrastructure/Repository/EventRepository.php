@@ -80,6 +80,29 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getEventsWithDaysByAdmin(Admin $admin)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event', 'days')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'days')
+            ->addOrderBy('event.title')
+            ->addOrderBy('days.endTime', 'DESC');
+
+        if ($admin->hasEvents()) {
+            $queryBuilder
+                ->where('event IN (:events)')
+                ->setParameter('events', $admin->getEvents());
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEventsByAdmin(Admin $admin)
     {
         $queryBuilder = $this
