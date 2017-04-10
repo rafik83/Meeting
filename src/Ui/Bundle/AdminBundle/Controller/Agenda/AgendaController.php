@@ -12,9 +12,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
+use Proximum\Vimeet\Application\View\Agenda\AgendaSpotView;
+use Proximum\Vimeet\Application\View\Spot\Agenda\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,6 +105,41 @@ class AgendaController extends Controller
     }
 
     /**
+     * @param Event $event
+     *
+     * @return JsonResponse
+     */
+    public function spotsListAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        /** @var ListView $spots */
+        $listView = $this->get('tactician.commandbus.query')->handle(
+            new ListViewQuery($event)
+        );
+
+        return new JsonResponse($listView->spotViews);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Spot    $spot
+     *
+     * @return JsonResponse
+     */
+    public function spotDetailAction(Request $request, Event $event, Spot $spot)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
+            new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))
+        );
+
+        return new JsonResponse($agendaSpotView);
+    }
+
+    /**
      * @param string $key
      *
      * @return JsonResponse
@@ -108,5 +148,4 @@ class AgendaController extends Controller
     {
         return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
-
 }

@@ -79,7 +79,7 @@ class ParticipantProductViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Participant inclus',
             49,
             'EUR',
-            Event::VAT_MODE_ATI,
+            Event::VAT_MODE_ET,
             true // isIncluded = true
         );
         $participantProductView         = $handler->handle(new ParticipantProductViewQuery($sheet, $locale));
@@ -137,7 +137,7 @@ class ParticipantProductViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Participant supplémentaire payant',
             79,
             'EUR',
-            Event::VAT_MODE_ATI,
+            Event::VAT_MODE_ET,
             false // isIncluded = false
         );
         $participantProductView         = $handler->handle(new ParticipantProductViewQuery($sheet, $locale));

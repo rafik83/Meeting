@@ -403,6 +403,24 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findBySpotWithSheets(Spot $spot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting', 'fromSheet', 'toSheet', 'slot')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'meeting.spot = :spot')
+            ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.slot', 'slot')
+            ->setParameter('spot', $spot);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasScheduledMeeting(Sheet $sheet)
     {
         $queryBuilder = $this

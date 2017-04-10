@@ -30,6 +30,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
@@ -120,9 +121,20 @@ class MeetingRequestController extends Controller
             'isCatalog'           => true, // set menu link visible,
             'isMeeting'           => true,
             'isEventOpen'         => $isEventOpen,
+            'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
             'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
             'tipTranslationViews' => $tipTranslationViews,
         ]);
+    }
+
+    /**
+     * @param $state
+     *
+     * @return bool
+     */
+    private function isFilterRequestPropositionActive($state)
+    {
+        return $state === Constant::FILTER_STATE_APPROVED || $state === Constant::FILTER_STATE_REFUSED;
     }
 
     /**

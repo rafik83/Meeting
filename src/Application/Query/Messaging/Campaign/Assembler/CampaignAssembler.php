@@ -115,7 +115,7 @@ class CampaignAssembler
     {
         foreach ($campaign->getSheets() as $sheet) {
             $sheetName = $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale);
-            $view->addSheet(new SheetListView($sheet->getId(), $sheetName));
+            $view->addSheet(new SheetListView($sheet->getId(), $sheetName, $sheet->getOwner()->getEmail()));
         }
     }
 
