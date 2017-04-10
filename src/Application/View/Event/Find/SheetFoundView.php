@@ -1,0 +1,40 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Event\Find;
+
+class SheetFoundView
+{
+    /** @var string */
+    public $eventId;
+
+    /** @var string */
+    public $eventTitle;
+
+    /** @var int */
+    public $sheetId;
+
+    /** @var string */
+    public $sheetTitle;
+
+    /**
+     * @param int    $eventId
+     * @param string $eventTitle
+     * @param int    $sheetId
+     * @param string $sheetTitle
+     */
+    public function __construct($eventId, $eventTitle, $sheetId, $sheetTitle)
+    {
+        $this->eventId    = $eventId;
+        $this->eventTitle = $eventTitle;
+        $this->sheetId    = $sheetId;
+        $this->sheetTitle = $sheetTitle;
+    }
+}

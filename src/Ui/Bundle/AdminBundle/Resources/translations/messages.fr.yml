@@ -123,8 +123,9 @@ admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
-admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
-admin.event.page.orderFinder.title: 'Recherche commande'
+admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
+admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
+admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
 admin.event.page.transactions.title: Transactions
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'

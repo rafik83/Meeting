@@ -3,26 +3,22 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Order;
+namespace Proximum\Vimeet\Application\Command\Invoice;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 
 class Find
 {
-    /**
-     * @var string
-     */
-    public $numero;
-
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
+
+    /** @var string */
+    public $numero;
 
     /**
      * @param Admin  $admin
