@@ -27,6 +27,13 @@ services:
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'sheet_param_converter' }
 
+    vimeet_app.param_converter.group_param_converter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\GroupParamConverter
+        arguments:
+            - '@repository.sheet.group_repository'
+        tags:
+            - { name: 'request.param_converter', priority: 2, converter: 'sheet_param_converter' }
+
     #
     # Security
     #
@@ -378,11 +385,19 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: monolog.logger, channel: security }
+
     security.sheet_voter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter
         tags:
             - { name: security.voter }
         public: false
+
+    security.sheet.group_voter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
     security.app.user_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
         arguments:

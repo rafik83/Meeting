@@ -8,16 +8,16 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Security;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class SheetVoter extends Voter
+class GroupVoter extends Voter
 {
-    const EDIT = 'edit';
+    const MANAGE = 'manage';
 
     /**
      * {@inheritdoc}
@@ -25,12 +25,12 @@ class SheetVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::EDIT])) {
+        if (!in_array($attribute, [self::MANAGE])) {
             return false;
         }
 
-        // only vote on Sheet objects inside this voter
-        if (!$subject instanceof Sheet) {
+        // only vote on Group objects inside this voter
+        if (!$subject instanceof Group) {
             return false;
         }
 
@@ -38,34 +38,37 @@ class SheetVoter extends Voter
     }
 
     /**
-     * {@inheritdoc}
+     * @param string         $attribute
+     * @param Group          $subject
+     * @param TokenInterface $token
+     *
+     * @return bool
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
 
+        // the user must be logged in
         if (!$user instanceof User) {
-            // the user must be logged in; if not, deny access
             return false;
         }
 
-        // $subject is a Sheet object, thanks to supports method
         switch ($attribute) {
-            case self::EDIT:
-                return $this->canEdit($subject, $user);
+            case self::MANAGE:
+                return $this->canManage($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Group $group
      * @param User  $user
      *
      * @return bool
      */
-    private function canEdit(Sheet $sheet, User $user)
+    private function canManage(Group $group, User $user)
     {
-        return $sheet->hasUser($user);
+        return $group->getManager() === $user;
     }
 }

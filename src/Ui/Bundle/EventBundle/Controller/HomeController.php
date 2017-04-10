@@ -17,25 +17,38 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends Controller
 {
     /**
      * Event home.
      *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param UserInterface $user
      *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function indexAction(Request $request, EventDomain $eventDomain)
+    public function indexAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
         $locale = $request->getLocale();
+        $event = $eventDomain->getEvent();
 
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && null !== $user) {
+            // User is a manager of Sheets group
+            $group = $this
+                ->get('repository.sheet.group_repository')
+                ->getByEventAndManager($event, $user);
+
+            if (null !== $group) {
+                return $this->redirectToRoute('event_sheet_group_index', ['group' => $group->getId()]);
+            }
+
+            // User has a sheet
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetsByUserAndEvent($this->getUser(), $eventDomain->getEvent());
+                ->getSheetsByUserAndEvent($user, $event);
 
             if (count($sheets)) {
                 return $this->redirectToRoute('event_sheet');
@@ -44,7 +57,7 @@ class HomeController extends Controller
 
         $form = $this->createForm(TypeChoiceType::class, null, [
             'locale' => $locale,
-            'event'  => $eventDomain->getEvent(),
+            'event'  => $event,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -64,7 +77,7 @@ class HomeController extends Controller
         }
 
         return $this->render('EventBundle:Home:index.html.twig', [
-            'event' => $eventDomain->getEvent(),
+            'event' => $event,
             'form'  => $form->createView(),
         ]);
     }

@@ -228,6 +228,17 @@ event_sheet_internal_print:
     defaults: { _controller: EventBundle:Sheet:print }
 
 #
+# Sheets group
+#
+
+event_sheet_group_index:
+    path:     /sheets-group/{group}
+    requirements:
+        group: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet/Group:index }
+
+#
 # Sheet Billing
 #
 
