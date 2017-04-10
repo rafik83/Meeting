@@ -40,8 +40,12 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $this->messageRepository->add(
-            new Message($command->getEvent(), $this->date, $command->name, $command->subject, $command->content)
-        );
+        $message = new Message($command->getEvent(), $this->date, $command->name);
+
+        foreach ($command->translations as $locale => $translation) {
+            $message->translate($locale, $translation['subject'], $translation['content']);
+        }
+
+        $this->messageRepository->add($message);
     }
 }

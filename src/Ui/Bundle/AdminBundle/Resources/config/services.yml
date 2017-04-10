@@ -207,14 +207,20 @@ services:
 
     form_type_messaging_message.create_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType
-        arguments:
-            - '@ui.helper.messaging_message_placeholder_helper'
         tags:
             - { name: form.type }
 
     form_type_messaging_message.update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\UpdateType
         arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type }
+
+    form_type_messaging_message.message_translation_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\MessageTranslationType
+        arguments:
+            - ['fr', 'en'] #Todo: inject parameter infrastructure.preferred_locales
             - '@ui.helper.messaging_message_placeholder_helper'
         tags:
             - { name: form.type }
