@@ -1572,6 +1572,7 @@ services:
             - '@adapter.serializer_adapter'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.invoice.invoice_repository'
+            - '@query.billing_infos.billing_infos_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invoice\Export }
 
