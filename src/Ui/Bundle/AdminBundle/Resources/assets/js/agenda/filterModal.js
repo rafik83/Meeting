@@ -15,13 +15,17 @@ module.exports = {
                 selectedTypes: [],
                 hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: [],
+                hasScheduledMeetings: []
             },
             filters: {
                 selectedTypes: [],
                 hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: [],
+                hasScheduledMeetings: []
             }
         }
     },
@@ -59,6 +63,25 @@ module.exports = {
                         filterMatching = true;
                     }
 
+                    if (this.filters.hasSentMeetingRequest === true
+                        && sheet.hasNotSentMeetingRequest !== this.filters.hasSentMeetingRequest) {
+                        filterMatching = true;
+                    }
+
+                    if (this.filters.hasSentMeetingRequest === false
+                        && sheet.hasNotSentMeetingRequest === this.filters.hasSentMeetingRequest) {
+                        filterMatching = true;
+                    }
+
+                    if (this.filters.hasScheduledMeetings === true && (sheet.countPlacedMeetings > 0)) {
+                        filterMatching = true;
+                    }
+
+
+                    if (this.filters.hasScheduledMeetings === false && (sheet.countPlacedMeetings > 0)) {
+                        filterMatching = true;
+                    }
+
                     return filterMatching;
                 }.bind(this));
             }
@@ -72,13 +95,17 @@ module.exports = {
                 selectedTypes: [],
                 hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: [],
+                hasScheduledMeetings: []
             };
             this.formFilters =  {
                 selectedTypes: [],
                 hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: [],
+                hasScheduledMeetings: []
             }
         },
         setUsedFilter: function() {
@@ -92,7 +119,11 @@ module.exports = {
         hasIndicatorFilter: function () {
             return this.filters.hasNotSentMeetingRequest === true
                 || this.filters.hasMeetingToApprove === true
-                || this.filters.hasNotEnoughAvailableSlot === true;
+                || this.filters.hasNotEnoughAvailableSlot === true
+                || this.filters.hasSentMeetingRequest === true
+                || this.filters.hasSentMeetingRequest === false
+                || this.filters.hasScheduledMeetings === true
+                || this.filters.hasScheduledMeetings === false
         }
     }
 };
