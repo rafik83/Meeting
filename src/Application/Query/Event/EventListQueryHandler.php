@@ -50,7 +50,7 @@ class EventListQueryHandler
     public function handle(EventListQuery $query)
     {
         $events        = $this->eventRepository->getEventsWithDaysByAdmin($query->admin);
-        $pastEventDate = clone $this->datetime->modify('+1 month');
+        $pastEventDate = clone $this->datetime->modify('-1 month');
         $actualEvents  = [];
         $pastEvents    = [];
 
@@ -69,7 +69,7 @@ class EventListQueryHandler
             );
 
             // past event
-            if ($lastDay->getEndTime() >= $pastEventDate) {
+            if ($lastDay->getEndTime() <= $pastEventDate) {
                 $pastEvents[] = $eventListView;
             } else {
                 // actual event
