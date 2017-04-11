@@ -52,7 +52,7 @@ class EventListQueryHandler
     {
         $events        = $this->eventRepository->getEventsWithDaysByAdmin($query->admin);
         $pastEventDate = clone $this->datetime->modify('-1 month');
-        $actualEvents  = [];
+        $currentEvents = [];
         $pastEvents    = [];
 
         foreach ($events as $event) {
@@ -70,18 +70,18 @@ class EventListQueryHandler
             try {
                 $lastDay = $event->getLastDay();
             } catch (DayNotDefinedException $dayNotDefinedException) {
-                $actualEvents[] = $eventListView;
+                $currentEvents[] = $eventListView;
+                
                 continue;
             }
 
             if ($lastDay->getEndTime() <= $pastEventDate) {
                 $pastEvents[] = $eventListView;
             } else {
-                // actual event
-                $actualEvents[] = $eventListView;
+                $currentEvents[] = $eventListView;
             }
         }
 
-        return new EventListsView($actualEvents, $pastEvents);
+        return new EventListsView($currentEvents, $pastEvents);
     }
 }
