@@ -108,6 +108,14 @@ class ProcessHandler
             if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
                 return;
             }
+            
+            $placeHolders = [];
+
+            foreach ($event->getLocales() as $locale) {
+                $placeHolders[$locale] = $this
+                    ->substitutionsProvider
+                    ->findPlaceholdersInMessage($message->getContent($locale));
+            }
 
             /** @var MailRecipientInterface $receiver */
             foreach ($newReceivers as $receiver) {
@@ -122,7 +130,7 @@ class ProcessHandler
                         $receiver,
                         $sheet,
                         $receiverLocale,
-                        $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent($receiverLocale))
+                        !isset($placeHolders[$receiverLocale]) ? $placeHolders[$receiverLocale] : []
                     ),
                     $receiverLocale
                 );
