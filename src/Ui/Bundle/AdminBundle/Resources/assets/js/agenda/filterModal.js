@@ -13,7 +13,6 @@ module.exports = {
             filteredSheets: [],
             formFilters: {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: [],
@@ -21,7 +20,6 @@ module.exports = {
             },
             filters: {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: [],
@@ -48,11 +46,6 @@ module.exports = {
                 filteredSheet = filteredSheet.filter(function (sheet) {
                     var filterMatching = false;
 
-                    if (this.filters.hasNotSentMeetingRequest === true
-                        && sheet.hasNotSentMeetingRequest === this.filters.hasNotSentMeetingRequest) {
-                        filterMatching = true;
-                    }
-
                     if (this.filters.hasMeetingToApprove === true
                         && sheet.hasMeetingToApprove === this.filters.hasMeetingToApprove) {
                         filterMatching = true;
@@ -77,7 +70,6 @@ module.exports = {
                         filterMatching = true;
                     }
 
-
                     if (this.filters.hasScheduledMeetings === false && (sheet.countPlacedMeetings > 0)) {
                         filterMatching = true;
                     }
@@ -93,7 +85,6 @@ module.exports = {
         reset: function () {
             this.filters = {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: [],
@@ -101,7 +92,6 @@ module.exports = {
             };
             this.formFilters =  {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: [],
@@ -117,8 +107,7 @@ module.exports = {
     },
     computed: {
         hasIndicatorFilter: function () {
-            return this.filters.hasNotSentMeetingRequest === true
-                || this.filters.hasMeetingToApprove === true
+            return this.filters.hasMeetingToApprove === true
                 || this.filters.hasNotEnoughAvailableSlot === true
                 || this.filters.hasSentMeetingRequest === true
                 || this.filters.hasSentMeetingRequest === false
