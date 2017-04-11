@@ -270,13 +270,6 @@ admin_category_update:
 #
 # Agenda
 #
-admin_agenda_tabs:
-    path: /event/{event}/agenda/tabs
-    requirements:
-            event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Agenda/Agenda:tabs }
-
 admin_agenda_index:
     path: /event/{event}/agenda
     requirements:
