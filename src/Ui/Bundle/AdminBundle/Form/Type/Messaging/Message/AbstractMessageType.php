@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,10 +27,13 @@ abstract class AbstractMessageType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('translations', CollectionType::class, [
-                'entry_type'   => MessageTranslationType::class,
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'label'        => false,
+                'entry_type'    => MessageTranslationType::class,
+                'entry_options' => [
+                    'event'  => $options['event'],
+                ],
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'label'         => false,
             ]);
     }
 
@@ -39,6 +43,8 @@ abstract class AbstractMessageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('csrf_token_id', 'messaging_message_create');
+        $resolver->setRequired(['event']);
+        $resolver->setAllowedTypes('event', Event::class);
     }
 
     public function getBlockPrefix()

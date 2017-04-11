@@ -55,7 +55,10 @@ class MessageController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new Create($event);
-        $form   = $this->createForm(CreateType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreateType::class, $create, [
+            'submit' => true,
+            'event'  => $event,
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
@@ -84,7 +87,10 @@ class MessageController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new Update($message);
-        $form   = $this->createForm(UpdateType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(UpdateType::class, $create, [
+            'submit' => true,
+            'event'  => $event,
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
