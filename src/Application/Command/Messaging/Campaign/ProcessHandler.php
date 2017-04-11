@@ -130,7 +130,7 @@ class ProcessHandler
                         $receiver,
                         $sheet,
                         $receiverLocale,
-                        !isset($placeHolders[$receiverLocale]) ? $placeHolders[$receiverLocale] : []
+                        isset($placeHolders[$receiverLocale]) ? $placeHolders[$receiverLocale] : []
                     ),
                     $receiverLocale
                 );
