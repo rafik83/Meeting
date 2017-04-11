@@ -164,11 +164,13 @@ class Message
      *
      * @param string $locale
      *
-     * @return string|null
+     * @return string
      */
     public function getSubject($locale)
     {
-        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getSubject() : null;
+        return $this->hasTranslation($locale)
+            ? $this->getTranslation($locale)->getSubject()
+            : $this->getTranslation($this->event->getFallback());
     }
 
     /**
@@ -176,11 +178,13 @@ class Message
      *
      * @param string $locale
      *
-     * @return string|null
+     * @return string
      */
     public function getContent($locale)
     {
-        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getContent() : null;
+        return $this->hasTranslation($locale)
+            ? $this->getTranslation($locale)->getContent()
+            : $this->getTranslation($this->event->getFallback())->getContent();
     }
 
     /**

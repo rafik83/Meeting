@@ -109,8 +109,6 @@ class ProcessHandler
                 return;
             }
 
-            $placeholders = $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent());
-
             /** @var MailRecipientInterface $receiver */
             foreach ($newReceivers as $receiver) {
                 if (isset($receivers[$receiver->getEmail()])) {
@@ -124,7 +122,7 @@ class ProcessHandler
                         $receiver,
                         $sheet,
                         $receiverLocale,
-                        $placeholders
+                        $this->substitutionsProvider->findPlaceholdersInMessage($message->getContent($receiverLocale))
                     ),
                     $receiverLocale
                 );
