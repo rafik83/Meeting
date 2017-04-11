@@ -71,29 +71,31 @@ class Message
     }
 
     /**
-     * @param string $locale
-     * @param string $subject
-     * @param string $content
+     * @param string             $locale
+     * @param string             $subject
+     * @param string             $content
+     * @param \DateTimeInterface $dateTime
      *
-     * @return Message $this
+     * @return Message
      */
-    public function translate($locale, $subject, $content)
+    public function translate($locale, $subject, $content, \DateTimeInterface $dateTime)
     {
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($locale, $subject, $content);
         } else {
-            $this->setTranslation($locale, $subject, $content);
+            $this->setTranslation($locale, $subject, $content, $dateTime);
         }
 
         return $this;
     }
 
     /**
-     * @param string $locale
-     * @param string $subject
-     * @param string $content
+     * @param string             $locale
+     * @param string             $subject
+     * @param string             $content
+     * @param \DateTimeInterface $dateTime
      */
-    public function setTranslation($locale, $subject, $content)
+    public function setTranslation($locale, $subject, $content, \DateTimeInterface $dateTime)
     {
         $this->translations->set(
             $locale,
@@ -102,7 +104,7 @@ class Message
                 $content,
                 $locale,
                 $this,
-                new \DateTime()
+                $dateTime
             )
         );
     }

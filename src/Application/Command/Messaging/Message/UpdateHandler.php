@@ -20,11 +20,18 @@ class UpdateHandler
     private $messageRepository;
 
     /**
-     * @param MessageRepositoryInterface $messageRepository
+     * @var \DateTimeInterface
      */
-    public function __construct(MessageRepositoryInterface $messageRepository)
+    private $dateTime;
+
+    /**
+     * @param MessageRepositoryInterface $messageRepository
+     * @param \DateTimeInterface         $dateTime
+     */
+    public function __construct(MessageRepositoryInterface $messageRepository, \DateTimeInterface $dateTime)
     {
         $this->messageRepository = $messageRepository;
+        $this->dateTime          = $dateTime;
     }
 
     /**
@@ -52,7 +59,8 @@ class UpdateHandler
             $message->translate(
                 $translation['locale'],
                 $translation['subject'],
-                $translation['content']
+                $translation['content'],
+                $this->dateTime
             );
         }
 

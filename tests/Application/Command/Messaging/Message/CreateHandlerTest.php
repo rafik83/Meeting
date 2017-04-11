@@ -34,7 +34,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                 'content' => 'content_' . $locale,
                 'locale'  => $locale,
             ];
-            $message->translate($locale, 'subject_' . $locale, 'content_' . $locale);
+            $message->translate($locale, 'subject_' . $locale, 'content_' . $locale, $date);
         }
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);

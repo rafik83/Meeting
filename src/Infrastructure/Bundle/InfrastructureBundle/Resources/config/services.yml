@@ -1450,6 +1450,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Messaging\Message\UpdateHandler
         arguments:
             - '@repository.messaging.message_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Message\Update }
 

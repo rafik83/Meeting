@@ -24,6 +24,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $command          = new Update($message);
         $command->name    = 'message_name_updated';
         $locale           = 'fr';
+        $dateTime         = new \DateTime();
 
         $command->translations = [
             'fr' => [
@@ -40,7 +41,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->set($message)->shouldBeCalled();
-        (new UpdateHandler($messageRepository->reveal()))->handle($command);
+        (new UpdateHandler($messageRepository->reveal(), $dateTime))->handle($command);
 
         $this->assertSame('message_name_updated', $message->getName());
         $this->assertSame('french subject', $message->getSubject($locale));
