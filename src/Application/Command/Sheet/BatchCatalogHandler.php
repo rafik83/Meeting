@@ -134,7 +134,7 @@ class BatchCatalogHandler
      * Remove a specific sheet id from the pull of batch IDs
      *
      * @param BatchCatalog $command
-     * @param int        $index
+     * @param int          $index
      */
     private function excludeSheetFromBatch(BatchCatalog $command, $index)
     {

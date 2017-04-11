@@ -21,7 +21,7 @@ class BatchCatalogJobQueue extends AbstractJobQueueAdapter implements BatchJobQu
     /**
      * {@inheritdoc}
      */
-    public function createJob(array $ids, Admin $admin, $options = [])
+    public function createJob(array $ids, Admin $admin, array $options = [])
     {
         $job = new Job(BatchCatalogCommand::NAME, [
             implode(',', $ids),

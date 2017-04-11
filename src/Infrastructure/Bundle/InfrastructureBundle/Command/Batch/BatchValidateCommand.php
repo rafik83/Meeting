@@ -81,7 +81,7 @@ class BatchValidateCommand extends Command
         $admin    = $this->adminRepository->findById($input->getArgument('adminId'));
 
         if (null === $admin) {
-            throw new \Exception('Admin not found.');
+            throw new \InvalidArgumentException('Admin not found.');
         }
 
         $this->postBatchValidateHandler->handle(

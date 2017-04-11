@@ -21,7 +21,7 @@ class BatchAcceptJobQueue extends AbstractJobQueueAdapter implements BatchJobQue
     /**
      * {@inheritdoc}
      */
-    public function createJob(array $ids, Admin $admin, $options = [])
+    public function createJob(array $ids, Admin $admin, array $options = [])
     {
         $job = new Job(BatchAcceptCommand::NAME, [
             implode(',', $ids),

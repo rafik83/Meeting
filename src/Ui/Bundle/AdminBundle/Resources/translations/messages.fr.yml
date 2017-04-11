@@ -540,7 +540,7 @@ admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
 admin.sheet.batch.selection.label: "Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées."
 admin.sheet.batch.selectionAll.label: "Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres."
-admin.sheet.batch.cancelSelection.label: "Annuler la selection complète"
+admin.sheet.batch.cancelSelection.label: "Annuler la sélection complète"
 admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
 admin.sheet.registeredAt.all: 'Peu importe'
 admin.schedule.title: Agenda
