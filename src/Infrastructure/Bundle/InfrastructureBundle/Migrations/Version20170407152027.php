@@ -29,9 +29,7 @@ class Version20170407152027 extends AbstractMigration
     {
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('event.id as eventId, event.locales as eventLocales')
-            ->from('event', 'event')
-            ->leftJoin('event', 'messaging_message', 'message', 'message.event_id = event.id')
-            ->groupBy('event.id');
+            ->from('event', 'event');
         $events = $queryBuilder->execute()->fetchAll();
 
         foreach ($events as $parameters) {
@@ -59,6 +57,6 @@ class Version20170407152027 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->addSql('DROP TABLE messaging_message_translation');
-        $this->addSql('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
+        $this->addSql->executeQuery('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
     }
 }
