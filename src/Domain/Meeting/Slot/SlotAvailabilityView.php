@@ -51,4 +51,12 @@ class SlotAvailabilityView
     {
         return $this->type === SlotAvailability::SLOT_AVAILABLE;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMeeting()
+    {
+        return $this->type === SlotAvailability::MEETING_UNAVAILABILITY;
+    }
 }

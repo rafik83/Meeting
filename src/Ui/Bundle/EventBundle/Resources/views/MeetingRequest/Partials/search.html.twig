@@ -52,6 +52,19 @@
 {% if hasResults %}
     <div class="catalog__filters">
         <div class="select-all">
+            {% if filterRequestProposition == true %}
+                <div class="btn-group" role="group" data-meeting-request-filter-type-buttons="buttons">
+                    <button class="btn btn-primary" data-meeting-request-filter-by="all">
+                        {{ 'event.meeting.listRequest.filter.all'|trans }}
+                    </button>
+                    <button class="btn btn-default" data-meeting-request-filter-by="requests">
+                        {{ 'event.meeting.listRequest.filter.requests'|trans }}
+                    </button>
+                    <button class="btn btn-default" data-meeting-request-filter-by="propositions">
+                        {{ 'event.meeting.listRequest.filter.propositions'|trans }}
+                    </button>
+                </div>
+            {% endif %}
         </div>
 
         <div class="sort">
