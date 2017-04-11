@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
-use Proximum\Vimeet\Domain\KeyDates\Checker\CloseAnsweringMeetingRequestAccessChecker;
-use Proximum\Vimeet\Domain\KeyDates\Checker\CloseMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -42,34 +42,34 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     private $templateDataFactory;
 
-    /** @var CloseMeetingRequestAccessChecker */
-    private $closeMeetingRequestAccessChecker;
+    /** @var MeetingRequestAccessChecker */
+    private $meetingRequestAccessChecker;
 
-    /** @var CloseAnsweringMeetingRequestAccessChecker */
-    private $closeAnsweringMeetingRequestAccessChecker;
+    /** @var AnsweringMeetingRequestAccessChecker */
+    private $answeringMeetingRequestAccessChecker;
 
     /**
-     * @param SheetRepositoryInterface                  $sheetRepository
-     * @param SheetSearchAdapterInterface               $sheetSearchAdapter
-     * @param SheetPreviewViewQueryHandler              $sheetPreviewViewQueryHandler
-     * @param TemplateDataFactory                       $templateDataFactory
-     * @param CloseMeetingRequestAccessChecker          $closeMeetingRequestAccessChecker
-     * @param CloseAnsweringMeetingRequestAccessChecker $closeAnsweringMeetingRequestAccessChecker
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetSearchAdapterInterface          $sheetSearchAdapter
+     * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
+     * @param TemplateDataFactory                  $templateDataFactory
+     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
-        CloseMeetingRequestAccessChecker $closeMeetingRequestAccessChecker,
-        CloseAnsweringMeetingRequestAccessChecker $closeAnsweringMeetingRequestAccessChecker
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
-        $this->sheetRepository                           = $sheetRepository;
-        $this->sheetSearchAdapter                        = $sheetSearchAdapter;
-        $this->sheetPreviewViewQueryHandler              = $sheetPreviewViewQueryHandler;
-        $this->templateDataFactory                       = $templateDataFactory;
-        $this->closeMeetingRequestAccessChecker          = $closeMeetingRequestAccessChecker;
-        $this->closeAnsweringMeetingRequestAccessChecker = $closeAnsweringMeetingRequestAccessChecker;
+        $this->sheetRepository                      = $sheetRepository;
+        $this->sheetSearchAdapter                   = $sheetSearchAdapter;
+        $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
+        $this->templateDataFactory                  = $templateDataFactory;
+        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
@@ -92,8 +92,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
 
-        $isMeetingRequestClosed          = !$this->closeMeetingRequestAccessChecker->allowedToAccess($query->event);
-        $isAnsweringMeetingRequestClosed = !$this->closeAnsweringMeetingRequestAccessChecker->allowedToAccess($query->event);
+        $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         $paginatedResult->results = array_map(
             function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed) {

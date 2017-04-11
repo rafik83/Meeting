@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\KeyDates\Checker;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CloseAnsweringMeetingRequestAccessChecker extends AccessChecker
+class AnsweringMeetingRequestAccessChecker extends AccessChecker
 {
     /**
      * Check if the date of close answering meeting request is passed or not

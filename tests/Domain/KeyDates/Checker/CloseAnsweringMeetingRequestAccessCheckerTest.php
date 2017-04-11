@@ -10,18 +10,18 @@
 
 namespace Proximum\Vimeet\Tests\Domain\KeyDates\Checker;
 
-use Proximum\Vimeet\Domain\KeyDates\Checker\CloseAnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class CloseAnsweringMeetingRequestAccessCheckerTest extends \PHPUnit_Framework_TestCase
+class AnsweringMeetingRequestAccessCheckerTest extends \PHPUnit_Framework_TestCase
 {
     public function testAllowedToAccessTrueAsDateIsNull()
     {
         $date  = new \DateTime();
         $event = EventFactory::createEvent();
 
-        $closeAnsweringMeetingRequestAccessChecker = new CloseAnsweringMeetingRequestAccessChecker($date);
-        $this->assertEquals(true, $closeAnsweringMeetingRequestAccessChecker->allowedToAccess($event));
+        $answeringMeetingRequestAccessChecker = new AnsweringMeetingRequestAccessChecker($date);
+        $this->assertEquals(true, $answeringMeetingRequestAccessChecker->allowedToAccess($event));
     }
 
     public function testAllowedToAccessTrueAsDateIsInTheFuture()
@@ -31,8 +31,8 @@ class CloseAnsweringMeetingRequestAccessCheckerTest extends \PHPUnit_Framework_T
         $event = EventFactory::createEvent();
         $event->getConfiguration()->setDates(null, null, null, null, $dateCloseAnsweringMeetingRequest);
 
-        $closeAnsweringMeetingRequestAccessChecker = new CloseAnsweringMeetingRequestAccessChecker($date);
-        $this->assertEquals(true, $closeAnsweringMeetingRequestAccessChecker->allowedToAccess($event));
+        $answeringMeetingRequestAccessChecker = new AnsweringMeetingRequestAccessChecker($date);
+        $this->assertEquals(true, $answeringMeetingRequestAccessChecker->allowedToAccess($event));
     }
 
     public function testAllowedToAccessFalseAsDateIsPassed()
@@ -42,7 +42,7 @@ class CloseAnsweringMeetingRequestAccessCheckerTest extends \PHPUnit_Framework_T
         $event = EventFactory::createEvent();
         $event->getConfiguration()->setDates(null, null, null, null, $dateCloseAnsweringMeetingRequest);
 
-        $closeAnsweringMeetingRequestAccessChecker = new CloseAnsweringMeetingRequestAccessChecker($date);
-        $this->assertEquals(false, $closeAnsweringMeetingRequestAccessChecker->allowedToAccess($event));
+        $answeringMeetingRequestAccessChecker = new AnsweringMeetingRequestAccessChecker($date);
+        $this->assertEquals(false, $answeringMeetingRequestAccessChecker->allowedToAccess($event));
     }
 }

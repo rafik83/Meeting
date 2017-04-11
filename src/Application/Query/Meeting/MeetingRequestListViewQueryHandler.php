@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class MeetingRequestListViewQueryHandler
@@ -31,21 +33,33 @@ class MeetingRequestListViewQueryHandler
      */
     private $meetingPublishedAccessChecker;
 
+    /** @var MeetingRequestAccessChecker */
+    private $meetingRequestAccessChecker;
+
+    /** @var AnsweringMeetingRequestAccessChecker */
+    private $answeringMeetingRequestAccessChecker;
+
     /**
      * MeetingRequestListViewQueryHandler constructor.
      *
-     * @param RequestRepositoryInterface     $meetingRequestRepository
-     * @param MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler
-     * @param MeetingPublishedAccessChecker  $meetingPublishedAccessChecker
+     * @param RequestRepositoryInterface           $meetingRequestRepository
+     * @param MeetingRequestViewQueryHandler       $meetingRequestViewQueryHandler
+     * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
+     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         RequestRepositoryInterface $meetingRequestRepository,
         MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler,
-        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
-        $this->meetingRequestRepository       = $meetingRequestRepository;
-        $this->meetingRequestViewQueryHandler = $meetingRequestViewQueryHandler;
-        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->meetingRequestRepository             = $meetingRequestRepository;
+        $this->meetingRequestViewQueryHandler       = $meetingRequestViewQueryHandler;
+        $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
+        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
@@ -61,7 +75,9 @@ class MeetingRequestListViewQueryHandler
         $meetingRequestListView = new MeetingRequestListView();
         $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
-        $isMeetingRequestUpdateLocked = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
+        $isMeetingRequestUpdateLocked    = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
+        $isMeetingrequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         foreach ($meetingRequests as $meetingRequest) {
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
@@ -70,7 +86,9 @@ class MeetingRequestListViewQueryHandler
                     $query->sheet,
                     $query->locale,
                     $isMeetingPublished,
-                    $isMeetingRequestUpdateLocked
+                    $isMeetingRequestUpdateLocked,
+                    $isMeetingrequestClosed,
+                    $isAnsweringMeetingRequestClosed
                 )
             );
 

@@ -52,6 +52,8 @@ common.update: Modifier
 common.validate: Valider
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
+event.meeting.request.closed: Les demandes de rendez-vous sont terminées
+event.meeting.request.answering.closed: Les validations de rendez-vous sont terminées
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.filter.all: 'Toutes'
 event.meeting.listRequest.filter.requests: 'Mes demandes'
