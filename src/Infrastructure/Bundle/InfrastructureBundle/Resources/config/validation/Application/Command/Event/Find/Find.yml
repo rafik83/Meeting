@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Event\Find\Find:
+    properties:
+        type:
+            - NotNull: ~
+        numero:
+            - NotBlank: ~
