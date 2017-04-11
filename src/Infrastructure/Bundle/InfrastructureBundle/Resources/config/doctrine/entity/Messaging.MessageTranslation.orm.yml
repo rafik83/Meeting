@@ -20,3 +20,4 @@ Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation:
             targetEntity: Proximum\Vimeet\Domain\Model\Messaging\Message
             joinColumn:
                 onDelete: CASCADE
+            inversedBy: translations
