@@ -27,8 +27,6 @@ class Version20170407152027 extends AbstractMigration
      */
     public function postUp(Schema $schema)
     {
-        //$this->skipIf($this->version->isMigrated() !== true, 'postUp can only apply if migration completes.');
-
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('event.id as eventId, event.locales as eventLocales')
             ->from('event', 'event')
@@ -61,6 +59,6 @@ class Version20170407152027 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->addSql('DROP TABLE messaging_message_translation');
-        $this->connection->executeQuery('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
+        $this->addSql('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
     }
 }
