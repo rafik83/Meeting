@@ -23,12 +23,12 @@ class EventListsView
     /**
      * @var EventListView[]
      */
-    public $currents;
+    public $currentsEventListView;
 
     /**
      * @var EventListView[]
      */
-    public $pasts;
+    public $pastsEventListView;
 
     /**
      * EventListView constructor.
@@ -38,7 +38,7 @@ class EventListsView
      */
     public function __construct(array $currentEvents = [], array $pastEvents = [])
     {
-        $this->currents = $currentEvents;
-        $this->pasts    = $pastEvents;
+        $this->currentsEventListView = $currentEvents;
+        $this->pastsEventListView    = $pastEvents;
     }
 }

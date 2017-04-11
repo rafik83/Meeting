@@ -53,7 +53,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for event in events.currents %}
+                        {% for event in events.currentsEventListView %}
                             {{ include('AdminBundle::Event/_eventListRow.html.twig') }}
                         {% endfor %}
                         </tbody>
@@ -70,7 +70,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for event in events.pasts %}
+                        {% for event in events.pastsEventListView %}
                             {{ include('AdminBundle::Event/_eventListRow.html.twig') }}
                         {% endfor %}
                         </tbody>
