@@ -3599,11 +3599,15 @@ services:
     #
     # Planner
     #
-    service_planner.exporter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Planner\Exporter
+    command.planner.export_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ExportHandler
         arguments:
+            - '@command.unavailability.mass.dispatcher_handler'
+            - '@command.meeting_request.admin.lock_meeting_request_update_handler'
             - '@query.planner.planner_view_query_handler'
-            - '@serializer'
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
 
     query.planner.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
@@ -3628,6 +3632,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.planner.indicator_calculator'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     query.planner.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler

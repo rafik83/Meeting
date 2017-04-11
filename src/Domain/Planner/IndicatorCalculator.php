@@ -113,7 +113,7 @@ class IndicatorCalculator
             foreach ($this->slotsUsable as $slotUsable) {
                 $slotAvailability = $this->slotAvailability->getSlotAvailability($slotUsable, $participant);
 
-                if (!$slotAvailability->isAvailable()) {
+                if (!$slotAvailability->isAvailable() && !$slotAvailability->isMeeting()) {
                     $unavailabilities[] = $slotUsable;
                 }
             }
