@@ -22,17 +22,28 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $message          = new Message(EventFactory::createEvent(), new \DateTime(), 'pro', 'xi', 'mum');
         $command          = new Update($message);
-        $command->name    = 'vi';
-        $command->subject = 'me';
-        $command->content = 'et';
+        $command->name    = 'message_name_updated';
+        $locale           = 'fr';
+
+        $command->translations = [
+            'fr' => [
+                'subject' => 'french subject',
+                'content' => 'french content',
+                'locale'  => 'fr',
+            ],
+            'en' => [
+                'subject' => 'english tea time',
+                'content' => 'english content',
+                'locale'  => 'en',
+            ],
+        ];
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->set($message)->shouldBeCalled();
-
         (new UpdateHandler($messageRepository->reveal()))->handle($command);
 
-        $this->assertSame('vi', $message->getName());
-        $this->assertSame('me', $message->getSubject());
-        $this->assertSame('et', $message->getContent());
+        $this->assertSame('message_name_updated', $message->getName());
+        $this->assertSame('french subject', $message->getSubject($locale));
+        $this->assertSame('french content', $message->getContent($locale));
     }
 }
