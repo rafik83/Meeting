@@ -1,4 +1,4 @@
-{% if menuView.categoriesView|length > 0 %}
+{% if menuView.categoriesView is not empty %}
     <button id="navigation" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="icon-Menu_12"></i> {{ 'navigation.menu'|trans }}
     </button>
