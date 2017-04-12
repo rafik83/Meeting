@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
+/**
+ * Update SheetTemplate title and locale fallback
+ */
 class UpdateHandler
 {
     /**
