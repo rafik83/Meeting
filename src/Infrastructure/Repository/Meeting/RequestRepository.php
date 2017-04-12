@@ -500,7 +500,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request, fromSheet, toSheet')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.enable = true AND request.disabled = false')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
             ->where('fromSheet.id IN (:sheets)')
             ->orWhere('toSheet.id IN (:sheets)')
