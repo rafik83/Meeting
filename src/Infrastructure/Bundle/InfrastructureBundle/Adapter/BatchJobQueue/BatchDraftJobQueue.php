@@ -26,7 +26,6 @@ class BatchDraftJobQueue extends AbstractJobQueueAdapter implements BatchJobQueu
         $job = new Job(BatchDraftCommand::NAME, [
             implode(',', $ids),
             $admin->getId(),
-            isset($options['state']) ? $options['state'] : null,
         ]);
 
         $this->setJob($job);
