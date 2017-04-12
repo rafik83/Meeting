@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeetingHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
@@ -37,10 +40,24 @@ class DeleteMeetingHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         $meetingRepository->remove($meeting)->shouldBeCalled();
+        $eventDispatcher
+            ->dispatch(
+                Events::MEETING_REMOVED,
+                new MeetingRemovedEvent(
+                    [
+                        $fromSheet,
+                        $toSheet,
+                    ]
+                )
+            )
+            ->shouldBeCalled()
+        ;
 
         // Handler
-        $handler = new DeleteMeetingHandler($meetingRepository->reveal());
+        $handler = new DeleteMeetingHandler($meetingRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle(new DeleteMeeting($meeting));
     }
 }

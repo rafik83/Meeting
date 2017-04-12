@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\Registration;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
@@ -36,18 +37,26 @@ class UpdateHandler
     private $templateDataFactory;
 
     /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
+
+    /**
      * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
      * @param TemplateDataFactory                     $templateDataFactory
      * @param DelayedEventDispatcher                  $eventDispatcher
+     * @param JobQueueInterface                       $jobQueue
      */
     public function __construct(
         RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
         TemplateDataFactory $templateDataFactory,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        JobQueueInterface $jobQueue
     ) {
         $this->registrationTemplateRepository = $registrationTemplateRepository;
         $this->templateDataFactory            = $templateDataFactory;
         $this->eventDispatcher                = $eventDispatcher;
+        $this->jobQueue                       = $jobQueue;
     }
 
     /**
@@ -69,6 +78,8 @@ class UpdateHandler
         }
 
         $this->registrationTemplateRepository->set($registrationTemplate);
+
+        $this->jobQueue->indexSheetsByRegistrationTemplate($registrationTemplate);
 
         if (null !== $update->registrationTemplate->getEvent()) {
             $this->eventDispatcher->dispatch(

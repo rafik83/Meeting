@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
@@ -91,6 +92,11 @@ class ImportHandler
     private $dateTime;
 
     /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
+
+    /**
      * @param SerializerAdapterInterface     $serializer
      * @param MeetingRepositoryInterface     $meetingRepository
      * @param SheetRepositoryInterface       $sheetRepository
@@ -98,6 +104,7 @@ class ImportHandler
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SpotRepositoryInterface        $spotRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
+     * @param JobQueueInterface              $jobQueue
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
@@ -108,6 +115,7 @@ class ImportHandler
         MeetingSlotRepositoryInterface $slotRepository,
         SpotRepositoryInterface $spotRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
+        JobQueueInterface $jobQueue,
         \DateTimeInterface $dateTime
     ) {
         $this->serializer           = $serializer;
@@ -117,6 +125,7 @@ class ImportHandler
         $this->slotRepository       = $slotRepository;
         $this->spotRepository       = $spotRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
+        $this->jobQueue             = $jobQueue;
         $this->dateTime             = $dateTime;
     }
 
@@ -140,6 +149,8 @@ class ImportHandler
         }
 
         $this->handlePlannerResult($import, $plannerResult);
+
+        $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
     }
 
     /**

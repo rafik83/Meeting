@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -520,5 +522,53 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('ids', $ids);
 
         return $queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBySheetTemplate(SheetTemplate $sheetTemplate)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type', 'WITH', 'type.sheetTemplate = :sheetTemplate')
+            ->setParameter('sheetTemplate', $sheetTemplate);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type', 'WITH', 'type.registrationTemplate = :registrationTemplate')
+            ->setParameter('registrationTemplate', $registrationTemplate);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByTypes(array $types)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.type IN (:types)')
+            ->setParameter('types', $types);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
