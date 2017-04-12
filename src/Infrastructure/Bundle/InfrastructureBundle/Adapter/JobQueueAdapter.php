@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 
 class JobQueueAdapter implements JobQueueInterface
 {
@@ -89,6 +90,16 @@ class JobQueueAdapter implements JobQueueInterface
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale)
     {
         $job = new Job('vimeet:order:export', [$event->getId(), $admin->getEmail(), $locale]);
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exportPlannerForEvent(Event $event, $locale)
+    {
+        $job = new Job(ExportPlannerCommand::NAME, [$event->getId(), $locale]);
 
         $this->setJob($job);
     }

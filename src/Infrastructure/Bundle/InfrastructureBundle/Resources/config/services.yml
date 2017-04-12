@@ -3616,6 +3616,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
 
+    command.planner.export_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ExportJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }
+
     query.planner.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
 

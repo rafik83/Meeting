@@ -42,4 +42,10 @@ interface JobQueueInterface
      * @param string $locale
      */
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     */
+    public function exportPlannerForEvent(Event $event, $locale);
 }

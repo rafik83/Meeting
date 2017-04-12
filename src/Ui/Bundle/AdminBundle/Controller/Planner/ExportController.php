@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
-use Proximum\Vimeet\Application\Command\Planner\Export;
+use Proximum\Vimeet\Application\Command\Planner\ExportJobCreator;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -33,14 +33,14 @@ class ExportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $export = new Export($event, $request->getLocale());
-        $form   = $this->createForm(ExportType::class, $export, [
+        $exportJobCreator = new ExportJobCreator($event, $request->getLocale());
+        $form   = $this->createForm(ExportType::class, $exportJobCreator, [
             'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $content  = $this->get('tactician.commandbus')->handle($export);
+                $content  = $this->get('tactician.commandbus')->handle($exportJobCreator);
                 $response = new XmlFileResponse(
                     $content,
                     sprintf("export_planner_%s_%s.xml", $event->getId(), date("Y_m_d_His"))
