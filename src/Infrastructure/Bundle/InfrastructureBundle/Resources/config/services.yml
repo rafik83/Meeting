@@ -3113,6 +3113,13 @@ services:
         tags:
             - { name: console.command }
 
+    command.planner.export_planner_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand
+        arguments:
+            - '@command.planner.export_handler'
+        tags:
+            - { name: console.command }
+
     command.generate_invoice_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
         arguments:
