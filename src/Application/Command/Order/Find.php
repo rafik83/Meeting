@@ -25,10 +25,12 @@ class Find
     public $admin;
 
     /**
-     * @param Admin $admin
+     * @param Admin  $admin
+     * @param string $numero
      */
-    public function __construct(Admin $admin)
+    public function __construct(Admin $admin, $numero)
     {
-        $this->admin = $admin;
+        $this->admin  = $admin;
+        $this->numero = $numero;
     }
 }

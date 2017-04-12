@@ -323,7 +323,7 @@ services:
     event_listener.sheet.sheet_populate_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber
         arguments:
-            - '@fos_elastica.object_persister.app.sheet'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.notification_event_subscriber:

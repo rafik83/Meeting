@@ -238,6 +238,22 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getByIds(array $ids)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from(Type::class, 'type')
+            ->where('type.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getParticipantTemplate($typeId)
     {
         $queryBuilder = $this

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Template\Registration;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
 use Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -60,11 +61,13 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $jobQueue->reveal()
         );
         $handler->handle($update);
     }
@@ -112,14 +115,16 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $registrationTemplateUpdated = new RegistrationTemplateUpdatedEvent($event);
         $eventDispatcher
-            ->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated
-            )->shouldBeCalled();
+            ->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated)
+            ->shouldBeCalled();
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $jobQueue->reveal()
         );
         $handler->handle($update);
     }

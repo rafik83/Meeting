@@ -1,0 +1,33 @@
+<script type="x/template" id="spots-agenda">
+    <div role="tabpanel" class="tab-pane active" id="spot">
+        <div class="col-xs-2" style="margin: 0; padding: 0;">
+            <div class="spots-list">
+                <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
+                    <tbody>
+                    <tr v-if="noSpots">
+                        <td>
+                            <div class="alert alert-warning">{{ 'admin.agenda.spot.loader'|trans }}</div>
+                        </td>
+                    </tr>
+                    <tr v-for="spot in spots">
+                        <td class="spot-td" v-on:click="detailAction(spot)">
+                            <strong>${ spot.reference }</strong>
+                            <i class="glyphicon glyphicon-facetime-video" v-if="spot.isVisio"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="agenda-horizontal">
+            <ul>
+                <li v-for="spot in openedSpots">
+                    <spot-agenda
+                            v-bind:spot="spot"
+                            v-on:close-spot-agenda="closeSpotAgenda">
+                    </spot-agenda>
+                </li>
+            </ul>
+        </div>
+</script>

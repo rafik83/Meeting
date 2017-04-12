@@ -52,9 +52,15 @@
 .catalog__list--block {
   .row {
     display: flex;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
 
     > [class*='col-'] {
       display: flex;
+    }
+    &:before {
+      content: none !important;
     }
   }
 

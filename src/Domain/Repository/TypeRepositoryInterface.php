@@ -97,6 +97,13 @@ interface TypeRepositoryInterface
     public function getById($id);
 
     /**
+     * @param int[] $ids
+     *
+     * @return Type[]
+     */
+    public function getByIds(array $ids);
+
+    /**
      * @param $typeId
      *
      * @return array
