@@ -13,13 +13,13 @@ namespace Proximum\Vimeet\Application\View\Group\Request;
 class SheetListView
 {
     /** @var int */
-    private $groupId;
+    public $groupId;
 
     /** @var string */
-    private $groupTitle;
+    public $groupTitle;
 
     /** @var SheetView[] */
-    private $sheetViews;
+    public $sheetViews;
 
     /**
      * @param int         $groupId
