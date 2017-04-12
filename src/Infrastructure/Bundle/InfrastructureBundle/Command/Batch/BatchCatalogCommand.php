@@ -62,7 +62,7 @@ class BatchCatalogCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Batch accept sheet action')
+            ->setDescription('Batch catalog sheet action')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids separated by a comma')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id')
             ->addArgument('state', InputArgument::REQUIRED, 'Add catalog state');
