@@ -321,7 +321,7 @@ import-prod-db@vm:
 
 post-import-db@vm:
 	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT(id, '@example.net')"
-	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT(id, '@example.net')"
+	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT(id, '-billinginfo@example.net')"
 	bin/console doctrine:migrations:migrate
 	bin/console vimeet:event:build-guideline-asset
 	bin/console fos:elastica:populate --env=dev --no-debug
