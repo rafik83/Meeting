@@ -41,11 +41,9 @@ class SpotQueryBuilder extends QueryBuilder
      */
     public function visio($visio = false)
     {
-        if ($visio === true) {
-            $this
-                ->andWhere('spot.visio = :visio')
-                ->setParameter('visio', $visio);
-        }
+        $this
+            ->andWhere('spot.visio = :visio')
+            ->setParameter('visio', $visio);
 
         return $this;
     }

@@ -136,6 +136,13 @@ interface MeetingRepositoryInterface
     public function findBySpotAndSlot(Spot $spot, MeetingSlot $meetingSlot);
 
     /**
+     * @param Spot $spot
+     *
+     * @return Meeting[]
+     */
+    public function findBySpotWithSheets(Spot $spot);
+
+    /**
      * @param Sheet $sheet
      *
      * @return bool
@@ -147,6 +154,17 @@ interface MeetingRepositoryInterface
      *
      * @return array
      *
+     * Example of result:
+     *  [
+     *      1 => [
+     *          'm'               => Meeting,
+     *          'fromParticipant' => fromParticipant,
+     *          'toParticipant'   => toParticipant,
+     *          'meetingBegin'    => slot.begin,
+     *          'meetingEnd'      => slot.end,
+     *          'spotReference'   => spot.reference
+     *      ]
+     *  ]
      */
     public function getAllCompleteByEvent(Event $event);
 }

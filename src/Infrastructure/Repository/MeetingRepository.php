@@ -112,12 +112,13 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting, fromParticipant, toParticipant')
+            ->select('meeting, fromParticipant, toParticipant, request')
             ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->join('meeting.fromParticipants', 'fromParticipant')
             ->join('meeting.toParticipants', 'toParticipant')
+            ->join('meeting.request', 'request')
             ->setParameter('event', $event)
             ->where('meeting.state = :state')
             ->setParameter('state', Meeting::STATE_SCHEDULED);
@@ -418,6 +419,24 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->where('meeting.slot = :slot')
             ->andWhere('meeting.spot = :spot')
             ->setParameter('slot', $meetingSlot)
+            ->setParameter('spot', $spot);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySpotWithSheets(Spot $spot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting', 'fromSheet', 'toSheet', 'slot')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'meeting.spot = :spot')
+            ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.slot', 'slot')
             ->setParameter('spot', $spot);
 
         return $queryBuilder->getQuery()->getResult();

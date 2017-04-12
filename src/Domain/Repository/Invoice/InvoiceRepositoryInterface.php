@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Invoice;
 
+use Proximum\Vimeet\Domain\Invoice\Numero\InvoiceNumeroView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
@@ -63,4 +64,11 @@ interface InvoiceRepositoryInterface
      * @return Invoice[]
      */
     public function getFilteredByEvents(array $events, \DateTimeInterface $beginDate, \DateTimeInterface $endDate);
+
+    /**
+     * @param InvoiceNumeroView $invoiceNumeroView
+     *
+     * @return Invoice[] multiple invoice can have the same numero
+     */
+    public function findByNumero(InvoiceNumeroView $invoiceNumeroView);
 }

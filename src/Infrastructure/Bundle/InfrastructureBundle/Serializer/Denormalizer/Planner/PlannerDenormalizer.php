@@ -328,8 +328,16 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             $this->handleSpot($meeting['spot']);
         }
 
+        if (isset($meeting['lockedSpot'])) {
+            $this->handleSpot($meeting['lockedSpot']);
+        }
+
         if (isset($meeting['slot'])) {
             $this->handleSlot($meeting['slot']);
+        }
+
+        if (isset($meeting['lockedSlot'])) {
+            $this->handleSlot($meeting['lockedSlot']);
         }
     }
 
@@ -401,6 +409,14 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             if (null !== $slotResult) {
                 $meetingResult->slot = $slotResult;
             }
+        }
+
+        if (isset($meeting['blockedSlot']) && $meeting['blockedSlot'] === true) {
+            $meetingResult->isBlockedSlot = true;
+        }
+
+        if (isset($meeting['blockedSpot']) && $meeting['blockedSpot'] === true) {
+            $meetingResult->isBlockedSpot = true;
         }
 
         $this->meetingList[] = $meetingResult;

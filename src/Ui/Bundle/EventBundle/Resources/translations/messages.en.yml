@@ -50,6 +50,9 @@ common.update: Modify
 common.validate: Validate
 event.info.close: Close
 event.info.contact: 'Useful information'
+event.meeting.listRequest.filter.all: 'All'
+event.meeting.listRequest.filter.requests: 'My requests only'
+event.meeting.listRequest.filter.propositions: 'Requests received only'
 gender.man: Mr
 gender.woman: Mrs
 happening.participationCancel.action: Cancel

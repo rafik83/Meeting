@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Invoice;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Invoice\Numero\InvoiceNumeroView;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -47,6 +48,23 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->setParameter('beginDate', $beginDate)
             ->setParameter('endDate', $endDate)
             ->setParameter('events', $events)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByNumero(InvoiceNumeroView $invoiceNumeroView)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice')
+            ->from(Invoice::class, 'invoice')
+            ->join('invoice.sheet', 'sheet', 'WITH', 'invoice.invoicePrefix = :prefix AND invoice.invoiceYear = :year AND invoice.invoiceIncrement = :increment')
+            ->setParameter('prefix', $invoiceNumeroView->prefix)
+            ->setParameter('year', $invoiceNumeroView->year)
+            ->setParameter('increment', $invoiceNumeroView->increment)
         ;
 
         return $queryBuilder->getQuery()->getResult();

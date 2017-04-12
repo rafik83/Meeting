@@ -17,8 +17,8 @@ use Proximum\Vimeet\Application\View\Planner\MeetingView;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
+use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
-use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -49,6 +49,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $slotView2 = new SlotView(2, 2, 11, 0, $day);
         $slotView3 = new SlotView(3, 3, 11, 30, $day);
         $slots     = [$slotView, $slotView2, $slotView3];
+        $spots     = [$this->prophesize(SpotView::class)->reveal()];
 
         $participant1     = ParticipantFactory::create($sheet1);
         $participant2     = ParticipantFactory::create($sheet1);
@@ -111,7 +112,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Handler
         $handler = new MeetingViewQueryHandler($requestRepository->reveal());
-        $result  = $handler->handle(new MeetingViewQuery($event, $sheets, $participants, $slots));
+        $result  = $handler->handle(new MeetingViewQuery($event, $sheets, $participants, $slots, $spots, 'moving_allowed'));
 
         // Expected
         $expected = [

@@ -259,7 +259,7 @@ class SlotAvailability
      *
      * @param Event $event
      */
-    private function autoLoading(Event $event)
+    public function autoLoading(Event $event)
     {
         if ($this->happenings === null) {
             $this->happenings = $this->happeningParticipationRepository->getByEvent($event);
