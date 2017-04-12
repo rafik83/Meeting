@@ -547,6 +547,24 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsOfSheetInRequest(Sheet $sheet)
+    {
+        if ($this->isSender($sheet)) {
+            return $this->fromParticipants->toArray();
+        }
+
+        if ($this->isReceiver($sheet)) {
+            return $this->toParticipants->toArray();
+        }
+
+        return [];
+    }
+
+    /**
      * @return bool
      */
     public function hasMeeting()

@@ -533,7 +533,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from(Sheet::class, 'sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.group = :group AND sheet.enable=true')
             ->setParameter('group', $group)
             ->getQuery()
