@@ -236,7 +236,7 @@ event_sheet_group_index:
     requirements:
         sheetGroup: \d+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet/Group:index }
+    defaults: { _controller: EventBundle:Group/Home:index }
 
 event_sheet_group_switch_to:
     path:     /sheets-group/{sheetGroup}/switch-to/{sheet}

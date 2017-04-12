@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 
 use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -17,7 +17,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class GroupController extends Controller
+class HomeController extends Controller
 {
     /**
      * @param EventDomain $eventDomain
