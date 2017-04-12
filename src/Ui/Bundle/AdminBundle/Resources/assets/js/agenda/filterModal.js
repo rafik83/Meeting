@@ -15,15 +15,15 @@ module.exports = {
                 selectedTypes: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
-                hasSentMeetingRequest: [],
-                hasScheduledMeetings: []
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             },
             filters: {
                 selectedTypes: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
-                hasSentMeetingRequest: [],
-                hasScheduledMeetings: []
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             }
         }
     },
@@ -62,7 +62,7 @@ module.exports = {
                     }
 
                     if (this.filters.hasSentMeetingRequest === false
-                        && sheet.hasNotSentMeetingRequest === this.filters.hasSentMeetingRequest) {
+                        && sheet.hasNotSentMeetingRequest !== this.filters.hasSentMeetingRequest) {
                         filterMatching = true;
                     }
 
@@ -70,7 +70,7 @@ module.exports = {
                         filterMatching = true;
                     }
 
-                    if (this.filters.hasScheduledMeetings === false && (sheet.countPlacedMeetings > 0)) {
+                    if (this.filters.hasScheduledMeetings === false && sheet.countPlacedMeetings === 0) {
                         filterMatching = true;
                     }
 
@@ -87,15 +87,15 @@ module.exports = {
                 selectedTypes: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
-                hasSentMeetingRequest: [],
-                hasScheduledMeetings: []
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             };
             this.formFilters =  {
                 selectedTypes: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
-                hasSentMeetingRequest: [],
-                hasScheduledMeetings: []
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             }
         },
         setUsedFilter: function() {
