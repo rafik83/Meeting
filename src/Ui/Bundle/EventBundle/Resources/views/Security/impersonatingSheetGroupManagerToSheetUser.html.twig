@@ -7,7 +7,7 @@
             '%toLastName%': impersonatingUser.toLastName,
         }) }}
 
-        <a href="{{ path('event_sheet_group_unswitch', {'sheetGroup' : sheet.group.id}) }}" class="btn btn-danger">
+        <a href="{{ path('event_sheet_group_unswitch', {'sheetGroup' : impersonatingUser.sheetGroupId}) }}" class="btn btn-danger">
             {{ 'sheetGroup.quitImpersonation'|trans }}
         </a>
     </div>

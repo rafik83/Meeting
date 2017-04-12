@@ -259,7 +259,8 @@ class SecurityController extends Controller
                         $role->getSource()->getUser()->getEmail(),
                         $user->getEmail(),
                         $user->getAccount()->getFirstName(),
-                        $user->getAccount()->getLastName()
+                        $user->getAccount()->getLastName(),
+                        $sheetGroup->getId()
                     );
                 }
             }
@@ -268,7 +269,6 @@ class SecurityController extends Controller
         return $this->render('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser.html.twig', [
             'impersonatingUser' => $impersonatingUser,
             'event'             => $event,
-            'sheet'             => $sheet,
         ]);
     }
 }

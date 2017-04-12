@@ -24,17 +24,22 @@ class ImpersonationUserView
     /** @var string */
     public $toLastName;
 
+    /** @var int */
+    public $sheetGroupId;
+
     /**
      * @param string $fromEmail
      * @param string $toEmail
      * @param string $toFirstName
      * @param string $toLastName
+     * @param int    $sheetGroupId
      */
-    public function __construct($fromEmail, $toEmail, $toFirstName, $toLastName)
+    public function __construct($fromEmail, $toEmail, $toFirstName, $toLastName, $sheetGroupId)
     {
         $this->fromEmail = $fromEmail;
         $this->toEmail = $toEmail;
         $this->toFirstName = $toFirstName;
         $this->toLastName = $toLastName;
+        $this->sheetGroupId = $sheetGroupId;
     }
 }
