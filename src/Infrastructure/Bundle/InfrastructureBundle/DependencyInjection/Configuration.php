@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('print_planning_path')->end()
                 ->scalarNode('export_transactions_path')->end()
                 ->scalarNode('export_order_path')->end()
+                ->scalarNode('export_planner_path')->end()
                 ->arrayNode('package')
                     ->children()
                         ->arrayNode('default_labels')

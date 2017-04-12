@@ -315,6 +315,7 @@ infrastructure:
     print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
     export_transactions_path: '%kernel.root_dir%/../web/uploads/export_transactions'
     export_order_path: '%kernel.root_dir%/../web/uploads/export_orders'
+    export_planner_path: '%kernel.root_dir%/../web/uploads/export_planner'
     package:
         default_labels:
             plans:
