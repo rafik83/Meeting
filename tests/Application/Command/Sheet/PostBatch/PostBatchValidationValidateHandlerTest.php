@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidationValidate;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidationValidateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -32,7 +33,10 @@ class PostBatchValidationValidateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
         $datetime        = new \DateTime();
+
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $eventDispatcher->dispatch(
             Events::SHEET_VALIDATION_VALIDATE,
@@ -42,7 +46,8 @@ class PostBatchValidationValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $query   = new PostBatchValidationValidate([$sheet1, $sheet2, $sheet3], $admin);
         $handler = new PostBatchValidationValidateHandler(
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);

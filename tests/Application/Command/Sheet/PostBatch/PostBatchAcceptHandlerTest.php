@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchAccept;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchAcceptHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -31,6 +32,7 @@ class PostBatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
         $admin  = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
 
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
         $datetime        = new \DateTime();
 
         $eventDispatcher->dispatch(
@@ -38,10 +40,13 @@ class PostBatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
             Argument::type(SheetAcceptedEvent::class)
         )->shouldBeCalledTimes(3);
 
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
+
         $query   = new PostBatchAccept([$sheet1, $sheet2, $sheet3], $admin);
         $handler = new PostBatchAcceptHandler(
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);

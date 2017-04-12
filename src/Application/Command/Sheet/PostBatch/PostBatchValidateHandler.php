@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -27,15 +28,23 @@ class PostBatchValidateHandler
     private $dateTime;
 
     /**
+     * @var SheetIndexerInterface
+     */
+    private $sheetIndexer;
+
+    /**
      * @param EventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface       $dateTime
+     * @param SheetIndexerInterface    $sheetIndexer
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        SheetIndexerInterface $sheetIndexer
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->dateTime        = $dateTime;
+        $this->sheetIndexer    = $sheetIndexer;
     }
 
     /**
@@ -43,6 +52,8 @@ class PostBatchValidateHandler
      */
     public function handle(PostBatchValidate $command)
     {
+        $this->sheetIndexer->updateSheets($command->sheets);
+
         foreach ($command->sheets as $sheet) {
             $this->eventDispatcher->dispatch(
                 Events::SHEET_VALIDATED,

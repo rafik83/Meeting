@@ -768,7 +768,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@adapter_batch_job_queue.batch_catalog_job_queue'
-
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
     command.sheet.batch_draft_handler:
@@ -1634,18 +1633,20 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@datetime'
+            - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_validate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidateHandler
         arguments:
             - '@event_dispatcher'
             - '@datetime'
+            - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalogHandler
         arguments:
             - '@event_dispatcher'
             - '@sheet.request.enable_disable_manager'
             - '@datetime'
-            - '@sheet.request.enable_disable_manager'
+            - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisableHandler
         arguments:
@@ -1653,11 +1654,13 @@ services:
             - '@event_dispatcher'
             - '@datetime'
             - '@sheet.request.enable_disable_manager'
+            - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_draft_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraftHandler
         arguments:
             - '@event_dispatcher'
             - '@datetime'
+            - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_validation_validate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidationValidateHandler
         arguments:
@@ -3271,7 +3274,7 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_validation_validate_handler'
-            
+
     command.index_sheets_by_sheet_template:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand
         arguments:

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
@@ -33,20 +34,28 @@ class PostBatchCatalogHandler
     private $enableDisableManager;
 
     /**
+     * @var SheetIndexerInterface
+     */
+    private $sheetIndexer;
+
+    /**
      * PostBatchCatalogHandler constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param EnableDisableManager     $enableDisableManager
      * @param \DateTimeInterface       $datetime
+     * @param SheetIndexerInterface    $sheetIndexer
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EnableDisableManager $enableDisableManager,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        SheetIndexerInterface $sheetIndexer
     ) {
         $this->eventDispatcher      = $eventDispatcher;
         $this->datetime             = $datetime;
         $this->enableDisableManager = $enableDisableManager;
+        $this->sheetIndexer         = $sheetIndexer;
     }
 
     /**
@@ -54,6 +63,8 @@ class PostBatchCatalogHandler
      */
     public function handle(PostBatchCatalog $command)
     {
+        $this->sheetIndexer->updateSheets($command->sheets);
+
         foreach ($command->sheets as $sheet) {
 
             $this->enableDisableManager->update($sheet, $command->state);

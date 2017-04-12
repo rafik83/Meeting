@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisable;
@@ -39,6 +40,7 @@ class PostBatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $datetime             = new \DateTime();
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetIndexer         = $this->prophesize(SheetIndexerInterface::class);
 
         $batchCatalogHandler->handle(Argument::type(BatchCatalog::class))->shouldNotBeCalled();
 
@@ -56,7 +58,8 @@ class PostBatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
             $datetime,
-            $enableDisableManager->reveal()
+            $enableDisableManager->reveal(),
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);
@@ -75,8 +78,11 @@ class PostBatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $datetime             = new \DateTime();
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetIndexer         = $this->prophesize(SheetIndexerInterface::class);
 
         $batchCatalogHandler->handle(Argument::type(BatchCatalog::class))->shouldBeCalled();
+
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $enableDisableManager
             ->update(Argument::type(Sheet::class), false)
@@ -92,7 +98,8 @@ class PostBatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
             $datetime,
-            $enableDisableManager->reveal()
+            $enableDisableManager->reveal(),
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);

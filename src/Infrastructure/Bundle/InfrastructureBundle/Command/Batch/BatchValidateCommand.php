@@ -65,7 +65,6 @@ class BatchValidateCommand extends Command
             ->setDescription('Batch validate sheet action')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids separated by a comma')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id')
-            ->addArgument('locale', InputArgument::REQUIRED, 'Locale')
             ->addArgument('comment', InputArgument::REQUIRED, 'Comment');
 
     }

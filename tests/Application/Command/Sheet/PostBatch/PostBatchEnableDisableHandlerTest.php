@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisable;
@@ -39,6 +40,8 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $datetime             = new \DateTime();
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
+
 
         $batchCatalogHandler
             ->handle(Argument::type(BatchCatalog::class))
@@ -58,7 +61,8 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
             $datetime,
-            $enableDisableManager->reveal()
+            $enableDisableManager->reveal(),
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);
@@ -77,6 +81,7 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $datetime             = new \DateTime();
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
         $batchCatalogHandler
             ->handle(Argument::type(BatchCatalog::class))
@@ -96,7 +101,8 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
             $datetime,
-            $enableDisableManager->reveal()
+            $enableDisableManager->reveal(),
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);

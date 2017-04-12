@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraft;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraftHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -32,11 +33,14 @@ class PostBatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet1->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
         $sheet2->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
         $sheet3->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
-        $admin  = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
+        $admin = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
 
         // Mock
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $sheetIndexer    = $this->prophesize(SheetIndexerInterface::class);
         $datetime        = new \DateTime();
+
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $eventDispatcher->dispatch(
             Events::SHEET_VALIDATION_DRAFT,
@@ -44,7 +48,7 @@ class PostBatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalledTimes(3);
 
         $query   = new PostBatchDraft([$sheet1, $sheet2, $sheet3], $admin);
-        $handler = new PostBatchDraftHandler($eventDispatcher->reveal(), $datetime);
+        $handler = new PostBatchDraftHandler($eventDispatcher->reveal(), $datetime, $sheetIndexer->reveal());
 
         $handler->handle($query);
     }

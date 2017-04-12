@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalogHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
@@ -33,12 +34,15 @@ class PostBatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2->setInCatalog(false);
         $sheet3 = SheetFactory::create($event);
         $sheet3->setInCatalog(false);
-        $admin  = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
+        $admin = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
 
         // Mock
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetIndexer         = $this->prophesize(SheetIndexerInterface::class);
         $datetime             = new \DateTime();
+
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $enableDisableManager
             ->update(Argument::type(Sheet::class), true)
@@ -53,7 +57,8 @@ class PostBatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new PostBatchCatalogHandler(
             $eventDispatcher->reveal(),
             $enableDisableManager->reveal(),
-            $datetime
+            $datetime,
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);
@@ -71,12 +76,15 @@ class PostBatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2->setInCatalog(false);
         $sheet3 = SheetFactory::create($event);
         $sheet3->setInCatalog(false);
-        $admin  = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
+        $admin = new Admin('john@doe.com', 'salt', 'password', 'fr', 'john', 'doh', 'ROLE_ADMIN', new \DateTime());
 
         // Mock
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
+        $sheetIndexer         = $this->prophesize(SheetIndexerInterface::class);
         $datetime             = new \DateTime();
+
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $enableDisableManager
             ->update(Argument::type(Sheet::class), false)
@@ -91,7 +99,8 @@ class PostBatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new PostBatchCatalogHandler(
             $eventDispatcher->reveal(),
             $enableDisableManager->reveal(),
-            $datetime
+            $datetime,
+            $sheetIndexer->reveal()
         );
 
         $handler->handle($query);
