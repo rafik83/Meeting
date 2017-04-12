@@ -238,6 +238,21 @@ event_sheet_group_index:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet/Group:index }
 
+event_sheet_group_switch_to:
+    path:     /sheets-group/{sheetGroup}/switch-to/{sheet}
+    requirements:
+        sheetGroup: \d+
+        sheet: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:switchSheetGroupManagerToSheetUser }
+
+event_sheet_group_unswitch:
+    path:     /sheets-group/{sheetGroup}/unswitch
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:unswitchSheetGroupManager }
+
 #
 # Sheet Billing
 #

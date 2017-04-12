@@ -1,0 +1,14 @@
+{% if impersonatingUser %}
+    <div class="well">
+        {{ 'sheetGroup.impersonateAs'|trans({
+            '%fromEmail%': impersonatingUser.fromEmail,
+            '%toEmail%': impersonatingUser.toEmail,
+            '%toFirstName%': impersonatingUser.toFirstName,
+            '%toLastName%': impersonatingUser.toLastName,
+        }) }}
+
+        <a href="{{ path('event_sheet_group_unswitch', {'sheetGroup' : sheet.group.id}) }}" class="btn btn-danger">
+            {{ 'sheetGroup.quitImpersonation'|trans }}
+        </a>
+    </div>
+{% endif %}

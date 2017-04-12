@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Application\View\Sheet\Group;
 
 class GroupView
 {
+    /** @var int */
+    public $id;
+
     /** @var string */
     public $title;
 
@@ -19,11 +22,13 @@ class GroupView
     public $sheetViews;
 
     /**
+     * @param int    $id
      * @param string $title
      * @param array  SheetView[]
      */
-    public function __construct($title, array $sheetViews)
+    public function __construct($id, $title, array $sheetViews)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->sheetViews = $sheetViews;
     }

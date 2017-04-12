@@ -21,7 +21,11 @@
             <tbody>
                 {% for sheetView in groupView.sheetViews %}
                     <tr>
-                        <td>{{ sheetView.title }}</td>
+                        <td>
+                            <a href="{{ path('event_sheet_group_switch_to', {sheetGroup: groupView.id, sheet: sheetView.id}) }}">
+                                {{ sheetView.title }}
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -51,6 +51,6 @@ class GroupViewQueryHandler
             return strcasecmp($one->title, $other->title);
         });
 
-        return new GroupView($groupViewQuery->group->getTitle(), $sheetViews);
+        return new GroupView($groupViewQuery->group->getId(), $groupViewQuery->group->getTitle(), $sheetViews);
     }
 }

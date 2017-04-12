@@ -386,6 +386,13 @@ services:
         tags:
             - { name: monolog.logger, channel: security }
 
+    security.authentication.switch_sheet_group_manager_to_sheet_user:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchSheetGroupManagerToSheetUser
+        arguments:
+            - '@security.token_storage'
+            - '@security.user_checker'
+            - '@security.authorization_checker'
+
     security.sheet_voter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter
         tags:
