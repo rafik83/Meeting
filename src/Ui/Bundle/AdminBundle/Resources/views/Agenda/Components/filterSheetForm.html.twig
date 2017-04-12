@@ -8,7 +8,7 @@
                 </label>
                 <div class="checkbox" v-for="type in types">
                     <label>
-                        <input name="selectedTypes" type="checkbox" v-model:value="filters.selectedTypes" :value="type">
+                        <input name="selectedTypes" type="checkbox" v-model:value="filters.selectedTypes" v-bind:value="type">
                         ${ type }
                     </label>
                 </div>
