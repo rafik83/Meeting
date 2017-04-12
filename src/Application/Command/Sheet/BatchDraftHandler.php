@@ -62,10 +62,12 @@ class BatchDraftHandler
             Sheet::STATE_VALIDATION_DRAFT
         );
 
-        $this->batchJobQueue->createJob(
-            $batchPending->ids,
-            $batchPending->admin
-        );
+        if (!empty($batchPending->ids)) {
+            $this->batchJobQueue->createJob(
+                $batchPending->ids,
+                $batchPending->admin
+            );
+        }
 
         return new BatchResult(count($sheets), $batchPending->getMessage() . 'draft.success');
     }

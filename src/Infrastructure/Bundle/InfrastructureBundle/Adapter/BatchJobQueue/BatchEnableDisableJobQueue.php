@@ -23,6 +23,10 @@ class BatchEnableDisableJobQueue extends AbstractJobQueueAdapter implements Batc
      */
     public function createJob(array $ids, Admin $admin, array $options = [])
     {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException('Missing sheet ids parameters');
+        }
+
         $job = new Job(BatchEnableDisableCommand::NAME, [
             implode(',', $ids),
             $admin->getId(),

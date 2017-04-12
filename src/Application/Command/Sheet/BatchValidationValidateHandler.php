@@ -62,7 +62,9 @@ class BatchValidationValidateHandler
             Sheet::STATE_VALIDATION_VALIDATED
         );
 
-        $this->batchJobQueue->createJob($batch->ids, $batch->admin);
+        if (!empty($batch->ids)) {
+            $this->batchJobQueue->createJob($batch->ids, $batch->admin);
+        }
 
         return new BatchResult(count($sheets), $batch->getMessage() . 'validation.validate.success');
     }

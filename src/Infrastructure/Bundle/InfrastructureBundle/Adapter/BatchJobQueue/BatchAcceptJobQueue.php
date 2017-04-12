@@ -23,6 +23,10 @@ class BatchAcceptJobQueue extends AbstractJobQueueAdapter implements BatchJobQue
      */
     public function createJob(array $ids, Admin $admin, array $options = [])
     {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException('Missing sheet ids parameters');
+        }
+
         $job = new Job(BatchAcceptCommand::NAME, [
             implode(',', $ids),
             $admin->getId(),

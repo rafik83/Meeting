@@ -60,11 +60,13 @@ class BatchValidateHandler
 
         $this->sheetRepository->updateStateBySheetsId($batchValidate->ids, Sheet::STATE_VALIDATED);
 
-        $this->batchJobQueue->createJob(
-            $batchValidate->ids,
-            $batchValidate->admin,
-            ['comment' => $batchValidate->comment]
-        );
+        if (!empty($batchValidate->ids)) {
+            $this->batchJobQueue->createJob(
+                $batchValidate->ids,
+                $batchValidate->admin,
+                ['comment' => $batchValidate->comment]
+            );
+        }
 
         return new BatchResult(count($sheets), $batchValidate->getMessage() . 'validate.success');
     }

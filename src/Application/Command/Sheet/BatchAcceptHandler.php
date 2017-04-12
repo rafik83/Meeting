@@ -63,7 +63,9 @@ class BatchAcceptHandler
             Sheet::STATE_ACCEPTED
         );
 
-        $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
+        if (!empty($batchAccept->ids)) {
+            $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
+        }
 
         return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');
     }

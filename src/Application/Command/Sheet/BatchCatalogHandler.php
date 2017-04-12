@@ -123,9 +123,11 @@ class BatchCatalogHandler
             }, $ignoredSheets));
         }
 
-        $this->batchJobQueue->createJob($command->ids, $command->admin, [
-            'state' => $command->state,
-        ]);
+        if (!empty($command->ids)) {
+            $this->batchJobQueue->createJob($command->ids, $command->admin, [
+                'state' => $command->state,
+            ]);
+        }
 
         return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
     }

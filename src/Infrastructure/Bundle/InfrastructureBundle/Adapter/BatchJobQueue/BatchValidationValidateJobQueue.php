@@ -23,6 +23,10 @@ class BatchValidationValidateJobQueue extends AbstractJobQueueAdapter implements
      */
     public function createJob(array $ids, Admin $admin, array $options = [])
     {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException('Missing sheet ids parameters');
+        }
+
         $job = new Job(BatchValidationValidateCommand::NAME, [
             'sheetIds' => implode(',', $ids),
             'adminId'  => $admin->getId(),
