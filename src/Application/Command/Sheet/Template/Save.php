@@ -20,7 +20,7 @@ class Save
     public $template;
 
     /**
-     * @var string
+     * @var array
      */
     public $value;
 
@@ -28,9 +28,9 @@ class Save
      * Save constructor.
      *
      * @param SheetTemplate $template
-     * @param string        $value
+     * @param array         $value
      */
-    public function __construct(SheetTemplate $template, $value)
+    public function __construct(SheetTemplate $template, array $value)
     {
         $this->template = $template;
         $this->value    = $value;

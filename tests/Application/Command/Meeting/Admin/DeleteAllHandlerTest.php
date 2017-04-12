@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler;
 use Proximum\Vimeet\Application\Exception\Meeting\NotAllowedToDeleteAllMeetingsException;
@@ -33,8 +34,15 @@ class DeleteAllHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexInCatalogSheetsByEvent($event)->shouldNotBeCalled();
+
         // Handler
-        $handler = new DeleteAllHandler($meetingRepository->reveal(), $meetingPublishedAccessChecker->reveal());
+        $handler = new DeleteAllHandler(
+            $meetingRepository->reveal(),
+            $meetingPublishedAccessChecker->reveal(),
+            $jobQueue->reveal()
+        );
         $handler->handle(new DeleteAll($event));
     }
 
@@ -50,8 +58,15 @@ class DeleteAllHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexInCatalogSheetsByEvent($event)->shouldBeCalled();
+
         // Handler
-        $handler = new DeleteAllHandler($meetingRepository->reveal(), $meetingPublishedAccessChecker->reveal());
+        $handler = new DeleteAllHandler(
+            $meetingRepository->reveal(),
+            $meetingPublishedAccessChecker->reveal(),
+            $jobQueue->reveal()
+        );
         $handler->handle(new DeleteAll($event));
     }
 }
