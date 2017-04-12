@@ -10,29 +10,36 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class Export
 {
     /** @var bool */
-    public $lockMeetingRequest = false;
+    public $lockMeetingRequest;
 
     /** @var string one of SolutionType constants */
     public $solutionType;
 
-    /** @var Event */
-    public $event;
+    /** @var int */
+    public $eventId;
 
     /** @var string */
     public $locale;
 
+    /** @var string */
+    public $emailToNotify;
+
     /**
-     * @param Event  $event
+     * @param int $eventId
      * @param string $locale
+     * @param string $emailToNotify
+     * @param bool   $lockMeetingRequest
+     * @param string $solutionType
      */
-    public function __construct(Event $event, $locale)
+    public function __construct($eventId, $locale, $emailToNotify, $lockMeetingRequest, $solutionType)
     {
-        $this->event  = $event;
-        $this->locale = $locale;
+        $this->eventId            = $eventId;
+        $this->locale             = $locale;
+        $this->emailToNotify      = $emailToNotify;
+        $this->lockMeetingRequest = $lockMeetingRequest;
+        $this->solutionType       = $solutionType;
     }
 }

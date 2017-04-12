@@ -45,7 +45,10 @@ class ExportPlannerCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Generate xml file for planner export')
             ->addArgument('event', InputArgument::REQUIRED, 'Event id')
+            ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale for the email')
+            ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorythm')
+            ->addArgument('lockMeetingRequest', InputArgument::OPTIONAL, 'Should meeting request be locked after export', false)
         ;
     }
 
@@ -57,7 +60,10 @@ class ExportPlannerCommand extends Command
         $this->exportPlannerHandler->handle(
             new Export(
                 $input->getArgument('event'),
-                $input->getArgument('locale')
+                $input->getArgument('locale'),
+                $input->getArgument('admin_email'),
+                $input->getArgument('lockMeetingRequest'),
+                $input->getArgument('solutionType')
             )
         );
     }

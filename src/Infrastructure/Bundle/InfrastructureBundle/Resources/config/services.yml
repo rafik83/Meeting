@@ -3609,10 +3609,17 @@ services:
     command.planner.export_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ExportHandler
         arguments:
-            - '@command.unavailability.mass.dispatcher_handler'
             - '@command.meeting_request.admin.lock_meeting_request_update_handler'
+            - '@command.unavailability.mass.dispatcher_handler'
             - '@query.planner.planner_view_query_handler'
             - '@adapter.serializer_adapter'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_planner_path%'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.file_repository'
+            - '@adapter.mailer_adapter'
+            - '@datetime'
+            - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
 

@@ -98,9 +98,15 @@ class JobQueueAdapter implements JobQueueInterface
     /**
      * {@inheritdoc}
      */
-    public function exportPlannerForEvent(Event $event, $locale)
+    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType)
     {
-        $job = new Job(ExportPlannerCommand::NAME, [$event->getId(), $locale]);
+        $job = new Job(ExportPlannerCommand::NAME, [
+            $event->getId(),
+            $admin->getEmail(),
+            $locale,
+            $lockMeetingRequest,
+            $solutionType
+        ]);
 
         $this->setJob($job);
     }

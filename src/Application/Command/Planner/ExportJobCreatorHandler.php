@@ -34,7 +34,10 @@ class ExportJobCreatorHandler
     {
         $this->jobQueue->exportPlannerForEvent(
             $exportJobCreator->event,
-            $exportJobCreator->locale
+            $exportJobCreator->admin,
+            $exportJobCreator->locale,
+            $exportJobCreator->lockMeetingRequest,
+            $exportJobCreator->solutionType
         );
     }
 }
