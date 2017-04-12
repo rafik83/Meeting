@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\User;
 
 /**
  * "Entité multi-fiches"
+ * sheet_group table
  */
 class Group
 {
