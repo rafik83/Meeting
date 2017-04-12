@@ -254,6 +254,16 @@ event_sheet_group_unswitch:
     defaults: { _controller: EventBundle:Security:unswitchSheetGroupManager }
 
 #
+# Sheets group meeting request management
+#
+event_sheet_group_requests_list:
+    path: /sheets-group/{sheetGroup}/requests/list
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Group/Request:list }
+
+#
 # Sheet Billing
 #
 
