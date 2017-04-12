@@ -493,7 +493,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestsOfSheets(Event $event, array $sheets, $page, $limit)
+    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet)
     {
         $queryBuilder = $this
             ->entityManager
@@ -502,12 +502,13 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
-            ->where('fromSheet.id IN (:sheets)')
-            ->orWhere('toSheet.id IN (:sheets)')
+            ->where('fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)')
+            ->orWhere('toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)')
             ->setParameter('event', $event)
-            ->setParameter('sheets', $sheets);
+            ->setParameter('sheets', $sheets)
+            ->setParameter('sheetsMet', $sheetsMet);
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, 'request', 'id');
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

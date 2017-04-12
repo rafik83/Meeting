@@ -126,12 +126,11 @@ interface RequestRepositoryInterface
     /**
      * @param Event   $event
      * @param Sheet[] $sheets
-     * @param int     $page
-     * @param int     $limit
+     * @param Sheet[] $sheetsMet
      *
      * @return Request[]
      */
-    public function getRequestsOfSheets(Event $event, array $sheets, $page, $limit);
+    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet);
 
     /**
      * @param Event $event
