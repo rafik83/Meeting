@@ -23,7 +23,7 @@ Feature: Display complete sheet from catalog
     Then I should be on this page "/fr/sheet/3"
     When I follow "navigation.links.catalog.available_date"
     Then I should see "Aanera"
-    When I go to this page "/fr/catalog/sheet/1"
+    When I go to this page "/fr/sheet/3/catalog/display/1"
     Then I should see "Aanera"
     And I should not see "sheet.object.action.edit"
     And I should see "catalog.meeting_request.create"
@@ -32,5 +32,5 @@ Feature: Display complete sheet from catalog
     Given I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I follow "navigation.links.catalog.available_date"
     Then I should not see "World Company Inc"
-    When I go to "/fr/catalog/sheet/3"
+    When I go to "/fr/sheet/3/catalog/display/3"
     Then the response status code should be 404

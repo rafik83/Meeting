@@ -24,7 +24,7 @@ Feature: Search sheet in catalog
     Then I should see "Aanera"
     And I should see "World Company Inc"
     And I should see "Hello World Company"
-    When I go to this page "/fr/catalog?position[]=position98"
+    When I go to this page "/fr/sheet/2/catalog?position[]=position98"
     Then I should see "1" in the ".total-result" element
     Then I should see "Aanera"
     But I should not see "World Company Inc"
@@ -38,7 +38,7 @@ Feature: Search sheet in catalog
     Then I should see "Aanera"
     And I should see "World Company Inc"
     And I should see "Hello World Company"
-    When I go to this page "/fr/catalog?localization=lyon"
+    When I go to this page "/fr/sheet/2/catalog?localization=lyon"
     Then I should see "1" in the ".total-result" element
     And I should see "World Company Inc"
     But I should not see "Aanera"
@@ -52,29 +52,29 @@ Feature: Search sheet in catalog
     And I should see "Aanera"
     And I should see "World Company Inc"
     And I should see "Hello World Company"
-    When I go to this page "/fr/catalog?content=Aanera"
+    When I go to this page "/fr/sheet/2/catalog?content=Aanera"
     Then I should see "1" in the ".total-result" element
     And I should see "Aanera"
     But I should not see "World Company Inc"
     And I should not see "Hello World Company"
-    When I go to this page "/fr/catalog?content=unknowsheet"
+    When I go to this page "/fr/sheet/2/catalog?content=unknowsheet"
     Then I should see "0" in the ".total-result" element
     Then I should see "catalog.noResult"
 
   Scenario: I can search and filter sheet by supply or need
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    When I go to this page "/fr/catalog?objective=supply"
+    When I go to this page "/fr/sheet/2/catalog?objective=supply"
     Then I should see "1" in the ".total-result" element
     And I should see "Aanera"
     But I should not see "World Company Inc"
     And I should not see "Hello World Company"
-    When I go to this page "/fr/catalog?objective=need"
+    When I go to this page "/fr/sheet/2/catalog?objective=need"
     Then I should see "2" in the ".total-result" element
     And I should see "Hello World Company"
     And I should see "Aanera"
     But I should not see "World Company Inc"
-    When I go to this page "/fr/catalog?objective=supply&objective=need"
+    When I go to this page "/fr/sheet/2/catalog?objective=supply&objective=need"
     Then I should see "2" in the ".total-result" element
     And I should see "Hello World Company"
     And I should see "Aanera"
