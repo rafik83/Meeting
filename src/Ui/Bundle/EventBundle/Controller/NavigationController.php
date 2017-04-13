@@ -13,9 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
-use Proximum\Vimeet\Application\View\Navigation\MenuView;
-use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,6 +38,9 @@ class NavigationController extends Controller
         Sheet $sheet = null,
         $registration = false
     ) {
+        $event = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+        dump($request);
         $requestStack    = $this->get('request_stack');
         $route           = $requestStack->getMasterRequest()->get('_route');
         $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
@@ -61,50 +61,19 @@ class NavigationController extends Controller
         $submenuView = null;
 
         if (null !== $user && false === $registration) {
-            $menuView    = $this->mainMenu($eventDomain->getEvent(), $request->getLocale());
-            $submenuView = $this->subMenu($eventDomain->getEvent(), $request->getLocale());
+            $menuView = $this->get('tactician.commandbus.query')->handle(
+                new MenuViewQuery($event, $user, $locale)
+            );
+
+            $submenuView = $this->get('tactician.commandbus.query')->handle(
+                new SubmenuViewQuery($event, $user, $locale, $route)
+            );
         }
 
         return $this->render('EventBundle::Navigation/header.html.twig', [
-            'menuHeader'  => $menuHeaderView,
-            'menuView'    => $menuView,
-            'submenuView' => $submenuView,
+            'menuHeaderView' => $menuHeaderView,
+            'menuView'       => $menuView,
+            'submenuView'    => $submenuView,
         ]);
-    }
-
-    /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return MenuView
-     */
-    private function mainMenu(Event $event, $locale)
-    {
-        $menuView = new MenuViewQuery($event, $this->getUser(), $locale);
-
-        return $this->get('tactician.commandbus.query')->handle($menuView);
-    }
-
-    /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return SubmenuView
-     */
-    private function subMenu(Event $event, $locale)
-    {
-        $requestStack = $this->get('request_stack');
-        $route        = $requestStack->getMasterRequest()->get('_route');
-
-        $submenuView = $this->get('tactician.commandbus.query')->handle(
-            new SubmenuViewQuery(
-                $event,
-                $this->getUser(),
-                $locale,
-                $route
-            )
-        );
-
-        return $submenuView;
     }
 }

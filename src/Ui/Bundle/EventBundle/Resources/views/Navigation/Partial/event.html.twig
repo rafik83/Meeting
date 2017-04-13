@@ -1,34 +1,34 @@
 <div class="header">
-    {% if menuHeader.event is defined %}
-        {% if menuHeader.event.logo != null %}
+    {% if menuHeaderView.event is defined %}
+        {% if menuHeaderView.event.logo != null %}
             <a href="{{ path('event') }}">
-                {% if menuHeader.event.isSvgLogo %}
-                    <img src="{{ menuHeader.event.logo }}" class="logo">
+                {% if menuHeaderView.event.isSvgLogo %}
+                    <img src="{{ menuHeaderView.event.logo }}" class="logo">
                 {% else %}
-                    <img src="{{ menuHeader.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+                    <img src="{{ menuHeaderView.event.logo|imagine_filter('event_header_logo') }}" class="logo">
                 {% endif %}
             </a>
         {% endif %}
         <div class="header__info">
-            <div>{{ menuHeader.event.description(app.request.locale)|nl2br }}</div>
+            <div>{{ menuHeaderView.event.description(app.request.locale)|nl2br }}</div>
         </div>
     {% endif %}
 
     <ul class="header__navigation">
-        {% if is_granted('ROLE_USER') and menuHeader.hasSheet %}
+        {% if is_granted('ROLE_USER') and menuHeaderView.hasSheet %}
             <li class="notifs">
                 <a href="{{ path('event_notification_list') }}">
                     <i class="icon-Retard"></i>
                     <span class="name">{{ 'navigation.links.notification'|trans }}</span>
-                    {% if menuHeader.hasNotifications %}
+                    {% if menuHeaderView.hasNotifications %}
                         <span class="alert-notification">!</span>
                     {% endif %}
                 </a>
             </li>
         {% endif %}
 
-        {% if menuHeader.event is defined %}
-            {% for locale, path in menuHeader.localeRoutes %}
+        {% if menuHeaderView.event is defined %}
+            {% for locale, path in menuHeaderView.localeRoutes %}
                 <li class="locale"><a href="{{ path }}">{{ locale }}</a></li>
             {% endfor %}
         {% endif %}
@@ -63,22 +63,22 @@
             </div>
             <div class="modal-body">
                 <ul>
-                    <li><strong class="highlight">{{ menuHeader.event.organiserName }}</strong></li>
-                    {% if menuHeader.event.configuration.contactFirstName or menuHeader.event.configuration.contactLastName %}
-                        <li>{{ menuHeader.event.configuration.contactFirstName|default('')|capitalize }} {{ menuHeader.event.configuration.contactLastName|default('')|upper }}</li>
+                    <li><strong class="highlight">{{ menuHeaderView.event.organiserName }}</strong></li>
+                    {% if menuHeaderView.event.configuration.contactFirstName or menuHeaderView.event.configuration.contactLastName %}
+                        <li>{{ menuHeaderView.event.configuration.contactFirstName|default('')|capitalize }} {{ menuHeaderView.event.configuration.contactLastName|default('')|upper }}</li>
                     {% endif %}
-                    {% if menuHeader.event.configuration.organiserPhone %}
-                        <li><i class="icon-Appeler"></i> {{ menuHeader.event.configuration.organiserPhone }}</li>
+                    {% if menuHeaderView.event.configuration.organiserPhone %}
+                        <li><i class="icon-Appeler"></i> {{ menuHeaderView.event.configuration.organiserPhone }}</li>
                     {% endif %}
-                    {% if menuHeader.event.organiserEmail %}
+                    {% if menuHeaderView.event.organiserEmail %}
                         <li><i class="icon-Message_1"></i>
-                            <a href="mailto:{{ menuHeader.event.organiserEmail }}">{{ menuHeader.event.organiserEmail }}</a>
+                            <a href="mailto:{{ menuHeaderView.event.organiserEmail }}">{{ menuHeaderView.event.organiserEmail }}</a>
                         </li>
                     {% endif %}
-                    {% if menuHeader.event.configuration.organiserWebsite %}
+                    {% if menuHeaderView.event.configuration.organiserWebsite %}
                         <li>
-                            <a href="{{ menuHeader.event.configuration.organiserWebsite }}" target="_blank" rel="external">
-                                {{ menuHeader.event.configuration.organiserWebsite }}
+                            <a href="{{ menuHeaderView.event.configuration.organiserWebsite }}" target="_blank" rel="external">
+                                {{ menuHeaderView.event.configuration.organiserWebsite }}
                             </a></li>
                     {% endif %}
                 </ul>
