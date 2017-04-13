@@ -47,7 +47,7 @@ class ExportPlannerCommand extends Command
             ->addArgument('event', InputArgument::REQUIRED, 'Event id')
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale for the email')
-            ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorythm')
+            ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorithm')
             ->addArgument('lockMeetingRequest', InputArgument::OPTIONAL, 'Should meeting request be locked after export', false)
         ;
     }
