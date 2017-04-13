@@ -36,11 +36,18 @@ class SheetView
     public $type;
 
     /**
+     * "Prénom du suivi commercial"
+     *
+     * @var string|null
+     */
+    public $followerFirstName;
+
+    /**
      * "Nom du suivi commercial"
      *
      * @var string|null
      */
-    public $follower;
+    public $followerLastName;
 
     /**
      * "Nombre de participants de la fiche"
@@ -132,7 +139,8 @@ class SheetView
      * @param string              $type
      * @param int                 $countParticipant
      * @param SheetIndicatorsView $sheetIndicatorsView
-     * @param string|null         $follower
+     * @param string              $followerFirstName
+     * @param string              $followerLastName
      * @param string              $url
      */
     public function __construct(
@@ -141,7 +149,8 @@ class SheetView
         $type,
         $countParticipant,
         SheetIndicatorsView $sheetIndicatorsView,
-        $follower,
+        $followerFirstName,
+        $followerLastName,
         $url
     ) {
         $this->id                       = $id;
@@ -155,8 +164,9 @@ class SheetView
         $this->countPlacedMeetings      = $sheetIndicatorsView->countPlacedMeetings;
         $this->usableSlots              = $sheetIndicatorsView->usableSlots;
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
+        $this->followerFirstName        = $followerFirstName;
+        $this->followerLastName         = $followerLastName;
         $this->url                      = $url;
-        $this->follower                 = $follower;
 
         $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
         $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;

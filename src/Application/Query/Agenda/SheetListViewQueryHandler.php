@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsView
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -99,13 +100,17 @@ class SheetListViewQueryHandler
                 $sheetIndicatorsView = new SheetIndicatorsView(0, 0, 0, 0, 0, $countMeetingsOfSheet);
             }
 
+            /** @var Admin $follower */
+            $follower = $sheet->getFollower() ? $sheet->getFollower() : null;
+
             $sheetList[] = new SheetView(
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
                 $sheetIndicatorsView,
-                null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
+                null !== $follower ? $follower->getFirstname() : null,
+                null !== $follower ? $follower->getLastname() : null,
                 $this->router->generate(
                     'admin_sheet_details',
                     ['sheet' => $sheet->getId(), 'event' => $sheetListViewQuery->event->getId()]
