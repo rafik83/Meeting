@@ -566,7 +566,9 @@ event_package_payment_pay_remaining:
     defaults: { _controller: EventBundle:Payment:payRemaining }
 
 event_payment_info:
-    path: /sheet/payment
+    path: /sheet/{sheet}/payment
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:paymentInfo }
 
