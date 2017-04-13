@@ -48,8 +48,6 @@ class AssignSpotHandler
      */
     public function handle(AssignSpot $assignSpot)
     {
-        $oldSpot = null;
-
         if ($assignSpot->spotCode === null || $assignSpot->spotCode === '') {
             $oldSpot = $assignSpot->sheet->getSpot();
 

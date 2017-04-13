@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Components\Invoice\Denormalizer;
 
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\BillingInfosViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupsViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\InvoiceViewDenormalizer;
@@ -76,10 +77,28 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             $date
         );
 
+        $billingInfosViewOfSheet = new BillingInfosView(
+            'man',
+            'DUPOND',
+            'Laurent',
+            'Directeur',
+            '+33122334455',
+            '+33611223344',
+            'my-email@example.net',
+            'My company',
+            '10 rue Saint Marc',
+            '75002',
+            'Paris',
+            'EN',
+            'My vat changed number',
+            'My reference'
+        );
+
         $serializer = new Serializer(
             [
                 new InvoiceViewDenormalizer(),
                 new SummaryViewDenormalizer(),
+                new BillingInfosViewDenormalizer(),
                 new GroupsViewDenormalizer(),
                 new GroupViewDenormalizer(),
                 new RowViewDenormalizer(),
@@ -97,7 +116,10 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             $invoice->getData(),
             InvoiceView::class,
             'json',
-            ['invoice' => $invoice]
+            [
+                'invoice'                 => $invoice,
+                'billingInfosViewOfSheet' => $billingInfosViewOfSheet
+            ]
         );
 
         /**
@@ -116,6 +138,7 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             null,
             $date,
             'fr',
+            $event->getTimeZone(),
             '',
             '',
             '',

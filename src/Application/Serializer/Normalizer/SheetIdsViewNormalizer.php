@@ -52,7 +52,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     const COL_ORDER_PROMO_CODE  = 'order_promo_code';
     const COL_SHEET_STATE       = 'sheet_state'; // State
     const COL_TOTAL_ORDER       = 'total_excluded_vat'; // Total hors taxes
-    const COL_REMAINING_TO_PAY  = 'remaining_to_pay'; // Total restant à payer avec taxes
+    const COL_BALANCE           = 'balance';
 
     protected $normalizerType = 'sheet';
 
@@ -197,7 +197,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         }
 
         $totalWithoutVat = AmountFormatter::centsToDecimalAmount($this->balance->getTotalWithoutVat($sheet));
-        $remainingToPay  = AmountFormatter::centsToDecimalAmount($this->balance->getRemainingToPay($sheet));
+        $balance = AmountFormatter::centsToDecimalAmount($this->balance->getBalance($sheet));
 
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
@@ -216,7 +216,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
             self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
             self::COL_TOTAL_ORDER       => $totalWithoutVat,
-            self::COL_REMAINING_TO_PAY  => $remainingToPay,
+            self::COL_BALANCE           => $balance,
         ];
 
         // 2. Registration data
@@ -362,7 +362,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_IN_CATALOG,
             self::COL_ORDER_PROMO_CODE,
             self::COL_TOTAL_ORDER,
-            self::COL_REMAINING_TO_PAY,
+            self::COL_BALANCE,
         ];
     }
 }

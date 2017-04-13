@@ -26,10 +26,11 @@ class LockMeetingRequestUpdate
 
     /**
      * @param Event $event
+     * @param bool  $lock
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, $lock)
     {
         $this->event = $event;
-        $this->lock  = $event->getConfiguration()->isMeetingRequestUpdateLocked();
+        $this->lock  = $lock;
     }
 }

@@ -26,10 +26,10 @@
                 {% for campaign in campaigns %}
                     <tr>
                         <td>{{ campaign.title }}</td>
-                        <td>{{ campaign.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td>{{ campaign.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                         <td>
                             {% if campaign.sent %}
-                                {{ campaign.sentAt|localizeddate('medium', 'short', app.request.locale) }}
+                                {{ campaign.sentAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
 
                                 {% if campaign.processed %}
                                     <i class="glyphicon glyphicon-ok"></i>

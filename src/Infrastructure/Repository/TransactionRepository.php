@@ -140,7 +140,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'transaction.sheet',
                 'sheet',
                 'WITH',
-                'sheet.id IN (:sheetIds) AND sheet.event = :event AND sheet.enable = true'
+                'sheet.id IN (:sheetIds) AND sheet.event = :event'
             )
             ->setParameter('event', $event)
             ->setParameter('sheetIds', $sheetIds)

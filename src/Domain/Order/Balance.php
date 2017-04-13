@@ -324,6 +324,24 @@ class Balance
     }
 
     /**
+     * Get total with VAT, if applicable, for all event
+     *
+     * @return int amount in cents
+     */
+    public function getOrdersTotalWithoutVatForEvent()
+    {
+        $orderVatViews = $this->getNotCancelledOrderVatViewsFromEvent();
+
+        $totalWithoutVat = 0;
+
+        foreach ($orderVatViews as $orderVatView) {
+            $totalWithoutVat += $orderVatView->totalWithoutVat;
+        }
+
+        return $totalWithoutVat;
+    }
+
+    /**
      * @return int amount in cents
      */
     public function getTotalRemainingToPayForEvent()

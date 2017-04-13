@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Application\View\Planner\PlannerView;
+use Proximum\Vimeet\Application\Exception\Planner;
 
 class PlannerViewQueryHandler
 {
@@ -88,6 +89,9 @@ class PlannerViewQueryHandler
      * @param PlannerViewQuery $query
      *
      * @return PlannerView
+     *
+     * @throws Planner\SlotNotConfiguredException
+     * @throws Planner\DayNotConfiguredException
      */
     public function handle(PlannerViewQuery $query)
     {
@@ -96,10 +100,14 @@ class PlannerViewQueryHandler
         $slots          = $this->slotViewQueryHandler->handle(new SlotViewQuery($event, $days));
         $types          = $this->typeViewQueryHandler->handle(new TypeViewQuery($event, $query->locale));
         $typePriorities = $this->typePriorityViewQueryHandler->handle(new TypePriorityViewQuery($event, $types));
-        $sheets         = $this->sheetViewQueryHandler->handle(new SheetViewQuery($event, $types));
+        $sheets         = $this->sheetViewQueryHandler->handle(
+            new SheetViewQuery($event, $types, $query->exportSolutionType)
+        );
         $participants   = $this->participantViewQueryHandler->handle(new ParticipantViewQuery($event, $sheets, $slots));
-        $meetings       = $this->meetingViewQueryHandler->handle(new MeetingViewQuery($event, $sheets, $participants, $slots));
         $spots          = $this->spotViewQueryHandler->handle(new SpotViewQuery($event, $sheets, $slots));
+        $meetings       = $this->meetingViewQueryHandler->handle(
+            new MeetingViewQuery($event, $sheets, $participants, $slots, $spots, $query->exportSolutionType)
+        );
 
         return new PlannerView($days, $slots, $types, $typePriorities, $sheets, $participants, $meetings, $spots);
     }
