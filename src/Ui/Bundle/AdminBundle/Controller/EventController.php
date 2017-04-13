@@ -17,13 +17,16 @@ use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as Paymen
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
-use Proximum\Vimeet\Application\Command\Order\Find;
+use Proximum\Vimeet\Application\Command\Event\Find\Find;
 use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Application\Exception\Invoice\InvalidNumeroInvoiceException;
+use Proximum\Vimeet\Application\Exception\Invoice\InvoiceNotFoundException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
+use Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
@@ -38,6 +41,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\FilterType as FilterTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,54 +86,61 @@ class EventController extends Controller
             );
         }
 
-        $orderForm = null;
-        $formIsSubmitted = false;
+        $findForm           = null;
+        $formIsSubmitted    = false;
+        $multipleSheetsView = null;
 
         if (Finder::IsAllowedToFind($admin)) {
             $find = new Find($admin);
-            $orderForm = $this->createForm(FindType::class, $find);
-            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
+            $findForm = $this->createForm(FindType::class, $find);
+            $formIsSubmitted = $findForm->handleRequest($request)->isSubmitted();
 
-            if ($formIsSubmitted && $orderForm->isValid()) {
+            if ($formIsSubmitted && $findForm->isValid()) {
                 try {
                     /** @var FindResult $result */
                     $result = $this->get('tactician.commandbus')->handle($find);
 
-                    return $this->redirect($this->generateUrl('admin_sheet_details', [
-                        'event' => $result->sheet->getEvent()->getId(),
-                        'sheet' => $result->sheet->getId(),
-                    ]) . '#sheetOrders');
+                    if ($result->hasOnlyOneSheet()) {
+                        return $this->redirectToRoute('admin_sheet_details', [
+                            'event'     => $result->sheet->getEvent()->getId(),
+                            'sheet'     => $result->sheet->getId(),
+                            '_fragment' => 'sheetOrders',
+                        ]);
+                    } else {
+                        // Warn the user that there is multiple sheet with an invoice with this numero
+                        $multipleSheetsView = $this->get('tactician.commandbus.query')->handle(
+                            new MultipleSheetFoundViewQuery($find->numero, $result->getSheets())
+                        );
+                    }
                 } catch (OrderNotFoundException $exception) {
-                    $orderForm->get('numero')->addError(
-                        new FormError(
-                            $this->get('translator')->trans(
-                                'validators.order.orderNotFound',
-                                [],
-                                'validators'
-                            )
-                        )
-                    );
+                    $this->addError($findForm->get('numero'), 'validators.order.orderNotFound');
                 } catch (InvalidNumeroOrderException $exception) {
-                    $orderForm->get('numero')->addError(
-                        new FormError(
-                            $this->get('translator')->trans(
-                                'validators.order.numeroNotValid',
-                                [],
-                                'validators'
-                            )
-                        )
-                    );
+                    $this->addError($findForm->get('numero'), 'validators.order.numeroNotValid');
+                } catch (InvalidNumeroInvoiceException $exception) {
+                    $this->addError($findForm->get('numero'), 'validators.invoice.numeroNotValid');
+                } catch (InvoiceNotFoundException $exception) {
+                    $this->addError($findForm->get('numero'), 'validators.invoice.invoiceNotFound');
                 }
             }
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events'            => $events,
-            'orderForm'         => $orderForm !== null ? $orderForm->createView() : null,
-            'orderTabActive'    => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
-            'transactionForm'   => $transactionForm !== null ? $transactionForm->createView() : null,
-            'invoiceExportForm' => $invoiceExportForm !== null ? $invoiceExportForm->createView() : null,
+            'events'             => $events,
+            'orderForm'          => $findForm !== null ? $findForm->createView() : null,
+            'orderTabActive'     => $findForm !== null && $formIsSubmitted ? true : false,
+            'transactionForm'    => $transactionForm !== null ? $transactionForm->createView() : null,
+            'invoiceExportForm'  => $invoiceExportForm !== null ? $invoiceExportForm->createView() : null,
+            'multipleSheetsView' => $multipleSheetsView,
         ]);
+    }
+
+    /**
+     * @param FormInterface $formElement
+     * @param string        $message
+     */
+    private function addError(FormInterface $formElement, $message)
+    {
+        $formElement->addError(new FormError($this->get('translator')->trans($message, [], 'validators')));
     }
 
     /**

@@ -18,6 +18,7 @@ var $                     = require('jquery'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
     Happening             = require('./components/_Happening'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
+    FilterRequestByType   = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination     = require('./components/_CatalogPagination');
 
 require('bootstrap');
@@ -76,6 +77,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.agenda'), function (element) {
         new Agenda(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.catalog__meeting_request'), function (element) {
+        new FilterRequestByType(element, target.querySelector('[data-meeting-request-filter-type-buttons]'));
     });
 
     $('.dropdown-menu', target).on('click', function (e) {

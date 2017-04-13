@@ -16,10 +16,32 @@ AgendaApiEndpoints.prototype.getSheetsEndpoint = function () {
 };
 
 /**
+ * Returns /admin/fr/event/{event_id}/agenda/spots
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/spots
+ *
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getSpotsEndpoint = function () {
+    return this.getPathname() + '/spots';
+};
+
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/spots/{spot_id}/details
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/spots/{spot_id}/details
+ *
+ * @param {int} spotId
+ *
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getSpotsDetailEndpoint = function (spotId) {
+    return this.getPathname() + '/spots/' + spotId + '/detail';
+};
+
+/**
  * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
  * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
  *
- * @param {int} sheet
+ * @param {object} sheet
  * @returns {string}
  */
 AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet) {

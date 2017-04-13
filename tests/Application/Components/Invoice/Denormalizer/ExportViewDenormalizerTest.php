@@ -56,6 +56,8 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
         $invoice->getVatAmount()->shouldBeCalled()->willReturn(700);
         $invoice->getCreatedAt()->shouldBeCalled()->willReturn($date);
 
+        $balance->getBalance($sheet->reveal())->shouldBeCalled()->willReturn(0);
+
         $sheetInfoGuesserCache->guessSheetTitle($sheet, 'fr')->shouldBeCalled()->willReturn('sheetTitle');
 
         $billingInfoView = new BillingInfosView(
@@ -67,11 +69,28 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             '+33909090909',
             'martin.dupont@elao.com',
             'elao',
-            null,
             '10 rue saint marc',
             '75002',
             'Paris',
             'FR',
+            null,
+            null
+        );
+
+        $billingInfoViewOut = new BillingInfosView(
+            'man',
+            'dupont',
+            'martin',
+            'Recruiter',
+            '+33069090909',
+            '+33909090909',
+            'martin.dupont@elao.com',
+            'elao',
+            '10 rue saint marc',
+            '75002',
+            'Paris',
+            'GB',
+            'vatNumber',
             null
         );
 
@@ -84,11 +103,11 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             'mobile'    => '+33909090909',
             'email'     => 'martin.dupont@elao.com',
             'company'   => 'elao',
-            'vatNumber' => null,
             'street'    => '10 rue saint marc',
             'zipcode'   => '75002',
             'city'      => 'Paris',
-            'country'   => 'FR',
+            'country'   => 'GB',
+            'vatNumber' => 'vatNumber',
             'reference' => null,
         ];
 
@@ -105,9 +124,8 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             7,
             0,
             'code',
-            'FR',
-            'Paris',
-            22
+            'vatNumber',
+            'GB'
         );
 
         $dateFormatter = IntlDateFormatter::create(
@@ -119,12 +137,17 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
 
         $exportViewDenormalizer = new ExportViewDenormalizer($sheetInfoGuesserCache->reveal(), $balance->reveal());
 
-        $context = ['locale' => 'fr', 'dateFormatter' => $dateFormatter, 'invoice' => $invoice->reveal()];
+        $context = [
+            'locale'                   => 'fr',
+            'dateFormatter'            => $dateFormatter,
+            'invoice'                  => $invoice->reveal(),
+            'billingInfosViewForSheet' => $billingInfoView,
+        ];
 
         $serializer = $this->prophesize(Serializer::class);
         $serializer->willImplement('Symfony\Component\Serializer\Normalizer\DenormalizerInterface');
         $serializer->denormalize($data['billingInfosView'], BillingInfosView::class, 'json', $context)
-            ->willReturn($billingInfoView);
+            ->willReturn($billingInfoViewOut);
 
         $exportViewDenormalizer->setDenormalizer($serializer->reveal());
 

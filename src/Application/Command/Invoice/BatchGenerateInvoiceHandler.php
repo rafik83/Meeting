@@ -69,8 +69,13 @@ class BatchGenerateInvoiceHandler
 
         // get event prefix
         $firstSheet = reset($sheets);
-        $event      = $firstSheet->getEvent();
-        $prefix     = $event->getInvoicePrefix();
+
+        if (false === $firstSheet) {
+            return;
+        }
+
+        $event  = $firstSheet->getEvent();
+        $prefix = $event->getInvoicePrefix();
 
         $sheetInvoicedViews = [];
 

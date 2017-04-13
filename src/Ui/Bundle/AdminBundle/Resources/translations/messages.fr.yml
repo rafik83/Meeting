@@ -18,6 +18,8 @@ admin.admin_list.table.title.firstname: Prénom
 admin.admin_list.table.title.lastname: Nom
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'Liste des utilisateurs du backoffice'
+admin.agenda.tab.sheet.title.label: 'Fiches'
+admin.agenda.tab.spot.title.label: 'Lieux'
 admin.agenda.countPendingProposition: 'Nombre de propositions reçues à valider'
 admin.agenda.countPlacedMeetings: 'Nombre de RDV'
 admin.agenda.countProposition: 'Nombre de propositions reçues'
@@ -94,7 +96,8 @@ admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
-admin.agenda.sheet.loader: 'Chargement des fiches'
+admin.agenda.sheet.loader: 'Chargement des fiches ...'
+admin.agenda.spot.loader: 'Chargement des lieux ...'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
 admin.agenda.sort.alphabetical.label: Alphabétique
@@ -132,8 +135,9 @@ admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
-admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
-admin.event.page.orderFinder.title: 'Recherche commande'
+admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
+admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
+admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
 admin.event.page.transactions.title: Transactions
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
@@ -328,6 +332,7 @@ admin.messaging.campaign.selected_filters: 'Filtres sélectionnés'
 admin.messaging.campaign.selected_sheets: 'Fiches sélectionnées'
 admin.messaging.campaign.send.title: Envoyer
 admin.messaging.campaign.sheet_list.columns.name: 'Nom de la fiche'
+admin.messaging.campaign.sheet_list.columns.ownerEmail: 'Email du propriétaire'
 admin.messaging.campaign.sheet_list.no_data: 'Aucune participation n''a été trouvée pour les critères courants'
 admin.messaging.campaign.sheet_list.success: 'Votre ciblage a été enregistré avec succès'
 admin.messaging.campaign.sheet_list.title: 'Créer mon ciblage'
@@ -467,6 +472,7 @@ admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
 admin.planner.export: Exporter
+admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
 admin.planner.export.heading: admin.planner.export.heading
 admin.planner.heading.export: 'Exporter les données pour l''algorithme'
 admin.planner.heading.import: 'Importer une solution depuis l''algorithme'
@@ -596,6 +602,7 @@ admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
 admin.sheet.export.fields.category: Catégorie
+admin.sheet.export.fields.balance: 'Balance TTC'
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
@@ -605,7 +612,6 @@ admin.sheet.export.fields.owner_email: 'Email propriétaire'
 admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
 admin.sheet.export.fields.registration_date: 'Date inscription'
-admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
 admin.sheet.export.fields.status: 'Statut fiche'
