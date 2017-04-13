@@ -47,7 +47,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $jobQueue->indexSheetsByTypes($create->types)->shouldBeCalled();
 
         //Handler
-        $handler = new CreateHandler($categoryRepository->reveal(), $typeRepository->reveal(), $jobQueue->reveal());
+        $handler = new CreateHandler(
+            $categoryRepository->reveal(),
+            $typeRepository->reveal(),
+            $jobQueue->reveal()
+        );
+
         $handler->handle($create);
     }
 
@@ -73,8 +78,15 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $typeRepository->getTypesByEvent($event)->willReturn([]);
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexSheetsByTypes($create->types)->shouldNotBeCalled();
+
         //Handler
-        $handler = new CreateHandler($categoryRepository->reveal(), $typeRepository->reveal());
+        $handler = new CreateHandler(
+            $categoryRepository->reveal(),
+            $typeRepository->reveal(),
+            $jobQueue->reveal()
+        );
         $handler->handle($create);
     }
 }
