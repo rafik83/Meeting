@@ -468,13 +468,6 @@ event_notification_list:
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:list }
 
-event_notification_read:
-    path:     /notification/{notification}/read
-    requirements:
-        notification: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Notification:read }
-
 #
 # Content
 #
