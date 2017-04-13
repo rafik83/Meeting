@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Navigation;
 final class Route
 {
     const SHEET = [
-        'event_sheet',
+        'event_sheet_default',
         'event_sheet_locale',
         'event_sheet_update',
     ];

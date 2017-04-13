@@ -11,9 +11,10 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class MenuHeaderViewQuery
+class HeaderViewQuery
 {
     /**
      * @var Event
@@ -46,18 +47,30 @@ class MenuHeaderViewQuery
     public $routeParameters;
 
     /**
-     * MenuHeaderViewQuery constructor.
-     *
-     * @param Event     $event
-     * @param string    $locale
-     * @param User|null $user
-     * @param string    $route
-     * @param array     $routeParameters
-     * @param bool      $registration
+     * @var null|Sheet
      */
-    public function __construct(Event $event, $locale, User $user = null, $route, array $routeParameters, $registration)
-    {
+    public $sheet;
+
+    /**
+     * @param Event      $event
+     * @param null|Sheet $sheet
+     * @param string     $locale
+     * @param null|User  $user
+     * @param string     $route
+     * @param array      $routeParameters
+     * @param bool       $registration
+     */
+    public function __construct(
+        Event $event,
+        Sheet $sheet = null,
+        $locale,
+        User $user = null,
+        $route,
+        array $routeParameters,
+        $registration
+    ) {
         $this->event           = $event;
+        $this->sheet           = $sheet;
         $this->user            = $user;
         $this->locale          = $locale;
         $this->registration    = $registration;

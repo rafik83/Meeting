@@ -1,0 +1,19 @@
+{{ include('EventBundle:Navigation/Partial:event.html.twig') }}
+
+{% if menuView is not null or submenuView is not null %}
+    <div class="sub-header">
+        {% if menuView is not null %}
+            <ul class="sub-header__item">
+                <li>
+                    <div class="navigation">
+                        {{ include('EventBundle:Navigation/Partial:mainMenu.html.twig') }}
+                    </div>
+                </li>
+            </ul>
+        {% endif %}
+
+        {% if submenuView is not null %}
+            {{ include('EventBundle:Navigation/Partial:submenu.html.twig') }}
+        {% endif %}
+    </div>
+{% endif %}

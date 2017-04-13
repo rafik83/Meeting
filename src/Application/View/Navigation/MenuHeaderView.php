@@ -31,7 +31,7 @@ class MenuHeaderView
     private $localeRoutes;
 
     /**
-     * @var Sheet
+     * @var null|Sheet
      */
     private $sheet;
 
@@ -49,6 +49,14 @@ class MenuHeaderView
         $this->event        = $event;
         $this->localeRoutes = $localeRoutes;
         $this->sheet        = $sheet;
+    }
+
+    /**
+     * @return null|Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
     }
 
     /**
