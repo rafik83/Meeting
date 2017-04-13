@@ -85,6 +85,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             '',
             1,
             $sheetIndicatorView,
+            false,
             null,
             null,
             '/my-url'
