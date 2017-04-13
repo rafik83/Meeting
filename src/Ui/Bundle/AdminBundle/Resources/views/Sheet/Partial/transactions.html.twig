@@ -24,7 +24,7 @@
                 <tbody>
                 {% for transaction in transactions %}
                     <tr>
-                        <td nowrap="nowrap">{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td nowrap="nowrap">{{ transaction.date|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                         <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
                         <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
                         <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>

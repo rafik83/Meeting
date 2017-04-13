@@ -50,8 +50,8 @@
                         {{ speaker.fullName }}{% if loop.index < loop.length %}, {% endif %}
                     {% endfor %}
                 </td>
-                <td>{{ happening.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
-                <td>{{ happening.end|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ happening.begin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+                <td>{{ happening.end|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>{{ happening.questionAllowed ? '✓' : '' }}</td>
                 <td>{{ happening.participations }}</td>
                 <td>{{ happening.hasLimit ? happening.limit : 'admin.happening.list.no-limit'|trans}}</td>

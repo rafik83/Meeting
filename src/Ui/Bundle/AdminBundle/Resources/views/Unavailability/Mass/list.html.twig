@@ -47,8 +47,8 @@
                 <td>{{ mass.name }}</td>
                 <td>{{ mass.title(event.getAvailableLocale(app.request.locale)) }}</td>
                 <td>{{ mass.category.title }}</td>
-                <td>{{ mass.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
-                <td>{{ mass.end|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ mass.begin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+                <td>{{ mass.end|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>{{ mass.dispatch ? '✓' : '' }}</td>
                 <td class="text-right" style="width: 110px;">
                     <div class="btn-group">
