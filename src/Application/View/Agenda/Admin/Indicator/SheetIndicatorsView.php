@@ -63,11 +63,11 @@ class SheetIndicatorsView
     public $hasNotEnoughAvailableSlot;
 
     /**
-     * "La fiche a des créneaux disponible"
+     * "La fiche a des créneaux disponibles"
      *
      * @var bool
      */
-    public $hasAvailableSlot;
+    public $hasAvailableSlots;
 
     /**
      * @param int $countRequest
@@ -98,7 +98,7 @@ class SheetIndicatorsView
         $this->hasMeetingToApprove      = $this->countPendingPropositions > 0;
 
         $this->hasNotEnoughAvailableSlot = $this->calculateHasNotEnoughAvailableSlot();
-        $this->hasAvailableSlot = $this->calculateHasAvailableSlot();
+        $this->hasAvailableSlots = $this->calculateHasAvailableSlots();
     }
 
 
@@ -117,11 +117,11 @@ class SheetIndicatorsView
     }
 
     /**
-     * "La fiche a des créneaux disponible"
+     * "La fiche a des créneaux disponibles"
      *
      * @return bool
      */
-    private function calculateHasAvailableSlot()
+    private function calculateHasAvailableSlots()
     {
         return ($this->usableSlots - $this->countPlacedMeetings) > 0;
     }

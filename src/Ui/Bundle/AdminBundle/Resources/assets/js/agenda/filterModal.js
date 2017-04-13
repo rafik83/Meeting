@@ -17,7 +17,7 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlot: false
+                hasAvailableSlots: false
             },
             filters: {
                 selectedTypes: [],
@@ -25,7 +25,7 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlot: null
+                hasAvailableSlots: null
             }
         }
     },
@@ -76,7 +76,7 @@ module.exports = {
                         filterMatching = true;
                     }
 
-                    if (this.filters.hasAvailableSlot === true && sheet.hasAvailableSlot === true) {
+                    if (this.filters.hasAvailableSlots === true && sheet.hasAvailableSlots === true) {
                         filterMatching = true;
                     }
 
@@ -95,7 +95,7 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlot: null
+                hasAvailableSlots: null
             };
             this.formFilters =  {
                 selectedTypes: [],
@@ -103,7 +103,7 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlot: null
+                hasAvailableSlots: null
             }
         },
         setUsedFilter: function() {
@@ -117,7 +117,7 @@ module.exports = {
         hasIndicatorFilter: function () {
             return this.filters.hasMeetingToApprove === true
                 || this.filters.hasNotEnoughAvailableSlot === true
-                || this.filters.hasAvailableSlot === true
+                || this.filters.hasAvailableSlots === true
                 || typeof this.filters.hasSentMeetingRequest === "boolean"
                 || typeof this.filters.hasScheduledMeetings === "boolean"
         }
