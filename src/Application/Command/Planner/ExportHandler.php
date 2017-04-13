@@ -17,13 +17,17 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestU
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\DispatcherHandler;
 use Proximum\Vimeet\Application\Exception\Order\Export\InvalidArgumentForExportException;
+use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
+use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
+use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\Error\ExportPlannerMailError;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportPlannerMail;
 
 class ExportHandler
@@ -103,39 +107,47 @@ class ExportHandler
         $this->mailSender                   = $mailSender;
     }
 
-
     /**
      * @param Export $export
      *
      * @throws InvalidArgumentForExportException
+     *
+     * @return bool
      */
     public function handle(Export $export)
     {
-        $event = $this->eventRepository->getById($export->eventId);
+        $content = null;
+        $event   = $this->eventRepository->getById($export->eventId);
 
         if ($event === null) {
             throw new InvalidArgumentForExportException(sprintf('Event %s not found', $export->eventId));
         }
 
-        $this->dispatcherHandler->handle(new Dispatcher($event));
-
-        if (true === $export->lockMeetingRequest) {
-            $command = new LockMeetingRequestUpdate($event, true);
-
-            $this->lockMeetingRequestHandler->handle($command);
+        try {
+            $this->dispatcherHandler->handle(new Dispatcher($event));
+        } catch (UnableToDispatchException $exception) {
+            return $this->notifyError(sprintf('flash.%s', $exception->indication), $event, $export);
         }
 
-        $planner = $this->plannerHandler->handle(
-            new PlannerViewQuery($event, $export->locale, $export->solutionType)
-        );
-        $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => self::XML_ROOT_NODE]);
+        if (true === $export->lockMeetingRequest) {
+            $this->lockMeetingRequestHandler->handle(new LockMeetingRequestUpdate($event, true));
+        }
+
+        try {
+            $planner = $this->plannerHandler->handle(new PlannerViewQuery($event, $export->locale, $export->solutionType));
+            $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => self::XML_ROOT_NODE]);
+        } catch (SlotNotConfiguredException $exception) {
+            return $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+        } catch (DayNotConfiguredException $exception) {
+            return $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+        }
 
         // Remove first line of file which is composed of the key
         $dataWithoutFirstLine = substr($content, strpos($content, "\n") + 1);
 
         $file = $this->createFile($event, $dataWithoutFirstLine);
 
-        $this->notifyCreationOfFile($event, $export, $file);
+        return $this->notifyCreationOfFile($event, $export, $file);
     }
 
     /**
@@ -164,6 +176,8 @@ class ExportHandler
      * @param Event  $event
      * @param Export $command
      * @param File   $file
+     *
+     * @return bool
      */
     private function notifyCreationOfFile(Event $event, Export $command, File $file)
     {
@@ -175,5 +189,29 @@ class ExportHandler
             $file->getHash(),
             $file->getId()
         ));
+
+        return true;
+    }
+
+    /**
+     * @param string $message
+     * @param Event  $event
+     * @param Export $command
+     *
+     * @return bool
+     */
+    private function notifyError($message, Event $event, Export $command)
+    {
+        $this->mailer->send(
+            new ExportPlannerMailError(
+                $event,
+                $this->mailSender,
+                $command->emailToNotify,
+                $command->locale,
+                $message
+            )
+        );
+
+        return false;
     }
 }

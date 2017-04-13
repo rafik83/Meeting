@@ -44,7 +44,7 @@ flash.admin.partner.update.success: 'Le partenaire a bien été édité avec suc
 flash.admin.planner.export.daysNotConfigured: 'Les jours de l''événement ne sont pas configurés'
 flash.admin.planner.export.slotNotConfigured: 'Les créneaux de rendez-vous ne sont pas configurés'
 flash.admin.planner.import.success: 'Importation des données réalisée avec succès'
-flash.admin.planner.export.success: 'L''export des planifications a été plannifié, vous allez recevoir un mail avec le fichier'
+flash.admin.planner.export.success: 'L''export des planifications a été plannifié, vous allez recevoir un mail contenant le fichier'
 flash.admin.planning.export.success: 'Vous recevrez un email lorsque le fichier d''export des plannings est prêt.'
 flash.admin.product.create.success: 'Le produit a bien été créé'
 flash.admin.product.import.success: 'Le catalogue de produits et les forfaits ont été importés'

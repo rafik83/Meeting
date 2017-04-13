@@ -48,20 +48,9 @@ class ExportController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($exportJobCreator);
+            $this->addFlash('success', 'flash.admin.planner.export.success');
 
-                $this->addFlash('success', 'flash.admin.planner.export.success');
-
-                return $this->redirectToRoute('admin_export_planner_data', ['event' => $event->getId()]);
-
-            } catch(SlotNotConfiguredException $exception) {
-                $this->addFlash('error', sprintf('flash.%s', $exception->getMessage()));
-            } catch(DayNotConfiguredException $exception) {
-                $this->addFlash('error', sprintf('flash.%s', $exception->getMessage()));
-            } catch (UnableToDispatchException $exception) {
-                $this->addFlash('error', sprintf('flash.%s', $exception->indication));
-            }
+            return $this->redirectToRoute('admin_export_planner_data', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Planner/Export:form.html.twig', [
