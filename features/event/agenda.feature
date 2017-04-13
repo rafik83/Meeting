@@ -18,7 +18,7 @@ Feature: Agenda
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     When I go to this page "/fr/agenda"
     Then I should be on this page "/fr/agenda/participant/2"
     And I should see "agenda.title"

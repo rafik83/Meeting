@@ -17,7 +17,7 @@ Feature: Upload and remove image
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
     Then the response status code should be 200
     When I attach the file "dummy-image-test.jpg" to "sheet_image_data_file"
@@ -29,10 +29,10 @@ Feature: Upload and remove image
   Scenario: I can remove my uploaded image on the sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     And I should not see "Ajouter un logo"
     When I follow "Ajouter un logo"
     Then the response status code should be 200
     And I press "sheet.object.image.remove"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     And I should see "Ajouter un logo"

@@ -24,12 +24,17 @@ class CompleteTranslationViewQueryHandler extends AbstractNotificationQueryHandl
      */
     public function handle(CompleteTranslationViewQuery $query)
     {
+        $link = $this->router->generate(
+            'event_sheet_locale',
+            ['sheet' => $query->sheet->getId(), 'locale' => $query->locale]
+        );
+
         return new NotificationView(
             $query->sheet->getCreatedAt(),
             Category::SHEET_ICON,
             Notification::CATEGORY_SHEET,
             'notification.sheet.completeTranslation',
-            $this->router->generate('event_sheet_locale', ['locale' => $query->locale]),
+            $link,
             Notification::PRIORITY_REQUIRED,
             ['%locale%' => $query->locale]
         );

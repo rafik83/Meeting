@@ -54,7 +54,7 @@ class ProgramController extends Controller
                 )
             );
         } catch (HappeningException $exception) {
-            return $this->redirectToRoute('event_sheet');
+            return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
         }
 
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);

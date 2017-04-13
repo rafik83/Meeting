@@ -20,7 +20,7 @@ Feature: Display complete sheet from catalog
     And elastica is populate
     When I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     When I follow "navigation.links.catalog.available_date"
     Then I should see "Aanera"
     When I go to this page "/fr/catalog/sheet/1"

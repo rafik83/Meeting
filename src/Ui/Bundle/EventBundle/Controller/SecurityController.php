@@ -211,7 +211,7 @@ class SecurityController extends Controller
             $sheet->getOwner()
         );
 
-        return $this->redirectToRoute('event_sheet');
+        return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
     /**

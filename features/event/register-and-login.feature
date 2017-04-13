@@ -137,7 +137,7 @@ Feature: Register and login user
       | block[57da9df7ced30][boolean] | 1                 |
       | Décrivez votre activité       | abc               |
     When I press "register.finalize"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     When I follow "navigation.links.notification"
     Then I should be on this page "/fr/notification"
     And I should see "notification.list.title.label"

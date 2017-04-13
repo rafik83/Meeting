@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
@@ -30,24 +31,50 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SheetController extends Controller
 {
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param null|string $locale
+     *
+     * @return RedirectResponse
+     */
+    public function redirectTosheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        try {
+            $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale ?: $request->getLocale());
+        } catch (SheetNotFoundException $sheetNotFoundException) {
+            throw $this->createAccessDeniedException('User not have Sheet');
+        }
+
+        if (null === $locale) {
+            return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
+        }
+
+        return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
+    }
+
     /**
      * Display the sheet in the choosen locale (independently from the interface locale).
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      *
      * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    public function sheetAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $locale = $locale ?: $request->getLocale();
-        $sheet  = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
         $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
         $participant           = $participantRepository->getParticipantForUserAndSheet($this->getUser(), $sheet);
@@ -337,7 +364,7 @@ class SheetController extends Controller
 
                 $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
 
-                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
             } else {
                 // If the form is not valid, re-render the templateData
                 $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -397,23 +424,26 @@ class SheetController extends Controller
         $removeImage = new RemoveImage($object, $sheet, $templateData);
         $this->get('tactician.commandbus')->handle($removeImage);
 
-        return $this->redirectToRoute('event_sheet');
+        return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
     /**
-     * @param Sheet $sheet
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return RedirectResponse
      */
-    public function submitValidationAction(Sheet $sheet)
+    public function submitValidationAction(EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $submitValidation = new SubmitValidation($sheet, $this->getUser());
+        $submitValidation = new SubmitValidation($sheet, $user);
 
         $this->get('tactician.commandbus')->handle($submitValidation);
 
-        return $this->redirectToRoute('event_sheet');
+        return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
     /**

@@ -12,7 +12,7 @@
             {{ form_errors(form) }}
             {% for key, child in form if key != 'submit' %}
                 {{ form_row(child, {
-                    'sheet_uri': path('event_sheet', { 'sheet': sheet.id }),
+                    'sheet_uri': path('event_sheet_default', { 'sheet': sheet.id }),
                     'nomenclature_label': label,
                     'levelsArchitecture': levelsArchitecture
                 }) }}

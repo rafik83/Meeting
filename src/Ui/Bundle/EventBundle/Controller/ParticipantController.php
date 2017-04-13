@@ -248,7 +248,7 @@ class ParticipantController extends Controller
             $updateProfile = new UpdateCompany($template, $sheet, $participant, $locale, $data, $user);
             $this->get('tactician.commandbus')->handle($updateProfile);
 
-            return $this->redirectToRoute('event_sheet');
+            return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('EventBundle:Participant:updateCompany.html.twig', [

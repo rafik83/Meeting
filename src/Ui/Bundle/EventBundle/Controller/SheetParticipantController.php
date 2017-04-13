@@ -134,7 +134,7 @@ class SheetParticipantController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($addParticipant);
 
-                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
             } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
                 $form->get('email')->addError(new FormError('validators.participant.alreadyLinkedToASheet'));
             } catch (ParticipantAlreadyExistException $exception) {
@@ -235,14 +235,21 @@ class SheetParticipantController extends Controller
                 $result = $this->get('tactician.commandbus')->handle($remove);
 
                 if (!$result->hasParticipantWithMeeting()) {
-                    return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                    return $this->redirectToRoute(
+                        'event_sheet_locale',
+                        ['sheet' => $sheet->getId(), 'locale' => $locale]
+                    );
                 } else {
                     $form->addError(
                         new FormError(
                             $this->get('translator')->transChoice(
                                 'validators.participant.remove.hasMeeting',
                                 $result->countParticipants(),
-                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($eventDomain->getEvent())], 'validators'
+                                [
+                                    '%participantName%' => $result->getParticipantsName(),
+                                    '%contactInfo%'     => ContactInfoGuesser::getContactInfos($eventDomain->getEvent()),
+                                ],
+                                'validators'
                             )
                         )
                     );

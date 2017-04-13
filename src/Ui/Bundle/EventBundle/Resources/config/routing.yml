@@ -139,10 +139,15 @@ event_account_participant_avatar:
 event_sheet:
     path:     /sheet
     methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:redirectTosheet }
+
+event_sheet_default:
+    path:     /sheet/{sheet}
+    methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_locale:
-    path:     /sheet/{locale}
+    path:     /sheet/{sheet}/{locale}
     requirements:
         locale: '[a-z]{2}'
     methods:  [GET]
