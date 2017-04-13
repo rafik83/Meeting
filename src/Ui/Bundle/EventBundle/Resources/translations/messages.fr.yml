@@ -72,6 +72,19 @@ event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
 gender.man: Monsieur
 gender.woman: Madame
+group.home.link.request: 'Gestion des RDVs'
+group.request.title: 'Gestion des rendez-vous de l''entité %groupTitle%'
+group.request.list.link.home: 'Retour à la gestion de mon entité'
+group.request.list.table.header.otherSheet: Autre fiche
+group.request.list.table.header.status: Statut
+group.request.list.table.header.sheetConcerned: 'Mes fiches concernés'
+group.request.list.table.header.participants: Participants
+group.request.list.table.no-result: Pas de demandes de rendez-vous
+group.request.list.no-preference: 'Pas de préférence'
+group.request.list.state.approved: Accepté
+group.request.list.state.refused: Refusé
+group.request.list.state.sent: En attente
+group.request.list.state.planned: Rendez-vous planifié
 happening.participate.action: Participer
 happening.participate.detail: Détail
 happening.participate.full: Complet

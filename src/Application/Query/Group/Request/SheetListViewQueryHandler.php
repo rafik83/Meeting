@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Group\Request;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Exception\Group\Request\NoResultException;
-use Proximum\Vimeet\Application\Exception\Group\Request\SheetNotMetException;
 use Proximum\Vimeet\Application\View\Group\Request\SheetListView;
 use Proximum\Vimeet\Application\View\Group\Request\SheetView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -96,32 +95,35 @@ class SheetListViewQueryHandler
             return $sheetMet['sheet'];
         }, $chuncks[$query->page - 1]);
 
-
-        $requests = $this->requestRepository->getRequestsOfSheetsWithSheets($query->group->getEvent(), $sheetsMet, $groupSheets);
-
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
 
+        foreach ($sheetsMet as $sheetMet) {
+            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(
+                new SheetViewQuery($sheetMet, $query->locale)
+            );
+        }
+
+        $requests = $this->requestRepository->getRequestsOfSheetsWithSheets($query->group->getEvent(), $sheetsMet, $groupSheets);
+
         foreach ($requests as $request) {
             $sheetMet = $this->getSheetMet($request, $groupSheets);
-
-            if (!isset($sheetViews[$sheetMet->getId()])) {
-                $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(
-                    new SheetViewQuery($sheetMet, $query->locale)
-                );
-            }
 
             $requestView = $this->requestViewQueryHandler->handle(
                 new RequestViewQuery($sheetMet, $request, $query->locale)
             );
 
-            $sheetViews[$sheetMet->getId()]->addRequest($requestView);
+            if (isset($sheetViews[$sheetMet->getId()])) {
+                $sheetViews[$sheetMet->getId()]->addRequest($requestView);
+            }
         }
 
         return new SheetListView(
             $query->group->getId(),
             $query->group->getTitle(),
-            $sheetViews
+            $sheetViews,
+            $query->page,
+            count($chuncks)
         );
     }
 
@@ -130,18 +132,20 @@ class SheetListViewQueryHandler
      * @param Sheet[] $groupSheet
      *
      * @return Sheet
-     * @throws SheetNotMetException
      */
     private function getSheetMet(Request $request, array &$groupSheet)
     {
+        // If the from sheet is not in the group sheet, then the sheet met is the from sheet
         if (!isset($groupSheet[$request->getFromSheet()->getId()])) {
             return $request->getFromSheet();
         }
 
+        // If the to sheet is not in the group sheet, then the sheet met is the to sheet
         if (!isset($groupSheet[$request->getToSheet()->getId()])) {
             return $request->getToSheet();
         }
 
-        throw new SheetNotMetException();
+        // Otherwise, it means that it is a sheet from the group that meet another sheet from the group
+        return $request->getFromSheet();
     }
 }

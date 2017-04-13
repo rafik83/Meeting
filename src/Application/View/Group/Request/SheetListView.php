@@ -22,14 +22,30 @@ class SheetListView
     public $sheetViews;
 
     /**
+     * @var int
+     */
+    public $page;
+
+    /**
+     * Number of pages
+     *
+     * @var int
+     */
+    public $pages;
+
+    /**
      * @param int         $groupId
      * @param string      $groupTitle
      * @param SheetView[] $sheetViews
+     * @param int         $page
+     * @param int         $pages
      */
-    public function __construct($groupId, $groupTitle, array $sheetViews)
+    public function __construct($groupId, $groupTitle, array $sheetViews, $page, $pages)
     {
         $this->groupId    = $groupId;
         $this->groupTitle = $groupTitle;
         $this->sheetViews = $sheetViews;
+        $this->page       = $page;
+        $this->pages      = $pages;
     }
 }

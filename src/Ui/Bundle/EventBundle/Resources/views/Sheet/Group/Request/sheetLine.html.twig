@@ -1,0 +1,34 @@
+<tr>
+    <td rowspan="{{ sheetView.numberOfRequest }}">
+        {{ sheetView.sheetTitle }}
+    </td>
+    {% for requestView in sheetView.requests %}
+        <td>
+            {% if requestView.isProposition %}
+                <i class="icon-Suivant"></i>
+            {% else %}
+                <i class="icon-Retour"></i>
+            {% endif %}
+            {% if requestView.planned %}
+                {{ 'group.request.list.state.planned'|trans }}
+            {% else %}
+                {{ ('group.request.list.state.' ~ requestView.state)|trans }}
+            {% endif %}
+        </td>
+        <td>{{ requestView.sheetMetTitle }}</td>
+        <td>
+            {% if requestView.participants is not empty %}
+                <ul>
+                    {% for participantView in requestView.participants %}
+                        <li>{{ participantView.completeName }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ 'group.request.list.no-preference'|trans }}
+            {% endif %}
+        </td>
+        {% if not loop.last %}
+            </tr><tr>
+        {% endif %}
+    {% endfor %}
+</tr>

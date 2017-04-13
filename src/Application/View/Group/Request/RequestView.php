@@ -16,6 +16,9 @@ class RequestView
     const TYPE_REQUEST     = 'request';
 
     /** @var int */
+    public $requestId;
+
+    /** @var int */
     public $sheetMetId;
 
     /** @var string */
@@ -30,20 +33,34 @@ class RequestView
     /** @var ParticipantView[] */
     public $participants;
 
+    /** @var bool */
+    public $planned;
+
     /**
+     * @param int               $requestId
      * @param int               $sheetMetId
      * @param string            $sheetMetTitle
      * @param string            $state
      * @param string            $type
      * @param ParticipantView[] $participants
+     * @param bool              $planned
      */
-    public function __construct($sheetMetId, $sheetMetTitle, $state, $type, array $participants)
-    {
+    public function __construct(
+        $requestId,
+        $sheetMetId,
+        $sheetMetTitle,
+        $state,
+        $type,
+        array $participants,
+        $planned = false
+    ) {
+        $this->requestId     = $requestId;
         $this->sheetMetId    = $sheetMetId;
         $this->sheetMetTitle = $sheetMetTitle;
         $this->state         = $state;
         $this->type          = $type;
         $this->participants  = $participants;
+        $this->planned       = $planned;
     }
 
     /**
@@ -52,5 +69,13 @@ class RequestView
     public function hasNoPrefrence()
     {
         return empty($this->participants);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProposition()
+    {
+        return $this->type === self::TYPE_PROPOSITION;
     }
 }

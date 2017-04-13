@@ -39,4 +39,12 @@ class SheetView
     {
         $this->requests[] = $requestView;
     }
+
+    /**
+     * @return int
+     */
+    public function numberOfRequest()
+    {
+        return count($this->requests);
+    }
 }

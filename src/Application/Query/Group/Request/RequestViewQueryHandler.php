@@ -44,6 +44,7 @@ class RequestViewQueryHandler
         $sheetMet = $query->request->getSheetMet($query->sheet);
 
         return new RequestView(
+            $query->request->getId(),
             $sheetMet->getId(),
             $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
             $query->request->getState(),
@@ -52,7 +53,8 @@ class RequestViewQueryHandler
                 return $this->participantViewQueryHandler->handle(
                     new ParticipantViewQuery($participant, $query->locale)
                 );
-            }, $query->request->getParticipantsOfSheetInRequest($sheetMet))
+            }, $query->request->getParticipantsOfSheetInRequest($sheetMet)),
+            $query->request->hasMeeting()
         );
     }
 }
