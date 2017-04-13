@@ -37,18 +37,15 @@ class SheetParticipantController extends Controller
      * Render the form of the addition of a participant. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function addParticipantAction(EventDomain $eventDomain, $locale, $key)
+    public function addParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$sheet->canBuyParticipant()) {
@@ -77,7 +74,10 @@ class SheetParticipantController extends Controller
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'sheet'  => $sheet,
             'locale' => $locale,
-            'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
+            'action' => $this->generateUrl(
+                'event_sheet_handle_participant',
+                ['sheet' => $sheet->getId(), 'locale' => $locale, 'key' => $key]
+            ),
         ]);
 
         $participantProductView = $this->get('tactician.commandbus.query')->handle(
@@ -99,18 +99,15 @@ class SheetParticipantController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
+    public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$sheet->canBuyParticipant()) {
@@ -123,10 +120,10 @@ class SheetParticipantController extends Controller
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'sheet'  => $sheet,
             'locale' => $locale,
-            'action' => $this->generateUrl('event_sheet_handle_participant', [
-                'locale' => $locale,
-                'key'    => $key
-            ]),
+            'action' => $this->generateUrl(
+                'event_sheet_handle_participant',
+                ['sheet' => $sheet->getId(), 'locale' => $locale, 'key' => $key]
+            ),
         ]);
 
         // Handle the form, update the object and redirect to the sheet if valid

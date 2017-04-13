@@ -166,7 +166,7 @@ event_sheet_form:
     defaults: { _controller: EventBundle:Sheet:form }
 
 event_sheet_update:
-    path:     /sheet/{sheet}/{locale}/{key}
+    path: /sheet/{sheet}/{locale}/{key}
     requirements:
         sheet: \d+
         locale: '[a-z]{2}'
@@ -175,16 +175,18 @@ event_sheet_update:
     defaults: { _controller: EventBundle:Sheet:update }
 
 event_sheet_add_participant:
-    path:   /sheet/{locale}/{key}/participant/add/form
+    path: /sheet/{sheet}/{locale}/{key}/participant/add/form
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:SheetParticipant:addParticipant }
 
 event_sheet_handle_participant:
-    path:   /sheet/{locale}/{key}/participant/add
+    path:   /sheet/{sheet}/{locale}/{key}/participant/add
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
