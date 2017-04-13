@@ -58,7 +58,7 @@
                     {{ order.follower }}
                 </td>
                 <td>
-                    {{ order.createdAt|localizeddate('medium', 'short') }}
+                    {{ order.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                 </td>
                 <td class="text-right">
                     {{ order.totalWithoutVat|localizedcurrency(order.currency) }}
