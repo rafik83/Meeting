@@ -65,7 +65,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetMet4->getId()->willReturn(5);
         $sheetMet5->getId()->willReturn(6);
 
-            $locale = 'fr';
+        $locale = 'fr';
         $page   = 1;
         $limit  = 2; // To ease test
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);

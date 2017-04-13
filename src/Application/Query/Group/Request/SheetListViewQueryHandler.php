@@ -84,16 +84,27 @@ class SheetListViewQueryHandler
             return strcasecmp($sheetOne['title'], $sheetTwo['title']);
         });
 
-        $chuncks = array_chunk($sheetsWithTitle, $query->limit);
+        $chunks = array_chunk($sheetsWithTitle, $query->limit);
 
-        if (!isset($chuncks[$query->page - 1])) {
+        if (!isset($chunks[$query->page - 1])) {
+            // If the page is 1 and there is no result, show no result instead of 404
+            if ($query->page === 1) {
+                return new SheetListView(
+                    $query->group->getId(),
+                    $query->group->getTitle(),
+                    [],
+                    $query->page,
+                    0
+                );
+            }
+
             throw new NoResultException();
         }
 
         /** @var Sheet[] $sheetsMet */
         $sheetsMet = array_map(function ($sheetMet) {
             return $sheetMet['sheet'];
-        }, $chuncks[$query->page - 1]);
+        }, $chunks[$query->page - 1]);
 
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
@@ -123,7 +134,7 @@ class SheetListViewQueryHandler
             $query->group->getTitle(),
             $sheetViews,
             $query->page,
-            count($chuncks)
+            count($chunks)
         );
     }
 
