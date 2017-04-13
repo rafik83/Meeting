@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;

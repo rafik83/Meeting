@@ -143,7 +143,7 @@ class SubstitutionsProvider
             case Compose::LINK_AGENDA:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['_locale' => $locale]);
             case Compose::LINK_CATALOG:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', ['_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_MEETING_REQUEST:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_list_request', ['_locale' => $locale, 'sheet' => $sheet->getId()]);
             case Compose::LINK_ORDERS:

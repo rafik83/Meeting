@@ -321,30 +321,40 @@ event_change_password:
 # Catalog
 #
 
-event_catalog_index:
+event_catalog_redirect:
     path: /catalog
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Catalog:redirect }
+
+event_catalog_index:
+    path: /sheet/{sheet}/catalog
+    requirements:
+        sheet: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Catalog:index }
 
 event_catalog_search_localization:
-    path: /catalog/search-localization
+    path: /sheet/{sheet}/catalog/search-localization
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchLocalization }
 
 event_catalog_search_keywords:
-    path: /catalog/search-keywords
+    path: /sheet/{sheet}/catalog/search-keywords
+    requirements:
+        sheet: \d+
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchKeywords }
 
 event_catalog_complete_sheet:
-    path: /catalog/sheet/{sheet}
+    path: /sheet/{sheet}/catalog/display/{sheetToDisplay}
     requirements:
         sheet: \d+
+        sheetToDisplay: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Catalog:sheet}
+    defaults: { _controller: EventBundle:Catalog:displaySheet }
 
 event_catalog_sheet_meeting_request:
-    path: /catalog/sheet/{sheet}/request-meeting
+    path: /sheet/{sheet}/catalog/request-meeting
     requirements:
         sheet: \d+
     methods:  [GET, POST]
