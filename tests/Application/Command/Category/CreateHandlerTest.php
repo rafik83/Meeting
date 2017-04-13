@@ -47,7 +47,46 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $jobQueue->indexSheetsByTypes($create->types)->shouldBeCalled();
 
         //Handler
-        $handler = new CreateHandler($categoryRepository->reveal(), $typeRepository->reveal(), $jobQueue->reveal());
+        $handler = new CreateHandler(
+            $categoryRepository->reveal(),
+            $typeRepository->reveal(),
+            $jobQueue->reveal()
+        );
+
+        $handler->handle($create);
+    }
+
+    public function testHandleException()
+    {
+        $this->expectException('Exception');
+
+        //Context
+        $event = EventFactory::createEvent();
+        $event->setLocales(['fr'], 'fr');
+
+        //Expected
+        $category = new Category($event);
+
+        //Command
+        $create = new Create($event);
+        $create->types = ['test'];
+
+        //Mock
+        $categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+        $categoryRepository->add($category);
+
+        $typeRepository->getTypesByEvent($event)->willReturn([]);
+
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexSheetsByTypes($create->types)->shouldNotBeCalled();
+
+        //Handler
+        $handler = new CreateHandler(
+            $categoryRepository->reveal(),
+            $typeRepository->reveal(),
+            $jobQueue->reveal()
+        );
         $handler->handle($create);
     }
 }
