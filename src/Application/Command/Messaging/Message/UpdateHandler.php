@@ -41,20 +41,7 @@ class UpdateHandler
     {
         $message = $command->getMessage();
 
-        foreach ($message->getTranslations() as $locale => $translation) {
-            // Remove translation if it was deleted
-            if (!isset($command->translations[$locale])) {
-                $this->messageRepository->removeTranslation($translation);
-                $message->translations->remove($locale);
-            }
-        }
-
         foreach ($command->translations as $locale => $translation) {
-            // Remove translation if locale was updated
-            if ($message->translations->containsKey($locale)) {
-                $this->messageRepository->removeTranslation($message->getTranslation($locale));
-                $message->translations->remove($locale);
-            }
 
             $message->translate(
                 $translation['locale'],

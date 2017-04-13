@@ -170,9 +170,7 @@ class Message
      */
     public function getSubject($locale)
     {
-        return $this->hasTranslation($locale)
-            ? $this->getTranslation($locale)->getSubject()
-            : $this->getTranslation($this->event->getFallback());
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getSubject() : '';
     }
 
     /**
@@ -184,9 +182,7 @@ class Message
      */
     public function getContent($locale)
     {
-        return $this->hasTranslation($locale)
-            ? $this->getTranslation($locale)->getContent()
-            : $this->getTranslation($this->event->getFallback())->getContent();
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getContent() : '';
     }
 
     /**

@@ -28,7 +28,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $message = new Message($event, $date, 'message_name');
 
-        foreach ($command->translations as $locale => $translation) {
+        foreach ($event->getLocales() as $locale) {
             $command->translations[$locale] = [
                 'subject' => 'subject_' . $locale,
                 'content' => 'content_' . $locale,

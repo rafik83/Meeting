@@ -37,11 +37,11 @@ final class Update
         $this->message = $message;
         $this->name    = $message->getName();
 
-        foreach ($this->message->getTranslations() as $translation) {
-            $this->translations[$translation->getLocale()] = [
-                'subject' => $translation->getSubject(),
-                'content' => $translation->getContent(),
-                'locale'  => $translation->getLocale(),
+        foreach ($message->getEvent()->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'subject' => $message->getSubject($locale),
+                'content' => $message->getContent($locale),
+                'locale'  => $locale,
             ];
         }
     }
