@@ -1960,6 +1960,15 @@ services:
             - '@event_sender'
 
     #
+    # Home
+    #
+    components.home.home_dispatch:
+        class: Proximum\Vimeet\Application\Components\Home\HomeDispatch
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.sheet.group_repository'
+
+    #
     # Happening component
     #
     happening.happening_permission_manager:
@@ -2506,6 +2515,14 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
+
+    query.sheet.multiple.multiple_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQuery }
 
     #
     # Program query

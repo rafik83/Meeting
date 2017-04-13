@@ -8,15 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet\Group;
+namespace Proximum\Vimeet\Application\Query\Sheet\Multiple;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\View\Sheet\Group\GroupView;
-use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
+use Proximum\Vimeet\Application\View\Sheet\Multiple\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class GroupViewQueryHandler
+class MultipleViewQueryHandler
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -35,13 +34,13 @@ class GroupViewQueryHandler
     }
 
     /**
-     * @param MultipleViewQuery $groupViewQuery
+     * @param MultipleViewQuery $multipleViewQuery
      *
-     * @return GroupView
+     * @return SheetView[]
      */
-    public function handle(MultipleViewQuery $groupViewQuery)
+    public function handle(MultipleViewQuery $multipleViewQuery)
     {
-        $sheets = $this->sheetRepository->getByGroup($groupViewQuery->group);
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($multipleViewQuery->user, $multipleViewQuery->event);
 
         $sheetViews = array_map(function (Sheet $sheet) {
             return new SheetView($sheet->getId(), $this->sheetInfoGuesser->guessSheetTitle($sheet));
@@ -51,6 +50,6 @@ class GroupViewQueryHandler
             return strcasecmp($one->title, $other->title);
         });
 
-        return new GroupView($groupViewQuery->group->getId(), $groupViewQuery->group->getTitle(), $sheetViews);
+        return $sheetViews;
     }
 }

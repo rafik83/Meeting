@@ -7,6 +7,11 @@ event:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Home:index }
 
+event_select_sheet:
+    path: /select-sheet
+    methods:  [GET]
+    defaults: { _controller: EventBundle:MultipleSheets/Home:selectSheet }
+
 #
 # Register
 #
