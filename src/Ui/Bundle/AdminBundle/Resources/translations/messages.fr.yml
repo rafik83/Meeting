@@ -547,8 +547,6 @@ admin.sheet.batch.selection.label: "Les <strong>%sheets%</strong> fiches de cett
 admin.sheet.batch.selectionAll.label: "Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres."
 admin.sheet.batch.cancelSelection.label: "Annuler la sélection complète"
 admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
-admin.sheet.registeredAt.all: 'Peu importe'
-admin.schedule.title: Agenda
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
