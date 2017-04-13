@@ -113,6 +113,8 @@ class JobQueueAdapter implements JobQueueInterface
             $lockMeetingRequest,
             $solutionType
         ]);
+
+        $this->setJob($job);
     }
 
     /**

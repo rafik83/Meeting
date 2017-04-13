@@ -1271,7 +1271,7 @@ admin_planner_export_file:
         event: \d+
         file: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Order/Export:exportFile }
+    defaults: { _controller: AdminBundle:Planner/Export:exportFile }
 
 #
 # Invoice
