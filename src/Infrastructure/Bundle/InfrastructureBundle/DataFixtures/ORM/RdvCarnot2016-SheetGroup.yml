@@ -56,7 +56,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_exposant'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d: { text: { fr: "Institut Carnot Fiche 1" } }
                 # Lien
                 90713a3d: { url: "<url()>" }
                 # Description d'activité
@@ -81,7 +81,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_institute_carnot'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d: { text: { fr: "Institut Carnot Fiche 2" } }
                 # Lien
                 90713a3d: { url: "<url()>" }
                 # Description d'activité
@@ -91,6 +91,31 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@rdv_carnot_group'
         registrationData:
             3ad4b72f: { text: 'Institut Carnot Fiche 2' }
+            93de093f: { text: "<address()>" }
+            de66af5d: { text: "<postCode()>" }
+            d224f0e7: { text: "<city()>" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "<sentence()>" }
+        lastLoginAt: <dateTime()>
+        inCatalog: true
+
+    rdv_carnot_group_sheet_3:
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_institute_carnot'
+            -
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "Institut Carnot Fiche 3" } }
+                # Lien
+                90713a3d: { url: "<url()>" }
+                # Description d'activité
+                d691d21c: { text: { fr: "<sentence()>" } }
+            - '@rdv_carnot_group_user_manager' # case Sheet owner is a Group manager
+            - <dateTime()>
+            - '@rdv_carnot_group'
+        registrationData:
+            3ad4b72f: { text: 'Institut Carnot Fiche 3' }
             93de093f: { text: "<address()>" }
             de66af5d: { text: "<postCode()>" }
             d224f0e7: { text: "<city()>" }
@@ -118,6 +143,18 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@rdv_carnot_group_sheet_2_owner_user'
         sheet: '@rdv_carnot_group_sheet_2'
+        active: true
+        data:
+            541f84d4: { text: <firstNameMale()> }
+            838197c7: { text: <lastName()> }
+            1efb9cbb: { telephone: <e164PhoneNumber()> }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: <e164PhoneNumber()> }
+            6c4a3a4f: { items: ["position2"] }
+    rdv_carnot_group_sheet_3_participant_1:
+        __construct: false
+        user: '@rdv_carnot_group_user_manager' # case a participant is a Group manager
+        sheet: '@rdv_carnot_group_sheet_3'
         active: true
         data:
             541f84d4: { text: <firstNameMale()> }

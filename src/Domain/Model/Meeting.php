@@ -336,6 +336,22 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * Set the blockedSpot to true
+     */
+    public function blockSpot()
+    {
+        $this->blockedSpot = true;
+    }
+
+    /**
+     * Set the blockedSlot to true
+     */
+    public function blockSlot()
+    {
+        $this->blockedSlot = true;
+    }
+
+    /**
      * @return boolean
      */
     public function isBlockedSlot()

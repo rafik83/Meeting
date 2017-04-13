@@ -4,20 +4,14 @@ Feature: See the dashboard of an event
 
   Scenario: See dashboard of event
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
-    When I go to this page "/admin/en/event"
-    And I follow "admin.dashboard.link"
-    Then the response status code should be 200
-    And I should see "admin.event.dashboard.title"
-    And I should see "admin.sheet.dashboard.totalOrders"
-    And I should see "admin.sheet.dashboard.totalPaid"
-    And I should see "admin.sheet.dashboard.totalRemainingToPay"
+    And the event "Best of web" is created
+    And there is an order with the amount of 123 and VAT is applicable
+    And there is an order with the amount of 200 and VAT is not applicable
+    And I am logged as admin
+    When I go to this page "/admin/fr/event/1/dashboard"
+    Then I should see "admin.event.dashboard.title"
+    And I should see "347,60 €" in the ".dashboard-total-orders" element
+    And I should see "0,00 €" in the ".dashboard-total-paid" element
+    And I should see "347,60 €" in the ".dashboard-total-remaining-to-pay" element
     And I should see "admin.sheet.dashboard.totalSheet"
     And I should see "admin.sheet.dashboard.totalParticipants"
-

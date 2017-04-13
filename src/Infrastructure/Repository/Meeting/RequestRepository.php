@@ -369,8 +369,6 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('approved', Request::STATE_APPROVED);
 
-        // avoid returning requests already transformed into meeting?
-
         return $queryBuilder->getQuery()->getResult();
     }
 

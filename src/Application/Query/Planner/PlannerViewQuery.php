@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 
 class PlannerViewQuery
 {
@@ -25,12 +26,22 @@ class PlannerViewQuery
     public $locale;
 
     /**
+     * @var string one of SolutionType constants
+     */
+    public $exportSolutionType;
+
+    /**
      * @param Event  $event
      * @param string $locale
+     * @param string $exportSolutionType
      */
-    public function __construct(Event $event, $locale)
-    {
-        $this->event  = $event;
-        $this->locale = $event->getAvailableLocale($locale);
+    public function __construct(
+        Event $event,
+        $locale,
+        $exportSolutionType = ExportSolutionType::SOLUTION_OPTIMIZE_MOVING
+    ) {
+        $this->event              = $event;
+        $this->locale             = $event->getAvailableLocale($locale);
+        $this->exportSolutionType = $exportSolutionType;
     }
 }

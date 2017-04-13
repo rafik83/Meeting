@@ -51,6 +51,22 @@ class RegistrationTemplateRepository implements RegistrationTemplateRepositoryIn
     /**
      * {@inheritdoc}
      */
+    public function findById($id)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(RegistrationTemplate::class, 'template')
+            ->where('template.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAllOrganizersTemplates()
     {
         $queryBuilder = $this

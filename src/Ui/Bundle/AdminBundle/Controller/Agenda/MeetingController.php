@@ -56,7 +56,7 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
-        $isVisio = $this->checkVisio($meeting->getRequest());
+        $isVisio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
 
         $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_spot_view_query_handler')->handle(
             new MeetingUpdateSpotViewQuery($meeting, $isVisio)
@@ -82,24 +82,23 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.error');
         }
 
+        $isVisio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
         $spot = $this->get('vimeet_infrastructure.repository.spot_repository')->find(
             $event,
             (int) $data->spotId,
-            $this->checkVisio($meeting->getRequest()) // find visio spot if meeting visio
+            $isVisio // find visio spot if meeting visio
         );
 
         if (null === $spot) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.selectedSpotNotExists');
         }
 
-        $visio = $this->checkVisio($meeting->getRequest());
-
         $updateSpot = new UpdateSpot(
             $meeting,
             $spot,
             $data->blockedSlot,
             $data->blockedSpot,
-            $visio
+            $isVisio
         );
 
         try {
@@ -158,7 +157,7 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.selectedSlotNotExists');
         }
 
-        $visio = $this->checkVisio($meeting->getRequest());
+        $visio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
 
         $updateSlot = new UpdateSlot($meeting, $slot, $visio);
 

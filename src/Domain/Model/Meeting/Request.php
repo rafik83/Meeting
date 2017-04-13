@@ -25,6 +25,9 @@ class Request implements MessageSubjectInterface
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
 
+    const TYPE_REQUEST     = 'request';
+    const TYPE_PROPOSITION = 'proposition';
+
     /**
      * @var int
      */
@@ -623,5 +626,23 @@ class Request implements MessageSubjectInterface
     public function setDisabled($disabled)
     {
         $this->disabled = $disabled;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return null|string
+     */
+    public function getTypeOfRequest(Sheet $sheet)
+    {
+        if ($this->isSender($sheet)) {
+            return self::TYPE_REQUEST;
+        }
+
+        if ($this->isReceiver($sheet)) {
+            return self::TYPE_PROPOSITION;
+        }
+
+        return null;
     }
 }

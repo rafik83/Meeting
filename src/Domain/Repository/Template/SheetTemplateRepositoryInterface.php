@@ -21,6 +21,13 @@ interface SheetTemplateRepositoryInterface
     public function all();
 
     /**
+     * @param int $id
+     *
+     * @return null|SheetTemplate
+     */
+    public function findById($id);
+
+    /**
      * @param array $events
      *
      * @return SheetTemplate[]

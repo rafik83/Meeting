@@ -29,22 +29,29 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
         $user = UserFactory::create();
-        $group = new Group($event, $user, 'My entity', $datetime);
 
-        $reflection = new \ReflectionClass(Sheet::class);
-        $property = $reflection->getProperty('id');
-        $property->setAccessible(true);
+        $reflectionGroup = new \ReflectionClass(Group::class);
+        $propertyGroupId = $reflectionGroup->getProperty('id');
+        $propertyGroupId->setAccessible(true);
+
+        $group = new Group($event, $user, 'My entity', $datetime);
+        $propertyGroupId->setValue($group, 1);
+
+        $reflectionSheet = new \ReflectionClass(Sheet::class);
+        $propertySheetId = $reflectionSheet->getProperty('id');
+        $propertySheetId->setAccessible(true);
 
         $sheet1 = SheetFactory::create($event);
-        $property->setValue($sheet1, 1);
+        $propertySheetId->setValue($sheet1, 1);
 
         $sheet2 = SheetFactory::create($event);
-        $property->setValue($sheet2, 2);
+        $propertySheetId->setValue($sheet2, 2);
 
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
         $expectedGroupView = new GroupView(
+            1,
             'My entity',
             [
                 new SheetView(1, 'Sheet title 1'),
