@@ -109,6 +109,7 @@ class SheetListViewQueryHandler
                 $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
                 $sheetIndicatorsView,
+                null !== $follower,
                 null !== $follower ? $follower->getFirstname() : null,
                 null !== $follower ? $follower->getLastname() : null,
                 $this->router->generate(

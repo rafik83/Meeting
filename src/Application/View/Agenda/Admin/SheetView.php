@@ -134,11 +134,17 @@ class SheetView
     public $hasNotEnoughAvailableSlot;
 
     /**
+     * @var bool
+     */
+    public $hasFollower;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
      * @param int                 $countParticipant
      * @param SheetIndicatorsView $sheetIndicatorsView
+     * @param bool                $hasFollower
      * @param string              $followerFirstName
      * @param string              $followerLastName
      * @param string              $url
@@ -149,6 +155,7 @@ class SheetView
         $type,
         $countParticipant,
         SheetIndicatorsView $sheetIndicatorsView,
+        $hasFollower,
         $followerFirstName,
         $followerLastName,
         $url
@@ -164,6 +171,7 @@ class SheetView
         $this->countPlacedMeetings      = $sheetIndicatorsView->countPlacedMeetings;
         $this->usableSlots              = $sheetIndicatorsView->usableSlots;
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
+        $this->hasFollower              = $hasFollower;
         $this->followerFirstName        = $followerFirstName;
         $this->followerLastName         = $followerLastName;
         $this->url                      = $url;
