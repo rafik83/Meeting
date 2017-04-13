@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet\Group;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Query\Sheet\Group\MultipleViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Group\MultipleViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Group\GroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -64,8 +64,8 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser->guessSheetTitle($sheet1)->shouldBeCalled()->willReturn('Sheet title 1');
         $sheetInfoGuesser->guessSheetTitle($sheet2)->shouldBeCalled()->willReturn('Sheet title 2');
 
-        $handler = new MultipleViewQueryHandler($sheetRepository->reveal(), $sheetInfoGuesser->reveal());
-        $groupView = $handler->handle(new MultipleViewQuery($group));
+        $handler = new GroupViewQueryHandler($sheetRepository->reveal(), $sheetInfoGuesser->reveal());
+        $groupView = $handler->handle(new GroupViewQuery($group));
 
         $this->assertEquals($expectedGroupView, $groupView);
     }

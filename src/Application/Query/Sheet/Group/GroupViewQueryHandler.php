@@ -35,11 +35,11 @@ class GroupViewQueryHandler
     }
 
     /**
-     * @param MultipleViewQuery $groupViewQuery
+     * @param GroupViewQuery $groupViewQuery
      *
      * @return GroupView
      */
-    public function handle(MultipleViewQuery $groupViewQuery)
+    public function handle(GroupViewQuery $groupViewQuery)
     {
         $sheets = $this->sheetRepository->getByGroup($groupViewQuery->group);
 

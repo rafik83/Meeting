@@ -39,15 +39,16 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $datetime->modify('-1 month')
         );
 
-        $type  = new Type($event);
-        $user  = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet = new Sheet($event, $type, [], $user, $datetime);
-        $sheet->setInCatalog(true);
+        $user = new User('email@email.com', 'salt', 'password', 'fr');
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->isInCatalog()->shouldBeCalled()->willReturn(true);
+        $sheet->getId()->shouldBeCalled()->willReturn(1);
 
         $locale = 'fr';
         $route  = 'event_catalog_index';
 
-        $query = new CatalogSubmenuViewQuery($user, $event, $locale, $sheet, $route);
+        $query = new CatalogSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
 
         // Expected
         $expectedSubmenuButtonViews = [
@@ -68,10 +69,10 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
-        $navigationBuilder->getRoute('event_catalog_index')->shouldBeCalled()
+        $navigationBuilder->getRoute('event_catalog_index', ["sheet" => 1])->shouldBeCalled()
             ->willReturn('navigation.category.catalog.link');
 
-        $navigationBuilder->getRoute('event_meeting_list_request', ['sheet' => null])->shouldBeCalled()
+        $navigationBuilder->getRoute('event_meeting_list_request', ['sheet' => 1])->shouldBeCalled()
             ->willReturn('navigation.category.meeting.link');
 
         $handler         = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime);
@@ -86,14 +87,16 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $package  = new Package($event, 'package', $datetime);
         $type->setPackage($package);
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->shouldBeCalled()->willReturn(2);
 
         $locale = 'fr';
         $route  = 'event_catalog_index';
 
-        $query = new SheetSubmenuViewQuery($user, $event, $locale, $sheet, $route);
+        $query = new SheetSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
 
         // Expected
         $expectedSubmenuButtonViews = [
@@ -108,7 +111,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
-        $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
+        $navigationBuilder->getRoute('event_sheet_default', ["sheet" => 2])->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
         $handler = new SheetSubmenuViewQueryHandler($navigationBuilder->reveal());
