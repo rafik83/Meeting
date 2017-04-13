@@ -14,6 +14,8 @@
                     'meetingRequest': meetingRequest,
                     'isMeetingPublished': isMeetingPublished|default(false),
                     'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                    'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                    'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
                 }, false) }}
             {% else %}
                 {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
@@ -55,6 +57,8 @@
                 'meetingRequest' : meetingRequest|default(false),
                 'isMeetingPublished': isMeetingPublished|default(false),
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
             }, false) }}
         {% endfor %}
     </div>
