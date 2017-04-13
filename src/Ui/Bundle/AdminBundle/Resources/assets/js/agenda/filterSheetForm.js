@@ -15,21 +15,19 @@ module.exports = {
 
             return types;
         },
-        followers: function () {
-            var followers = [];
+        sheetsWithFollower: function() {
             var sheets = this.sheets;
 
-            sheets.filter(function(sheet) {
+            sheets = sheets.filter(function(sheet) {
                 return sheet.hasFollower;
             });
 
-            sheets.sort(function(a, b){
-                if (a.followerLastName < b.followerLastName) return -1;
-                if (a.followerLastName > b.followerLastName) return 1;
-                return 0;
-            });
+            return sheets;
+        },
+        followers: function () {
+            var followers = [];
 
-            sheets.forEach(function (sheet) {
+            this.sortSheetsByLastname(this.sheetsWithFollower).forEach(function (sheet) {
                 var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
 
                 if (followers.indexOf(follower) === - 1) {
@@ -38,6 +36,15 @@ module.exports = {
             });
 
             return followers;
+        }
+    },
+    methods: {
+        sortSheetsByLastname: function(sheets) {
+            return sheets.sort(function(a, b){
+                if (a.followerLastName < b.followerLastName) return -1;
+                if (a.followerLastName > b.followerLastName) return 1;
+                return 0;
+            });
         }
     }
 };

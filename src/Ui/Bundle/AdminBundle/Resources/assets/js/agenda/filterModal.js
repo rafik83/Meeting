@@ -38,7 +38,7 @@ module.exports = {
 
             var filteredSheet = this.sheets;
 
-            /**
+            /*
              * Filter on types
              */
             if (this.filters.selectedTypes.length > 0) {
@@ -47,7 +47,7 @@ module.exports = {
                 }.bind(this));
             }
 
-            /**
+            /*
              * Filter on followers (selected / unassigned)
              */
             if (this.filters.selectedFollowers.length > 0) {
@@ -63,7 +63,7 @@ module.exports = {
                 }.bind(this));
             }
 
-            /**
+            /*
              * Filter on indicators
              */
             if (this.hasIndicatorFilter) {
