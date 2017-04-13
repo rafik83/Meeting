@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -40,7 +40,7 @@ class NavigationController extends Controller
     ) {
         $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
-        dump($request);
+
         $requestStack    = $this->get('request_stack');
         $route           = $requestStack->getMasterRequest()->get('_route');
         $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
@@ -62,11 +62,11 @@ class NavigationController extends Controller
 
         if (null !== $user && false === $registration) {
             $menuView = $this->get('tactician.commandbus.query')->handle(
-                new MenuViewQuery($event, $user, $locale)
+                new MenuViewQuery($event, $sheet, $user, $locale)
             );
 
             $submenuView = $this->get('tactician.commandbus.query')->handle(
-                new SubmenuViewQuery($event, $user, $locale, $route)
+                new SubmenuViewQuery($event, $sheet, $user, $locale, $route)
             );
         }
 

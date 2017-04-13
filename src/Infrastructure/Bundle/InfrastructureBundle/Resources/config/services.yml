@@ -2765,7 +2765,6 @@ services:
     query.navigation.menu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\MenuViewQueryHandler
         arguments:
-            - '@sheet.sheet_guesser'
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
@@ -2779,7 +2778,6 @@ services:
     query.navigation.submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
         arguments:
-            - '@sheet.sheet_guesser'
             - '@query.navigation.sheet_submenu_view_query_handler'
             - '@query.navigation.catalog_submenu_view_query_handler'
             - '@query.navigation.agenda_submenu_view_query_handler'

@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class SubmenuViewQuery
@@ -21,7 +22,12 @@ class SubmenuViewQuery
     public $event;
 
     /**
-     * @var User
+     * @var null|Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var null|User
      */
     public $user;
 
@@ -36,18 +42,18 @@ class SubmenuViewQuery
     public $route;
 
     /**
-     * SubmenuViewQuery constructor.
-     *
-     * @param Event  $event
-     * @param User   $user
-     * @param string $locale
-     * @param string $route
+     * @param Event      $event
+     * @param Sheet|null $sheet
+     * @param User       $user
+     * @param string     $locale
+     * @param string     $route
      */
-    public function __construct(Event $event, User $user, $locale, $route)
+    public function __construct(Event $event, Sheet $sheet = null, User $user = null, $locale, $route)
     {
         $this->event  = $event;
+        $this->sheet  = $sheet;
         $this->user   = $user;
         $this->locale = $locale;
-        $this->route = $route;
+        $this->route  = $route;
     }
 }
