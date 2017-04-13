@@ -29,7 +29,7 @@ class SheetView
     {
         $this->sheetId = $sheetId;
         $this->sheetTitle = $sheetTitle;
-        $this->requests = [];
+        $this->requestViews = [];
     }
 
     /**
@@ -37,7 +37,7 @@ class SheetView
      */
     public function addRequest(RequestView $requestView)
     {
-        $this->requests[] = $requestView;
+        $this->requestViews[] = $requestView;
     }
 
     /**
@@ -45,6 +45,6 @@ class SheetView
      */
     public function numberOfRequest()
     {
-        return count($this->requests);
+        return count($this->requestViews);
     }
 }
