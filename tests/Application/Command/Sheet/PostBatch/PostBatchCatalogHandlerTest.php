@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
+use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalogHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
@@ -53,7 +54,7 @@ class PostBatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
             Argument::type(SheetCatalogEvent::class)
         )->shouldBeCalledTimes(3);
 
-        $query   = new PostBatchCatalog([$sheet1, $sheet2, $sheet3], $admin, true);
+        $query   = new PostBatchCatalog([$sheet1, $sheet2, $sheet3], $admin, BatchCatalogHandler::ADD_CATALOG);
         $handler = new PostBatchCatalogHandler(
             $eventDispatcher->reveal(),
             $enableDisableManager->reveal(),
@@ -95,7 +96,7 @@ class PostBatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
             Argument::type(SheetCatalogEvent::class)
         )->shouldNotBeCalled();
 
-        $query   = new PostBatchCatalog([$sheet1, $sheet2, $sheet3], $admin, false);
+        $query   = new PostBatchCatalog([$sheet1, $sheet2, $sheet3], $admin, BatchCatalogHandler::REMOVE_CATALOG);
         $handler = new PostBatchCatalogHandler(
             $eventDispatcher->reveal(),
             $enableDisableManager->reveal(),

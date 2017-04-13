@@ -19,6 +19,9 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchEnableDisableHandler
 {
+    const STATE_ENABLE  = 'enable';
+    const STATE_DISABLE = 'disable';
+
     /**
      * @var SheetRepositoryInterface
      */
@@ -117,7 +120,7 @@ class BatchEnableDisableHandler
             $this->batchJobQueue->createJob(
                 $batchEnableDisable->ids,
                 $batchEnableDisable->admin,
-                ['state' => $batchEnableDisable->state]
+                ['state' => $batchEnableDisable->state ? self::STATE_ENABLE : self::STATE_DISABLE]
             );
         }
 

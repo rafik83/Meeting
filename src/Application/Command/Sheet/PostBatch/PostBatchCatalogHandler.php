@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
+use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
@@ -63,21 +64,25 @@ class PostBatchCatalogHandler
      */
     public function handle(PostBatchCatalog $command)
     {
+        $state = $command->state === BatchCatalogHandler::ADD_CATALOG;
+
         $this->sheetIndexer->updateSheets($command->sheets);
 
         foreach ($command->sheets as $sheet) {
-
-            $this->enableDisableManager->update($sheet, $command->state);
+            $this->enableDisableManager->update(
+                $sheet,
+                $state
+            );
 
             // trace state in catalog change only
-            if ($sheet->isInCatalog() !== $command->state) {
+            if ($sheet->isInCatalog() !== $state) {
                 $this->eventDispatcher->dispatch(
                     Events::SHEET_CATALOG,
                     new SheetCatalogEvent(
                         $sheet,
                         $command->admin,
                         $this->datetime,
-                        $command->state
+                        $state
                     )
                 );
             }

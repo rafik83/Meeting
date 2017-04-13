@@ -68,7 +68,7 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->updateInCatalogBySheetsId([1,2,3], true)->shouldBeCalled();
 
-        $batchJobQueue->createJob([1, 2 ,3], $admin, ['state' => true])->shouldBeCalled();
+        $batchJobQueue->createJob([1, 2 ,3], $admin, ['state' => BatchCatalogHandler::ADD_CATALOG])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1, 2, 3], true, $admin);
@@ -146,7 +146,7 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->updateInCatalogBySheetsId([1 => 1, 3 => 3], false)->shouldBeCalled();
 
-        $batchJobQueue->createJob([1 => 1, 3 => 3], $admin, ['state' => false])->shouldBeCalled();
+        $batchJobQueue->createJob([1 => 1, 3 => 3], $admin, ['state' => BatchCatalogHandler::REMOVE_CATALOG])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1 => 1, 2 => 2, 3 => 3], false, $admin);
@@ -207,7 +207,7 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->updateInCatalogBySheetsId([2 => 2], true)->shouldBeCalled();
 
-        $batchJobQueue->createJob([2 => 2], $admin, ['state' => true])->shouldBeCalled();
+        $batchJobQueue->createJob([2 => 2], $admin, ['state' => BatchCatalogHandler::ADD_CATALOG])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1 => 1, 2 => 2], true, $admin);

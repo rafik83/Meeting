@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
@@ -73,19 +74,21 @@ class PostBatchEnableDisableHandler
      */
     public function handle(PostBatchEnableDisable $command)
     {
+        $state = $command->state === BatchEnableDisableHandler::STATE_ENABLE;
+
         $this->sheetIndexer->updateSheets($command->sheets);
 
         // remove sheet from catalog if sheet is disable
-        if ($command->state === false) {
+        if ($command->state === BatchEnableDisableHandler::STATE_DISABLE) {
             $this->batchCatalogHandler->handle(new BatchCatalog(
                 $command->ids,
-                $command->state,
+                false,
                 $command->admin
             ));
         }
 
         foreach ($command->sheets as $sheet) {
-            $this->enableDisableManager->update($sheet, $command->state);
+            $this->enableDisableManager->update($sheet, $state);
 
             $this->eventDispatcher->dispatch(
                 Events::SHEET_ENABLE_DISABLE,
@@ -93,7 +96,7 @@ class PostBatchEnableDisableHandler
                     $sheet,
                     $command->admin,
                     $this->dateTime,
-                    $command->state
+                    $state
                 )
             );
         }

@@ -14,6 +14,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisable;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
@@ -42,6 +43,7 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $batchCatalogHandler
             ->handle(Argument::type(BatchCatalog::class))
@@ -56,7 +58,7 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             Argument::type(SheetEnableDisableEvent::class)
         )->shouldBeCalledTimes(3);
 
-        $query   = new PostBatchEnableDisable([$sheet1, $sheet2, $sheet3], [1, 2, 3], $admin, true);
+        $query   = new PostBatchEnableDisable([$sheet1, $sheet2, $sheet3], [1, 2, 3], $admin, BatchEnableDisableHandler::STATE_ENABLE);
         $handler = new PostBatchEnableDisableHandler(
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
@@ -83,6 +85,8 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
+
         $batchCatalogHandler
             ->handle(Argument::type(BatchCatalog::class))
             ->shouldBeCalled();
@@ -96,7 +100,7 @@ class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             Argument::type(SheetEnableDisableEvent::class)
         )->shouldBeCalledTimes(3);
 
-        $query   = new PostBatchEnableDisable([$sheet1, $sheet2, $sheet3], [1, 2, 3], $admin, false);
+        $query   = new PostBatchEnableDisable([$sheet1, $sheet2, $sheet3], [1, 2, 3], $admin, BatchEnableDisableHandler::STATE_DISABLE);
         $handler = new PostBatchEnableDisableHandler(
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),

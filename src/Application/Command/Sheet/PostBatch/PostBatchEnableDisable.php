@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchEnableDisableCommand;
 
 class PostBatchEnableDisable
 {
@@ -31,7 +33,10 @@ class PostBatchEnableDisable
     public $ids;
 
     /**
-     * @var bool
+     * @var string
+     *
+     * @see BatchEnableDisableHandler::STATE_ENABLE
+     * @see BatchEnableDisableHandler::STATE_DISABLE
      */
     public $state;
 

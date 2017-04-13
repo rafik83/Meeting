@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
-use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -20,6 +19,9 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchCatalogHandler
 {
+    const ADD_CATALOG    = 'add';
+    const REMOVE_CATALOG = 'remove';
+
     /**
      * @var SheetRepositoryInterface
      */
@@ -126,7 +128,7 @@ class BatchCatalogHandler
 
         if (!empty($command->ids)) {
             $this->batchJobQueue->createJob($command->ids, $command->admin, [
-                'state' => $command->state,
+                'state' => $command->state ? self::ADD_CATALOG : self::REMOVE_CATALOG,
             ]);
         }
 

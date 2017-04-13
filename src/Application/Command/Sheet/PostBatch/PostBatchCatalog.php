@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -26,7 +27,10 @@ class PostBatchCatalog
     public $admin;
 
     /**
-     * @var bool
+     * @var string
+     *
+     * @see BatchCatalogHandler::ADD_CATALOG
+     * @see BatchCatalogHandler::REMOVE_CATALOG
      */
     public $state;
 
@@ -35,7 +39,7 @@ class PostBatchCatalog
      *
      * @param Sheet[] $sheets
      * @param Admin   $admin
-     * @param bool    $state
+     * @param string  $state
      */
     public function __construct(array $sheets, Admin $admin, $state)
     {
