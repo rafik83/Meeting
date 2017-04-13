@@ -24,8 +24,8 @@ module.exports = {
             });
 
             sheets.sort(function(a, b){
-                if(a.followerLastName < b.followerLastName) return -1;
-                if(a.followerLastName > b.followerLastName) return 1;
+                if (a.followerLastName < b.followerLastName) return -1;
+                if (a.followerLastName > b.followerLastName) return 1;
                 return 0;
             });
 
