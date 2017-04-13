@@ -68,6 +68,17 @@
                     <input name="selectedTypes" type="checkbox" v-model:value="filters.hasNotEnoughAvailableSlot" v-bind:value="true">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="selectedFollower">
+                    {{ 'admin.agenda.filters.follower.label'|trans }}
+                </label>
+                <div class="checkbox" v-for="follower in followers">
+                    <label>
+                        <input name="selectedFollower" type="checkbox" v-model:value="filters.selectedFollowers" v-bind:value="follower">
+                        ${ follower }
+                    </label>
+                </div>
+            </div>
         </form>
     </div>
 </div>
