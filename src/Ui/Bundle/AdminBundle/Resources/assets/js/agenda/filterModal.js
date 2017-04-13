@@ -13,15 +13,17 @@ module.exports = {
             filteredSheets: [],
             formFilters: {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             },
             filters: {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             }
         }
     },
@@ -44,11 +46,6 @@ module.exports = {
                 filteredSheet = filteredSheet.filter(function (sheet) {
                     var filterMatching = false;
 
-                    if (this.filters.hasNotSentMeetingRequest === true
-                        && sheet.hasNotSentMeetingRequest === this.filters.hasNotSentMeetingRequest) {
-                        filterMatching = true;
-                    }
-
                     if (this.filters.hasMeetingToApprove === true
                         && sheet.hasMeetingToApprove === this.filters.hasMeetingToApprove) {
                         filterMatching = true;
@@ -56,6 +53,24 @@ module.exports = {
 
                     if (this.filters.hasNotEnoughAvailableSlot === true
                         && sheet.hasNotEnoughAvailableSlot === this.filters.hasNotEnoughAvailableSlot) {
+                        filterMatching = true;
+                    }
+
+                    if (this.filters.hasSentMeetingRequest === true
+                        && sheet.hasNotSentMeetingRequest !== this.filters.hasSentMeetingRequest) {
+                        filterMatching = true;
+                    }
+
+                    if (this.filters.hasSentMeetingRequest === false
+                        && sheet.hasNotSentMeetingRequest !== this.filters.hasSentMeetingRequest) {
+                        filterMatching = true;
+                    }
+
+                    if (this.filters.hasScheduledMeetings === true && (sheet.countPlacedMeetings > 0)) {
+                        filterMatching = true;
+                    }
+
+                    if (this.filters.hasScheduledMeetings === false && sheet.countPlacedMeetings === 0) {
                         filterMatching = true;
                     }
 
@@ -70,15 +85,17 @@ module.exports = {
         reset: function () {
             this.filters = {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             };
             this.formFilters =  {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             }
         },
         setUsedFilter: function() {
@@ -90,9 +107,12 @@ module.exports = {
     },
     computed: {
         hasIndicatorFilter: function () {
-            return this.filters.hasNotSentMeetingRequest === true
-                || this.filters.hasMeetingToApprove === true
-                || this.filters.hasNotEnoughAvailableSlot === true;
+            return this.filters.hasMeetingToApprove === true
+                || this.filters.hasNotEnoughAvailableSlot === true
+                || this.filters.hasSentMeetingRequest === true
+                || this.filters.hasSentMeetingRequest === false
+                || this.filters.hasScheduledMeetings === true
+                || this.filters.hasScheduledMeetings === false
         }
     }
 };
