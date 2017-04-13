@@ -80,7 +80,7 @@ class EventListQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $eventListsView = $handler->handle($query);
 
         $this->assertEquals($expectedEventListsView, $eventListsView);
-        $this->assertCount(1, $eventListsView->currents);
-        $this->assertCount(1, $eventListsView->pasts);
+        $this->assertCount(1, $eventListsView->currentsEventListView);
+        $this->assertCount(1, $eventListsView->pastsEventListView);
     }
 }
