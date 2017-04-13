@@ -138,6 +138,7 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             null,
             $date,
             'fr',
+            $event->getTimeZone(),
             '',
             '',
             '',
