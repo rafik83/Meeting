@@ -151,20 +151,24 @@ event_sheet_default:
 event_sheet_locale:
     path:     /sheet/{sheet}/{locale}
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_form:
-    path:     /sheet/{locale}/{key}/form
+    path:     /sheet/{sheet}/{locale}/{key}/form
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:form }
+
 event_sheet_update:
-    path:     /sheet/{locale}/{key}
+    path:     /sheet/{sheet}/{locale}/{key}
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]

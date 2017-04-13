@@ -222,18 +222,15 @@ class SheetController extends Controller
      * Render the form of an object. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function formAction(EventDomain $eventDomain, $locale, $key)
+    public function formAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -286,7 +283,10 @@ class SheetController extends Controller
         }
 
         return $this->createForm($types[$object->getType()], $object, [
-            'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'action' => $this->generateUrl(
+                'event_sheet_update',
+                ['sheet' => $object->getSheet()->getId(), 'locale' => $locale, 'key' => $key]
+            ),
             'submit'      => true,
             'locale'      => $locale,
             'help'        => $object->getHelp(),
@@ -301,17 +301,15 @@ class SheetController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function updateAction(Request $request, EventDomain $eventDomain, $locale, $key)
+    public function updateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
