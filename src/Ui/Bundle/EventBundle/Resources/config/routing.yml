@@ -193,12 +193,22 @@ event_sheet_handle_participant:
     defaults: { _controller: EventBundle:SheetParticipant:handleAddParticipant }
 
 event_sheet_remove_participant:
-    path:   /sheet/{locale}/{key}/participant/remove/form
+    path:   /sheet/{sheet}/{locale}/{key}/participant/remove/form
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:SheetParticipant:removeParticipant }
+
+event_sheet_handle_remove_participant:
+    path: /sheet/{sheet}/{locale}/{key}/participant/remove
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
 
 event_sheet_remove_image:
     path: /sheet/{locale}/{key}/image/remove
@@ -207,14 +217,6 @@ event_sheet_remove_image:
         key: \w+
     methods: [DELETE]
     defaults: { _controller: EventBundle:Sheet:removeImage }
-
-event_sheet_handle_remove_participant:
-    path: /sheet/{locale}/{key}/participant/remove
-    requirements:
-        locale: '[a-z]{2}'
-        key: \w+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
 
 event_sheet_submit_validation:
     path: /sheet/{sheet}/validate

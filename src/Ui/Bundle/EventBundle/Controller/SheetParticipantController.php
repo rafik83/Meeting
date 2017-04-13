@@ -172,17 +172,18 @@ class SheetParticipantController extends Controller
      * Render the form to remove participant. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function removeParticipantAction(EventDomain $eventDomain, $locale, $key)
+    public function removeParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
-        list ($form, $sheet) = $this->removeParticipantData($eventDomain, $locale, $key);
-
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        list ($form) = $this->removeParticipantData($sheet, $locale, $key);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
@@ -219,11 +220,12 @@ class SheetParticipantController extends Controller
      * @return Response
      * @throws \Exception
      */
-    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
+    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
-        list ($form, $sheet, $remove) = $this->removeParticipantData($eventDomain, $locale, $key);
-
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        list ($form, $remove) = $this->removeParticipantData($sheet, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -282,32 +284,14 @@ class SheetParticipantController extends Controller
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return Sheet
-     */
-    private function getUserSheet(Event $event, $locale)
-    {
-        return $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
-    }
-
-    /**
-     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
-     * @throws \Exception
      * @return array
      */
-    private function removeParticipantData($eventDomain, $locale, $key)
+    private function removeParticipantData(Sheet $sheet, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
         }
@@ -316,14 +300,13 @@ class SheetParticipantController extends Controller
         $form   = $this->createForm(RemoveType::class, $remove, [
             'action' => $this->generateUrl(
                 'event_sheet_handle_remove_participant',
-                ['locale' => $locale, 'key' => $key]
+                ['sheet' => $sheet->getId(), 'locale' => $locale, 'key' => $key]
             ),
             'participants' => $sheet->getParticipants(),
         ]);
 
         return [
             $form,
-            $sheet,
             $remove,
         ];
     }
