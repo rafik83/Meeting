@@ -17,7 +17,7 @@ Feature: Unavailability
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/agenda"
     Then I should be on this page "/fr/agenda/participant/2"
     And I should see "agenda.title"
@@ -49,7 +49,7 @@ Feature: Unavailability
   Scenario: I can add comment to an unavailability
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/agenda"
     Then I should be on this page "/fr/agenda/participant/2"
     And I should see "agenda.title"

@@ -34,7 +34,7 @@ Feature: Edit an order
   Scenario: Check new custom row in pro forma
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.package.order_list"
     Then the response status code should be 200
     When I follow "order.list.pro_forma.link"
@@ -60,7 +60,7 @@ Feature: Edit an order
   Scenario: Check updated custom row in pro forma
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.package.order_list"
     Then the response status code should be 200
     When I follow "order.list.pro_forma.link"
@@ -78,7 +78,7 @@ Feature: Edit an order
   Scenario: Check removed custom row in pro forma
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.package.order_list"
     Then the response status code should be 200
     When I follow "order.list.pro_forma.link"

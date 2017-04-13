@@ -18,7 +18,7 @@ Feature: Agenda
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/agenda"
     Then I should be on this page "/fr/agenda/participant/2"
     And I should see "agenda.title"
@@ -35,7 +35,7 @@ Feature: Agenda
       | add_participant_email     | pascal.michelin2@example.net |
     And I should see "Participant supplémentaire"
     Then I press "sheet.participant.sendInvite"
-    And I should be on this page "/fr/sheet/fr"
+    And I should be on this page "/fr/sheet/2/fr"
     When I go to this page "/fr/agenda"
     Then I should be on this page "/fr/agenda/participant/2"
     And I should see "agenda.participant.view"

@@ -143,6 +143,8 @@ event_sheet:
 
 event_sheet_default:
     path:     /sheet/{sheet}
+    requirements:
+        sheet: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
