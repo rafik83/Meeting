@@ -481,6 +481,13 @@ event_package:
     defaults: { _controller: EventBundle:Package:redirect }
     methods: [GET]
 
+event_package_redirect_depending_on_context:
+    path: /sheet/{sheet}/package
+    requirements:
+        sheet: \d+
+    defaults: { _controller: EventBundle:Package:redirectDependingOnContext }
+    methods: [GET]
+
 event_package_step:
     path: /sheet/{sheet}/package/step/{step}
     defaults: { _controller: EventBundle:Package:step }

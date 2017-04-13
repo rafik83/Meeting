@@ -29,7 +29,6 @@ final class Route
     ];
 
     const PACKAGE = [
-        'event_package',
         'event_package_step',
         'event_package_add_participant',
         'event_package_remove_participant',

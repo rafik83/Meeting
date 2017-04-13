@@ -57,6 +57,24 @@ class PackageController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $sheet = $this->get('sheet.sheet_guesser')
+            ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
+
+        return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return RedirectResponse
+     */
+    public function redirectDependingOnContextAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         try {
             $sheet = $this->get('sheet.sheet_guesser')
                 ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
