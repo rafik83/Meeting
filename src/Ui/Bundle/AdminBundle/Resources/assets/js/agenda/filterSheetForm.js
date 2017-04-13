@@ -14,6 +14,30 @@ module.exports = {
             });
 
             return types;
+        },
+        followers: function () {
+            var followers = [];
+            var sheets = this.sheets;
+
+            sheets.filter(function(sheet) {
+                return !!sheet.followerLastName;
+            });
+
+            sheets.sort(function(a, b){
+                if(a.followerLastName < b.followerLastName) return -1;
+                if(a.followerLastName > b.followerLastName) return 1;
+                return 0;
+            });
+
+            sheets.forEach(function (sheet) {
+                var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
+
+                if (followers.indexOf(follower) === - 1) {
+                    followers.push(follower);
+                }
+            });
+
+            return followers;
         }
     }
 };

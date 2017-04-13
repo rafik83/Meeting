@@ -13,6 +13,7 @@ module.exports = {
             filteredSheets: [],
             formFilters: {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
@@ -20,6 +21,7 @@ module.exports = {
             },
             filters: {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
@@ -39,6 +41,14 @@ module.exports = {
             if (this.filters.selectedTypes.length > 0) {
                 filteredSheet = filteredSheet.filter(function (sheet) {
                     return this.filters.selectedTypes.indexOf(sheet.type) !== -1;
+                }.bind(this));
+            }
+
+            if (this.filters.selectedFollowers.length > 0) {
+                filteredSheet = filteredSheet.filter(function (sheet) {
+                    var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
+
+                    return this.filters.selectedFollowers.indexOf(follower) !== -1;
                 }.bind(this));
             }
 
@@ -85,6 +95,7 @@ module.exports = {
         reset: function () {
             this.filters = {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
