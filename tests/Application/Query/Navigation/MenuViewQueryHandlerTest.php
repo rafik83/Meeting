@@ -30,15 +30,14 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $user  = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
 
         // Mock
-        $sheetGuesser             = $this->prophesize(SheetGuesser::class);
         $categoryViewQueryHandler = $this->prophesize(CategoryViewQueryHandler::class);
-        $sheetGuesser->getUserSheet($user, $event, 'fr')->shouldBeCalled()->willThrow(new SheetNotFoundException());
 
         // Handler
-        $handler = new MenuViewQueryHandler($sheetGuesser->reveal(), $categoryViewQueryHandler->reveal());
-        $result = $handler->handle(new MenuViewQuery($event, $user, 'fr'));
+        $handler = new MenuViewQueryHandler($categoryViewQueryHandler->reveal());
+        $result = $handler->handle(new MenuViewQuery($event, $sheet, $user, 'fr'));
 
         $expected = new MenuView([]);
         $this->assertEquals($expected, $result);
@@ -52,9 +51,8 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = SheetFactory::create($event, $user);
 
         // Mock
-        $sheetGuesser             = $this->prophesize(SheetGuesser::class);
         $categoryViewQueryHandler = $this->prophesize(CategoryViewQueryHandler::class);
-        $sheetGuesser->getUserSheet($user, $event, 'fr')->shouldBeCalled()->willReturn($sheet);
+
         foreach (Category::$categories as $category) {
             $categoryViewQueryHandler
                 ->handle(new CategoryViewQuery($sheet, $user, $category, 'fr'))
@@ -63,8 +61,8 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         }
 
         // Handler
-        $handler = new MenuViewQueryHandler($sheetGuesser->reveal(), $categoryViewQueryHandler->reveal());
-        $result = $handler->handle(new MenuViewQuery($event, $user, 'fr'));
+        $handler = new MenuViewQueryHandler($categoryViewQueryHandler->reveal());
+        $result = $handler->handle(new MenuViewQuery($event, $sheet, $user, 'fr'));
 
         // Expected
         $categories = [];
