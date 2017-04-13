@@ -419,7 +419,7 @@ class MeetingRequestController extends Controller
             if ($isSubmitted && $form->isValid()) {
                 $this->get('tactician.commandbus')->handle($unRefuse);
 
-                // If the
+                // If the meeting request are still answerable
                 if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')->allowedToAccess($eventDomain->getEvent())) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
