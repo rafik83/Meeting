@@ -127,6 +127,13 @@ class SheetView
     public $hasNotEnoughAvailableSlot;
 
     /**
+     * "La fiche a des créneaux disponible"
+     *
+     * @var bool
+     */
+    public $hasAvailableSlot;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
@@ -161,5 +168,6 @@ class SheetView
         $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
         $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
         $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
+        $this->hasAvailableSlot          = $sheetIndicatorsView->hasAvailableSlot;
     }
 }
