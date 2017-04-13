@@ -62,7 +62,7 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->updateEnableStateBySheetsId([1, 2, 3], false)->shouldBeCalled();
 
-        $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => false])->shouldBeCalled();
+        $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => BatchEnableDisableHandler::STATE_DISABLE])->shouldBeCalled();
 
         // Command
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
