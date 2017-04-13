@@ -31,6 +31,7 @@ admin.agenda.export.omz: OMZ
 admin.agenda.export.participant_schedules.danger: 'Attention, si l''export est réalisé avant la date de publication des rendez-vous, les plannings ne comporteront pas les rendez-vous positionés'
 admin.agenda.export.participant_schedules.title: 'Export des participants et plannings'
 admin.agenda.export.title: 'Rendez-vous / Export'
+admin.agenda.filters.follower.label: 'Suivi commercial'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
