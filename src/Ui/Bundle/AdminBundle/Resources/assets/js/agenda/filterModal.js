@@ -38,20 +38,34 @@ module.exports = {
 
             var filteredSheet = this.sheets;
 
+            /**
+             * Filter on types
+             */
             if (this.filters.selectedTypes.length > 0) {
                 filteredSheet = filteredSheet.filter(function (sheet) {
                     return this.filters.selectedTypes.indexOf(sheet.type) !== -1;
                 }.bind(this));
             }
 
+            /**
+             * Filter on followers (selected / unassigned)
+             */
             if (this.filters.selectedFollowers.length > 0) {
                 filteredSheet = filteredSheet.filter(function (sheet) {
                     var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
 
                     return this.filters.selectedFollowers.indexOf(follower) !== -1;
                 }.bind(this));
+
+            } else if (null === this.filters.selectedFollowers) {
+                filteredSheet = filteredSheet.filter(function () {
+                    return !sheet.hasFollower;
+                }.bind(this));
             }
 
+            /**
+             * Filter on indicators
+             */
             if (this.hasIndicatorFilter) {
                 filteredSheet = filteredSheet.filter(function (sheet) {
                     var filterMatching = false;

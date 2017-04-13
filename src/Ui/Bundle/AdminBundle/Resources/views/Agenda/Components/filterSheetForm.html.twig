@@ -72,6 +72,12 @@
                 <label for="selectedFollower">
                     {{ 'admin.agenda.filters.follower.label'|trans }}
                 </label>
+                <div class="checkbox">
+                    <label>
+                        <input name="selectedFollower" type="checkbox" v-model:value="filters.selectedFollowers" v-bind:value="null">
+                        {{ 'admin.agenda.filters.follower.unassigned.label'|trans }}
+                    </label>
+                </div>
                 <div class="checkbox" v-for="follower in followers">
                     <label>
                         <input name="selectedFollower" type="checkbox" v-model:value="filters.selectedFollowers" v-bind:value="follower">

@@ -20,7 +20,7 @@ module.exports = {
             var sheets = this.sheets;
 
             sheets.filter(function(sheet) {
-                return !!sheet.followerLastName;
+                return sheet.hasFollower;
             });
 
             sheets.sort(function(a, b){

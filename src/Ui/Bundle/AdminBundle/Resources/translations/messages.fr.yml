@@ -32,6 +32,7 @@ admin.agenda.export.participant_schedules.danger: 'Attention, si l''export est r
 admin.agenda.export.participant_schedules.title: 'Export des participants et plannings'
 admin.agenda.export.title: 'Rendez-vous / Export'
 admin.agenda.filters.follower.label: 'Suivi commercial'
+admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
