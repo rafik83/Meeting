@@ -19,7 +19,7 @@ class SheetView
     public $sheetTitle;
 
     /** @var RequestView[] */
-    public $requests;
+    public $requestViews;
 
     /**
      * @param int    $sheetId

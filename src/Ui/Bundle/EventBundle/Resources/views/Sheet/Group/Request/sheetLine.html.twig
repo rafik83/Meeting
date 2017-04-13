@@ -2,7 +2,7 @@
     <td rowspan="{{ sheetView.numberOfRequest }}">
         {{ sheetView.sheetTitle }}
     </td>
-    {% for requestView in sheetView.requests %}
+    {% for requestView in sheetView.requestViews %}
         <td>
             {% if requestView.isProposition %}
                 <i class="icon-Suivant"></i>

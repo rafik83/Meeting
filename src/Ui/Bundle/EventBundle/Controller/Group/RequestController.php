@@ -37,7 +37,7 @@ class RequestController extends Controller
                     $sheetGroup,
                     $request->getLocale(),
                     $request->get('page', 1),
-                    50
+                    self::PAGINATE_REQUEST_LIMIT
                 )
             );
         } catch (NoResultException $exception) {

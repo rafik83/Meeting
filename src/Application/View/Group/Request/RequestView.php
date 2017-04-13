@@ -66,7 +66,7 @@ class RequestView
     /**
      * @return bool
      */
-    public function hasNoPrefrence()
+    public function hasNoPreference()
     {
         return empty($this->participants);
     }
