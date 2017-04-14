@@ -17,6 +17,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing\UpdateInfoType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,12 +34,6 @@ class BillingController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        if (!$sheet->hasUser($this->getUser()) || $sheet->getEvent() !== $eventDomain->getEvent()) {
-            throw $this->createNotFoundException(
-                sprintf('The current user %s is not part of this sheet %s', $this->getUser()->getId(), $sheet->getId())
-            );
-        }
 
         $info    = $this->get('repository.billing_info_repository')->getBySheet($sheet) ? : new BillingInfo($sheet);
         $country = $sheet->getEvent()->getCountry();
@@ -80,27 +75,32 @@ class BillingController extends Controller
         }
 
         return $this->render('EventBundle:Billing:info.html.twig', [
-            'event'  => $eventDomain->getEvent(),
-            'form'   => $form->createView(),
-            'view'   => ['funnel' => $funnel]
+            'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
+            'form'  => $form->createView(),
+            'view'  => ['funnel' => $funnel],
         ]);
     }
 
     /**
      * Route used in navigation menu to redirect into billing info form
      * and clean flash to prevent the funnel display
+     *
+     * @param Sheet $sheet
+     *
+     * @return RedirectResponse
      */
     public function infoClearFlashAction(Sheet $sheet)
     {
         $this->container->get('session')->getFlashBag()->set('package_funnel_billing_info', null);
-        return $this->redirectToRoute('event_billing_info', [
-            'sheet' => $sheet->getId(),
-            ]
-        );
+
+        return $this->redirectToRoute('event_billing_info', ['sheet' => $sheet->getId()]);
     }
 
     /**
-     * @return null|mixed
+     * @param string $flash
+     *
+     * @return mixed|null
      */
     private function getFlash($flash)
     {
