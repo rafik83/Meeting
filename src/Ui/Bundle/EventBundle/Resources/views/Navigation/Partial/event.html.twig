@@ -27,6 +27,15 @@
             </li>
         {% endif %}
 
+        {% if is_granted('ROLE_USER') and menuHeaderView.hasMultipleSheets %}
+            <li class="notifs">
+                <a href="{{ path('event_select_sheet') }}">
+                    <i class="icon-Document_1"></i>
+                    <span class="name">{{ 'navigation.links.returnToSelectSheet'|trans }}</span>
+                </a>
+            </li>
+        {% endif %}
+
         {% if menuHeaderView.event is defined %}
             {% for locale, path in menuHeaderView.localeRoutes %}
                 <li class="locale"><a href="{{ path }}">{{ locale }}</a></li>

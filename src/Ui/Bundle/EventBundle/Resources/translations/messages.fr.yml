@@ -144,6 +144,7 @@ navigation.links.planning.final_date: 'Publication le'
 navigation.links.planning.flash_presentation: 'Présentations flash'
 navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
+navigation.links.returnToSelectSheet: Mes fiches
 navigation.links.sheet.locale: Version
 navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'

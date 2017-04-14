@@ -2772,6 +2772,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\HeaderViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery }

@@ -36,19 +36,31 @@ class MenuHeaderView
     private $sheet;
 
     /**
+     * @var bool
+     */
+    private $multipleSheets;
+
+    /**
      * MenuHeaderView constructor.
      *
      * @param Event      $event
      * @param array      $localeRoutes
      * @param Sheet|null $sheet
      * @param bool       $notification
+     * @param bool       $multipleSheets
      */
-    public function __construct(Event $event, array $localeRoutes, Sheet $sheet = null, $notification = false)
-    {
-        $this->notification = $notification;
-        $this->event        = $event;
-        $this->localeRoutes = $localeRoutes;
-        $this->sheet        = $sheet;
+    public function __construct(
+        Event $event,
+        array $localeRoutes,
+        Sheet $sheet = null,
+        $notification = false,
+        $multipleSheets = false
+    ) {
+        $this->notification   = $notification;
+        $this->event          = $event;
+        $this->localeRoutes   = $localeRoutes;
+        $this->sheet          = $sheet;
+        $this->multipleSheets = $multipleSheets;
     }
 
     /**
@@ -89,5 +101,13 @@ class MenuHeaderView
     public function hasSheet()
     {
         return $this->sheet !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMultipleSheets()
+    {
+        return $this->multipleSheets;
     }
 }
