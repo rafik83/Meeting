@@ -17,9 +17,9 @@
         </td>
         <td>{{ requestView.sheetMetTitle }}</td>
         <td>
-            {% if requestView.participants is not empty %}
+            {% if requestView.participantViews is not empty %}
                 <ul>
-                    {% for participantView in requestView.participants %}
+                    {% for participantView in requestView.participantViews %}
                         <li>{{ participantView.completeName }}</li>
                     {% endfor %}
                 </ul>

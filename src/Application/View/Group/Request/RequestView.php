@@ -31,7 +31,7 @@ class RequestView
     public $type;
 
     /** @var ParticipantView[] */
-    public $participants;
+    public $participantViews;
 
     /** @var bool */
     public $planned;
@@ -42,7 +42,7 @@ class RequestView
      * @param string            $sheetMetTitle
      * @param string            $state
      * @param string            $type
-     * @param ParticipantView[] $participants
+     * @param ParticipantView[] $participantViews
      * @param bool              $planned
      */
     public function __construct(
@@ -51,16 +51,16 @@ class RequestView
         $sheetMetTitle,
         $state,
         $type,
-        array $participants,
+        array $participantViews,
         $planned = false
     ) {
-        $this->requestId     = $requestId;
-        $this->sheetMetId    = $sheetMetId;
-        $this->sheetMetTitle = $sheetMetTitle;
-        $this->state         = $state;
-        $this->type          = $type;
-        $this->participants  = $participants;
-        $this->planned       = $planned;
+        $this->requestId         = $requestId;
+        $this->sheetMetId        = $sheetMetId;
+        $this->sheetMetTitle     = $sheetMetTitle;
+        $this->state             = $state;
+        $this->type              = $type;
+        $this->participantViews  = $participantViews;
+        $this->planned           = $planned;
     }
 
     /**
@@ -68,7 +68,7 @@ class RequestView
      */
     public function hasNoPreference()
     {
-        return empty($this->participants);
+        return empty($this->participantViews);
     }
 
     /**
