@@ -55,7 +55,7 @@ class ParticipantController extends Controller
         $template        = $this->get('template.template_data_factory')->createRegistrationFromParticipant($participant, $locale);
         $profileTemplate = $template->getProfileObjects();
         $avatarTemplate  = $template->getAvatarObjects();
-        $companyTemplate = $template->getCompanyObjects();
+        $companyTemplate = $template->getEditableSheetDataExceptedImageObjects();
 
         $card  = $this->get('tactician.commandbus.query')->handle(
             new CardViewQuery(
@@ -124,7 +124,8 @@ class ParticipantController extends Controller
 
         return $this->render('EventBundle:Participant:updateProfile.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView()
+            'sheet' => $sheet,
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -201,6 +202,7 @@ class ParticipantController extends Controller
 
         return $this->render('EventBundle:Participant:updateAvatar.html.twig', [
             'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
             'card'  => $card,
             'form'  => $form->createView(),
             'key'   => $key,
@@ -221,10 +223,6 @@ class ParticipantController extends Controller
 
         $user   = $this->getUser();
         $locale = $request->getLocale();
-
-        if (!$sheet->hasUser($user)) {
-            throw $this->createAccessDeniedException('You are not allowed to update this participant');
-        }
 
         $participant = $sheet->getUserParticipant($user);
         $template    = $this->get('template.template_data_factory')->createCompanyTemplate($sheet, $locale);
@@ -253,7 +251,8 @@ class ParticipantController extends Controller
 
         return $this->render('EventBundle:Participant:updateCompany.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView()
+            'sheet' => $sheet,
+            'form'  => $form->createView(),
         ]);
     }
 }
