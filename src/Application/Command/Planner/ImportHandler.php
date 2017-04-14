@@ -164,7 +164,7 @@ class ImportHandler
      */
     public function handle(Import $import)
     {
-        $event   = $this->eventRepository->getById($import->eventId);
+        $event = $this->eventRepository->getById($import->eventId);
 
         if ($event === null) {
             throw new InvalidArgumentForImportException(sprintf('Event %s not found', $import->eventId));
