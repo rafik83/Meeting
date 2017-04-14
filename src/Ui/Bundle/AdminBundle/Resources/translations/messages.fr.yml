@@ -124,6 +124,9 @@ admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
+admin.event.days: "Jours de l'événement"
+admin.event.list.currents.title: 'Événements actuels'
+admin.event.list.pasts.title: 'Événements passés'
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'

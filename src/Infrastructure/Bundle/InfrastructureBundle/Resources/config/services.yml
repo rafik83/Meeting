@@ -2525,6 +2525,14 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.sheet_search_adapter'
 
+    query.event.event_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Event\EventListQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
+
     query.sheet.group.group_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler
         arguments:

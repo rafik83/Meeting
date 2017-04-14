@@ -1,0 +1,32 @@
+<tr>
+    <td>
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                {{ event.title }}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                {{ include('AdminBundle:Event:links.html.twig', {event: event}) }}
+            </ul>
+        </div>
+    </td>
+    <td>
+        {% for locale in event.locales %}
+            {% if locale == event.fallback %}
+                <strong>{{ locale|language }}</strong>{{ (not loop.last ? ',' : '') }}
+            {% else %}
+                {{ locale|language ~ (not loop.last ? ',' : '') }}
+            {% endif %}
+        {% endfor %}
+    </td>
+    <td>
+        {% for day in event.days %}
+            {{ day.date ~ (not loop.last ? ',' : '') }}
+        {% endfor %}
+    </td>
+    <td>
+        <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}" target="_blank">
+            {{ event.domain }}
+        </a>
+    </td>
+</tr>
