@@ -1,5 +1,6 @@
 var filterSheetForm = require('./filterSheetForm'),
-    options         = require('../vueComponents/options');
+    options         = require('../vueComponents/options'),
+    SheetFilter      = require('./filters/_SheetsFilter');
 
 module.exports = {
     template: '#filter-modal',
@@ -33,52 +34,7 @@ module.exports = {
         },
         save: function () {
             this.setUsedFilter();
-
-            var filteredSheet = this.sheets;
-
-            if (this.filters.selectedTypes.length > 0) {
-                filteredSheet = filteredSheet.filter(function (sheet) {
-                    return this.filters.selectedTypes.indexOf(sheet.type) !== -1;
-                }.bind(this));
-            }
-
-            if (this.hasIndicatorFilter) {
-                filteredSheet = filteredSheet.filter(function (sheet) {
-                    var filterMatching = false;
-
-                    if (this.filters.hasMeetingToApprove === true
-                        && sheet.hasMeetingToApprove === this.filters.hasMeetingToApprove) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasNotEnoughAvailableSlot === true
-                        && sheet.hasNotEnoughAvailableSlot === this.filters.hasNotEnoughAvailableSlot) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasSentMeetingRequest === true
-                        && sheet.hasNotSentMeetingRequest !== this.filters.hasSentMeetingRequest) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasSentMeetingRequest === false
-                        && sheet.hasNotSentMeetingRequest !== this.filters.hasSentMeetingRequest) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasScheduledMeetings === true && (sheet.countPlacedMeetings > 0)) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasScheduledMeetings === false && sheet.countPlacedMeetings === 0) {
-                        filterMatching = true;
-                    }
-
-                    return filterMatching;
-                }.bind(this));
-            }
-
-            this.filteredSheets = filteredSheet;
+            this.filteredSheets = new SheetFilter(this.filters).filter(this.sheets);
             this.$emit('refresh-list', this.filteredSheets);
             this.$emit('close-modal');
         },
