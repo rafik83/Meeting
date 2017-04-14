@@ -15,21 +15,24 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Import
 {
-    /**
-     * @var UploadedFile
-     */
-    public $file;
+    /** @var int */
+    public $fileId;
+
+    /** @var int */
+    public $eventId;
+
+    /** @var string */
+    public $emailToNotify;
 
     /**
-     * @var Event
+     * @param int    $fileId
+     * @param int    $eventId
+     * @param string $emailToNotify
      */
-    public $event;
-
-    /**
-     * @param Event $event
-     */
-    public function __construct(Event $event)
+    public function __construct($fileId, $eventId, $emailToNotify)
     {
-        $this->event = $event;
+        $this->fileId        = $fileId;
+        $this->eventId       = $eventId;
+        $this->emailToNotify = $emailToNotify;
     }
 }

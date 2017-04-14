@@ -10,26 +10,28 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImportJobCreator
 {
-    /**
-     * @var UploadedFile
-     */
+    /** @var UploadedFile */
     public $file;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
+
+    /** @var Admin */
+    public $admin;
 
     /**
      * @param Event $event
+     * @param Admin $admin
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, Admin $admin)
     {
         $this->event = $event;
+        $this->admin = $admin;
     }
 }

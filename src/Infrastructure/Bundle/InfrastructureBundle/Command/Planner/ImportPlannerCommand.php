@@ -44,6 +44,7 @@ class ImportPlannerCommand extends Command
         $this
             ->setName(self::NAME)
             ->setDescription('Import xml planner file for algorithm')
+            ->addArgument('file', InputArgument::REQUIRED, 'File id')
             ->addArgument('event', InputArgument::REQUIRED, 'Event id')
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
         ;
@@ -56,6 +57,7 @@ class ImportPlannerCommand extends Command
     {
         $this->importPlannerHandler->handle(
             new Import(
+                $input->getArgument('file'),
                 $input->getArgument('event'),
                 $input->getArgument('admin_email')
             )

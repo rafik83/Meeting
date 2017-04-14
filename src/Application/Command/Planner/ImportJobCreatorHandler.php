@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
@@ -29,6 +30,9 @@ class ImportJobCreatorHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
     /**
      * ImportJobCreatorHandler constructor.
      *
@@ -36,17 +40,20 @@ class ImportJobCreatorHandler
      * @param string                  $importLocationDirectoryPath
      * @param FileRepositoryInterface $fileRepository
      * @param \DateTimeInterface      $dateTime
+     * @param JobQueueInterface       $jobQueue
      */
     public function __construct(
         LocalFileStorageAdapter $fileStorageAdapter,
         $importLocationDirectoryPath,
         FileRepositoryInterface $fileRepository,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        JobQueueInterface $jobQueue
     ) {
         $this->fileStorageAdapter          = $fileStorageAdapter;
         $this->importLocationDirectoryPath = $importLocationDirectoryPath;
         $this->fileRepository              = $fileRepository;
         $this->dateTime                    = $dateTime;
+        $this->jobQueue                    = $jobQueue;
     }
 
     /**
@@ -55,7 +62,10 @@ class ImportJobCreatorHandler
     public function handle(ImportJobCreator $command)
     {
         $content = file_get_contents($command->file);
-        $this->createFile($command->event, $content);
+
+        $file = $this->createFile($command->event, $content);
+
+        $this->jobQueue->importPlannerForEvent($file, $command->event, $command->admin);
     }
 
     /**

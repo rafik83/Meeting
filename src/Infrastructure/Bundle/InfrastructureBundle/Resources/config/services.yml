@@ -1550,9 +1550,12 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.file_repository'
             - '@adapter.entity_manager_adapter'
             - '@adapter.job_queue_adapter'
             - '@datetime'
+            - '%infrastructure.import_planner_path%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
 
@@ -1563,6 +1566,7 @@ services:
             - '%infrastructure.import_planner_path%'
             - '@repository.file_repository'
             - '@datetime'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ImportJobCreator }
 

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Planner;
 use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Planner\Import\InvalidArgumentForImportException;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
 use Proximum\Vimeet\Application\View\Planner\Result\PlannerResult;
@@ -22,6 +23,8 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -62,9 +65,24 @@ class ImportHandler
     private $spotRepository;
 
     /**
+     * @var EventRepositoryInterface
+     */
+    private $eventRepository;
+
+    /**
+     * @var FileRepositoryInterface
+     */
+    private $fileRepository;
+
+    /**
      * @var EntityManagerAdapterInterface
      */
     private $entityManagerAdapter;
+
+    /**
+     * @var string
+     */
+    private $importDirectoryPath;
 
     /**
      * @var Request[]
@@ -103,9 +121,12 @@ class ImportHandler
      * @param RequestRepositoryInterface     $requestRepository
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SpotRepositoryInterface        $spotRepository
+     * @param EventRepositoryInterface       $eventRepository
+     * @param FileRepositoryInterface        $fileRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
      * @param JobQueueInterface              $jobQueue
      * @param \DateTimeInterface             $dateTime
+     * @param string                         $importDirectoryPath
      */
     public function __construct(
         SerializerAdapterInterface $serializer,
@@ -114,9 +135,12 @@ class ImportHandler
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepositoryInterface $slotRepository,
         SpotRepositoryInterface $spotRepository,
+        EventRepositoryInterface $eventRepository,
+        FileRepositoryInterface $fileRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
         JobQueueInterface $jobQueue,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        $importDirectoryPath
     ) {
         $this->serializer           = $serializer;
         $this->meetingRepository    = $meetingRepository;
@@ -124,22 +148,38 @@ class ImportHandler
         $this->requestRepository    = $requestRepository;
         $this->slotRepository       = $slotRepository;
         $this->spotRepository       = $spotRepository;
+        $this->eventRepository      = $eventRepository;
+        $this->fileRepository       = $fileRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
         $this->jobQueue             = $jobQueue;
         $this->dateTime             = $dateTime;
+        $this->importDirectoryPath  = $importDirectoryPath;
     }
 
     /**
      * @param Import $import
      *
+     * @throws InvalidArgumentForImportException
      * @throws InvalidXmlException
      */
     public function handle(Import $import)
     {
-        // Remove all meeting of the event
-        $this->meetingRepository->deleteAll($import->event);
+        $event   = $this->eventRepository->getById($import->eventId);
 
-        $content = file_get_contents($import->file);
+        if ($event === null) {
+            throw new InvalidArgumentForImportException(sprintf('Event %s not found', $import->eventId));
+        }
+
+        // Remove all meeting of the event
+        $this->meetingRepository->deleteAll($event);
+
+        $file = $this->fileRepository->getById($import->fileId);
+
+        if ($file === null) {
+            throw new InvalidArgumentForImportException(sprintf('File %s not found', $import->fileId));
+        }
+
+        $content = file_get_contents($this->importDirectoryPath . $file->getPath());
 
         try {
             /** @var PlannerResult $plannerResult */
@@ -148,18 +188,17 @@ class ImportHandler
             throw new InvalidXmlException();
         }
 
-        $this->handlePlannerResult($import, $plannerResult);
+        $this->handlePlannerResult($event, $plannerResult);
 
-        $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
+        $this->jobQueue->indexInCatalogSheetsByEvent($event);
     }
 
     /**
-     * @param Import        $import
+     * @param Event         $event
      * @param PlannerResult $plannerResult
      */
-    private function handlePlannerResult(Import $import, PlannerResult $plannerResult)
+    private function handlePlannerResult(Event $event, PlannerResult $plannerResult)
     {
-        $event = $import->event;
         $this->prepareRequestSheetSlotAndSpot($event);
         $toFlush = [];
 

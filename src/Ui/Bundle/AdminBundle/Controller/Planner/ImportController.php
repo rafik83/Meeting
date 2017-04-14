@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 use Proximum\Vimeet\Application\Command\Planner\Import;
 use Proximum\Vimeet\Application\Command\Planner\ImportJobCreator;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,6 +21,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ImportController extends Controller
 {
@@ -29,11 +31,15 @@ class ImportController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function importAction(Request $request, Event $event)
+    public function importAction(Request $request, Event $event, UserInterface $admin)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $importJobCreator = new ImportJobCreator($event);
+        if (!$admin instanceof Admin) {
+            throw $this->createNotFoundException('Admin not found');
+        }
+
+        $importJobCreator = new ImportJobCreator($event, $admin);
         $form = $this->createForm(ImportType::class, $importJobCreator, [
             'submit'  => true,
             'confirm' => 'form.planner_import.confirm.submit.label',
