@@ -1,6 +1,6 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
     options         = require('../../../vueComponents/options');
-    SheetFilter      = require('./filters/_SheetsFilter');
+    SheetFilter      = require('./../../filters/_SheetsFilter');
 
 module.exports = {
     template: '#filter-modal',
@@ -17,14 +17,16 @@ module.exports = {
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: false
             },
             filters: {
                 selectedTypes: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: null
             }
         }
     },
@@ -44,14 +46,16 @@ module.exports = {
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: null
             };
             this.formFilters =  {
                 selectedTypes: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: null
             }
         },
         setUsedFilter: function() {
