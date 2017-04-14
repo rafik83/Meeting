@@ -34,15 +34,17 @@ event_register_new_user:
 # Change mail
 #
 event_account_change_mail:
-    path: /account/change-mail
+    path: /account/sheet/{sheet}/change-mail
+    requirements:
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Account:updateEmail }
 
 event_activate_new_mail:
     path: /account/change_mail/{token}
-    methods: [GET]
     requirements:
         token: \w+
+    methods: [GET]
     defaults: { _controller: EventBundle:Account:activateNewMail }
 
 #
@@ -318,7 +320,9 @@ event_logout:
     methods:  [GET]
 
 event_change_password:
-    path:     /change-password
+    path:     /sheet/{sheet}/change-password
+    requirements:
+        sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
 
