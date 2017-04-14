@@ -461,7 +461,9 @@ event_meeting_request_edit:
     defaults: { _controller: EventBundle:MeetingRequest:editRequest }
 
 event_meeting_request_export_contact:
-    path: /export-contacts.csv
+    path: /sheet/{sheet}/export-contacts.csv
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Request/Export:exportContact }
 

@@ -155,7 +155,7 @@ class SubstitutionsProvider
             case Compose::LINK_SHEET:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_EXPORT_MEETING_SHEET:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', ['_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', ['sheet' => $sheet->getId(), '_locale' => $locale]);
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);

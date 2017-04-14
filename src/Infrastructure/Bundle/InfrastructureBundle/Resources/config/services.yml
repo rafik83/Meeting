@@ -2957,7 +2957,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting.participants_view_query_handler'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@sheet.sheet_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery }
 
