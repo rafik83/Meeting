@@ -38,7 +38,7 @@ class Message
     /**
      * @var ArrayCollection
      */
-    public $translations;
+    private $translations;
 
     /**
      * @var string
