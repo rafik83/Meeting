@@ -56,11 +56,12 @@ interface JobQueueInterface
     public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType);
 
     /**
-     * @param File  $file
-     * @param Event $event
-     * @param Admin $admin
+     * @param File   $file
+     * @param Event  $event
+     * @param Admin  $admin
+     * @param string $locale
      */
-    public function importPlannerForEvent(File $file, Event $event, Admin $admin);
+    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale);
 
     /**
      * @param SheetTemplate $sheetTemplate

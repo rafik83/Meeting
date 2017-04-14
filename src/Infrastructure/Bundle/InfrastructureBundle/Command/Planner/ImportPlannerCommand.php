@@ -47,6 +47,7 @@ class ImportPlannerCommand extends Command
             ->addArgument('file', InputArgument::REQUIRED, 'File id')
             ->addArgument('event', InputArgument::REQUIRED, 'Event id')
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
+            ->addArgument('locale', InputArgument::REQUIRED, 'Locale')
         ;
     }
 
@@ -59,7 +60,8 @@ class ImportPlannerCommand extends Command
             new Import(
                 $input->getArgument('file'),
                 $input->getArgument('event'),
-                $input->getArgument('admin_email')
+                $input->getArgument('admin_email'),
+                $input->getArgument('locale')
             )
         );
     }

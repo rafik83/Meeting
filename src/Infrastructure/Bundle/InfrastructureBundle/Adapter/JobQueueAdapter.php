@@ -122,12 +122,13 @@ class JobQueueAdapter implements JobQueueInterface
     /**
      * {@inheritdoc}
      */
-    public function importPlannerForEvent(File $file, Event $event, Admin $admin)
+    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale)
     {
         $job = new Job(ImportPlannerCommand::NAME, [
             $file->getId(),
             $event->getId(),
-            $admin->getEmail()
+            $admin->getEmail(),
+            $locale
         ]);
 
         $this->setJob($job);

@@ -39,7 +39,7 @@ class ImportController extends Controller
             throw $this->createNotFoundException('Admin not found');
         }
 
-        $importJobCreator = new ImportJobCreator($event, $admin);
+        $importJobCreator = new ImportJobCreator($event, $admin, $request->getLocale());
         $form = $this->createForm(ImportType::class, $importJobCreator, [
             'submit'  => true,
             'confirm' => 'form.planner_import.confirm.submit.label',

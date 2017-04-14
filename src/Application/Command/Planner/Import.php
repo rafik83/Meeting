@@ -21,6 +21,9 @@ class Import
     /** @var string */
     public $emailToNotify;
 
+    /** @var string */
+    public $locale;
+
     /**
      * @param int    $fileId
      * @param int    $eventId

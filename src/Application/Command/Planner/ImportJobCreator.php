@@ -25,13 +25,17 @@ class ImportJobCreator
     /** @var Admin */
     public $admin;
 
+    /** @var string */
+    public $locale;
+
     /**
      * @param Event $event
      * @param Admin $admin
      */
-    public function __construct(Event $event, Admin $admin)
+    public function __construct(Event $event, Admin $admin, $locale)
     {
-        $this->event = $event;
-        $this->admin = $admin;
+        $this->event  = $event;
+        $this->admin  = $admin;
+        $this->locale = $locale;
     }
 }
