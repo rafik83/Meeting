@@ -126,7 +126,7 @@ class ExportHandler
         try {
             $this->dispatcherHandler->handle(new Dispatcher($event));
         } catch (UnableToDispatchException $exception) {
-            return $this->notifyError(sprintf('flash.%s', $exception->indication), $event, $export);
+            $this->notifyError(sprintf('flash.%s', $exception->indication), $event, $export);
         }
 
         if (true === $export->lockMeetingRequest) {
@@ -137,17 +137,14 @@ class ExportHandler
             $planner = $this->plannerHandler->handle(new PlannerViewQuery($event, $export->locale, $export->solutionType));
             $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => self::XML_ROOT_NODE]);
         } catch (SlotNotConfiguredException $exception) {
-            return $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+            $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
         } catch (DayNotConfiguredException $exception) {
-            return $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+            $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
         }
 
-        // Remove first line of file which is composed of the key
-        $dataWithoutFirstLine = substr($content, strpos($content, "\n") + 1);
+        $file = $this->createFile($event, $content);
 
-        $file = $this->createFile($event, $dataWithoutFirstLine);
-
-        return $this->notifyCreationOfFile($event, $export, $file);
+        $this->notifyCreationOfFile($event, $export, $file);
     }
 
     /**
@@ -176,8 +173,6 @@ class ExportHandler
      * @param Event  $event
      * @param Export $command
      * @param File   $file
-     *
-     * @return bool
      */
     private function notifyCreationOfFile(Event $event, Export $command, File $file)
     {
@@ -189,16 +184,14 @@ class ExportHandler
             $file->getHash(),
             $file->getId()
         ));
-
-        return true;
     }
 
     /**
+     * Send a mail to the emailToNotify with the error message
+     *
      * @param string $message
      * @param Event  $event
      * @param Export $command
-     *
-     * @return bool
      */
     private function notifyError($message, Event $event, Export $command)
     {
@@ -211,7 +204,5 @@ class ExportHandler
                 $message
             )
         );
-
-        return false;
     }
 }

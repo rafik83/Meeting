@@ -45,6 +45,7 @@ class ExportController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($exportJobCreator);
             $this->addFlash('success', 'flash.admin.planner.export.success');
 
             return $this->redirectToRoute('admin_export_planner_data', ['event' => $event->getId()]);
