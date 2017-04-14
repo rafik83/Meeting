@@ -157,7 +157,7 @@ class ExportHandler
     {
         $filePath = $this->fileStorageAdapter->create(
             $data,
-            sprintf('planner_%s.csv', $event->getId()),
+            sprintf('planner_%s.xml', $event->getId()),
             $this->exportLocationDirectoryPath
         );
 
