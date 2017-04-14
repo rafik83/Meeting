@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -96,10 +98,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet, participants')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants')
-            ->where('sheet.event = :event')
-            ->andWhere('sheet.inCatalog = true')
-            ->andWhere('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
+            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
+            ->where('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
             ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
 
@@ -522,5 +522,53 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('ids', $ids);
 
         return $queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBySheetTemplate(SheetTemplate $sheetTemplate)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type', 'WITH', 'type.sheetTemplate = :sheetTemplate')
+            ->setParameter('sheetTemplate', $sheetTemplate);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type', 'WITH', 'type.registrationTemplate = :registrationTemplate')
+            ->setParameter('registrationTemplate', $registrationTemplate);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByTypes(array $types)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.type IN (:types)')
+            ->setParameter('types', $types);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

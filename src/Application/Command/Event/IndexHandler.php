@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Event;
+
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+
+/**
+ * Reindex all in catalog sheets for a given Event
+ */
+class IndexHandler
+{
+    /** @var SheetIndexerInterface */
+    private $sheetIndexer;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param SheetIndexerInterface    $sheetIndexer
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository, SheetIndexerInterface $sheetIndexer)
+    {
+        $this->sheetIndexer = $sheetIndexer;
+        $this->sheetRepository = $sheetRepository;
+    }
+
+    /**
+     * @param Index $index
+     */
+    public function handle(Index $index)
+    {
+        $this->sheetIndexer->updateSheets(
+            $this->sheetRepository->getSheetsInCatalogByEvent($index->event)
+        );
+    }
+}

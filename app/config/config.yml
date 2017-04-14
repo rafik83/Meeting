@@ -49,6 +49,8 @@ twig:
         timezone: Europe/Paris
     paths:
         "%kernel.root_dir%/../src/Ui/Resources/views": Ui
+    globals:
+        admin_menu_color: "%admin_menu_color%"
 
 # Doctrine Configuration
 doctrine:
@@ -200,6 +202,8 @@ fos_elastica:
                             type: integer
                         owner:
                             type: integer
+                        ownerEmail:
+                            type: string
                         lastLoginAt:
                             type: date
                         imported:

@@ -43,6 +43,12 @@ services:
             - '@behat_manager.user'
             - '@behat_manager.type'
 
+    behat_manager.invoice:
+        class: Proximum\Vimeet\Behat\Service\Manager\InvoiceManager
+        arguments:
+            - '@behat_manager.sheet'
+            - '@repository.invoice.invoice_repository'
+
     behat_manager.participant:
         class: Proximum\Vimeet\Behat\Service\Manager\ParticipantManager
         arguments:
@@ -71,6 +77,19 @@ services:
             - '@behat_manager.slot'
             - '@behat_manager.spot'
 
+    behat_manager.order:
+        class: Proximum\Vimeet\Behat\Service\Manager\OrderManager
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@behat_manager.sheet'
+            - '@behat_manager.billing_info'
+            - '@datetime'
+
+    behat_manager.billing_info:
+        class: Proximum\Vimeet\Behat\Service\Manager\BillingInfoManager
+        arguments:
+            - '@repository.billing_info_repository'
+
     #
     # Proxies
     #
@@ -98,6 +117,13 @@ services:
             - '@behat_storage'
             - '@behat_manager.sheet'
 
+    behat_proxy.invoice_context:
+        class: Proximum\Vimeet\Behat\Proxy\InvoiceContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.sheet'
+            - '@behat_manager.invoice'
+
     behat_proxy.participant_context:
         class: Proximum\Vimeet\Behat\Proxy\ParticipantContextProxy
         arguments:
@@ -109,3 +135,9 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.meeting'
+
+    behat_proxy.order_context:
+        class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.order'

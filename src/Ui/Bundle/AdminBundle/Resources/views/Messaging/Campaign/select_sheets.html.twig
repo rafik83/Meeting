@@ -39,6 +39,7 @@
                             <tr>
                                 <th><input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" /></th>
                                 <th>{{ 'admin.messaging.campaign.sheet_list.columns.name'|trans }}</th>
+                                <th>{{ 'admin.messaging.campaign.sheet_list.columns.ownerEmail'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,7 @@
                                 <tr>
                                     <td>{{ form_widget(create_campaign_form.sheetIds[sheet.id]) }}</td>
                                     <td>{{ sheet.name }}</td>
+                                    <td>{{ sheet.ownerEmail }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

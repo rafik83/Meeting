@@ -1,1 +1,10 @@
-<b>{{ object.getDefaultLabel }}:</b> {{ object.content|nl2br }}<br>
+{% if object.isTranslatable %}
+    <b>{{ object.getDefaultLabel }}:</b>
+    <ul>
+    {% for locale, translation in object.translations %}
+        <li><i>{{ locale|locale }}:</i> {{ translation|nl2br }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <b>{{ object.getDefaultLabel }}:</b> {{ object.content|nl2br }}<br>
+{% endif %}

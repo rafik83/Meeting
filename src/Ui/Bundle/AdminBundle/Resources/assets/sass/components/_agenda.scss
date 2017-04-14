@@ -20,6 +20,10 @@
     overflow: scroll;
     height: calc(100vh - 80px);
 
+    .agenda-panel {
+      margin: 0 5px 0 5px;
+    }
+
     ul {
       margin: 0;
       padding: 0;
@@ -32,6 +36,21 @@
   }
 
   .table-agenda-day {
+    tr.table-agenda-day-slot {
+      &.table-slot-spot {
+        > td {
+          height: 55px;
+          overflow-y: hidden;
+        }
+        .slot {
+          min-height: 55px;
+        }
+      }
+      > td {
+        height: 80px;
+        overflow-y: hidden;
+      }
+    }
     td {
       padding: 0 !important;
       border: 1px solid #ddd;
@@ -44,8 +63,8 @@
 
   .slot {
     padding: 4px;
-    height: 65px;
-    width: 120px;
+    min-height: 65px;
+    min-width: 120px;
 
     &.meeting {
       background: #32b5fc;
@@ -100,6 +119,45 @@
     padding: 0 0 100px 10px;
   }
 
+  .spots-list {
+    position: fixed;
+    left: 0;
+    height: calc(100% - 150px);
+    width: 17%;
+    overflow-y: scroll;
+    padding: 0 0 0 10px;
+    .spot-td {
+      cursor: pointer;
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
+
+  .agenda-slot-meeting-list {
+    li {
+      float: left;
+      padding: 5px;
+      .title {
+        > a {
+          width: 100px;
+          color: inherit;
+          text-overflow: ellipsis;
+          /* Required for text-overflow to do anything */
+          white-space: nowrap;
+          overflow: hidden;
+          display: block;
+        }
+        float: left;
+        width: 100px;
+      }
+      .separator {
+        float: left;
+        width: 10px;
+      }
+    }
+  }
+
   .sheet-title {
     display: block;
     overflow: hidden;
@@ -152,4 +210,18 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
+}
+
+.agenda-tab {
+  position: fixed;
+  width: 100%;
+  top: 60px;
+  left: 15px;
+}
+
+.agenda-tab-content {
+  position: fixed;
+  width: 100%;
+  top: 105px;
+  left: 15px;
 }

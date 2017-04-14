@@ -10,20 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Application\Command\Event\Find\FindResult as AbstractFindResult;
 
-class FindResult
+class FindResult extends AbstractFindResult
 {
-    /**
-     * @var Sheet
-     */
-    public $sheet;
-
-    /**
-     * @param Sheet $sheet
-     */
-    public function __construct(Sheet $sheet)
-    {
-        $this->sheet = $sheet;
-    }
 }

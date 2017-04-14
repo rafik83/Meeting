@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Category;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\CategoryTranslation;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
@@ -28,15 +29,23 @@ class CreateHandler
     private $typeRepository;
 
     /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
+
+    /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param TypeRepositoryInterface     $typeRepository
+     * @param JobQueueInterface           $jobQueue
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
-        TypeRepositoryInterface $typeRepository
+        TypeRepositoryInterface $typeRepository,
+        JobQueueInterface $jobQueue
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->typeRepository     = $typeRepository;
+        $this->jobQueue           = $jobQueue;
     }
 
     /**
@@ -67,5 +76,7 @@ class CreateHandler
         $this->categoryRepository->add($category);
 
         $create->category = $category;
+
+        $this->jobQueue->indexSheetsByTypes($create->types);
     }
 }
