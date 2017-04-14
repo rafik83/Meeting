@@ -1894,6 +1894,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.manager'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
     #
     # Security Component
@@ -2356,6 +2358,8 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
             - '@template.template_data_factory'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
     query.invoice.invoice_data_query_handler:
@@ -2933,6 +2937,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting_request.meeting_request_view_query_handler'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
@@ -3422,6 +3428,16 @@ services:
 
     domain.key_dates.checker.meeting_published_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.answering_meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
         arguments:
             - '@datetime'
 

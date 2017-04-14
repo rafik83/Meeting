@@ -21,20 +21,61 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
 
-        $catalogOnlineDate   = new \DateTime('2016-06-23 12:00:00');
-        $happeningsOpenDate  = new \DateTime('2016-06-21 12:00:00');
-        $schedulePublishDate = new \DateTime('2016-06-30 12:00:00');
-            
+        $catalogOnlineDate                = new \DateTime('2016-06-23 12:00:00');
+        $happeningsOpenDate               = new \DateTime('2016-06-21 12:00:00');
+        $schedulePublishDate              = new \DateTime('2016-06-30 12:00:00');
+        $closeMeetingRequestDate          = new \DateTime('2016-07-08 12:00:00');
+        $closeAnsweringMeetingRequestDate = new \DateTime('2016-07-09 12:00:00');
+
         $expectedEvent = EventFactory::createEvent();
-        $expectedEvent->getConfiguration()->setDates($catalogOnlineDate, $happeningsOpenDate, $schedulePublishDate);
+        $expectedEvent->getConfiguration()->setDates(
+            $catalogOnlineDate,
+            $happeningsOpenDate,
+            $schedulePublishDate,
+            $closeMeetingRequestDate,
+            $closeAnsweringMeetingRequestDate
+        );
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
 
-        $command                      = new ConfigureDates($event);
-        $command->catalogOnlineDate   = $catalogOnlineDate;
-        $command->happeningsOpenDate  = $happeningsOpenDate;
-        $command->schedulePublishDate = $schedulePublishDate;
+        $command                                   = new ConfigureDates($event);
+        $command->catalogOnlineDate                = $catalogOnlineDate;
+        $command->happeningsOpenDate               = $happeningsOpenDate;
+        $command->schedulePublishDate              = $schedulePublishDate;
+        $command->closeMeetingRequestDate          = $closeMeetingRequestDate;
+        $command->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
+
+        $handler = new ConfigureDatesHandler($eventRepository->reveal());
+        $handler->handle($command);
+    }
+
+    public function testHandleWithNullableDates()
+    {
+        $event = EventFactory::createEvent();
+
+        $catalogOnlineDate                = new \DateTime('2016-06-23 12:00:00');
+        $schedulePublishDate              = new \DateTime('2016-06-30 12:00:00');
+        $closeAnsweringMeetingRequestDate = new \DateTime('2016-07-09 12:00:00');
+
+        $expectedEvent = EventFactory::createEvent();
+        $expectedEvent->getConfiguration()->setDates(
+            $catalogOnlineDate,
+            null,
+            $schedulePublishDate,
+            null,
+            $closeAnsweringMeetingRequestDate
+        );
+
+        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
+        $eventRepository->set($expectedEvent)->shouldBeCalled();
+
+        $command                                   = new ConfigureDates($event);
+        $command->catalogOnlineDate                = $catalogOnlineDate;
+        $command->happeningsOpenDate               = null;
+        $command->schedulePublishDate              = $schedulePublishDate;
+        $command->closeMeetingRequestDate          = null;
+        $command->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
 
         $handler = new ConfigureDatesHandler($eventRepository->reveal());
         $handler->handle($command);

@@ -66,6 +66,12 @@ class MeetingRequestView
      */
     public $isSheetSeeable;
 
+    /** @var bool */
+    public $isMeetingRequestClosed;
+
+    /** @var bool */
+    public $isAnsweringMeetingRequestClosed;
+
     /**
      * MeetingRequestView constructor.
      *
@@ -79,6 +85,8 @@ class MeetingRequestView
      * @param bool               $isMeetingPublished
      * @param bool               $isMeetingRequestUpdateLocked
      * @param bool               $isSheetSeeable
+     * @param bool               $isMeetingRequestClosed
+     * @param bool               $isAnsweringMeetingRequestClosed
      */
     public function __construct(
         Sheet $sheet,
@@ -90,18 +98,22 @@ class MeetingRequestView
         array $previewViews,
         $isMeetingPublished = false,
         $isMeetingRequestUpdateLocked = false,
-        $isSheetSeeable = false
+        $isSheetSeeable = false,
+        $isMeetingRequestClosed = false,
+        $isAnsweringMeetingRequestClosed = false
     ) {
-        $this->sheet                        = $sheet;
-        $this->sheetName                    = $sheetName;
-        $this->state                        = $state;
-        $this->type                         = $type;
-        $this->createdAt                    = $createdAt;
-        $this->meetingRequest               = $meetingRequest;
-        $this->previewViews                 = $previewViews;
-        $this->isMeetingPublished           = $isMeetingPublished;
-        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
-        $this->isSheetSeeable               = $isSheetSeeable;
+        $this->sheet                           = $sheet;
+        $this->sheetName                       = $sheetName;
+        $this->state                           = $state;
+        $this->type                            = $type;
+        $this->createdAt                       = $createdAt;
+        $this->meetingRequest                  = $meetingRequest;
+        $this->previewViews                    = $previewViews;
+        $this->isMeetingPublished              = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
+        $this->isSheetSeeable                  = $isSheetSeeable;
+        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
     }
 
     /**
