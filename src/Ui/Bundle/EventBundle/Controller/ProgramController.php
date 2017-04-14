@@ -13,34 +13,33 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ProgramController extends Controller
 {
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     *
+     * @param UserInterface $user
      *
      * @return Response
      */
-    public function indexAction(Request $request, EventDomain $eventDomain)
+    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
-        $event  = $eventDomain->getEvent();
-        $locale = $request->getLocale();
-        $user   = $this->getUser();
-
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $event, $locale);
-
-        if ($sheet === null) {
-            throw $this->createNotFoundException(sprintf('This user %s has no sheet', $user->getId()));
-        }
+        $event = $eventDomain->getEvent();
 
         try {
             /** @var ProgramView $program */

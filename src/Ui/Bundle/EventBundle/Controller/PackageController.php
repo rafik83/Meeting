@@ -64,26 +64,14 @@ class PackageController extends Controller
     }
 
     /**
-     * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
      * @return RedirectResponse
      */
-    public function redirectDependingOnContextAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function redirectDependingOnContextAction(EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        try {
-            $sheet = $this->get('sheet.sheet_guesser')
-                ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
-        } catch (SheetNotFoundException $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
-        } catch (\Exception $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
-        }
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!empty($sheet->getNotCancelledOrders())) {
