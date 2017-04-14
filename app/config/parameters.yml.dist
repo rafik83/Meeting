@@ -51,4 +51,6 @@ parameters:
 
     assets_version: 1
 
+    sentry_dsn: ~
+
     admin_menu_color: "#222"

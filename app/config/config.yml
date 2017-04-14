@@ -391,3 +391,8 @@ payum:
             payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
         offline:
             factory: offline
+
+# Sentry configuration (Data source name)
+sentry:
+    dsn: "%sentry_dsn%"
+    environment: "%kernel.environment%"
