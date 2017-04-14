@@ -60,15 +60,5 @@ module.exports = {
         setFormFilter: function () {
             Object.assign(this.formFilters, this.filters);
         }
-    },
-    computed: {
-        hasIndicatorFilter: function () {
-            return this.filters.hasMeetingToApprove === true
-                || this.filters.hasNotEnoughAvailableSlot === true
-                || this.filters.hasSentMeetingRequest === true
-                || this.filters.hasSentMeetingRequest === false
-                || this.filters.hasScheduledMeetings === true
-                || this.filters.hasScheduledMeetings === false
-        }
     }
 };
