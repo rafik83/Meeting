@@ -37,6 +37,14 @@ class ConfigureDatesType extends AbstractType
                 'view_timezone' => $options['event']->getTimezone(),
                 'required'      => false,
             ])
+            ->add('closeMeetingRequestDate', DateTimePickerType::class, [
+                'view_timezone' => $options['event']->getTimezone(),
+                'required'      => false,
+            ])
+            ->add('closeAnsweringMeetingRequestDate', DateTimePickerType::class, [
+                'view_timezone' => $options['event']->getTimezone(),
+                'required'      => false,
+            ])
         ;
     }
 

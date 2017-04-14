@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Tests\Application\Components\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -27,29 +29,31 @@ use Proximum\Vimeet\Tests\Factory\SpotFactory;
 
 class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @varObjectProphecy
-     */
+    /** @varObjectProphecy */
     public $meetingPublishedAccessChecker;
 
-    /**
-     * @var ObjectProphecy
-     */
+    /** @var ObjectProphecy */
     private $requestRepository;
 
-    /**
-     * @var ObjectProphecy
-     */
+    /** @var ObjectProphecy */
     private $sheetManager;
+
+    /** @var ObjectProphecy */
+    private $meetingRequestAccessChecker;
+
+    /** @var ObjectProphecy */
+    private $answeringMeetingRequestAccessChecker;
 
     /**
      * Init mock for the suite test
      */
     public function setUp()
     {
-        $this->requestRepository             = $this->prophesize(RequestRepositoryInterface::class);
-        $this->sheetManager                  = $this->prophesize(SheetManager::class);
-        $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
+        $this->requestRepository                    = $this->prophesize(RequestRepositoryInterface::class);
+        $this->sheetManager                         = $this->prophesize(SheetManager::class);
+        $this->meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
+        $this->meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
+        $this->answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
     }
 
     /**
@@ -60,7 +64,9 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         return new RequestPermissionManager(
             $this->requestRepository->reveal(),
             $this->sheetManager->reveal(),
-            $this->meetingPublishedAccessChecker->reveal()
+            $this->meetingPublishedAccessChecker->reveal(),
+            $this->meetingRequestAccessChecker->reveal(),
+            $this->answeringMeetingRequestAccessChecker->reveal()
         );
     }
 
@@ -129,6 +135,23 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testIsAllowedToEditFalseAsDateForAnsweringIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEdit(
+            $request,
+            $sheet
+        ));
+    }
+
     public function testIsAllowedToEditTrue()
     {
         list(
@@ -137,6 +160,8 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToEdit(
             $request,
@@ -220,6 +245,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
         $request->setMeeting($meeting);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToEditApproved(
             $request,
@@ -258,6 +284,24 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->setMeeting($meeting);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToEditApprovedFalseAsDateToAnswerIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
             $request,
@@ -274,8 +318,25 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
         $request->approve($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToEditApproved(
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToCancelFalseAsDateAnsweringRequestIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
             $request,
             $sheet
         ));
@@ -290,6 +351,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
         $request->refuse($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
             $request,
@@ -307,6 +369,8 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ) = $this->getInitialsValue();
         $request->refuse($datetime);
 
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
             $request,
             $sheet
@@ -323,6 +387,8 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ) = $this->getInitialsValue();
         $request->refuse($datetime);
 
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
             $request,
             $sheet2
@@ -338,6 +404,8 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
 
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
+
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToCancel(
             $request,
             $sheet
@@ -351,8 +419,9 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet,
             $sheet2,
             $request
-            ) = $this->getInitialsValue();
+        ) = $this->getInitialsValue();
         $request->approve($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $sheet->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
@@ -369,6 +438,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->approve($datetime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
@@ -390,6 +460,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->approve($datetime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
@@ -412,6 +483,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
         $request->approve($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToCancel(
             $request,
@@ -450,6 +522,22 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testIsAllowedToRefuseFalseAsDateToAnswerRequestIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToRefuse(
+            $request,
+            $sheet2
+        ));
+    }
+
     public function testIsAllowedToRefuseTrueAsSheetToIsTryingToRefuseSentRequest()
     {
         list(
@@ -458,6 +546,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToRefuse(
             $request,
@@ -512,6 +601,22 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testIsAllowedToApproveFalseAsDateToAnswerIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToApprove(
+            $request,
+            $sheet2
+        ));
+    }
+
     public function testIsAllowedToApproveTrueAsSheetToIsTryingToApproveSentRequest()
     {
         list(
@@ -520,6 +625,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToApprove(
             $request,
@@ -604,6 +710,23 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testIsAllowedToUnRefuseFalseAsDateToAnswerIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $request->refuse($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnRefuse(
+            $request,
+            $sheet2
+        ));
+    }
+
     public function testIsAllowedToUnRefuseTrueAsItIsDoneBySheetTo()
     {
         list(
@@ -613,8 +736,27 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
             ) = $this->getInitialsValue();
         $request->refuse($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnRefuse(
+            $request,
+            $sheet2
+        ));
+    }
+
+    public function testIsAllowedToUnApproveFalseAsDateToAnswerRequestIsPassed()
+    {
+        list(
+            $datetime,
+            $sheet,
+            $sheet2,
+            $request
+            ) = $this->getInitialsValue();
+        $request->approve($datetime);
+
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
             $sheet2
         ));
@@ -628,6 +770,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
@@ -643,6 +786,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
@@ -658,6 +802,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet2,
             $request
         ) = $this->getInitialsValue();
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
@@ -674,6 +819,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
         $request->approve($datetime);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
@@ -691,6 +837,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ) = $this->getInitialsValue();
         $request->approve($datetime);
         $sheet2->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
@@ -713,13 +860,13 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->setMeeting($meeting);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,
             $sheet2
         ));
     }
-
 
     public function testIsAllowedToUnApproveTrueAsMeetingsAreNotPublished()
     {
@@ -736,6 +883,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
         $request->setMeeting($meeting);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnApprove(
             $request,

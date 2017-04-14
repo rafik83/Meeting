@@ -1,0 +1,27 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title event.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'event.activateAccount.expired.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content styled-form">
+                {{ 'event.activateAccount.expired.explanation'|trans }}
+
+                <form action="{{ path('event_activate_account_expired', { 'event': event.id, 'token': token }) }}" method="POST">
+                    <div class="inputs">
+                        <div class="validation">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="icon-Suivant_3"></i> {{ 'event.activateAccount.expired.resend'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+{% endblock %}

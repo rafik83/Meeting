@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>{{ 'pro_forma.title'|trans({ '%date%': pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }) }}</title>
+    <title>{{ 'pro_forma.title'|trans({ '%date%': pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }) }}</title>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 </head>
 <body>
@@ -41,7 +41,7 @@
         {% endif %}
         <div class="row">
             <div class="col-md-12">
-                <strong>{{ 'pro_forma.date.title'|trans }}</strong> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+                <strong>{{ 'pro_forma.date.title'|trans }}</strong> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
             </div>
         </div>
         {{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary, order: pro_forma.order}) }}

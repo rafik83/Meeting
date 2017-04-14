@@ -38,9 +38,9 @@
             <tbody>
             {% for day in event.days %}
                 <tr>
-                    <td>{{ day.day|localizeddate('medium', 'none') }}</td>
-                    <td>{{ day.startTime|localizeddate('none', 'short') }}</td>
-                    <td>{{ day.endTime|localizeddate('none', 'short') }}</td>
+                    <td>{{ day.day|localizeddate('medium', 'none', app.request.locale, event.timeZone) }}</td>
+                    <td>{{ day.startTime|localizeddate('none', 'short', app.request.locale, event.timeZone) }}</td>
+                    <td>{{ day.endTime|localizeddate('none', 'short', app.request.locale, event.timeZone) }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -72,8 +72,8 @@
             <tbody>
                 {% for slot in slots %}
                     <tr>
-                        <td>{{ slot.begin|localizeddate }}</td>
-                        <td>{{ slot.end|localizeddate }}</td>
+                        <td>{{ slot.begin|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
+                        <td>{{ slot.end|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
                         <td>{{ slot.duration }}</td>
                         <td class="text-center">
                             {% if slot.locked %}

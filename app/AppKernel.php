@@ -24,7 +24,6 @@ class AppKernel extends Kernel
             new Elao\Bundle\FormBundle\ElaoFormBundle(),
             new Elao\Bundle\FormTranslationBundle\ElaoFormTranslationBundle(),
             new Elao\Bundle\Theme\TwitterBootstrap3Bundle\ElaoThemeTwitterBootstrap3Bundle(),
-            new Elao\ErrorNotifierBundle\ElaoErrorNotifierBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new League\Tactician\Bundle\TacticianBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
@@ -34,6 +33,9 @@ class AppKernel extends Kernel
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
+
+            // Sentry
+            new Sentry\SentryBundle\SentryBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),

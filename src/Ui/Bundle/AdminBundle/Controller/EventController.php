@@ -13,19 +13,20 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\Create;
+use Proximum\Vimeet\Application\Command\Event\Find\Find;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
-use Proximum\Vimeet\Application\Command\Event\Find\Find;
-use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
+use Proximum\Vimeet\Application\Command\Transaction\Filter as FilterTransaction;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvalidNumeroInvoiceException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvoiceNotFoundException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
+use Proximum\Vimeet\Application\Query\Event\EventListQuery;
 use Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -57,9 +58,7 @@ class EventController extends Controller
     {
         /** @var Admin $admin */
         $admin  = $this->getUser();
-        $events = $this
-            ->get('vimeet_infrastructure.repository.event_repository')
-            ->getListByAdmin($admin);
+        $events = $this->get('tactician.commandbus.query')->handle(new EventListQuery($admin));
 
         $transactionForm = null;
         $invoiceExportForm = null;

@@ -31,6 +31,15 @@ interface EventRepositoryInterface
     public function getEventsByAdmin(Admin $admin);
 
     /**
+     * Get events order by title and last event day
+     *
+     * @param Admin $admin
+     *
+     * @return Event[]
+     */
+    public function getEventsWithDaysByAdmin(Admin $admin);
+
+    /**
      * @return EventListView[]
      */
     public function getList();

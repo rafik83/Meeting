@@ -24,11 +24,6 @@ class ActivateAccountEvent extends Event
     private $user;
 
     /**
-     * @var User
-     */
-    private $sender;
-
-    /**
      * @var ProximumEvent
      */
     private $event;
@@ -39,11 +34,6 @@ class ActivateAccountEvent extends Event
     private $activateAccountToken;
 
     /**
-     * @var string
-     */
-    private $locale;
-
-    /**
      * @var Sheet
      */
     private $sheet;
@@ -52,23 +42,17 @@ class ActivateAccountEvent extends Event
      * @param User                 $user
      * @param ProximumEvent        $event
      * @param ActivateAccountToken $activateAccountToken
-     * @param string               $locale
-     * @param User                 $sender
      * @param Sheet                $sheet
      */
     public function __construct(
         User $user,
         ProximumEvent $event,
         ActivateAccountToken $activateAccountToken,
-        $locale,
-        User $sender,
         Sheet $sheet
     ) {
         $this->user                 = $user;
         $this->event                = $event;
         $this->activateAccountToken = $activateAccountToken;
-        $this->locale               = $locale;
-        $this->sender               = $sender;
         $this->sheet                = $sheet;
     }
 
@@ -94,22 +78,6 @@ class ActivateAccountEvent extends Event
     public function getActivateAccountToken()
     {
         return $this->activateAccountToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @return User
-     */
-    public function getSender()
-    {
-        return $this->sender;
     }
 
     /**

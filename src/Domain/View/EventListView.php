@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\View;
 
+use Proximum\Vimeet\Application\View\Event\DayView;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 
 class EventListView implements EventInterface
@@ -40,19 +41,26 @@ class EventListView implements EventInterface
     public $fallback;
 
     /**
-     * @param int    $id
-     * @param string $title
-     * @param string $domain
-     * @param array  $locales
-     * @param string $fallback
+     * @var DayView[]
      */
-    public function __construct($id, $title, $domain, array $locales, $fallback)
+    public $days;
+
+    /**
+     * @param int       $id
+     * @param string    $title
+     * @param string    $domain
+     * @param array     $locales
+     * @param string    $fallback
+     * @param DayView[] $days
+     */
+    public function __construct($id, $title, $domain, array $locales, $fallback, array $days = [])
     {
         $this->id       = $id;
         $this->title    = $title;
         $this->domain   = $domain;
         $this->locales  = $locales;
         $this->fallback = $fallback;
+        $this->days     = $days;
     }
 
     /**

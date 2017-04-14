@@ -701,6 +701,15 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccountPassword }
+
+    command.user.activate_account.re_send_activate_account_token_handler:
+        class: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountTokenHandler
+        arguments:
+            - '@components.token.user.activate_account_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken }
+
     command.user.change_mail_handler:
         class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
         arguments:
@@ -1840,6 +1849,7 @@ services:
         arguments:
             - '@repository.user_activate_account_token_repository'
             - '@datetime'
+            - '%user_activate_account_token_expiration%'
     components.token.admin.activate_account_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator
         arguments:
@@ -1890,6 +1900,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.manager'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
     #
     # Security Component
@@ -2352,6 +2364,8 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
             - '@template.template_data_factory'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
     query.invoice.invoice_data_query_handler:
@@ -2510,6 +2524,14 @@ services:
         arguments:
             - '@adapter.serializer_adapter'
             - '@adapter.sheet_search_adapter'
+
+    query.event.event_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Event\EventListQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
     query.sheet.group.group_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler
@@ -2937,6 +2959,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting_request.meeting_request_view_query_handler'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
@@ -3426,6 +3450,16 @@ services:
 
     domain.key_dates.checker.meeting_published_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.answering_meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
         arguments:
             - '@datetime'
 

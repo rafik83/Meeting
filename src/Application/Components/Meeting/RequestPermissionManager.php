@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,36 +21,42 @@ use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class RequestPermissionManager
 {
-    /**
-     * @var MeetingPublishedAccessChecker
-     */
+    /** @var MeetingPublishedAccessChecker */
     private $meetingPublishedAccessChecker;
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var SheetManager
-     */
+    /** @var SheetManager */
     private $sheetManager;
+
+    /** @var MeetingRequestAccessChecker */
+    private $meetingRequestAccessChecker;
+
+    /** @var AnsweringMeetingRequestAccessChecker */
+    private $answeringMeetingRequestAccessChecker;
 
     /**
      * RequestPermissionManager constructor.
      *
-     * @param RequestRepositoryInterface    $requestRepository
-     * @param SheetManager                  $sheetManager
-     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+     * @param RequestRepositoryInterface           $requestRepository
+     * @param SheetManager                         $sheetManager
+     * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
+     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         SheetManager $sheetManager,
-        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
-        $this->requestRepository             = $requestRepository;
-        $this->sheetManager                  = $sheetManager;
-        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->requestRepository                    = $requestRepository;
+        $this->sheetManager                         = $sheetManager;
+        $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
+        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
@@ -61,7 +69,10 @@ class RequestPermissionManager
      */
     public function isAllowedToEdit(Request $request, Sheet $sheet)
     {
-        return $request->isSender($sheet) && $request->isSent();
+        return $request->isSender($sheet)
+            && $request->isSent()
+            && $this->answeringMeetingRequestAccessChecker->allowedToAccess($request->getEvent())
+        ;
     }
 
     /**
@@ -94,6 +105,7 @@ class RequestPermissionManager
         if (($request->isSender($sheet) || $request->isReceiver($sheet))
             && $request->isApproved()
             && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
+            && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())
         ) {
             if ($this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent()) && $request->hasMeeting()) {
                 return false;
@@ -115,15 +127,17 @@ class RequestPermissionManager
      */
     public function isAllowedToCancel(Request $request, Sheet $sheet)
     {
-        if ($request->isSender($sheet)) {
-            if ($request->isSent()) {
-                return true;
-            } elseif ($request->isApproved() && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()) {
-                if ($this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent()) && $request->hasMeeting()) {
-                    return false;
-                }
+        if ($this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())) {
+            if ($request->isSender($sheet)) {
+                if ($request->isSent()) {
+                    return true;
+                } elseif ($request->isApproved() && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()) {
+                    if ($this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent()) && $request->hasMeeting()) {
+                        return false;
+                    }
 
-                return true;
+                    return true;
+                }
             }
         }
 
@@ -140,7 +154,9 @@ class RequestPermissionManager
      */
     public function isAllowedToRefuse(Request $request, Sheet $sheet)
     {
-        return $request->isReceiver($sheet) && $request->isSent();
+        return $request->isReceiver($sheet)
+            && $request->isSent()
+            && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent());
     }
 
     /**
@@ -153,7 +169,10 @@ class RequestPermissionManager
      */
     public function isAllowedToApprove(Request $request, Sheet $sheet)
     {
-        return $request->isReceiver($sheet) && $request->isSent();
+        return $request->isReceiver($sheet)
+            && $request->isSent()
+            && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())
+        ;
     }
 
     /**
@@ -179,7 +198,10 @@ class RequestPermissionManager
      */
     public function isAllowedToUnRefuse(Request $request, Sheet $sheet)
     {
-        return $request->isRefused() && $request->isReceiver($sheet);
+        return $request->isRefused()
+            && $request->isReceiver($sheet)
+            && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())
+        ;
     }
 
     /**
@@ -192,15 +214,17 @@ class RequestPermissionManager
      */
     public function isAllowedToUnApprove(Request $request, Sheet $sheet)
     {
-        if ($request->isApproved()
-            && $request->isReceiver($sheet)
-            && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
-        ) {
-            if ($this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent()) && $request->hasMeeting()) {
-                return false;
-            }
+        if ($this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())) {
+            if ($request->isApproved()
+                && $request->isReceiver($sheet)
+                && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
+            ) {
+                if ($this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent()) && $request->hasMeeting()) {
+                    return false;
+                }
 
-            return true;
+                return true;
+            }
         }
 
         return false;
