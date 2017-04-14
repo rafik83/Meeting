@@ -131,13 +131,17 @@ class MeetingRequestController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param null        $from
+     * @param Sheet       $fromSheet
+     * @param Sheet       $toSheet
      *
      * @throws \Exception
      */
-    private function authorizeToCreateRequest(Request $request, EventDomain $eventDomain, Sheet $sheet, &$from)
-    {
+    private function authorizeToCreateRequest(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $fromSheet,
+        Sheet $toSheet
+    ) {
         $event = $eventDomain->getEvent();
 
         // if the meeting request are closed
@@ -145,7 +149,7 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('You can not request a meeting as the meeting request are closed');
         }
 
-        if (!$sheet->isInCatalog()) {
+        if (!$toSheet->isInCatalog()) {
             throw $this->createNotFoundException('Sheet not in catalog');
         }
 
@@ -154,22 +158,20 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException();
         }
 
-        $from = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
-
         // If the sheet that request the meeting is not in catalog
-        if (!$from->isInCatalog()) {
+        if (!$fromSheet->isInCatalog()) {
             throw $this->createNotFoundException('Viewer Sheet not in catalog');
         }
 
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($from);
+        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($fromSheet);
 
         // If there are no rules between the two sheets
-        if (!in_array($sheet->getType(), $visibleTypes)) {
+        if (!in_array($toSheet->getType(), $visibleTypes)) {
             throw $this->createNotFoundException('The viewer is not allowed to create a meeting request with this sheet');
         }
 
         // If the requester sheet is the sheet requested
-        if ($from === $sheet) {
+        if ($fromSheet === $toSheet) {
             throw $this->createNotFoundException('You can not request a meeting with yourself');
         }
 
@@ -180,7 +182,7 @@ class MeetingRequestController extends Controller
         // If there is already a meeting request between the two sheets
         if (null !== $this
                 ->get('vimeet_infrastructure.repository.meeting.request_repository')
-                ->getRequestBetweenSheets($sheet, $from)
+                ->getRequestBetweenSheets($fromSheet, $toSheet)
         ) {
             throw $this->createNotFoundException('You can not request a meeting as there is already one');
         }
@@ -191,7 +193,7 @@ class MeetingRequestController extends Controller
      *
      * @param Request       $request
      * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
+     * @param Sheet         $sheet fromSheet
      * @param Sheet         $toSheet
      * @param UserInterface $user
      *
@@ -200,7 +202,7 @@ class MeetingRequestController extends Controller
     public function createRequestAction(
         Request $request,
         EventDomain $eventDomain,
-        Sheet $sheet,
+        Sheet $sheet, // fromSheet
         Sheet $toSheet,
         UserInterface $user
     ) {
@@ -208,7 +210,7 @@ class MeetingRequestController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         if (!$user instanceof User) { throw $this->createAccessDeniedException('User not found'); }
 
-        $this->authorizeToCreateRequest($request, $eventDomain, $toSheet, $sheet);
+        $this->authorizeToCreateRequest($request, $eventDomain, $sheet, $toSheet);
 
         $createRequest = new CreateRequest($sheet, $sheet, $user);
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
@@ -295,6 +297,7 @@ class MeetingRequestController extends Controller
                 true,
                 true,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
+                    'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
                     'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
                     'isMeetingRequestUpdateLocked' =>$eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
@@ -364,6 +367,7 @@ class MeetingRequestController extends Controller
                 true,
                 true,
                 $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
+                    'sheet'          => $sheet,
                     'meetingRequest' => $meetingRequest,
                 ])
             ));
@@ -410,12 +414,6 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
-            $this->getUser(),
-            $eventDomain->getEvent(),
-            $request->getLocale()
-        );
-
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
             ->get('tactician.commandbus.query')
@@ -427,6 +425,7 @@ class MeetingRequestController extends Controller
             $unRefuse = new UnRefuseMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
+                    'sheet'          => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId()
                 ]),
             ]);
@@ -576,6 +575,7 @@ class MeetingRequestController extends Controller
             $unApprovedRequest = new UnApproveMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $unApprovedForm    = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
+                    'sheet'          => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId()
                 ]),
             ]);
@@ -669,6 +669,7 @@ class MeetingRequestController extends Controller
                 'locale'           => $request->getLocale(),
                 'show_description' => !$discussion->hasMessageOfSheet($sheet),
                 'action'           => $this->generateUrl('event_meeting_request_edit', [
+                    'sheet'          => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId()
                 ]),
             ]);
