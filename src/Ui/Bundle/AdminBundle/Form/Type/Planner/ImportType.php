@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner;
 
-use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Application\Command\Planner\ImportJobCreator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,7 +35,7 @@ class ImportType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Import::class,
+            'data_class' => ImportJobCreator::class,
         ]);
     }
 

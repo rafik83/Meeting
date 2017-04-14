@@ -1556,6 +1556,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
 
+    command.planner.import_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ImportJobCreatorHandler
+        arguments:
+            - '@adapter.local_file_storage'
+            - '%infrastructure.import_planner_path%'
+            - '@repository.file_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ImportJobCreator }
+
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
         arguments:

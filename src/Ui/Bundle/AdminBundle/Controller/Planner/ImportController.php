@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Application\Command\Planner\ImportJobCreator;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ImportType;
@@ -32,15 +33,15 @@ class ImportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $import = new Import($event);
-        $form   = $this->createForm(ImportType::class, $import, [
+        $importJobCreator = new ImportJobCreator($event);
+        $form = $this->createForm(ImportType::class, $importJobCreator, [
             'submit'  => true,
             'confirm' => 'form.planner_import.confirm.submit.label',
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($import);
+                $this->get('tactician.commandbus')->handle($importJobCreator);
                 $this->addFlash('success', 'flash.admin.planner.import.success');
 
                 return $this->redirectToRoute('admin_planner', [
