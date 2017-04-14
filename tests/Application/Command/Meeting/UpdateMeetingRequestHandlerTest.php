@@ -50,7 +50,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetFrom);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -104,7 +104,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetFrom);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -160,7 +160,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetTo);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -215,7 +215,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetTo);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 

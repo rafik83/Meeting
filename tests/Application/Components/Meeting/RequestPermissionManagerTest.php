@@ -11,10 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Components\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
-use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
-use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -36,12 +34,6 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
     private $requestRepository;
 
     /** @var ObjectProphecy */
-    private $sheetManager;
-
-    /** @var ObjectProphecy */
-    private $meetingRequestAccessChecker;
-
-    /** @var ObjectProphecy */
     private $answeringMeetingRequestAccessChecker;
 
     /**
@@ -50,9 +42,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->requestRepository                    = $this->prophesize(RequestRepositoryInterface::class);
-        $this->sheetManager                         = $this->prophesize(SheetManager::class);
         $this->meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
-        $this->meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $this->answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
     }
 
@@ -63,9 +53,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
     {
         return new RequestPermissionManager(
             $this->requestRepository->reveal(),
-            $this->sheetManager->reveal(),
             $this->meetingPublishedAccessChecker->reveal(),
-            $this->meetingRequestAccessChecker->reveal(),
             $this->answeringMeetingRequestAccessChecker->reveal()
         );
     }
