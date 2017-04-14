@@ -45,8 +45,10 @@ class RequestViewQueryHandler
 
         return new RequestView(
             $query->request->getId(),
+            $query->request,
             $sheetMet->getId(),
             $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
+            $sheetMet,
             $query->request->getState(),
             $query->request->isSender($sheetMet) ? RequestView::TYPE_REQUEST : RequestView::TYPE_PROPOSITION,
             array_map(function (Participant $participant) use ($query) {

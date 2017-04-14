@@ -47,8 +47,10 @@ class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $expected = new RequestView(
             123,
+            $request->reveal(),
             432,
             'sheet Met title',
+            $sheetMet->reveal(),
             'sent',
             RequestView::TYPE_PROPOSITION,
             [],
@@ -97,8 +99,10 @@ class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $expected = new RequestView(
             123,
+            $request->reveal(),
             432,
             'sheet Met title',
+            $sheetMet->reveal(),
             'approved',
             RequestView::TYPE_REQUEST,
             [$participantView1, $participantView2],

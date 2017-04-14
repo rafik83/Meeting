@@ -27,6 +27,7 @@ use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestVie
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
@@ -36,6 +37,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,6 +45,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MeetingRequestController extends Controller
 {
@@ -175,23 +178,31 @@ class MeetingRequestController extends Controller
     /**
      * Create a meeting request between two sheet
      *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param Sheet         $toSheet
+     * @param UserInterface $user
      *
      * @return Response|JsonResponse
      */
-    public function createRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
+    public function createRequestAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Sheet $toSheet,
+        UserInterface $user
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        if (!$user instanceof User) { throw $this->createAccessDeniedException('User not found'); }
 
-        $from = null;
-        $this->authorizeToCreateRequest($request, $eventDomain, $sheet, $from);
+        $this->authorizeToCreateRequest($request, $eventDomain, $toSheet, $sheet);
 
-        $createRequest = new CreateRequest($from, $sheet, $this->getUser());
+        $createRequest = new CreateRequest($sheet, $sheet, $user);
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', ['sheet' => $sheet->getId()]),
-            'sheet'  => $from,
+            'sheet'  => $sheet,
             'locale' => $request->getLocale(),
         ]);
 
@@ -240,7 +251,7 @@ class MeetingRequestController extends Controller
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($this->getUser(), $meetingRequest, $sheet)) {
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
         }
 
@@ -310,7 +321,7 @@ class MeetingRequestController extends Controller
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($this->getUser(), $meetingRequest, $sheet)) {
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
         }
 
@@ -363,6 +374,7 @@ class MeetingRequestController extends Controller
     /**
      * @param Request        $request
      * @param EventDomain    $eventDomain
+     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
@@ -370,12 +382,13 @@ class MeetingRequestController extends Controller
     public function showConversationOfRefuseRequestAction(
         Request $request,
         EventDomain $eventDomain,
+        Sheet $sheet,
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $permissionManager = $this->get('meeting.request_permission_manager');
 
-        if (!$permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($this->getUser(), $meetingRequest)) {
+        if (!$permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($sheet, $meetingRequest)) {
             throw $this->createNotFoundException('You are not allowed to see this meeting request.');
         }
 
@@ -396,7 +409,7 @@ class MeetingRequestController extends Controller
 
         $form = null;
 
-        if ($permissionManager->isAllowedToUnRefuse($this->getUser(), $meetingRequest, $sheet)) {
+        if ($permissionManager->isAllowedToUnRefuse($meetingRequest, $sheet)) {
             $unRefuse = new UnRefuseMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
@@ -469,7 +482,7 @@ class MeetingRequestController extends Controller
         RequestPermissionManager &$permissionManager,
         &$cancelForm
     ) {
-        if ($permissionManager->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet)) {
+        if ($permissionManager->isAllowedToCancel($meetingRequest, $sheet)) {
             $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
             $cancelForm    = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
@@ -484,7 +497,8 @@ class MeetingRequestController extends Controller
                     true,
                     true,
                     $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
-                        'sheet' => $meetingRequest->getToSheet(),
+                        'sheet'   => $sheet,
+                        'toSheet' => $meetingRequest->getToSheet(),
                     ])
                 ));
             }
@@ -509,7 +523,7 @@ class MeetingRequestController extends Controller
         RequestPermissionManager &$permissionManager,
         &$unApprovedForm = null
     ) {
-        if ($permissionManager->isAllowedToUnApprove($this->getUser(), $meetingRequest, $sheet)) {
+        if ($permissionManager->isAllowedToUnApprove($meetingRequest, $sheet)) {
             $unApprovedRequest = new UnApproveMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $unApprovedForm    = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
@@ -558,9 +572,9 @@ class MeetingRequestController extends Controller
         );
         $permissionManager = $this->get('meeting.request_permission_manager');
 
-        $isNotAllowedToEditApproved = $meetingRequest->isApproved() && !$permissionManager->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet);
+        $isNotAllowedToEditApproved = $meetingRequest->isApproved() && !$permissionManager->isAllowedToEditApproved($meetingRequest, $sheet);
 
-        $isNotAllowedToEdit = $meetingRequest->isSent() && !$permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet);
+        $isNotAllowedToEdit = $meetingRequest->isSent() && !$permissionManager->isAllowedToEdit($meetingRequest, $sheet);
 
 
         if ($isNotAllowedToEditApproved || $isNotAllowedToEdit) {

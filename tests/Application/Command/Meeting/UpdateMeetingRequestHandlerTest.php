@@ -66,7 +66,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         //Handler
         $handler = new UpdateMeetingRequestHandler(
@@ -121,7 +121,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         //Handler
         $handler = new UpdateMeetingRequestHandler(
@@ -176,7 +176,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldNotBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
         //Handler
         $handler = new UpdateMeetingRequestHandler(
@@ -232,7 +232,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         //Handler
         $handler = new UpdateMeetingRequestHandler(

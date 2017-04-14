@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Group\Request;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class SheetView
 {
     /** @var int */
@@ -18,17 +20,22 @@ class SheetView
     /** @var string */
     public $sheetTitle;
 
+    /** @var Sheet */
+    public $sheet;
+
     /** @var RequestView[] */
     public $requestViews;
 
     /**
      * @param int    $sheetId
      * @param string $sheetTitle
+     * @param Sheet  $sheet
      */
-    public function __construct($sheetId, $sheetTitle)
+    public function __construct($sheetId, $sheetTitle, Sheet $sheet)
     {
         $this->sheetId = $sheetId;
         $this->sheetTitle = $sheetTitle;
+        $this->sheet = $sheet;
         $this->requestViews = [];
     }
 

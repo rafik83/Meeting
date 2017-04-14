@@ -1,5 +1,5 @@
 {% if allowedToCreate is defined and allowedToCreate == true %}
-    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': viewed}, false) }}
+    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': viewer, 'toSheet': viewed}, false) }}
 {% else %}
     {% if meetingRequest is defined and meetingRequest is not null %}
         {% if meetingRequest.toSheet == viewer %}

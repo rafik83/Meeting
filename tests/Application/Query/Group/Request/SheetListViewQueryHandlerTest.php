@@ -124,8 +124,8 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($requestView3);
 
-        $sheetView1 = new SheetView(1, 'title 1');
-        $sheetView2 = new SheetView(2, 'title 2');
+        $sheetView1 = new SheetView(1, 'title 1', $sheetMet1->reveal());
+        $sheetView2 = new SheetView(2, 'title 2', $groupSheet1->reveal());
 
         $sheetViewQueryHandler
             ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
@@ -137,10 +137,10 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($sheetView2);
 
 
-        $expectedSheetView1 = new SheetView(1, 'title 1');
+        $expectedSheetView1 = new SheetView(1, 'title 1', $sheetMet1->reveal());
         $expectedSheetView1->addRequest($requestView1->reveal());
         $expectedSheetView1->addRequest($requestView2->reveal());
-        $expectedSheetView2 = new SheetView(2, 'title 2');
+        $expectedSheetView2 = new SheetView(2, 'title 2', $groupSheet1->reveal());
         $expectedSheetView2->addRequest($requestView3->reveal());
 
         $handler = new SheetListViewQueryHandler(

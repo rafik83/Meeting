@@ -29,7 +29,7 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new SheetViewQueryHandler($sheetInfoGuesser->reveal());
         $result = $handler->handle(new SheetViewQuery($sheet->reveal(), $locale));
 
-        $expected = new SheetView(12345, 'Sheet Title');
+        $expected = new SheetView(12345, 'Sheet Title', $sheet->reveal());
 
         $this->assertEquals($expected, $result);
     }

@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Group\Request;
 
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class RequestView
 {
     const TYPE_PROPOSITION = 'proposition';
@@ -18,11 +21,17 @@ class RequestView
     /** @var int */
     public $requestId;
 
+    /** @var Request */
+    public $request;
+
     /** @var int */
     public $sheetMetId;
 
     /** @var string */
     public $sheetMetTitle;
+
+    /** @var Sheet */
+    public $sheetMet;
 
     /** @var string */
     public $state;
@@ -38,8 +47,10 @@ class RequestView
 
     /**
      * @param int               $requestId
+     * @param Request           $request
      * @param int               $sheetMetId
      * @param string            $sheetMetTitle
+     * @param Sheet             $sheetMet
      * @param string            $state
      * @param string            $type
      * @param ParticipantView[] $participantViews
@@ -47,20 +58,24 @@ class RequestView
      */
     public function __construct(
         $requestId,
+        Request $request,
         $sheetMetId,
         $sheetMetTitle,
+        Sheet $sheetMet,
         $state,
         $type,
         array $participantViews,
         $planned = false
     ) {
-        $this->requestId         = $requestId;
-        $this->sheetMetId        = $sheetMetId;
-        $this->sheetMetTitle     = $sheetMetTitle;
-        $this->state             = $state;
-        $this->type              = $type;
-        $this->participantViews  = $participantViews;
-        $this->planned           = $planned;
+        $this->requestId        = $requestId;
+        $this->request          = $request;
+        $this->sheetMetId       = $sheetMetId;
+        $this->sheetMetTitle    = $sheetMetTitle;
+        $this->sheetMet         = $sheetMet;
+        $this->state            = $state;
+        $this->type             = $type;
+        $this->participantViews = $participantViews;
+        $this->planned          = $planned;
     }
 
     /**

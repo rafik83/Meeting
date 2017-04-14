@@ -35,7 +35,8 @@ class SheetViewQueryHandler
     {
         return new SheetView(
             $query->sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetTitle($query->sheet, $query->locale)
+            $this->sheetInfoGuesser->guessSheetTitle($query->sheet, $query->locale),
+            $query->sheet
         );
     }
 }
