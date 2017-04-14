@@ -3178,6 +3178,13 @@ services:
         tags:
             - { name: console.command }
 
+    command.planner.import_planner_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand
+        arguments:
+            - '@command.planner.import_handler'
+        tags:
+            - { name: console.command }
+
     command.generate_invoice_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
         arguments:
