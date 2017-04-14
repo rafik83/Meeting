@@ -26,7 +26,7 @@
                 <td>{{ promotion_code.stock }}</td>
                 <td>
                     {% if promotion_code.validUntil is not null %}
-                        {{ promotion_code.validUntil|localizeddate('medium', 'short', app.request.locale) }}
+                        {{ promotion_code.validUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     {% endif %}
                 </td>
                 <td class="text-right">
