@@ -139,7 +139,7 @@ Feature: Register and login user
     When I press "register.finalize"
     Then I should be on this page "/fr/sheet/5"
     When I follow "navigation.links.notification"
-    Then I should be on this page "/fr/notification"
+    Then I should be on this page "/fr/sheet/5/notification"
     And I should see "notification.list.title.label"
     And I should see "notification.package.noOrder"
     And I should see "notification.label.required"
