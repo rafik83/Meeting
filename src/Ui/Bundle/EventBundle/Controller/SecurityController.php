@@ -162,12 +162,12 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param Event   $event
+     * @param Sheet   $sheet
      *
      * @return Response
      */
-    public function impersonatingUserAction(Request $request, Event $event)
+    public function impersonatingUserAction(Event $event, Sheet $sheet)
     {
         $impersonatingUser = null;
 
@@ -182,8 +182,6 @@ class SecurityController extends Controller
                 }
             }
         }
-
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
 
         return $this->render('EventBundle:Security:impersonating.html.twig', [
             'impersonatingUser' => $impersonatingUser,
@@ -231,15 +229,14 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Request       $request
      * @param Event         $event
+     * @param Sheet         $sheet
      * @param UserInterface $user
      *
      * @return Response
      */
-    public function impersonatingSheetGroupManagerToSheetUserAction(Request $request, Event $event, UserInterface $user)
+    public function impersonatingSheetGroupManagerToSheetUserAction(Event $event, Sheet $sheet, UserInterface $user)
     {
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
         $sheetGroup = $sheet->getGroup();
 
         if (null === $sheetGroup) {

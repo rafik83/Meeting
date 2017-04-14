@@ -18,12 +18,12 @@
                 {{ render(controller('EventBundle:Navigation:menu', { 'sheet': sheet is defined ? sheet : null })) }}
             </div>
 
-            {% if is_granted('ROLE_PREVIOUS_USER') and event is defined %}
-                {{ render(controller('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser', { 'event': event })) }}
+            {% if is_granted('ROLE_PREVIOUS_USER') and event is defined and sheet is defined %}
+                {{ render(controller('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser', { 'event': event, 'sheet': sheet })) }}
             {% endif %}
 
-            {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
-                {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
+            {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined and sheet is defined %}
+                {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet })) }}
             {% endif %}
 
             <div class="container-fluid">
