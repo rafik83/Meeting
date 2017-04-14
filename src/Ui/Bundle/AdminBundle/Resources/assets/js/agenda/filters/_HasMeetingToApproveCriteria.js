@@ -1,11 +1,19 @@
 var Criteria = require('./_Criteria');
 
-function HasMeetingToApproveCriteria(filter){
+/**
+ * @param {boolean} filter
+ * @constructor
+ */
+function HasMeetingToApproveCriteria(filter) {
     this.filter = filter;
 }
 
 HasMeetingToApproveCriteria.prototype = new Criteria();
 
+/**
+ * @param {array} sheets
+ * @returns {array}
+ */
 HasMeetingToApproveCriteria.prototype.meetCriteria = function(sheets) {
 
     if (this.filter === true) {

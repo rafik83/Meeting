@@ -6,11 +6,19 @@ var TypeCriteria                      = require('./_TypeCriteria'),
     HasScheduledMeetingsCriteria      = require('./_HasScheduledMeetingsCriteria'),
     HasNoScheduledMeetingsCriteria    = require('./_HasNoScheduledMeetingsCriteria');
 
+/**
+ * @param {array} filters
+ * @constructor
+ */
 function SheetsFilter(filters)
 {
     this.filters = filters;
 }
 
+/**
+ * @param {array} sheets
+ * @returns {array}
+ */
 SheetsFilter.prototype.filter = function (sheets)
 {
     var typeCriteria = new TypeCriteria(this.filters.selectedTypes);
@@ -21,10 +29,7 @@ SheetsFilter.prototype.filter = function (sheets)
     var hasScheduledMeetingsCriteria = new HasScheduledMeetingsCriteria(this.filters.hasScheduledMeetings);
     var hasNoScheduledMeetingsCriteria = new HasNoScheduledMeetingsCriteria(this.filters.hasScheduledMeetings);
 
-    // OR
     sheets = typeCriteria.meetCriteria(sheets);
-
-    // AND
     sheets = hasMeetingToApproveCriteria.meetCriteria(sheets);
     sheets = hasNotEnoughAvailableSlotCriteria.meetCriteria(sheets);
     sheets = hasSentMeetingRequestCriteria.meetCriteria(sheets);

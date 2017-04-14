@@ -1,11 +1,19 @@
 var Criteria = require('./_Criteria');
 
-function TypeCriteria(types){
+/**
+ * @param {array} types
+ * @constructor
+ */
+function TypeCriteria(types) {
     this.types = types;
 }
 
 TypeCriteria.prototype = new Criteria();
 
+/**
+ * @param {array} sheets
+ * @returns {array}
+ */
 TypeCriteria.prototype.meetCriteria = function(sheets) {
 
     if (this.types.length > 0) {

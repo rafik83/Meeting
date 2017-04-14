@@ -1,11 +1,19 @@
 var Criteria = require('./_Criteria');
 
-function HasNotEnoughAvailableSlotCriteria(filter){
+/**
+ * @param {boolean} filter
+ * @constructor
+ */
+function HasNotEnoughAvailableSlotCriteria(filter) {
     this.filter = filter;
 }
 
 HasNotEnoughAvailableSlotCriteria.prototype = new Criteria();
 
+/**
+ * @param {array} sheets
+ * @returns {array}
+ */
 HasNotEnoughAvailableSlotCriteria.prototype.meetCriteria = function(sheets) {
 
     if (this.filter === true) {

@@ -1,11 +1,19 @@
 var Criteria = require('./_Criteria');
 
-function HasScheduledMeetingsCriteria(filter){
+/**
+ * @param {boolean} filter
+ * @constructor
+ */
+function HasScheduledMeetingsCriteria(filter) {
     this.filter = filter;
 }
 
 HasScheduledMeetingsCriteria.prototype = new Criteria();
 
+/**
+ * @param {array} sheets
+ * @returns {array}
+ */
 HasScheduledMeetingsCriteria.prototype.meetCriteria = function(sheets) {
 
     if (this.filter === true) {
