@@ -80,7 +80,7 @@ class HomeController extends Controller
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && null !== $user) {
             $homeDispatchView = $this->get('components.home.home_dispatch')->handle($event, $user);
 
-            if (false !== $homeDispatchView) {
+            if (null !== $homeDispatchView) {
                 if ($homeDispatchView->isGroup()) {
                     return $this->redirectToRoute(
                         'event_sheet_group_index',

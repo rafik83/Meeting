@@ -179,7 +179,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('COUNT(DISTINCT sheet.id)')
-            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->from(Sheet::class, 'sheet')
             ->join(
                 'sheet.participants',
                 'participant',

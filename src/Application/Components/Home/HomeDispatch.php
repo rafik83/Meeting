@@ -39,7 +39,7 @@ class HomeDispatch
      * @param Event $event
      * @param User  $user
      *
-     * @return false|HomeDispatchView
+     * @return null|HomeDispatchView
      */
     public function handle(Event $event, User $user)
     {
@@ -65,6 +65,6 @@ class HomeDispatch
             return new HomeDispatchView(HomeDispatchView::TYPE_ONE_SHEET, $sheet);
         }
 
-        return false;
+        return null;
     }
 }
