@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
@@ -78,11 +79,15 @@ class SubmenuViewQueryHandler
      */
     public function handle(SubmenuViewQuery $query)
     {
-        $sheet = $this->sheetGuesser->getUserSheet(
-            $query->user,
-            $query->event,
-            $query->locale
-        );
+        try {
+            $sheet = $this->sheetGuesser->getUserSheet(
+                $query->user,
+                $query->event,
+                $query->locale
+            );
+        } catch (SheetNotFoundException $exception) {
+            return new SubmenuView([]);
+        }
 
         $buttonsViews = [];
 

@@ -22,6 +22,10 @@
                 {% endif %}
             </div>
 
+            {% if is_granted('ROLE_PREVIOUS_USER') and event is defined %}
+                {{ render(controller('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser', { 'event': event })) }}
+            {% endif %}
+
             {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
                 {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
             {% endif %}

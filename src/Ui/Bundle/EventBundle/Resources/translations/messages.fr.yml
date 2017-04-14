@@ -312,6 +312,8 @@ sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
 sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nET\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
+sheetGroup.impersonateAs : '%fromEmail% connecté en tant que %toFirstName% %toLastName% (%toEmail%)'
+sheetGroup.quitImpersonation : Quitter
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total

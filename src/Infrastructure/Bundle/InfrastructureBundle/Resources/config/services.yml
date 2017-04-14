@@ -155,6 +155,12 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetCompletenessRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    repository.sheet.group_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\GroupRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     repository.admin_activate_account_token_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:
@@ -2518,6 +2524,14 @@ services:
         arguments:
             - '@adapter.serializer_adapter'
             - '@adapter.sheet_search_adapter'
+
+    query.sheet.group.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
 
     #
     # Program query
