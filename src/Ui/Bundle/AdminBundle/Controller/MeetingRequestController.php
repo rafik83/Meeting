@@ -173,7 +173,10 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Action not allowed for this user');
         }
 
-        $lockMeetingRequest = new LockMeetingRequestUpdate($event);
+        $lockMeetingRequest = new LockMeetingRequestUpdate(
+            $event,
+            $event->getConfiguration()->isMeetingRequestUpdateLocked()
+        );
         $form               = $this->createForm(LockMeetingRequestType::class, $lockMeetingRequest, [
             'submit' => true,
         ]);

@@ -21,7 +21,7 @@
                 <tbody>
                 {% for notification in notifications.notificationViews %}
                     <tr>
-                        <td>{{ notification.createdAt|localizeddate('long', 'none', app.request.locale) }}</td>
+                        <td>{{ notification.createdAt|localizeddate('long', 'none', app.request.locale, event.timeZone) }}</td>
                         <td>
                             <i class="{{ notification.icon }}"></i> {{ ('notification.category.' ~ notification.category ~ '.label')|trans }}
                         </td>

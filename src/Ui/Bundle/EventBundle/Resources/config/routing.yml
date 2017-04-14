@@ -72,6 +72,18 @@ event_activate_account:
         token: \w+
     defaults: { _controller: EventBundle:ActivateAccount:password }
 
+event_activate_account_expired:
+    path: /activate/{token}/expired
+    methods: [GET, POST]
+    requirements:
+        token: \w+
+    defaults: { _controller: EventBundle:ActivateAccount:expiredToken }
+
+event_actiavet_account_re_send_token_confirm:
+    path: /activate/expired/resend
+    methods: [GET]
+    defaults: { _controller: EventBundle:ActivateAccount:confirmReSendToken }
+
 event_activate_account_already_known:
     path: /complete-profile/{participant}
     methods: [GET]
@@ -226,6 +238,32 @@ event_sheet_internal_print:
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:print }
+
+#
+# Sheets group
+#
+
+event_sheet_group_index:
+    path:     /sheets-group/{sheetGroup}
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Group/Home:index }
+
+event_sheet_group_switch_to:
+    path:     /sheets-group/{sheetGroup}/switch-to/{sheet}
+    requirements:
+        sheetGroup: \d+
+        sheet: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:switchSheetGroupManagerToSheetUser }
+
+event_sheet_group_unswitch:
+    path:     /sheets-group/{sheetGroup}/unswitch
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:unswitchSheetGroupManager }
 
 #
 # Sheet Billing
@@ -407,7 +445,7 @@ event_meeting_request_edit:
 event_meeting_request_export_contact:
     path: /export-contacts.csv
     methods: [GET]
-    defaults: { _controller: EventBundle:MeetingRequest:exportContact }
+    defaults: { _controller: EventBundle:MeetingRequest\Contact:exportContact }
 
 #
 # Notification

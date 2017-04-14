@@ -37,7 +37,9 @@ class ConfigureDatesHandler
         $configureDates->event->getConfiguration()->setDates(
             $configureDates->catalogOnlineDate,
             $configureDates->happeningsOpenDate,
-            $configureDates->schedulePublishDate
+            $configureDates->schedulePublishDate,
+            $configureDates->closeMeetingRequestDate,
+            $configureDates->closeAnsweringMeetingRequestDate
         );
 
         $this->eventRepository->set($configureDates->event);

@@ -155,6 +155,12 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetCompletenessRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    repository.sheet.group_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\GroupRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     repository.admin_activate_account_token_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:
@@ -343,6 +349,15 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
+
+    command.event.index_handler:
+        class: Proximum\Vimeet\Application\Command\Event\IndexHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Index }
+
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
         class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
         arguments:
@@ -367,6 +382,15 @@ services:
                 - '@repository.rule_repository'
             tags:
                 - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Remove }
+
+    command.type.index_handler:
+            class: Proximum\Vimeet\Application\Command\Type\IndexHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.sheet_repository'
+                - '@adapter.sheet_indexer'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Index }
+
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
         class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
         arguments:
@@ -417,6 +441,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Category\Update }
     vimeet_infrastructure.vimeet.application.command.category.create_handler:
@@ -424,6 +449,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Category\Create }
     vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:
@@ -675,6 +701,15 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccountPassword }
+
+    command.user.activate_account.re_send_activate_account_token_handler:
+        class: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountTokenHandler
+        arguments:
+            - '@components.token.user.activate_account_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken }
+
     command.user.change_mail_handler:
         class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
         arguments:
@@ -945,8 +980,18 @@ services:
         arguments:
             - '@repository.template.sheet_template_repository'
             - '@template.template_preview_resolver'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
+
+    command.sheet.template.index_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\IndexHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Index }
+
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
         arguments:
@@ -963,8 +1008,18 @@ services:
             - '@repository.template.registration_template_repository'
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
+
+    command.sheet.template_registration.index_handler:
+        class: Proximum\Vimeet\Application\Command\Template\Registration\IndexHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Index }
+
     command.template.registration.add_locale_handler:
         class: Proximum\Vimeet\Application\Command\Template\Registration\AddLocaleHandler
         arguments:
@@ -1511,6 +1566,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@adapter.entity_manager_adapter'
+            - '@adapter.job_queue_adapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
@@ -1520,6 +1576,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
@@ -1548,6 +1605,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeetingHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting }
 
@@ -1660,6 +1718,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter
         arguments:
             - '@filesystem'
+
+    adapter.sheet_indexer:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
+        arguments:
+            - '@fos_elastica.object_persister.app.sheet'
 
     #
     # Components
@@ -1786,6 +1849,7 @@ services:
         arguments:
             - '@repository.user_activate_account_token_repository'
             - '@datetime'
+            - '%user_activate_account_token_expiration%'
     components.token.admin.activate_account_token_generator:
         class: Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator
         arguments:
@@ -1836,6 +1900,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.manager'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
     #
     # Security Component
@@ -2298,6 +2364,8 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
             - '@template.template_data_factory'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
     query.invoice.invoice_data_query_handler:
@@ -2464,6 +2532,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
+
+    query.sheet.group.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
 
     #
     # Program query
@@ -2883,6 +2959,8 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting_request.meeting_request_view_query_handler'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
@@ -3129,6 +3207,38 @@ services:
         tags:
             - { name: console.command }
 
+    command.index_sheets_by_sheet_template:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand
+        arguments:
+            - '@command.sheet.template.index_handler'
+            - '@repository.template.sheet_template_repository'
+        tags:
+            - { name: console.command }
+
+    command.index_sheets_by_registration_template:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand
+        arguments:
+            - '@command.sheet.template_registration.index_handler'
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: console.command }
+
+    command.index_sheets_by_types:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand
+        arguments:
+            - '@command.type.index_handler'
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: console.command }
+
+    command.index_in_catalog_sheets_by_event:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand
+        arguments:
+            - '@command.event.index_handler'
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
@@ -3340,6 +3450,16 @@ services:
 
     domain.key_dates.checker.meeting_published_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.answering_meeting_request_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
         arguments:
             - '@datetime'
 
@@ -3607,11 +3727,15 @@ services:
     #
     # Planner
     #
-    service_planner.exporter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Planner\Exporter
+    command.planner.export_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ExportHandler
         arguments:
+            - '@command.unavailability.mass.dispatcher_handler'
+            - '@command.meeting_request.admin.lock_meeting_request_update_handler'
             - '@query.planner.planner_view_query_handler'
-            - '@serializer'
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
 
     query.planner.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
@@ -3636,6 +3760,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.planner.indicator_calculator'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     query.planner.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler

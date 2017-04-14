@@ -112,12 +112,13 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting, fromParticipant, toParticipant')
+            ->select('meeting, fromParticipant, toParticipant, request')
             ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->join('meeting.fromParticipants', 'fromParticipant')
             ->join('meeting.toParticipants', 'toParticipant')
+            ->join('meeting.request', 'request')
             ->setParameter('event', $event)
             ->where('meeting.state = :state')
             ->setParameter('state', Meeting::STATE_SCHEDULED);
