@@ -11,12 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\ExportJobCreator;
-use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
-use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
-use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\XmlFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ExportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
