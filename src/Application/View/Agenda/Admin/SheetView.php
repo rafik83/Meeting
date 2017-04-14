@@ -134,6 +134,13 @@ class SheetView
     public $hasAvailableSlots;
 
     /**
+     * "A encore des demandes/propositions validés et non placés"
+     *
+     * @var bool
+     */
+    public $hasValidatedRequestNotScheduled;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
@@ -165,9 +172,10 @@ class SheetView
         $this->url                      = $url;
         $this->follower                 = $follower;
 
-        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
-        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
-        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
-        $this->hasAvailableSlots          = $sheetIndicatorsView->hasAvailableSlots;
+        $this->hasNotEnoughAvailableSlot       = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
+        $this->hasNotSentMeetingRequest        = $sheetIndicatorsView->hasNotSentMeetingRequest;
+        $this->hasMeetingToApprove             = $sheetIndicatorsView->hasMeetingToApprove;
+        $this->hasAvailableSlots               = $sheetIndicatorsView->hasAvailableSlots;
+        $this->hasValidatedRequestNotScheduled = $sheetIndicatorsView->hasValidatedRequestNotScheduled;
     }
 }

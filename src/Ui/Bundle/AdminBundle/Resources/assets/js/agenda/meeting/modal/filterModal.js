@@ -18,7 +18,8 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlots: false
+                hasAvailableSlots: false,
+                hasValidatedRequestNotScheduled: false
             },
             filters: {
                 selectedTypes: [],
@@ -26,7 +27,8 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlots: null
+                hasAvailableSlots: null,
+                hasValidatedRequestNotScheduled: null
             }
         }
     },
@@ -47,7 +49,8 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlots: null
+                hasAvailableSlots: null,
+                hasValidatedRequestNotScheduled: null
             };
             this.formFilters =  {
                 selectedTypes: [],
@@ -55,7 +58,8 @@ module.exports = {
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
-                hasAvailableSlots: null
+                hasAvailableSlots: null,
+                hasValidatedRequestNotScheduled: null
             }
         },
         setUsedFilter: function() {
