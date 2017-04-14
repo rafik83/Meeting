@@ -8,24 +8,24 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Request;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingRequest;
 
 use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 
-class ExportController extends Controller
+class ContactController extends Controller
 {
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
      * @return Response
      */

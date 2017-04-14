@@ -50,8 +50,15 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+event.activateAccount.expired.title: 'Votre invitation a expiré'
+event.activateAccount.expired.explanation: 'Votre invitation a expiré, vous pouvez recevoir une nouvelle invitation par email en cliquant sur le bouton ci-dessous'
+event.activateAccount.expired.resend: 'Recevoir une nouvelle invitation par email'
+event.activateAccount.resendToken.title: Une nouvelle invitation vous a été envoyée
+event.activateAccount.resendToken.explanation: Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
+event.meeting.request.closed: Les demandes de rendez-vous sont terminées
+event.meeting.request.answering.closed: Les validations de rendez-vous sont terminées
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.filter.all: 'Toutes'
 event.meeting.listRequest.filter.requests: 'Mes demandes'

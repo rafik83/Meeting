@@ -79,6 +79,18 @@ event_activate_account:
         token: \w+
     defaults: { _controller: EventBundle:ActivateAccount:password }
 
+event_activate_account_expired:
+    path: /activate/{token}/expired
+    methods: [GET, POST]
+    requirements:
+        token: \w+
+    defaults: { _controller: EventBundle:ActivateAccount:expiredToken }
+
+event_actiavet_account_re_send_token_confirm:
+    path: /activate/expired/resend
+    methods: [GET]
+    defaults: { _controller: EventBundle:ActivateAccount:confirmReSendToken }
+
 event_activate_account_already_known:
     path: /complete-profile/{participant}
     methods: [GET]
@@ -469,7 +481,7 @@ event_meeting_request_export_contact:
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Request/Export:exportContact }
+    defaults: { _controller: EventBundle:MeetingRequest\Contact:exportContact }
 
 #
 # Notification

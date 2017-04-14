@@ -321,6 +321,8 @@ class CatalogController extends Controller
 
         $isMeetingPublished           = false;
         $isMeetingRequestUpdateLocked = false;
+        $isMeetingRequestClosed       = false;
+        $isAnsweringMeetingRequestClosed = false;
 
         if ($sheet === $sheetToDisplay) {
             $meetingRequest = null;
@@ -334,6 +336,11 @@ class CatalogController extends Controller
                 ->allowedToAccess($event);
 
             $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
+            $isMeetingRequestClosed          = !$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($event);
+            $isAnsweringMeetingRequestClosed = !$this
+                ->get('domain.key_dates.checker.answering_meeting_request_access_checker')
+                ->allowedToAccess($event)
+            ;
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
@@ -349,6 +356,8 @@ class CatalogController extends Controller
             'meetingRequest'               => $meetingRequest,
             'isMeetingPublished'           => $isMeetingPublished,
             'isMeetingRequestUpdateLocked' => $isMeetingRequestUpdateLocked,
+            'isMeetingRequestClosed'       =>$isMeetingRequestClosed,
+            'isAnsweringMeetingRequestClosed' =>$isAnsweringMeetingRequestClosed,
         ]);
     }
 

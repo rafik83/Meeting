@@ -36,6 +36,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -58,10 +59,7 @@ class MeetingRequestController extends Controller
     public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
-        }
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
             $sheet, $request->getLocale()
@@ -136,26 +134,35 @@ class MeetingRequestController extends Controller
     {
         $event = $eventDomain->getEvent();
 
+        // if the meeting request are closed
+        if (!$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException('You can not request a meeting as the meeting request are closed');
+        }
+
         if (!$sheet->isInCatalog()) {
             throw $this->createNotFoundException('Sheet not in catalog');
         }
 
+        // If the catalog is closed
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
             throw $this->createNotFoundException();
         }
 
         $from = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
 
+        // If the sheet that request the meeting is not in catalog
         if (!$from->isInCatalog()) {
             throw $this->createNotFoundException('Viewer Sheet not in catalog');
         }
 
         $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($from);
 
+        // If there are no rules between the two sheets
         if (!in_array($sheet->getType(), $visibleTypes)) {
             throw $this->createNotFoundException('The viewer is not allowed to create a meeting request with this sheet');
         }
 
+        // If the requester sheet is the sheet requested
         if ($from === $sheet) {
             throw $this->createNotFoundException('You can not request a meeting with yourself');
         }
@@ -164,6 +171,7 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
+        // If there is already a meeting request between the two sheets
         if (null !== $this
                 ->get('vimeet_infrastructure.repository.meeting.request_repository')
                 ->getRequestBetweenSheets($sheet, $from)
@@ -309,6 +317,7 @@ class MeetingRequestController extends Controller
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
@@ -409,14 +418,19 @@ class MeetingRequestController extends Controller
             if ($isSubmitted && $form->isValid()) {
                 $this->get('tactician.commandbus')->handle($unRefuse);
 
-                return new JsonResponse($this->createJsonResponseData(
-                    true,
-                    true,
-                    $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
-                        'meetingRequest' => $meetingRequest,
-                        'sheet'          => $meetingRequest->getToSheet(),
-                    ])
-                ));
+                // If the meeting request are still answerable
+                if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+                    return new JsonResponse($this->createJsonResponseData(
+                        true,
+                        true,
+                        $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
+                            'meetingRequest' => $meetingRequest,
+                            'sheet'          => $meetingRequest->getToSheet(),
+                        ])
+                    ));
+                } else {
+                    return $this->displayWarningClosedAnsweringMeetingRequest();
+                }
             } elseif ($isSubmitted && !$form->isValid()) {
                 return new JsonResponse($this->createJsonResponseData(
                     false,
@@ -454,6 +468,30 @@ class MeetingRequestController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    private function displayWarningClosedMeetingRequest()
+    {
+        return new JsonResponse($this->createJsonResponseData(
+            true,
+            true,
+            $this->renderView('EventBundle:MeetingRequest/Button:closedMeetingRequest.html.twig')
+        ));
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    private function displayWarningClosedAnsweringMeetingRequest()
+    {
+        return new JsonResponse($this->createJsonResponseData(
+            true,
+            true,
+            $this->renderView('EventBundle:MeetingRequest/Button:closedAnsweringMeetingRequest.html.twig')
+        ));
+    }
+
+    /**
      * @param Request                  $request
      * @param MeetingRequest           $meetingRequest
      * @param Sheet                    $sheet
@@ -480,13 +518,19 @@ class MeetingRequestController extends Controller
             if ($cancelForm->handleRequest($request)->isSubmitted() && $cancelForm->isValid()) {
                 $this->get('tactician.commandbus')->handle($cancelRequest);
 
-                return new JsonResponse($this->createJsonResponseData(
-                    true,
-                    true,
-                    $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
-                        'sheet' => $meetingRequest->getToSheet(),
-                    ])
-                ));
+                // If you are still allowed to request someone in meeting
+                if ($this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($sheet->getEvent())) {
+                    return new JsonResponse($this->createJsonResponseData(
+                        true,
+                        true,
+                        $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
+                            'sheet' => $meetingRequest->getToSheet(),
+                        ])
+                    ));
+                } else {
+                    // Otherwise, response with the message saying the meeting requests are closed
+                    return $this->displayWarningClosedMeetingRequest();
+                }
             }
         }
 

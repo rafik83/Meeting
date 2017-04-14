@@ -8,13 +8,21 @@
 
         <div class="buttons-zone button request-meeting-sheet">
             {% if isRequestMeetingEnabled %}
-                {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
-                    'sheet': sheet,
-                    'userSheet': userSheet,
-                    'meetingRequest': meetingRequest,
-                    'isMeetingPublished': isMeetingPublished|default(false),
-                    'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
-                }, false) }}
+                {% if meetingRequest is defined and meetingRequest is null and isMeetingRequestClosed is defined and isMeetingRequestClosed == true %}
+                    {# Hide buttons if the meetingRequests are closed #}
+                {% elseif meetingRequest is defined and meetingRequest is not null and isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
+                    {# Hide buttons if the meetingRequests answering are closed #}
+                {% else %}
+                    {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
+                        'sheet': sheet,
+                        'userSheet': userSheet,
+                        'meetingRequest': meetingRequest,
+                        'isMeetingPublished': isMeetingPublished|default(false),
+                        'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                        'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                        'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                    }, false) }}
+                {% endif %}
             {% else %}
                 {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
             {% endif %}
@@ -55,6 +63,8 @@
                 'meetingRequest' : meetingRequest|default(false),
                 'isMeetingPublished': isMeetingPublished|default(false),
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
             }, false) }}
         {% endfor %}
     </div>
