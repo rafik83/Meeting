@@ -1,5 +1,5 @@
-var sortSheetForm = require('./sortSheetForm'),
-    options       = require('../vueComponents/options'),
+var sortSheetForm = require('./../form/sortSheetForm'),
+    options       = require('../../../vueComponents/options'),
     sortConstant  = {
         asc: 'asc',
         desc: 'desc',

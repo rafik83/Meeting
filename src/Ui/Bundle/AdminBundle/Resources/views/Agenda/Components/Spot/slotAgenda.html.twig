@@ -21,11 +21,11 @@
                     <li class="" v-for="meeting in agendaSlot.meetings">
                         <div class="text-center">
                             <div class="title">
-                                <a href="#" v-bind:title="meeting.fromSheetTitle">${ meeting.fromSheetTitle }</a>
+                                <a href="#" v-bind:title="meeting.fromSheetTitle" v-on:click="showAgendaForSheetId(meeting.fromSheetId)">${ meeting.fromSheetTitle }</a>
                             </div>
                             <div class="separator">/</div>
                             <div class="title">
-                                <a href="#" v-bind:title="meeting.toSheetTitle">${ meeting.toSheetTitle }</a>
+                                <a href="#" v-bind:title="meeting.toSheetTitle" v-on:click="showAgendaForSheetId(meeting.toSheetId)">${ meeting.toSheetTitle }</a>
                             </div>
                         </div>
                     </li>
