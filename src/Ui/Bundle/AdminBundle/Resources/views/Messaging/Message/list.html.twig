@@ -35,7 +35,7 @@
                     {{ message.name }}
                 </td>
                 <td>
-                    {{ message.createdAt|localizeddate('medium', 'short') }}
+                    {{ message.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                 </td>
                 <td class="text-right">
                     <a class="btn btn-default btn-sm" href="{{ path('admin_messaging_message_update', { 'event': event.id, 'message': message.id }) }}">

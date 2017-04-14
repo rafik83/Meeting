@@ -20,7 +20,7 @@
                                 {{ program.categoryTitle }}
                             </strong>
                         {% endif %}
-                        <span>- {{ day.day|localizeddate('full', 'none')|capitalize }}</span>
+                        <span>- {{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}</span>
                     </p>
                 </header>
                 <div class="meets">

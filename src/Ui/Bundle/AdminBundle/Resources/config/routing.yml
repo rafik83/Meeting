@@ -270,7 +270,6 @@ admin_category_update:
 #
 # Agenda
 #
-
 admin_agenda_index:
     path: /event/{event}/agenda
     requirements:
@@ -284,6 +283,21 @@ admin_agenda_sheets_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheetsList }
+
+admin_agenda_spot_list:
+    path: /event/{event}/agenda/spots
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:spotsList }
+
+admin_agenda_spot_detail:
+    path: /event/{event}/agenda/spots/{spot}/detail
+    requirements:
+        event: \d+
+        spot: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:spotDetail }
 
 admin_agenda_sheets_indicators:
     path: /event/{event}/agenda/sheets/indicators
@@ -1240,7 +1254,7 @@ admin_export_planner_data:
     path: /event/{event}/planner/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Planner/Export:export }
 
 admin_import_planner_data:

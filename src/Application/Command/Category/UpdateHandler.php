@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Category;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -26,15 +28,23 @@ class UpdateHandler
     private $typeRepository;
 
     /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
+
+    /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param TypeRepositoryInterface     $typeRepository
+     * @param JobQueueInterface           $jobQueue
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
-        TypeRepositoryInterface $typeRepository
+        TypeRepositoryInterface $typeRepository,
+        JobQueueInterface $jobQueue
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->typeRepository     = $typeRepository;
+        $this->jobQueue = $jobQueue;
     }
 
     /**
@@ -62,6 +72,15 @@ class UpdateHandler
             }
         }
 
+        $oldTypeIds = array_map(
+            function (Type $type) {
+                return $type->getId();
+            },
+            $category->getTypes()
+        );
+
+        $newTypeIds = $update->types;
+
         // Remove Type
         foreach ($category->getTypes() as $type) {
             if (!in_array($type->getId(), $update->types)) {
@@ -70,5 +89,10 @@ class UpdateHandler
         }
 
         $this->categoryRepository->set($category);
+
+        if ($oldTypeIds != $newTypeIds) {
+            $allTypeIds = array_unique(array_merge($oldTypeIds, $newTypeIds));
+            $this->jobQueue->indexSheetsByTypes($allTypeIds);
+        }
     }
 }

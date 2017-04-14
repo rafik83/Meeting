@@ -28,6 +28,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
@@ -104,16 +105,27 @@ class MeetingRequestController extends Controller
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
         return $this->render($template, [
-            'event'              => $event,
-            'sheet'              => $sheet,
-            'meetingRequestView' => $meetingRequestListView,
-            'stateListsView'     => $stateListsView,
-            'searchForm'         => $searchForm->createView(),
-            'isCatalog'          => true, // set menu link visible,
-            'isMeeting'          => true,
-            'isEventOpen'        => $isEventOpen,
-            'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
+            'event'                    => $event,
+            'sheet'                    => $sheet,
+            'meetingRequestView'       => $meetingRequestListView,
+            'stateListsView'           => $stateListsView,
+            'searchForm'               => $searchForm->createView(),
+            'isCatalog'                => true, // set menu link visible,
+            'isMeeting'                => true,
+            'isEventOpen'              => $isEventOpen,
+            'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
+            'resultsCount'             => count($meetingRequestListView->getMeetingRequestsView()),
         ]);
+    }
+
+    /**
+     * @param $state
+     *
+     * @return bool
+     */
+    private function isFilterRequestPropositionActive($state)
+    {
+        return $state === Constant::FILTER_STATE_APPROVED || $state === Constant::FILTER_STATE_REFUSED;
     }
 
     /**

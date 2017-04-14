@@ -54,6 +54,7 @@ final class Events
     const SHEET_UPDATED                        = 'sheet.updated';
     const MUST_SELECT_PACKAGE                  = 'package.must_select_package';
     const REGISTRATION_TEMPLATE_UPDATED        = 'registration_template.updated';
+    const SHEET_TEMPLATE_UPDATED               = 'sheet_template.updated';
     const PACKAGE_STEP_DONE                    = 'package.step.done';
     const SHEET_COMPLETENESS                   = 'sheet.completeness';
     const TRANSACTION_CREATED                  = 'transaction.created';
