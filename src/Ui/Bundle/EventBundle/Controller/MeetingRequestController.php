@@ -61,6 +61,7 @@ class MeetingRequestController extends Controller
     public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('You can not update this data');
@@ -260,6 +261,7 @@ class MeetingRequestController extends Controller
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
@@ -330,6 +332,7 @@ class MeetingRequestController extends Controller
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
@@ -396,6 +399,7 @@ class MeetingRequestController extends Controller
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $permissionManager = $this->get('meeting.request_permission_manager');
 
         if (!$permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($sheet, $meetingRequest)) {
@@ -598,23 +602,23 @@ class MeetingRequestController extends Controller
      *
      * @param Request        $request
      * @param EventDomain    $eventDomain
+     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return JsonResponse|Response
      */
-    public function editRequestAction(Request $request, EventDomain $eventDomain, MeetingRequest $meetingRequest)
-    {
+    public function editRequestAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        MeetingRequest $meetingRequest
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException('Not allowed method');
         }
-
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
-            $this->getUser(),
-            $eventDomain->getEvent(),
-            $request->getLocale()
-        );
         $permissionManager = $this->get('meeting.request_permission_manager');
 
         $isNotAllowedToEditApproved = $meetingRequest->isApproved() && !$permissionManager->isAllowedToEditApproved($meetingRequest, $sheet);
