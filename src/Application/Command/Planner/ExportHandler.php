@@ -111,8 +111,6 @@ class ExportHandler
      * @param Export $export
      *
      * @throws InvalidArgumentForExportException
-     *
-     * @return bool
      */
     public function handle(Export $export)
     {
@@ -127,6 +125,8 @@ class ExportHandler
             $this->dispatcherHandler->handle(new Dispatcher($event));
         } catch (UnableToDispatchException $exception) {
             $this->notifyError(sprintf('flash.%s', $exception->indication), $event, $export);
+
+            return;
         }
 
         if (true === $export->lockMeetingRequest) {
@@ -138,8 +138,12 @@ class ExportHandler
             $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => self::XML_ROOT_NODE]);
         } catch (SlotNotConfiguredException $exception) {
             $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+
+            return;
         } catch (DayNotConfiguredException $exception) {
             $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+
+            return;
         }
 
         $file = $this->createFile($event, $content);
