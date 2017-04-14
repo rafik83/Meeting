@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Exception\Group\Request\NoResultException;
 use Proximum\Vimeet\Application\View\Group\Request\SheetListView;
 use Proximum\Vimeet\Application\View\Group\Request\SheetView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -37,25 +39,37 @@ class SheetListViewQueryHandler
     /** @var RequestViewQueryHandler */
     private $requestViewQueryHandler;
 
+    /** @var MeetingRequestAccessChecker */
+    private $meetingRequestAccessChecker;
+
+    /** @var AnsweringMeetingRequestAccessChecker */
+    private $answeringMeetingRequestAccessChecker;
+
     /**
-     * @param SheetRepositoryInterface   $sheetRepository
-     * @param SheetInfoGuesserCache      $sheetInfoGuesser
-     * @param RequestRepositoryInterface $requestRepository
-     * @param SheetViewQueryHandler      $sheetViewQueryHandler
-     * @param RequestViewQueryHandler    $requestViewQueryHandler
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetInfoGuesserCache                $sheetInfoGuesser
+     * @param RequestRepositoryInterface           $requestRepository
+     * @param SheetViewQueryHandler                $sheetViewQueryHandler
+     * @param RequestViewQueryHandler              $requestViewQueryHandler
+     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesserCache $sheetInfoGuesser,
         RequestRepositoryInterface $requestRepository,
         SheetViewQueryHandler $sheetViewQueryHandler,
-        RequestViewQueryHandler $requestViewQueryHandler
+        RequestViewQueryHandler $requestViewQueryHandler,
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->sheetRepository  = $sheetRepository;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->requestRepository = $requestRepository;
         $this->sheetViewQueryHandler = $sheetViewQueryHandler;
         $this->requestViewQueryHandler = $requestViewQueryHandler;
+        $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
@@ -67,10 +81,14 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $query)
     {
+        $event = $query->group->getEvent();
         $groupSheets = $this->sheetRepository->getByGroup($query->group);
+        $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
+        $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
+        $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
 
         // sheets met by the group sheets
-        $sheets = $this->sheetRepository->getSheetsMetBySheets($query->group->getEvent(), $groupSheets);
+        $sheets = $this->sheetRepository->getSheetsMetBySheets($event, $groupSheets);
 
         $sheetsWithTitle = [];
 
@@ -98,7 +116,10 @@ class SheetListViewQueryHandler
                     $query->group->getTitle(),
                     [],
                     $query->page,
-                    0
+                    0,
+                    $isMeetingRequestUpdateLocked,
+                    $isMeetingRequestClosed,
+                    $isAnsweringMeetingRequestClosed
                 );
             }
 
@@ -111,7 +132,7 @@ class SheetListViewQueryHandler
         }, $chunks[$query->page - 1]);
 
         $sheetViews = $this->getSheetViewsWithRequest(
-            $query->group->getEvent(),
+            $event,
             $groupSheets,
             $sheetsMet,
             $query->locale
@@ -122,7 +143,10 @@ class SheetListViewQueryHandler
             $query->group->getTitle(),
             $sheetViews,
             $query->page, // current page
-            count($chunks) // total page
+            count($chunks), // total page
+            $isMeetingRequestUpdateLocked,
+            $isMeetingRequestClosed,
+            $isAnsweringMeetingRequestClosed
         );
     }
 

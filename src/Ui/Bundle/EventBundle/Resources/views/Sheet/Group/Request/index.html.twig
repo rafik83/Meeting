@@ -28,7 +28,12 @@
                 </thead>
                 <tbody>
                     {% for sheetView in sheetListView.sheetViews if sheetListView.sheetViews is not empty %}
-                        {{ include('EventBundle:Sheet/Group/Request:sheetLine.html.twig', {'sheetView': sheetView }) }}
+                        {{ include('EventBundle:Sheet/Group/Request:sheetLine.html.twig', {
+                            'sheetView': sheetView,
+                            'isMeetingRequestUpdateLocked': sheetListView.isMeetingRequestUpdateLocked,
+                            'isMeetingRequestClosed': sheetListView.isMeetingRequestClosed,
+                            'isAnsweringMeetingRequestClosed': sheetListView.isAnsweringMeetingRequestClosed,
+                        }) }}
                     {% else %}
                         <tr>
                             <td colspan="4" class="text-center">{{ 'group.request.list.table.no-result'|trans }}</td>

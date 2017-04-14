@@ -33,19 +33,42 @@ class SheetListView
      */
     public $pages;
 
+    /** @var bool */
+    public $isMeetingRequestUpdateLocked;
+
+    /** @var bool */
+    public $isMeetingRequestClosed;
+
+    /** @var bool */
+    public $isAnsweringMeetingRequestClosed;
+
     /**
      * @param int         $groupId
      * @param string      $groupTitle
      * @param SheetView[] $sheetViews
      * @param int         $page
      * @param int         $pages
+     * @param bool        $isMeetingRequestUpdateLocked
+     * @param bool        $isMeetingRequestClosed
+     * @param bool        $isAnsweringMeetingRequestClosed
      */
-    public function __construct($groupId, $groupTitle, array $sheetViews, $page, $pages)
-    {
-        $this->groupId    = $groupId;
-        $this->groupTitle = $groupTitle;
-        $this->sheetViews = $sheetViews;
-        $this->page       = $page;
-        $this->pages      = $pages;
+    public function __construct(
+        $groupId,
+        $groupTitle,
+        array $sheetViews,
+        $page,
+        $pages,
+        $isMeetingRequestUpdateLocked,
+        $isMeetingRequestClosed,
+        $isAnsweringMeetingRequestClosed
+    ) {
+        $this->groupId                         = $groupId;
+        $this->groupTitle                      = $groupTitle;
+        $this->sheetViews                      = $sheetViews;
+        $this->page                            = $page;
+        $this->pages                           = $pages;
+        $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
+        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
     }
 }

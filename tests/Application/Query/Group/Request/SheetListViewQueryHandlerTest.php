@@ -20,9 +20,12 @@ use Proximum\Vimeet\Application\Query\Group\Request\SheetViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Request\RequestView;
 use Proximum\Vimeet\Application\View\Group\Request\SheetListView;
 use Proximum\Vimeet\Application\View\Group\Request\SheetView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -32,6 +35,9 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event  = $this->prophesize(Event::class);
+        $configuration = $this->prophesize(Configuration::class);
+        $event->getConfiguration()->willReturn($configuration->reveal());
+        $configuration->isMeetingRequestUpdateLocked()->willReturn(false);
         $group  = $this->prophesize(Group::class);
         $group->getId()->willReturn(9);
         $group->getTitle()->willReturn('group title');
@@ -143,17 +149,33 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedSheetView2 = new SheetView(2, 'title 2', $groupSheet1->reveal());
         $expectedSheetView2->addRequest($requestView3->reveal());
 
+        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+
         $handler = new SheetListViewQueryHandler(
             $sheetRepository->reveal(),
             $sheetInfoGuesser->reveal(),
             $requestRepository->reveal(),
             $sheetViewQueryHandler->reveal(),
-            $requestViewQueryHandler->reveal()
+            $requestViewQueryHandler->reveal(),
+            $meetingRequestAccessChecker->reveal(),
+            $answeringMeetingRequestAccessChecker->reveal()
         );
 
         $result = $handler->handle(new SheetListViewQuery($group->reveal(), $locale, $page, $limit));
 
-        $expected = new SheetListView(9, 'group title', [3 => $expectedSheetView1, 1 => $expectedSheetView2], 1, 3);
+        $expected = new SheetListView(
+            9,
+            'group title',
+            [3 => $expectedSheetView1, 1 => $expectedSheetView2],
+            1,
+            3,
+            false,
+            false,
+            false
+        );
 
         $this->assertEquals($expected, $result);
     }
