@@ -1,20 +1,20 @@
 <ul class="list-group">
     <li class="list-group-item">
         {{ 'admin.sheet.createdAt'|trans }}
-        <span class="badge">{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</span>
+        <span class="badge">{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</span>
     </li>
     {% if sheet.lastLoginAt is not null %}
         <li class="list-group-item">
             {{ 'admin.sheet.lastLoginAt'|trans }}
             <span class="badge">
-                {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
+                {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
             </span>
         </li>
     {% endif %}
 
     {% for trace in traces %}
         <li class="list-group-item">
-            {{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
+            {{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) }}
             {% if trace.author != '' %}
                 {{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}
             {% else %}
@@ -23,7 +23,7 @@
             {% if trace.comment != '' %}
                 {{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}
             {% endif %}
-            <span class="badge">{{ trace.date|localizeddate('medium', 'short', app.request.locale) }}</span>
+            <span class="badge">{{ trace.date|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</span>
         </li>
     {% endfor %}
 </ul>

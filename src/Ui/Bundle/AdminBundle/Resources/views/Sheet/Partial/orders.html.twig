@@ -23,7 +23,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {{ orderVatView.createdAt|localizeddate('medium', 'short') }}
+                            {{ orderVatView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                         </td>
                         <td class="text-right">
                             {{ orderVatView.totalWithVat|format_amount|localizedcurrency(orderVatView.currency) }}

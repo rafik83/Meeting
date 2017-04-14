@@ -1,6 +1,6 @@
-var updateParticipantForm = require('./updateParticipantForm'),
-    options               = require('../vueComponents/options'),
-    AgendaApiEndpoints    = require('../components/_AgendaApiEndpoints');
+var updateParticipantForm = require('./../form/updateParticipantForm'),
+    options               = require('../../../vueComponents/options'),
+    AgendaApiEndpoints    = require('../../../components/_AgendaApiEndpoints');
 
 var api = new AgendaApiEndpoints();
 

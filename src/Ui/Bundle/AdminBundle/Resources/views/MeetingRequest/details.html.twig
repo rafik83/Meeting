@@ -52,7 +52,7 @@
             {{ message.content }}
             <br>
             <span class="label label-default">
-                {{ message.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+                {{ message.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
             </span>
         </blockquote>
     {% endfor %}

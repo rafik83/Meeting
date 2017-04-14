@@ -1,6 +1,6 @@
-var options = require('../vueComponents/options'),
-    massAssignmentForm = require('./massAssignmentForm'),
-    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints'),
+var options = require('../../../vueComponents/options'),
+    massAssignmentForm = require('./../form/massAssignmentForm'),
+    AgendaApiEndpoints = require('../../../components/_AgendaApiEndpoints'),
     querystring = require('querystring');
 
 var api = new AgendaApiEndpoints();
