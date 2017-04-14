@@ -127,14 +127,17 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
-        $package  = new Package($event, 'package', $datetime);
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->shouldBeCalled()->willReturn(1);
+
+        $package = new Package($event, 'package', $datetime);
         $type->setPackage($package);
 
         $locale = 'fr';
         $route  = 'event_agenda';
 
-        $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet, $route);
+        $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
 
         // Expected
         $expectedSubmenuButtonViews = [
@@ -158,10 +161,14 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happeningAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
-        $navigationBuilder->getRoute('event_agenda')->shouldBeCalled()
+        $navigationBuilder
+            ->getRoute('event_agenda', ['sheet' => 1])
+            ->shouldBeCalled()
             ->willReturn('agenda.title.link');
 
-        $navigationBuilder->getRoute('happening_program')->shouldBeCalled()
+        $navigationBuilder
+            ->getRoute('happening_program', ['sheet' => 1])
+            ->shouldBeCalled()
             ->willReturn('program.title.link');
 
         $handler = new AgendaSubmenuViewQueryHandler(
