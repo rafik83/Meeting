@@ -68,7 +68,6 @@ class BatchValidationValidateHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new BatchValidationValidateHandler(
             $sheetRepository->reveal(),
-            $date,
             $batchJobQueue->reveal()
         );
 

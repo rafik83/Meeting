@@ -50,7 +50,6 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $sheetRepository      = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher      = $this->prophesize(DelayedEventDispatcher::class);
         $meetingRepository    = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetInfoGuesser     = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue        = $this->prophesize(BatchCatalogJobQueue::class);
@@ -74,8 +73,6 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new BatchCatalog([1, 2, 3], true, $admin);
         $handler = new BatchCatalogHandler(
             $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
             $batchJobQueue->reveal()
@@ -119,7 +116,6 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $sheetRepository   = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
@@ -152,8 +148,6 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new BatchCatalog([1 => 1, 2 => 2, 3 => 3], false, $admin);
         $handler = new BatchCatalogHandler(
             $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
             $batchJobQueue->reveal()
@@ -194,7 +188,6 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $sheetRepository   = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue     = $this->prophesize(BatchCatalogJobQueue::class);
@@ -213,8 +206,6 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new BatchCatalog([1 => 1, 2 => 2], true, $admin);
         $handler = new BatchCatalogHandler(
             $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
             $batchJobQueue->reveal()

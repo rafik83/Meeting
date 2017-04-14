@@ -69,7 +69,6 @@ class BatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new BatchDraftHandler(
             $sheetRepository->reveal(),
-            $date,
             $batchJobQueue->reveal()
         );
 

@@ -52,7 +52,6 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new BatchAcceptHandler(
             $sheetRepository->reveal(),
-            $date,
             $batchJobQueue->reveal()
         );
         $result  = $handler->handle($command);

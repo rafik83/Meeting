@@ -22,11 +22,6 @@ class BatchDraftHandler
     private $sheetRepository;
 
     /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
-
-    /**
      * @var BatchJobQueueInterface
      */
     private $batchJobQueue;
@@ -35,16 +30,13 @@ class BatchDraftHandler
      * BatchPendingHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param \DateTimeInterface       $datetime
      * @param BatchJobQueueInterface   $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        \DateTimeInterface $datetime,
         BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->datetime        = $datetime;
         $this->batchJobQueue   = $batchJobQueue;
     }
 

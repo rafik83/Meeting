@@ -42,8 +42,6 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
-        $batchCatalogHandler = $this->prophesize(BatchCatalogHandler::class);
         $meetingRepository   = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetInfoGuesser    = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue       = $this->prophesize(BatchJobQueueInterface::class);
@@ -68,9 +66,6 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
         $handler = new BatchEnableDisableHandler(
             $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $batchCatalogHandler->reveal(),
-            $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
             $batchJobQueue->reveal()
@@ -99,8 +94,6 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
-        $batchCatalogHandler = $this->prophesize(BatchCatalogHandler::class);
         $meetingRepository   = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetInfoGuesser    = $this->prophesize(SheetInfoGuesser::class);
         $batchJobQueue       = $this->prophesize(BatchJobQueueInterface::class);
@@ -131,9 +124,6 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
         $handler = new BatchEnableDisableHandler(
             $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $batchCatalogHandler->reveal(),
-            $date,
             $meetingRepository->reveal(),
             $sheetInfoGuesser->reveal(),
             $batchJobQueue->reveal()

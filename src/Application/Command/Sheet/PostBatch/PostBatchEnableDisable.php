@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchEnableDisableCommand;
 
 class PostBatchEnableDisable
 {

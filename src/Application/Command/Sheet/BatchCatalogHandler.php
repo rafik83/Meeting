@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchCatalogHandler
 {
@@ -26,16 +25,6 @@ class BatchCatalogHandler
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var DelayedEventDispatcher
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
 
     /**
      * @var MeetingRepositoryInterface
@@ -56,23 +45,17 @@ class BatchCatalogHandler
      * BatchCatalogHandler constructor.
      *
      * @param SheetRepositoryInterface   $sheetRepository
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param \DateTimeInterface         $datetime
      * @param MeetingRepositoryInterface $meetingRepository
      * @param SheetInfoGuesser           $sheetInfoGuesser
      * @param BatchJobQueueInterface     $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime,
         MeetingRepositoryInterface $meetingRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository   = $sheetRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->datetime          = $datetime;
         $this->meetingRepository = $meetingRepository;
         $this->sheetInfoGuesser  = $sheetInfoGuesser;
         $this->batchJobQueue     = $batchJobQueue;

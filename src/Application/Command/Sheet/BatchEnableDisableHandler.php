@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchEnableDisableHandler
 {
@@ -26,21 +25,6 @@ class BatchEnableDisableHandler
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var DelayedEventDispatcher
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var BatchCatalogHandler
-     */
-    private $batchCatalogHandler;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
 
     /**
      * @var MeetingRepositoryInterface
@@ -61,29 +45,20 @@ class BatchEnableDisableHandler
      * BatchEnableDisableHandler constructor.
      *
      * @param SheetRepositoryInterface   $sheetRepository
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param BatchCatalogHandler        $batchCatalogHandler
-     * @param \DateTimeInterface         $datetime
      * @param MeetingRepositoryInterface $meetingRepository
      * @param SheetInfoGuesser           $sheetInfoGuesser
      * @param BatchJobQueueInterface     $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher,
-        BatchCatalogHandler $batchCatalogHandler,
-        \DateTimeInterface $datetime,
         MeetingRepositoryInterface $meetingRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         BatchJobQueueInterface $batchJobQueue
     ) {
-        $this->sheetRepository     = $sheetRepository;
-        $this->eventDispatcher     = $eventDispatcher;
-        $this->batchCatalogHandler = $batchCatalogHandler;
-        $this->datetime            = $datetime;
-        $this->meetingRepository   = $meetingRepository;
-        $this->sheetInfoGuesser    = $sheetInfoGuesser;
-        $this->batchJobQueue       = $batchJobQueue;
+        $this->sheetRepository   = $sheetRepository;
+        $this->meetingRepository = $meetingRepository;
+        $this->sheetInfoGuesser  = $sheetInfoGuesser;
+        $this->batchJobQueue     = $batchJobQueue;
     }
 
     /**
