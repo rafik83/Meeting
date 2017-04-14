@@ -10,13 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
-use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class RequestPermissionManager
@@ -27,12 +24,6 @@ class RequestPermissionManager
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /** @var SheetManager */
-    private $sheetManager;
-
-    /** @var MeetingRequestAccessChecker */
-    private $meetingRequestAccessChecker;
-
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
 
@@ -40,22 +31,16 @@ class RequestPermissionManager
      * RequestPermissionManager constructor.
      *
      * @param RequestRepositoryInterface           $requestRepository
-     * @param SheetManager                         $sheetManager
      * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
-     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        SheetManager $sheetManager,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
-        MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->requestRepository                    = $requestRepository;
-        $this->sheetManager                         = $sheetManager;
         $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
-        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
