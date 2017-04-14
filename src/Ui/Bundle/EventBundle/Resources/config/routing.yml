@@ -621,17 +621,23 @@ event_invoice_show:
 # Agenda
 #
 event_agenda:
-    path: /agenda
+    path: /sheet/{sheet}/agenda
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:index }
 
 event_agenda_participant:
-    path: /agenda/participant/{participant}
+    path: /sheet/{sheet}/agenda/participant/{participant}
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
 happening_program:
-    path: /program
+    path: /sheet/{sheet}/program
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Program:index }
 
@@ -650,13 +656,16 @@ event_sheet_happening_participate:
 # Unavailability
 #
 event_unavailability_create:
-    path: /agenda/participant/{participant}/unavailability/create
+    path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/create
+    requirements:
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Unavailability:create }
 
 event_unavailability_remove:
-    path: /agenda/participant/{participant}/unavailability/{unavailability}/remove
-    methods: [DELETE]
+    path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/{unavailability}/remove
     requirements:
+        sheet: \d+
         unavailability: \d+
+    methods: [DELETE]
     defaults: { _controller: EventBundle:Unavailability:remove }

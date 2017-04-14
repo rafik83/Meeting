@@ -108,7 +108,7 @@ class PlanningViewQueryHandler
             $agendaRoute = null;
 
             if ($this->happeningsAccessChecker->allowedToAccess($event)) {
-                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
+                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda', ['sheet' => $sheet->getId()]);
             }
 
             return new LinkView(
@@ -142,7 +142,7 @@ class PlanningViewQueryHandler
             $agendaRoute = null;
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($event)) {
-                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
+                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda', ['sheet' => $sheet->getId()]);
             }
 
             return new LinkView(

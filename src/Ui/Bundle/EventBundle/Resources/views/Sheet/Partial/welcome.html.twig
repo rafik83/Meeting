@@ -41,7 +41,7 @@
                 <p class="custom-modal-text">{{ 'sheet.welcome.programContent'|trans|nl2br }}</p>
                 <div class="custom-modal-button-parent">
                     <div class="custom-modal-button-child">
-                        <a type="button" class="btn btn-primary" href="{{ path('happening_program') }}">
+                        <a type="button" class="btn btn-primary" href="{{ path('happening_program', {'sheet': sheet.id}) }}">
                             <i class="icon icon-Calendrier"></i>
                             {{ 'navigation.category.program'|trans }}
                         </a>

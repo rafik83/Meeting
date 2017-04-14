@@ -141,7 +141,7 @@ class SubstitutionsProvider
             case Compose::LINK_ACTIVACTE_ACCOUNT:
                 return $this->getActivateAccountUrl($recipient, $sheet, $locale);
             case Compose::LINK_AGENDA:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_CATALOG:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_MEETING_REQUEST:
@@ -151,7 +151,7 @@ class SubstitutionsProvider
             case Compose::LINK_PACKAGE:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_package_redirect_depending_on_context', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_PROGRAM:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', ['_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_SHEET:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_EXPORT_MEETING_SHEET:
