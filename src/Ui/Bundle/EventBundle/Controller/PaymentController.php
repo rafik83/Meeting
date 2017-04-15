@@ -120,6 +120,7 @@ class PaymentController extends Controller
 
         return $this->render('EventBundle:Payment:choice.html.twig', [
             'event'   => $eventDomain->getEvent(),
+            'sheet'   => $sheet,
             'form'    => $form->createView(),
             'total'   => $total,
             'deposit' => $deposit,
@@ -214,6 +215,7 @@ class PaymentController extends Controller
 
         return $this->render('EventBundle:Sheet:paymentInfo.html.twig', [
             'event'  => $eventDomain->getEvent(),
+            'sheet'  => $sheet,
             'locale' => $request->getLocale(),
         ]);
     }
