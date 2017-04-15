@@ -154,7 +154,6 @@ class UnavailabilityController extends Controller
     }
 
     /**
-     * @param Request        $request
      * @param EventDomain    $eventDomain
      * @param Unavailability $unavailability
      * @param Participant    $participant
@@ -163,7 +162,6 @@ class UnavailabilityController extends Controller
      * @return RedirectResponse
      */
     public function removeAction(
-        Request $request,
         EventDomain $eventDomain,
         Unavailability $unavailability,
         Participant $participant,
@@ -174,17 +172,6 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
 
-        try {
-            $sheet = $this
-                ->get('sheet.sheet_guesser')
-                ->getUserSheet($this->getUser(), $event, $request->getLocale());
-        } catch (SheetNotFoundException $exception) {
-            throw $this->createNotFoundException('Sheet not found');
-        }
-
-        if ($sheet !== $unavailability->getParticipant()->getSheet()) {
-            throw $this->createAccessDeniedException('This user can not remove this unavailability');
-        }
         if (!$sheet->hasParticipant($participant)) {
             throw $this->createNotFoundException('The participant given is not on the sheet');
         }
