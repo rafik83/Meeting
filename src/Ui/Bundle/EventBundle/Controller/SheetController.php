@@ -269,6 +269,7 @@ class SheetController extends Controller
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
+            'sheet'    => $sheet,
             'uid'      => $key,
             'label'    => $label,
             'form'     => $form->createView(),
@@ -421,15 +422,15 @@ class SheetController extends Controller
 
     /**
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return RedirectResponse
      */
-    public function removeImageAction(EventDomain $eventDomain, $locale, $key)
+    public function removeImageAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);

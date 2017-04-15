@@ -230,8 +230,9 @@ event_sheet_handle_remove_participant:
     defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
 
 event_sheet_remove_image:
-    path: /sheet/{locale}/{key}/image/remove
+    path: /sheet/{sheet}/{locale}/{key}/image/remove
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods: [DELETE]
