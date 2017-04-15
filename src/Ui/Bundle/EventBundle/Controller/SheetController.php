@@ -134,32 +134,44 @@ class SheetController extends Controller
     }
 
     /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
+     * @param int           $sheetToDisplay
+     * @param string        $locale
      *
      * @return BinaryFileResponse
      */
-    public function generatePdfAction(EventDomain $eventDomain, Sheet $sheet, $locale)
-    {
-        $user      = $this->getUser();
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $eventDomain->getEvent(), $locale);
+    public function generatePdfAction(
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserInterface $user,
+        $sheetToDisplay,
+        $locale
+    ) {
+        $sheetToDisplay = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetById($sheetToDisplay);
 
-        if ($userSheet !== $sheet) {
-            if (!$sheet->isInCatalog()) {
+        if (null === $sheetToDisplay || $eventDomain->getEvent() !== $sheetToDisplay->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not found');
+        }
+
+        if ($sheetToDisplay !== $sheet) {
+            if (!$sheetToDisplay->isInCatalog()) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
             $rules = $this
                 ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
 
             if (empty($rules)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
             }
         }
 
-        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($this->getUser(), $sheet, $locale);
+        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($user, $sheet, $sheetToDisplay, $locale);
 
         return new BinaryFileResponse($pathToPdf);
     }
@@ -168,35 +180,43 @@ class SheetController extends Controller
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param User        $user
+     * @param int         $sheetToDisplay
      * @param string      $locale
      *
      * @return Response
      */
-    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
+    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $sheetToDisplay, $locale)
     {
-        $event     = $eventDomain->getEvent();
-        $locale    = $event->getAvailableLocale($locale);
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $event, $locale);
+        $event  = $eventDomain->getEvent();
+        $locale = $event->getAvailableLocale($locale);
+
+        $sheetToDisplay = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetById($sheetToDisplay);
+
+        if (null === $sheetToDisplay || $event !== $sheetToDisplay->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not found');
+        }
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
         // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheetToDisplay, $locale);
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
-            $sheet,
+            $sheetToDisplay,
             $user,
             $locale
         );
 
-        if ($userSheet !== $sheet) {
+        if ($sheetToDisplay !== $sheet) {
             if (!$sheet->isInCatalog() || !$isCatalogAllowed) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
             $rules = $this
                 ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
 
             if (empty($rules)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
@@ -209,7 +229,7 @@ class SheetController extends Controller
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
             'event'         => $event,
-            'sheet'         => $sheet,
+            'sheet'         => $sheetToDisplay,
             'taggedData'    => $taggedData,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
