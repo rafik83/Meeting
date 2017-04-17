@@ -134,7 +134,7 @@ class SheetView
     public $hasAvailableSlots;
 
     /**
-     * "A encore des demandes/propositions validés et non placés"
+     * "A encore des demandes/propositions validées et non placées"
      *
      * @var bool
      */
