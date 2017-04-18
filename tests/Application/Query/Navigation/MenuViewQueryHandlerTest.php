@@ -10,10 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Navigation;
 
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
-use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Navigation\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\CategoryViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
@@ -37,7 +34,7 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Handler
         $handler = new MenuViewQueryHandler($categoryViewQueryHandler->reveal());
-        $result = $handler->handle(new MenuViewQuery($event, $sheet, $user, 'fr'));
+        $result = $handler->handle(new MenuViewQuery($event, 'fr', $sheet, $user));
 
         $expected = new MenuView([]);
         $this->assertEquals($expected, $result);
@@ -62,7 +59,7 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Handler
         $handler = new MenuViewQueryHandler($categoryViewQueryHandler->reveal());
-        $result = $handler->handle(new MenuViewQuery($event, $sheet, $user, 'fr'));
+        $result = $handler->handle(new MenuViewQuery($event, 'fr', $sheet, $user));
 
         // Expected
         $categories = [];
