@@ -1539,6 +1539,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler
         arguments:
             - '@adapter.sendgrid_api_adapter'
+            - '@domain.messaging.batch.sheet_validated_substitutions_provider'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
 

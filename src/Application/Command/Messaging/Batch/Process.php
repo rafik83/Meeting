@@ -26,14 +26,21 @@ class Process
     public $message;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * Process constructor.
      *
      * @param Message $message
      * @param Sheet[] $sheets
+     * @param string  $locale
      */
-    public function __construct(Message $message, array $sheets)
+    public function __construct(Message $message, array $sheets, $locale)
     {
         $this->sheets  = $sheets;
         $this->message = $message;
+        $this->locale  = $locale;
     }
 }
