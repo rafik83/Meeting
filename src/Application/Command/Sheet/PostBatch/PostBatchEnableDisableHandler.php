@@ -82,7 +82,7 @@ class PostBatchEnableDisableHandler
         if ($command->state === BatchEnableDisableHandler::STATE_DISABLE) {
             $this->batchCatalogHandler->handle(new BatchCatalog(
                 $command->ids,
-                BatchCatalogHandler::REMOVE_CATALOG,
+                false,
                 $command->admin
             ));
         }
