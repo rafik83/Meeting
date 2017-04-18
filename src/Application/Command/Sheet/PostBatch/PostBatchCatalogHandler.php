@@ -69,7 +69,7 @@ class PostBatchCatalogHandler
         $this->sheetIndexer->updateSheets($command->sheets);
 
         foreach ($command->sheets as $sheet) {
-            // Disable the requests
+            // Disable/enable the requests
             $this->enableDisableManager->update(
                 $sheet,
                 $state

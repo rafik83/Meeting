@@ -88,7 +88,7 @@ class PostBatchEnableDisableHandler
         }
 
         foreach ($command->sheets as $sheet) {
-            // Disable the happening
+            // Disable/enable the happenings
             $this->enableDisableManagerHappening->update(
                 $sheet,
                 $state
