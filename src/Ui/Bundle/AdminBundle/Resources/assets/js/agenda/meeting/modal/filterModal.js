@@ -1,5 +1,6 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
     options         = require('../../../vueComponents/options');
+    SheetFilter      = require('./filters/_SheetsFilter');
 
 module.exports = {
     template: '#filter-modal',
@@ -13,15 +14,17 @@ module.exports = {
             filteredSheets: [],
             formFilters: {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             },
             filters: {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             }
         }
     },
@@ -31,54 +34,24 @@ module.exports = {
         },
         save: function () {
             this.setUsedFilter();
-
-            var filteredSheet = this.sheets;
-
-            if (this.filters.selectedTypes.length > 0) {
-                filteredSheet = filteredSheet.filter(function (sheet) {
-                    return this.filters.selectedTypes.indexOf(sheet.type) !== -1;
-                }.bind(this));
-            }
-
-            if (this.hasIndicatorFilter) {
-                filteredSheet = filteredSheet.filter(function (sheet) {
-                    var filterMatching = false;
-
-                    if (this.filters.hasNotSentMeetingRequest === true
-                        && sheet.hasNotSentMeetingRequest === this.filters.hasNotSentMeetingRequest) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasMeetingToApprove === true
-                        && sheet.hasMeetingToApprove === this.filters.hasMeetingToApprove) {
-                        filterMatching = true;
-                    }
-
-                    if (this.filters.hasNotEnoughAvailableSlot === true
-                        && sheet.hasNotEnoughAvailableSlot === this.filters.hasNotEnoughAvailableSlot) {
-                        filterMatching = true;
-                    }
-
-                    return filterMatching;
-                }.bind(this));
-            }
-
-            this.filteredSheets = filteredSheet;
+            this.filteredSheets = new SheetFilter(this.filters).filter(this.sheets);
             this.$emit('refresh-list', this.filteredSheets);
             this.$emit('close-modal');
         },
         reset: function () {
             this.filters = {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             };
             this.formFilters =  {
                 selectedTypes: [],
-                hasNotSentMeetingRequest: false,
                 hasMeetingToApprove: false,
-                hasNotEnoughAvailableSlot: false
+                hasNotEnoughAvailableSlot: false,
+                hasSentMeetingRequest: null,
+                hasScheduledMeetings: null
             }
         },
         setUsedFilter: function() {
@@ -86,13 +59,6 @@ module.exports = {
         },
         setFormFilter: function () {
             Object.assign(this.formFilters, this.filters);
-        }
-    },
-    computed: {
-        hasIndicatorFilter: function () {
-            return this.filters.hasNotSentMeetingRequest === true
-                || this.filters.hasMeetingToApprove === true
-                || this.filters.hasNotEnoughAvailableSlot === true;
         }
     }
 };
