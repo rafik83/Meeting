@@ -67,6 +67,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser->guessSheetTitle($sheet, 'fr')->shouldBeCalled()->willReturn('Titre fiche');
         $routerInterface->generate('admin_sheet_details', Argument::any())->willReturn('/my-url');
 
+        $participantInfoGuesser->guessParticipantCompleteName($participant, 'fr')->shouldBeCalled();
         $sheetIndicatorsViewQueryHandler->handle(new SheetIndicatorsViewQuery($sheet))->shouldNotBeCalled();
 
         $query   = new SheetListViewQuery($event, 'fr');
@@ -92,7 +93,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             null,
             '/my-url',
-            []
+            [['fullname' => null, 'email' => 'email@email.com']]
         );
 
         $this->assertEquals($expectedView, $view[0]);
