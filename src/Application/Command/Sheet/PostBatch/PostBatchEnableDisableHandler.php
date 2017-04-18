@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalog;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
-use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
+use Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager as EnableDisableManagerHappening;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -37,9 +37,9 @@ class PostBatchEnableDisableHandler
     private $dateTime;
 
     /**
-     * @var EnableDisableManager
+     * @var EnableDisableManagerHappening
      */
-    private $enableDisableManager;
+    private $enableDisableManagerHappening;
 
     /**
      * @var SheetIndexerInterface
@@ -49,24 +49,24 @@ class PostBatchEnableDisableHandler
     /**
      * PostBatchEnableDisableHandler constructor.
      *
-     * @param BatchCatalogHandler      $batchCatalogHandler
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param \DateTimeInterface       $dateTime
-     * @param EnableDisableManager     $enableDisableManager
-     * @param SheetIndexerInterface    $sheetIndexer
+     * @param BatchCatalogHandler           $batchCatalogHandler
+     * @param EventDispatcherInterface      $eventDispatcher
+     * @param \DateTimeInterface            $dateTime
+     * @param EnableDisableManagerHappening $enableDisableManagerHappening
+     * @param SheetIndexerInterface         $sheetIndexer
      */
     public function __construct(
         BatchCatalogHandler $batchCatalogHandler,
         EventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime,
-        EnableDisableManager $enableDisableManager,
+        EnableDisableManagerHappening $enableDisableManagerHappening,
         SheetIndexerInterface $sheetIndexer
     ) {
-        $this->batchCatalogHandler  = $batchCatalogHandler;
-        $this->eventDispatcher      = $eventDispatcher;
-        $this->dateTime             = $dateTime;
-        $this->enableDisableManager = $enableDisableManager;
-        $this->sheetIndexer         = $sheetIndexer;
+        $this->batchCatalogHandler           = $batchCatalogHandler;
+        $this->eventDispatcher               = $eventDispatcher;
+        $this->dateTime                      = $dateTime;
+        $this->enableDisableManagerHappening = $enableDisableManagerHappening;
+        $this->sheetIndexer                  = $sheetIndexer;
     }
 
     /**
@@ -88,7 +88,11 @@ class PostBatchEnableDisableHandler
         }
 
         foreach ($command->sheets as $sheet) {
-            $this->enableDisableManager->update($sheet, $state);
+            // Disable the happening
+            $this->enableDisableManagerHappening->update(
+                $sheet,
+                $state
+            );
 
             $this->eventDispatcher->dispatch(
                 Events::SHEET_ENABLE_DISABLE,

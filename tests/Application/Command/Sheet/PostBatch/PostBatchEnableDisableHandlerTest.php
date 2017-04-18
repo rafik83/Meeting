@@ -17,7 +17,7 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisable;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisableHandler;
-use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
+use Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Domain\Model\Admin;

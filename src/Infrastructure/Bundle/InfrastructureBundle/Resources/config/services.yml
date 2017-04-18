@@ -1644,7 +1644,7 @@ services:
             - '@command.sheet.batch_catalog_handler'
             - '@event_dispatcher'
             - '@datetime'
-            - '@sheet.request.enable_disable_manager'
+            - '@sheet.happening_participation.enable_disable_manager'
             - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_draft_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraftHandler
