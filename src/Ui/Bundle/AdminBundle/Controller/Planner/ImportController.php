@@ -48,7 +48,7 @@ class ImportController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($importJobCreator);
-                $this->addFlash('success', 'flash.admin.planner.import.success');
+                $this->addFlash('success', 'flash.admin.planner.import.pending');
 
                 return $this->redirectToRoute('admin_planner', [
                     'event' => $event->getId(),

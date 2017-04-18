@@ -32,6 +32,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\ParticipantFinder;
+use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ImportPlannerMail;
 
 class ImportHandler
@@ -65,6 +66,9 @@ class ImportHandler
 
     /** @var MailerInterface */
     private $mailer;
+
+    /** @var LocalFileStorageAdapter */
+    private $localFileStorage;
 
     /** @var string */
     private $importDirectoryPath;
@@ -101,6 +105,7 @@ class ImportHandler
      * @param FileRepositoryInterface        $fileRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
      * @param MailerInterface                $mailer
+     * @param LocalFileStorageAdapter        $localFileStorage
      * @param JobQueueInterface              $jobQueue
      * @param \DateTimeInterface             $dateTime
      * @param string                         $importDirectoryPath
@@ -117,6 +122,7 @@ class ImportHandler
         FileRepositoryInterface $fileRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
         MailerInterface $mailer,
+        LocalFileStorageAdapter $localFileStorage,
         JobQueueInterface $jobQueue,
         \DateTimeInterface $dateTime,
         $importDirectoryPath,
@@ -132,6 +138,7 @@ class ImportHandler
         $this->fileRepository       = $fileRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
         $this->mailer               = $mailer;
+        $this->localFileStorage     = $localFileStorage;
         $this->jobQueue             = $jobQueue;
         $this->dateTime             = $dateTime;
         $this->importDirectoryPath  = $importDirectoryPath;
@@ -175,6 +182,8 @@ class ImportHandler
         $this->jobQueue->indexInCatalogSheetsByEvent($event);
 
         $this->notifyAboutImportSuccess($event, $import);
+
+        $this->localFileStorage->remove($this->importDirectoryPath . $file->getPath(), true);
     }
 
     /**

@@ -10,8 +10,13 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner;
 
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Command\Planner\Import;
 use Proximum\Vimeet\Application\Command\Planner\ImportHandler;
+use Proximum\Vimeet\Application\Exception\Planner\Import\InvalidArgumentForImportException;
+use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\Error\ImportPlannerMailError;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,16 +29,35 @@ class ImportPlannerCommand extends Command
     /** @var ImportHandler */
     private $importPlannerHandler;
 
+    /** @var MailerInterface */
+    private $mailer;
+
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
+    /** @var string */
+    private $mailSender;
+
     /**
      * ImportPlannerCommand constructor.
      *
-     * @param ImportHandler $importPlannerHandler
+     * @param ImportHandler            $importPlannerHandler
+     * @param MailerInterface          $mailer
+     * @param EventRepositoryInterface $eventRepository
+     * @param string                   $mailSender
      */
-    public function __construct(ImportHandler $importPlannerHandler)
-    {
+    public function __construct(
+        ImportHandler $importPlannerHandler,
+        MailerInterface $mailer,
+        EventRepositoryInterface $eventRepository,
+        $mailSender
+    ) {
         parent::__construct(self::NAME);
 
         $this->importPlannerHandler = $importPlannerHandler;
+        $this->mailer               = $mailer;
+        $this->eventRepository      = $eventRepository;
+        $this->mailSender           = $mailSender;
     }
 
     /**
@@ -56,13 +80,54 @@ class ImportPlannerCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->importPlannerHandler->handle(
-            new Import(
-                $input->getArgument('file'),
-                $input->getArgument('event'),
-                $input->getArgument('admin_email'),
-                $input->getArgument('locale')
-            )
-        );
+        $arguments = $input->getArguments();
+
+        try {
+            $this->importPlannerHandler->handle(
+                new Import(
+                    $arguments['file'],
+                    $arguments['event'],
+                    $arguments['admin_email'],
+                    $arguments['locale']
+                )
+            );
+        } catch (InvalidArgumentForImportException $exception) {
+            $this->notifyAdminAboutError(
+                $arguments['event'],
+                $arguments['admin_email'],
+                $arguments['locale'],
+                $exception->getMessage()
+            );
+
+            return;
+        } catch (InvalidXmlException $exception) {
+            $this->notifyAdminAboutError(
+                $arguments['event'],
+                $arguments['admin_email'],
+                $arguments['locale'],
+                $exception->getMessage()
+            );
+
+            return;
+        }
+    }
+
+    /**
+     * @param int    $eventId
+     * @param string $emailToNotify
+     * @param string $locale
+     * @param string $errorMessage
+     */
+    private function notifyAdminAboutError($eventId, $emailToNotify, $locale, $errorMessage)
+    {
+        $event = $this->eventRepository->getById($eventId);
+
+        $this->mailer->send(new ImportPlannerMailError(
+            $event,
+            $this->mailSender,
+            $emailToNotify,
+            $locale,
+            $errorMessage
+        ));
     }
 }

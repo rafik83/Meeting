@@ -1554,6 +1554,7 @@ services:
             - '@repository.file_repository'
             - '@adapter.entity_manager_adapter'
             - '@adapter.mailer_adapter'
+            - '@adapter.local_file_storage'
             - '@adapter.job_queue_adapter'
             - '@datetime'
             - '%infrastructure.import_planner_path%'
@@ -3188,6 +3189,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand
         arguments:
             - '@command.planner.import_handler'
+            - '@adapter.mailer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '%mailer_sender%'
         tags:
             - { name: console.command }
 
