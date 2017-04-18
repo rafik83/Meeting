@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -56,6 +57,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $routerInterface   = $this->prophesize(RouterInterface::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetIndicatorsViewQueryHandler = $this->prophesize(SheetIndicatorsViewQueryHandler::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $meetingRepository->countMeetingsOfEvent($event)->shouldBeCalled()->willReturn([12 => ['countMeetings' => 10]]);
 
         $product = new Product($event, 'plan', 'name', 'img.png', 10, 1, 1, 1, true);
@@ -73,7 +75,8 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetInfoGuesser->reveal(),
             $sheetIndicatorsViewQueryHandler->reveal(),
             $meetingRepository->reveal(),
-            $routerInterface->reveal()
+            $routerInterface->reveal(),
+            $participantInfoGuesser->reveal()
         );
 
         $view = $handler->handle($query);
@@ -88,7 +91,8 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             false,
             null,
             null,
-            '/my-url'
+            '/my-url',
+            []
         );
 
         $this->assertEquals($expectedView, $view[0]);
