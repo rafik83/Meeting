@@ -752,6 +752,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter_batch_job_queue.batch_validate_job_queue'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
     command.sheet.batch_generate_invoice_handler:
@@ -1645,7 +1646,6 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@datetime'
-            - '@adapter.sheet_indexer'
     command.sheet.post_batch.post_batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchCatalogHandler
         arguments:
@@ -3250,6 +3250,14 @@ services:
         arguments:
             - '@repository.admin_repository'
             - '@command.invoice.batch_generate_invoice_handler'
+        tags:
+            - { name: console.command }
+
+    command.index_sheets_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: console.command }
 

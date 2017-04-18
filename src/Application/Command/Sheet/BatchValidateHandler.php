@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -25,19 +26,27 @@ class BatchValidateHandler
      * @var BatchJobQueueInterface
      */
     private $batchJobQueue;
+    
+    /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
 
     /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param BatchJobQueueInterface   $batchJobQueue
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        BatchJobQueueInterface $batchJobQueue
+        BatchJobQueueInterface $batchJobQueue,
+        JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->batchJobQueue   = $batchJobQueue;
+        $this->jobQueue        = $jobQueue;
     }
 
     /**
@@ -53,6 +62,9 @@ class BatchValidateHandler
         $this->sheetRepository->updateStateBySheetsId($batchValidate->ids, Sheet::STATE_VALIDATED);
 
         if (!empty($batchValidate->ids)) {
+            // reindex sheet in elasticsearch
+            $this->jobQueue->indexSheets($batchValidate->ids);
+            
             $this->batchJobQueue->createJob(
                 $batchValidate->ids,
                 $batchValidate->admin,

@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -115,6 +116,21 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function indexInCatalogSheetsByEvent(Event $event)
     {
         $job = new Job(IndexInCatalogSheetsByEventCommand::NAME, [$event->getId()]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function indexSheets(array $sheetIds)
+    {
+        $job = new Job(
+            IndexSheetsCommand::NAME,
+            [implode(',', $sheetIds)],
+            true,
+            Job::DEFAULT_QUEUE,
+            Job::PRIORITY_HIGH
+        );
         $this->setJob($job);
     }
 }

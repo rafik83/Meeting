@@ -34,9 +34,6 @@ class PostBatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $datetime        = new \DateTime();
-        $sheetIndexer    = $this->prophesize(SheetIndexerInterface::class);
-
-        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $eventDispatcher->dispatch(
             Events::SHEET_VALIDATED,
@@ -46,8 +43,7 @@ class PostBatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $query   = new PostBatchValidate([$sheet1, $sheet2, $sheet3], $admin, 'comment');
         $handler = new PostBatchValidateHandler(
             $eventDispatcher->reveal(),
-            $datetime,
-            $sheetIndexer->reveal()
+            $datetime
         );
 
         $handler->handle($query);

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -64,4 +65,9 @@ interface JobQueueInterface
      * @param Event $event
      */
     public function indexInCatalogSheetsByEvent(Event $event);
+
+    /**
+     * @param Int[] $sheetIds
+     */
+    public function indexSheets(array $sheetIds);
 }
