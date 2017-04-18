@@ -1,12 +1,11 @@
 {% import "MailBundle:Mail:macros.html.twig" as macros %}
 <html>
 <body>
-{{ 'mail.planner.export.error'|trans(
-    {
-        '%eventTitle%': mail.event.title,
-    },
-    'mail', mail.locale)|html|nl2br
-}}
+{% if mail.event is defined %}
+    {{ 'mail.planner.export.error'|trans({'%eventTitle%': mail.event.title}, 'mail', mail.locale)|html|nl2br }}
+{% else %}
+    {{ 'mail.planner.import.error'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endif %}
 <br>
 {{ mail.message|trans({}, 'mail', mail.locale) }}
 </body>

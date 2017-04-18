@@ -24,8 +24,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -54,12 +52,6 @@ class ImportHandler
 
     /** @var SpotRepositoryInterface */
     private $spotRepository;
-
-    /** @var EventRepositoryInterface */
-    private $eventRepository;
-
-    /** @var FileRepositoryInterface */
-    private $fileRepository;
 
     /** @var EntityManagerAdapterInterface */
     private $entityManagerAdapter;
@@ -101,8 +93,6 @@ class ImportHandler
      * @param RequestRepositoryInterface     $requestRepository
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SpotRepositoryInterface        $spotRepository
-     * @param EventRepositoryInterface       $eventRepository
-     * @param FileRepositoryInterface        $fileRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
      * @param MailerInterface                $mailer
      * @param LocalFileStorageAdapter        $localFileStorage
@@ -118,8 +108,6 @@ class ImportHandler
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepositoryInterface $slotRepository,
         SpotRepositoryInterface $spotRepository,
-        EventRepositoryInterface $eventRepository,
-        FileRepositoryInterface $fileRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
         MailerInterface $mailer,
         LocalFileStorageAdapter $localFileStorage,
@@ -134,8 +122,6 @@ class ImportHandler
         $this->requestRepository    = $requestRepository;
         $this->slotRepository       = $slotRepository;
         $this->spotRepository       = $spotRepository;
-        $this->eventRepository      = $eventRepository;
-        $this->fileRepository       = $fileRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
         $this->mailer               = $mailer;
         $this->localFileStorage     = $localFileStorage;
@@ -153,22 +139,10 @@ class ImportHandler
      */
     public function handle(Import $import)
     {
-        $event = $this->eventRepository->getById($import->eventId);
-
-        if ($event === null) {
-            throw new InvalidArgumentForImportException(sprintf('Event %s not found', $import->eventId));
-        }
-
         // Remove all meeting of the event
-        $this->meetingRepository->deleteAll($event);
+        $this->meetingRepository->deleteAll($import->event);
 
-        $file = $this->fileRepository->getById($import->fileId);
-
-        if ($file === null) {
-            throw new InvalidArgumentForImportException(sprintf('File %s not found', $import->fileId));
-        }
-
-        $content = file_get_contents($this->importDirectoryPath . $file->getPath());
+        $content = file_get_contents($this->importDirectoryPath . $import->file->getPath());
 
         try {
             /** @var PlannerResult $plannerResult */
@@ -177,13 +151,13 @@ class ImportHandler
             throw new InvalidXmlException();
         }
 
-        $this->handlePlannerResult($event, $plannerResult);
+        $this->handlePlannerResult($import->event, $plannerResult);
 
-        $this->jobQueue->indexInCatalogSheetsByEvent($event);
+        $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
 
-        $this->notifyAboutImportSuccess($event, $import);
+        $this->notifyAboutImportSuccess($import->event, $import);
 
-        $this->localFileStorage->remove($file->getPath(), true);
+        $this->localFileStorage->remove($import->file->getPath(), true);
     }
 
     /**

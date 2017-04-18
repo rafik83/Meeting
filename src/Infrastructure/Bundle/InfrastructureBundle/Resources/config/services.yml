@@ -1550,8 +1550,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@repository.file_repository'
             - '@adapter.entity_manager_adapter'
             - '@adapter.mailer_adapter'
             - '@adapter.local_file_storage'
@@ -3191,6 +3189,7 @@ services:
             - '@command.planner.import_handler'
             - '@adapter.mailer_adapter'
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.file_repository'
             - '%mailer_sender%'
         tags:
             - { name: console.command }

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\Error;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class ImportPlannerMailError extends AbstractMail
 {
@@ -25,21 +24,21 @@ class ImportPlannerMailError extends AbstractMail
     /** @var string  */
     protected $messageId = 'import_planner_error';
 
-    /** @var Event */
-    public $event;
+    /** @var int */
+    public $eventId;
 
     /** @var string */
     public $message;
 
     /**
-     * @param Event  $event
+     * @param int    $eventId
      * @param string $sender
      * @param string $receiver
      * @param string $locale
      * @param string $message
      */
     public function __construct(
-        Event $event,
+        $eventId,
         $sender,
         $receiver,
         $locale,
@@ -47,7 +46,7 @@ class ImportPlannerMailError extends AbstractMail
     ) {
         parent::__construct($sender, $receiver, $locale);
 
-        $this->event   = $event;
+        $this->eventId   = $eventId;
         $this->message = $message;
     }
 }

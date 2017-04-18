@@ -10,13 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\File;
+
 class Import
 {
-    /** @var int */
-    public $fileId;
+    /** @var File */
+    public $file;
 
-    /** @var int */
-    public $eventId;
+    /** @var Event */
+    public $event;
 
     /** @var string */
     public $emailToNotify;
@@ -25,14 +28,14 @@ class Import
     public $locale;
 
     /**
-     * @param int    $fileId
-     * @param int    $eventId
+     * @param File   $file
+     * @param Event  $event
      * @param string $emailToNotify
      */
-    public function __construct($fileId, $eventId, $emailToNotify)
+    public function __construct($file, $event, $emailToNotify)
     {
-        $this->fileId        = $fileId;
-        $this->eventId       = $eventId;
+        $this->file          = $file;
+        $this->event         = $event;
         $this->emailToNotify = $emailToNotify;
     }
 }
