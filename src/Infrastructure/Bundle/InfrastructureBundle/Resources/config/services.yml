@@ -3265,6 +3265,8 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_validation_validate_handler'
+        tags:
+            - { name: console.command }
 
     command.index_sheets_by_sheet_template:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand

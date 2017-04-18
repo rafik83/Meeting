@@ -28,9 +28,9 @@ class BatchValidateJobQueue extends AbstractJobQueueAdapter implements BatchJobQ
         }
 
         $job = new Job(BatchValidateCommand::NAME, [
-            'sheetIds' => implode(',', $ids),
-            'adminId'  => $admin->getId(),
-            'comment'  => isset($options['comment']) ? $options['comment'] : null,
+            implode(',', $ids),
+            $admin->getId(),
+            isset($options['comment']) ? $options['comment'] : null,
         ]);
 
         $this->setJob($job);
