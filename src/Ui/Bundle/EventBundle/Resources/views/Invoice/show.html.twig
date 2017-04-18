@@ -46,7 +46,7 @@
                     {% endif %}
 
                     <br><strong>{{ 'invoice.date.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
-                    {{ invoiceView.createdAt|localizeddate('medium', 'none', invoiceView.eventDefaultLocale) }}
+                    {{ invoiceView.createdAt|localizeddate('medium', 'none', invoiceView.eventDefaultLocale, invoiceView.eventTimeZone) }}
                 </p>
             </div>
         </div>

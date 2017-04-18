@@ -44,6 +44,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->select('transaction')
             ->from(Transaction::class, 'transaction')
             ->where('transaction.sheet = :sheet')
+            ->andWhere('transaction.hidden = false')
             ->setParameter('sheet', $sheet)
             ->orderBy('transaction.date', 'DESC');
 
@@ -87,6 +88,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->from(Transaction::class, 'transaction')
             ->where('transaction.sheet = :sheet')
             ->andWhere('transaction.state = :state')
+            ->andWhere('transaction.hidden = false')
             ->orderBy('transaction.date', 'DESC')
             ->setParameter('sheet', $sheet)
             ->setParameter('state', Transaction::STATE_PENDING);
@@ -104,6 +106,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->select('transaction')
             ->from(Transaction::class, 'transaction')
             ->where('transaction.sheet = :sheet')
+            ->andWhere('transaction.hidden = false')
             ->andWhere('transaction.state = :state')
             ->setParameter('sheet', $sheet)
             ->setParameter('state', Transaction::STATE_PAID);
@@ -120,7 +123,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->createQueryBuilder()
             ->select('transaction, sheet')
             ->from(Transaction::class, 'transaction')
-            ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
+            ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true AND transaction.hidden = false')
             ->setParameter('event', $event)
         ;
 
@@ -140,7 +143,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'transaction.sheet',
                 'sheet',
                 'WITH',
-                'sheet.id IN (:sheetIds) AND sheet.event = :event'
+                'sheet.id IN (:sheetIds) AND sheet.event = :event AND transaction.hidden = false'
             )
             ->setParameter('event', $event)
             ->setParameter('sheetIds', $sheetIds)
@@ -161,6 +164,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.enable = true')
             ->where('sheet.event = :event')
             ->andWhere('transaction.state = :state')
+            ->andWhere('transaction.hidden = false')
             ->setParameter('state', Transaction::STATE_PAID)
             ->setParameter('event', $event);
 
@@ -180,7 +184,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'transaction.sheet',
                 'sheet',
                 'WITH',
-                'sheet.event IN (:events) AND transaction.date BETWEEN :beginDate and :endDate AND transaction.state = :state'
+                'sheet.event IN (:events) AND transaction.date BETWEEN :beginDate and :endDate AND transaction.state = :state AND transaction.hidden = false'
             )
             ->leftJoin('transaction.payment', 'payment')
             ->orderBy('transaction.date')
