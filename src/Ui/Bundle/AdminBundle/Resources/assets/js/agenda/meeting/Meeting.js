@@ -14,6 +14,8 @@ var axios = require('axios');
 
 var api = new AgendaApiEndpoints();
 
+var SheetFilter = require('./../filters/_SheetsFilter');
+
 /**
  * Pass axios to Vue
  */
@@ -39,11 +41,14 @@ module.exports = {
             isMeetingToUpdateLoading: false, /** Is meeting loading */
             meetingToUpdate: null, /** Meeting to update form */
             filteredSheets: [], /** Sheet[] */
+            filteredSheetsBySheetOrParticipant: [], /** Sheet[] */
             showFilterModal: false,
             showMassAssignmentModal: false,
             showParticipantModal: false,
             hasUsedSheetFilter: false,
+            hasUsedSheetOrParticipantFilter: false,
             showSortModal: false,
+            filterBySheetOrParticipantValue: null,
             /**
              * Meeting slot to update
              */
@@ -81,7 +86,14 @@ module.exports = {
                 && this.meetingSlotToUpdate === null;
         },
         sheetsIterator: function () {
-            return this.hasUsedSheetFilter ? this.filteredSheets : this.sheets;
+
+            if (this.hasUsedSheetOrParticipantFilter) {
+                return this.filteredSheetsBySheetOrParticipant;
+            } else if (this.hasUsedSheetFilter) {
+                return this.filteredSheets;
+            }
+
+            return this.sheets;
         },
 
         countFilteredSheets: function () {
@@ -117,6 +129,29 @@ module.exports = {
             if (typeof child !== 'undefined') {
                 child.setFormFilter();
             }
+        },
+
+        /**
+         * Filter on sheet list by participant name / email or sheet title
+         */
+        filterBySheetOrParticipant: function () {
+            var delay = (function(){
+                var timer = 0;
+                return function(callback, ms){
+                    clearTimeout (timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+
+            delay(function(){
+                if (this.filterBySheetOrParticipantValue.length > 0) {
+                    var sheetsToFilter = this.filteredSheets.length > 0 ? this.filteredSheets : this.sheets;
+                    this.filteredSheetsBySheetOrParticipant = new SheetFilter({filterBySheetOrParticipantValue : this.filterBySheetOrParticipantValue}).filter(sheetsToFilter);
+                    this.hasUsedSheetOrParticipantFilter = true;
+                } else {
+                    this.hasUsedSheetOrParticipantFilter = false;
+                }
+            }.bind(this), 300);
         },
 
         /**

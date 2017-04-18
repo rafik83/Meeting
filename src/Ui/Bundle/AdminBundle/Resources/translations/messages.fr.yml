@@ -47,6 +47,7 @@ admin.agenda.filters.hasSentMeetingRequest.no: 'Non'
 admin.agenda.filters.hasSentMeetingRequest.yes: 'Oui'
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
+admin.agenda.filters.search: 'Rechercher'
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
 admin.agenda.filters.title.label: 'Filtre fiche'
 admin.agenda.filters.type: 'Type de participation'

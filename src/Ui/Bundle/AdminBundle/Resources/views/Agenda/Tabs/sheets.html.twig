@@ -21,6 +21,11 @@
                         </tr>
                         <tr>
                             <td>
+                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 {{ 'admin.agenda.indicators-caption'|trans }}
                                 <table class="table-no-margin-bottom table table-condensed table-bordered">
                                     <tr>

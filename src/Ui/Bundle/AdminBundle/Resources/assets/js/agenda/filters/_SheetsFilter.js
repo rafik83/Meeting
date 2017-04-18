@@ -4,7 +4,12 @@ var TypeCriteria                      = require('./_TypeCriteria'),
     HasSentMeetingRequestCriteria     = require('./_HasSentMeetingRequestCriteria'),
     HasNotSentMeetingRequestCriteria  = require('./_HasNotSentMeetingRequestCriteria'),
     HasScheduledMeetingsCriteria      = require('./_HasScheduledMeetingsCriteria'),
-    HasNoScheduledMeetingsCriteria    = require('./_HasNoScheduledMeetingsCriteria');
+    HasNoScheduledMeetingsCriteria    = require('./_HasNoScheduledMeetingsCriteria'),
+    FollowerCriteria                  = require('./_FollowerCriteria'),
+    NoFollowerCriteria                = require('./_NoFollowerCriteria'),
+    OrCriteria                        = require('./_OrCriteria'),
+    ParticipantDataCriteria           = require('./_ParticipantDataCriteria'),
+    SheetTitleCriteria                = require('./_SheetTitleCriteria');
 
 /**
  * @param {array} filters
@@ -28,14 +33,22 @@ SheetsFilter.prototype.filter = function (sheets)
     var hasNotSentMeetingRequestCriteria = new HasNotSentMeetingRequestCriteria(this.filters.hasSentMeetingRequest);
     var hasScheduledMeetingsCriteria = new HasScheduledMeetingsCriteria(this.filters.hasScheduledMeetings);
     var hasNoScheduledMeetingsCriteria = new HasNoScheduledMeetingsCriteria(this.filters.hasScheduledMeetings);
+    var followerCriteria = new FollowerCriteria(this.filters.selectedFollowers);
+    var noFollowerCriteria = new NoFollowerCriteria(this.filters.selectedFollowers);
+    var sheetTitleCriteria = new SheetTitleCriteria(this.filters.filterBySheetOrParticipantValue);
+    var participantDataCriteria = new ParticipantDataCriteria(this.filters.filterBySheetOrParticipantValue);
 
     sheets = typeCriteria.meetCriteria(sheets);
+    sheets = followerCriteria.meetCriteria(sheets);
+    sheets = noFollowerCriteria.meetCriteria(sheets);
     sheets = hasMeetingToApproveCriteria.meetCriteria(sheets);
     sheets = hasNotEnoughAvailableSlotCriteria.meetCriteria(sheets);
     sheets = hasSentMeetingRequestCriteria.meetCriteria(sheets);
     sheets = hasNotSentMeetingRequestCriteria.meetCriteria(sheets);
     sheets = hasScheduledMeetingsCriteria.meetCriteria(sheets);
     sheets = hasNoScheduledMeetingsCriteria.meetCriteria(sheets);
+
+    sheets = (new OrCriteria(sheetTitleCriteria, participantDataCriteria)).meetCriteria(sheets);
 
     return sheets;
 };
