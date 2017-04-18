@@ -462,6 +462,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
             - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Remove }
     command.user.forgotten_password_handler:
@@ -1492,6 +1493,7 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
 
