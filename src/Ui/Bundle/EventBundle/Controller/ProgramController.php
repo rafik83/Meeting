@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,10 +29,9 @@ class ProgramController extends Controller
      * @param Request       $request
      * @param EventDomain   $eventDomain
      * @param Sheet         $sheet
-     *
      * @param UserInterface $user
      *
-     * @return Response
+     * @return Response|RedirectResponse
      */
     public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {

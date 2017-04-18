@@ -34,6 +34,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class CatalogController extends Controller
@@ -61,6 +62,8 @@ class CatalogController extends Controller
      * @param Sheet       $sheet
      *
      * @return Response
+     *
+     * @throws NotFoundHttpException
      */
     public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
@@ -187,6 +190,7 @@ class CatalogController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
      * @return Response
      */
