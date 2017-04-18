@@ -127,6 +127,14 @@ class SheetView
     public $hasNotEnoughAvailableSlot;
 
     /**
+     * The sheet has a participant which is not available at all during the event
+     * but has a meeting request explicitly associated to him/her
+     *
+     * @var bool
+     */
+    public $hasParticipantUnavailableWithMeetingRequest;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
@@ -134,6 +142,7 @@ class SheetView
      * @param SheetIndicatorsView $sheetIndicatorsView
      * @param string|null         $follower
      * @param string              $url
+     * @param bool                $hasParticipantUnavailableWithMeetingRequest
      */
     public function __construct(
         $id,
@@ -142,7 +151,8 @@ class SheetView
         $countParticipant,
         SheetIndicatorsView $sheetIndicatorsView,
         $follower,
-        $url
+        $url,
+        $hasParticipantUnavailableWithMeetingRequest = false
     ) {
         $this->id                       = $id;
         $this->title                    = $title;
@@ -157,6 +167,8 @@ class SheetView
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
         $this->url                      = $url;
         $this->follower                 = $follower;
+
+        $this->hasParticipantUnavailableWithMeetingRequest = $hasParticipantUnavailableWithMeetingRequest;
 
         $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
         $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
