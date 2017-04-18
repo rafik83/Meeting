@@ -89,7 +89,9 @@ class MeetingRequestViewQueryHandler
             $previews,
             $query->isMeetingPublished,
             $query->isMeetingRequestUpdateLocked,
-            $isSheetSeeable
+            $isSheetSeeable,
+            $query->isMeetingRequestClosed,
+            $query->isAnsweringMeetingRequestClosed
         );
     }
 

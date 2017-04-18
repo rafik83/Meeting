@@ -107,7 +107,9 @@ class SheetPreviewViewQueryHandler
             $meetingRequest,
             $viewer === $sheet,
             $meetingPublished,
-            $isMeetingRequestUpdateLocked
+            $isMeetingRequestUpdateLocked,
+            $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
+            $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed
         );
     }
 }

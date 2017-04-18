@@ -676,6 +676,26 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return Event\Day
+     *
+     * @throws DayNotDefinedException
+     */
+    public function getLastDay()
+    {
+        $days = $this->days->toArray();
+
+        if (empty($days)) {
+            throw new DayNotDefinedException();
+        }
+
+        usort($days, function (Day $day1, Day $day2) {
+            return $day1->getDay() < $day2->getDay();
+        });
+
+        return reset($days);
+    }
+
+    /**
      * @return \DateTimeInterface|null
      */
     public function getOpenDate()

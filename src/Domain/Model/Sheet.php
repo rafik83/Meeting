@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
@@ -133,16 +134,28 @@ class Sheet implements TraceableInterface
     private $imported = false;
 
     /**
+     * @var null|Group
+     */
+    private $group;
+
+    /**
      * Sheet constructor.
      *
-     * @param Event              $event
-     * @param Type               $type
-     * @param array              $data
-     * @param User               $owner
+     * @param Event             $event
+     * @param Type              $type
+     * @param array             $data
+     * @param User              $owner
      * @param DateTimeInterface $createdAt
+     * @param Group|null        $group
      */
-    public function __construct(Event $event, Type $type, array $data, User $owner, DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        Event $event,
+        Type $type,
+        array $data,
+        User $owner,
+        DateTimeInterface $createdAt,
+        Group $group = null
+    ) {
         $this->event        = $event;
         $this->type         = $type;
         $this->data         = $data;
@@ -153,6 +166,7 @@ class Sheet implements TraceableInterface
         $this->orders       = new ArrayCollection();
         $this->state        = self::STATE_PENDING;
         $this->completeness = 0;
+        $this->group        = $group;
     }
 
     /**
@@ -823,5 +837,13 @@ class Sheet implements TraceableInterface
     public function getOwnerLocale()
     {
         return $this->getOwner()->getLocale();
+    }
+
+    /**
+     * @return null|Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }

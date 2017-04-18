@@ -35,7 +35,14 @@ admin.agenda.export.participant_schedules.title: 'Export des participants et pla
 admin.agenda.export.title: 'Rendez-vous / Export'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
-admin.agenda.filters.hasSentMeetingRequest.label: 'Pas de demande de rendez-vous'
+admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
+admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
+admin.agenda.filters.hasScheduledMeeting.no: 'Non'
+admin.agenda.filters.hasScheduledMeeting.yes: 'Oui'
+admin.agenda.filters.hasSentMeetingRequest.all: 'Peu importe'
+admin.agenda.filters.hasSentMeetingRequest.label: 'A fait des demandes de rendez-vous'
+admin.agenda.filters.hasSentMeetingRequest.no: 'Non'
+admin.agenda.filters.hasSentMeetingRequest.yes: 'Oui'
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
@@ -124,6 +131,9 @@ admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
+admin.event.days: "Jours de l'événement"
+admin.event.list.currents.title: 'Événements actuels'
+admin.event.list.pasts.title: 'Événements passés'
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'

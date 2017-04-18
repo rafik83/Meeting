@@ -15,14 +15,14 @@ use Proximum\Vimeet\Domain\Model\AbstractUser;
 abstract class AbstractTokenGenerator
 {
     /**
-     * @var \DateTimeImmutable
+     * @var \DateTimeInterface
      */
     protected $expirateDate;
 
     /**
-     * @param \DateTimeImmutable $dateTime
+     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(\DateTimeImmutable $dateTime)
+    public function __construct(\DateTimeInterface $dateTime)
     {
         $this->expirateDate = $dateTime->add($this->getLifetime());
     }

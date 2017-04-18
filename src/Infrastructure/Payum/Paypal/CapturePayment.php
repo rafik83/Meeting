@@ -16,6 +16,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,24 +88,38 @@ class CapturePayment
 
             if (Api::PAYMENTSTATUS_COMPLETED === $paymentStatus) {
                 $transaction->setPaid();
+                $transaction->unHide();
                 $this->transactionRepository->set($transaction);
+
+                $this->dispatchTransactionUpdatedEvent($transaction);
 
                 return self::STATUS_SUCCESS;
             } elseif (Api::RECURRINGPAYMENTSTATUS_CANCELLED === $paymentStatus) {
                 $transaction->setCancelled();
+                $transaction->unHide();
                 $this->transactionRepository->set($transaction);
+
+                $this->dispatchTransactionUpdatedEvent($transaction);
 
                 return self::STATUS_CANCELLED;
             } elseif (Api::PAYMENTSTATUS_PENDING === $paymentStatus) {
+                $this->dispatchTransactionUpdatedEvent($transaction);
+
                 return self::STATUS_PENDING;
             }
-
-            $this->eventDispatcher->dispatch(
-                Events::TRANSACTION_UPDATED,
-                new TransactionUpdatedEvent($transaction)
-            );
         }
 
         return self::STATUS_ERROR;
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    private function dispatchTransactionUpdatedEvent(Transaction $transaction)
+    {
+        $this->eventDispatcher->dispatch(
+            Events::TRANSACTION_UPDATED,
+            new TransactionUpdatedEvent($transaction)
+        );
     }
 }
