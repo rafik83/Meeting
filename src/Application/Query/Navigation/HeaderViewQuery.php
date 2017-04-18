@@ -22,11 +22,6 @@ class HeaderViewQuery
     public $event;
 
     /**
-     * @var User|null
-     */
-    public $user;
-
-    /**
      * @var string
      */
     public $locale;
@@ -52,29 +47,34 @@ class HeaderViewQuery
     public $sheet;
 
     /**
+     * @var User|null
+     */
+    public $user;
+
+    /**
      * @param Event      $event
-     * @param null|Sheet $sheet
      * @param string     $locale
-     * @param null|User  $user
      * @param string     $route
      * @param array      $routeParameters
      * @param bool       $registration
+     * @param null|Sheet $sheet
+     * @param null|User  $user
      */
     public function __construct(
         Event $event,
-        Sheet $sheet = null,
         $locale,
-        User $user = null,
         $route,
         array $routeParameters,
-        $registration
+        $registration,
+        Sheet $sheet = null,
+        User $user = null
     ) {
         $this->event           = $event;
-        $this->sheet           = $sheet;
-        $this->user            = $user;
         $this->locale          = $locale;
         $this->registration    = $registration;
         $this->route           = $route;
         $this->routeParameters = $routeParameters;
+        $this->sheet           = $sheet;
+        $this->user            = $user;
     }
 }

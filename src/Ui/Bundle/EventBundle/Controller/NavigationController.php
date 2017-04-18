@@ -48,12 +48,12 @@ class NavigationController extends Controller
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
             new HeaderViewQuery(
                 $eventDomain->getEvent(),
-                $sheet,
                 $request->getLocale(),
-                $user,
                 $route,
                 $routeParameters,
-                $registration
+                $registration,
+                $sheet,
+                $user
             )
         );
 
