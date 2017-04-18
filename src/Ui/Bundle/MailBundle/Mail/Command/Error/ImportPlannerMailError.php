@@ -22,6 +22,9 @@ class ImportPlannerMailError extends AbstractMail
     /** @var string */
     protected $template = 'MailBundle:Mail:Planner/error.html.twig';
 
+    /** @var string  */
+    protected $messageId = 'import_planner_error';
+
     /** @var Event */
     public $event;
 

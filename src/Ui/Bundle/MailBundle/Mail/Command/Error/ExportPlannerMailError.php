@@ -21,6 +21,9 @@ class ExportPlannerMailError extends AbstractMail
     /** @var string */
     protected $template = 'MailBundle:Mail:Planner/error.html.twig';
 
+    /** @var string  */
+    protected $messageId = 'export_planner_error';
+
     /** @var Event */
     public $event;
 
