@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
+
 class Export
 {
     /** @var bool */
@@ -39,7 +42,7 @@ class Export
         $this->eventId            = $eventId;
         $this->locale             = $locale;
         $this->emailToNotify      = $emailToNotify;
-        $this->lockMeetingRequest = $lockMeetingRequest;
+        $this->lockMeetingRequest = ($lockMeetingRequest === ExportPlannerCommand::LOCK_MEETING_REQUEST) ? true : false;
         $this->solutionType       = $solutionType;
     }
 }

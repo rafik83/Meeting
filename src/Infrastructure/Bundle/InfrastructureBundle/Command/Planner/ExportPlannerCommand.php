@@ -19,7 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportPlannerCommand extends Command
 {
-    const NAME = 'vimeet:planner:export';
+    const NAME                      = 'vimeet:planner:export';
+    const LOCK_MEETING_REQUEST      = 'lock';
+    const DONT_LOCK_MEETING_REQUEST = 'not_lock';
 
     /** @var ExportHandler */
     private $exportPlannerHandler;
@@ -48,8 +50,12 @@ class ExportPlannerCommand extends Command
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale for the email')
             ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorithm')
-            ->addArgument('lockMeetingRequest', InputArgument::OPTIONAL, 'Should meeting request be locked after export', false)
-        ;
+            ->addArgument(
+                'lockMeetingRequest',
+                InputArgument::OPTIONAL,
+                'Should meeting request be locked after export',
+                self::DONT_LOCK_MEETING_REQUEST
+            );
     }
 
     /**

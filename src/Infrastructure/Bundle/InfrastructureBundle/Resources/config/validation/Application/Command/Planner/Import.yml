@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Planner\Import:
+Proximum\Vimeet\Application\Command\Planner\ImportJobCreator:
     properties:
         file:
             - NotNull: ~
