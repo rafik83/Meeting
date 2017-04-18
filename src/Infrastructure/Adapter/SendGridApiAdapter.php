@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
@@ -21,7 +22,7 @@ use SendGrid\Email;
 use SendGrid\Mail;
 use SendGrid\Personalization;
 
-class SendGridApiAdapter
+class SendGridApiAdapter implements SendGridApiAdapterInterface
 {
     /**
      * The maximum number of receivers for a sending.
