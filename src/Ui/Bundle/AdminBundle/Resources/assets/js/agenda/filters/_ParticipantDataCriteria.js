@@ -22,7 +22,7 @@ ParticipantDataCriteria.prototype.meetCriteria = function(sheets) {
                 var fullnameMatch = participant.fullname.search(new RegExp(this.participantData, 'i')) !== -1;
                 var emailMatch    = participant.email.search(new RegExp(this.participantData, 'i')) !== -1;
 
-                return fullnameMatch || emailMatch;
+                return true === fullnameMatch || true === emailMatch;
             }.bind(this));
 
             return filteredParticipants.length > 0;

@@ -16,7 +16,7 @@ FollowerCriteria.prototype = new Criteria();
  */
 FollowerCriteria.prototype.meetCriteria = function(sheets) {
 
-    if (typeof this.types !== 'undefined' && this.followers.length > 0) {
+    if (typeof this.followers !== 'undefined' && this.followers.length > 0) {
         return sheets.filter(function (sheet) {
             var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
 

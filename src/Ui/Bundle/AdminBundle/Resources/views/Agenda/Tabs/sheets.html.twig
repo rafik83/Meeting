@@ -80,7 +80,7 @@
 
                                 <small>${ sheet.type }</small>
 
-                                <div v-if="sheet.hasFollower != null">
+                                <div v-if="sheet.hasFollower === true">
                                     <small>
                                         <span class="glyphicon glyphicon-arrow-right"></span>
                                         &nbsp${sheet.followerFirstName } ${ sheet.followerLastName }

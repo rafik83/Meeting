@@ -135,15 +135,15 @@ module.exports = {
          * Filter on sheet list by participant name / email or sheet title
          */
         filterBySheetOrParticipant: function () {
-            var delay = (function(){
+            var delay = (function() {
                 var timer = 0;
-                return function(callback, ms){
+                return function(callback, ms) {
                     clearTimeout (timer);
                     timer = setTimeout(callback, ms);
                 };
             })();
 
-            delay(function(){
+            delay(function() {
                 if (this.filterBySheetOrParticipantValue.length > 0) {
                     var sheetsToFilter = this.filteredSheets.length > 0 ? this.filteredSheets : this.sheets;
                     this.filteredSheetsBySheetOrParticipant = new SheetFilter({filterBySheetOrParticipantValue : this.filterBySheetOrParticipantValue}).filter(sheetsToFilter);
