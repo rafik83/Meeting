@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\tests\Application\Command\Messaging\Message;
 use Proximum\Vimeet\Application\Command\Messaging\Message\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation;
 use Proximum\Vimeet\Domain\Repository\Messaging\MessageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -22,13 +23,22 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event            = EventFactory::createEvent();
         $command          = new Create($event);
-        $command->name    = 'pro';
-        $command->subject = 'xi';
-        $command->content = 'mum';
+        $command->name    = 'message_name';
         $date             = new \DateTime();
 
+        $message = new Message($event, $date, 'message_name');
+
+        foreach ($event->getLocales() as $locale) {
+            $command->translations[$locale] = [
+                'subject' => 'subject_' . $locale,
+                'content' => 'content_' . $locale,
+                'locale'  => $locale,
+            ];
+            $message->translate($locale, 'subject_' . $locale, 'content_' . $locale, $date);
+        }
+
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
-        $messageRepository->add(new Message($event, $date, 'pro', 'xi', 'mum'))->shouldBeCalled();
+        $messageRepository->add($message)->shouldBeCalled();
 
         (new CreateHandler($messageRepository->reveal(), $date))->handle($command);
     }
