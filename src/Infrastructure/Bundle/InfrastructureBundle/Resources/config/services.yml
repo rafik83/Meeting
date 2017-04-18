@@ -1535,6 +1535,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 
+    command.messaging.batch.process_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler
+        arguments:
+            - '@adapter.sendgrid_api_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
+
     command.planner.import_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
         arguments:
@@ -4038,6 +4045,9 @@ services:
             - '@template.participant_info_guesser'
             - '@components.token.user.activate_account_token_generator'
             - '@query.sheet.planning.sheet_planning_view_query_handler'
+
+    domain.messaging.batch.sheet_validated_substitutions_provider:
+        class: Proximum\Vimeet\Domain\Messaging\Batch\SheetValidatedSubstitutionsProvider
 
     #
     # Emailing Query
