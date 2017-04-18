@@ -8,6 +8,6 @@
     'mail', mail.locale)|html|nl2br
 }}
 <br>
-{{ mail.message|trans({}, mail.locale) }}
+{{ mail.message|trans({}, 'mail', mail.locale) }}
 </body>
 </html>
