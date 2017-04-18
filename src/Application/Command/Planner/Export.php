@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
 
 class Export
 {
