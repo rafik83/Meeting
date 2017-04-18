@@ -204,7 +204,10 @@ class MeetingRequestController extends Controller
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        if (!$user instanceof User) { throw $this->createAccessDeniedException('User not found'); }
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('User not found');
+        }
 
         $toSheet = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
