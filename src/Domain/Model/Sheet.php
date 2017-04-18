@@ -258,6 +258,22 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Participant
+     *
+     * @throws SheetException
+     */
+    public function getFirstParticipant()
+    {
+        $firstParticipant = $this->getParticipants()->first();
+
+        if (false === $firstParticipant) {
+            throw new SheetException('Sheet cannot have no participant');
+        }
+
+        return $firstParticipant;
+    }
+
+    /**
      * @return int
      */
     public function countParticipant()

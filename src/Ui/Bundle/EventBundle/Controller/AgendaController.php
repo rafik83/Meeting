@@ -48,7 +48,7 @@ class AgendaController extends Controller
 
         return $this->redirectToRoute(
             'event_agenda_participant',
-            ['participant' => $sheet->getParticipants()->first()->getId(), 'sheet' => $sheet->getId()]
+            ['participant' => $sheet->getFirstParticipant()->getId(), 'sheet' => $sheet->getId()]
         );
     }
 
