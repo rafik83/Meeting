@@ -183,7 +183,7 @@ class ImportHandler
 
         $this->notifyAboutImportSuccess($event, $import);
 
-        $this->localFileStorage->remove($this->importDirectoryPath . $file->getPath(), true);
+        $this->localFileStorage->remove($file->getPath(), true);
     }
 
     /**
