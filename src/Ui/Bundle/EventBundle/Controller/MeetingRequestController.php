@@ -138,7 +138,7 @@ class MeetingRequestController extends Controller
      *
      * @throws NotFoundHttpException
      */
-    private function authorizeToCreateRequest(Request $request, Event $event, Sheet $fromSheet,Sheet $toSheet)
+    private function authorizeToCreateRequest(Request $request, Event $event, Sheet $fromSheet, Sheet $toSheet)
     {
         // if the meeting request are closed
         if (!$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($event)) {
