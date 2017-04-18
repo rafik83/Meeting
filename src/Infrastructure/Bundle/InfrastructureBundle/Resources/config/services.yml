@@ -535,6 +535,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.update_handler:

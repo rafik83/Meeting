@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -68,12 +69,15 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         //Handler
         $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime
+            $datetime,
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -123,12 +127,15 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         //Handler
         $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime
+            $datetime,
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -178,12 +185,15 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         //Handler
         $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime
+            $datetime,
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -234,12 +244,15 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         //Handler
         $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime
+            $datetime,
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);

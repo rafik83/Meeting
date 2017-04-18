@@ -8,16 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Event\Happening;
+namespace Proximum\Vimeet\Application\Event\MeetingRequest;
 
 use Proximum\Vimeet\Domain\Model\Participant;
 use Symfony\Component\EventDispatcher\Event;
 
-class ParticipantHappeningEvent extends Event
+class ParticipateToRequestEvent extends Event
 {
-    /**
-     * @var Participant
-     */
+    /** @var Participant */
     public $participant;
 
     /**

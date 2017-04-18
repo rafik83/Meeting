@@ -67,4 +67,6 @@ final class Events
     const HAPPENING_UN_PARTICIPATE             = 'happening.un_participate';
     const UNAVAILABILITY_ADDED                 = 'unavailability.added';
     const UNAVAILABILITY_REMOVED               = 'unavailability.removed';
+    const REQUEST_PARTICIPATE                  = 'request.participate';
+    const REQUEST_UN_PARTICIPATE               = 'request.un_participate';
 }

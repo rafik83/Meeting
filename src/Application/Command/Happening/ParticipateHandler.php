@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Command\Happening;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipantHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
@@ -117,7 +119,7 @@ class ParticipateHandler
 
                 $this->eventDispatcher->dispatch(
                     Events::HAPPENING_PARTICIPATE,
-                    new ParticipantHappeningEvent($participant)
+                    new ParticipateHappeningEvent($participant)
                 );
             }
         }
@@ -132,7 +134,7 @@ class ParticipateHandler
 
                 $this->eventDispatcher->dispatch(
                     Events::HAPPENING_UN_PARTICIPATE,
-                    new ParticipantHappeningEvent($participant)
+                    new UnParticipateHappeningEvent($participant)
                 );
             }
         }

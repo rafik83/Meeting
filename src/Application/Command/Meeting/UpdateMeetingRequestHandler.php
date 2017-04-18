@@ -11,10 +11,14 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateMeetingRequestHandler
 {
@@ -38,6 +42,9 @@ class UpdateMeetingRequestHandler
      */
     private $requestPermissionManager;
 
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
+
     /**
      * EditRequestHandler constructor.
      *
@@ -45,17 +52,20 @@ class UpdateMeetingRequestHandler
      * @param MessageRepositoryInterface $messageRepository
      * @param RequestPermissionManager   $requestPermissionManager
      * @param \DateTimeInterface         $datetime
+     * @param DelayedEventDispatcher     $eventDispatcher
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $requestPermissionManager,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->requestRepository        = $requestRepository;
         $this->messageRepository        = $messageRepository;
         $this->requestPermissionManager = $requestPermissionManager;
         $this->datetime                 = $datetime;
+        $this->eventDispatcher          = $eventDispatcher;
     }
 
     /**
@@ -101,6 +111,12 @@ class UpdateMeetingRequestHandler
             foreach ($updateRequest->meetingRequest->getFromParticipants() as $participant) {
                 if (!in_array($participant, $updateRequest->participants)) {
                     $updateRequest->meetingRequest->removeFromParticipant($participant);
+
+                    if ($updateRequest->meetingRequest->isApproved()) {
+                        $this->eventDispatcher->dispatch(
+                            Events::REQUEST_UN_PARTICIPATE, new UnParticipateToRequestEvent($participant)
+                        );
+                    }
                 }
             }
 
@@ -108,6 +124,12 @@ class UpdateMeetingRequestHandler
             foreach ($updateRequest->participants as $participant) {
                 if (!$updateRequest->meetingRequest->hasFromParticipant($participant)) {
                     $updateRequest->meetingRequest->addFromParticipant($participant);
+
+                    if ($updateRequest->meetingRequest->isApproved()) {
+                        $this->eventDispatcher->dispatch(
+                            Events::REQUEST_PARTICIPATE, new ParticipateToRequestEvent($participant)
+                        );
+                    }
                 }
             }
         } elseif ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getToSheet()) {
@@ -115,6 +137,12 @@ class UpdateMeetingRequestHandler
             foreach ($updateRequest->meetingRequest->getToParticipants() as $participant) {
                 if (!in_array($participant, $updateRequest->participants)) {
                     $updateRequest->meetingRequest->removeToParticipant($participant);
+
+                    if ($updateRequest->meetingRequest->isApproved()) {
+                        $this->eventDispatcher->dispatch(
+                            Events::REQUEST_UN_PARTICIPATE, new UnParticipateToRequestEvent($participant)
+                        );
+                    }
                 }
             }
 
@@ -122,6 +150,12 @@ class UpdateMeetingRequestHandler
             foreach ($updateRequest->participants as $participant) {
                 if (!$updateRequest->meetingRequest->hasToParticipant($participant)) {
                     $updateRequest->meetingRequest->addToParticipant($participant);
+
+                    if ($updateRequest->meetingRequest->isApproved()) {
+                        $this->eventDispatcher->dispatch(
+                            Events::REQUEST_PARTICIPATE, new ParticipateToRequestEvent($participant)
+                        );
+                    }
                 }
             }
         }
