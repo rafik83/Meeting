@@ -34,7 +34,7 @@ class Export
      * @param int $eventId
      * @param string $locale
      * @param string $emailToNotify
-     * @param bool   $lockMeetingRequest
+     * @param string $lockMeetingRequest
      * @param string $solutionType
      */
     public function __construct($eventId, $locale, $emailToNotify, $lockMeetingRequest, $solutionType)

@@ -29,8 +29,9 @@ class ImportJobCreator
     public $locale;
 
     /**
-     * @param Event $event
-     * @param Admin $admin
+     * @param Event  $event
+     * @param Admin  $admin
+     * @param string $locale
      */
     public function __construct(Event $event, Admin $admin, $locale)
     {
