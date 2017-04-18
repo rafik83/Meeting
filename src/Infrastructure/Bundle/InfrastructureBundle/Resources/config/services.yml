@@ -1657,6 +1657,7 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@datetime'
+            - '@adapter.sheet_indexer'
 
     #
     # Security
