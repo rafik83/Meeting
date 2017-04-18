@@ -16,7 +16,7 @@ TypeCriteria.prototype = new Criteria();
  */
 TypeCriteria.prototype.meetCriteria = function(sheets) {
 
-    if (this.types.length > 0) {
+    if (typeof this.types !== 'undefined' && this.types.length > 0) {
         return sheets.filter(function (sheet) {
             return this.types.indexOf(sheet.type) !== -1;
         }.bind(this));
