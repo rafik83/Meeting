@@ -139,6 +139,11 @@ class SheetView
     public $hasFollower;
 
     /**
+     * @var array
+     */
+    public $participants;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
@@ -148,6 +153,7 @@ class SheetView
      * @param string              $followerFirstName
      * @param string              $followerLastName
      * @param string              $url
+     * @param array               $participants
      */
     public function __construct(
         $id,
@@ -158,7 +164,8 @@ class SheetView
         $hasFollower,
         $followerFirstName,
         $followerLastName,
-        $url
+        $url,
+        array $participants
     ) {
         $this->id                       = $id;
         $this->title                    = $title;
@@ -175,6 +182,7 @@ class SheetView
         $this->followerFirstName        = $followerFirstName;
         $this->followerLastName         = $followerLastName;
         $this->url                      = $url;
+        $this->participants             = $participants;
 
         $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
         $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;

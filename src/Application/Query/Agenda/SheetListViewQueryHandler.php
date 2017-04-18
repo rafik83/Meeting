@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class SheetListViewQueryHandler
 {
@@ -48,26 +49,34 @@ class SheetListViewQueryHandler
     private $meetingRepository;
 
     /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * SheetListViewQueryHandler constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param SheetRepositoryInterface        $sheetRepository
+     * @param SheetInfoGuesser                $sheetInfoGuesser
      * @param SheetIndicatorsViewQueryHandler $sheetIndicatorsViewQueryHandler
-     * @param MeetingRepositoryInterface $meetingRepository
-     * @param RouterInterface $router
+     * @param MeetingRepositoryInterface      $meetingRepository
+     * @param RouterInterface                 $router
+     * @param ParticipantInfoGuesser          $participantInfoGuesser
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         SheetIndicatorsViewQueryHandler $sheetIndicatorsViewQueryHandler,
         MeetingRepositoryInterface $meetingRepository,
-        RouterInterface $router
+        RouterInterface $router,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->sheetRepository   = $sheetRepository;
         $this->sheetInfoGuesser  = $sheetInfoGuesser;
         $this->meetingRepository = $meetingRepository;
         $this->router            = $router;
         $this->sheetIndicatorsViewQueryHandler = $sheetIndicatorsViewQueryHandler;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
@@ -103,6 +112,19 @@ class SheetListViewQueryHandler
             /** @var Admin $follower */
             $follower = $sheet->getFollower() ? $sheet->getFollower() : null;
 
+            $participants = [];
+            foreach ($sheet->getParticipants() as $participant) {
+
+                $fullname = $this
+                    ->participantInfoGuesser
+                    ->guessParticipantCompleteName($participant, $sheetListViewQuery->locale);
+
+                $participants[] = [
+                    'fullname' => $fullname,
+                    'email'    => $participant->getUser()->getEmail()
+                ];
+            }
+
             $sheetList[] = new SheetView(
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
@@ -115,7 +137,8 @@ class SheetListViewQueryHandler
                 $this->router->generate(
                     'admin_sheet_details',
                     ['sheet' => $sheet->getId(), 'event' => $sheetListViewQuery->event->getId()]
-                )
+                ),
+                $participants
             );
         }
 

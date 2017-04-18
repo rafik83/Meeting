@@ -2611,6 +2611,7 @@ services:
             - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@adapter.router'
+            - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
     query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:

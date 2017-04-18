@@ -78,6 +78,7 @@ class AgendaParticipantViewQueryHandler
         return new AgendaParticipantView(
             $query->participant->getId(),
             $fullname,
+            $query->participant->getUser()->getEmail(),
             $dayViews
         );
     }
