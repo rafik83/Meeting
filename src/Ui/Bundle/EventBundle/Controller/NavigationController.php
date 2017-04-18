@@ -62,11 +62,11 @@ class NavigationController extends Controller
 
         if (null !== $user && false === $registration) {
             $menuView = $this->get('tactician.commandbus.query')->handle(
-                new MenuViewQuery($event, $sheet, $user, $locale)
+                new MenuViewQuery($event, $locale, $sheet, $user)
             );
 
             $submenuView = $this->get('tactician.commandbus.query')->handle(
-                new SubmenuViewQuery($event, $sheet, $user, $locale, $route)
+                new SubmenuViewQuery($event, $locale, $route, $sheet, $user)
             );
         }
 

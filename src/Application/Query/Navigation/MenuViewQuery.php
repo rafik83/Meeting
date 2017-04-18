@@ -22,6 +22,11 @@ class MenuViewQuery
     public $event;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * @var null|Sheet
      */
     public $sheet;
@@ -32,21 +37,16 @@ class MenuViewQuery
     public $user;
 
     /**
-     * @var string
-     */
-    public $locale;
-
-    /**
      * @param Event      $event
+     * @param string     $locale
      * @param null|Sheet $sheet
      * @param null|User  $user
-     * @param string     $locale
      */
-    public function __construct(Event $event, Sheet $sheet = null, User $user = null, $locale)
+    public function __construct(Event $event, $locale, Sheet $sheet = null, User $user = null)
     {
         $this->event  = $event;
-        $this->user   = $user;
         $this->locale = $locale;
-        $this->sheet = $sheet;
+        $this->sheet  = $sheet;
+        $this->user   = $user;
     }
 }

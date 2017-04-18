@@ -22,16 +22,6 @@ class SubmenuViewQuery
     public $event;
 
     /**
-     * @var null|Sheet
-     */
-    public $sheet;
-
-    /**
-     * @var null|User
-     */
-    public $user;
-
-    /**
      * @var string
      */
     public $locale;
@@ -42,18 +32,28 @@ class SubmenuViewQuery
     public $route;
 
     /**
+     * @var null|Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var null|User
+     */
+    public $user;
+
+    /**
      * @param Event      $event
-     * @param Sheet|null $sheet
-     * @param User       $user
      * @param string     $locale
      * @param string     $route
+     * @param null|Sheet $sheet
+     * @param null|User  $user
      */
-    public function __construct(Event $event, Sheet $sheet = null, User $user = null, $locale, $route)
+    public function __construct(Event $event, $locale, $route, Sheet $sheet = null, User $user = null)
     {
         $this->event  = $event;
-        $this->sheet  = $sheet;
-        $this->user   = $user;
         $this->locale = $locale;
         $this->route  = $route;
+        $this->sheet  = $sheet;
+        $this->user   = $user;
     }
 }
