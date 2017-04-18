@@ -1,6 +1,6 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
     options         = require('../../../vueComponents/options');
-    SheetFilter      = require('./filters/_SheetsFilter');
+    SheetFilter     = require('../../filters/_SheetsFilter');
 
 module.exports = {
     template: '#filter-modal',
