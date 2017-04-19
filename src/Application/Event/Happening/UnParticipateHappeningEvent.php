@@ -10,21 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Event\Happening;
 
-use Proximum\Vimeet\Domain\Model\Participant;
-use Symfony\Component\EventDispatcher\Event;
-
-class UnParticipateHappeningEvent extends Event
+class UnParticipateHappeningEvent extends AbstractHappeningEvent
 {
-    /**
-     * @var Participant
-     */
-    public $participant;
-
-    /**
-     * @param Participant $participant
-     */
-    public function __construct(Participant $participant)
-    {
-        $this->participant = $participant;
-    }
 }

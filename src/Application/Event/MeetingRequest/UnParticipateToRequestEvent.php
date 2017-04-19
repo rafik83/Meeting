@@ -10,19 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Event\MeetingRequest;
 
-use Proximum\Vimeet\Domain\Model\Participant;
-use Symfony\Component\EventDispatcher\Event;
-
-class UnParticipateToRequestEvent extends Event
+class UnParticipateToRequestEvent extends AbstractParticipantAssignedEvent
 {
-    /** @var Participant */
-    public $participant;
-
-    /**
-     * @param Participant $participant
-     */
-    public function __construct(Participant $participant)
-    {
-        $this->participant = $participant;
-    }
 }
