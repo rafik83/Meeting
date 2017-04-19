@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Happening\ParticipantHappeningEvent;
+use Proximum\Vimeet\Application\Event\Unavailability\RemoveUnavailabilityEvent;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -48,7 +48,7 @@ class RemoveHandler
 
         $this->eventDispatcher->dispatch(
             Events::UNAVAILABILITY_REMOVED,
-            new ParticipantHappeningEvent($remove->unavailability->getParticipant())
+            new RemoveUnavailabilityEvent($remove->unavailability->getParticipant())
         );
     }
 }
