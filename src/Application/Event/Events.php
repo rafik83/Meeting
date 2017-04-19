@@ -70,4 +70,6 @@ final class Events
     const REQUEST_PARTICIPATE                  = 'request.participate';
     const REQUEST_UN_PARTICIPATE               = 'request.un_participate';
     const MASS_ASSIGNMENT_UPDATED              = 'mass.assignment.updated';
+    const MEETING_PARTICIPATE                  = 'meeting.participate';
+    const MEETING_UN_PARTICIPATE               = 'meeting.un_participate';
 }

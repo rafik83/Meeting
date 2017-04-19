@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\AbstractHappeningEvent;
 use Proximum\Vimeet\Application\Event\Mass\Assignment\AssignmentUpdatedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\AbstractParticipateEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\AbstractParticipantAssignedEvent;
 use Proximum\Vimeet\Application\Event\Unavailability\AbstractUnavailabilityEvent;
 use Proximum\Vimeet\Domain\Request\ParticipantAssignedAggregator;
@@ -72,6 +73,14 @@ class AggregateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param AbstractParticipateEvent $event
+     */
+    public function onMeetingChanged(AbstractParticipateEvent $event)
+    {
+        $this->participantAssignedAggregator->aggregateAssignation($event->participant);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -84,6 +93,8 @@ class AggregateEventSubscriber implements EventSubscriberInterface
             Events::HAPPENING_PARTICIPATE       => 'onHappeningParticipationChanged',
             Events::HAPPENING_UN_PARTICIPATE    => 'onHappeningParticipationChanged',
             Events::MASS_ASSIGNMENT_UPDATED     => 'onMassAssignmentChanged',
+            Events::MEETING_PARTICIPATE         => 'onMeetingChanged',
+            Events::MEETING_UN_PARTICIPATE      => 'onMeetingChanged',
         ];
     }
 }
