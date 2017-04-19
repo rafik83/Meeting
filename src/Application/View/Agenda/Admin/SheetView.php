@@ -143,7 +143,7 @@ class SheetView
      * @param int                 $countParticipant
      * @param SheetIndicatorsView $sheetIndicatorsView
      * @param bool                $hasFollower
-     * @param null|FollowerView        $follower
+     * @param null|FollowerView   $follower
      * @param string              $url
      * @param array               $participants
      */
