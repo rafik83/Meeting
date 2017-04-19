@@ -65,7 +65,6 @@ class UnRefuseMeetingRequestHandler
     public function handle(UnRefuseMeetingRequest $unRefuseMeetingRequest)
     {
         if (!$this->permissionManager->isAllowedToUnRefuse(
-            $unRefuseMeetingRequest->editor,
             $unRefuseMeetingRequest->meetingRequest,
             $unRefuseMeetingRequest->sheet
         )) {

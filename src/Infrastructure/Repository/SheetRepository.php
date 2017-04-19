@@ -255,6 +255,23 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsMetBySheets(Event $event, array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true AND EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet AND r.to IN (:sheets)) OR (r.to = sheet AND r.from IN (:sheets)))')
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUnvalidatedSheetsById(array $ids)
     {
         $queryBuilder = $this->findByIdsQueryBuilder($ids);
@@ -516,7 +533,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from(Sheet::class, 'sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.group = :group AND sheet.enable=true')
             ->setParameter('group', $group)
             ->getQuery()

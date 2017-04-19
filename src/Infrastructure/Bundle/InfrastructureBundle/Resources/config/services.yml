@@ -1898,9 +1898,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.application.components.sheet.manager'
             - '@domain.key_dates.checker.meeting_published_access_checker'
-            - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
     #
@@ -4130,3 +4128,32 @@ services:
         class: Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler
         arguments:
             - '@adapter.event_url_generator'
+
+    #
+    # Group request queries
+    #
+    query.group.request.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Request\SheetViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+    query.group.request.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Request\ParticipantViewQueryHandler
+        arguments:
+            - '@command.planning.participant_info_guesser_cache'
+    query.group.request.request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Request\RequestViewQueryHandler
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@query.group.request.participant_view_query_handler'
+    query.group.request.sheet_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.group.request.sheet_view_query_handler'
+            - '@query.group.request.request_view_query_handler'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
