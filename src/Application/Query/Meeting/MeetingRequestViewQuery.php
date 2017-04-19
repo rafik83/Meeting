@@ -40,6 +40,12 @@ class MeetingRequestViewQuery
      */
     public $isMeetingRequestUpdateLocked;
 
+    /** @var bool */
+    public $isMeetingRequestClosed;
+
+    /** @var bool */
+    public $isAnsweringMeetingRequestClosed;
+
     /**
      * MeetingRequestViewQuery constructor.
      *
@@ -48,18 +54,24 @@ class MeetingRequestViewQuery
      * @param string         $locale
      * @param bool           $isMeetingPublished
      * @param bool           $isMeetingRequestUpdateLocked
+     * @param bool           $isMeetingRequestClosed
+     * @param bool           $isAnsweringMeetingRequestClosed
      */
     public function __construct(
         MeetingRequest $meetingRequest,
         Sheet $sheet,
         $locale,
         $isMeetingPublished,
-        $isMeetingRequestUpdateLocked
+        $isMeetingRequestUpdateLocked,
+        $isMeetingRequestClosed = false,
+        $isAnsweringMeetingRequestClosed = false
     ) {
-        $this->meetingRequest               = $meetingRequest;
-        $this->locale                       = $locale;
-        $this->sheet                        = $sheet;
-        $this->isMeetingPublished           = $isMeetingPublished;
-        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
+        $this->meetingRequest                  = $meetingRequest;
+        $this->locale                          = $locale;
+        $this->sheet                           = $sheet;
+        $this->isMeetingPublished              = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
+        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
     }
 }

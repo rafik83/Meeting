@@ -65,6 +65,12 @@ class CatalogSheetPreviewView
      */
     public $isMeetingRequestUpdateLocked;
 
+    /** @var bool */
+    public $isMeetingRequestClosed;
+
+    /** @var bool */
+    public $isAnsweringMeetingRequestClosed;
+
     /**
      * @param int             $id
      * @param Sheet           $sheet
@@ -75,6 +81,8 @@ class CatalogSheetPreviewView
      * @param bool            $isItMySheet
      * @param bool            $isMeetingPublished
      * @param bool            $isMeetingRequestUpdateLocked
+     * @param bool            $isMeetingRequestClosed
+     * @param bool            $isAnsweringMeetingRequestClosed
      */
     public function __construct(
         $id,
@@ -84,17 +92,21 @@ class CatalogSheetPreviewView
         Meeting\Request $meetingRequest = null,
         $isItMySheet,
         $isMeetingPublished = false,
-        $isMeetingRequestUpdateLocked = false
+        $isMeetingRequestUpdateLocked = false,
+        $isMeetingRequestClosed = false,
+        $isAnsweringMeetingRequestClosed = false
     ) {
-        $this->id                           = $id;
-        $this->sheet                        = $sheet;
-        $this->title                        = $title;
-        $this->type                         = $type;
-        $this->preview                      = $preview;
-        $this->meetingRequest               = $meetingRequest;
-        $this->isItMySheet                  = $isItMySheet;
-        $this->isMeetingPublished           = $isMeetingPublished;
-        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
+        $this->id                              = $id;
+        $this->sheet                           = $sheet;
+        $this->title                           = $title;
+        $this->type                            = $type;
+        $this->preview                         = $preview;
+        $this->meetingRequest                  = $meetingRequest;
+        $this->isItMySheet                     = $isItMySheet;
+        $this->isMeetingPublished              = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
+        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
     }
 
     /**
