@@ -20,10 +20,10 @@ OrCriteria.prototype.meetCriteria = function(sheets) {
     var firstCriteria = this.firstCriteria.meetCriteria(sheets);
     var secondCriteria = this.secondCriteria.meetCriteria(sheets);
 
-    var len = firstCriteria.length;
-    for (var i=0; i<len; i++) {
-        if (!contains(secondCriteria, firstCriteria[i])){
-            secondCriteria.push(firstCriteria[i]);
+    var length = firstCriteria.length;
+    for (var element = 0; i < length; element++) {
+        if (!contains(secondCriteria, firstCriteria[element])){
+            secondCriteria.push(firstCriteria[element]);
         }
     }
 

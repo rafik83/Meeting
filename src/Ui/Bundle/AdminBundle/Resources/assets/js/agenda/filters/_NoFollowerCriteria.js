@@ -16,10 +16,24 @@ NoFollowerCriteria.prototype = new Criteria();
  */
 NoFollowerCriteria.prototype.meetCriteria = function(sheets) {
 
-    if (null === this.followers) {
+    noFollowerFilter = false;
+    if (typeof this.followers !== 'undefined'
+        && this.followers.length > 0) {
+
+        this.followers.forEach(function (follower) {
+            if (follower === 'follower_unassigned') {
+                noFollowerFilter = true;
+                return false;
+            }
+        });
+
+        if (noFollowerFilter === false) {
+            return [];
+        }
+
         return sheets.filter(function (sheet) {
             return !sheet.hasFollower;
-        }.bind(this));
+        });
     }
 
     return sheets;

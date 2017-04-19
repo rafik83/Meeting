@@ -39,8 +39,6 @@ SheetsFilter.prototype.filter = function (sheets)
     var participantDataCriteria = new ParticipantDataCriteria(this.filters.filterBySheetOrParticipantValue);
 
     sheets = typeCriteria.meetCriteria(sheets);
-    sheets = followerCriteria.meetCriteria(sheets);
-    sheets = noFollowerCriteria.meetCriteria(sheets);
     sheets = hasMeetingToApproveCriteria.meetCriteria(sheets);
     sheets = hasNotEnoughAvailableSlotCriteria.meetCriteria(sheets);
     sheets = hasSentMeetingRequestCriteria.meetCriteria(sheets);
@@ -49,6 +47,7 @@ SheetsFilter.prototype.filter = function (sheets)
     sheets = hasNoScheduledMeetingsCriteria.meetCriteria(sheets);
 
     sheets = (new OrCriteria(sheetTitleCriteria, participantDataCriteria)).meetCriteria(sheets);
+    sheets = (new OrCriteria(followerCriteria, noFollowerCriteria)).meetCriteria(sheets);
 
     return sheets;
 };

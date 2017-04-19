@@ -18,9 +18,9 @@ FollowerCriteria.prototype.meetCriteria = function(sheets) {
 
     if (typeof this.followers !== 'undefined' && this.followers.length > 0) {
         return sheets.filter(function (sheet) {
-            var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
+            var followerId = sheet.follower !== null ? sheet.follower.id : null;
 
-            return this.followers.indexOf(follower) !== -1;
+            return this.followers.indexOf(followerId) !== -1;
         }.bind(this));
     }
 

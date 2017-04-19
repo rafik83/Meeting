@@ -25,26 +25,39 @@ module.exports = {
             return sheets;
         },
         followers: function () {
-            var followers = [];
+            var followers = {};
 
-            this.sortSheetsByLastname(this.sheetsWithFollower).forEach(function (sheet) {
-                var follower = sheet.followerFirstName + ' ' + sheet.followerLastName;
-
-                if (followers.indexOf(follower) === - 1) {
-                    followers.push(follower);
-                }
+            this.sheetsWithFollower.forEach(function (sheet) {
+                var follower = {
+                    id: sheet.follower.id,
+                    // Last name is only used to sort
+                    lastName: sheet.follower.lastName,
+                    fullname: sheet.follower.firstName + ' ' + sheet.follower.lastName
+                };
+                // Use follower id to avoid duplication
+                followers[follower.id] = follower;
             });
 
-            return followers;
+            return this.sortFollowersByLastName(followers);
+        },
+        follower_unassigned: function() {
+            return 'follower_unassigned';
         }
     },
     methods: {
-        sortSheetsByLastname: function(sheets) {
-            return sheets.sort(function(a, b){
-                if (a.followerLastName < b.followerLastName) return -1;
-                if (a.followerLastName > b.followerLastName) return 1;
+        sortFollowersByLastName: function(followers) {
+            var sortable = [];
+
+            // Switch object into array to sort
+            Object.keys(followers).map(function(follower) {
+                sortable.push(followers[follower]);
+            });
+
+            return sortable.sort(function(followerA, followerB){
+                if (followerA.lastName < followerB.lastName) return -1;
+                if (followerA.lastName > followerB.lastName) return 1;
                 return 0;
             });
-        }
+        },
     }
 };
