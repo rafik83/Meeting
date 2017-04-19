@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository\Messaging;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation;
 
 interface MessageRepositoryInterface
 {
@@ -37,4 +38,9 @@ interface MessageRepositoryInterface
      * @return Message[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param MessageTranslation $messageTranslation
+     */
+    public function removeTranslation(MessageTranslation $messageTranslation);
 }

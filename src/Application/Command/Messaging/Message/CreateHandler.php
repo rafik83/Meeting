@@ -23,16 +23,16 @@ class CreateHandler
     /**
      * @var \DateTimeInterface
      */
-    private $date;
+    private $dateTime;
 
     /**
      * @param MessageRepositoryInterface $messageRepository
-     * @param \DateTimeInterface         $date
+     * @param \DateTimeInterface         $dateTime
      */
-    public function __construct(MessageRepositoryInterface $messageRepository, \DateTimeInterface $date)
+    public function __construct(MessageRepositoryInterface $messageRepository, \DateTimeInterface $dateTime)
     {
         $this->messageRepository = $messageRepository;
-        $this->date              = $date;
+        $this->dateTime          = $dateTime;
     }
 
     /**
@@ -40,8 +40,12 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $this->messageRepository->add(
-            new Message($command->getEvent(), $this->date, $command->name, $command->subject, $command->content)
-        );
+        $message = new Message($command->getEvent(), $this->dateTime, $command->name);
+
+        foreach ($command->translations as $locale => $translation) {
+            $message->translate($locale, $translation['subject'], $translation['content'], $this->dateTime);
+        }
+
+        $this->messageRepository->add($message);
     }
 }

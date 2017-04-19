@@ -411,6 +411,7 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $mail = new SheetChangeTypeMail(
             $event->getSheet()->getEvent(),
+            $event->getSheet(),
             $this->sender->generate($event->getSheet()->getEvent()),
             $event->getSheet()->getOwner()->getEmail(),
             $event->getLocale(),

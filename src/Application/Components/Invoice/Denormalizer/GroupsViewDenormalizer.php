@@ -28,7 +28,11 @@ class GroupsViewDenormalizer implements DenormalizerInterface, DenormalizerAware
         $groupViews = [];
 
         foreach ($data['groups'] as $group) {
-            $groupViews[] = $this->denormalizer->denormalize($group, GroupView::class, $format, $context);
+            $groupView = $this->denormalizer->denormalize($group, GroupView::class, $format, $context);
+
+            if (null !== $groupView) {
+                $groupViews[] = $this->denormalizer->denormalize($group, GroupView::class, $format, $context);
+            }
         }
 
         return new GroupsView($groupViews);

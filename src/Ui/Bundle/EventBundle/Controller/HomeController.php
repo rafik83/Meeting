@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,9 +25,9 @@ class HomeController extends Controller
     /**
      * Event home.
      *
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param UserInterface $user
+     * @param Request            $request
+     * @param EventDomain        $eventDomain
+     * @param null|UserInterface $user
      *
      * @return RedirectResponse|Response
      */
@@ -35,24 +36,10 @@ class HomeController extends Controller
         $locale = $request->getLocale();
         $event = $eventDomain->getEvent();
 
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && null !== $user) {
-            // User is a manager of Sheets group
-            $group = $this
-                ->get('repository.sheet.group_repository')
-                ->getByEventAndManager($event, $user);
+        $response = $this->attemptDispatchUser($event, $user);
 
-            if (null !== $group) {
-                return $this->redirectToRoute('event_sheet_group_index', ['sheetGroup' => $group->getId()]);
-            }
-
-            // User has a sheet
-            $sheets = $this
-                ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetsByUserAndEvent($user, $event);
-
-            if (count($sheets)) {
-                return $this->redirectToRoute('event_sheet');
-            }
+        if ($response instanceof RedirectResponse) {
+            return $response;
         }
 
         $form = $this->createForm(TypeChoiceType::class, null, [
@@ -80,5 +67,40 @@ class HomeController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Event              $event
+     * @param null|UserInterface $user
+     *
+     * @return null|RedirectResponse
+     */
+    private function attemptDispatchUser(Event $event, UserInterface $user = null)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && null !== $user) {
+            $homeDispatchView = $this->get('components.home.home_dispatch')->handle($event, $user);
+
+            if (null !== $homeDispatchView) {
+                if ($homeDispatchView->isGroup()) {
+                    return $this->redirectToRoute(
+                        'event_sheet_group_index',
+                        ['sheetGroup' => $homeDispatchView->getGroup()->getId()]
+                    );
+                }
+
+                if ($homeDispatchView->isOneSheet()) {
+                    return $this->redirectToRoute(
+                        'event_sheet_default',
+                        ['sheet' => $homeDispatchView->getSheet()->getId()]
+                    );
+                }
+
+                if ($homeDispatchView->isMultipleSheet()) {
+                    return $this->redirectToRoute('event_select_sheet');
+                }
+            }
+        }
+
+        return null;
     }
 }

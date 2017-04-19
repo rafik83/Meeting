@@ -17,7 +17,7 @@
 
     {{ macros.button(
         'mail.participant.profile.link'|trans({}, 'mail', mail.locale),
-        'https://' ~ mail.event.domain ~ path('event_sheet_locale', { 'locale': mail.locale })
+        'https://' ~ mail.event.domain ~ path('event_sheet_locale', { 'sheet': mail.sheet.id, 'locale': mail.locale })
     ) }}
 
     <br>

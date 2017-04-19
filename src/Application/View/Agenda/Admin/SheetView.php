@@ -137,6 +137,20 @@ class SheetView
     public $follower;
 
     /**
+     * "La fiche a des créneaux disponibles"
+     *
+     * @var bool
+     */
+    public $hasAvailableSlots;
+
+    /**
+     * "A encore des demandes/propositions validées et non placées"
+     *
+     * @var bool
+     */
+    public $hasValidatedRequestNotScheduled;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
@@ -174,8 +188,10 @@ class SheetView
         $this->participants             = $participants;
         $this->follower                 = $follower;
 
-        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
-        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
-        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
+        $this->hasNotEnoughAvailableSlot       = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
+        $this->hasNotSentMeetingRequest        = $sheetIndicatorsView->hasNotSentMeetingRequest;
+        $this->hasMeetingToApprove             = $sheetIndicatorsView->hasMeetingToApprove;
+        $this->hasAvailableSlots               = $sheetIndicatorsView->hasAvailableSlots;
+        $this->hasValidatedRequestNotScheduled = $sheetIndicatorsView->hasValidatedRequestNotScheduled;
     }
 }

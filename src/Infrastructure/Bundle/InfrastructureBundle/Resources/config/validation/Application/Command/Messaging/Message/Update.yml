@@ -2,7 +2,13 @@ Proximum\Vimeet\Application\Command\Messaging\Message\Update:
     properties:
         name:
             - NotBlank: ~
-        subject:
-            - NotBlank: ~
-        content:
-            - NotBlank: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        locale:
+                            - NotBlank: ~
+                        subject:
+                            - NotBlank: ~
+                        content:
+                            - NotBlank: ~

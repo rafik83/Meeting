@@ -1264,6 +1264,14 @@ admin_import_planner_data:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Planner/Import:import }
 
+admin_planner_export_file:
+    path: /event/{event}/planner/export/link/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Export:exportFile }
+
 #
 # Invoice
 #

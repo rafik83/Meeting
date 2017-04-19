@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner;
 
-use Proximum\Vimeet\Application\Command\Planner\Export;
+use Proximum\Vimeet\Application\Command\Planner\ExportJobCreator;
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -48,7 +48,7 @@ class ExportType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Export::class,
+            'data_class' => ExportJobCreator::class,
         ]);
     }
 

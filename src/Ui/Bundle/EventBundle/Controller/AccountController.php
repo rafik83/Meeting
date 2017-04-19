@@ -14,30 +14,36 @@ use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AccountController extends Controller
 {
     /**
-     * @param Request   $request
-     * @param EventDomain $eventDomain
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function updateEmailAction(Request $request, EventDomain $eventDomain)
+    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $changeMail = new ChangeMail($this->getUser(), $eventDomain->getEvent());
+        $changeMail = new ChangeMail($user, $eventDomain->getEvent());
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [
-            'action' => $this->generateUrl('event_account_change_mail'),
+            'action' => $this->generateUrl('event_account_change_mail', ['sheet' => $sheet->getId()]),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -55,6 +61,7 @@ class AccountController extends Controller
 
         return $this->render('EventBundle:User:update_account.html.twig', [
             'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
             'form'  => $form->createView(),
         ]);
     }

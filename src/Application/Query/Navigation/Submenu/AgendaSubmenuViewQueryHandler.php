@@ -55,14 +55,14 @@ class AgendaSubmenuViewQueryHandler
             $buttonViews[] = new SubmenuButtonView(
                 Category::AGENDA_ICON,
                 'agenda.title',
-                $this->navigationBuilder->getRoute('event_agenda'),
+                $this->navigationBuilder->getRoute('event_agenda', ['sheet' => $query->sheet->getId()]),
                 Route::isAgenda($query->route)
             );
 
             $buttonViews[] = new SubmenuButtonView(
                 Category::PLANNING_ICON,
                 'program.title',
-                $this->navigationBuilder->getRoute('happening_program'),
+                $this->navigationBuilder->getRoute('happening_program', ['sheet' => $query->sheet->getId()]),
                 Route::isProgram($query->route)
             );
         }

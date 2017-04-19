@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class SheetChangeTypeMail extends UserMail
@@ -49,12 +50,18 @@ class SheetChangeTypeMail extends UserMail
     private $fromTypeTitle;
 
     /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * @var bool
      */
     protected $sendToEmailTeam = true;
 
     /**
      * @param Event               $event
+     * @param Sheet               $sheet
      * @param string              $sender
      * @param string              $receiver
      * @param string              $locale
@@ -65,6 +72,7 @@ class SheetChangeTypeMail extends UserMail
      */
     public function __construct(
         Event $event,
+        Sheet $sheet,
         $sender,
         $receiver,
         $locale,
@@ -75,9 +83,18 @@ class SheetChangeTypeMail extends UserMail
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
+        $this->sheet         = $sheet;
         $this->user          = $user;
         $this->fromTypeTitle = $fromTypeTitle;
         $this->toTypeTitle   = $toTypeTitle;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
     }
 
     /**

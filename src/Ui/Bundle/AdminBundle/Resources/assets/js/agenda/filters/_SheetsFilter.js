@@ -9,7 +9,9 @@ var TypeCriteria                      = require('./_TypeCriteria'),
     NoFollowerCriteria                = require('./_NoFollowerCriteria'),
     OrCriteria                        = require('./_OrCriteria'),
     ParticipantDataCriteria           = require('./_ParticipantDataCriteria'),
-    SheetTitleCriteria                = require('./_SheetTitleCriteria');
+    SheetTitleCriteria                = require('./_SheetTitleCriteria'),
+    HasAvailableSlots                 = require('./_HasAvailableSlots'),
+    HasValidatedRequestNotScheduled   = require('./_HasValidatedRequestNotScheduled');
 
 /**
  * @param {array} filters
@@ -37,6 +39,8 @@ SheetsFilter.prototype.filter = function (sheets)
     var noFollowerCriteria = new NoFollowerCriteria(this.filters.selectedFollowers);
     var sheetTitleCriteria = new SheetTitleCriteria(this.filters.filterBySheetOrParticipantValue);
     var participantDataCriteria = new ParticipantDataCriteria(this.filters.filterBySheetOrParticipantValue);
+    var hasAvailableSlotsCriteria = new HasAvailableSlots(this.filters.hasAvailableSlots);
+    var hasValidatedRequestNotScheduled = new HasValidatedRequestNotScheduled(this.filters.hasValidatedRequestNotScheduled);
 
     sheets = typeCriteria.meetCriteria(sheets);
     sheets = hasMeetingToApproveCriteria.meetCriteria(sheets);
@@ -45,6 +49,8 @@ SheetsFilter.prototype.filter = function (sheets)
     sheets = hasNotSentMeetingRequestCriteria.meetCriteria(sheets);
     sheets = hasScheduledMeetingsCriteria.meetCriteria(sheets);
     sheets = hasNoScheduledMeetingsCriteria.meetCriteria(sheets);
+    sheets = hasAvailableSlotsCriteria.meetCriteria(sheets);
+    sheets = hasValidatedRequestNotScheduled.meetCriteria(sheets);
 
     sheets = (new OrCriteria(sheetTitleCriteria, participantDataCriteria)).meetCriteria(sheets);
     sheets = (new OrCriteria(followerCriteria, noFollowerCriteria)).meetCriteria(sheets);

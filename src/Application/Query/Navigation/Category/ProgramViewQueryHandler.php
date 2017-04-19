@@ -86,7 +86,7 @@ class ProgramViewQueryHandler
         foreach ($categories as $category) {
             $linksView[] = new LinkView(
                 $category->getTitle($programViewQuery->locale),
-                $this->navigationBuilder->getRoute('happening_program'),
+                $this->navigationBuilder->getRoute('happening_program', ['sheet' => $programViewQuery->sheet->getId()]),
                 null
             );
         }

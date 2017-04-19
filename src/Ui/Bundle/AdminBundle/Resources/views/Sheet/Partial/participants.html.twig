@@ -1,5 +1,5 @@
 <div class="row">
-    {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
+    {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet_default', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
     <div class="col-md-6">
     {% if details.owner.shouldBeDisplayed %}
         <div class="col-md-12">

@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Application\Command\Planner\ImportJobCreator;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,6 +21,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ImportController extends Controller
 {
@@ -28,20 +31,24 @@ class ImportController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function importAction(Request $request, Event $event)
+    public function importAction(Request $request, Event $event, UserInterface $admin)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $import = new Import($event);
-        $form   = $this->createForm(ImportType::class, $import, [
+        if (!$admin instanceof Admin) {
+            throw $this->createNotFoundException('Admin not found');
+        }
+
+        $importJobCreator = new ImportJobCreator($event, $admin, $request->getLocale());
+        $form = $this->createForm(ImportType::class, $importJobCreator, [
             'submit'  => true,
             'confirm' => 'form.planner_import.confirm.submit.label',
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($import);
-                $this->addFlash('success', 'flash.admin.planner.import.success');
+                $this->get('tactician.commandbus')->handle($importJobCreator);
+                $this->addFlash('success', 'flash.admin.planner.import.pending');
 
                 return $this->redirectToRoute('admin_planner', [
                     'event' => $event->getId(),

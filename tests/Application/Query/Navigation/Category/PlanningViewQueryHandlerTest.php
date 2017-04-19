@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -106,11 +107,14 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $user  = UserFactory::create();
-        $sheet = SheetFactory::create($event, $user);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
+        $sheet->getId()->shouldBeCalled()->willReturn(1);
+
         $date  = new \DateTime('2016-10-12 10:00:00.000');
         $event->getConfiguration()->setDates(null, $date, null);
 
-        $this->navigationBuilder->getRoute('event_agenda')->shouldBeCalled()->willReturn('route');
+        $this->navigationBuilder->getRoute('event_agenda', ['sheet' => 1])->shouldBeCalled()->willReturn('route');
         $this->happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
         $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
 
@@ -119,7 +123,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $this->happeningsAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+        $result = $handler->handle(new PlanningViewQuery($sheet->reveal(), $user, 'fr'));
 
         $linkView = new LinkView(
             'navigation.links.planning.available_date',
@@ -167,11 +171,14 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $user  = UserFactory::create();
-        $sheet = SheetFactory::create($event, $user);
         $date  = new \DateTime('2016-10-12 10:00:00.000');
         $event->getConfiguration()->setDates(null, null, $date);
 
-        $this->navigationBuilder->getRoute('event_agenda')->shouldBeCalled()->willReturn('route');
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
+        $sheet->getId()->shouldBeCalled()->willReturn(1);
+
+        $this->navigationBuilder->getRoute('event_agenda', ['sheet' => 1])->shouldBeCalled()->willReturn('route');
         $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
         $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
@@ -180,7 +187,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $this->happeningsAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
+        $result = $handler->handle(new PlanningViewQuery($sheet->reveal(), $user, 'fr'));
 
         $linkViewHappening = new LinkView('navigation.links.incoming', null);
         $linkView = new LinkView(

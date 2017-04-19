@@ -45,7 +45,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->remove($request)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToCancel($user, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToCancel($request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         // Handle
 
@@ -79,7 +79,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->remove($request)->shouldNotBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToCancel($user, $request, $sheetFrom)->shouldBeCalled()->willReturn(false);
+        $permissionManager->isAllowedToCancel($request, $sheetFrom)->shouldBeCalled()->willReturn(false);
 
         // Handle
         $handler = new CancelRequestHandler(
@@ -112,7 +112,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->remove($request)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToCancel($user, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToCancel($request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         // Handle
 

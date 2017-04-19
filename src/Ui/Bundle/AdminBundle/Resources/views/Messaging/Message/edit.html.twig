@@ -8,8 +8,7 @@
 
 {% block form_content %}
     {{ form_row(form.name) }}
-    {{ form_row(form.subject) }}
-    {{ form_row(form.content) }}
+    {{ form_row(form.translations) }}
 {% endblock %}
 
 {% block goback_link path('admin_messaging_message_list', {event: event.id}) %}

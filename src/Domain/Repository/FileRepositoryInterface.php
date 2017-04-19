@@ -18,4 +18,11 @@ interface FileRepositoryInterface
      * @param File $file
      */
     public function add(File $file);
+
+    /**
+     * @param int $id
+     *
+     * @return null|File
+     */
+    public function getById($id);
 }

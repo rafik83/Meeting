@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -38,11 +37,6 @@ class CreateRequest
     public $description;
 
     /**
-     * @var string
-     */
-    public $state;
-
-    /**
      * @var User
      */
     public $creator;
@@ -56,7 +50,6 @@ class CreateRequest
     {
         $this->from         = $from;
         $this->to           = $to;
-        $this->state        = Request::STATE_SENT;
         $this->creator      = $creator;
         $this->participants = [];
     }

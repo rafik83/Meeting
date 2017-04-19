@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
@@ -36,28 +35,20 @@ class MeetingSheetViewQueryHandler
     private $sheetInfoGuesser;
 
     /**
-     * @var SheetGuesser
-     */
-    private $sheetGuesser;
-
-    /**
      * MeetingSheetViewQueryHandler constructor.
      *
      * @param RequestRepositoryInterface   $requestRepository
      * @param ParticipantsViewQueryHandler $participantsViewQueryHandler
      * @param SheetInfoGuesser             $sheetInfoGuesser
-     * @param SheetGuesser                 $sheetGuesser
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         ParticipantsViewQueryHandler $participantsViewQueryHandler,
-        SheetInfoGuesser $sheetInfoGuesser,
-        SheetGuesser $sheetGuesser
+        SheetInfoGuesser $sheetInfoGuesser
     ) {
         $this->requestRepository            = $requestRepository;
         $this->participantsViewQueryHandler = $participantsViewQueryHandler;
         $this->sheetInfoGuesser             = $sheetInfoGuesser;
-        $this->sheetGuesser                 = $sheetGuesser;
     }
 
     /**
@@ -68,14 +59,12 @@ class MeetingSheetViewQueryHandler
      */
     public function handle(MeetingSheetViewQuery $query)
     {
-        $sheet = $this->sheetGuesser->getUserSheet($query->user, $query->event, $query->locale);
-
-        $meetingsRequest = $this->requestRepository->findAccepted($sheet);
+        $meetingsRequest = $this->requestRepository->findAccepted($query->sheet);
 
         $meetingSheetViews = [];
 
         foreach ($meetingsRequest as $meeting) {
-            $metSheet     = $meeting->getSheetMet($sheet);
+            $metSheet     = $meeting->getSheetMet($query->sheet);
             $participants = $metSheet->getParticipants()->toArray();
 
             $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($metSheet, $query->locale);

@@ -164,9 +164,32 @@ class SheetRepository implements SheetRepositoryInterface
                 'sheet.event = :event AND sheet.enable = true AND (sheet.owner = :user OR participant.user = :user)'
             )
             ->setParameter('event', $event)
-            ->setParameter('user', $user);
+            ->setParameter('user', $user)
+            ->groupBy('sheet.id');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countSheetsByUserAndEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(DISTINCT sheet.id)')
+            ->from(Sheet::class, 'sheet')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND (sheet.owner = :user OR participant.user = :user)'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('user', $user);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -248,6 +271,23 @@ class SheetRepository implements SheetRepositoryInterface
             ->findByIdsQueryBuilder($ids)
             ->andWhere('sheet.event = :event')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsMetBySheets(Event $event, array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true AND EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet AND r.to IN (:sheets)) OR (r.to = sheet AND r.from IN (:sheets)))')
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -516,7 +556,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from(Sheet::class, 'sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.group = :group AND sheet.enable=true')
             ->setParameter('group', $group)
             ->getQuery()

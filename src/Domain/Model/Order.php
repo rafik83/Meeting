@@ -232,19 +232,31 @@ class Order
     }
 
     /**
-     * @param Row $customRow
+     * @param Row $rowToRemove
      *
-     * @return Order
+     * @return self
      */
-    public function removeCustomRow(Row $customRow)
+    public function removeRow(Row $rowToRemove)
     {
         foreach ($this->rows as $key => $row) {
-            if ($row->getId() === $customRow->getId()) {
+            if ($row->getId() === $rowToRemove->getId()) {
                 $this->rows->remove($key);
+
                 return $this;
             }
         }
+
         return $this;
+    }
+
+    /**
+     * @param Row $customRow
+     *
+     * @return self
+     */
+    public function removeCustomRow(Row $customRow)
+    {
+        return $this->removeRow($customRow);
     }
 
     /**

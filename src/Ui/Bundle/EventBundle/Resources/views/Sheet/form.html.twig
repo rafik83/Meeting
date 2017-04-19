@@ -16,6 +16,7 @@
         <div class="object--image--footer">
             {{ macros.delete_button(
             path('event_sheet_remove_image', {
+                'sheet': sheet.id,
                 'key': uid,
                 'locale': locale
             }),
