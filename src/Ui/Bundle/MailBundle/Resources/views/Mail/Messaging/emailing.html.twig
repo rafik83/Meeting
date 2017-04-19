@@ -1,5 +1,5 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
-    {{ mail.message.content|html }}
+    {{ mail.message.content(mail.locale)|html }}
 {% endblock %}
