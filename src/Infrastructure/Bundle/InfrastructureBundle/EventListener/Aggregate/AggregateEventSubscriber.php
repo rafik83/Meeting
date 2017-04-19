@@ -70,8 +70,8 @@ class AggregateEventSubscriber implements EventSubscriberInterface
         return [
             Events::UNAVAILABILITY_ADDED        => 'onUnavailabilityChanged',
             Events::UNAVAILABILITY_REMOVED      => 'onUnavailabilityChanged',
-            Events::REQUEST_PARTICIPANT_ADDED   => 'onRequestParticipationChanged',
-            Events::REQUEST_PARTICIPANT_REMOVED => 'onRequestParticipationChanged',
+            Events::REQUEST_PARTICIPATE         => 'onRequestParticipationChanged',
+            Events::REQUEST_UN_PARTICIPATE      => 'onRequestParticipationChanged',
             Events::HAPPENING_PARTICIPATE       => 'onHappeningParticipationChanged',
             Events::HAPPENING_UN_PARTICIPATE    => 'onHappeningParticipationChanged',
         ];
