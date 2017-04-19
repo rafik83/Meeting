@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
+use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -82,6 +83,8 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $view = $handler->handle($query);
 
+        $expectedParticipant = new AgendaParticipantView(1, null, 'email@email.com', []);
+
         $sheetIndicatorView = new SheetIndicatorsView(0, 0, 0, 0, 0, 10);
         $expectedView = new SheetView(
             $sheet->getId(),
@@ -91,9 +94,8 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetIndicatorView,
             false,
             null,
-            null,
             '/my-url',
-            [['fullname' => null, 'email' => 'email@email.com']]
+            [$expectedParticipant]
         );
 
         $this->assertEquals($expectedView, $view[0]);
