@@ -17,12 +17,12 @@ NoFollowerCriteria.prototype = new Criteria();
 NoFollowerCriteria.prototype.meetCriteria = function(sheets) {
 
     noFollowerFilter = false;
-    if (typeof this.followers !== 'undefined'
-        && this.followers.length > 0) {
+    if (typeof this.followers !== 'undefined' && this.followers.length > 0) {
 
         this.followers.forEach(function (follower) {
             if (follower === 'follower_unassigned') {
                 noFollowerFilter = true;
+
                 return false;
             }
         });

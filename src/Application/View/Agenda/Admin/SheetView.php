@@ -132,7 +132,7 @@ class SheetView
     /**
      * Suivi commercial
      *
-     * @var FollowerView
+     * @var null|FollowerView
      */
     public $follower;
 
