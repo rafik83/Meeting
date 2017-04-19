@@ -21,7 +21,7 @@ OrCriteria.prototype.meetCriteria = function(sheets) {
     var secondCriteria = this.secondCriteria.meetCriteria(sheets);
 
     var length = firstCriteria.length;
-    for (var element = 0; i < length; element++) {
+    for (var element = 0; element < length; element++) {
         if (!contains(secondCriteria, firstCriteria[element])){
             secondCriteria.push(firstCriteria[element]);
         }
