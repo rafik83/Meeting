@@ -4133,3 +4133,17 @@ services:
         class: Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler
         arguments:
             - '@adapter.event_url_generator'
+
+    #
+    # Aggregator
+    #
+    domain.request.participant_assigned_aggregator:
+        class: Proximum\Vimeet\Domain\Request\ParticipantAssignedAggregator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+    domain.unavailability.participant_unavailable_aggregator:
+        class: Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'

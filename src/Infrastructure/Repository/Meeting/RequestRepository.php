@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -558,9 +559,7 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param Sheet $sheet
-     *
-     * @return Request[]
+     * {@inheritdoc}
      */
     public function findAccepted(Sheet $sheet)
     {
@@ -576,6 +575,26 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('state', Request::STATE_APPROVED);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function participantIsAssignedToAccepted(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('count(request)')
+            ->from(Request::class, 'request')
+            ->leftjoin('request.fromParticipants', 'fromParticipant')
+            ->leftjoin('request.toParticipants', 'toParticipant')
+            ->where('request.state = :approved AND request.disabled = false AND (fromParticipant.id = :participant OR toParticipant.id = :participant)')
+            ->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)')
+            ->setParameter('participant', $participant)
+            ->setParameter('approved', Request::STATE_APPROVED);
+
+        return ((int) $queryBuilder->getQuery()->getSingleScalarResult()) > 0;
     }
 
     /**

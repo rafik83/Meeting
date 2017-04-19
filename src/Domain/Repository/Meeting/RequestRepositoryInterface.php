@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository\Meeting;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -228,4 +229,11 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function findAccepted(Sheet $sheet);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function participantIsAssignedToAccepted(Participant $participant);
 }
