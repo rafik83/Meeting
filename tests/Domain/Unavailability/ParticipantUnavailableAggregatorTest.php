@@ -35,7 +35,7 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->set($participant->reveal())->shouldBeCalled();
 
-        $participant->setIsFullyUnavailable(true)->shouldBeCalled();
+        $participant->setFullyUnavailable(true)->shouldBeCalled();
 
         $participantUnavailableAggregator = new ParticipantUnavailableAggregator(
             $meetingSlotRepository->reveal(),
@@ -60,7 +60,7 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->set($participant->reveal())->shouldBeCalled();
 
-        $participant->setIsFullyUnavailable(false)->shouldBeCalled();
+        $participant->setFullyUnavailable(false)->shouldBeCalled();
 
         $participantUnavailableAggregator = new ParticipantUnavailableAggregator(
             $meetingSlotRepository->reveal(),

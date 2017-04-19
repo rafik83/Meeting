@@ -42,7 +42,7 @@ class ParticipantUnavailableAggregator
         $event  = $participant->getSheet()->getEvent();
         $slots  = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds($event, [$participant->getId()]);
 
-        $participant->setIsFullyUnavailable(empty($slots));
+        $participant->setFullyUnavailable(empty($slots));
 
         $this->participantRepository->set($participant);
     }

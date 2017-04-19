@@ -319,7 +319,7 @@ class Participant implements MailRecipientInterface
     /**
      * @param bool $isFullyUnavailable
      */
-    public function setIsFullyUnavailable($isFullyUnavailable)
+    public function setFullyUnavailable($isFullyUnavailable)
     {
         $this->isFullyUnavailable = $isFullyUnavailable;
     }
