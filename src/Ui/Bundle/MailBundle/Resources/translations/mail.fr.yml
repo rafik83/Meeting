@@ -40,7 +40,7 @@ mail.planner.export.error: "Bonjour, \n\n Une erreur s'est produite durant le tr
 mail.planner.export.link.click: 'Télécharger les planifications'
 mail.planner.export.subject: 'Fichier d''export des planifications'
 mail.planner.export.subject.error: 'Erreur lors de l''export d''un fichier'
-mail.planner.import.intro: "Bonjour, \n\n L''import du fichier pour les planifications de l''événement %eventTitle% est terminé."
+mail.planner.import.intro: "Bonjour, \n\n L'import du fichier pour les planifications de l'événement %eventTitle% est terminé."
 mail.planner.import.subject: 'Import des planifications'
 mail.planner.import.error: "Bonjour, \n\n Une erreur s'est produite durant le traitement de l'import des planifications \n\n"
 mail.planner.import.subject.error: 'Erreur lors de l''import des planifications'
