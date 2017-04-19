@@ -45,9 +45,17 @@ class Merger
             $firstOrder->getCreatedAt()
         );
 
+        // Merge products and promotion code
         foreach ($orders as $order) {
             $this->mergeProduct($orderMerged, $order);
             $this->mergePromotionCode($orderMerged, $order);
+        }
+
+        // Remove products whose merged quantity return 0
+        foreach ($orderMerged->getRows() as $row) {
+            if ($row->getQuantity() === 0) {
+                $orderMerged->removeRow($row);
+            }
         }
 
         return $orderMerged;

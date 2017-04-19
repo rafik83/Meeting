@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -40,22 +42,34 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     private $templateDataFactory;
 
+    /** @var MeetingRequestAccessChecker */
+    private $meetingRequestAccessChecker;
+
+    /** @var AnsweringMeetingRequestAccessChecker */
+    private $answeringMeetingRequestAccessChecker;
+
     /**
-     * @param SheetRepositoryInterface     $sheetRepository
-     * @param SheetSearchAdapterInterface  $sheetSearchAdapter
-     * @param SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler
-     * @param TemplateDataFactory          $templateDataFactory
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetSearchAdapterInterface          $sheetSearchAdapter
+     * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
+     * @param TemplateDataFactory                  $templateDataFactory
+     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
-        $this->sheetRepository              = $sheetRepository;
-        $this->sheetSearchAdapter           = $sheetSearchAdapter;
-        $this->sheetPreviewViewQueryHandler = $sheetPreviewViewQueryHandler;
-        $this->templateDataFactory          = $templateDataFactory;
+        $this->sheetRepository                      = $sheetRepository;
+        $this->sheetSearchAdapter                   = $sheetSearchAdapter;
+        $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
+        $this->templateDataFactory                  = $templateDataFactory;
+        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
@@ -78,11 +92,23 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
 
+        $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
+
         $paginatedResult->results = array_map(
-            function (Sheet $sheet) use ($query) {
+            function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed) {
                 return $this
                     ->sheetPreviewViewQueryHandler
-                    ->handle(new SheetPreviewViewQuery($query->event, $sheet, $query->locale, $query->viewer));
+                    ->handle(
+                        new SheetPreviewViewQuery(
+                            $query->event,
+                            $sheet,
+                            $query->locale,
+                            $query->viewer,
+                            $isMeetingRequestClosed,
+                            $isAnsweringMeetingRequestClosed
+                        )
+                    );
             },
             $paginatedResult->results
         );

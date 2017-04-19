@@ -1,5 +1,5 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
-    options         = require('../../../vueComponents/options');
+    options         = require('../../../vueComponents/options'),
     SheetFilter      = require('./../../filters/_SheetsFilter');
 
 module.exports = {

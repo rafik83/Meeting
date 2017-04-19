@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -127,6 +128,14 @@ interface SheetRepositoryInterface
     public function getSheetsByEventAndIds(Event $event, array $ids);
 
     /**
+     * @param Event   $event
+     * @param Sheet[] $sheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsMetBySheets(Event $event, array $sheets);
+
+    /**
      * @param array $ids
      *
      * @return Sheet[]
@@ -211,6 +220,13 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByUser(User $user);
+
+    /**
+     * @param Group $group
+     *
+     * @return Sheet[]
+     */
+    public function getByGroup(Group $group);
 
     /**
      * @param SheetTemplate $sheetTemplate

@@ -152,6 +152,8 @@ form.event_billing_configuration.children.translations.prototype.children.paymen
 form.event_configure_date.children.catalogOnlineDate.label: 'Mise en ligne du catalogue'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
+form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
+form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloquer les acceptations/refus des RDV'
 form.event_configure_date.children.submit.label: Enregistrer
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise

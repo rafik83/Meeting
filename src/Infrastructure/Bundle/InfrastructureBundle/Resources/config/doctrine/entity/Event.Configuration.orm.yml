@@ -18,6 +18,12 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         schedulePublishDate:
             type: datetime
             nullable: true
+        closeMeetingRequestDate:
+            type: datetime
+            nullable: true
+        closeAnsweringMeetingRequestDate:
+            type: datetime
+            nullable: true
         meetingRequestUpdateLocked:
             type: boolean
             options:
