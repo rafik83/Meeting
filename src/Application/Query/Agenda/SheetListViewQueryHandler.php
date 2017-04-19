@@ -14,8 +14,10 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Admin\FollowerView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
+use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -119,10 +121,22 @@ class SheetListViewQueryHandler
                     ->participantInfoGuesser
                     ->guessParticipantCompleteName($participant, $sheetListViewQuery->locale);
 
-                $participants[] = [
-                    'fullname' => $fullname,
-                    'email'    => $participant->getUser()->getEmail()
-                ];
+                // We used the same view that will be override by load agenda js method
+                $participants[] = new AgendaParticipantView(
+                    $participant->getId(),
+                    $fullname,
+                    $participant->getUser()->getEmail(),
+                    []
+                );
+            }
+
+            $followerView = null;
+            if (null !== $follower) {
+                $followerView = new FollowerView(
+                        $follower->getId(),
+                        $follower->getFirstname(),
+                        $follower->getLastname()
+                );
             }
 
             $sheetList[] = new SheetView(
@@ -132,8 +146,7 @@ class SheetListViewQueryHandler
                 count($sheet->getParticipants()),
                 $sheetIndicatorsView,
                 null !== $follower,
-                null !== $follower ? $follower->getFirstname() : null,
-                null !== $follower ? $follower->getLastname() : null,
+                $followerView,
                 $this->router->generate(
                     'admin_sheet_details',
                     ['sheet' => $sheet->getId(), 'event' => $sheetListViewQuery->event->getId()]

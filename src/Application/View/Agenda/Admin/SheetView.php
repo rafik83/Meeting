@@ -36,20 +36,6 @@ class SheetView
     public $type;
 
     /**
-     * "Prénom du suivi commercial"
-     *
-     * @var string|null
-     */
-    public $followerFirstName;
-
-    /**
-     * "Nom du suivi commercial"
-     *
-     * @var string|null
-     */
-    public $followerLastName;
-
-    /**
      * "Nombre de participants de la fiche"
      *
      * @var int
@@ -144,14 +130,20 @@ class SheetView
     public $participants;
 
     /**
+     * Suivi commercial
+     *
+     * @var FollowerView
+     */
+    public $follower;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
      * @param int                 $countParticipant
      * @param SheetIndicatorsView $sheetIndicatorsView
      * @param bool                $hasFollower
-     * @param string              $followerFirstName
-     * @param string              $followerLastName
+     * @param null|FollowerView        $follower
      * @param string              $url
      * @param array               $participants
      */
@@ -162,8 +154,7 @@ class SheetView
         $countParticipant,
         SheetIndicatorsView $sheetIndicatorsView,
         $hasFollower,
-        $followerFirstName,
-        $followerLastName,
+        $follower,
         $url,
         array $participants
     ) {
@@ -179,10 +170,9 @@ class SheetView
         $this->usableSlots              = $sheetIndicatorsView->usableSlots;
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
         $this->hasFollower              = $hasFollower;
-        $this->followerFirstName        = $followerFirstName;
-        $this->followerLastName         = $followerLastName;
         $this->url                      = $url;
         $this->participants             = $participants;
+        $this->follower                 = $follower;
 
         $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
         $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
