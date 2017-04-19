@@ -24,12 +24,4 @@ final class UpdateType extends AbstractMessageType
 
         $resolver->setDefault('data_class', UpdateMessage::class);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'messaging_update_message';
-    }
 }

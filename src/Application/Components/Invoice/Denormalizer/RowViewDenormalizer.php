@@ -26,6 +26,10 @@ class RowViewDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
+        if (0 === $data['quantity']) {
+            return null;
+        }
+
         $customRowViews = [];
 
         foreach ($data['customRows'] as $customRow) {

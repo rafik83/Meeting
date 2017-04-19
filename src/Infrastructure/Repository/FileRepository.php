@@ -39,4 +39,19 @@ class FileRepository implements FileRepositoryInterface
         $this->entityManager->persist($file);
         $this->entityManager->flush();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getById($id)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('file')
+            ->from(File::class, 'file')
+            ->where('file.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

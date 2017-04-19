@@ -290,6 +290,16 @@ event_sheet_group_unswitch:
     defaults: { _controller: EventBundle:Security:unswitchSheetGroupManager }
 
 #
+# Sheets group meeting request management
+#
+event_sheet_group_requests_list:
+    path: /sheets-group/{sheetGroup}/requests/list
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Group/Request:list }
+
+#
 # Sheet Billing
 #
 
@@ -358,6 +368,8 @@ event_catalog_index:
 
 event_catalog_search_localization:
     path: /sheet/{sheet}/catalog/search-localization
+    requirements:
+        sheet: \d+
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchLocalization }
 
@@ -377,9 +389,10 @@ event_catalog_complete_sheet:
     defaults: { _controller: EventBundle:Catalog:displaySheet }
 
 event_catalog_sheet_meeting_request:
-    path: /sheet/{sheet}/catalog/request-meeting
+    path: /sheet/{sheet}/catalog/sheet/{toSheet}/request-meeting
     requirements:
         sheet: \d+
+        toSheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
@@ -465,14 +478,14 @@ event_meeting_request_refuse:
     defaults: { _controller: EventBundle:MeetingRequest:refuseRequest }
 
 event_meeting_request_show_conversation_refuse:
-    path: /meeting/request/{meetingRequest}/show
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/show
     requirements:
         meetingRequest: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:showConversationOfRefuseRequest }
 
 event_meeting_request_edit:
-    path: /meeting/request/{meetingRequest}/edit
+    path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
     requirements:
         meetingRequest: \d+
     methods:  [GET, POST]

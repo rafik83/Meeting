@@ -24,9 +24,11 @@ Feature: See, create and update an emailing message
     And I follow "admin.messaging.message.create.title"
     And I should see "admin.messaging.message.create.title"
     Then I fill in the following:
-      | form.messaging_create_message.children.name.label      | foo |
-      | form.messaging_create_message.children.subject.label   | bar |
-      | form.messaging_create_message.children.content.label   | baz |
+      | form.messaging_create_message.children.name.label      | foo        |
+      | messaging_create_message_translations_en_subject       | bar        |
+      | messaging_create_message_translations_en_content       | baz        |
+      | messaging_create_message_translations_fr_subject       | subject_fr |
+      | messaging_create_message_translations_fr_content       | content_fr |
     And I press "form.messaging_create_message.children.submit.label"
     And I should be on this page "/admin/en/event/1/messaging/messages"
     And I should see "flash.messaging.message.create.success"
@@ -38,10 +40,12 @@ Feature: See, create and update an emailing message
     And I follow "admin.messaging.message.list.edit_link"
     And I should see "admin.messaging.message.edit.title"
     Then I fill in the following:
-      | form.messaging_update_message.children.name.label      | edited-foo |
-      | form.messaging_update_message.children.subject.label   | bar        |
-      | form.messaging_update_message.children.content.label   | edited-baz |
-    And I press "form.messaging_update_message.children.submit.label"
-    And I should be on this page "/admin/en/event/1/messaging/messages"
+      | form.messaging_create_message.children.name.label      | edited-foo |
+      | messaging_create_message_translations_en_subject       | bar        |
+      | messaging_create_message_translations_en_content       | baz        |
+      | messaging_create_message_translations_fr_subject       | subject_fr |
+      | messaging_create_message_translations_fr_content       | content_fr |
+    When I press "messaging_create_message_submit"
+    Then I should be on this page "/admin/en/event/1/messaging/messages"
     And I should see "flash.messaging.message.update.success"
     And I should see "edited-foo"
