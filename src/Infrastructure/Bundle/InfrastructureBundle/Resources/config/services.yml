@@ -1567,10 +1567,25 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@adapter.entity_manager_adapter'
+            - '@adapter.mailer_adapter'
+            - '@adapter.local_file_storage'
             - '@adapter.job_queue_adapter'
             - '@datetime'
+            - '%infrastructure.import_planner_path%'
+            - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
+
+    command.planner.import_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ImportJobCreatorHandler
+        arguments:
+            - '@adapter.local_file_storage'
+            - '%infrastructure.import_planner_path%'
+            - '@repository.file_repository'
+            - '@datetime'
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ImportJobCreator }
 
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
@@ -3198,6 +3213,24 @@ services:
         tags:
             - { name: console.command }
 
+    command.planner.export_planner_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand
+        arguments:
+            - '@command.planner.export_handler'
+        tags:
+            - { name: console.command }
+
+    command.planner.import_planner_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand
+        arguments:
+            - '@command.planner.import_handler'
+            - '@adapter.mailer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.file_repository'
+            - '%mailer_sender%'
+        tags:
+            - { name: console.command }
+
     command.generate_invoice_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
         arguments:
@@ -3729,12 +3762,26 @@ services:
     command.planner.export_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ExportHandler
         arguments:
-            - '@command.unavailability.mass.dispatcher_handler'
             - '@command.meeting_request.admin.lock_meeting_request_update_handler'
+            - '@command.unavailability.mass.dispatcher_handler'
             - '@query.planner.planner_view_query_handler'
             - '@adapter.serializer_adapter'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_planner_path%'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.file_repository'
+            - '@adapter.mailer_adapter'
+            - '@datetime'
+            - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
+
+    command.planner.export_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ExportJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }
 
     query.planner.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
