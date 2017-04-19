@@ -5,6 +5,11 @@ var TypeCriteria                      = require('./_TypeCriteria'),
     HasNotSentMeetingRequestCriteria  = require('./_HasNotSentMeetingRequestCriteria'),
     HasScheduledMeetingsCriteria      = require('./_HasScheduledMeetingsCriteria'),
     HasNoScheduledMeetingsCriteria    = require('./_HasNoScheduledMeetingsCriteria'),
+    FollowerCriteria                  = require('./_FollowerCriteria'),
+    NoFollowerCriteria                = require('./_NoFollowerCriteria'),
+    OrCriteria                        = require('./_OrCriteria'),
+    ParticipantDataCriteria           = require('./_ParticipantDataCriteria'),
+    SheetTitleCriteria                = require('./_SheetTitleCriteria'),
     HasAvailableSlots                 = require('./_HasAvailableSlots'),
     HasValidatedRequestNotScheduled   = require('./_HasValidatedRequestNotScheduled');
 
@@ -30,6 +35,10 @@ SheetsFilter.prototype.filter = function (sheets)
     var hasNotSentMeetingRequestCriteria = new HasNotSentMeetingRequestCriteria(this.filters.hasSentMeetingRequest);
     var hasScheduledMeetingsCriteria = new HasScheduledMeetingsCriteria(this.filters.hasScheduledMeetings);
     var hasNoScheduledMeetingsCriteria = new HasNoScheduledMeetingsCriteria(this.filters.hasScheduledMeetings);
+    var followerCriteria = new FollowerCriteria(this.filters.selectedFollowers);
+    var noFollowerCriteria = new NoFollowerCriteria(this.filters.selectedFollowers);
+    var sheetTitleCriteria = new SheetTitleCriteria(this.filters.filterBySheetOrParticipantValue);
+    var participantDataCriteria = new ParticipantDataCriteria(this.filters.filterBySheetOrParticipantValue);
     var hasAvailableSlotsCriteria = new HasAvailableSlots(this.filters.hasAvailableSlots);
     var hasValidatedRequestNotScheduled = new HasValidatedRequestNotScheduled(this.filters.hasValidatedRequestNotScheduled);
 
@@ -42,6 +51,9 @@ SheetsFilter.prototype.filter = function (sheets)
     sheets = hasNoScheduledMeetingsCriteria.meetCriteria(sheets);
     sheets = hasAvailableSlotsCriteria.meetCriteria(sheets);
     sheets = hasValidatedRequestNotScheduled.meetCriteria(sheets);
+
+    sheets = (new OrCriteria(sheetTitleCriteria, participantDataCriteria)).meetCriteria(sheets);
+    sheets = (new OrCriteria(followerCriteria, noFollowerCriteria)).meetCriteria(sheets);
 
     return sheets;
 };

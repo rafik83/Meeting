@@ -1,12 +1,12 @@
 /**
  * @constructor
  */
-function Criteria(){}
+function Criteria() {}
 
 /**
  * @param sheets
  */
-Criteria.prototype.meetCriteria = function(sheets){};
+Criteria.prototype.meetCriteria = function(sheets) {};
 
 /**
  * @type {Criteria}

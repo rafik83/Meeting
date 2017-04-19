@@ -33,6 +33,8 @@ admin.agenda.export.omz: OMZ
 admin.agenda.export.participant_schedules.danger: 'Attention, si l''export est réalisé avant la date de publication des rendez-vous, les plannings ne comporteront pas les rendez-vous positionés'
 admin.agenda.export.participant_schedules.title: 'Export des participants et plannings'
 admin.agenda.export.title: 'Rendez-vous / Export'
+admin.agenda.filters.follower.label: 'Suivi commercial'
+admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
 admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
@@ -47,6 +49,7 @@ admin.agenda.filters.hasSentMeetingRequest.no: 'Non'
 admin.agenda.filters.hasSentMeetingRequest.yes: 'Oui'
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
+admin.agenda.filters.search: 'Rechercher'
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
 admin.agenda.filters.title.label: 'Filtre fiche'
 admin.agenda.filters.type: 'Type de participation'
