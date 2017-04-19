@@ -1,5 +1,6 @@
-var options = require('../vueComponents/options'),
-    AgendaApiEndpoints = require('../components/_AgendaApiEndpoints');
+var options = require('../../vueComponents/options'),
+    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
+    eventDispatcher = require('../../vueComponents/EventDispatcher');
 
 var api = new AgendaApiEndpoints();
 
@@ -148,6 +149,16 @@ module.exports = {
          */
         showMassAssignment: function (massId) {
             this.$emit('show-mass-assignment', massId);
+        },
+
+        /**
+         * Emit event to show agenda of given sheet id
+         *
+         * @param {int} spotId
+         */
+        loadSpotDetail: function (spotId) {
+            eventDispatcher.dispatch('load-spot-detail', spotId);
+            eventDispatcher.dispatch('toggleTab', 'spotTab');
         }
     }
 };

@@ -171,8 +171,6 @@ class AddHandler
             $user,
             $add->sheet->getEvent(),
             $token,
-            $add->locale,
-            $add->adder,
             $add->sheet
         );
 

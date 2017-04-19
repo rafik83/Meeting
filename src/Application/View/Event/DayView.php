@@ -1,0 +1,44 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Event;
+
+class DayView
+{
+    /**
+     * @var \DateTimeInterface
+     */
+    public $startTime;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $endTime;
+
+    /**
+     * DayView constructor.
+     *
+     * @param \DateTimeInterface $startTime
+     * @param \DateTimeInterface $endTime
+     */
+    public function __construct(\DateTimeInterface $startTime, \DateTimeInterface $endTime)
+    {
+        $this->startTime = $startTime;
+        $this->endTime   = $endTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDate()
+    {
+        return $this->startTime->format('d/m/Y');
+    }
+}

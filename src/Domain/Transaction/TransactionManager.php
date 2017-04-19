@@ -46,6 +46,7 @@ class TransactionManager
     public function setPaid(Transaction $transaction)
     {
         $transaction->setPaid();
+        $transaction->unHide();
         $this->transactionRepository->set($transaction);
 
         $this->eventDispatcher->dispatch(
