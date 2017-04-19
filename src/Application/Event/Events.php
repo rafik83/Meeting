@@ -69,4 +69,5 @@ final class Events
     const UNAVAILABILITY_REMOVED               = 'unavailability.removed';
     const REQUEST_PARTICIPATE                  = 'request.participate';
     const REQUEST_UN_PARTICIPATE               = 'request.un_participate';
+    const MASS_ASSIGNMENT_UPDATED              = 'mass.assignment.updated';
 }

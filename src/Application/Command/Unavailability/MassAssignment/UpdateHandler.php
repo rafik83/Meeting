@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\MassAssignment;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Mass\Assignment\AssignmentUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateHandler
 {
@@ -27,18 +30,24 @@ class UpdateHandler
      */
     private $participantRepository;
 
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
+
     /**
      * UpdateHandler constructor.
      *
      * @param MassAssignmentRepositoryInterface $massAssignmentRepository
      * @param ParticipantRepositoryInterface    $participantRepository
+     * @param DelayedEventDispatcher            $eventDispatcher
      */
     public function __construct(
         MassAssignmentRepositoryInterface $massAssignmentRepository,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->massAssignmentRepository = $massAssignmentRepository;
         $this->participantRepository    = $participantRepository;
+        $this->eventDispatcher          = $eventDispatcher;
     }
 
     /**
@@ -53,6 +62,8 @@ class UpdateHandler
         if ($update->enabled === false) {
             $update->massAssignment->disable();
             $this->massAssignmentRepository->set($update->massAssignment);
+
+            $this->dispatchUpdateEvent($update->massAssignment->getParticipant());
 
             return;
         }
@@ -85,5 +96,15 @@ class UpdateHandler
         );
 
         $this->massAssignmentRepository->set($update->massAssignment);
+
+        $this->dispatchUpdateEvent($update->massAssignment->getParticipant());
+    }
+
+    private function dispatchUpdateEvent($participant)
+    {
+        $this->eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant)
+        );
     }
 }
