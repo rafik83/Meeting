@@ -7,6 +7,11 @@ event:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Home:index }
 
+event_select_sheet:
+    path: /select-sheet
+    methods:  [GET]
+    defaults: { _controller: EventBundle:MultipleSheets/Home:selectSheet }
+
 #
 # Register
 #
@@ -29,15 +34,17 @@ event_register_new_user:
 # Change mail
 #
 event_account_change_mail:
-    path: /account/change-mail
+    path: /account/sheet/{sheet}/change-mail
+    requirements:
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Account:updateEmail }
 
 event_activate_new_mail:
     path: /account/change_mail/{token}
-    methods: [GET]
     requirements:
         token: \w+
+    methods: [GET]
     defaults: { _controller: EventBundle:Account:activateNewMail }
 
 #
@@ -151,69 +158,85 @@ event_account_participant_avatar:
 event_sheet:
     path:     /sheet
     methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:redirectTosheet }
+
+event_sheet_default:
+    path:     /sheet/{sheet}
+    requirements:
+        sheet: \d+
+    methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_locale:
-    path:     /sheet/{locale}
+    path:     /sheet/{sheet}/{locale}
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:sheet }
 
 event_sheet_form:
-    path:     /sheet/{locale}/{key}/form
+    path:     /sheet/{sheet}/{locale}/{key}/form
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:form }
+
 event_sheet_update:
-    path:     /sheet/{locale}/{key}
+    path: /sheet/{sheet}/{locale}/{key}
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:update }
 
 event_sheet_add_participant:
-    path:   /sheet/{locale}/{key}/participant/add/form
+    path: /sheet/{sheet}/{locale}/{key}/participant/add/form
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:SheetParticipant:addParticipant }
 
 event_sheet_handle_participant:
-    path:   /sheet/{locale}/{key}/participant/add
+    path:   /sheet/{sheet}/{locale}/{key}/participant/add
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:SheetParticipant:handleAddParticipant }
 
 event_sheet_remove_participant:
-    path:   /sheet/{locale}/{key}/participant/remove/form
+    path:   /sheet/{sheet}/{locale}/{key}/participant/remove/form
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
     defaults: { _controller: EventBundle:SheetParticipant:removeParticipant }
 
-event_sheet_remove_image:
-    path: /sheet/{locale}/{key}/image/remove
-    requirements:
-        locale: '[a-z]{2}'
-        key: \w+
-    methods: [DELETE]
-    defaults: { _controller: EventBundle:Sheet:removeImage }
-
 event_sheet_handle_remove_participant:
-    path: /sheet/{locale}/{key}/participant/remove
+    path: /sheet/{sheet}/{locale}/{key}/participant/remove
     requirements:
+        sheet: \d+
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
+
+event_sheet_remove_image:
+    path: /sheet/{sheet}/{locale}/{key}/image/remove
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [DELETE]
+    defaults: { _controller: EventBundle:Sheet:removeImage }
 
 event_sheet_submit_validation:
     path: /sheet/{sheet}/validate
@@ -223,7 +246,7 @@ event_sheet_submit_validation:
     defaults: { _controller: EventBundle:Sheet:submitValidation }
 
 event_sheet_generate_pdf:
-    path:     /sheet/print/sheet-{sheet}-{locale}.pdf
+    path:     /sheet/{sheet}/print/sheet-{sheetToDisplay}-{locale}.pdf
     requirements:
         sheet: \d+
         locale: '[a-z]{2}'
@@ -231,10 +254,11 @@ event_sheet_generate_pdf:
     defaults: { _controller: EventBundle:Sheet:generatePdf }
 
 event_sheet_internal_print:
-    path:     /_internal/{user}/sheet/{sheet}/{locale}/print
+    path:     /_internal/sheet/{sheet}/{user}/print/{sheetToDisplay}/{locale}
     requirements:
         user: \d+
         sheet: \d+
+        sheetToDisplay: \d+
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:print }
@@ -320,7 +344,9 @@ event_logout:
     methods:  [GET]
 
 event_change_password:
-    path:     /change-password
+    path:     /sheet/{sheet}/change-password
+    requirements:
+        sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
 
@@ -328,32 +354,45 @@ event_change_password:
 # Catalog
 #
 
-event_catalog_index:
+event_catalog_redirect:
     path: /catalog
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Catalog:redirect }
+
+event_catalog_index:
+    path: /sheet/{sheet}/catalog
+    requirements:
+        sheet: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Catalog:index }
 
 event_catalog_search_localization:
-    path: /catalog/search-localization
+    path: /sheet/{sheet}/catalog/search-localization
+    requirements:
+        sheet: \d+
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchLocalization }
 
 event_catalog_search_keywords:
-    path: /catalog/search-keywords
+    path: /sheet/{sheet}/catalog/search-keywords
+    requirements:
+        sheet: \d+
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchKeywords }
 
 event_catalog_complete_sheet:
-    path: /catalog/sheet/{sheet}
+    path: /sheet/{sheet}/catalog/display/{sheetToDisplay}
     requirements:
         sheet: \d+
+        sheetToDisplay: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Catalog:sheet}
+    defaults: { _controller: EventBundle:Catalog:displaySheet }
 
 event_catalog_sheet_meeting_request:
     path: /sheet/{sheet}/catalog/sheet/{toSheet}/request-meeting
     requirements:
         sheet: \d+
+        toSheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
@@ -453,7 +492,9 @@ event_meeting_request_edit:
     defaults: { _controller: EventBundle:MeetingRequest:editRequest }
 
 event_meeting_request_export_contact:
-    path: /export-contacts.csv
+    path: /sheet/{sheet}/export-contacts.csv
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:MeetingRequest\Contact:exportContact }
 
@@ -461,16 +502,9 @@ event_meeting_request_export_contact:
 # Notification
 #
 event_notification_list:
-    path: /notification
+    path: /sheet/{sheet}/notification
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:list }
-
-event_notification_read:
-    path:     /notification/{notification}/read
-    requirements:
-        notification: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Notification:read }
 
 #
 # Content
@@ -486,6 +520,13 @@ event_content_terms_of_sale:
 event_package:
     path: /package
     defaults: { _controller: EventBundle:Package:redirect }
+    methods: [GET]
+
+event_package_redirect_depending_on_context:
+    path: /sheet/{sheet}/package
+    requirements:
+        sheet: \d+
+    defaults: { _controller: EventBundle:Package:redirectDependingOnContext }
     methods: [GET]
 
 event_package_step:
@@ -566,7 +607,9 @@ event_package_payment_pay_remaining:
     defaults: { _controller: EventBundle:Payment:payRemaining }
 
 event_payment_info:
-    path: /sheet/payment
+    path: /sheet/{sheet}/payment
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:paymentInfo }
 
@@ -609,17 +652,23 @@ event_invoice_show:
 # Agenda
 #
 event_agenda:
-    path: /agenda
+    path: /sheet/{sheet}/agenda
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:index }
 
 event_agenda_participant:
-    path: /agenda/participant/{participant}
+    path: /sheet/{sheet}/agenda/participant/{participant}
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
 happening_program:
-    path: /program
+    path: /sheet/{sheet}/program
+    requirements:
+        sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Program:index }
 
@@ -638,13 +687,16 @@ event_sheet_happening_participate:
 # Unavailability
 #
 event_unavailability_create:
-    path: /agenda/participant/{participant}/unavailability/create
+    path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/create
+    requirements:
+        sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Unavailability:create }
 
 event_unavailability_remove:
-    path: /agenda/participant/{participant}/unavailability/{unavailability}/remove
-    methods: [DELETE]
+    path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/{unavailability}/remove
     requirements:
+        sheet: \d+
         unavailability: \d+
+    methods: [DELETE]
     defaults: { _controller: EventBundle:Unavailability:remove }

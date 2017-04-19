@@ -48,7 +48,7 @@ class PackageSubmenuButtonViewQueryHandler
 
         // Package button
         if ($package !== null && $package->isPassable() === true) {
-            $route = 'event_package';
+            $route = 'event_package_redirect_depending_on_context';
 
             if ($query->sheet->hasNotCancelledOrders() && !$hasProductsInCart) {
                 $route = 'event_order_summary_total';

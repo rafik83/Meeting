@@ -44,7 +44,10 @@ class SheetViewQueryHandler
         foreach($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
             $linksView[] = new LinkView(
                 'navigation.links.sheet.locale',
-                $this->navigationBuilder->getRoute('event_sheet_locale', ['locale' => $locale]),
+                $this->navigationBuilder->getRoute(
+                    'event_sheet_locale',
+                    ['sheet' => $sheetQuery->sheet->getId(), 'locale' => $locale]
+                ),
                 $locale
             );
         }

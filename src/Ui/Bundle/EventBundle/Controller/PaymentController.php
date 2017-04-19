@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
@@ -121,6 +120,7 @@ class PaymentController extends Controller
 
         return $this->render('EventBundle:Payment:choice.html.twig', [
             'event'   => $eventDomain->getEvent(),
+            'sheet'   => $sheet,
             'form'    => $form->createView(),
             'total'   => $total,
             'deposit' => $deposit,
@@ -137,7 +137,7 @@ class PaymentController extends Controller
     public function payRemainingAction(EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 
@@ -174,7 +174,7 @@ class PaymentController extends Controller
         Sheet $sheet,
         Transaction $transaction
     ) {
-        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $captureToken = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction, $request->getLocale());
 
@@ -190,7 +190,7 @@ class PaymentController extends Controller
      */
     public function donePaymentAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $status = $this->get('vimeet.payum.paypal.capture_payment')->process($request);
 
@@ -205,13 +205,17 @@ class PaymentController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
      * @return Response
      */
-    public function paymentInfoAction(Request $request, EventDomain $eventDomain)
+    public function paymentInfoAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         return $this->render('EventBundle:Sheet:paymentInfo.html.twig', [
             'event'  => $eventDomain->getEvent(),
+            'sheet'  => $sheet,
             'locale' => $request->getLocale(),
         ]);
     }
@@ -221,13 +225,13 @@ class PaymentController extends Controller
      */
     private function hasPackageCompletedPaymentFlash()
     {
-        $sheet = $this->consumePackageCompletedPaymentFlash();
+        $sheetId = $this->consumePackageCompletedPaymentFlash();
 
-        if (!empty($sheet)) {
-            $this->addFlash('package_completed_payment', $sheet);
+        if (!empty($sheetId)) {
+            $this->addFlash('package_completed_payment', $sheetId);
         }
 
-        return !empty($sheet);
+        return !empty($sheetId);
     }
 
     /**
@@ -235,19 +239,8 @@ class PaymentController extends Controller
      */
     private function consumePackageCompletedPaymentFlash()
     {
-        $sheet = $this->get('session')->getFlashBag()->get('package_completed_payment');
+        $sheetId = $this->get('session')->getFlashBag()->get('package_completed_payment');
 
-        return $sheet;
-    }
-
-    /**
-     * @param Event $event
-     * @param Sheet $sheet
-     */
-    private function denyAccessIfUserNotAllowed(Event $event, Sheet $sheet)
-    {
-        if ($event !== $sheet->getEvent() || !$sheet->hasUser($this->getUser())) {
-            throw $this->createNotFoundException('This page is not accessible by this user');
-        }
+        return $sheetId;
     }
 }

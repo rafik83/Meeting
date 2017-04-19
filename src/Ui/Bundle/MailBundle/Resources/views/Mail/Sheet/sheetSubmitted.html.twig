@@ -15,7 +15,7 @@
 
     {{ macros.button(
         'mail.sheet.show.link'|trans({}, 'mail', mail.locale),
-        url('event_sheet', {'event': mail.event.id, 'sheet': mail.sheet.id})
+        url('admin_sheet_details', {'event': mail.event.id, 'sheet': mail.sheet.id})
     ) }}
 
     <br>

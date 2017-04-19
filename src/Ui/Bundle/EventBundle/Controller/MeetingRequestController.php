@@ -65,10 +65,6 @@ class MeetingRequestController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
-        }
-
         $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
             $sheet, $request->getLocale()
         ));

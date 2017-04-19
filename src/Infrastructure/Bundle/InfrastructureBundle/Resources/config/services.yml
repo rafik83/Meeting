@@ -1986,16 +1986,13 @@ services:
             - '@event_sender'
 
     #
-    # Notification component
+    # Home
     #
-    notification.notification_view_factory:
-        class: Proximum\Vimeet\Application\Components\Notification\NotificationViewFactory
+    components.home.home_dispatch:
+        class: Proximum\Vimeet\Application\Components\Home\HomeDispatch
         arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.sheet.group_repository'
 
     #
     # Happening component
@@ -2555,6 +2552,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
 
+    query.sheet.multiple.multiple_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQuery }
+
     #
     # Program query
     #
@@ -2796,22 +2801,20 @@ services:
     query.navigation.menu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\MenuViewQueryHandler
         arguments:
-            - '@sheet.sheet_guesser'
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
     query.navigation.menu_header_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Navigation\HeaderViewQueryHandler
         arguments:
-            - '@sheet.sheet_guesser'
             - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.router'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery }
     query.navigation.submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
         arguments:
-            - '@sheet.sheet_guesser'
             - '@query.navigation.sheet_submenu_view_query_handler'
             - '@query.navigation.catalog_submenu_view_query_handler'
             - '@query.navigation.agenda_submenu_view_query_handler'
@@ -2992,7 +2995,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting.participants_view_query_handler'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@sheet.sheet_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery }
 

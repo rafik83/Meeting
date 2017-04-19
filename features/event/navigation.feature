@@ -15,9 +15,9 @@ Feature: Navigate in the application using menu
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     When I follow "en"
-    Then I should be on this page "/en/sheet"
+    Then I should be on this page "/en/sheet/1"
     When I follow "navigation.links.member_space.profile"
     Then I should be on this page "/en/account/sheet/1/participant/1"
     When I follow "fr"

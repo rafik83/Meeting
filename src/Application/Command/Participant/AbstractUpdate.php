@@ -22,7 +22,7 @@ abstract class AbstractUpdate
     public $templateData;
 
     /**
-     * @var Participant
+     * @var Participant|null
      */
     public $participant;
 
