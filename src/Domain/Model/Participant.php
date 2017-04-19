@@ -65,7 +65,20 @@ class Participant implements MailRecipientInterface
     /**
      * @var bool
      */
-    private $visio = false; 
+    private $visio = false;
+
+    /**
+     * The participant is assigned to accepted request
+     * @var bool
+     */
+    private $hasRequestAssigned = false;
+
+    /**
+     * The participant is unavailable or participate to happenings during all the slots of the event
+     *
+     * @var bool
+     */
+    private $isFullyUnavailable = false;
 
     /**
      * @param Sheet $sheet
@@ -277,5 +290,37 @@ class Participant implements MailRecipientInterface
     public function getEmail()
     {
         return $this->user->getEmail();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasRequestAssigned()
+    {
+        return $this->hasRequestAssigned;
+    }
+
+    /**
+     * @param bool $hasRequestAssigned
+     */
+    public function setHasRequestAssigned($hasRequestAssigned)
+    {
+        $this->hasRequestAssigned = $hasRequestAssigned;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsFullyUnavailable()
+    {
+        return $this->isFullyUnavailable;
+    }
+
+    /**
+     * @param bool $isFullyUnavailable
+     */
+    public function setIsFullyUnavailable($isFullyUnavailable)
+    {
+        $this->isFullyUnavailable = $isFullyUnavailable;
     }
 }
