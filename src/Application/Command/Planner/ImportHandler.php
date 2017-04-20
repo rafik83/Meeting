@@ -160,7 +160,7 @@ class ImportHandler
         $this->localFileStorage->remove($import->file->getPath(), true);
 
         $this->jobQueue->aggregateParticipantAssignedToRequest($import->event);
-        $this->jobQueue->aggregateParticipantFullUnavailability($import->event);
+        $this->jobQueue->aggregateParticipantFullUnavailability($import->event, true);
     }
 
     /**
