@@ -41,7 +41,7 @@ admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
 admin.agenda.filters.hasScheduledMeeting.no: Non
 admin.agenda.filters.hasScheduledMeeting.yes: Oui
 admin.agenda.filters.hasSentMeetingRequest.all: 'Peu importe'
-admin.agenda.filters.hasSentMeetingRequest.label: 'Pas de demande de rendez-vous'
+admin.agenda.filters.hasSentMeetingRequest.label: 'A fait des demandes de rendez-vous'
 admin.agenda.filters.hasSentMeetingRequest.no: Non
 admin.agenda.filters.hasSentMeetingRequest.yes: Oui
 admin.agenda.filters.hasValidatedRequestNotScheduled.label: 'A encore des demandes/propositions validées et non placées'
