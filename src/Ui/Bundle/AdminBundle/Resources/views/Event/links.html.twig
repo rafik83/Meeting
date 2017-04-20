@@ -159,6 +159,11 @@
             </li>
         </ul>
     </li>
+    <li>
+        <a href="{{ path('admin_sheets_group_list', { 'event': event.id }) }}">
+            {{ 'admin.sheets_group.index'|trans }}
+        </a>
+    </li>
     <li class="dropdown-submenu">
         <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
             {{ 'admin.spot.link'|trans }}

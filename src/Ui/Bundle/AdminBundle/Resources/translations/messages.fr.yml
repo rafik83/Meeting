@@ -127,6 +127,13 @@ admin.common.export.no: Non
 admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
+admin.sheets_group.index: 'Multi-fiches'
+admin.sheets_group.create: 'Nouvelle Entité Multi-fiches'
+admin.sheets_group.title: 'Multi-fiches'
+admin.sheets_group.column.email_manager: 'Email du gestionnaire'
+admin.sheets_group.column.title: 'Titre'
+admin.sheets_group.column.sheet_list: 'Liste des fiches'
+admin.sheets_group.column.created_at: 'Date de création'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'

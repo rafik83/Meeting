@@ -2552,6 +2552,21 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
 
+    query.sheet.group.admin.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQuery }
+
+    query.sheet.group.admin.group_list_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQueryHandler
+        arguments:
+            - '@query.sheet.group.admin.group_view_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
+
     query.sheet.multiple.multiple_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQueryHandler
         arguments:
