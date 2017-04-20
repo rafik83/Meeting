@@ -2560,6 +2560,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQuery }
 
+    query.sheet.group.participant.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery }
+
     #
     # Program query
     #

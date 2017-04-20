@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
@@ -551,5 +552,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByGroup(Group $group)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant, user, sheet')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.group = :group AND sheet.enable = true')
+            ->join('participant.user', 'user')
+            ->setParameter('group', $group)
+            ->orderBy('user.account.lastName')
+            ->addOrderBy('user.account.firstName');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

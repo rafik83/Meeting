@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 
 use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery;
+use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
@@ -36,9 +37,14 @@ class ParticipantController extends Controller
             new GroupViewQuery($sheetGroup)
         );
 
+        $userParticipantViews = $this->get('tactician.commandbus.query')->handle(
+            new UsersParticipantViewQuery($sheetGroup)
+        );
+
         return $this->render('EventBundle:Sheet/Group/Participant:index.html.twig', [
-            'event'     => $event,
-            'groupView' => $groupView,
+            'event'                => $event,
+            'groupView'            => $groupView,
+            'userParticipantViews' => $userParticipantViews,
         ]);
     }
 }

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\ParticipantView;
@@ -235,4 +236,11 @@ interface ParticipantRepositoryInterface
      * @return int
      */
     public function countParticipantBySheet(Sheet $sheet);
+
+    /**
+     * @param Group $group
+     *
+     * @return Participant[]
+     */
+    public function findByGroup(Group $group);
 }
