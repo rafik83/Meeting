@@ -9,7 +9,7 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
-    <div class="catalog--advanced">
+    <div class="catalog catalog--advanced">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
             searchForm: searchForm,
@@ -18,7 +18,8 @@
             sheet: sheet,
             seeMoreButton: seeMoreButton,
             page: page,
-            isCatalog: isCatalog
+            isCatalog: isCatalog,
+            tipTranslationViews: null
         }, false) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
