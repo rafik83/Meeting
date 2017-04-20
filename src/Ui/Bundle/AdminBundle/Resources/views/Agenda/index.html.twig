@@ -3,31 +3,24 @@
 {% block title 'admin.agenda.title'|trans %}
 
 {% block content %}
-    <div id="agenda" class="agenda-container">
-        <meeting-update-modal
-                v-bind:meeting-to-update="meetingToUpdate"
-                v-on:close-modal="clearMeetingToUpdate"
-                v-on:meeting-updated="meetingUpdated"
-                v-on:meeting-updating="handleMeetingUpdating"
-                v-on:meeting-updated-error="handleMeetingUpdatedError">
-        </meeting-update-modal>
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs agenda-tab" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#sheet" aria-controls="sheet" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.sheet.title.label'|trans }}</a>
-            </li>
-            <li role="presentation">
-                <a href="#spot" aria-controls="spot" role="tab" data-toggle="tab">{{ 'admin.agenda.tab.spot.title.label'|trans }}</a>
-            </li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content agenda-tab-content">
-            {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
-            <spot></spot>
+<div id="agenda" class="agenda-container">
+    <!-- Nav tabs -->
+    <tabs inline-template>
+        <div>
+            <ul class="nav nav-tabs agenda-tab">
+                <li v-for="tab in tabs" v-bind:class="{ active: tab.isActive }" v-on:click="selectTab(tab)">
+                    <a href="#" aria-controls="sheet">${ tab.name }</a>
+                </li>
+            </ul>
+            <tab class="agenda-tab-content" reference="sheetTab" name="{{ 'admin.agenda.tab.sheet.title.label'|trans }}" v-bind:selected="true">
+                <meeting></meeting>
+            </tab>
+            <tab class="agenda-tab-content" reference="spotTab" name="{{ 'admin.agenda.tab.spot.title.label'|trans }}">
+                <spot></spot>
+            </tab>
         </div>
-    </div>
+    </tabs>
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -47,6 +40,8 @@
     {{ include('AdminBundle:Agenda/Components:sortSheetForm.html.twig') }}
 
     {{ include('AdminBundle:Agenda/Tabs:spots.html.twig') }}
+    {{ include('AdminBundle:Agenda/Tabs:sheets.html.twig') }}
+
     {{ include('AdminBundle:Agenda/Components/Spot:spotAgenda.html.twig') }}
     {{ include('AdminBundle:Agenda/Components/Spot:slotAgenda.html.twig') }}
 

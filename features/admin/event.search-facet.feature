@@ -50,7 +50,7 @@ Feature: See and update search facet
   Scenario: I can see search type in catalog
     When I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     And I should see "Les rendez-vous CARNOT 2016"
     When I follow "navigation.links.catalog.available_date"
     Then I should see "Participants"

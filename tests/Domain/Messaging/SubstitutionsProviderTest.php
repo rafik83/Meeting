@@ -41,6 +41,9 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
     /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
+    /** @var SheetPlanningViewQueryHandler */
+    private $sheetPlanningViewQueryHandler;
+
     public function setUp()
     {
         $this->eventUrlGenerator             = $this->prophesize(Event\EventUrlGeneratorInterface::class);
@@ -99,12 +102,13 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
         $sheet     = $this->prophesize(Sheet::class);
         $event     = $this->prophesize(Event::class);
         $sheet->getEvent()->willReturn($event->reveal());
+        $sheet->getId()->willReturn(1);
         $locale    = 'fr';
         $event->getAvailableLocale($locale)->willReturn($locale);
 
         $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA];
         $this->participantInfoGuesser->guessParticipantCompleteName($recipient->reveal(), $locale)->willReturn('Henri Désiré Landru');
-        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['_locale' => 'fr'])->willReturn('url-to-event-agenda');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['sheet' => 1, '_locale' => 'fr'])->willReturn('url-to-event-agenda');
 
         $this->assertEquals(
             [
@@ -118,16 +122,17 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetSubstitutionsPlanning()
     {
         $event     = EventFactory::createEvent();
-        $sheet     = SheetFactory::create($event);
-        $user      = UserFactory::create('email@email.fr');
-        $recipient = ParticipantFactory::create($sheet, $user);
         $locale    = 'fr';
+        $recipient = $this->prophesize(Participant::class);
+        $sheet     = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
+        $sheet->getId()->shouldBeCalled()->willReturn(1);
 
         $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_SHEET_PLANNING];
         $this->participantInfoGuesser->guessParticipantCompleteName($recipient, $locale)->willReturn('Henri Désiré Landru');
-        $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['_locale' => 'fr'])->willReturn('url-to-event-agenda');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['sheet' => 1, '_locale' => 'fr'])->willReturn('url-to-event-agenda');
         $this->sheetPlanningViewQueryHandler
-            ->handle(new SheetPlanningViewQuery($sheet, $locale, $recipient))
+            ->handle(new SheetPlanningViewQuery($sheet->reveal(), $locale, $recipient->reveal()))
             ->shouldBeCalled()
             ->willReturn(new SheetPlanningView('<p>PLANNING</p>'));
 
@@ -137,7 +142,7 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
                 Compose::LINK_AGENDA        => 'url-to-event-agenda',
                 Compose::TAG_SHEET_PLANNING => '<p>PLANNING</p>'
             ],
-            $this->substitutionProvider->getSubstitutions($recipient, $sheet, $locale, $placeholders)
+            $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
         );
     }
 }

@@ -37,11 +37,7 @@ class OrderController extends Controller
         $balance = $this->get('order.balance');
         $orderVatViews = $balance->getOrderVatViews($sheet);
 
-        if ($eventDomain->getEvent() !== $sheet->getEvent()
-            || !$sheet->hasUser($this->getUser())
-            || !$sheet->getPackage()->isPassable()
-            || empty($orderVatViews)
-        ) {
+        if (!$sheet->getPackage()->isPassable() || empty($orderVatViews)) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
@@ -70,11 +66,7 @@ class OrderController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if ($eventDomain->getEvent() !== $sheet->getEvent()
-            || !$sheet->hasUser($this->getUser())
-            || !$sheet->getPackage()->isPassable()
-            || $order->getSheet() !== $sheet
-        ) {
+        if (!$sheet->getPackage()->isPassable() || $order->getSheet() !== $sheet) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
@@ -108,11 +100,7 @@ class OrderController extends Controller
 
         $orders = $sheet->getNotCancelledOrders();
 
-        if ($eventDomain->getEvent() !== $sheet->getEvent()
-            || !$sheet->hasUser($this->getUser())
-            || !$sheet->getPackage()->isPassable()
-            || count($orders) === 0
-        ) {
+        if (!$sheet->getPackage()->isPassable() || count($orders) === 0) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 

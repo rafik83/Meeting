@@ -85,7 +85,7 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
             AmountFormatter::centsToDecimalAmount($invoice->getTotal()),
             AmountFormatter::centsToDecimalAmount($invoice->getTotalWithVat()),
             AmountFormatter::centsToDecimalAmount($invoice->getVatAmount()),
-            $this->balance->getBalance($invoice->getSheet()),
+            AmountFormatter::centsToDecimalAmount($this->balance->getBalance($invoice->getSheet())),
             $invoice->getEvent()->getConfiguration()->getAnalyticsCode(),
             $billingInfo->vatNumber,
             $billingInfo->country

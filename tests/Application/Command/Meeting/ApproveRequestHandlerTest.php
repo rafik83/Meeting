@@ -67,7 +67,7 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($message)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToApprove($request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
@@ -122,7 +122,7 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($message)->shouldNotBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
+        $permissionManager->isAllowedToApprove($request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 

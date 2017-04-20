@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
@@ -57,15 +56,21 @@ class PackageController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        try {
-            $sheet = $this->get('sheet.sheet_guesser')
-                ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
-        } catch (SheetNotFoundException $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
-        } catch (\Exception $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
-        }
+        $sheet = $this->get('sheet.sheet_guesser')
+            ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
 
+        return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return RedirectResponse
+     */
+    public function redirectDependingOnContextAction(EventDomain $eventDomain, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!empty($sheet->getNotCancelledOrders())) {

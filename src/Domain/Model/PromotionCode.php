@@ -87,7 +87,10 @@ class PromotionCode
         if ($this->translations->containsKey($locale)) {
             $this->translations->get($locale)->update($label, $description);
         } else {
-            $this->translations->add(new PromotionCodeTranslation($this, $locale, $label, $description));
+            $this->translations->set(
+                $locale,
+                new PromotionCodeTranslation($this, $locale, $label, $description)
+            );
         }
 
         return $this;
@@ -216,7 +219,7 @@ class PromotionCode
 
         return $this;
     }
-    
+
     /**
      * @param Product $product
      *

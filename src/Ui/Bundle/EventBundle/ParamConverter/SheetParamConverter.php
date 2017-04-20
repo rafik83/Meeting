@@ -37,9 +37,14 @@ class SheetParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
+        $sheetId = $request->attributes->get('sheet');
+
+        if (null === $sheetId) {
+            return false;
+        }
+
         /** @var null|EventDomain $eventDomain */
         $eventDomain = $request->attributes->get('eventDomain');
-        $sheetId     = $request->attributes->get('sheet');
         $sheet       = $this->sheetRepository->getSheetById($sheetId);
 
         if (null === $sheet) {

@@ -6,7 +6,7 @@
     {% endif %}
 
     <div class="wrapper profile">
-        {{ render(controller('EventBundle:Navigation:menuHeader', {'registration': true})) }}
+        {{ render(controller('EventBundle:Navigation:menu', {'registration': true})) }}
 
         <div class="profile__content">
             {% block content %}{% endblock %}

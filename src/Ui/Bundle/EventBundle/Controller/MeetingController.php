@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,7 @@ class MeetingController extends Controller
     public function displayAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $locale = $request->getLocale();
 
@@ -74,6 +76,7 @@ class MeetingController extends Controller
     public function cancelAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $cancel = new Cancel($meeting, $this->getUser(), $sheet, new \DateTimeImmutable());
         $form   = $this->createForm(CancelType::class, $cancel);
@@ -104,6 +107,7 @@ class MeetingController extends Controller
     public function updateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $update = new Update($meeting, $sheet, $this->getUser(), new \DateTimeImmutable());
         $form   = $this->createForm(UpdateType::class, $update, ['submit' => true]);

@@ -69,6 +69,9 @@ class InvoiceView
     /** @var float */
     public $vatRate;
 
+    /** @var string */
+    public $eventTimeZone;
+
     /**
      * @param string             $invoiceNumber
      * @param bool               $vatApplicable
@@ -82,6 +85,7 @@ class InvoiceView
      * @param string             $invoiceLogo
      * @param \DateTimeInterface $createdAt
      * @param string             $eventDefaultLocale
+     * @param string             $eventTimeZone
      * @param string             $eventBillingAddress
      * @param string             $eventBankInfo
      * @param string             $eventPaymentCondition
@@ -103,6 +107,7 @@ class InvoiceView
         $invoiceLogo,
         \DateTimeInterface $createdAt,
         $eventDefaultLocale,
+        $eventTimeZone,
         $eventBillingAddress,
         $eventBankInfo,
         $eventPaymentCondition,
@@ -123,6 +128,7 @@ class InvoiceView
         $this->invoiceLogo           = $invoiceLogo;
         $this->createdAt             = $createdAt;
         $this->eventDefaultLocale    = $eventDefaultLocale;
+        $this->eventTimeZone         = $eventTimeZone;
         $this->eventBillingAddress   = $eventBillingAddress;
         $this->eventBankInfo         = $eventBankInfo;
         $this->eventPaymentCondition = $eventPaymentCondition;

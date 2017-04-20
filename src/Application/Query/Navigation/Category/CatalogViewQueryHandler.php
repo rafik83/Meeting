@@ -94,7 +94,7 @@ class CatalogViewQueryHandler
             // catalog opened and sheet is in catalog
             return new LinkView(
                 'navigation.links.catalog.available_date',
-                $this->navigationBuilder->getRoute('event_catalog_index'),
+                $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $sheet->getId()]),
                 null,
                 new StateButtonView(true, $formattedDate)
             );

@@ -20,7 +20,7 @@ class MeetingSlotViewQuery
     public $meeting;
 
     /**
-     * @var int
+     * @var string
      */
     public $locale;
 

@@ -24,12 +24,4 @@ final class CreateType extends AbstractMessageType
 
         $resolver->setDefault('data_class', CreateMessage::class);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'messaging_create_message';
-    }
 }

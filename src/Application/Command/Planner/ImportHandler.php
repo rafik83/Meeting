@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Planner\Import\InvalidArgumentForImportException;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
 use Proximum\Vimeet\Application\View\Planner\Result\PlannerResult;
@@ -27,68 +30,61 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\ParticipantFinder;
+use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ImportPlannerMail;
 
 class ImportHandler
 {
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
-    /**
-     * @var SerializerAdapterInterface
-     */
+    /** @var SerializerAdapterInterface */
     private $serializer;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var MeetingSlotRepositoryInterface
-     */
+    /** @var MeetingSlotRepositoryInterface */
     private $slotRepository;
 
-    /**
-     * @var SpotRepositoryInterface
-     */
+    /** @var SpotRepositoryInterface */
     private $spotRepository;
 
-    /**
-     * @var EntityManagerAdapterInterface
-     */
+    /** @var EntityManagerAdapterInterface */
     private $entityManagerAdapter;
 
-    /**
-     * @var Request[]
-     */
+    /** @var MailerInterface */
+    private $mailer;
+
+    /** @var LocalFileStorageAdapter */
+    private $localFileStorage;
+
+    /** @var string */
+    private $importDirectoryPath;
+
+    /** @var string */
+    private $mailSender;
+
+    /** @var Request[] */
     private $requests = [];
 
-    /**
-     * @var Sheet[]
-     */
+    /** @var Sheet[] */
     private $sheets = [];
 
-    /**
-     * @var MeetingSlot[]
-     */
+    /** @var MeetingSlot[] */
     private $slots = [];
 
-    /**
-     * @var Spot[]
-     */
+    /** @var Spot[] */
     private $spots = [];
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $dateTime;
+
+    /** @var JobQueueInterface */
+    private $jobQueue;
 
     /**
      * @param SerializerAdapterInterface     $serializer
@@ -98,7 +94,12 @@ class ImportHandler
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SpotRepositoryInterface        $spotRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
+     * @param MailerInterface                $mailer
+     * @param LocalFileStorageAdapter        $localFileStorage
+     * @param JobQueueInterface              $jobQueue
      * @param \DateTimeInterface             $dateTime
+     * @param string                         $importDirectoryPath
+     * @param string                         $mailSender
      */
     public function __construct(
         SerializerAdapterInterface $serializer,
@@ -108,7 +109,12 @@ class ImportHandler
         MeetingSlotRepositoryInterface $slotRepository,
         SpotRepositoryInterface $spotRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
-        \DateTimeInterface $dateTime
+        MailerInterface $mailer,
+        LocalFileStorageAdapter $localFileStorage,
+        JobQueueInterface $jobQueue,
+        \DateTimeInterface $dateTime,
+        $importDirectoryPath,
+        $mailSender
     ) {
         $this->serializer           = $serializer;
         $this->meetingRepository    = $meetingRepository;
@@ -117,12 +123,18 @@ class ImportHandler
         $this->slotRepository       = $slotRepository;
         $this->spotRepository       = $spotRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
+        $this->mailer               = $mailer;
+        $this->localFileStorage     = $localFileStorage;
+        $this->jobQueue             = $jobQueue;
         $this->dateTime             = $dateTime;
+        $this->importDirectoryPath  = $importDirectoryPath;
+        $this->mailSender           = $mailSender;
     }
 
     /**
      * @param Import $import
      *
+     * @throws InvalidArgumentForImportException
      * @throws InvalidXmlException
      */
     public function handle(Import $import)
@@ -130,7 +142,7 @@ class ImportHandler
         // Remove all meeting of the event
         $this->meetingRepository->deleteAll($import->event);
 
-        $content = file_get_contents($import->file);
+        $content = file_get_contents($this->importDirectoryPath . $import->file->getPath());
 
         try {
             /** @var PlannerResult $plannerResult */
@@ -139,16 +151,21 @@ class ImportHandler
             throw new InvalidXmlException();
         }
 
-        $this->handlePlannerResult($import, $plannerResult);
+        $this->handlePlannerResult($import->event, $plannerResult);
+
+        $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
+
+        $this->notifyAboutImportSuccess($import->event, $import);
+
+        $this->localFileStorage->remove($import->file->getPath(), true);
     }
 
     /**
-     * @param Import        $import
+     * @param Event         $event
      * @param PlannerResult $plannerResult
      */
-    private function handlePlannerResult(Import $import, PlannerResult $plannerResult)
+    private function handlePlannerResult(Event $event, PlannerResult $plannerResult)
     {
-        $event = $import->event;
         $this->prepareRequestSheetSlotAndSpot($event);
         $toFlush = [];
 
@@ -162,7 +179,7 @@ class ImportHandler
 
             // Each 1000 meetings, flush and clear to optimize the insertion
             if (0 === ($index % 1000)) {
-                $this->entityManagerAdapter->flush();
+                $this->entityManagerAdapter->flush($toFlush);
 
                 /** @var Meeting $flush */
                 foreach ($toFlush as $flush) {
@@ -262,8 +279,32 @@ class ImportHandler
             $spot
         );
 
+        if ($meetingResult->isBlockedSlot) {
+            $meeting->blockSlot();
+        }
+
+        if ($meetingResult->isBlockedSpot) {
+            $meeting->blockSpot();
+        }
+
         $this->entityManagerAdapter->persist($meeting);
 
         return $meeting;
+    }
+
+    /**
+     * Send a mail to current admin to notify him about successful planner import
+     *
+     * @param Event $event
+     * @param Import $command
+     */
+    public function notifyAboutImportSuccess(Event $event, Import $command)
+    {
+        $this->mailer->send(new ImportPlannerMail(
+            $event,
+            $this->mailSender,
+            $command->emailToNotify,
+            $command->locale
+        ));
     }
 }

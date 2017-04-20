@@ -1,0 +1,102 @@
+<div class="header">
+    {% if menuHeaderView.event is defined %}
+        {% if menuHeaderView.event.logo != null %}
+            <a href="{{ path('event') }}">
+                {% if menuHeaderView.event.isSvgLogo %}
+                    <img src="{{ menuHeaderView.event.logo }}" class="logo">
+                {% else %}
+                    <img src="{{ menuHeaderView.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+                {% endif %}
+            </a>
+        {% endif %}
+        <div class="header__info">
+            <div>{{ menuHeaderView.event.description(app.request.locale)|nl2br }}</div>
+        </div>
+    {% endif %}
+
+    <ul class="header__navigation">
+        {% if is_granted('ROLE_USER') and menuHeaderView.hasSheet %}
+            <li class="notifs">
+                <a href="{{ path('event_notification_list', {sheet: menuHeaderView.sheet.id}) }}">
+                    <i class="icon-Retard"></i>
+                    <span class="name">{{ 'navigation.links.notification'|trans }}</span>
+                    {% if menuHeaderView.hasNotifications %}
+                        <span class="alert-notification">!</span>
+                    {% endif %}
+                </a>
+            </li>
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') and menuHeaderView.hasMultipleSheets %}
+            <li class="notifs">
+                <a href="{{ path('event_select_sheet') }}">
+                    <i class="icon-Document_1"></i>
+                    <span class="name">{{ 'navigation.links.returnToSelectSheet'|trans }}</span>
+                </a>
+            </li>
+        {% endif %}
+
+        {% if menuHeaderView.event is defined %}
+            {% for locale, path in menuHeaderView.localeRoutes %}
+                <li class="locale"><a href="{{ path }}">{{ locale }}</a></li>
+            {% endfor %}
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+            <li>
+                <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
+                    <i class="icon-Disconnect"></i>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
+                    <i class="icon-Disconnect"></i>
+                </a>
+            </li>
+        {% endif %}
+
+        <li>
+            <a href="#event-contact-modal" data-toggle="modal" data-target="#event-contact-modal">
+                <i class="icon-Appeler"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="modal fade" id="event-contact-modal" tabindex="-4" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="icon-Appeler"></i> {{ 'event.info.contact'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><strong class="highlight">{{ menuHeaderView.event.organiserName }}</strong></li>
+                    {% if menuHeaderView.event.configuration.contactFirstName or menuHeaderView.event.configuration.contactLastName %}
+                        <li>{{ menuHeaderView.event.configuration.contactFirstName|default('')|capitalize }} {{ menuHeaderView.event.configuration.contactLastName|default('')|upper }}</li>
+                    {% endif %}
+                    {% if menuHeaderView.event.configuration.organiserPhone %}
+                        <li><i class="icon-Appeler"></i> {{ menuHeaderView.event.configuration.organiserPhone }}</li>
+                    {% endif %}
+                    {% if menuHeaderView.event.organiserEmail %}
+                        <li><i class="icon-Message_1"></i>
+                            <a href="mailto:{{ menuHeaderView.event.organiserEmail }}">{{ menuHeaderView.event.organiserEmail }}</a>
+                        </li>
+                    {% endif %}
+                    {% if menuHeaderView.event.configuration.organiserWebsite %}
+                        <li>
+                            <a href="{{ menuHeaderView.event.configuration.organiserWebsite }}" target="_blank" rel="external">
+                                {{ menuHeaderView.event.configuration.organiserWebsite }}
+                            </a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+                    <i class="icon-Retour"></i>{{ 'event.info.close'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

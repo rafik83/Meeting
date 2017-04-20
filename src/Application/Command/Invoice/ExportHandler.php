@@ -82,6 +82,7 @@ class ExportHandler
 
         $invoices = $this->invoiceRepository->getFilteredByEvents($events, $command->beginDate, $endDate);
         $invoiceExportViews = [];
+        $billingInfosViewOfSheets = [];
 
         foreach ($invoices as $invoice) {
             // store the billingInfo of the sheet in an array to avoid potentially

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class MenuViewQuery
@@ -21,26 +22,31 @@ class MenuViewQuery
     public $event;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * @var string
      */
     public $locale;
 
     /**
-     * MenuViewQuery constructor.
-     *
-     * @param Event $event
-     * @param User  $user
-     * @param       $locale
+     * @var null|Sheet
      */
-    public function __construct(Event $event, User $user, $locale)
+    public $sheet;
+
+    /**
+     * @var null|User
+     */
+    public $user;
+
+    /**
+     * @param Event      $event
+     * @param string     $locale
+     * @param null|Sheet $sheet
+     * @param null|User  $user
+     */
+    public function __construct(Event $event, $locale, Sheet $sheet = null, User $user = null)
     {
         $this->event  = $event;
-        $this->user   = $user;
         $this->locale = $locale;
+        $this->sheet  = $sheet;
+        $this->user   = $user;
     }
 }

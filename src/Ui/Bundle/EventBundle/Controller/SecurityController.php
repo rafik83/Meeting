@@ -10,18 +10,23 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\View\Sheet\Group\ImpersonationUserView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SecurityController extends Controller
 {
@@ -157,12 +162,12 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param Event   $event
+     * @param Sheet   $sheet
      *
      * @return Response
      */
-    public function impersonatingUserAction(Request $request, Event $event)
+    public function impersonatingUserAction(Event $event, Sheet $sheet)
     {
         $impersonatingUser = null;
 
@@ -178,12 +183,89 @@ class SecurityController extends Controller
             }
         }
 
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
-
         return $this->render('EventBundle:Security:impersonating.html.twig', [
             'impersonatingUser' => $impersonatingUser,
             'event'             => $event,
             'sheet'             => $sheet,
+        ]);
+    }
+
+    /**
+     * @param EventDomain   $eventDomain
+     * @param Group         $sheetGroup
+     * @param UserInterface $user
+     * @param Sheet         $sheet
+     *
+     * @return RedirectResponse
+     */
+    public function switchSheetGroupManagerToSheetUserAction(EventDomain $eventDomain, Group $sheetGroup, UserInterface $user, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
+
+        $this->get('security.authentication.switch_sheet_group_manager_to_sheet_user')->handle(
+            $user,
+            $sheet,
+            $sheet->getOwner()
+        );
+
+        return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
+    }
+
+    /**
+     * @param EventDomain   $eventDomain
+     * @param Group         $sheetGroup
+     * @param UserInterface $user
+     *
+     * @return RedirectResponse
+     */
+    public function unswitchSheetGroupManagerAction(EventDomain $eventDomain, Group $sheetGroup, UserInterface $user)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $this->get('security.authentication.switch_sheet_group_manager_to_sheet_user')->unswitch();
+
+        return $this->redirectToRoute('event_sheet_group_index', ['sheetGroup' => $sheetGroup->getId()]);
+    }
+
+    /**
+     * @param Event         $event
+     * @param Sheet         $sheet
+     * @param UserInterface $user
+     *
+     * @return Response
+     */
+    public function impersonatingSheetGroupManagerToSheetUserAction(Event $event, Sheet $sheet, UserInterface $user)
+    {
+        $sheetGroup = $sheet->getGroup();
+
+        if (null === $sheetGroup) {
+            throw $this->createAccessDeniedException('Given sheet not have group');
+        }
+
+        $impersonatingUser = null;
+
+        $token = $this->get('security.token_storage')->getToken();
+
+        if (null !== $token) {
+            $roles = $token->getRoles();
+
+            foreach ($roles as $role) {
+                if ($role instanceof SwitchUserRole) {
+                    $impersonatingUser = new ImpersonationUserView(
+                        $role->getSource()->getUser()->getEmail(),
+                        $user->getEmail(),
+                        $user->getAccount()->getFirstName(),
+                        $user->getAccount()->getLastName(),
+                        $sheetGroup->getId()
+                    );
+                }
+            }
+        }
+
+        return $this->render('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser.html.twig', [
+            'impersonatingUser' => $impersonatingUser,
+            'event'             => $event,
         ]);
     }
 }

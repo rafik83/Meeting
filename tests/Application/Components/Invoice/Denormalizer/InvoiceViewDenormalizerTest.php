@@ -138,6 +138,7 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             null,
             $date,
             'fr',
+            $event->getTimeZone(),
             '',
             '',
             '',
@@ -231,11 +232,6 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
                                     19800
                                 ),
                             ]
-                        ),
-                        new GroupView(
-                            'Mobiliers supplémentaires',
-                            'option',
-                            7
                         ),
                     ]
                 ),

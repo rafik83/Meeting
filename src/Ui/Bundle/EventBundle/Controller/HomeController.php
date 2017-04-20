@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,34 +18,33 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends Controller
 {
     /**
      * Event home.
      *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
+     * @param Request            $request
+     * @param EventDomain        $eventDomain
+     * @param null|UserInterface $user
      *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function indexAction(Request $request, EventDomain $eventDomain)
+    public function indexAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
         $locale = $request->getLocale();
+        $event = $eventDomain->getEvent();
 
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $sheets = $this
-                ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetsByUserAndEvent($this->getUser(), $eventDomain->getEvent());
+        $response = $this->attemptDispatchUser($event, $user);
 
-            if (count($sheets)) {
-                return $this->redirectToRoute('event_sheet');
-            }
+        if ($response instanceof RedirectResponse) {
+            return $response;
         }
 
         $form = $this->createForm(TypeChoiceType::class, null, [
             'locale' => $locale,
-            'event'  => $eventDomain->getEvent(),
+            'event'  => $event,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -64,8 +64,43 @@ class HomeController extends Controller
         }
 
         return $this->render('EventBundle:Home:index.html.twig', [
-            'event' => $eventDomain->getEvent(),
+            'event' => $event,
             'form'  => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Event              $event
+     * @param null|UserInterface $user
+     *
+     * @return null|RedirectResponse
+     */
+    private function attemptDispatchUser(Event $event, UserInterface $user = null)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && null !== $user) {
+            $homeDispatchView = $this->get('components.home.home_dispatch')->handle($event, $user);
+
+            if (null !== $homeDispatchView) {
+                if ($homeDispatchView->isGroup()) {
+                    return $this->redirectToRoute(
+                        'event_sheet_group_index',
+                        ['sheetGroup' => $homeDispatchView->getGroup()->getId()]
+                    );
+                }
+
+                if ($homeDispatchView->isOneSheet()) {
+                    return $this->redirectToRoute(
+                        'event_sheet_default',
+                        ['sheet' => $homeDispatchView->getSheet()->getId()]
+                    );
+                }
+
+                if ($homeDispatchView->isMultipleSheet()) {
+                    return $this->redirectToRoute('event_select_sheet');
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
 class InvoiceController extends Controller
 {
     /**
+     * This controller is public
+     * Do not add SheetVoter
+     *
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param Invoice     $invoice

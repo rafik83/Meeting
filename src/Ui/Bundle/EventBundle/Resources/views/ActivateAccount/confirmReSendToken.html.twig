@@ -1,0 +1,17 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title event.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'event.activateAccount.resendToken.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content styled-form">
+                {{ 'event.activateAccount.resendToken.explanation'|trans }}
+            </div>
+        </section>
+    </div>
+{% endblock %}

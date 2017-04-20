@@ -78,7 +78,7 @@
                 {% endif %}
 
                 <div role="tabpanel" class="tab-pane" id="sheetTraces">
-                    {{ include('AdminBundle:Sheet/Partial:traces.html.twig', { sheet: sheet, traces: details.traces }, false) }}
+                    {{ include('AdminBundle:Sheet/Partial:traces.html.twig', { event: event, sheet: sheet, traces: details.traces }, false) }}
                 </div>
             </div>
         </div>

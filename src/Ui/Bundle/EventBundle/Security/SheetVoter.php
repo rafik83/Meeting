@@ -1,4 +1,13 @@
 <?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Security;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -20,7 +29,7 @@ class SheetVoter extends Voter
             return false;
         }
 
-        // only vote on Post objects inside this voter
+        // only vote on Sheet objects inside this voter
         if (!$subject instanceof Sheet) {
             return false;
         }
@@ -41,11 +50,9 @@ class SheetVoter extends Voter
         }
 
         // $subject is a Sheet object, thanks to supports method
-        $post = $subject;
-
         switch ($attribute) {
             case self::EDIT:
-                return $this->canEdit($post, $user);
+                return $this->canEdit($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -59,6 +66,17 @@ class SheetVoter extends Voter
      */
     private function canEdit(Sheet $sheet, User $user)
     {
-        return $sheet->hasUser($user);
+        if ($sheet->hasUser($user)) {
+            return true;
+        }
+
+        // If the user is not on the sheet but is manager of the sheet's group
+        $group = $sheet->getGroup();
+
+        if ($group !== null && $group->getManager() === $user) {
+            return true;
+        }
+
+        return false;
     }
 }

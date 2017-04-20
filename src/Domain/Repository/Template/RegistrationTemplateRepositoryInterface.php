@@ -21,6 +21,13 @@ interface RegistrationTemplateRepositoryInterface
     public function getBaseTemplates();
 
     /**
+     * @param int $id
+     *
+     * @return null|RegistrationTemplate
+     */
+    public function findById($id);
+
+    /**
      * @return RegistrationTemplate[]
      */
     public function getAllOrganizersTemplates();

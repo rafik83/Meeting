@@ -18,14 +18,14 @@ Feature: Agenda
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
-    When I go to this page "/fr/agenda"
-    Then I should be on this page "/fr/agenda/participant/2"
+    Then I should be on this page "/fr/sheet/2"
+    When I go to this page "/fr/sheet/2/agenda"
+    Then I should be on this page "/fr/sheet/2/agenda/participant/2"
     And I should see "agenda.title"
     And I should see "Mercredi 12 octobre 2016"
     And I should see "Jeudi 13 octobre 2016"
     And I should see "cocktail"
-    Then I go to this page "/fr/sheet"
+    Then I go to this page "/fr/sheet/2"
     And I should see "sheet.object.action.add"
     Then I follow "sheet.object.action.add"
     And I should see "sheet.participant.sendInvite"
@@ -35,10 +35,10 @@ Feature: Agenda
       | add_participant_email     | pascal.michelin2@example.net |
     And I should see "Participant supplémentaire"
     Then I press "sheet.participant.sendInvite"
-    And I should be on this page "/fr/sheet/fr"
-    When I go to this page "/fr/agenda"
-    Then I should be on this page "/fr/agenda/participant/2"
+    And I should be on this page "/fr/sheet/2/fr"
+    When I go to this page "/fr/sheet/2/agenda"
+    Then I should be on this page "/fr/sheet/2/agenda/participant/2"
     And I should see "agenda.participant.view"
-    Then I go to this page "/fr/agenda/participant/4"
+    Then I go to this page "/fr/sheet/2/agenda/participant/4"
     And the response status code should be 200
 

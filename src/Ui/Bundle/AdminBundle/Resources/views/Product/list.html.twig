@@ -95,9 +95,9 @@
                 </td>
                 <td class="text-right">{{ product.unitPrice|localizedcurrency(event.currency) }}</td>
                 <td class="text-right">{{ product.quantityMax }}</td>
-                <td class="text-center">{{ product.buyableUntil ? product.buyableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
+                <td class="text-center">{{ product.buyableUntil ? product.buyableUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) : '-' }}</td>
                 <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
-                <td class="text-center">{{ product.deletableUntil ? product.deletableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
+                <td class="text-center">{{ product.deletableUntil ? product.deletableUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) : '-' }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}" class="btn btn-default btn-sm">
                         {{ 'admin.product.update.action'|trans }}

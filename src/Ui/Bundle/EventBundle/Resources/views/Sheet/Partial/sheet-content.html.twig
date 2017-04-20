@@ -8,29 +8,37 @@
 
         <div class="buttons-zone button request-meeting-sheet">
             {% if isRequestMeetingEnabled %}
-                {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
-                    'sheet': sheet,
-                    'userSheet': userSheet,
-                    'meetingRequest': meetingRequest,
-                    'isMeetingPublished': isMeetingPublished|default(false),
-                    'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
-                }, false) }}
+                {% if meetingRequest is defined and meetingRequest is null and isMeetingRequestClosed is defined and isMeetingRequestClosed == true %}
+                    {# Hide buttons if the meetingRequests are closed #}
+                {% elseif meetingRequest is defined and meetingRequest is not null and isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
+                    {# Hide buttons if the meetingRequests answering are closed #}
+                {% else %}
+                    {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
+                        'sheet': sheet,
+                        'userSheet': userSheet,
+                        'meetingRequest': meetingRequest,
+                        'isMeetingPublished': isMeetingPublished|default(false),
+                        'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                        'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                        'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                    }, false) }}
+                {% endif %}
             {% else %}
                 {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
             {% endif %}
-            <a href="{{ path('event_sheet_generate_pdf', { sheet: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
+            <a href="{{ path('event_sheet_generate_pdf', { sheet: userSheet is defined ? userSheet.id : sheet.id, sheetToDisplay: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
         </div>
 
         {% if isCatalog is not defined or isCatalog == false %}
             <ul class="tabs">
                 <li{% if locale == event.fallback %} class="active"{% endif %}>
-                    <a href="{{ path('event_sheet_locale', { 'locale': event.fallback }) }}">
+                    <a href="{{ path('event_sheet_locale', { 'sheet': sheet.id, 'locale': event.fallback }) }}">
                         <span class="name">{{ event.fallback|locale }}*</span>
                     </a>
                 </li>
                 {% for event_locale in event.locales if event_locale != event.fallback %}
                     <li{% if event_locale == locale %} class="active"{% endif %}>
-                        <a href="{{ path('event_sheet_locale', { 'locale': event_locale }) }}">
+                        <a href="{{ path('event_sheet_locale', { 'sheet': sheet.id, 'locale': event_locale }) }}">
                             <span class="name">{{ event_locale|locale }}*</span>
                         </a>
                     </li>
@@ -55,6 +63,8 @@
                 'meetingRequest' : meetingRequest|default(false),
                 'isMeetingPublished': isMeetingPublished|default(false),
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
             }, false) }}
         {% endfor %}
     </div>

@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
@@ -85,6 +88,16 @@ interface SheetRepositoryInterface
     public function getSheetsByUserAndEvent(User $user, Event $event);
 
     /**
+     * Get count enabled sheet by user or user's participant
+     *
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countSheetsByUserAndEvent(User $user, Event $event);
+
+    /**
      * Get all sheets whatever its enabled state by user or user's participant
      *
      * @param User  $user
@@ -123,6 +136,14 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsByEventAndIds(Event $event, array $ids);
+
+    /**
+     * @param Event   $event
+     * @param Sheet[] $sheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsMetBySheets(Event $event, array $sheets);
 
     /**
      * @param array $ids
@@ -209,4 +230,32 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByUser(User $user);
+
+    /**
+     * @param Group $group
+     *
+     * @return Sheet[]
+     */
+    public function getByGroup(Group $group);
+
+    /**
+     * @param SheetTemplate $sheetTemplate
+     *
+     * @return Sheet[]
+     */
+    public function getBySheetTemplate(SheetTemplate $sheetTemplate);
+
+    /**
+     * @param RegistrationTemplate $registrationTemplate
+     *
+     * @return Sheet[]
+     */
+    public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate);
+
+    /**
+     * @param Type[] $types
+     *
+     * @return Sheet[]
+     */
+    public function getByTypes(array $types);
 }

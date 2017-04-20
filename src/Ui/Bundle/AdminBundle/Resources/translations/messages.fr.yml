@@ -33,11 +33,23 @@ admin.agenda.export.omz: OMZ
 admin.agenda.export.participant_schedules.danger: 'Attention, si l''export est réalisé avant la date de publication des rendez-vous, les plannings ne comporteront pas les rendez-vous positionés'
 admin.agenda.export.participant_schedules.title: 'Export des participants et plannings'
 admin.agenda.export.title: 'Rendez-vous / Export'
+admin.agenda.filters.follower.label: 'Suivi commercial'
+admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
-admin.agenda.filters.hasSentMeetingRequest.label: 'Pas de demande de rendez-vous'
+admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
+admin.agenda.filters.hasValidatedRequestNotScheduled.label: 'A encore des demandes/propositions validées et non placées'
+admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
+admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
+admin.agenda.filters.hasScheduledMeeting.no: 'Non'
+admin.agenda.filters.hasScheduledMeeting.yes: 'Oui'
+admin.agenda.filters.hasSentMeetingRequest.all: 'Peu importe'
+admin.agenda.filters.hasSentMeetingRequest.label: 'A fait des demandes de rendez-vous'
+admin.agenda.filters.hasSentMeetingRequest.no: 'Non'
+admin.agenda.filters.hasSentMeetingRequest.yes: 'Oui'
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
+admin.agenda.filters.search: 'Rechercher'
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
 admin.agenda.filters.title.label: 'Filtre fiche'
 admin.agenda.filters.type: 'Type de participation'
@@ -124,6 +136,9 @@ admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
+admin.event.days: "Jours de l'événement"
+admin.event.list.currents.title: 'Événements actuels'
+admin.event.list.pasts.title: 'Événements passés'
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
@@ -463,6 +478,7 @@ admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
 admin.planner.export: Exporter
+admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
 admin.planner.export.heading: admin.planner.export.heading
 admin.planner.heading.export: 'Exporter les données pour l''algorithme'
 admin.planner.heading.import: 'Importer une solution depuis l''algorithme'

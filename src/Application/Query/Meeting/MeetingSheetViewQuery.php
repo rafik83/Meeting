@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MeetingSheetViewQuery
 {
@@ -21,26 +21,26 @@ class MeetingSheetViewQuery
     public $event;
 
     /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
      * @var string
      */
     public $locale;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * MeetingSheetViewQuery constructor.
      *
-     * @param User   $user
      * @param Event  $event
+     * @param Sheet  $sheet
      * @param string $locale
      */
-    public function __construct(User $user, Event $event, $locale)
+    public function __construct(Event $event, Sheet $sheet, $locale)
     {
         $this->event  = $event;
+        $this->sheet  = $sheet;
         $this->locale = $locale;
-        $this->user   = $user;
     }
 }
