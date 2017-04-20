@@ -84,15 +84,16 @@ class SendEmailingCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $event       = $this->eventRepository->getById($input->getArgument('eventId'));
-        $sheets      = $this->sheetRepository->findByIds($input->getArgument('sheetIds'));
-        $messageType = $input->getArgument('emailingType');
+        $event     = $this->eventRepository->getById($input->getArgument('eventId'));
+        $sheetIds  = explode(',', $input->getArgument('sheetIds'));
+        $sheets    = $this->sheetRepository->findByIds($sheetIds);
+        $messageId = $input->getArgument('emailingId');
 
         if (null === $event) {
             throw new \InvalidArgumentException('Event not found.');
         }
 
-        $message = $this->messageFactory->create($event, $sheets, $messageType);
+        $message = $this->messageFactory->create($event, $sheets, $messageId);
 
         $this->processHandler->handle(new Process($message, $sheets));
     }

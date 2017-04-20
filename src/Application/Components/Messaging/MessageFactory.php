@@ -37,14 +37,14 @@ class MessageFactory
     /**
      * @param Event   $event
      * @param Sheet[] $sheets
-     * @param string  $messageType
+     * @param string  $messageId
      *
      * @return Message
      * @throw \InvalidArgumentException
      */
-    public function create(Event $event, array $sheets, $messageType)
+    public function create(Event $event, array $sheets, $messageId)
     {
-        switch ($messageType) {
+        switch ($messageId) {
             case Events::SHEET_VALIDATED:
                 $command = new CreateMessage(
                     $event,

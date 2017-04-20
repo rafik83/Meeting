@@ -73,6 +73,8 @@ class SheetValidatedSubstitutionsProvider extends AbstractSubstitutionsProvider
                 return $sheet->getOwner()->getFirstName();
             case self::TAG_LASTNAME:
                 return $sheet->getOwner()->getLastName();
+            case self::TAG_PARTICIPATION_TYPE:
+                return $sheet->getType()->getTitle($locale);
             case self::TAG_CATALOG_ONLINE_DATE:
                 $catalogOnlineDate = $event->getConfiguration()->getCatalogOnlineDate();
                 return $catalogOnlineDate !== null ? $dateFormatter->format($catalogOnlineDate) : '';

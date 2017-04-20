@@ -44,7 +44,7 @@ abstract class AbstractSubstitutionsProvider
     public function findPlaceholders($messageTitle, $messageBody)
     {
         $foundPlaceholders = [];
-
+        
         foreach ($this->placeholders as $placeholder) {
             if (false !== strpos($messageBody, $placeholder)) {
                 $foundPlaceholders[] = $placeholder;

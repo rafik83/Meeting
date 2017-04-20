@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 
 class CreateMessageHandler
 {
@@ -56,8 +57,6 @@ class CreateMessageHandler
     {
         $message = new Message($command->event, $this->dateTime, $command->name);
 
-        $emailContent = $this->twig->load($command->emailTemplate)->render();
-
         foreach ($command->sheets as $sheet) {
             $locale = $sheet->getOwnerLocale();
 
@@ -68,6 +67,10 @@ class CreateMessageHandler
                     'mail',
                     $locale
                 );
+
+                $emailContent = $this->twig
+                    ->load($command->emailTemplate)
+                    ->render(['mail' => new MessageContentMail($message, $command->event, $locale)]);
 
                 $message->translate($locale, $emailSubject, $emailContent, $this->dateTime);
             }
