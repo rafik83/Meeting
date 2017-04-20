@@ -3276,7 +3276,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@application.components.messaging.message_factory',
+            - '@application.components.messaging.message_factory'
             - '@command.messaging.batch.process_handler'
         tags:
             - { name: console.command }
