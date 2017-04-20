@@ -80,7 +80,11 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__meeting_request'), function (element) {
-        new FilterRequestByType(element, target.querySelector('[data-meeting-request-filter-type-buttons]'));
+        var buttons = target.querySelector('[data-meeting-request-filter-type-buttons]');
+
+        if (buttons !== null) {
+            new FilterRequestByType(element, buttons);
+        }
     });
 
     $('.dropdown-menu', target).on('click', function (e) {
@@ -160,7 +164,12 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.object--nomenclature, .object--collection.style--style-2, .object--collection.style--style-3'), function (element) {
-        new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
+        var showMoreElement = element.querySelector('.section__content');
+        var buttonContainer = element.querySelector('footer');
+
+        if (showMoreElement !== null && buttonContainer !== null) {
+            new ShowMore(showMoreElement, buttonContainer);
+        }
     });
 
     [].forEach.call(target.querySelectorAll('.happening'), function (element) {
