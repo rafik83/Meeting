@@ -82,4 +82,15 @@ interface JobQueueInterface
      * @param Event $event
      */
     public function indexInCatalogSheetsByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     * @param bool  $onlyInCatalog
+     */
+    public function aggregateParticipantFullUnavailability(Event $event, $onlyInCatalog = false);
+
+    /**
+     * @param Event $event
+     */
+    public function aggregateParticipantAssignedToRequest(Event $event);
 }
