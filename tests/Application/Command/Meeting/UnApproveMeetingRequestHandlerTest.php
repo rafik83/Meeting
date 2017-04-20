@@ -48,7 +48,7 @@ class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToUnApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToUnApprove($request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         // Handle
         $handler = new UnApproveMeetingRequestHandler(
@@ -87,7 +87,7 @@ class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldNotBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToUnApprove($user2, $request, $sheetFrom)->shouldBeCalled()->willReturn(false);
+        $permissionManager->isAllowedToUnApprove($request, $sheetFrom)->shouldBeCalled()->willReturn(false);
 
         // Handle
         $handler = new UnApproveMeetingRequestHandler(

@@ -1,6 +1,6 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
-    options         = require('../../../vueComponents/options');
-    SheetFilter     = require('../../filters/_SheetsFilter');
+    options         = require('../../../vueComponents/options'),
+    SheetFilter     = require('./../../filters/_SheetsFilter');
 
 module.exports = {
     template: '#filter-modal',
@@ -14,17 +14,23 @@ module.exports = {
             filteredSheets: [],
             formFilters: {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: false,
+                hasValidatedRequestNotScheduled: false
             },
             filters: {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: null,
+                hasValidatedRequestNotScheduled: null
             }
         }
     },
@@ -41,17 +47,23 @@ module.exports = {
         reset: function () {
             this.filters = {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: null,
+                hasValidatedRequestNotScheduled: null
             };
             this.formFilters =  {
                 selectedTypes: [],
+                selectedFollowers: [],
                 hasMeetingToApprove: false,
                 hasNotEnoughAvailableSlot: false,
                 hasSentMeetingRequest: null,
-                hasScheduledMeetings: null
+                hasScheduledMeetings: null,
+                hasAvailableSlots: null,
+                hasValidatedRequestNotScheduled: null
             }
         },
         setUsedFilter: function() {

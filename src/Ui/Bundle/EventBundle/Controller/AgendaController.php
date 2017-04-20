@@ -10,86 +10,68 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AgendaController extends Controller
 {
     /**
-     * @param EventDomain $eventDomain
-     * @param Request     $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse
      */
-    public function indexAction(EventDomain $eventDomain, Request $request)
+    public function indexAction(EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
-        try {
-            $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
-                $this->getUser(),
-                $eventDomain->getEvent(),
-                $request->getLocale()
+        $participant = $sheet->getUserParticipant($user);
+
+        if (null !== $participant) {
+            return $this->redirectToRoute(
+                'event_agenda_participant',
+                ['participant' => $participant->getId(), 'sheet' => $sheet->getId()]
             );
-
-            $participant = $sheet->getUserParticipant($this->getUser());
-
-            if (null !== $participant) {
-                return $this->redirectToRoute(
-                    'event_agenda_participant',
-                    ['participant' => $participant->getId()]
-                );
-            }
-
-            if ($sheet->isOwner($this->getUser())) {
-                return $this->redirectToRoute(
-                    'event_agenda_participant',
-                    ['participant' => $sheet->getParticipants()->first()->getId()]
-                );
-            }
-        } catch (SheetNotFoundException $exception) {
-            throw $this->createNotFoundException('Sheet not found');
         }
 
-        throw $this->createNotFoundException(sprintf(
-            'User %s has a sheet %s but is not participant and owner',
-            $this->getUser()->getId(),
-            $sheet->getId()
-        ));
+        return $this->redirectToRoute(
+            'event_agenda_participant',
+            ['participant' => $sheet->getFirstParticipant()->getId(), 'sheet' => $sheet->getId()]
+        );
     }
 
     /**
      * @param EventDomain $eventDomain
      * @param Request     $request
      * @param Participant $participant
+     * @param Sheet       $sheet
      *
      * @return Response
      */
-    public function participantAction(EventDomain $eventDomain, Request $request, Participant $participant)
-    {
+    public function participantAction(
+        EventDomain $eventDomain,
+        Request $request,
+        Participant $participant,
+        Sheet $sheet
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
-        $sheet = $participant->getSheet();
-
-        if ($sheet->getEvent() !== $eventDomain->getEvent()) {
-            throw $this->createNotFoundException('The participant of this sheet is not on this event');
-        }
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createNotFoundException(sprintf(
-                'The user %s is not participant/owner of the sheet %s',
-                $this->getUser()->getId(),
-                $sheet->getId()
-            ));
+        if ($participant->getSheet() !== $sheet) {
+            throw $this->createNotFoundException('This participant is not in this sheet');
         }
 
         /** @var AgendaView $agenda */
@@ -104,6 +86,7 @@ class AgendaController extends Controller
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event'  => $eventDomain->getEvent(),
             'agenda' => $agenda,
+            'sheet'  => $sheet,
         ]);
     }
 }

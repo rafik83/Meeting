@@ -66,7 +66,6 @@ class UpdateMeetingRequestHandler
     public function handle(UpdateMeetingRequest $updateRequest)
     {
         if (!$this->requestPermissionManager->isAllowedToEditSentOrApproved(
-            $updateRequest->editor,
             $updateRequest->meetingRequest,
             $updateRequest->sheetEditor
         )) {

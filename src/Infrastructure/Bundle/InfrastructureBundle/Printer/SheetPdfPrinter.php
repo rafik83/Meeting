@@ -55,27 +55,29 @@ class SheetPdfPrinter
     }
 
     /**
-     * @param User   $user   who want to print the pdf
-     * @param Sheet  $sheet  targetted sheet
+     * @param User   $user who want to print the pdf
+     * @param Sheet  $sheet targetted sheet
+     * @param Sheet  $sheetToDisplay
      * @param string $locale locale of the sheet
      *
      * @return string
      */
-    public function generate(User $user, Sheet $sheet, $locale)
+    public function generate(User $user, Sheet $sheet, Sheet $sheetToDisplay, $locale)
     {
         $pathToPdf = sprintf(
             '%s/%s-%s.pdf',
             sys_get_temp_dir(),
             $user->getId(),
-            $sheet->getId()
+            $sheetToDisplay->getId()
         );
 
         $urlToPrint = $this->router->generate(
             'event_sheet_internal_print',
             [
-                'sheet'  => $sheet->getId(),
-                'locale' => $locale,
-                'user'   => $user->getId(),
+                'user'           => $user->getId(),
+                'sheet'          => $sheet->getId(),
+                'sheetToDisplay' => $sheetToDisplay->getId(),
+                'locale'         => $locale,
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

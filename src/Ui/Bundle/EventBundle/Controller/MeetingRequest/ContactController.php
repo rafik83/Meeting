@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingRequest;
 
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 
 class ContactController extends Controller
@@ -24,25 +24,23 @@ class ContactController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
-     * @return Response|CSVFileResponse
+     * @return CSVFileResponse
      */
-    public function exportContactAction(Request $request, EventDomain $eventDomain)
+    public function exportContactAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_OPEN_ACCESS', $eventDomain->getEvent());
 
-        try {
-            $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
-                new MeetingSheetViewQuery(
-                    $this->getUser(),
-                    $eventDomain->getEvent(),
-                    $request->getLocale()
-                )
-            );
-        } catch (SheetNotFoundException $exception) {
-            throw $this->createNotFoundException('Sheet not found');
-        }
+        $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
+            new MeetingSheetViewQuery(
+                $eventDomain->getEvent(),
+                $sheet,
+                $request->getLocale()
+            )
+        );
 
         $charset       = Charset::WINDOWS_1252;
         $exportContent = $this->get('serializer')->serialize($meetingSheetListView, 'csv', [

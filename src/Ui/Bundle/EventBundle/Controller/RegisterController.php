@@ -172,7 +172,7 @@ class RegisterController extends Controller
 
             $this->container->get('session')->getFlashBag()->set('first_registration', true);
 
-            return $this->redirectToRoute('event_sheet');
+            return $this->redirectToRoute('event_sheet_default', ['sheet' => $participate->sheet->getId()]);
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
@@ -228,7 +228,7 @@ class RegisterController extends Controller
 
                 $this->container->get('session')->getFlashBag()->add('first_registration', true);
 
-                return $this->redirectToRoute('event_sheet');
+                return $this->redirectToRoute('event_sheet_default', ['sheet' => $participant->getSheet()->getId()]);
             }
         }
 

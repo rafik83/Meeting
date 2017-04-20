@@ -16,7 +16,7 @@ Feature: Manage participant
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     And I should see "sheet.object.action.add"
     Then I follow "sheet.object.action.add"
     And I should see "sheet.participant.sendInvite"
@@ -28,7 +28,7 @@ Feature: Manage participant
     Then I press "sheet.participant.sendInvite"
     And the "sheet.participant.add.confirmation" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
     And the "user.account_activated" mail should be sent to "pascal.michelin@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
-    And I should be on this page "/fr/sheet/fr"
+    And I should be on this page "/fr/sheet/1/fr"
     And I should see "Pascal MICHELIN"
     # initials of Pascal MICHELIN
     And I should see "PM"
@@ -36,13 +36,13 @@ Feature: Manage participant
   Scenario: I can remove a participant of my sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1"
     And I should see "sheet.object.action.remove"
     Then I follow "sheet.object.action.remove"
     ## There is a problem with the radio here as they don't have a label
     ## Therefore the select is used (as it can check radio, don't ask why)
     And I select "0" from "remove_participant[participants][]"
     And I press "sheet.participant.remove"
-    And I should be on this page "/fr/sheet/fr"
+    And I should be on this page "/fr/sheet/1/fr"
     And I should not see "John DOE"
     And I should not see "JD"

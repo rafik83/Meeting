@@ -422,7 +422,7 @@ class Package
      */
     public function getPlansLabel($locale)
     {
-        return $this->translations->containsKey($locale)
+        return null !== $this->translations && $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getPlansLabel()
             : '';
     }
@@ -434,7 +434,7 @@ class Package
      */
     public function getParticipantAndPlanningLabel($locale)
     {
-        return $this->translations->containsKey($locale)
+        return null !== $this->translations && $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getParticipantAndPlanningLabel()
             : '';
     }
@@ -446,7 +446,7 @@ class Package
      */
     public function getOptionsLabel($locale)
     {
-        return $this->translations->containsKey($locale)
+        return null !== $this->translations && $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getOptionsLabel()
             : '';
     }

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
@@ -30,24 +31,50 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SheetController extends Controller
 {
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param null|string $locale
+     *
+     * @return RedirectResponse
+     */
+    public function redirectTosheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        try {
+            $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale ?: $request->getLocale());
+        } catch (SheetNotFoundException $sheetNotFoundException) {
+            throw $this->createAccessDeniedException('User not have Sheet');
+        }
+
+        if (null === $locale) {
+            return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
+        }
+
+        return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
+    }
+
     /**
      * Display the sheet in the choosen locale (independently from the interface locale).
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      *
      * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    public function sheetAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $locale = $locale ?: $request->getLocale();
-        $sheet  = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
         $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
         $participant           = $participantRepository->getParticipantForUserAndSheet($this->getUser(), $sheet);
@@ -93,46 +120,60 @@ class SheetController extends Controller
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'                  => $eventDomain->getEvent(),
-            'sheet'                  => $sheet,
-            'taggedData'             => $taggedData,
-            'locale'                 => $locale,
-            'nomenclatures'          => $nomenclatures,
-            'participants'           => $participants,
-            'templateData'           => $templateData,
-            'popinWelcome'           => $popinWelcome,
-            'sheetValidationView'    => (isset($sheetValidationView)) ? $sheetValidationView : null,
-            'participantProductView' => $participantProductView,
+            'event'                   => $eventDomain->getEvent(),
+            'sheet'                   => $sheet,
+            'taggedData'              => $taggedData,
+            'locale'                  => $locale,
+            'nomenclatures'           => $nomenclatures,
+            'participants'            => $participants,
+            'templateData'            => $templateData,
+            'popinWelcome'            => $popinWelcome,
+            'sheetValidationView'     => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'participantProductView'  => $participantProductView,
+            'isRequestMeetingEnabled' => false,
+            'isCatalog'               => false,
         ]);
     }
 
     /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
+     * @param int           $sheetToDisplay
+     * @param string        $locale
      *
      * @return BinaryFileResponse
      */
-    public function generatePdfAction(EventDomain $eventDomain, Sheet $sheet, $locale)
-    {
-        $user      = $this->getUser();
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $eventDomain->getEvent(), $locale);
+    public function generatePdfAction(
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserInterface $user,
+        $sheetToDisplay,
+        $locale
+    ) {
+        $sheetToDisplay = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetById($sheetToDisplay);
 
-        if ($userSheet !== $sheet) {
-            if (!$sheet->isInCatalog()) {
+        if (null === $sheetToDisplay || $eventDomain->getEvent() !== $sheetToDisplay->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not found');
+        }
+
+        if ($sheetToDisplay !== $sheet) {
+            if (!$sheetToDisplay->isInCatalog()) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
             $rules = $this
                 ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
 
             if (empty($rules)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
             }
         }
 
-        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($this->getUser(), $sheet, $locale);
+        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($user, $sheet, $sheetToDisplay, $locale);
 
         return new BinaryFileResponse($pathToPdf);
     }
@@ -141,35 +182,43 @@ class SheetController extends Controller
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param User        $user
+     * @param int         $sheetToDisplay
      * @param string      $locale
      *
      * @return Response
      */
-    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
+    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $sheetToDisplay, $locale)
     {
-        $event     = $eventDomain->getEvent();
-        $locale    = $event->getAvailableLocale($locale);
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $event, $locale);
+        $event  = $eventDomain->getEvent();
+        $locale = $event->getAvailableLocale($locale);
+
+        $sheetToDisplay = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetById($sheetToDisplay);
+
+        if (null === $sheetToDisplay || $event !== $sheetToDisplay->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not found');
+        }
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
         // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheetToDisplay, $locale);
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
-            $sheet,
+            $sheetToDisplay,
             $user,
             $locale
         );
 
-        if ($userSheet !== $sheet) {
+        if ($sheetToDisplay !== $sheet) {
             if (!$sheet->isInCatalog() || !$isCatalogAllowed) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
             $rules = $this
                 ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
 
             if (empty($rules)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
@@ -182,7 +231,7 @@ class SheetController extends Controller
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
             'event'         => $event,
-            'sheet'         => $sheet,
+            'sheet'         => $sheetToDisplay,
             'taggedData'    => $taggedData,
             'locale'        => $locale,
             'nomenclatures' => $nomenclatures,
@@ -195,18 +244,15 @@ class SheetController extends Controller
      * Render the form of an object. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function formAction(EventDomain $eventDomain, $locale, $key)
+    public function formAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -225,6 +271,7 @@ class SheetController extends Controller
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
+            'sheet'    => $sheet,
             'uid'      => $key,
             'label'    => $label,
             'form'     => $form->createView(),
@@ -259,7 +306,10 @@ class SheetController extends Controller
         }
 
         return $this->createForm($types[$object->getType()], $object, [
-            'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
+            'action' => $this->generateUrl(
+                'event_sheet_update',
+                ['sheet' => $object->getSheet()->getId(), 'locale' => $locale, 'key' => $key]
+            ),
             'submit'      => true,
             'locale'      => $locale,
             'help'        => $object->getHelp(),
@@ -274,17 +324,15 @@ class SheetController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function updateAction(Request $request, EventDomain $eventDomain, $locale, $key)
+    public function updateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -337,7 +385,7 @@ class SheetController extends Controller
 
                 $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
 
-                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
             } else {
                 // If the form is not valid, re-render the templateData
                 $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -376,15 +424,15 @@ class SheetController extends Controller
 
     /**
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return RedirectResponse
      */
-    public function removeImageAction(EventDomain $eventDomain, $locale, $key)
+    public function removeImageAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -397,23 +445,26 @@ class SheetController extends Controller
         $removeImage = new RemoveImage($object, $sheet, $templateData);
         $this->get('tactician.commandbus')->handle($removeImage);
 
-        return $this->redirectToRoute('event_sheet');
+        return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
     /**
-     * @param Sheet $sheet
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return RedirectResponse
      */
-    public function submitValidationAction(Sheet $sheet)
+    public function submitValidationAction(EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $submitValidation = new SubmitValidation($sheet, $this->getUser());
+        $submitValidation = new SubmitValidation($sheet, $user);
 
         $this->get('tactician.commandbus')->handle($submitValidation);
 
-        return $this->redirectToRoute('event_sheet');
+        return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
     /**

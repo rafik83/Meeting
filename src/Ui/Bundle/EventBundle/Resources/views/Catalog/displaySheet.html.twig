@@ -1,0 +1,12 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'sheet.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    {% set userSheet = sheet %}
+    {% set sheet = sheetToDisplay %}
+
+    {{ include('EventBundle:Sheet/Partial:sheet-content.html.twig') }}
+{% endblock %}
