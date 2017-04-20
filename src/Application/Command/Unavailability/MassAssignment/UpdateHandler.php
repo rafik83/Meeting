@@ -100,6 +100,9 @@ class UpdateHandler
         $this->dispatchUpdateEvent($update->massAssignment->getParticipant());
     }
 
+    /**
+     * @param $participant
+     */
     private function dispatchUpdateEvent($participant)
     {
         $this->eventDispatcher->dispatch(

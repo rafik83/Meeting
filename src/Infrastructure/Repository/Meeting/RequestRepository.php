@@ -490,6 +490,28 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request, fromSheet, toSheet, meeting')
+            ->from(Request::class, 'request', 'request.id')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
+            ->leftJoin('request.meeting', 'meeting')
+            ->where('fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)')
+            ->orWhere('toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)')
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets)
+            ->setParameter('sheetsMet', $sheetsMet);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param QueryBuilder $queryBuilder
      * @param Sheet        $sheet
      * @param array        $filters

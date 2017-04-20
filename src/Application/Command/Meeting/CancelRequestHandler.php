@@ -60,7 +60,6 @@ class CancelRequestHandler
     public function handle(CancelRequest $cancelRequest)
     {
         if (!$this->permissionManager->isAllowedToCancel(
-            $cancelRequest->emitter,
             $cancelRequest->request,
             $cancelRequest->sheet
         )) {

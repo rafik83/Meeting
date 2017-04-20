@@ -22,8 +22,8 @@ class PreviewQueryHandler
         return new PreviewView(
             $query->message->getEvent(),
             $query->locale,
-            $query->message->getSubject(),
-            $query->message->getContent()
+            $query->message->getSubject($query->locale),
+            $query->message->getContent($query->locale)
         );
     }
 }

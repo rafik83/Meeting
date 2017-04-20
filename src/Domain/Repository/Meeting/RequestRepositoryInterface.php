@@ -125,6 +125,15 @@ interface RequestRepositoryInterface
     public function getRequestBetweenSheets(Sheet $one, Sheet $another);
 
     /**
+     * @param Event   $event
+     * @param Sheet[] $sheets
+     * @param Sheet[] $sheetsMet
+     *
+     * @return Request[]
+     */
+    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet);
+
+    /**
      * @param Event $event
      * @param User  $user
      *

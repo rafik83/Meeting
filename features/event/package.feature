@@ -162,7 +162,7 @@ Feature: Complete my package
     And I should see "order.transaction.list.title"
     And I should see "order.transaction.howtopay"
     When I follow "order.transaction.howtopay"
-    Then I should be on this page "/fr/sheet/payment"
+    Then I should be on this page "/fr/sheet/1/payment"
     And I should see "package.payment.billingAddress"
     And I should see "package.payment.bankInfo"
 

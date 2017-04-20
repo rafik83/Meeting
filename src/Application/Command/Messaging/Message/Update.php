@@ -20,14 +20,9 @@ final class Update
     public $name;
 
     /**
-     * @var string
+     * @var array
      */
-    public $subject;
-
-    /**
-     * @var string
-     */
-    public $content;
+    public $translations;
 
     /**
      * @var Message
@@ -41,8 +36,14 @@ final class Update
     {
         $this->message = $message;
         $this->name    = $message->getName();
-        $this->subject = $message->getSubject();
-        $this->content = $message->getContent();
+
+        foreach ($message->getEvent()->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'subject' => $message->getSubject($locale),
+                'content' => $message->getContent($locale),
+                'locale'  => $locale,
+            ];
+        }
     }
 
     /**

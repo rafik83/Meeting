@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<section class="main">
+<section class="main mg-top">
     <header>
         <h1>
             {{ groupView.title }}
@@ -15,7 +15,14 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>{{ 'sheet.title'|trans }}</th>
+                    <th>
+                        {{ 'sheet.title'|trans }}
+                        <div class="pull-right">
+                            <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
+                                {{ 'group.home.link.request'|trans }}
+                            </a>
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>

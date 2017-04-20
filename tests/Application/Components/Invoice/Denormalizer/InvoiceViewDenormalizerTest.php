@@ -233,11 +233,6 @@ class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
                                 ),
                             ]
                         ),
-                        new GroupView(
-                            'Mobiliers supplémentaires',
-                            'option',
-                            7
-                        ),
                     ]
                 ),
                 new PromotionCodesView(

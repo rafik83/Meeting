@@ -51,7 +51,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetFrom);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -67,7 +67,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
@@ -108,7 +108,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetFrom);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -125,7 +125,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
@@ -167,7 +167,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetTo);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -183,7 +183,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldNotBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
@@ -225,7 +225,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetTo);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -242,7 +242,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 

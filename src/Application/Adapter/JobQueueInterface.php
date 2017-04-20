@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
@@ -44,6 +45,23 @@ interface JobQueueInterface
      * @param string $locale
      */
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
+
+    /**
+     * @param Event  $event
+     * @param Admin  $admin
+     * @param string $locale
+     * @param string $lockMeetingRequest
+     * @param string $solutionType
+     */
+    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType);
+
+    /**
+     * @param File   $file
+     * @param Event  $event
+     * @param Admin  $admin
+     * @param string $locale
+     */
+    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale);
 
     /**
      * @param SheetTemplate $sheetTemplate

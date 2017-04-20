@@ -41,7 +41,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         $package->enable(true, true, true);
         $type->setPackage($package);
 
-        $route = 'event_package';
+        $route = 'event_package_redirect_depending_on_context';
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
@@ -52,7 +52,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         );
 
         $navigationBuilder
-            ->getRoute('event_package', ["sheet" => null])
+            ->getRoute('event_package_redirect_depending_on_context', ["sheet" => null])
             ->shouldBeCalled()
             ->willReturn('event_package.link');
         $cartRowRepository->hasProducts($sheet)->shouldBeCalled()->willReturn(false);
@@ -63,7 +63,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             Category::PACKAGE_ICON,
             'navigation.category.package',
             'event_package.link',
-            true,
+            false,
             false
         );
 
@@ -101,7 +101,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         );
 
         $navigationBuilder
-            ->getRoute('event_package', ["sheet" => null])
+            ->getRoute('event_package_redirect_depending_on_context', ["sheet" => null])
             ->shouldBeCalled()
             ->willReturn('event_package.link');
         $cartRowRepository->hasProducts($sheet)->shouldBeCalled()->willReturn(true);

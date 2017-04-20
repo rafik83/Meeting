@@ -3,7 +3,7 @@
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
     </div>
 {% else %}
-    <div class="btn btn-gray accept" data-modal-load="{{ path('event_meeting_request_edit', { 'meetingRequest': meetingRequest.id }) }}">
+    <div class="btn btn-gray accept" data-modal-load="{{ path('event_meeting_request_edit', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
     </div>
 {% endif %}

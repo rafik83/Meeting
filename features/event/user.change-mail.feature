@@ -19,7 +19,7 @@ Feature: Change my mail
     Then I should be on this page "/fr/participant/1/step/1"
 
   Scenario: I can change my email full process
-    When I go to this page "/fr/account/change-mail"
+    When I go to this page "/fr/account/sheet/1/change-mail"
     Then I fill in the following:
       | form.change_mail.children.mail.label | truc@bidule.com |
     And I press "common.validate"

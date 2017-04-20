@@ -66,7 +66,6 @@ class UnApproveMeetingRequestHandler
     public function handle(UnApproveMeetingRequest $unApproveMeetingRequest)
     {
         if (!$this->permissionManager->isAllowedToUnApprove(
-            $unApproveMeetingRequest->user,
             $unApproveMeetingRequest->meetingRequest,
             $unApproveMeetingRequest->sheet
         )) {

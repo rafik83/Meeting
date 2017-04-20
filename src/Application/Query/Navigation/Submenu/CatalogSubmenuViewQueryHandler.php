@@ -55,7 +55,7 @@ class CatalogSubmenuViewQueryHandler
             $buttonViews[] = new SubmenuButtonView(
                 Category::CATALOG_ICON,
                 'navigation.category.catalog',
-                $this->navigationBuilder->getRoute('event_catalog_index'),
+                $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $query->sheet->getId()]),
                 Route::isCatalog($query->route)
             );
 
