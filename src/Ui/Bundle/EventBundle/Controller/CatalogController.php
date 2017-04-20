@@ -347,21 +347,22 @@ class CatalogController extends Controller
             ;
         }
 
-        return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'                        => $event,
-            'userSheet'                    => $sheet,
-            'sheet'                        => $sheetToDisplay,
-            'taggedData'                   => $taggedData,
-            'locale'                       => $locale,
-            'nomenclatures'                => $nomenclatures,
-            'participants'                 => $participants,
-            'templateData'                 => $templateData,
-            'isCatalog'                    => true,
-            'meetingRequest'               => $meetingRequest,
-            'isMeetingPublished'           => $isMeetingPublished,
-            'isMeetingRequestUpdateLocked' => $isMeetingRequestUpdateLocked,
-            'isMeetingRequestClosed'       =>$isMeetingRequestClosed,
-            'isAnsweringMeetingRequestClosed' =>$isAnsweringMeetingRequestClosed,
+        return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
+            'event'                           => $event,
+            'sheet'                           => $sheet,
+            'sheetToDisplay'                  => $sheetToDisplay,
+            'taggedData'                      => $taggedData,
+            'locale'                          => $locale,
+            'nomenclatures'                   => $nomenclatures,
+            'participants'                    => $participants,
+            'templateData'                    => $templateData,
+            'meetingRequest'                  => $meetingRequest,
+            'isMeetingPublished'              => $isMeetingPublished,
+            'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
+            'isMeetingRequestClosed'          => $isMeetingRequestClosed,
+            'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
+            'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
+            'isCatalog'                       => true,
         ]);
     }
 
