@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Validate;
 use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -54,13 +55,15 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
 
+        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATED)->shouldBeCalled();
+
         $batchJobQueue->createJob(
             [1, 2, 3],
             $admin,
             ['comment' => $comment]
         )->shouldBeCalled();
 
-        $command = new BatchValidate([1, 2, 3], $admin, $comment);
+        $command = new BatchValidate($event, [1, 2, 3], $admin, $comment);
 
         $handler = new BatchValidateHandler(
             $sheetRepository->reveal(),
