@@ -536,14 +536,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Update }
     vimeet_infrastructure.vimeet.application.command.meeting.update_spot_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpotHandler
         arguments:
@@ -604,14 +596,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Cancel }
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
         arguments:
@@ -1881,20 +1865,6 @@ services:
     #
     vimeet.components.paginator:
         class: Proximum\Vimeet\Application\Components\Paginator\Paginator
-
-    #
-    # Schedule component
-    #
-    vimeet.application.components.schedule.schedule_builder:
-        class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-            - '@vimeet_infrastructure.repository.happening_repository'
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
 
     #
     # Meeting Component
