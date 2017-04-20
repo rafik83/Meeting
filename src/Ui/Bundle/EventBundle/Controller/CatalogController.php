@@ -349,8 +349,8 @@ class CatalogController extends Controller
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'                        => $event,
-            'userSheet'                    => $sheet,
-            'sheet'                        => $sheetToDisplay,
+            'sheet'                        => $sheet,
+            'sheetToDisplay'               => $sheetToDisplay,
             'taggedData'                   => $taggedData,
             'locale'                       => $locale,
             'nomenclatures'                => $nomenclatures,
