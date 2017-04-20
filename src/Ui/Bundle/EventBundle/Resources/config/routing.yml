@@ -300,6 +300,17 @@ event_sheet_group_requests_list:
     defaults: { _controller: EventBundle:Group/Request:list }
 
 #
+# Sheets group
+#
+
+event_sheet_group_participant_index:
+    path: /sheets-group/{sheetGroup}/participants/list
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Group/Participant:index }
+
+#
 # Sheet Billing
 #
 

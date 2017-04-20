@@ -83,6 +83,10 @@ event.sheet.export.fields.sheet_zipcode: 'Code postal'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.request: 'Gestion des RDVs'
+group.home.link.participant: 'Participants'
+group.participant.title: 'Gestion des participants'
+group.participant.list.participant: Participant
+group.participant.list.sheets: Fiches
 group.request.list.link.home: 'Retour à la gestion de mon entité'
 group.request.list.no-preference: 'Pas de préférence'
 group.request.list.state.approved: Acceptée

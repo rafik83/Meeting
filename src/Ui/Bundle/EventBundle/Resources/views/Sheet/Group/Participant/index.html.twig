@@ -1,0 +1,37 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ groupView.title }} - {{ event.title }}
+{% endblock %}
+
+{% block content %}
+<section class="main mg-top">
+    <header>
+        <h1>
+            {{ groupView.title }}
+            -
+            {{ 'group.participant.title'|trans }}
+        </h1>
+    </header>
+    <div class="main__container">
+            <a href="{{ path('event_sheet_group_index', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right">
+                {{ 'group.request.list.link.home'|trans }}
+            </a>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ 'group.participant.list.participant'|trans }}</th>
+                        <th>{{ 'group.participant.list.sheets'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+</section>
+{% endblock %}
