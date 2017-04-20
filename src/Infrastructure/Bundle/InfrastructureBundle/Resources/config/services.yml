@@ -1980,6 +1980,11 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
+    application.components.messaging.message_factory:
+        class: Proximum\Vimeet\Application\Components\Messaging\MessageFactory
+        arguments:
+            - '@command.messaging.batch.create_handler'
+
     #
     # Security Component
     #
@@ -3263,6 +3268,16 @@ services:
         arguments:
             - '@repository.messaging.campaign_repository'
             - '@command.messaging.campaign.process_handler'
+        tags:
+            - { name: console.command }
+
+    command.send_emailing_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@application.components.messaging.message_factory',
+            - '@command.messaging.batch.process_handler'
         tags:
             - { name: console.command }
 

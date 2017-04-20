@@ -27,6 +27,12 @@ interface JobQueueInterface
     public function sendCampaign(Campaign $campaign);
 
     /**
+     * @param Event   $event
+     * @param Int[] $sheetIds
+     */
+    public function sendEmailing(Event $event, array $sheetIds);
+
+    /**
      * @param Type[] $types
      * @param string $orderBy
      * @param string $emailToNotify

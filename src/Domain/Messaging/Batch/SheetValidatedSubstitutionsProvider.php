@@ -24,6 +24,18 @@ class SheetValidatedSubstitutionsProvider extends AbstractSubstitutionsProvider
     const TAG_PARTICIPATION_TYPE  = '%participationType%';
 
     /**
+     * @var array
+     */
+    protected $placeholders = [
+        self::TAG_EVENT_NAME,
+        self::TAG_FIRSTNAME,
+        self::TAG_LASTNAME,
+        self::TAG_CATALOG_ONLINE_DATE,
+        self::TAG_SCHEDULE_DATE,
+        self::TAG_PARTICIPATION_TYPE
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function getSubstitutions(MailRecipientInterface $recipient, Sheet $sheet, $locale, $placeholders = [])

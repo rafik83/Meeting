@@ -27,18 +27,6 @@ class ProcessHandler
     private $substitutionsProvider;
 
     /**
-     * @var array
-     */
-    private $placeholders = [
-        '%event%',
-        '%catalogOnlineDate%',
-        '%scheduleDate%',
-        '%firstname%',
-        '%lastname%',
-        '%participationType%',
-    ];
-
-    /**
      * ProcessHandler constructor.
      *
      * @param SendGridApiAdapterInterface   $sendGridApiAdapter
@@ -57,10 +45,7 @@ class ProcessHandler
      */
     public function handle(Process $process)
     {
-        $this->sendGridApiAdapter->send(
-            $process->message,
-            $this->getReceivers($process)
-        );
+        $this->sendGridApiAdapter->send($process->message, $this->getReceivers($process));
     }
 
     /**
@@ -73,11 +58,20 @@ class ProcessHandler
         $receivers = [];
 
         foreach ($process->sheets as $sheet) {
+            $locale = $sheet->getOwnerLocale();
+
+            // get subject and body placeholders
+            $placeholders = $this->substitutionsProvider->findPlaceholders(
+                $process->message->getSubject($locale),
+                $process->message->getContent($locale)
+            );
+
+            // replace placeholders by content
             $substitutions = $this->substitutionsProvider->getSubstitutions(
                 $sheet->getOwner(),
                 $sheet,
-                $process->locale,
-                $process->placeholders
+                $locale,
+                $placeholders
             );
 
             $email = $sheet->getOwner()->getEmail();
@@ -85,7 +79,7 @@ class ProcessHandler
             $receiver[$index] = new ReceiverView(
                 $email,
                 $substitutions,
-                $process->locale
+                $locale
             );
         }
 

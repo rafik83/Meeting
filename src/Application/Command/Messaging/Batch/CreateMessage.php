@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class CreateMessage
 {
@@ -27,11 +28,6 @@ class CreateMessage
     /**
      * @var string
      */
-    public $locale;
-
-    /**
-     * @var string
-     */
     public $name;
 
     /**
@@ -40,27 +36,25 @@ class CreateMessage
     public $subject;
 
     /**
-     * @var array
+     * @var Sheet[]
      */
-    public $subjectParameters;
+    public $sheets;
 
     /**
      * Create constructor.
      *
-     * @param Event  $event
-     * @param string $name
-     * @param string $subject
-     * @param array  $subjectParameters
-     * @param string $emailTemplate
-     * @param string $locale
+     * @param Event   $event
+     * @param Sheet[] $sheets
+     * @param string  $name
+     * @param string  $subject
+     * @param string  $emailTemplate
      */
-    public function __construct(Event $event, $name, $subject, array $subjectParameters, $emailTemplate, $locale)
+    public function __construct(Event $event, array $sheets, $name, $subject, $emailTemplate)
     {
-        $this->event             = $event;
-        $this->subject           = $subject;
-        $this->subjectParameters = $subjectParameters;
-        $this->emailTemplate     = $emailTemplate;
-        $this->locale            = $locale;
-        $this->name              = $name;
+        $this->event         = $event;
+        $this->subject       = $subject;
+        $this->emailTemplate = $emailTemplate;
+        $this->name          = $name;
+        $this->sheets        = $sheets;
     }
 }

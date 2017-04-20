@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 abstract class AbstractSubstitutionsProvider
 {
     /**
+     * @var array
+     */
+    protected $placeholders = [];
+
+    /**
      * @param MailRecipientInterface $recipient
      * @param Sheet                  $sheet
      * @param string                 $locale
@@ -29,4 +34,26 @@ abstract class AbstractSubstitutionsProvider
         $locale,
         $placeholders = []
     );
+
+    /**
+     * @param string $messageTitle
+     * @param string $messageBody
+     *
+     * @return array
+     */
+    public function findPlaceholders($messageTitle, $messageBody)
+    {
+        $foundPlaceholders = [];
+
+        foreach ($this->placeholders as $placeholder) {
+            if (false !== strpos($messageBody, $placeholder)) {
+                $foundPlaceholders[] = $placeholder;
+            }
+            if (false !== strpos($messageTitle, $placeholder)) {
+                $foundPlaceholders[] = $placeholder;
+            }
+        }
+
+        return $foundPlaceholders;
+    }
 }
