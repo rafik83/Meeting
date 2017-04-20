@@ -311,7 +311,7 @@ class Participant implements MailRecipientInterface
     /**
      * @return bool
      */
-    public function isIsFullyUnavailable()
+    public function isFullyUnavailable()
     {
         return $this->isFullyUnavailable;
     }
