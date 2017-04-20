@@ -1543,6 +1543,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
 
+    command.messaging.batch.create_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler
+        arguments:
+            - '@twig'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessage }
+
     command.planner.import_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
         arguments:
