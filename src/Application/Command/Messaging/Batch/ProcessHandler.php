@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Domain\Messaging\Batch\AbstractSubstitutionsProvider;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class ProcessHandler
 {
@@ -26,6 +25,18 @@ class ProcessHandler
      * @var AbstractSubstitutionsProvider
      */
     private $substitutionsProvider;
+
+    /**
+     * @var array
+     */
+    private $placeholders = [
+        '%event%',
+        '%catalogOnlineDate%',
+        '%scheduleDate%',
+        '%firstname%',
+        '%lastname%',
+        '%participationType%',
+    ];
 
     /**
      * ProcessHandler constructor.
@@ -46,37 +57,35 @@ class ProcessHandler
      */
     public function handle(Process $process)
     {
-        $placeholders = [
-            '%event%',
-            '%catalogOnlineDate%',
-            '%scheduleDate%',
-            '%firstname%',
-            '%lastname%',
-            '%participationType%',
-        ];
-
         $this->sendGridApiAdapter->send(
             $process->message,
-            $this->getReceivers($process->sheets, $process->locale)
+            $this->getReceivers($process)
         );
     }
 
     /**
-     * @param Sheet[] $sheets
-     * @param string  $locale
+     * @param Process $process
      *
      * @return array
      */
-    private function getReceivers(array $sheets, $locale)
+    private function getReceivers(Process $process)
     {
         $receivers = [];
 
-        foreach ($sheets as $sheet) {
-            $email            = $sheet->getOwner()->getEmail();
-            $receiver[$email] = new ReceiverView(
+        foreach ($process->sheets as $sheet) {
+            $substitutions = $this->substitutionsProvider->getSubstitutions(
+                $sheet->getOwner(),
+                $sheet,
+                $process->locale,
+                $process->placeholders
+            );
+
+            $email = $sheet->getOwner()->getEmail();
+            $index = $email . $sheet->getId();
+            $receiver[$index] = new ReceiverView(
                 $email,
-                [],
-                $locale
+                $substitutions,
+                $process->locale
             );
         }
 
