@@ -295,7 +295,7 @@ class Participant implements MailRecipientInterface
     /**
      * @return bool
      */
-    public function isHasRequestAssigned()
+    public function hasRequestAssigned()
     {
         return $this->hasRequestAssigned;
     }

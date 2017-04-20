@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -115,6 +116,8 @@ class SheetListViewQueryHandler
             $follower = $sheet->getFollower() ? $sheet->getFollower() : null;
 
             $participants = [];
+            $hasParticipantUnavailableWithMeetingRequest = false;
+
             foreach ($sheet->getParticipants() as $participant) {
 
                 $fullname = $this
@@ -128,9 +131,14 @@ class SheetListViewQueryHandler
                     $participant->getUser()->getEmail(),
                     []
                 );
+
+                if ($participant->isFullyUnavailable() && $participant->hasRequestAssigned()) {
+                    $hasParticipantUnavailableWithMeetingRequest = true;
+                }
             }
 
             $followerView = null;
+
             if (null !== $follower) {
                 $followerView = new FollowerView(
                         $follower->getId(),
@@ -151,7 +159,8 @@ class SheetListViewQueryHandler
                     'admin_sheet_details',
                     ['sheet' => $sheet->getId(), 'event' => $sheetListViewQuery->event->getId()]
                 ),
-                $participants
+                $participants,
+                $hasParticipantUnavailableWithMeetingRequest
             );
         }
 
