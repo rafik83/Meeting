@@ -7,7 +7,7 @@
 {% block content %}
     <div class="catalog catalog--advanced">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
-        {{ include('EventBundle:MeetingRequest/Partials:catalog.html.twig' }}
+        {{ include('EventBundle:MeetingRequest/Partials:catalog.html.twig', {tipTranslationViews: null}) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}
