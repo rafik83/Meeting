@@ -17,11 +17,7 @@ HasParticipantUnavailableWithMeetingRequestCriteria.prototype = new Criteria();
  */
 HasParticipantUnavailableWithMeetingRequestCriteria.prototype.meetCriteria = function(sheets) {
 
-    console.log('ici');
-    console.log(this.filter);
-
     if (this.filter === true) {
-        console.log('la');
         return sheets.filter(function (sheet) {
             return sheet.hasParticipantUnavailableWithMeetingRequest === true;
         }.bind(this));
