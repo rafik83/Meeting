@@ -478,7 +478,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enabled = true AND sheet.inCatalog = true')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
