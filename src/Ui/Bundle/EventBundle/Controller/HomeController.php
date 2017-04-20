@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -77,7 +78,7 @@ class HomeController extends Controller
      */
     private function attemptDispatchUser(Event $event, UserInterface $user = null)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && null !== $user) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $user instanceof User) {
             $homeDispatchView = $this->get('components.home.home_dispatch')->handle($event, $user);
 
             if (null !== $homeDispatchView) {

@@ -150,10 +150,10 @@ form.event_billing_configuration.children.translations.prototype.children.paymen
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder: 'Exemple adresse, siret, capital ...'
 form.event_configure_date.children.catalogOnlineDate.label: 'Mise en ligne du catalogue'
+form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloquer les acceptations/refus des RDV'
+form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
-form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
-form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloquer les acceptations/refus des RDV'
 form.event_configure_date.children.submit.label: Enregistrer
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
@@ -316,10 +316,14 @@ form.messaging_create_message.children.content.label: Contenu
 form.messaging_create_message.children.name.label: 'Nom emailing'
 form.messaging_create_message.children.subject.label: Sujet
 form.messaging_create_message.children.submit.label: Enregistrer
-form.messaging_create_message.children.translations.prototype.label: 'Traduction'
-form.messaging_create_message.children.translations.prototype.children.locale.label: 'Langue'
-form.messaging_create_message.children.translations.prototype.children.subject.label: 'Sujet'
-form.messaging_create_message.children.translations.prototype.children.content.label: 'Contenu'
+form.messaging_create_message.children.translations.prototype.children.content.label: Contenu
+form.messaging_create_message.children.translations.prototype.children.locale.label: Langue
+form.messaging_create_message.children.translations.prototype.children.subject.label: Sujet
+form.messaging_create_message.children.translations.prototype.label: Traduction
+form.messaging_update_message.children.content.label: Contenu
+form.messaging_update_message.children.name.label: 'Nom emailing'
+form.messaging_update_message.children.subject.label: Sujet
+form.messaging_update_message.children.submit.label: Enregistrer
 form.new_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.new_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.new_password.children.submit.label: Envoyez
@@ -338,11 +342,13 @@ form.nomenclature_update_type.children.sort.label: Tri
 form.nomenclature_update_type.children.submit.label: Enregistrer
 form.nomenclature_update_type.children.title.label: Titre
 form.order_filter.children.sheet.enabled.label: Fiche
-form.order_invoice_find.children.type.label: 'Chercher'
-form.order_invoice_find.children.type.choices.invoice: 'Facture'
-form.order_invoice_find.children.type.choices.order: 'Commande'
+form.order_find.children.numero.label: 'Entrer le numéro de la commande'
+form.order_find.children.submit.label: Rechercher
 form.order_invoice_find.children.numero.label: 'Numéro de la commande/facture'
 form.order_invoice_find.children.submit.label: Rechercher
+form.order_invoice_find.children.type.choices.invoice: Facture
+form.order_invoice_find.children.type.choices.order: Commande
+form.order_invoice_find.children.type.label: Chercher
 form.order_row.children.description.label: Description
 form.order_row.children.label.label: Intitulé
 form.order_row.children.price.label: 'Prix unitaire'
@@ -397,13 +403,13 @@ form.payment_mode_choice.children.paymentMode.bank_check: Chèque
 form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_mode_choice.children.paymentMode.paypal: Paypal
 form.planner_export.children.lockMeetingRequest.label: 'Verrouiller les demandes de rendez-vous'
-form.planner_export.children.lockMeetingRequest.option.yes: 'Oui'
-form.planner_export.children.lockMeetingRequest.option.no: 'Non'
+form.planner_export.children.lockMeetingRequest.option.no: Non
+form.planner_export.children.lockMeetingRequest.option.yes: Oui
 form.planner_export.children.solutionType.label: 'Type de solution à exporter'
 form.planner_export.children.solutionType.option.from_scratch: 'Réinitialisation - les rdv déjà créés sont supprimés'
-form.planner_export.children.solutionType.option.moving_allowed: 'Optimiser en bougeant les rdvs (sauf ceux qui ont un lieu ou créneau bloqué)'
 form.planner_export.children.solutionType.option.locked: 'Optimiser sans bouger les rdv'
-form.planner_export.children.submit.label: 'Exporter'
+form.planner_export.children.solutionType.option.moving_allowed: 'Optimiser en bougeant les rdvs (sauf ceux qui ont un lieu ou créneau bloqué)'
+form.planner_export.children.submit.label: Exporter
 form.planner_import.children.file.label: 'Solution à importer'
 form.planner_import.children.submit.label: Importer
 form.planner_import.confirm.submit.label: 'L''import d''une nouvelle solution a pour effet de supprimer l''ensemble des rendez-vous positionnés de l''événement, êtes-vous sûr de vouloir réaliser cette action ?'
