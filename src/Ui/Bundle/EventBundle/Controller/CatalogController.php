@@ -85,7 +85,10 @@ class CatalogController extends Controller
         $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
 
         if (empty($visibleTypes)) {
-            return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
+            return $this->render(
+                'EventBundle:Catalog:no-visible-type.html.twig',
+                ['event' => $event, 'sheet' => $sheet]
+            );
         }
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(
