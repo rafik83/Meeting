@@ -76,7 +76,7 @@ class ProcessHandler
 
             $email = $sheet->getOwner()->getEmail();
             $index = $email . $sheet->getId();
-            $receiver[$index] = new ReceiverView(
+            $receivers[$index] = new ReceiverView(
                 $email,
                 $substitutions,
                 $locale

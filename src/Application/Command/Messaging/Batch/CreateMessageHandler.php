@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Domain\Messaging\Batch\AbstractSubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
 class CreateMessageHandler
@@ -34,15 +33,13 @@ class CreateMessageHandler
     /**
      * CreateHandler constructor.
      *
-     * @param \Twig_Environment             $twig
-     * @param TranslatorInterface           $translator
-     * @param AbstractSubstitutionsProvider $abstractSubstitutionsProvider
-     * @param \DateTimeInterface            $dateTime
+     * @param \Twig_Environment   $twig
+     * @param TranslatorInterface $translator
+     * @param \DateTimeInterface  $dateTime
      */
     public function __construct(
         \Twig_Environment $twig,
         TranslatorInterface $translator,
-        AbstractSubstitutionsProvider $abstractSubstitutionsProvider,
         \DateTimeInterface $dateTime
     ) {
         $this->twig       = $twig;

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MessageFactory
 {
@@ -34,9 +35,9 @@ class MessageFactory
     }
 
     /**
-     * @param Event  $event
-     * @param array  $sheets
-     * @param string $messageType
+     * @param Event   $event
+     * @param Sheet[] $sheets
+     * @param string  $messageType
      *
      * @return Message
      * @throw \InvalidArgumentException

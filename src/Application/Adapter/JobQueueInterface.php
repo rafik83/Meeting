@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -27,7 +26,7 @@ interface JobQueueInterface
     public function sendCampaign(Campaign $campaign);
 
     /**
-     * @param Event   $event
+     * @param Event $event
      * @param Int[] $sheetIds
      */
     public function sendEmailing(Event $event, array $sheetIds);
