@@ -3603,6 +3603,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@adapter.job_queue_adapter'
 
     #
     # Filter
@@ -4214,6 +4215,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@domain.request.participant_assigned_aggregator'
+    command.aggregate.participant.full_unavailability_for_given_participants_handler:
+        class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityForGivenParticipantsHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.participant_repository'
+             - '@domain.unavailability.participant_unavailable_aggregator'
 
     #
     # Symfony Command Aggregator
@@ -4230,6 +4236,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.aggregate.participant.assigned_to_request_handler'
+        tags:
+            - { name: console.command }
+    symfony_command.aggregate.participant.participants_given_full_unavailability_aggregate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantsGivenFullUnavailabilityAggregateCommand
+        arguments:
+            - '@command.aggregate.participant.full_unavailability_for_given_participants_handler'
         tags:
             - { name: console.command }
 

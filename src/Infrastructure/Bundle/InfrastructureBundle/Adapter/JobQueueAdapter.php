@@ -17,11 +17,13 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantFullUnavailabilityAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantsGivenFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
@@ -182,6 +184,21 @@ class JobQueueAdapter implements JobQueueInterface
             $onlyInCatalog
         ]);
         $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateParticipantsGivenFullUnavailability(array $participants)
+    {
+        if (!empty($participants)) {
+            $job = new Job(ParticipantsGivenFullUnavailabilityAggregateCommand::NAME, [
+                implode(',', array_map(function (Participant $participant) {
+                    return $participant->getId();
+                }, $participants))
+            ]);
+            $this->setJob($job);
+        }
     }
 
     /**
