@@ -75,7 +75,7 @@ class SendEmailingCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Send emailing to a pull of sheets')
             ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
-            ->addArgument('emailingType', InputArgument::REQUIRED, 'Emailing type')
+            ->addArgument('emailingId', InputArgument::REQUIRED, 'Emailing ID')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids');
     }
 

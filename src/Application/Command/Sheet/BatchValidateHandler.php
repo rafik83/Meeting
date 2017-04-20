@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -64,6 +65,9 @@ class BatchValidateHandler
         if (!empty($batchValidate->ids)) {
             // reindex sheet in elasticsearch
             $this->jobQueue->indexSheets($batchValidate->ids);
+
+            // send email
+            $this->jobQueue->sendEmailing($batchValidate->event, $batchValidate->ids, Events::SHEET_VALIDATED);
             
             $this->batchJobQueue->createJob(
                 $batchValidate->ids,

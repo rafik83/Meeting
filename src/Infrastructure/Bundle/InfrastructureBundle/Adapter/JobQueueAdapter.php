@@ -25,6 +25,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexShee
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -174,11 +175,15 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function sendEmailing(Event $event, array $sheetIds)
+    public function sendEmailing(Event $event, array $sheetIds, $emailId)
     {
         $job = new Job(
             SendEmailingCommand::NAME,
-            [$event->getId(), implode(',', $sheetIds)]
+            [
+                $event->getId(),
+                $emailId,
+                implode(',', $sheetIds),
+            ]
         );
         $this->setJob($job);
     }

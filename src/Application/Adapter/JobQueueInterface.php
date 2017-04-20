@@ -26,10 +26,11 @@ interface JobQueueInterface
     public function sendCampaign(Campaign $campaign);
 
     /**
-     * @param Event $event
-     * @param Int[] $sheetIds
+     * @param Event  $event
+     * @param Int[]  $sheetIds
+     * @param string $emailId
      */
-    public function sendEmailing(Event $event, array $sheetIds);
+    public function sendEmailing(Event $event, array $sheetIds, $emailId);
 
     /**
      * @param Type[] $types

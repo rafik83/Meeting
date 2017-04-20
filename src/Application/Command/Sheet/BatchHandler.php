@@ -107,6 +107,7 @@ class BatchHandler
 
         if ($batch->validate) {
             return $this->batchValidateHandler->handle(new BatchValidate(
+                $batch->event,
                 $batch->ids,
                 $batch->admin,
                 $batch->validateComment

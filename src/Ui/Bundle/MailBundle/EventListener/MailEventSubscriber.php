@@ -432,7 +432,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         return [
             Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
             Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
-            Events::SHEET_VALIDATED                    => 'onSheetValidated',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
             Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
             Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
