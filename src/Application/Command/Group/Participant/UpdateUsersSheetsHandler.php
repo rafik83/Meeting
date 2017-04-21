@@ -31,6 +31,12 @@ class UpdateUsersSheetsHandler
     /** @var UserRepositoryInterface */
     private $userRepository;
 
+    /**
+     * @param ParticipantRepositoryInterface   $participantRepository
+     * @param UserRepositoryInterface          $userRepository
+     * @param UsersParticipantViewQueryHandler $usersParticipantViewQueryHandler
+     * @param UserToParticipant                $userToParticipant
+     */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
