@@ -100,4 +100,124 @@ class User extends AbstractUser implements MailRecipientInterface
 
         return $this->account->getLastName();
     }
+
+    /**
+     * @return string
+     */
+    public function getAvatar()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getAvatar();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPosition()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getPosition();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getPhone();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getMobile();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getAddress();
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipCode()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getZipCode();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getCity();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getCountry();
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getWebsite();
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        if (null === $this->account) {
+            return '';
+        }
+
+        return $this->account->getGender();
+    }
 }

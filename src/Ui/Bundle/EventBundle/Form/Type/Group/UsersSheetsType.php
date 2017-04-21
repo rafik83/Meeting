@@ -29,10 +29,11 @@ class UsersSheetsType extends AbstractType
         foreach ($updateUsersSheets->sheetsByUser as $userId => $value) {
             $builder
                 ->add($userId, SheetChoiceType::class, [
-                    'attr'  => ['class' => 'select2 form-control'],
+                    'attr'     => ['class' => 'select2 form-control'],
                     'group'    => $options['group'],
                     'multiple' => true,
                     'label'    => false,
+                    'required' => false,
                 ])
             ;
         }

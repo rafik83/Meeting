@@ -1669,6 +1669,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invo\BatchGenerateInvoice }
 
+    command.group.participant.update_users_sheets_handler:
+        class: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheetsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@query.sheet.group.participant.participant_view_query_handler'
+            - '@participant.user_to_participant'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
+
     #
     # Security
     #
@@ -3397,6 +3407,15 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # Participant
+    #
+    participant.user_to_participant:
+        class: Proximum\Vimeet\Domain\Participant\UserToParticipant
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.template_data_factory'
 
     #
     # Payment

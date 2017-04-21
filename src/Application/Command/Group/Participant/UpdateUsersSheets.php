@@ -12,19 +12,24 @@ namespace Proximum\Vimeet\Application\Command\Group\Participant;
 
 use Proximum\Vimeet\Application\View\Group\Participant\UserParticipantView;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class UpdateUsersSheets
 {
-    /**
-     * @var array of User id => Sheet[]
-     */
+    /** @var Group */
+    public $group;
+
+    /** @var array of User id => Sheet[] */
     public $sheetsByUser = [];
 
     /**
+     * @param Group                 $group
      * @param UserParticipantView[] $userParticipantViews
      */
-    public function __construct(array $userParticipantViews)
+    public function __construct(Group $group, array $userParticipantViews)
     {
+        $this->group = $group;
+
         foreach ($userParticipantViews as $userParticipantView) {
             $this->sheetsByUser[$userParticipantView->userId] = $userParticipantView->sheets;
         }

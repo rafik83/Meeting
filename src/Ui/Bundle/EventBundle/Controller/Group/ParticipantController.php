@@ -46,22 +46,33 @@ class ParticipantController extends Controller
             new UsersParticipantViewQuery($sheetGroup)
         );
 
-        $updateUsersSheets = new UpdateUsersSheets($userParticipantViews);
+        $updateUsersSheets = new UpdateUsersSheets($sheetGroup, $userParticipantViews);
 
         $form = $this->createForm(
             UsersSheetsType::class,
             $updateUsersSheets,
-            ['group' => $sheetGroup, 'updateUsersSheets' => $updateUsersSheets]
+            [
+                'group' => $sheetGroup,
+                'updateUsersSheets' => $updateUsersSheets,
+            ]
         );
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('command.group.participant.update_users_sheets_handler')->handle($updateUsersSheets);
+
+            $this->addFlash('success', 'flash.group.participant.update_success');
+
+            return $this->redirectToRoute(
+                'event_sheet_group_participant_index',
+                ['sheetGroup' => $sheetGroup->getId()]
+            );
         }
 
         return $this->render('EventBundle:Sheet/Group/Participant:index.html.twig', [
             'event'                => $event,
             'groupView'            => $groupView,
             'userParticipantViews' => $userParticipantViews,
-            'form'  => $form->createView(),
+            'form'                 => $form->createView(),
         ]);
     }
 }
