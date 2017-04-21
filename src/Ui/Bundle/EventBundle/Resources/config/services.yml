@@ -438,6 +438,12 @@ services:
             - '%domain%'
             - '%mailer_sender%'
 
+    user_to_group_manager_checker:
+        class: Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
 
     #
     # Validators
