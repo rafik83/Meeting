@@ -37,6 +37,7 @@ class SheetValidatedSubstitutionsProvider extends AbstractSubstitutionsProvider
         $this->placeholders = array_merge($this->placeholders, [
             self::TAG_CATALOG_ONLINE_DATE,
             self::TAG_SCHEDULE_DATE,
+            self::TAG_SHEET_LINK
         ]);
     }
 
@@ -65,7 +66,7 @@ class SheetValidatedSubstitutionsProvider extends AbstractSubstitutionsProvider
                     $schedulePublishDate = $event->getConfiguration()->getSchedulePublishDate();
                     return $schedulePublishDate !== null ? $dateFormatter->format($schedulePublishDate) : '';
                 case self::TAG_SHEET_LINK:
-                    return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', ['sheet' => $sheet->getId(), '_locale_' => $locale]);
+                    return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', ['sheet' => $sheet->getId(), '_locale' => $locale]);
                 default:
                     throw new InvalidMessagePlaceholderException($placeholder);
             }
