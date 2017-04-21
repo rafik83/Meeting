@@ -1539,7 +1539,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler
         arguments:
             - '@adapter.sendgrid_api_adapter'
-            - '@domain.messaging.batch.sheet_validated_substitutions_provider'
+            - '@domain.messaging.emailing.sheet_validated_substitutions_provider'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
 
@@ -4119,8 +4119,10 @@ services:
             - '@components.token.user.activate_account_token_generator'
             - '@query.sheet.planning.sheet_planning_view_query_handler'
 
-    domain.messaging.batch.sheet_validated_substitutions_provider:
-        class: Proximum\Vimeet\Domain\Messaging\Batch\SheetValidatedSubstitutionsProvider
+    domain.messaging.emailing.sheet_validated_substitutions_provider:
+        class: Proximum\Vimeet\Domain\Messaging\Emailing\SheetValidatedSubstitutionsProvider
+        arguments:
+            - '@adapter.event_url_generator'
 
     #
     # Emailing Query
