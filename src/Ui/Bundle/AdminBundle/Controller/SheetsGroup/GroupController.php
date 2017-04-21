@@ -60,7 +60,7 @@ class GroupController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $user = $this->get('tactician.commandbus')->handle($query);
-                
+
             } catch (UserNotAllowedToManageGroupException $exception) {
                 $this->notifyFlashError($exception->email,  'flash.admin.group.create.error.user_not_allowed_to_manage');
             } catch (UserNotFoundForGivenEmailException $exception) {
