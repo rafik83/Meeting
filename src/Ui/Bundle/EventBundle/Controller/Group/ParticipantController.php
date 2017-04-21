@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets;
 use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
-use Proximum\Vimeet\Application\View\Group\Participant\UserParticipantView;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\UsersSheetsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
