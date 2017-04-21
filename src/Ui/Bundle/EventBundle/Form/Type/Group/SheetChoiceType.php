@@ -60,7 +60,7 @@ class SheetChoiceType extends AbstractType
                 },
                 'choices'      => function (Options $options) {
                     $sheets = $this->sheetRepository->getByGroup($options['group']);
-                    $this->sortedSheet->sort($sheets);
+                    $sheets = $this->sortedSheet->sort($sheets);
 
                     return $sheets;
                 },

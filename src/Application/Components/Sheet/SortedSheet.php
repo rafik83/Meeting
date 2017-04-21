@@ -28,20 +28,28 @@ class SortedSheet
 
     /**
      * @param Sheet[] $sheets
+     *
+     * @return Sheet[]
      */
-    public function sort(array &$sheets)
+    public function sort(array $sheets)
     {
-        // Warmup sheetInfoGuesserCache
-        // This avoids the issue "Warning: usort(): Array was modified by the user comparison function"
-        foreach($sheets as $sheet) {
-            $this->sheetInfoGuesserCache->guessSheetTitle($sheet, null);
+        $sheetsWithTitle = [];
+
+        foreach ($sheets as $sheet) {
+            $sheetsWithTitle[] = [
+                'title' => $this->sheetInfoGuesserCache->guessSheetTitle($sheet, null),
+                'sheet' => $sheet,
+            ];
         }
 
-        usort($sheets, function (Sheet $one, Sheet $other) {
-            return strcasecmp(
-                $this->sheetInfoGuesserCache->guessSheetTitle($one, null),
-                $this->sheetInfoGuesserCache->guessSheetTitle($other, null)
-            );
+        usort($sheetsWithTitle, function ($sheetOne, $sheetTwo) {
+            return strcasecmp($sheetOne['title'], $sheetTwo['title']);
         });
+
+        $sheets = array_map(function($sheetWithTitle) {
+            return $sheetWithTitle['sheet'];
+        }, $sheetsWithTitle);
+
+        return $sheets;
     }
 }
