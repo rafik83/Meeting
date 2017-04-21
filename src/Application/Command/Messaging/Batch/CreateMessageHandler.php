@@ -55,7 +55,7 @@ class CreateMessageHandler
      */
     public function handle(CreateMessage $command)
     {
-        $message = new Message($command->event, $this->dateTime, $command->name);
+        $message = new Message($command->event, $this->dateTime, $command->name, $command->sendToEmailTeam);
 
         foreach ($command->sheets as $sheet) {
             $locale = $sheet->getOwnerLocale();

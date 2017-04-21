@@ -81,7 +81,7 @@ class SendGridApiAdapter implements SendGridApiAdapterInterface
 
             // For each locale, send the chunck of receivers for this locale with the mail
             foreach ($receiverByLocale as $locale => $receiversForLocale) {
-                $this->doSend($this->prepare(clone $rawMails[$locale], $receiversForLocale));
+                $this->doSend($this->prepare($message, clone $rawMails[$locale], $receiversForLocale));
             }
         }
     }
@@ -118,16 +118,21 @@ class SendGridApiAdapter implements SendGridApiAdapterInterface
     /**
      * Adds receivers and substitutions to a given SendGrid Mail.
      *
+     * @param Message        $message
      * @param Mail           $mail
      * @param ReceiverView[] $receivers An array of ReceiverView instances indexed by email
      *
      * @return Mail
      */
-    private function prepare(Mail $mail, array $receivers)
+    private function prepare(Message $message, Mail $mail, array $receivers)
     {
         foreach ($receivers as $email => $receiver) {
             $personalization = new Personalization();
             $personalization->addTo(new Email(null, (string) $email));
+
+            if ($message->isSendToEmailTeam()) {
+                $personalization->addBcc($message->getEvent()->getEmailTeam());
+            }
 
             foreach ($receiver->getReplaces() as $placeholder => $value) {
                 $personalization->addSubstitution((string) $placeholder, (string) $value);

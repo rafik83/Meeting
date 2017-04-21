@@ -38,11 +38,12 @@ class MessageFactory
      * @param Event   $event
      * @param Sheet[] $sheets
      * @param string  $messageId
+     * @param bool    $sendEmailToTeam
      *
      * @return Message
      * @throw \InvalidArgumentException
      */
-    public function create(Event $event, array $sheets, $messageId)
+    public function create(Event $event, array $sheets, $messageId, $sendEmailToTeam = false)
     {
         switch ($messageId) {
             case Events::SHEET_VALIDATED:
@@ -50,7 +51,8 @@ class MessageFactory
                     $event,
                     $sheets,
                     Events::SHEET_VALIDATED,
-                    'mail.sheet.validation.validate.subject', 'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig'
+                    'mail.sheet.validation.validate.subject', 'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
+                    $sendEmailToTeam
                 );
                 break;
             default:

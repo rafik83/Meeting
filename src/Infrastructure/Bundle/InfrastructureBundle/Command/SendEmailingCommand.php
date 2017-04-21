@@ -22,7 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SendEmailingCommand extends Command
 {
-    const NAME = 'vimeet:emailing:send';
+    const NAME     = 'vimeet:emailing:send';
+    const BOOL_YES = 'YES';
+    const BOOL_NO  = 'NO';
 
     /**
      * @var EventRepositoryInterface
@@ -76,7 +78,8 @@ class SendEmailingCommand extends Command
             ->setDescription('Send emailing to a pull of sheets')
             ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
             ->addArgument('emailingId', InputArgument::REQUIRED, 'Emailing ID')
-            ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids');
+            ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids')
+            ->addArgument('sendEmailToTeam', InputArgument::REQUIRED, 'Sheet ids', self::BOOL_NO);
     }
 
     /**
@@ -84,16 +87,17 @@ class SendEmailingCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $event     = $this->eventRepository->getById($input->getArgument('eventId'));
-        $sheetIds  = explode(',', $input->getArgument('sheetIds'));
-        $sheets    = $this->sheetRepository->findByIds($sheetIds);
-        $messageId = $input->getArgument('emailingId');
+        $event           = $this->eventRepository->getById($input->getArgument('eventId'));
+        $sheetIds        = explode(',', $input->getArgument('sheetIds'));
+        $sheets          = $this->sheetRepository->findByIds($sheetIds);
+        $messageId       = $input->getArgument('emailingId');
+        $sendEmailToTeam = $input->getArgument('sendEmailToTeam') === self::BOOL_YES ? true : false;
 
         if (null === $event) {
             throw new \InvalidArgumentException('Event not found.');
         }
 
-        $message = $this->messageFactory->create($event, $sheets, $messageId);
+        $message = $this->messageFactory->create($event, $sheets, $messageId, $sendEmailToTeam);
 
         $this->processHandler->handle(new Process($message, $sheets));
     }
