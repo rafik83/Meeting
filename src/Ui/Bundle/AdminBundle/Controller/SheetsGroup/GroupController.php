@@ -56,30 +56,15 @@ class GroupController extends Controller
 
         $query = new UserViewQuery($event);
         $form  = $this->createForm(SearchType::class, $query, ['event' => $event]);
-        $translator = $this->get('translator');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $user = $this->get('tactician.commandbus')->handle($query);
-
+                
             } catch (UserNotAllowedToManageGroupException $exception) {
-                $this->addFlash(
-                    'error',
-                    $translator->trans(
-                        'flash.admin.group.create.error.user_not_allowed_to_manage',
-                        ['%userName%' => $exception->userName],
-                        'flashes'
-                    )
-                );
+                $this->notifyFlashError($exception->email,  'flash.admin.group.create.error.user_not_allowed_to_manage');
             } catch (UserNotFoundForGivenEmailException $exception) {
-                $this->addFlash(
-                    'error',
-                    $translator->trans(
-                        'flash.admin.group.create.error.email_not_found',
-                        ['%email%' => $exception->email],
-                        'flashes'
-                    )
-                );
+                $this->notifyFlashError($exception->email, 'flash.admin.group.create.error.email_not_found');
             }
         }
 
@@ -87,5 +72,23 @@ class GroupController extends Controller
             'event' => $event,
             'form'  => $form->createView()
         ]);
+    }
+
+    /**
+     * @param string $userEmail
+     * @param string $translationKey
+     */
+    private function notifyFlashError($userEmail, $translationKey)
+    {
+        $translator = $this->get('translator');
+
+        $this->addFlash(
+            'error',
+            $translator->trans(
+                $translationKey,
+                ['%email%' => $userEmail],
+                'flashes'
+            )
+        );
     }
 }

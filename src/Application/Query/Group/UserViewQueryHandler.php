@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Group;
 
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailException;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
@@ -55,8 +57,14 @@ class UserViewQueryHandler
             throw new UserNotFoundForGivenEmailException($query->email);
         }
 
-        if (false === $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($query->event, $user)) {
-            throw new UserNotAllowedToManageGroupException($user->getFullname());
+        try {
+            $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($query->event, $user);
+        } catch (UserAlreadyGroupManagerOnSameEventException $exception) {
+
+            throw new UserNotAllowedToManageGroupException($query->email);
+        } catch (UserAlreadyParticipantOrOwnerOnGroupOnSameEventException $exception) {
+
+            throw new UserNotAllowedToManageGroupException($query->email);
         }
 
         return new UserView($user->getId(), $user->getEmail(), $user->getFullname());

@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Service\SheetsGroup;
 
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -33,17 +35,26 @@ class UserToGroupManagerChecker
 
     /**
      * @param Event $event
-     * @param User $user
+     * @param User  $user
      *
      * @return bool
+     *
+     * @throws UserAlreadyGroupManagerOnSameEventException
+     * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
      */
     public function isUserToGroupManagerAllowed(Event $event, User $user)
     {
-        return (
-            true === $this->isUserAlreadyManagerOnSameEvent($event, $user)
-            &&
-            true === $this->isUserParticipantOrOwnerOfSheetOnGroupOnSameEvent($event, $user)
-        );
+        if ($this->isUserAlreadyManagerOnSameEvent($event, $user)) {
+
+            throw new UserAlreadyGroupManagerOnSameEventException();
+        }
+
+        if ($this->isUserParticipantOrOwnerOfSheetOnGroupOnSameEvent($event, $user)) {
+
+            throw new UserAlreadyParticipantOrOwnerOnGroupOnSameEventException();
+        }
+
+        return true;
     }
 
     /**

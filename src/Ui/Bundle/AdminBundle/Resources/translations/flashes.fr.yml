@@ -16,7 +16,7 @@ flash.admin.event.update.asset.failed: 'La génération du style des couleurs a 
 flash.admin.event.update.success: 'L''événement a bien été mis à jour'
 flash.admin.event.who_see_what.success: 'La règle a bien été mis à jour'
 flash.admin.group.create.error.email_not_found: 'Aucun utilisateur trouvé pour cette addresse e-mail : %email%'
-flash.admin.group.create.error.user_not_allowed_to_manage: 'L''utilisateur "%userName%" n''est pas autorisé à gérer une nouvelle entité'
+flash.admin.group.create.error.user_not_allowed_to_manage: 'L''utilisateur suivant n''est pas autorisé à gérer une nouvelle entité: %email%'
 flash.admin.happening.category.create.success: 'La catégorie de sous événement a bien été créée'
 flash.admin.happening.category.update.success: 'La catégorie de sous événement a bien été mise à jour'
 flash.admin.happening.create.success: 'Le sous événement a bien été créé'

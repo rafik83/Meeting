@@ -13,15 +13,15 @@ namespace Proximum\Vimeet\Application\Exception\Group;
 class UserNotAllowedToManageGroupException extends GroupException
 {
     /** @var string */
-    public $userName;
+    public $email;
 
     /**
      * UserNotAllowedToManageGroupException constructor.
      *
-     * @param string $userName
+     * @param string $email
      */
-    public function __construct($userName)
+    public function __construct($email)
     {
-        $this->userName = $userName;
+        $this->email = $email;
     }
 }
