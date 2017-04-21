@@ -27,9 +27,9 @@ class SortedSheet
     }
 
     /**
-     * {@inheritdoc}
+     * @param Sheet[] $sheets
      */
-    public function sort(&$sheets)
+    public function sort(array &$sheets)
     {
         // Warmup sheetInfoGuesserCache
         // This avoids the issue "Warning: usort(): Array was modified by the user comparison function"

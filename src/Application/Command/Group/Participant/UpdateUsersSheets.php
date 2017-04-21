@@ -18,7 +18,7 @@ class UpdateUsersSheets
     /**
      * @var array of User id => Sheet[]
      */
-    public $sheetsByUser;
+    public $sheetsByUser = [];
 
     /**
      * @param UserParticipantView[] $userParticipantViews

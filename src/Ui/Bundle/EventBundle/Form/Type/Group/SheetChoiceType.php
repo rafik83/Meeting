@@ -24,19 +24,26 @@ class SheetChoiceType extends AbstractType
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
     /** @var SortedSheet */
     private $sortedSheet;
+
     /** @var SheetInfoGuesserCache */
     private $sheetInfoGuesserCache;
 
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param SheetInfoGuesserCache    $sheetInfoGuesserCache
+     * @param SortedSheet              $sortedSheet
+     */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesserCache $sheetInfoGuesserCache,
         SortedSheet $sortedSheet
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->sortedSheet = $sortedSheet;
         $this->sheetInfoGuesserCache = $sheetInfoGuesserCache;
+        $this->sortedSheet = $sortedSheet;
     }
 
     /**
