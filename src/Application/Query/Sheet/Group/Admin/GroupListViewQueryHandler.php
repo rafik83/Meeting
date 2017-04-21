@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
 
 class GroupListViewQueryHandler
 {
-    /** @var array */
+    /** @var GroupView[] */
     private $groupViews = [];
 
     /** @var GroupViewQueryHandler */

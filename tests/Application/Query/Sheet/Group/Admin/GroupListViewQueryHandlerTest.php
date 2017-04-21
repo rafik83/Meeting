@@ -11,6 +11,8 @@
 namespace Application\Query\Sheet\Group\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
@@ -22,7 +24,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -47,10 +49,9 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = SheetFactory::create($event);
         $propertySheetId->setValue($sheet2, 2);
 
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $groupViewQueryHandler = $this->prophesize(GroupViewQueryHandler::class);
 
-        $expectedGroupView = new GroupView(
+        $expectedResult = new GroupView(
             1,
             'My entity',
             $user->getEmail(),
@@ -61,14 +62,15 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $datetime
         );
 
-        $sheetRepository->getByGroup($group)->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
+        $handler = new GroupListViewQueryHandler($groupViewQueryHandler->reveal());
 
-        $sheetInfoGuesser->guessSheetTitle($sheet1)->shouldBeCalled()->willReturn('Sheet title 1');
-        $sheetInfoGuesser->guessSheetTitle($sheet2)->shouldBeCalled()->willReturn('Sheet title 2');
+        $groupViewQueryHandler
+            ->handle(new GroupViewQuery($group))
+            ->shouldBeCalled()
+            ->willReturn($expectedResult);
 
-        $handler = new GroupViewQueryHandler($sheetRepository->reveal(), $sheetInfoGuesser->reveal());
-        $groupView = $handler->handle(new GroupViewQuery($group));
+        $result = $handler->handle(new GroupListViewQuery([$group]));
 
-        $this->assertEquals($expectedGroupView, $groupView);
+        $this->assertEquals([$expectedResult], $result);
     }
 }
