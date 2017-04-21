@@ -18,6 +18,9 @@ class UsersParticipantViewQueryHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
+    /**
+     * @param ParticipantRepositoryInterface $participantRepository
+     */
     public function __construct(ParticipantRepositoryInterface $participantRepository)
     {
         $this->participantRepository = $participantRepository;
