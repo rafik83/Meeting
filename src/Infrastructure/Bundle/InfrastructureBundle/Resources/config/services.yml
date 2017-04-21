@@ -1807,6 +1807,12 @@ services:
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    vimeet_infrastructure.application.components.sorted_sheet:
+        class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+
     #
     # Sheet Request
     #

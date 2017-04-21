@@ -307,7 +307,7 @@ event_sheet_group_participant_index:
     path: /sheets-group/{sheetGroup}/participants/list
     requirements:
         sheetGroup: \d+
-    methods:  [GET]
+    methods:  [GET, POST]
     defaults: { _controller: EventBundle:Group/Participant:index }
 
 #
