@@ -36,3 +36,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         happeningParticipations:
             targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
             mappedBy: participant
+    uniqueConstraints:
+        unique_user_sheet_idx:
+            columns: [sheet_id, user_id]
