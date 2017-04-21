@@ -26,6 +26,4 @@ class GroupListViewQuery
     {
         $this->groups = $groups;
     }
-
-
 }

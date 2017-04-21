@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use \Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class GroupController extends Controller
 {
@@ -34,7 +34,7 @@ class GroupController extends Controller
         $groupViews = $this->get('tactician.commandbus')->handle(new GroupListViewQuery($sheetsGroups));
 
         return $this->render('AdminBundle:SheetsGroup:list.html.twig', [
-            'event'        => $event,
+            'event'      => $event,
             'groupViews' => $groupViews,
         ]);
     }

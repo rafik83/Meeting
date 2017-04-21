@@ -30,11 +30,15 @@
                     <td>{{ groupView.title }}</td>
                     <td>{{ groupView.emailManager }}</td>
                     <td>
-                        {% for sheetView in groupView.sheetViews %}
-                            <span class="badge badge-primary">{{ sheetView.title }}</span>
-                        {% endfor %}
+                        <ul>
+                            {% for sheetView in groupView.sheetViews %}
+                                <li>{{ sheetView.title }}</li>
+                            {% endfor %}
+                        </ul>
                     </td>
-                    <td>{{ groupView.createdAt|localizeddate }}</td>
+                    <td>
+                        {{ groupView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
