@@ -175,7 +175,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function sendEmailing(Event $event, array $sheetIds, $emailId)
+    public function sendEmailing(Event $event, array $sheetIds, $emailId, $sendEmailToTeam = false)
     {
         $job = new Job(
             SendEmailingCommand::NAME,
@@ -183,6 +183,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 $event->getId(),
                 $emailId,
                 implode(',', $sheetIds),
+                $sendEmailToTeam ? SendEmailingCommand::BOOL_YES : SendEmailingCommand::BOOL_NO
             ]
         );
         $this->setJob($job);

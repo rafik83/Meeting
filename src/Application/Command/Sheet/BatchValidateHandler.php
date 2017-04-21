@@ -67,7 +67,7 @@ class BatchValidateHandler
             $this->jobQueue->indexSheets($batchValidate->ids);
 
             // send email
-            $this->jobQueue->sendEmailing($batchValidate->event, $batchValidate->ids, Events::SHEET_VALIDATED);
+            $this->jobQueue->sendEmailing($batchValidate->event, $batchValidate->ids, Events::SHEET_VALIDATED, true);
             
             $this->batchJobQueue->createJob(
                 $batchValidate->ids,
