@@ -39,7 +39,7 @@ class UpdateHandler
             }
         }
 
-        foreach ($command->translations as $locale => $translation) {
+        foreach ($command->translations as $translation) {
             $command->tip->translate(
                 $translation['locale'],
                 $translation['title'],
