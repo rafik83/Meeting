@@ -33,10 +33,7 @@ class GroupController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheetsGroupRepository = $this->get('repository.sheet.group_repository');
-        $sheetsGroups = $sheetsGroupRepository->getAllByEventOrderedByTitle($event);
-
-        $groupViews = $this->get('tactician.commandbus')->handle(new GroupListViewQuery($sheetsGroups));
+        $groupViews = $this->get('tactician.commandbus')->handle(new GroupListViewQuery($event));
 
         return $this->render('AdminBundle:SheetsGroup:list.html.twig', [
             'event'      => $event,

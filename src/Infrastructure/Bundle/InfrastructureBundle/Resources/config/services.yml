@@ -2564,6 +2564,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQueryHandler
         arguments:
             - '@query.sheet.group.admin.group_view_handler'
+            - '@repository.sheet.group_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
 

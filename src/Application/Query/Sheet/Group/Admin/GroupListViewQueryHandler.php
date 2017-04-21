@@ -11,23 +11,28 @@
 namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
 use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
+use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 
 class GroupListViewQueryHandler
 {
-    /** @var GroupView[] */
-    private $groupViews = [];
-
     /** @var GroupViewQueryHandler */
     private $groupViewQueryHandler;
+
+    /** @var GroupRepositoryInterface */
+    private $groupRepository;
 
     /**
      * GroupListViewQueryHandler constructor.
      *
-     * @param GroupViewQueryHandler $groupViewQueryHandler
+     * @param GroupViewQueryHandler    $groupViewQueryHandler
+     * @param GroupRepositoryInterface $groupRepository
      */
-    public function __construct(GroupViewQueryHandler $groupViewQueryHandler)
-    {
+    public function __construct(
+        GroupViewQueryHandler $groupViewQueryHandler,
+        GroupRepositoryInterface $groupRepository
+    ) {
         $this->groupViewQueryHandler = $groupViewQueryHandler;
+        $this->groupRepository       = $groupRepository;
     }
 
     /**
@@ -37,10 +42,15 @@ class GroupListViewQueryHandler
      */
     public function handle(GroupListViewQuery $groupListViewQuery)
     {
-        foreach ($groupListViewQuery->groups as $group) {
-            $this->groupViews[] = $this->groupViewQueryHandler->handle(new GroupViewQuery($group));
+        $groupViews   = [];
+        $sheetsGroups = $this->groupRepository->getAllByEventOrderedByTitle($groupListViewQuery->event);
+
+        if (!empty($sheetsGroups)) {
+            foreach ($sheetsGroups as $group) {
+                $groupViews[] = $this->groupViewQueryHandler->handle(new GroupViewQuery($group));
+            }
         }
 
-        return $this->groupViews;
+        return $groupViews;
     }
 }

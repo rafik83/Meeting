@@ -10,20 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class GroupListViewQuery
 {
-    /** @var Group[] */
-    public $groups;
+    /** @var Event */
+    public $event;
 
     /**
      * GroupListViewQuery constructor.
      *
-     * @param Group[] $groups
+     * @param Event $event
      */
-    public function __construct(array $groups)
+    public function __construct(Event $event)
     {
-        $this->groups = $groups;
+        $this->event = $event;
     }
 }

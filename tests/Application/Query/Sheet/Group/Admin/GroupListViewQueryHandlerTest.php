@@ -17,8 +17,10 @@ use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -50,6 +52,7 @@ class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $propertySheetId->setValue($sheet2, 2);
 
         $groupViewQueryHandler = $this->prophesize(GroupViewQueryHandler::class);
+        $groupRepository       = $this->prophesize(GroupRepositoryInterface::class);
 
         $expectedResult = new GroupView(
             1,
@@ -62,14 +65,16 @@ class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $datetime
         );
 
-        $handler = new GroupListViewQueryHandler($groupViewQueryHandler->reveal());
+        $handler = new GroupListViewQueryHandler($groupViewQueryHandler->reveal(), $groupRepository->reveal());
+
+        $groupRepository->getAllByEventOrderedByTitle($event)->shouldBeCalled()->willReturn([$group]);
 
         $groupViewQueryHandler
             ->handle(new GroupViewQuery($group))
             ->shouldBeCalled()
             ->willReturn($expectedResult);
 
-        $result = $handler->handle(new GroupListViewQuery([$group]));
+        $result = $handler->handle(new GroupListViewQuery($event));
 
         $this->assertEquals([$expectedResult], $result);
     }
