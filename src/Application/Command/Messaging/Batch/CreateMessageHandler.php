@@ -63,7 +63,7 @@ class CreateMessageHandler
             if (!$message->hasTranslation($locale)) {
                 $emailSubject = $this->translator->trans(
                     $command->subject,
-                    [],
+                    [], // no parameters because substitutions provider will do it itself
                     'mail',
                     $locale
                 );

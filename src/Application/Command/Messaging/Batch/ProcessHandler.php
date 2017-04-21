@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
 use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
-use Proximum\Vimeet\Domain\Messaging\Batch\AbstractSubstitutionsProvider;
+use Proximum\Vimeet\Domain\Messaging\Emailing\AbstractSubstitutionsProvider;
 
 class ProcessHandler
 {
