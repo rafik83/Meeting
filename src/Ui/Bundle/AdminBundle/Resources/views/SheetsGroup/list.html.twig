@@ -10,7 +10,7 @@
     </h1>
 
     <div>
-        <a href="#" class="btn btn-primary new-action">
+        <a href="{{ path('admin_sheets_group_pre_create', {'event': event.id}) }}" class="btn btn-primary new-action">
             {{ 'admin.sheets_group.create'|trans }}
         </a>
     </div>

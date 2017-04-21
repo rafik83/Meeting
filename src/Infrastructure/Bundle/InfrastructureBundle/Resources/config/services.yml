@@ -4223,3 +4223,14 @@ services:
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
+
+    #
+    # Group - Search user view query
+    #
+    query.group.user_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\UserViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@user_to_group_manager_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\UserViewQuery }
