@@ -18,26 +18,15 @@ class SheetValidatedSubstitutionsProvider extends AbstractSubstitutionsProvider
 {
     const TAG_CATALOG_ONLINE_DATE = '%catalogOnlineDate%';
     const TAG_SCHEDULE_DATE       = '%scheduleDate%';
-    const TAG_SHEET_LINK          = '%sheetLink%';
-
-    /**
-     * @var EventUrlGenerator
-     */
-    private $eventUrlGenerator;
 
     /**
      * SheetValidatedSubstitutionsProvider constructor.
-     *
-     * @param EventUrlGenerator $eventUrlGenerator
      */
-    public function __construct(EventUrlGenerator $eventUrlGenerator)
+    public function __construct()
     {
-        $this->eventUrlGenerator = $eventUrlGenerator;
-
         $this->placeholders = array_merge($this->placeholders, [
             self::TAG_CATALOG_ONLINE_DATE,
             self::TAG_SCHEDULE_DATE,
-            self::TAG_SHEET_LINK
         ]);
     }
 
@@ -65,8 +54,6 @@ class SheetValidatedSubstitutionsProvider extends AbstractSubstitutionsProvider
                 case self::TAG_SCHEDULE_DATE:
                     $schedulePublishDate = $event->getConfiguration()->getSchedulePublishDate();
                     return $schedulePublishDate !== null ? $dateFormatter->format($schedulePublishDate) : '';
-                case self::TAG_SHEET_LINK:
-                    return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', ['sheet' => $sheet->getId(), '_locale' => $locale]);
                 default:
                     throw new InvalidMessagePlaceholderException($placeholder);
             }

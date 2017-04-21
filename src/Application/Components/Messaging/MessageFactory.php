@@ -51,6 +51,15 @@ class MessageFactory
                     $event,
                     $sheets,
                     Events::SHEET_VALIDATED,
+                    'mail.sheet.validated.subject', 'MailBundle:Mail:Sheet/sheetValidated.html.twig',
+                    $sendEmailToTeam
+                );
+                break;
+            case Events::SHEET_VALIDATION_VALIDATE:
+                $command = new CreateMessage(
+                    $event,
+                    $sheets,
+                    Events::SHEET_VALIDATION_VALIDATE,
                     'mail.sheet.validation.validate.subject', 'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
                     $sendEmailToTeam
                 );

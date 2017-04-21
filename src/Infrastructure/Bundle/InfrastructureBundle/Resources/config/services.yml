@@ -4121,6 +4121,9 @@ services:
 
     domain.messaging.emailing.sheet_validated_substitutions_provider:
         class: Proximum\Vimeet\Domain\Messaging\Emailing\SheetValidatedSubstitutionsProvider
+
+    domain.messaging.emailing.sheet_validation_validated_substitutions_provider:
+        class: Proximum\Vimeet\Domain\Messaging\Emailing\SheetValidationValidatedSubstitutionsProvider
         arguments:
             - '@adapter.event_url_generator'
 

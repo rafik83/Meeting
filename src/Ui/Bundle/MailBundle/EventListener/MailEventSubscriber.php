@@ -129,26 +129,6 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param SheetValidationValidateEvent $event
-     */
-    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
-    {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
-        );
-
-        $mail = new SheetValidationValidateMail(
-            $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getSheet()->getOwner()->getEmail(),
-            $event->getSheet()->getOwner()->getLocale(),
-            $participantMailView
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
      * @param TransactionConfirmedEvent $event
      */
     public function onTransactionConfirmed(TransactionConfirmedEvent $event)
@@ -444,7 +424,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
             Events::SHEET_VALIDATION_DRAFT             => 'onSheetValidationDraft',
-            Events::SHEET_VALIDATION_VALIDATE          => 'onSheetValidationValidate',
         ];
     }
 }
