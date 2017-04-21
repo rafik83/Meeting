@@ -201,9 +201,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->where('participant.user = :userId AND participant.sheet = :sheetId')
             ->setParameter('userId', $user->getId())
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id = :sheetId')
             ->setParameter('sheetId', $sheet->getId())
             ->setMaxResults(1);
 
@@ -220,9 +219,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant.id')
             ->from(Participant::class, 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user = :user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'participant.user = :user AND sheet.event = :event')
             ->setParameter('user', $user)
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -238,8 +236,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
+            ->join('participant.sheet', 'sheet', 'WITH', 'participant.user = :userId AND sheet.event = :eventId')
             ->setParameter('userId', $userId)
             ->setParameter('eventId', $event->getId());
 
