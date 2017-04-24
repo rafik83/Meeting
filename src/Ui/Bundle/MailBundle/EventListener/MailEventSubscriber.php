@@ -85,50 +85,6 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Send email when admin validate user event participation
-     *
-     * @param SheetValidatedEvent $event
-     */
-    public function onSheetValidated(SheetValidatedEvent $event)
-    {
-        $owner = $event->getSheet()->getOwner();
-
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $owner)
-        );
-
-        $mail = new SheetValidatedMail(
-            $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $owner->getEmail(),
-            $owner->getLocale(),
-            $participantMailView
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
-     * @param SheetDraftEvent $event
-     */
-    public function onSheetValidationDraft(SheetDraftEvent $event)
-    {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
-        );
-
-        $mail = new SheetValidationDraftMail(
-            $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getSheet()->getOwner()->getEmail(),
-            $event->getSheet()->getOwner()->getLocale(),
-            $participantMailView
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
      * @param TransactionConfirmedEvent $event
      */
     public function onTransactionConfirmed(TransactionConfirmedEvent $event)
@@ -423,7 +379,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
-            Events::SHEET_VALIDATION_DRAFT             => 'onSheetValidationDraft',
         ];
     }
 }

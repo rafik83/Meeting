@@ -785,6 +785,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter_batch_job_queue.batch_draft_job_queue'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchDraft }
     command.sheet.batch_validation_validate_handler:

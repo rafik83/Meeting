@@ -148,7 +148,7 @@ class BatchHandler
 
         if ($batch->draft) {
             return $this->batchDraftHandler->handle(
-                new BatchDraft($batch->ids, $batch->admin)
+                new BatchDraft($batch->event, $batch->ids, $batch->admin)
             );
         }
 

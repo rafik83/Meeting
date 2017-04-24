@@ -64,6 +64,15 @@ class MessageFactory
                     $sendEmailToTeam
                 );
                 break;
+            case Events::SHEET_VALIDATION_DRAFT:
+                $command = new CreateMessage(
+                    $event,
+                    $sheets,
+                    Events::SHEET_VALIDATION_DRAFT,
+                    'mail.sheet.validation.draft.subject', 'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig',
+                    $sendEmailToTeam
+                );
+                break;
             default:
                 throw new \InvalidArgumentException('Unknow message type');
         }
