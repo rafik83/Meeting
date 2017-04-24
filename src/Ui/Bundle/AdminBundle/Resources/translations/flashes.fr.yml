@@ -88,6 +88,8 @@ flash.admin.template.package.update.success: 'Template de forfait modifié avec 
 flash.admin.template.registration.update.error.nomenclatureNotFound: 'Un objet nomenclature de ce template n''est pas correctement rempli'
 flash.admin.template.registration.update.error.template: 'Il y a un problème avec votre template'
 flash.admin.template.registration.update.success: 'Template d''Inscription modifié avec succès'
+flash.admin.tip.create.success: 'Le message d''aide a été créé'
+flash.admin.tip.update.success: 'Le message d''aide a été mis à jour'
 flash.admin.transaction.create.success: 'La transaction a été créée'
 flash.admin.transaction.export.failed: 'Il y a une erreur dans le formulaire d''export'
 flash.admin.transaction.remove.success: 'La transaction a été supprimée'
