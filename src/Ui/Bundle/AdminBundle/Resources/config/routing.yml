@@ -1324,3 +1324,14 @@ admin_order_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
+
+#
+# Sheet attendance
+#
+admin_sheet_attend:
+    path: /event/{event}/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:cancelAttendance }
