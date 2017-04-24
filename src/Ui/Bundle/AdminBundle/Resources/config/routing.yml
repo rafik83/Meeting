@@ -1324,3 +1324,23 @@ admin_order_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
+
+#
+# Tip
+#
+admin_tip_list:
+    path: /tip/list
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Tip:list }
+
+admin_tip_create:
+    path: /tip/create
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Tip:create }
+
+admin_tip_update:
+    path: /tip/{tip}/update
+    requirements:
+        tip: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Tip:update }

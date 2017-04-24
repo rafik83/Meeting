@@ -19,6 +19,8 @@ use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -176,15 +178,22 @@ class CatalogController extends Controller
             $template = 'EventBundle:Catalog:index.html.twig';
         }
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_CATALOG,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render($template, [
-            'event'           => $event,
-            'sheet'           => $sheet,
-            'page'            => 1,
-            'isCatalog'       => true,
-            'typeViews'       => $typeViews,
-            'paginatedResult' => $paginatedResult,
-            'seeMoreButton'   => $seeMoreButton,
-            'searchForm'      => $searchForm->createView(),
+            'event'               => $event,
+            'sheet'               => $sheet,
+            'page'                => 1,
+            'isCatalog'           => true,
+            'typeViews'           => $typeViews,
+            'paginatedResult'     => $paginatedResult,
+            'seeMoreButton'       => $seeMoreButton,
+            'searchForm'          => $searchForm->createView(),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 
