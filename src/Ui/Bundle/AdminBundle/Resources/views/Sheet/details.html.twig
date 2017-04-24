@@ -20,6 +20,22 @@
                 {{ ('event.sheet.state.' ~ details.state)|trans }}
             </span>
 
+
+            {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                <a href="{{ path('admin_sheet_attend', {'event': event.id, 'sheet': sheet.id}) }}"
+                    class="label label-{{ sheet.attend ? 'success' : 'danger' }}">
+            {% else %}
+                <span class="label label-{{ sheet.attend ? 'success' : 'danger' }}">
+            {% endif %}
+
+                {{ ('event.sheet.attend.' ~ (sheet.attend ? 'present' : 'cancel'))|trans }}
+
+            {% if not is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                </span>
+            {% else %}
+                </a>
+            {% endif %}
+
             {% if sheet.inCatalog %}
                 <span class="label label-success">
                     {{ 'admin.sheet.inCatalog'|trans }}

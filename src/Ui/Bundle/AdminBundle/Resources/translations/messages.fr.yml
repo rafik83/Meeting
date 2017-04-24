@@ -888,6 +888,8 @@ event.schedule.columns.happening.title: Sous-événements
 event.schedule.columns.meeting.title: Rendez-vous
 event.schedule.columns.unavailability.title: Indisponibilités
 event.sheet.add_participant.title: 'Ajouter un participant'
+event.sheet.attend.cancel: 'A annulé sa venue'
+event.sheet.attend.present: Présent
 event.sheet.billing.title: Facturation
 event.sheet.block.add_participant.title: 'Remplir ce participant'
 event.sheet.block.buy_participant.option: Option
