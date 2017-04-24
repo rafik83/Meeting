@@ -10,55 +10,44 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
-use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
-use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
-use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 
 class CreateHandler
 {
     /** @var GroupRepositoryInterface */
     private $groupRepository;
 
-    /** @var UserToGroupManagerChecker */
-    private $userToGroupManagerChecker;
-
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     /**
      * CreateHandler constructor.
      *
      * @param GroupRepositoryInterface  $groupRepository
-     * @param UserToGroupManagerChecker $userToGroupManagerChecker
      * @param SheetRepositoryInterface  $sheetRepository
+     * @param \DateTimeInterface        $dateTime
      */
     public function __construct(
         GroupRepositoryInterface $groupRepository,
-        UserToGroupManagerChecker $userToGroupManagerChecker,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        \DateTimeInterface $dateTime
     ) {
         $this->groupRepository           = $groupRepository;
-        $this->userToGroupManagerChecker = $userToGroupManagerChecker;
         $this->sheetRepository           = $sheetRepository;
+        $this->dateTime                  = $dateTime;
     }
 
+    /**
+     * @param Create $command
+     */
     public function handle(Create $command)
     {
-        try {
-            $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($command->event, $command->user);
-        } catch(UserAlreadyGroupManagerOnSameEventException $exception) {
-
-            throw new UserNotAllowedToManageGroupException($command->user->getEmail());
-        } catch (UserAlreadyParticipantOrOwnerOnGroupOnSameEventException $exception) {
-
-            throw new UserNotAllowedToManageGroupException($command->user->getEmail());
-        }
-
-        $group = new Group($command->event, $command->user, $command->title, $command->dateTime);
+        $group = new Group($command->event, $command->user, $command->title, $this->dateTime);
 
         foreach ($command->sheetViews as $sheetView) {
             $sheet = $this->sheetRepository->getSheetById($sheetView->id);

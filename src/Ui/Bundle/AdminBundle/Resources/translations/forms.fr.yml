@@ -582,7 +582,7 @@ form.search_user_sheets_group.children.submit.label: 'Suivant'
 form.create_sheets_group.children.name_manager.label: 'Nom du manager'
 form.create_sheets_group.children.email_manager.label: 'Email du manager'
 form.create_sheets_group.children.title.label: 'Titre de l''entité'
-form.create_sheets_group.children.sheets.label: 'Fiches de l''entité'
+form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
 form.create_sheets_group.children.submit.label: 'Créer'
 form.create_sheets_group.children.sheetViews.prototype.label: 'Fiches'
 form.select_recipients.children.recipients.label: Destinataires

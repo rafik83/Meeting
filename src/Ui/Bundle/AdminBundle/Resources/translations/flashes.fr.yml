@@ -15,8 +15,6 @@ flash.admin.event.practicalInfo.update.success: 'Les informations pratiques ont 
 flash.admin.event.update.asset.failed: 'La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire'
 flash.admin.event.update.success: 'L''événement a bien été mis à jour'
 flash.admin.event.who_see_what.success: 'La règle a bien été mis à jour'
-flash.admin.group.create.error.email_not_found: 'Aucun utilisateur trouvé pour cette addresse e-mail : %email%'
-flash.admin.group.create.error.user_not_allowed_to_manage: 'L''utilisateur suivant n''est pas autorisé à gérer une nouvelle entité: %email%'
 flash.admin.group.create.error.no_sheet_available: 'Aucunes fiches disponibles pour l''événement'
 flash.admin.group.create.success: 'L''entité multi-fiches a été créee'
 flash.admin.happening.category.create.success: 'La catégorie de sous événement a bien été créée'

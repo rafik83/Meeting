@@ -996,8 +996,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler
         arguments:
             - '@repository.sheet.group_repository'
-            - '@user_to_group_manager_checker'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 
@@ -4238,12 +4238,12 @@ services:
     # Group - Search user view query
     #
     query.group.user_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\UserViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Group\SearchUserQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@user_to_group_manager_checker'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\UserViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\SearchUserQuery }
     query.group.sheet.sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQueryHandler
         arguments:

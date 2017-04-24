@@ -18,9 +18,6 @@ class SheetView
     /** @var string */
     public $title;
 
-    /** @var array */
-    public $sheetViews = [];
-
     /**
      * SheetView constructor.
      *

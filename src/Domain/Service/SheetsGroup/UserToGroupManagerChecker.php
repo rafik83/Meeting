@@ -27,7 +27,7 @@ class UserToGroupManagerChecker
 
     /**
      * UserToGroupManagerChecker constructor.
-     * 
+     *
      * @param GroupRepositoryInterface $groupRepository
      * @param SheetRepositoryInterface $sheetRepository
      */
@@ -52,12 +52,12 @@ class UserToGroupManagerChecker
     {
         if ($this->isUserAlreadyManagerOnSameEvent($event, $user)) {
 
-            throw new UserAlreadyGroupManagerOnSameEventException();
+            throw new UserAlreadyGroupManagerOnSameEventException($user->getEmail());
         }
 
         if ($this->isUserParticipantOrOwnerOfSheetOnGroupOnSameEvent($event, $user)) {
 
-            throw new UserAlreadyParticipantOrOwnerOnGroupOnSameEventException();
+            throw new UserAlreadyParticipantOrOwnerOnGroupOnSameEventException($user->getEmail());
         }
 
         return true;

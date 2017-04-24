@@ -639,7 +639,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet.id')
             ->from(Sheet::class, 'sheet')
-            ->where('sheet.group IS NOT NULL AND sheet.user = :user AND sheet.event = :event')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                '(sheet.owner = :user OR participant.user = :user) 
+                AND sheet.event = :event AND sheet.group IS NOT NULL'
+            )
             ->setParameter('user', $user)
             ->setParameter('event', $event)
             ->setMaxResults(1);

@@ -28,9 +28,6 @@ class Create
     /** @var string */
     public $title;
 
-    /** @var \DateTimeInterface */
-    public $dateTime;
-
     /**
      * Create constructor.
      *
@@ -43,6 +40,5 @@ class Create
         $this->event      = $event;
         $this->user       = $user;
         $this->sheetViews = $sheetViews;
-        $this->dateTime   = new \DateTime();
     }
 }

@@ -10,6 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Exception\Group;
 
-class UserAlreadyParticipantOrOwnerOnGroupOnSameEventException extends \Exception
+class UserAlreadyParticipantOrOwnerOnGroupOnSameEventException extends GroupException
 {
+    /** @var string */
+    public $email;
+
+    /**
+     * UserNotAllowedToManageGroupException constructor.
+     *
+     * @param string $email
+     */
+    public function __construct($email = '')
+    {
+        $this->email = $email;
+    }
 }

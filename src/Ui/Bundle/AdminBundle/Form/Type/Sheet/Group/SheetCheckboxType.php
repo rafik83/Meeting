@@ -23,19 +23,20 @@ class SheetCheckboxType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('sheetViews', ChoiceType::class, [
-            'choices'      => $options['sheetViews'],
-            'choice_label' => function(SheetView $sheetView) {
-                return $sheetView->title;
-            },
-            'choice_value' => function (SheetView $sheetView) {
-                return $sheetView->id;
-            },
-            'multiple' => true,
-            'expanded' => true,
-            'label'    => false,
-            'required' => true,
-        ]);
+        if (!empty($options['sheetViews'])) {
+            $builder->add('sheetViews', ChoiceType::class, [
+                'choices' => $options['sheetViews'],
+                'choice_label' => function (SheetView $sheetView) {
+                    return $sheetView->title;
+                },
+                'choice_value' => function (SheetView $sheetView) {
+                    return $sheetView->id;
+                },
+                'multiple' => true,
+                'expanded' => true,
+                'label' => false,
+            ]);
+        }
     }
 
     /**
@@ -45,6 +46,5 @@ class SheetCheckboxType extends AbstractType
     {
         $resolver->setRequired(['sheetViews']);
         $resolver->setAllowedTypes('sheetViews', 'array');
-        $resolver->setDefaults(['data_class' => SheetView::class]);
     }
 }
