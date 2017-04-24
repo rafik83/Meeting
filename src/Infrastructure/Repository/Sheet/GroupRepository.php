@@ -84,4 +84,13 @@ class GroupRepository implements GroupRepositoryInterface
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Group $group)
+    {
+        $this->entityManager->persist($group);
+        $this->entityManager->flush($group);
+    }
 }

@@ -37,4 +37,9 @@ interface GroupRepositoryInterface
      * @return Group[]
      */
     public function getAllByEventOrderedByTitle(Event $event);
+
+    /**
+     * @param Group $group
+     */
+    public function add(Group $group);
 }

@@ -862,4 +862,16 @@ class Sheet implements TraceableInterface
     {
         return $this->group;
     }
+
+    /**
+     * @param Group $group
+     *
+     * @return $this
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
 }

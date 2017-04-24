@@ -23,7 +23,7 @@ class SheetViewQueryHandler
     private $navigationBuilder;
 
     /**
-     * SheetViewQueryHandler constructor.
+     * SheetListViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
      */

@@ -1341,3 +1341,11 @@ admin_sheets_group_pre_create:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:SheetsGroup/Group:preCreate }
+
+admin_sheets_group_create:
+    path: /event/{event}/sheets-group/{user}/create
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:create }

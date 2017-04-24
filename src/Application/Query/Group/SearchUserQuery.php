@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Group;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class UserViewQuery
+class SearchUserQuery
 {
     /** @var Event */
     public $event;
@@ -21,7 +21,7 @@ class UserViewQuery
     public $email;
 
     /**
-     * UserViewQuery constructor.
+     * SearchUserQuery constructor.
      *
      * @param Event  $event
      */

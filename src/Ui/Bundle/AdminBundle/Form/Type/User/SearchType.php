@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User;
 
-use Proximum\Vimeet\Application\Query\Group\UserViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\AbstractType;
@@ -35,7 +34,6 @@ class SearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => UserViewQuery::class]);
         $resolver->setRequired(['event']);
         $resolver->setAllowedTypes('event', Event::class);
     }

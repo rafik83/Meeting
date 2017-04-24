@@ -82,6 +82,6 @@ class UserToGroupManagerChecker
      */
     private function isUserParticipantOrOwnerOfSheetOnGroupOnSameEvent(Event $event, User $user)
     {
-        return count($this->sheetRepository->countSheetsByUserAndEvent($user, $event)) > 0 ? false : true;
+        return $this->sheetRepository->hasSheetWithGroupByUserByEvent($user, $event);
     }
 }

@@ -992,6 +992,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Index }
 
+    command.sheets_group.create_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@user_to_group_manager_checker'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
+
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
         arguments:
@@ -4235,3 +4244,10 @@ services:
             - '@user_to_group_manager_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\UserViewQuery }
+    query.group.sheet.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.planning.sheet_info_guesser_cache'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery }
