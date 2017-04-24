@@ -37,10 +37,10 @@
                             </a>
                         </td>
                     </tr>
-                    {% for participant in sheetView.participants %}
+                    {% for participantView in sheetView.participantViews %}
                         <tr>
                             <td>
-                                {{ participant.fullName }}
+                                {{ participantView.fullName }}
                             </td>
                         </tr>
                     {% endfor %}

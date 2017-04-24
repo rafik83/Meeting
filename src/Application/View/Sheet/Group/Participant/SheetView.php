@@ -18,18 +18,18 @@ class SheetView
     /** @var string */
     public $title;
 
-    /** @var ParticipantView[] $participants */
-    public $participants;
+    /** @var ParticipantView[] */
+    public $participantViews;
 
     /**
      * @param int               $id
      * @param string            $title
-     * @param ParticipantView[] $participants
+     * @param ParticipantView[] $participantViews
      */
-    public function __construct($id, $title, array $participants)
+    public function __construct($id, $title, array $participantViews)
     {
-        $this->id           = $id;
-        $this->title        = $title;
-        $this->participants = $participants;
+        $this->id               = $id;
+        $this->title            = $title;
+        $this->participantViews = $participantViews;
     }
 }

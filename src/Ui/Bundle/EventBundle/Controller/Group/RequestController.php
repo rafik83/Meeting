@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Exception\Group\Request\NoResultException;
 use Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,9 @@ class RequestController extends Controller
      */
     public function listAction(Request $request, EventDomain $eventDomain, Group $sheetGroup)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
+
         try {
             $sheetListView = $this->get('tactician.commandbus.query')->handle(
                 new SheetListViewQuery(
