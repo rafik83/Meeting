@@ -15,8 +15,12 @@ module.exports = {
         return {
             availableSlotsForMeeting: [],
             currentAvailableSlotsForMeeting: [],
-            slotToBeMoved: null
+            slotToBeMoved: null,
+            routeToUpdateSheetAttendance: null,
         }
+    },
+    beforeMount: function () {
+        this.routeToUpdateSheetAttendance = api.updateSheetAttendance(this.sheet.id);
     },
     methods: {
         init: function () {
@@ -40,10 +44,6 @@ module.exports = {
         scheduleMeeting: function (slot) {
             this.disableSlotsAction();
             this.$emit('schedule-meeting', slot);
-        },
-
-        getAttendFormRoute: function () {
-            return api.updateSheetAttendance(this.sheet.id);
         },
 
         /**
