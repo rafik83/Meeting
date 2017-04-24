@@ -19,7 +19,7 @@
                         {{ 'sheet.title'|trans }}
 
                         <div class="pull-right">
-                            <a href="{{ path('event_sheet_group_participant_index', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
+                            <a href="{{ path('event_sheet_group_participant_update', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
                                 {{ 'group.home.link.participant'|trans }}
                             </a>
                             <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">

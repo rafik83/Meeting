@@ -18,12 +18,11 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\UsersSheetsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
-use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ParticipantController extends Controller
+class ParticipantUpdateController extends Controller
 {
     /**
      * @param Request     $request
@@ -32,7 +31,7 @@ class ParticipantController extends Controller
      *
      * @return Response
      */
-    public function indexAction(Request $request, EventDomain $eventDomain, Group $sheetGroup)
+    public function updateAction(Request $request, EventDomain $eventDomain, Group $sheetGroup)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
@@ -86,7 +85,7 @@ class ParticipantController extends Controller
             );
 
             return $this->redirectToRoute(
-                'event_sheet_group_participant_index',
+                'event_sheet_group_participant_update',
                 ['sheetGroup' => $sheetGroup->getId()]
             );
         }

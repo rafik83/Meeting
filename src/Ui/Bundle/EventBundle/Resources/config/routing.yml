@@ -303,12 +303,12 @@ event_sheet_group_requests_list:
 # Sheets group
 #
 
-event_sheet_group_participant_index:
-    path: /sheets-group/{sheetGroup}/participants/list
+event_sheet_group_participant_update:
+    path: /sheets-group/{sheetGroup}/participants/update
     requirements:
         sheetGroup: \d+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Group/Participant:index }
+    defaults: { _controller: EventBundle:Group/ParticipantUpdate:update }
 
 #
 # Sheet Billing
