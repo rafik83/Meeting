@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block content %}
-<section class="main mg-top">
-    <header>
-        <h1>
-            {{ groupView.title }}
-        </h1>
-    </header>
-    <div class="main__container">
-        <table class="table">
-            <thead>
+    <section class="main mg-top">
+        <header>
+            <h1>
+                {{ groupView.title }}
+            </h1>
+        </header>
+        <div class="main__container">
+            <table class="table">
+                <thead>
                 <tr>
                     <th>
                         {{ 'sheet.title'|trans }}
@@ -27,8 +27,8 @@
                         </div>
                     </th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {% for sheetView in groupView.sheetViews %}
                     <tr>
                         <td>
@@ -37,9 +37,16 @@
                             </a>
                         </td>
                     </tr>
+                    {% for participant in sheetView.participants %}
+                        <tr>
+                            <td>
+                                {{ participant.fullName }}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</section>
+                </tbody>
+            </table>
+        </div>
+    </section>
 {% endblock %}
