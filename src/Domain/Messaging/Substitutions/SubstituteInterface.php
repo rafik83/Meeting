@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class FirstnameSubstitution implements Substitute
+interface SubstituteInterface
 {
     /**
-     * {@inheritdoc}
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return string
      */
-    public function getValue(Sheet $sheet, $locale)
-    {
-        return $sheet->getOwner()->getFirstName();
-    }
+    public function getValue(Sheet $sheet, $locale);
 }

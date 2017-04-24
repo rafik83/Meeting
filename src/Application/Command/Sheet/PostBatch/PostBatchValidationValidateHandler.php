@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
-use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

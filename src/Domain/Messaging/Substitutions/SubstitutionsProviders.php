@@ -15,14 +15,14 @@ use Proximum\Vimeet\Domain\Exception\Messaging\UndefinedSubstitutionProviderExce
 class SubstitutionsProviders
 {
     /**
-     * @var array of tag => Substitute
+     * @var array of tag => SubstituteInterface
      */
     private $substitutions = [];
 
     /**
      * @param string $tag
      *
-     * @return Substitute
+     * @return SubstituteInterface
      * @throws UndefinedSubstitutionProviderException
      */
     public function getSubstitution($tag)
@@ -35,10 +35,10 @@ class SubstitutionsProviders
     }
 
     /**
-     * @param string     $tag
-     * @param Substitute $substitutionProvider
+     * @param string              $tag
+     * @param SubstituteInterface $substitutionProvider
      */
-    public function registerSubstitution($tag, Substitute $substitutionProvider)
+    public function registerSubstitution($tag, SubstituteInterface $substitutionProvider)
     {
         $this->substitutions[$tag] = $substitutionProvider;
     }

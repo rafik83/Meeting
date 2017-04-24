@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class ParticipantTypeSubstitution implements Substitute
+class ParticipantTypeSubstitution implements SubstituteInterface
 {
     /**
      * {@inheritdoc}

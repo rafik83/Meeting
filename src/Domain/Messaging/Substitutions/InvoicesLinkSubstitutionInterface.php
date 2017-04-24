@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 
-class InvoicesLinkSubstitution implements Substitute
+class InvoicesLinkSubstitution implements SubstituteInterface
 {
     /**
      * @var InvoiceRepositoryInterface

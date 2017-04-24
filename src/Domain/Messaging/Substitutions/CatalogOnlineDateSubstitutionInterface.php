@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class CatalogOnlineDateSubstitution implements Substitute
+class CatalogOnlineDateSubstitution implements SubstituteInterface
 {
     /**
      * {@inheritdoc}

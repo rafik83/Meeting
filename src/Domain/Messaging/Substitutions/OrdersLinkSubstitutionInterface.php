@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 
-class SheetLinkSubstitution implements Substitute
+class OrdersLinkSubstitution implements SubstituteInterface
 {
     /**
      * @var EventUrlGenerator
@@ -21,7 +21,7 @@ class SheetLinkSubstitution implements Substitute
     private $eventUrlGenerator;
 
     /**
-     * SheetLinkSubstitution constructor.
+     * OrdersLinkSubstitution constructor.
      *
      * @param EventUrlGenerator $eventUrlGenerator
      */
@@ -35,9 +35,14 @@ class SheetLinkSubstitution implements Substitute
      */
     public function getValue(Sheet $sheet, $locale)
     {
-        return $this->eventUrlGenerator->generateEventAbsoluteUrl($sheet->getEvent(), 'event_sheet_default', [
-            'sheet'   => $sheet->getId(),
-            '_locale' => $locale,
-        ]);
+        $ordersUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $sheet->getEvent(),
+            'event_order_list',
+            [
+                '_locale' => $sheet->getOwnerLocale(), 'sheet' => $sheet->getId(),
+            ]
+        );
+
+        return $ordersUrl;
     }
 }

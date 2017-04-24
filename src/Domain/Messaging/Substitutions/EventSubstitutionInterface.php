@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-interface Substitute
+class EventSubstitution implements SubstituteInterface
 {
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getValue(Sheet $sheet, $locale);
+    public function getValue(Sheet $sheet, $locale)
+    {
+        return $sheet->getEvent()->getTitle();
+    }
 }
