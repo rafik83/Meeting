@@ -42,6 +42,10 @@ module.exports = {
             this.$emit('schedule-meeting', slot);
         },
 
+        getAttendFormRoute: function () {
+            return api.updateSheetAttendance(this.sheet.id);
+        },
+
         /**
          * @param {Object} slot
          *
