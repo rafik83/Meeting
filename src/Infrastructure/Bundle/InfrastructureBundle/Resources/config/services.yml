@@ -1540,7 +1540,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler
         arguments:
             - '@adapter.sendgrid_api_adapter'
-            - '@domain.messaging.emailing.sheet_validated_substitutions_provider'
+            - '@domain.messaging.substitutions_r'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
 
@@ -4119,13 +4119,10 @@ services:
             - '@components.token.user.activate_account_token_generator'
             - '@query.sheet.planning.sheet_planning_view_query_handler'
 
-    domain.messaging.emailing.sheet_validated_substitutions_provider:
-        class: Proximum\Vimeet\Domain\Messaging\Emailing\SheetValidatedSubstitutionsProvider
-
-    domain.messaging.emailing.sheet_validation_validated_substitutions_provider:
-        class: Proximum\Vimeet\Domain\Messaging\Emailing\SheetValidationValidatedSubstitutionsProvider
+    domain.messaging.emailing.substitution_resolver:
+        class: Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver
         arguments:
-            - '@adapter.event_url_generator'
+            - '@domain.messaging.substitutions.substitutions_providers'
 
     #
     # Emailing Query
@@ -4356,3 +4353,35 @@ services:
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
+
+    ##
+    # Substitution Provider
+    ##
+
+    domain.messaging.substitutions.event_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\EventSubstitution
+    domain.messaging.substitutions.firstname_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\FirstnameSubstitution
+    domain.messaging.substitutions.lastname_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\LastnameSubstitution
+    domain.messaging.substitutions.participant_type_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\ParticipantTypeSubstitution
+    domain.messaging.substitutions.schedule_date_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\ScheduleDateSubstitution
+    domain.messaging.substitutions.catalog_online_date_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\CatalogOnlineDateSubstitution
+    domain.messaging.substitutions.sheet_link_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\SheetLinkSubstitution
+        arguments:
+            - '@adapter.event_url_generator'
+
+    domain.messaging.substitutions.substitutions_providers:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\SubstitutionsProviders
+        calls:
+            - ['registerSubstitution', ['%event%', '@domain.messaging.substitutions.event_substitution']]
+            - ['registerSubstitution', ['%firstname%', '@domain.messaging.substitutions.firstname_substitution']]
+            - ['registerSubstitution', ['%lastname%', '@domain.messaging.substitutions.lastname_substitution']]
+            - ['registerSubstitution', ['%participationType%', '@domain.messaging.substitutions.participant_type_substitution']]
+            - ['registerSubstitution', ['%sheetLink%', '@domain.messaging.substitutions.sheet_link_substitution']]
+            - ['registerSubstitution', ['%catalogOnlineDate%', '@domain.messaging.substitutions.catalog_online_date_substitution']]
+            - ['registerSubstitution', ['%scheduleDate%', '@domain.messaging.substitutions.schedule_date_substitution']]

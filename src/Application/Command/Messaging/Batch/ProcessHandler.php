@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
 use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
-use Proximum\Vimeet\Domain\Messaging\Emailing\AbstractSubstitutionsProvider;
+use Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver;
 
 class ProcessHandler
 {
@@ -22,22 +22,22 @@ class ProcessHandler
     private $sendGridApiAdapter;
 
     /**
-     * @var AbstractSubstitutionsProvider
+     * @var SubstitutionResolver
      */
-    private $substitutionsProvider;
+    private $substitutionResolver;
 
     /**
      * ProcessHandler constructor.
      *
-     * @param SendGridApiAdapterInterface   $sendGridApiAdapter
-     * @param AbstractSubstitutionsProvider $substitutionsProvider
+     * @param SendGridApiAdapterInterface $sendGridApiAdapter
+     * @param SubstitutionResolver        $substitutionResolver
      */
     public function __construct(
         SendGridApiAdapterInterface $sendGridApiAdapter,
-        AbstractSubstitutionsProvider $substitutionsProvider
+        SubstitutionResolver $substitutionResolver
     ) {
-        $this->sendGridApiAdapter    = $sendGridApiAdapter;
-        $this->substitutionsProvider = $substitutionsProvider;
+        $this->sendGridApiAdapter   = $sendGridApiAdapter;
+        $this->substitutionResolver = $substitutionResolver;
     }
 
     /**
@@ -51,7 +51,7 @@ class ProcessHandler
     /**
      * @param Process $process
      *
-     * @return array
+     * @return array string => ReceiverView
      */
     private function getReceivers(Process $process)
     {
@@ -60,19 +60,8 @@ class ProcessHandler
         foreach ($process->sheets as $sheet) {
             $locale = $sheet->getOwnerLocale();
 
-            // get subject and body placeholders
-            $placeholders = $this->substitutionsProvider->findPlaceholders(
-                $process->message->getSubject($locale),
-                $process->message->getContent($locale)
-            );
-
-            // replace placeholders by content
-            $substitutions = $this->substitutionsProvider->getSubstitutions(
-                $sheet->getOwner(),
-                $sheet,
-                $locale,
-                $placeholders
-            );
+            // replace all placeholders by content
+            $substitutions = $this->substitutionResolver->getSubstitutions($sheet, $locale);
 
             $email = $sheet->getOwner()->getEmail();
             $index = $email . $sheet->getId();
