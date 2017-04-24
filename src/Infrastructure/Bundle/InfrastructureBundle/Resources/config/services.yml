@@ -2560,6 +2560,30 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQuery }
 
+    query.sheet.group.participant.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@query.sheet.group.participant.sheets_view_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQuery }
+
+    query.sheet.group.participant.sheets_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\SheetsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@query.sheet.group.participant.participant_view_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SheetsViewQuery }
+
+    query.sheet.group.participant.participant_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQueryHandler
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQuery }
+
     #
     # Program query
     #
