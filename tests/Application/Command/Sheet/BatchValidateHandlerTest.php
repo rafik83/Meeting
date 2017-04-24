@@ -55,7 +55,7 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
 
-        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATED)->shouldBeCalled();
+        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATED, true)->shouldBeCalled();
 
         $batchJobQueue->createJob(
             [1, 2, 3],

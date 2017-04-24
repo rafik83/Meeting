@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -27,17 +29,25 @@ class BatchValidationValidateHandler
     private $batchJobQueue;
 
     /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
+
+    /**
      * BatchValidationValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param BatchJobQueueInterface   $batchJobQueue
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        BatchJobQueueInterface $batchJobQueue
+        BatchJobQueueInterface $batchJobQueue,
+        JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->batchJobQueue   = $batchJobQueue;
+        $this->jobQueue        = $jobQueue;
     }
 
     /**
@@ -55,6 +65,12 @@ class BatchValidationValidateHandler
         );
 
         if (!empty($batch->ids)) {
+            // reindex sheets
+            $this->jobQueue->indexSheets($batch->ids);
+
+            // send email
+            $this->jobQueue->sendEmailing($batch->event, $batch->ids, Events::SHEET_VALIDATION_VALIDATE, true);
+
             $this->batchJobQueue->createJob($batch->ids, $batch->admin);
         }
 

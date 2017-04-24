@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -47,11 +49,12 @@ class BatchValidationValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedSheet3 = new Sheet($event, $type, [], $user3, $date);
         $expectedSheet3->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
 
-        $command = new BatchValidationValidate([1, 2, 3], $admin);
+        $command = new BatchValidationValidate($event, [1, 2, 3], $admin);
 
         // Mock
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $batchJobQueue   = $this->prophesize(BatchJobQueueInterface::class);
+        $jobQueue        = $this->prophesize(JobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])
             ->shouldBeCalled()
@@ -61,14 +64,17 @@ class BatchValidationValidateHandlerTest extends \PHPUnit_Framework_TestCase
             ->updateValidationState([1, 2, 3], Sheet::STATE_VALIDATION_VALIDATED)
             ->shouldBeCalled();
 
-        $batchJobQueue
-            ->createJob([1, 2, 3], $admin)
-            ->shouldBeCalled();
+        $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
+
+        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATION_VALIDATE, true)->shouldBeCalled();
+
+        $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
 
         // Handler
         $handler = new BatchValidationValidateHandler(
             $sheetRepository->reveal(),
-            $batchJobQueue->reveal()
+            $batchJobQueue->reveal(),
+            $jobQueue->reveal()
         );
 
         $result = $handler->handle($command);

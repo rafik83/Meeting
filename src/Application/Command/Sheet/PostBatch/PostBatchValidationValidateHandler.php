@@ -28,25 +28,17 @@ class PostBatchValidationValidateHandler
     private $datetime;
 
     /**
-     * @var SheetIndexerInterface
-     */
-    private $sheetIndexer;
-
-    /**
      * PostBatchValidationValidateHandler constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface       $datetime
-     * @param SheetIndexerInterface    $sheetIndexer
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $datetime,
-        SheetIndexerInterface $sheetIndexer
+        \DateTimeInterface $datetime
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->datetime        = $datetime;
-        $this->sheetIndexer    = $sheetIndexer;
     }
 
     /**
@@ -54,8 +46,6 @@ class PostBatchValidationValidateHandler
      */
     public function handle(PostBatchValidationValidate $command)
     {
-        $this->sheetIndexer->updateSheets($command->sheets);
-
         foreach ($command->sheets as $sheet) {
             $this->eventDispatcher->dispatch(
                 Events::SHEET_VALIDATION_VALIDATE,

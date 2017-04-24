@@ -154,7 +154,7 @@ class BatchHandler
 
         if ($batch->validationValidate) {
             return $this->batchValidationValidateHandler->handle(
-                new BatchValidationValidate($batch->ids, $batch->admin)
+                new BatchValidationValidate($batch->event, $batch->ids, $batch->admin)
             );
         }
         
