@@ -18,12 +18,11 @@ class ParticipantView
      *
      * @param string $firstName
      * @param string $lastName
-     * @param string $fullName
      */
-    public function __construct($firstName, $lastName, $fullName)
+    public function __construct($firstName, $lastName)
     {
         $this->firstName = $firstName;
         $this->lastName  = $lastName;
-        $this->fullName  = $fullName;
+        $this->fullName  = $firstName . ' ' . $lastName;
     }
 }

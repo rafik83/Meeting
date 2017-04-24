@@ -37,6 +37,6 @@ class ParticipantViewQueryHandler
             ->participantInfoGuesser
             ->guessParticipantLastName($query->participant, $query->participant->getLocale());
 
-        return new ParticipantView($firstName, $lastName, $firstName . ' '  . $lastName);
+        return new ParticipantView($firstName, $lastName);
     }
 }

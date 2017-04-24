@@ -52,7 +52,8 @@ class SheetsViewQueryHandler
             usort($participantViews,
                 function (ParticipantView $one, ParticipantView $other) {
                     return strcasecmp($one->lastName, $other->lastName);
-                });
+                }
+            );
 
 
             return new SheetView(
@@ -60,13 +61,13 @@ class SheetsViewQueryHandler
                 $this->sheetInfoGuesser->guessSheetTitle($sheet),
                 $participantViews
             );
-        },
-            $query->sheets);
+        }, $query->sheets);
 
         usort($sheetViews,
             function (SheetView $one, SheetView $other) {
                 return strcasecmp($one->title, $other->title);
-            });
+            }
+        );
 
         return $sheetViews;
     }
