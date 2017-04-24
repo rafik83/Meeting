@@ -98,7 +98,7 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $updateUsersSheetsHandler->handle($updateUsersSheets));
     }
 
-    public function testRemoveUserSheetWithParticipantHasMeeting()
+    public function testRemoveUserFromSheetWithParticipantHasMeeting()
     {
         $participantRepositoryMock = $this->prophesize(ParticipantRepositoryInterface::class);
         $userRepositoryMock = $this->prophesize(UserRepositoryInterface::class);
@@ -152,7 +152,7 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesserCacheMock
             ->guessSheetTitle($sheetMock2->reveal(), null)
             ->shouldBeCalled()
-            ->willReturn('Sheet title 1');
+            ->willReturn('Sheet title 2');
 
         $participantRepositoryMock->delete($participantMock->reveal())->shouldNotBeCalled();
 
@@ -163,7 +163,78 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals(
-            [UpdateUsersSheetsResultView::createHasMeetingOnSheet('Jean Bon', 'Sheet title 1')],
+            [UpdateUsersSheetsResultView::createHasMeetingOnSheet('Jean Bon', 'Sheet title 2')],
+            $updateUsersSheetsHandler->handle($updateUsersSheets)
+        );
+    }
+
+    public function testRemoveUserFromSheetButAtLeastOneParticipantOnSheetIsNeeded()
+    {
+        $participantRepositoryMock = $this->prophesize(ParticipantRepositoryInterface::class);
+        $userRepositoryMock = $this->prophesize(UserRepositoryInterface::class);
+        $meetingRepositoryMock = $this->prophesize(MeetingRepositoryInterface::class);
+        $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
+        $userToParticipantMock = $this->prophesize(UserToParticipant::class);
+        $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
+
+        $groupMock = $this->prophesize(Group::class);
+
+        $sheetMock1 = $this->prophesize(Sheet::class);
+        $sheetMock2 = $this->prophesize(Sheet::class);
+
+        $userMock = $this->prophesize(User::class);
+
+        $participantMock = $this->prophesize(Participant::class);
+
+        $userParticipantViews = [
+            1 => new UserParticipantView(1, 'jean@bon.com', 'Jean Bon', [$sheetMock1->reveal(), $sheetMock2->reveal()]),
+        ];
+
+        $usersParticipantViewQueryHandlerMock
+            ->handle(new UsersParticipantViewQuery($groupMock->reveal()))
+            ->willReturn($userParticipantViews);
+
+        $updateUsersSheetsHandler = new UpdateUsersSheetsHandler(
+            $participantRepositoryMock->reveal(),
+            $userRepositoryMock->reveal(),
+            $meetingRepositoryMock->reveal(),
+            $usersParticipantViewQueryHandlerMock->reveal(),
+            $userToParticipantMock->reveal(),
+            $sheetInfoGuesserCacheMock->reveal()
+        );
+
+        $userRepositoryMock
+            ->getByIdsIndexedById([1])
+            ->shouldBeCalled()
+            ->willReturn([1 => $userMock->reveal()]);
+
+        $participantRepositoryMock
+            ->getParticipantForUserAndSheet($userMock->reveal(), $sheetMock2->reveal())
+            ->shouldBeCalled()
+            ->willReturn($participantMock->reveal());
+
+        $meetingRepositoryMock
+            ->hasScheduledMeetingByParticipant($participantMock->reveal())
+            ->shouldNotBeCalled();
+
+        $sheetMock2->countParticipants()->shouldBeCalled()->willReturn(1);
+
+        $sheetInfoGuesserCacheMock->guessSheetTitle($sheetMock1->reveal(), null)->shouldNotBeCalled();
+        $sheetInfoGuesserCacheMock
+            ->guessSheetTitle($sheetMock2->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn('Sheet title 2');
+
+        $participantRepositoryMock->delete($participantMock->reveal())->shouldNotBeCalled();
+
+        $updateUsersSheets = new UpdateUsersSheets($groupMock->reveal(), $userParticipantViews);
+
+        $updateUsersSheets->sheetsByUser = [
+            1 => [$sheetMock1->reveal()],
+        ];
+
+        $this->assertEquals(
+            [UpdateUsersSheetsResultView::createSheetMustHaveAtLeastOneParticipant('Jean Bon', 'Sheet title 2')],
             $updateUsersSheetsHandler->handle($updateUsersSheets)
         );
     }

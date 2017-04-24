@@ -102,6 +102,15 @@ class UpdateUsersSheetsHandler
                     $participantToDelete = $this->participantRepository->getParticipantForUserAndSheet($user, $sheet);
 
                     if (null !== $participantToDelete) {
+                        if (1 === $sheet->countParticipants()) {
+                            $updateUsersSheetsResultViews[] = UpdateUsersSheetsResultView::createSheetMustHaveAtLeastOneParticipant(
+                                $userParticipantViews[$userId]->fullname,
+                                $this->sheetInfoGuesserCache->guessSheetTitle($sheet, null)
+                            );
+
+                            continue;
+                        }
+
                         if (true === $this->meetingRepository->hasScheduledMeetingByParticipant($participantToDelete)) {
                             $updateUsersSheetsResultViews[] = UpdateUsersSheetsResultView::createHasMeetingOnSheet(
                                 $userParticipantViews[$userId]->fullname,
@@ -112,6 +121,7 @@ class UpdateUsersSheetsHandler
                         }
 
                         $this->participantRepository->delete($participantToDelete);
+                        $sheet->removeParticipant($participantToDelete);
                     }
                 }
             }
