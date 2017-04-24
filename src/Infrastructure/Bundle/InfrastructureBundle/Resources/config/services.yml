@@ -1540,7 +1540,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler
         arguments:
             - '@adapter.sendgrid_api_adapter'
-            - '@domain.messaging.substitutions_r'
+            - '@domain.messaging.emailing.substitution_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
 
@@ -4378,10 +4378,10 @@ services:
     domain.messaging.substitutions.substitutions_providers:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\SubstitutionsProviders
         calls:
-            - ['registerSubstitution', ['%event%', '@domain.messaging.substitutions.event_substitution']]
-            - ['registerSubstitution', ['%firstname%', '@domain.messaging.substitutions.firstname_substitution']]
-            - ['registerSubstitution', ['%lastname%', '@domain.messaging.substitutions.lastname_substitution']]
-            - ['registerSubstitution', ['%participationType%', '@domain.messaging.substitutions.participant_type_substitution']]
-            - ['registerSubstitution', ['%sheetLink%', '@domain.messaging.substitutions.sheet_link_substitution']]
-            - ['registerSubstitution', ['%catalogOnlineDate%', '@domain.messaging.substitutions.catalog_online_date_substitution']]
-            - ['registerSubstitution', ['%scheduleDate%', '@domain.messaging.substitutions.schedule_date_substitution']]
+            - ['registerSubstitution', ['%%event%%', '@domain.messaging.substitutions.event_substitution']]
+            - ['registerSubstitution', ['%%firstname%%', '@domain.messaging.substitutions.firstname_substitution']]
+            - ['registerSubstitution', ['%%lastname%%', '@domain.messaging.substitutions.lastname_substitution']]
+            - ['registerSubstitution', ['%%participationType%%', '@domain.messaging.substitutions.participant_type_substitution']]
+            - ['registerSubstitution', ['%%sheetLink%%', '@domain.messaging.substitutions.sheet_link_substitution']]
+            - ['registerSubstitution', ['%%catalogOnlineDate%%', '@domain.messaging.substitutions.catalog_online_date_substitution']]
+            - ['registerSubstitution', ['%%scheduleDate%%', '@domain.messaging.substitutions.schedule_date_substitution']]
