@@ -25,6 +25,12 @@ class UserToGroupManagerChecker
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /**
+     * UserToGroupManagerChecker constructor.
+     * 
+     * @param GroupRepositoryInterface $groupRepository
+     * @param SheetRepositoryInterface $sheetRepository
+     */
     public function __construct(
         GroupRepositoryInterface $groupRepository,
         SheetRepositoryInterface $sheetRepository

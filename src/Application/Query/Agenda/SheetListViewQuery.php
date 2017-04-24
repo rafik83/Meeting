@@ -30,7 +30,7 @@ class SheetListViewQuery
     public $lazyLoadIndicators;
 
     /**
-     * SheetViewQuery constructor.
+     * SheetListViewQuery constructor.
      *
      * @param Event  $event
      * @param string $locale

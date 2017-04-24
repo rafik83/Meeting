@@ -11,10 +11,10 @@
 namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView as AdminGroupView;
 
 class GroupViewQueryHandler
 {
@@ -30,14 +30,14 @@ class GroupViewQueryHandler
      */
     public function __construct(SheetRepositoryInterface $sheetRepository, SheetInfoGuesser $sheetInfoGuesser)
     {
-        $this->sheetRepository = $sheetRepository;
+        $this->sheetRepository  = $sheetRepository;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
     /**
      * @param GroupViewQuery $groupViewQuery
      *
-     * @return GroupView
+     * @return AdminGroupView
      */
     public function handle(GroupViewQuery $groupViewQuery)
     {
@@ -51,7 +51,7 @@ class GroupViewQueryHandler
             return strcasecmp($one->title, $other->title);
         });
 
-        return new GroupView(
+        return new AdminGroupView(
             $groupViewQuery->group->getId(),
             $groupViewQuery->group->getTitle(),
             $groupViewQuery->group->getManager()->getEmail(),

@@ -36,7 +36,7 @@ class Create
      *
      * @param Event           $event
      * @param User            $user
-     * @param SheetView[] $sheetViews
+     * @param SheetView[]     $sheetViews
      */
     public function __construct(Event $event, User $user, array $sheetViews)
     {
