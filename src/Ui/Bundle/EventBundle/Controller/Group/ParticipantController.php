@@ -13,10 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets;
 use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
+use Proximum\Vimeet\Application\View\Group\Participant\UpdateUsersSheetsResultView;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\UsersSheetsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,9 +59,31 @@ class ParticipantController extends Controller
         );
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('command.group.participant.update_users_sheets_handler')->handle($updateUsersSheets);
+            /** @var UpdateUsersSheetsResultView[] $updateUsersSheetsResultViews */
+            $updateUsersSheetsResultViews = $this->get('command.group.participant.update_users_sheets_handler')
+                ->handle($updateUsersSheets)
+            ;
 
-            $this->addFlash('success', 'flash.group.participant.update_success');
+            $updateUsersSheetsResultMessage = [];
+
+            $translator = $this->get('translator');
+
+            foreach ($updateUsersSheetsResultViews as $updateUsersSheetsResultView) {
+                $updateUsersSheetsResultMessage[] = $translator->trans('flash.' . $updateUsersSheetsResultView->type, [
+                    '%participantFullname%' => $updateUsersSheetsResultView->participantFullname,
+                    '%sheetTitle%' => $updateUsersSheetsResultView->sheetTitle,
+                ], 'flashes');
+            }
+
+            $this->addFlash(
+                'success',
+                $translator->transChoice(
+                    'flash.group.participant.update_success',
+                    count($updateUsersSheetsResultMessage),
+                    ['%result%' => implode("\n", $updateUsersSheetsResultMessage)],
+                    'flashes'
+                )
+            );
 
             return $this->redirectToRoute(
                 'event_sheet_group_participant_index',

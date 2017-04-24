@@ -1675,8 +1675,10 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@query.sheet.group.participant.participant_view_query_handler'
             - '@participant.user_to_participant'
+            - '@command.planning.sheet_info_guesser_cache'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
 
