@@ -79,7 +79,7 @@ class SendEmailingCommand extends Command
             ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
             ->addArgument('emailingId', InputArgument::REQUIRED, 'Emailing ID')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids')
-            ->addArgument('sendEmailToTeam', InputArgument::OPTIONAL, 'Sheet ids', self::BOOL_NO);
+            ->addArgument('sendEmailToTeam', InputArgument::OPTIONAL, 'Send email to team', self::BOOL_NO);
     }
 
     /**

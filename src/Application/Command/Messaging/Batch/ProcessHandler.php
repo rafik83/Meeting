@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver;
+use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 
 class ProcessHandler
 {
@@ -27,17 +30,25 @@ class ProcessHandler
     private $substitutionResolver;
 
     /**
+     * @var BillingInfoRepositoryInterface
+     */
+    private $billingInfoRepository;
+
+    /**
      * ProcessHandler constructor.
      *
-     * @param SendGridApiAdapterInterface $sendGridApiAdapter
-     * @param SubstitutionResolver        $substitutionResolver
+     * @param SendGridApiAdapterInterface    $sendGridApiAdapter
+     * @param SubstitutionResolver           $substitutionResolver
+     * @param BillingInfoRepositoryInterface $billingInfoRepository
      */
     public function __construct(
         SendGridApiAdapterInterface $sendGridApiAdapter,
-        SubstitutionResolver $substitutionResolver
+        SubstitutionResolver $substitutionResolver,
+        BillingInfoRepositoryInterface $billingInfoRepository
     ) {
-        $this->sendGridApiAdapter   = $sendGridApiAdapter;
-        $this->substitutionResolver = $substitutionResolver;
+        $this->sendGridApiAdapter    = $sendGridApiAdapter;
+        $this->substitutionResolver  = $substitutionResolver;
+        $this->billingInfoRepository = $billingInfoRepository;
     }
 
     /**
@@ -57,6 +68,8 @@ class ProcessHandler
     {
         $receivers = [];
 
+        $billingInfos = $this->getBillingInfosIndexedBySheetId($process->sheets);
+
         foreach ($process->sheets as $sheet) {
             $locale = $sheet->getOwnerLocale();
 
@@ -65,6 +78,18 @@ class ProcessHandler
 
             $email = $sheet->getOwner()->getEmail();
             $index = $email . $sheet->getId();
+
+            if ($process->message->isSendEmailToBillingInfo() && isset($billingInfos[$sheet->getId()])) {
+                $billingInfo      = $billingInfos[$sheet->getId()];
+                $billingInfoIndex = $billingInfo->getEmail() . $sheet->getId();
+
+                $receivers[$billingInfoIndex] = new ReceiverView(
+                    $billingInfo->getEmail(),
+                    $substitutions,
+                    $locale
+                );
+            }
+
             $receivers[$index] = new ReceiverView(
                 $email,
                 $substitutions,
@@ -73,5 +98,22 @@ class ProcessHandler
         }
 
         return $receivers;
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     *
+     * @return BillingInfo[] indexed by Sheet id
+     */
+    private function getBillingInfosIndexedBySheetId($sheets)
+    {
+        $billingInfos                 = $this->billingInfoRepository->getBySheets($sheets);
+        $billingInfosIndexedBySheetId = [];
+
+        foreach ($billingInfos as $billingInfo) {
+            $billingInfosIndexedBySheetId[$billingInfo->getSheet()->getId()] = $billingInfo;
+        }
+
+        return $billingInfosIndexedBySheetId;
     }
 }

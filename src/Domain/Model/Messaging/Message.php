@@ -53,18 +53,32 @@ class Message
     private $sendToEmailTeam = false;
 
     /**
+     * Flag to send email to billing info as well
+     *
+     * @var bool
+     */
+    private $sendEmailToBillingInfo = false;
+
+    /**
      * @param Event              $event
      * @param \DateTimeInterface $createdAt
      * @param string             $name
      * @param bool               $sendToEmailTeam
+     * @param bool               $sendEmailToBillingInfo
      */
-    public function __construct(Event $event, \DateTimeInterface $createdAt, $name, $sendToEmailTeam = false)
-    {
-        $this->event           = $event;
-        $this->name            = $name;
-        $this->createdAt       = $createdAt;
-        $this->translations    = new ArrayCollection();
-        $this->sendToEmailTeam = $sendToEmailTeam;
+    public function __construct(
+        Event $event,
+        \DateTimeInterface $createdAt,
+        $name,
+        $sendToEmailTeam = false,
+        $sendEmailToBillingInfo = false
+    ) {
+        $this->event                  = $event;
+        $this->name                   = $name;
+        $this->createdAt              = $createdAt;
+        $this->translations           = new ArrayCollection();
+        $this->sendToEmailTeam        = $sendToEmailTeam;
+        $this->sendEmailToBillingInfo = $sendEmailToBillingInfo;
     }
 
     /**
@@ -216,5 +230,13 @@ class Message
     public function isSendToEmailTeam()
     {
         return $this->sendToEmailTeam;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendEmailToBillingInfo()
+    {
+        return $this->sendEmailToBillingInfo;
     }
 }

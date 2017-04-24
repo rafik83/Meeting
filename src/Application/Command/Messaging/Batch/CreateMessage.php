@@ -46,6 +46,11 @@ class CreateMessage
     public $sendToEmailTeam = false;
 
     /**
+     * @var bool
+     */
+    public $sendEmailToBillingInfo = false;
+
+    /**
      * Create constructor.
      *
      * @param Event   $event
@@ -54,14 +59,23 @@ class CreateMessage
      * @param string  $subject
      * @param string  $emailTemplate
      * @param bool    $sendToEmailTeam
+     * @param bool    $sendEmailToBillingInfo
      */
-    public function __construct(Event $event, array $sheets, $name, $subject, $emailTemplate, $sendToEmailTeam = false)
-    {
-        $this->event           = $event;
-        $this->subject         = $subject;
-        $this->emailTemplate   = $emailTemplate;
-        $this->name            = $name;
-        $this->sheets          = $sheets;
-        $this->sendToEmailTeam = $sendToEmailTeam;
+    public function __construct(
+        Event $event,
+        array $sheets,
+        $name,
+        $subject,
+        $emailTemplate,
+        $sendToEmailTeam = false,
+        $sendEmailToBillingInfo = false
+    ) {
+        $this->event                  = $event;
+        $this->subject                = $subject;
+        $this->emailTemplate          = $emailTemplate;
+        $this->name                   = $name;
+        $this->sheets                 = $sheets;
+        $this->sendToEmailTeam        = $sendToEmailTeam;
+        $this->sendEmailToBillingInfo = $sendEmailToBillingInfo;
     }
 }

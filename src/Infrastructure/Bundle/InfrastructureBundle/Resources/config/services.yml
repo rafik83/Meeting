@@ -3317,6 +3317,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
         arguments:
             - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
             - '@command.invoice.batch_generate_invoice_handler'
         tags:
             - { name: console.command }
@@ -4375,6 +4376,21 @@ services:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\SheetLinkSubstitution
         arguments:
             - '@adapter.event_url_generator'
+    domain.messaging.substitutions.participant_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\ParticipantSubstitution
+        arguments:
+            - '@domain.messaging.substitutions.firstname_substitution'
+            - '@domain.messaging.substitutions.lastname_substitution'
+    domain.messaging.substitutions.invoices_link_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\InvoicesLinkSubstitution
+        arguments:
+            - '@repository.invoice.invoice_repository'
+            - '@components.invoice.invoice_url_view_query_handler'
+            - '@twig'
+    domain.messaging.substitutions.orders_link_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\OrdersLinkSubstitution
+        arguments:
+            - '@adapter.event_url_generator'
 
     domain.messaging.substitutions.substitutions_providers:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\SubstitutionsProviders
@@ -4386,3 +4402,6 @@ services:
             - ['registerSubstitution', ['%%sheetLink%%', '@domain.messaging.substitutions.sheet_link_substitution']]
             - ['registerSubstitution', ['%%catalogOnlineDate%%', '@domain.messaging.substitutions.catalog_online_date_substitution']]
             - ['registerSubstitution', ['%%scheduleDate%%', '@domain.messaging.substitutions.schedule_date_substitution']]
+            - ['registerSubstitution', ['%%participant%%', '@domain.messaging.substitutions.participant_substitution']]
+            - ['registerSubstitution', ['%%ordersLink%%', '@domain.messaging.substitutions.orders_link_substitution']]
+            - ['registerSubstitution', ['%%invoiceLinks%%', '@domain.messaging.substitutions.invoices_link_substitution']]

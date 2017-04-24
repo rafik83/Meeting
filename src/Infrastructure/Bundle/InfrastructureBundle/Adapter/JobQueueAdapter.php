@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -70,9 +69,10 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function generateInvoice(array $sheetIds, Admin $admin)
+    public function generateInvoice(Event $event, array $sheetIds, Admin $admin)
     {
         $job = new Job(GenerateInvoiceCommand::NAME, [
+            'eventId'  => $event->getId(),
             'adminId'  => $admin->getId(),
             'sheetIds' => implode(',', $sheetIds),
         ]);
@@ -100,7 +100,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $admin->getEmail(),
             $locale,
             $lockMeetingRequest,
-            $solutionType
+            $solutionType,
         ]);
 
         $this->setJob($job);
@@ -115,7 +115,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $file->getId(),
             $event->getId(),
             $admin->getEmail(),
-            $locale
+            $locale,
         ]);
 
         $this->setJob($job);
@@ -183,7 +183,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 $event->getId(),
                 $emailId,
                 implode(',', $sheetIds),
-                $sendEmailToTeam ? SendEmailingCommand::BOOL_YES : SendEmailingCommand::BOOL_NO
+                $sendEmailToTeam ? SendEmailingCommand::BOOL_YES : SendEmailingCommand::BOOL_NO,
             ]
         );
         $this->setJob($job);

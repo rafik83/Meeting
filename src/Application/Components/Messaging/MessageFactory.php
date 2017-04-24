@@ -73,8 +73,19 @@ class MessageFactory
                     $sendEmailToTeam
                 );
                 break;
+            case Events::SHEET_INVOICED:
+                $command = new CreateMessage(
+                    $event,
+                    $sheets,
+                    Events::SHEET_INVOICED,
+                    'mail.sheet.invoiced.subject',
+                    'MailBundle:Mail:Invoice/sheetInvoiced.html.twig',
+                    $sendEmailToTeam,
+                    true
+                );
+                break;
             default:
-                throw new \InvalidArgumentException('Unknow message type');
+                throw new \InvalidArgumentException('Undefined message type');
         }
 
         return $this->createMessageHandler->handle($command);

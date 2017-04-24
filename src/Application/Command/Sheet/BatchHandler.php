@@ -160,7 +160,7 @@ class BatchHandler
         
         if ($batch->generateInvoice) {
            return $this->batchGenerateInvoiceHandler->handle(
-               new BatchGenerateInvoice($batch->ids, $batch->admin)
+               new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
            );
         }
 
