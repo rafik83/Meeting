@@ -28,7 +28,7 @@ Feature: Partner available features
     And I should see "Les rendez-vous CARNOT 2016"
     And I should see "admin.users.link"
     And I should see "admin.sheet.link"
-    When I follow "admin.sheet.link"
+    When I go to this page "/admin/fr/event/1/sheet"
     And I should see "admin.sheet.title"
     # verify that I can check the checkbox
     When I check "sheet_batch_ids_1"

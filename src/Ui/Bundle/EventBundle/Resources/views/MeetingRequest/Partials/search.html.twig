@@ -49,6 +49,8 @@
     {% endif %}
 </div>
 
+{{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+
 {% if hasResults %}
     <div class="catalog__filters">
         <div class="select-all">

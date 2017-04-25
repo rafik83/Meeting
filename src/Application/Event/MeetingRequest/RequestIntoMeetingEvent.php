@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\Event;
 class RequestIntoMeetingEvent extends Event
 {
     /**
-     * @var Sheet
+     * @var Sheet[]
      */
     private $sheets;
 

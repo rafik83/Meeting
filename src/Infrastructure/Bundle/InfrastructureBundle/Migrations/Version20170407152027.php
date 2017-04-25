@@ -57,6 +57,6 @@ class Version20170407152027 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->addSql('DROP TABLE messaging_message_translation');
-        $this->addSql->executeQuery('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
+        $this->addSql('ALTER TABLE messaging_message ADD subject VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, ADD content LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
     }
 }
