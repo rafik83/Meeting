@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
+use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -44,9 +45,9 @@ class ParticipantViewQueryHandler
         DayRepositoryInterface $dayRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler
     ) {
-        $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->meetingSlotRepository  = $meetingSlotRepository;
-        $this->dayRepository = $dayRepository;
+        $this->participantInfoGuesser    = $participantInfoGuesser;
+        $this->meetingSlotRepository     = $meetingSlotRepository;
+        $this->dayRepository             = $dayRepository;
         $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
     }
 
@@ -71,7 +72,7 @@ class ParticipantViewQueryHandler
     /**
      * @param Event $event
      *
-     * @return array
+     * @return AgendaDayView[]
      */
     private function buildDayViewsSkeleton(Event $event)
     {

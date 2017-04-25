@@ -7,7 +7,7 @@ class AgendaDayView
     /**
      * @var SlotView[]
      */
-    public $slots;
+    public $slotViews;
 
     /**
      * Day number incremented
@@ -19,12 +19,12 @@ class AgendaDayView
     /**
      * AgendaDayView constructor.
      *
-     * @param int                $day
-     * @param SlotView[] $slots
+     * @param int        $day
+     * @param SlotView[] $slotViews
      */
-    public function __construct($day, array $slots)
+    public function __construct($day, array $slotViews)
     {
-        $this->slots = $slots;
-        $this->day   = $day;
+        $this->slotViews = $slotViews;
+        $this->day       = $day;
     }
 }

@@ -38,6 +38,5 @@ class SlotViewQueryHandler
         }, $slots);
 
         return $slotViews;
-
     }
 }
