@@ -33,7 +33,7 @@ class Process
      */
     public function __construct(Message $message, array $sheets)
     {
-        $this->sheets       = $sheets;
-        $this->message      = $message;
+        $this->sheets  = $sheets;
+        $this->message = $message;
     }
 }

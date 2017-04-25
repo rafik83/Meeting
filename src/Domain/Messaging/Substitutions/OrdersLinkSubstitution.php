@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 
@@ -23,9 +24,9 @@ class OrdersLinkSubstitution implements SubstituteInterface
     /**
      * OrdersLinkSubstitution constructor.
      *
-     * @param EventUrlGenerator $eventUrlGenerator
+     * @param EventUrlGeneratorInterface $eventUrlGenerator
      */
-    public function __construct(EventUrlGenerator $eventUrlGenerator)
+    public function __construct(EventUrlGeneratorInterface $eventUrlGenerator)
     {
         $this->eventUrlGenerator = $eventUrlGenerator;
     }
@@ -39,7 +40,8 @@ class OrdersLinkSubstitution implements SubstituteInterface
             $sheet->getEvent(),
             'event_order_list',
             [
-                '_locale' => $sheet->getOwnerLocale(), 'sheet' => $sheet->getId(),
+                '_locale' => $sheet->getOwnerLocale(),
+                'sheet'   => $sheet->getId(),
             ]
         );
 
