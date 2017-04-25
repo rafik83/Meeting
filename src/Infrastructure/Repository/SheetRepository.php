@@ -653,4 +653,22 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasGroup(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.group = NULL AND sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+    }
 }
