@@ -22,7 +22,11 @@
         </div>
     </div>
     {{ form_row(form.title) }}
-    {{ form_row(form.sheetViews) }}
+
+    {% if form.sheetViews is defined %}
+        {{ form_row(form.sheetViews) }}
+    {% endif %}
+    
 {% endblock %}
 
 {% block goback_link path('admin_sheets_group_pre_create', {event: event.id}) %}

@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Exception\Group\NoSheetsAvailableForUserAndForEvent;
-use Proximum\Vimeet\Application\Exception\Group\NoSheetSelectedForGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
@@ -126,15 +125,11 @@ class GroupController extends Controller
         $command = new Create($event, $user, $sheetViews);
         $form    = $this->createForm(CreateType::class, $command, ['sheetViews' => $sheetViews]);
 
-        try {
-            if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-                $this->get('tactician.commandbus')->handle($command);
-                $this->addFlash('success', 'flash.admin.group.create.success');
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.admin.group.create.success');
 
-                return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
-            }
-        } catch (NoSheetSelectedForGroupException $exception) {
-            $this->notifyFormError($form, 'sheetViews', 'validators.group.no_sheet_selected');
+            return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
         }
 
         return $this->render('@Admin/SheetsGroup/create.html.twig', [

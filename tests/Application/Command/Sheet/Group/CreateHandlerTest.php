@@ -53,28 +53,4 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler->handle($create);
     }
-
-    public function testHandleWithNoSheetSelected()
-    {
-        $this->expectException(NoSheetSelectedForGroupException::class);
-
-        $dateTime   = new \DateTime();
-        $event      = EventFactory::createEvent('Concerto en fa mineur de P.Sebastien');
-        $user       = UserFactory::create('p.seb@elao.com');
-        $sheetViews = [new SheetView(1, 'fiche 1')];
-
-        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
-        $create        = new Create($event, $user, $sheetViews);
-        $create->title = 'Groupe';
-
-        $handler = new CreateHandler(
-            $groupRepository->reveal(),
-            $sheetRepository->reveal(),
-            $dateTime
-        );
-
-        $handler->handle($create);
-    }
 }

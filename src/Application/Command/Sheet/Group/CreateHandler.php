@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
-use Proximum\Vimeet\Application\Exception\Group\NoSheetSelectedForGroupException;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -45,16 +44,10 @@ class CreateHandler
 
     /**
      * @param Create $command
-     *
-     * @throws NoSheetSelectedForGroupException
      */
     public function handle(Create $command)
     {
         $group = new Group($command->event, $command->user, $command->title, $this->dateTime);
-
-        if (empty($command->sheetViews['sheetViews'])) {
-            throw new NoSheetSelectedForGroupException();
-        }
 
         foreach ($command->sheetViews['sheetViews'] as $sheetView) {
             $sheet = $this->sheetRepository->getSheetById($sheetView->id);
