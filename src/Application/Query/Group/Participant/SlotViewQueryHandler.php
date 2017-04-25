@@ -33,8 +33,8 @@ class SlotViewQueryHandler
 
         $slotViews = [];
 
-        array_map(function() {
-            $slotViews[] = new SlotView();
+        array_map(function($slot) {
+            $slotViews[] = new SlotView($slot);
         }, $slots);
 
         return $slotViews;

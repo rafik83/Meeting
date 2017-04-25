@@ -2,10 +2,50 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Group\Participant;
 
+use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+
 class SlotView
 {
-    /** @var bool */
+    /**
+     * @var string
+     */
+    public $beginEndHour;
+
+    /** @var bool  */
     public $available = false;
 
-    public $tooltip;
+    /**
+     * AbstractSlotView constructor.
+     *
+     * @param MeetingSlot $slot
+     */
+    public function __construct(MeetingSlot $slot)
+    {
+        $this->beginEndHour = $this->getFormattedHour($slot);
+    }
+
+    /**
+     * Get slot date formatted like that "10:00 - 10:30"
+     *
+     * @param MeetingSlot $slot
+     *
+     * @return string
+     */
+    private function getFormattedHour(MeetingSlot $slot)
+    {
+        return sprintf(
+            '%s - %s',
+            HappeningDateHelper::getHour($slot->getBegin(), null, $slot->getEvent()->getTimeZone()),
+            HappeningDateHelper::getHour($slot->getEnd(), null, $slot->getEvent()->getTimeZone())
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAnAvailableSlot()
+    {
+        return $this->available;
+    }
 }
