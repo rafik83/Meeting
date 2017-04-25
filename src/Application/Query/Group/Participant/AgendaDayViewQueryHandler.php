@@ -9,7 +9,7 @@ class AgendaDayViewQueryHandler
     /**
      * @var SlotViewsQueryHandler
      */
-    private $slotsViewQueryHandler;
+    private $slotViewsQueryHandler;
 
     /**
      * AgendaDayViewQueryHandler constructor.
@@ -28,7 +28,7 @@ class AgendaDayViewQueryHandler
      */
     public function handle(AgendaDayViewQuery $query)
     {
-        $slotViews = $this->slotsViewQueryHandler->handle(
+        $slotViews = $this->slotViewsQueryHandler->handle(
             new SlotViewsQuery(
                 $query->event,
                 $query->day
