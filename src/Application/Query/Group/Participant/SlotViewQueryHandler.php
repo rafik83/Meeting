@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
-use Proximum\Vimeet\Application\View\Sheet\Group\Participant\EmptySlotView;
+use Proximum\Vimeet\Application\View\Sheet\Group\Participant\SlotView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class SlotViewQueryHandler
@@ -34,7 +34,7 @@ class SlotViewQueryHandler
         $slotViews = [];
 
         array_map(function() {
-            $slotViews[] = new EmptySlotView();
+            $slotViews[] = new SlotView();
         }, $slots);
 
         return $slotViews;
