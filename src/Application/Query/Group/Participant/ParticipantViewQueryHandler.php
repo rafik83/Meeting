@@ -3,6 +3,9 @@
 namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantViewQueryHandler
@@ -13,13 +16,38 @@ class ParticipantViewQueryHandler
     private $participantInfoGuesser;
 
     /**
+     * @var MeetingSlotRepositoryInterface
+     */
+    private $meetingSlotRepository;
+
+    /**
+     * @var DayRepositoryInterface
+     */
+    private $dayRepository;
+
+    /**
+     * @var AgendaDayViewQueryHandler
+     */
+    private $agendaDayViewQueryHandler;
+
+    /**
      * ParticipantViewQueryHandler constructor.
      *
-     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param ParticipantInfoGuesser          $participantInfoGuesser
+     * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
+     * @param DayRepositoryInterface          $dayRepository
+     * @param AgendaDayViewQueryHandler       $agendaDayViewQueryHandler
      */
-    public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
+        DayRepositoryInterface $dayRepository,
+        AgendaDayViewQueryHandler $agendaDayViewQueryHandler
+    ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->meetingSlotRepository  = $meetingSlotRepository;
+        $this->dayRepository = $dayRepository;
+        $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
     }
 
     /**
@@ -38,5 +66,29 @@ class ParticipantViewQueryHandler
             ->guessParticipantLastName($query->participant, $query->participant->getLocale());
 
         return new ParticipantView($firstName, $lastName);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    private function buildDayViewsSkeleton(Event $event)
+    {
+        $eventDays = $this->dayRepository->findByEvent($event);
+
+        $dayViews = [];
+
+        foreach ($eventDays as $dayNumber => $day) {
+            $dayViews[] = $this->agendaDayViewQueryHandler->handle(
+                new AgendaDayViewQuery(
+                    $event,
+                    $day,
+                    $dayNumber
+                )
+            );
+        }
+
+        return $dayViews;
     }
 }

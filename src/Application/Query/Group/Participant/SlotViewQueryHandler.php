@@ -1,0 +1,43 @@
+<?php
+
+namespace Proximum\Vimeet\Application\Query\Group\Participant;
+
+use Proximum\Vimeet\Application\View\Sheet\Group\Participant\EmptySlotView;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+
+class SlotViewQueryHandler
+{
+    /**
+     * @var MeetingSlotRepositoryInterface
+     */
+    private $meetingSlotRepository;
+
+    /**
+     * SlotViewQueryHandler constructor.
+     *
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     */
+    public function __construct(MeetingSlotRepositoryInterface $meetingSlotRepository)
+    {
+        $this->meetingSlotRepository = $meetingSlotRepository;
+    }
+
+    /**
+     * @param SlotViewQuery $query
+     *
+     * @return array
+     */
+    public function handle(SlotViewQuery $query)
+    {
+        $slots = $this->meetingSlotRepository->findByEventAndDay($query->event, $query->day);
+
+        $slotViews = [];
+
+        array_map(function() {
+            $slotViews[] = new EmptySlotView();
+        }, $slots);
+
+        return $slotViews;
+
+    }
+}

@@ -46,7 +46,7 @@ class SheetsViewQueryHandler
             foreach ($sheet->getParticipants()->toArray() as $participant) {
                 $participantViews[] = $this
                     ->participantViewQueryHandler
-                    ->handle(new ParticipantViewQuery($participant));
+                    ->handle(new ParticipantViewQuery($participant, $sheet->getEvent()));
             }
 
             usort($participantViews,
@@ -54,7 +54,6 @@ class SheetsViewQueryHandler
                     return strcasecmp($one->lastName, $other->lastName);
                 }
             );
-
 
             return new SheetView(
                 $sheet->getId(),
