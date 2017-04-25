@@ -20,7 +20,6 @@
                 {{ ('event.sheet.state.' ~ details.state)|trans }}
             </span>
 
-
             {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
                 <a href="{{ path('admin_sheet_attend', {'event': event.id, 'sheet': sheet.id}) }}"
                     class="label label-{{ sheet.attend ? 'success' : 'danger' }}">
