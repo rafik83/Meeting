@@ -106,6 +106,15 @@
                         <li>{{ form_widget(batch_form.validationStateValidate) }}</li>
                     {% endif %}
 
+                    {% if batch_form.assignToGroup is defined %}
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#sheetAssignToGroup">
+                                {{ 'admin.sheet.assignToGroup'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if batch_form.generateInvoice is defined %}
                         <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.generateInvoice, { 'attr': { 'data-confirm': 'admin.batch_actions.generateInvoice.confirm'|trans({'%prefix%': event.invoicePrefix.prefixExample}) } }) }}</li>
@@ -278,6 +287,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
                     {{ form_widget(batch_form.validate) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="sheetAssignToGroup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{ 'admin.sheet.assignToGroup'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batch_form.group) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                    {{ form_widget(batch_form.assignToGroup) }}
                 </div>
             </div>
         </div>

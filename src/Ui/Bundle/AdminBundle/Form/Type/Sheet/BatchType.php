@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group\GroupChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -72,6 +73,11 @@ class BatchType extends AbstractType
                 ->add('addCatalog', SubmitType::class)
                 ->add('removeCatalog', SubmitType::class)
                 ->add('generateInvoice', SubmitType::class)
+                ->add('group', GroupChoiceType::class, [
+                    'event'    => $options['event'],
+                    'required' => false,
+                ])
+                ->add('assignToGroup', SubmitType::class)
             ;
         }
 
