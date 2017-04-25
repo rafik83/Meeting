@@ -636,6 +636,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->update(Sheet::class, 'sheet')
             ->set('sheet.state', ':state')
             ->where('sheet.id IN (:ids)')
+            ->andWhere('sheet.state != :state')
             ->setParameter('ids', $ids)
             ->setParameter('state', $state);
 

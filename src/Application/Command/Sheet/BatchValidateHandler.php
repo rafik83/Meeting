@@ -27,7 +27,7 @@ class BatchValidateHandler
      * @var BatchJobQueueInterface
      */
     private $batchJobQueue;
-    
+
     /**
      * @var JobQueueInterface
      */
@@ -58,19 +58,22 @@ class BatchValidateHandler
     public function handle(BatchValidate $batchValidate)
     {
         // Get unvalidated sheets
-        $sheets = $this->sheetRepository->getUnvalidatedSheetsById($batchValidate->ids);
+        $sheets   = $this->sheetRepository->getUnvalidatedSheetsById($batchValidate->ids);
+        $sheetIds = array_map(function (Sheet $sheet) {
+            return $sheet->getId();
+        }, $sheets);
 
         $this->sheetRepository->updateStateBySheetsId($batchValidate->ids, Sheet::STATE_VALIDATED);
 
-        if (!empty($batchValidate->ids)) {
+        if (!empty($sheetIds)) {
             // reindex sheet in elasticsearch
-            $this->jobQueue->indexSheets($batchValidate->ids);
+            $this->jobQueue->indexSheets($sheetIds);
 
             // send email
-            $this->jobQueue->sendEmailing($batchValidate->event, $batchValidate->ids, Events::SHEET_VALIDATED, true);
-            
+            $this->jobQueue->sendEmailing($batchValidate->event, $sheetIds, Events::SHEET_VALIDATED, true);
+
             $this->batchJobQueue->createJob(
-                $batchValidate->ids,
+                $sheetIds,
                 $batchValidate->admin,
                 ['comment' => $batchValidate->comment]
             );
