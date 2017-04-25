@@ -71,7 +71,7 @@ class RouterAdapter implements RouterInterface
      */
     public function generateSheet(Sheet $sheet)
     {
-        return $this->router->generate('event_sheet', ['sheet' => $sheet->getId()]);
+        return $this->router->generate('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
     /**

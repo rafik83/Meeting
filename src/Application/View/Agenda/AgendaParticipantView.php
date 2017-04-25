@@ -28,16 +28,23 @@ class AgendaParticipantView
     public $fullname;
 
     /**
+     * @var string
+     */
+    public $email;
+
+    /**
      * AgendaParticipantView constructor.
      *
      * @param int             $id
      * @param string          $fullname
+     * @param string          $email
      * @param AgendaDayView[] $days
      */
-    public function __construct($id, $fullname, array $days)
+    public function __construct($id, $fullname, $email, array $days)
     {
         $this->days     = $days;
         $this->id       = $id;
         $this->fullname = $fullname;
+        $this->email    = $email;
     }
 }

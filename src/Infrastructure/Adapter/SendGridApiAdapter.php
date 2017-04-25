@@ -104,7 +104,7 @@ class SendGridApiAdapter
                 ->render(['mail' => new MessageContentMail($message, $event, $locale)]);
 
             $mail = new Mail();
-            $mail->setSubject($message->getSubject());
+            $mail->setSubject($message->getSubject($locale));
             $mail->setFrom(new Email($event->getTitle(), $this->eventSender->generate($event)));
             $mail->addContent(new Content('text/html', $body[$locale]));
 

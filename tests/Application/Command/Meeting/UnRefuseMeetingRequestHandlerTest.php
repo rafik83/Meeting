@@ -48,7 +48,7 @@ class UnRefuseMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToUnRefuse($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+        $permissionManager->isAllowedToUnRefuse($request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         // Handle
         $handler = new UnRefuseMeetingRequestHandler(
@@ -87,7 +87,7 @@ class UnRefuseMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldNotBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
-        $permissionManager->isAllowedToUnRefuse($user2, $request, $sheetFrom)->shouldBeCalled()->willReturn(false);
+        $permissionManager->isAllowedToUnRefuse($request, $sheetFrom)->shouldBeCalled()->willReturn(false);
 
         // Handle
         $handler = new UnRefuseMeetingRequestHandler(

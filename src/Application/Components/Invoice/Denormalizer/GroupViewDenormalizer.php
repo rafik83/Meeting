@@ -29,13 +29,21 @@ class GroupViewDenormalizer implements DenormalizerInterface, DenormalizerAwareI
         $rowViews = [];
 
         foreach ($data['products'] as $product) {
-            $rowViews[] = $this->denormalizer->denormalize($product, RowView::class, $format, $context);
+            $rowView = $this->denormalizer->denormalize($product, RowView::class, $format, $context);
+
+            if (null !== $rowView) {
+                $rowViews[] = $rowView;
+            }
         }
 
         $customRowViews = [];
 
         foreach ($data['customRows'] as $customRow) {
             $customRowViews[] = $this->denormalizer->denormalize($customRow, CustomRowView::class, $format, $context);
+        }
+
+        if (empty($rowViews) && empty($customRowViews)) {
+            return null;
         }
 
         return new GroupView(

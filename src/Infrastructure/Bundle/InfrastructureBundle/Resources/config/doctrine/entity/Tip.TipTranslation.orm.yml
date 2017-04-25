@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
+    type:  entity
+    table: tip_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            nullable: true
+        locale:
+            type: string
+        content:
+            type: text
+        createdAt:
+            type: datetime
+    manyToOne:
+        tip:
+            targetEntity: Proximum\Vimeet\Domain\Model\Tip\Tip
+            inversedBy: translations

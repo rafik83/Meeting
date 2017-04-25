@@ -10,13 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
-use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class RequestPermissionManager
@@ -27,12 +24,6 @@ class RequestPermissionManager
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /** @var SheetManager */
-    private $sheetManager;
-
-    /** @var MeetingRequestAccessChecker */
-    private $meetingRequestAccessChecker;
-
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
 
@@ -40,56 +31,47 @@ class RequestPermissionManager
      * RequestPermissionManager constructor.
      *
      * @param RequestRepositoryInterface           $requestRepository
-     * @param SheetManager                         $sheetManager
      * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
-     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        SheetManager $sheetManager,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
-        MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->requestRepository                    = $requestRepository;
-        $this->sheetManager                         = $sheetManager;
         $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
-        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
      * Is a user allowed to edit a meeting request as a particular sheet
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToEdit(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToEdit(Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user)
-            && $request->isSender($sheet)
+        return $request->isSender($sheet)
             && $request->isSent()
             && $this->answeringMeetingRequestAccessChecker->allowedToAccess($request->getEvent())
         ;
     }
 
     /**
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToEditSentOrApproved(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToEditSentOrApproved(Request $request, Sheet $sheet)
     {
         if ($request->isSent()) {
-            return $this->isAllowedToEdit($user, $request, $sheet);
+            return $this->isAllowedToEdit($request, $sheet);
         } elseif ($request->isApproved()) {
-            return $this->isAllowedToEditApproved($user, $request, $sheet);
+            return $this->isAllowedToEditApproved($request, $sheet);
         }
 
         return false;
@@ -98,16 +80,14 @@ class RequestPermissionManager
     /**
      * Is a user allowed to edit an approved meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToEditApproved(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToEditApproved(Request $request, Sheet $sheet)
     {
-        if ($sheet->hasUser($user)
-            && ($request->isSender($sheet) || $request->isReceiver($sheet))
+        if (($request->isSender($sheet) || $request->isReceiver($sheet))
             && $request->isApproved()
             && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
             && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())
@@ -125,16 +105,15 @@ class RequestPermissionManager
     /**
      * Is a user allowed to cancel a meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToCancel(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToCancel(Request $request, Sheet $sheet)
     {
         if ($this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())) {
-            if ($sheet->hasUser($user) && $request->isSender($sheet)) {
+            if ($request->isSender($sheet)) {
                 if ($request->isSent()) {
                     return true;
                 } elseif ($request->isApproved() && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()) {
@@ -153,16 +132,14 @@ class RequestPermissionManager
     /**
      * Is a user allowed to refuse a meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToRefuse(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToRefuse(Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user)
-            && $request->isReceiver($sheet)
+        return $request->isReceiver($sheet)
             && $request->isSent()
             && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent());
     }
@@ -170,16 +147,14 @@ class RequestPermissionManager
     /**
      * Is a user allowed to approve a meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToApprove(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToApprove(Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user)
-            && $request->isReceiver($sheet)
+        return $request->isReceiver($sheet)
             && $request->isSent()
             && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())
         ;
@@ -188,30 +163,27 @@ class RequestPermissionManager
     /**
      * Is a user allowed to see a meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToSee(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToSee(Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user) && ($request->isSender($sheet) || $request->isReceiver($sheet));
+        return ($request->isSender($sheet) || $request->isReceiver($sheet));
     }
 
     /**
      * Is a user allowed to unrefuse a refused meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToUnRefuse(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToUnRefuse(Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user)
-            && $request->isRefused()
+        return $request->isRefused()
             && $request->isReceiver($sheet)
             && $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())
         ;
@@ -220,17 +192,15 @@ class RequestPermissionManager
     /**
      * Is a user allowed to unapproved an approved meeting request
      *
-     * @param User    $user
      * @param Request $request
      * @param Sheet   $sheet
      *
      * @return bool
      */
-    public function isAllowedToUnApprove(User $user, Request $request, Sheet $sheet)
+    public function isAllowedToUnApprove(Request $request, Sheet $sheet)
     {
         if ($this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())) {
-            if ($sheet->hasUser($user)
-                && $request->isApproved()
+            if ($request->isApproved()
                 && $request->isReceiver($sheet)
                 && !$sheet->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
             ) {
@@ -246,38 +216,20 @@ class RequestPermissionManager
     }
 
     /**
-     * Is a user allowed to create a meeting request between these two sheets
+     * Is a sheet allowed to see conversation of a refuse meeting request
      *
-     * @param User  $user
-     * @param Sheet $from
-     * @param Sheet $to
-     *
-     * @return bool
-     */
-    public function isAllowedToCreate(User $user, Sheet $from, Sheet $to)
-    {
-        return $from->hasUser($user)
-            && $this->sheetManager->isAllowedToSee($user, $from, $to)
-            && $this->hasNotLivingRequestsBetween($from, $to)
-            && $this->meetingRequestAccessChecker->allowedToAccess($from->getEvent())
-        ;
-    }
-
-    /**
-     * Is a user allowed to see conversation of a refuse meeting request
-     *
-     * @param User    $user
+     * @param Sheet   $sheet
      * @param Request $request
      *
      * @return bool
      */
-    public function isAllowedToSeeConversationOfRefuseMeetingRequest(User $user, Request $request)
+    public function isAllowedToSeeConversationOfRefuseMeetingRequest(Sheet $sheet, Request $request)
     {
         if (!$request->isRefused()) {
             return false;
         }
 
-        return $request->getFromSheet()->hasUser($user) || $request->getToSheet()->hasUser($user);
+        return $request->getFromSheet() === $sheet || $request->getToSheet() === $sheet;
     }
 
     /**

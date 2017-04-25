@@ -23,6 +23,8 @@ class InfrastructureExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('infrastructure.eu_countries', $config['eu_countries']);
+        $container->setParameter('infrastructure.preferred_locales', $config['preferred_locales']);
+        $container->setParameter('infrastructure.default_locales', $config['default_locales']);
         $container->setParameter('infrastructure.supported_currencies', $config['supported_currencies']);
         $container->setParameter('infrastructure.web_asset_event_guideline_path', $config['web_asset_event_guideline_path']);
         $container->setParameter('infrastructure.bundle_guideline_path', $config['bundle_guideline_path']);
@@ -31,6 +33,8 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.print_planning_path', $config['print_planning_path']);
         $container->setParameter('infrastructure.export_transactions_path', $config['export_transactions_path']);
         $container->setParameter('infrastructure.export_order_path', $config['export_order_path']);
+        $container->setParameter('infrastructure.export_planner_path', $config['export_planner_path']);
+        $container->setParameter('infrastructure.import_planner_path', $config['import_planner_path']);
         $container->setParameter('infrastructure.package.default_labels', $config['package']['default_labels']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

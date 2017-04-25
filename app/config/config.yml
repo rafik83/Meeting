@@ -307,6 +307,8 @@ services:
 
 infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
+    preferred_locales: ['fr', 'en', 'es', 'de', 'it', 'zh']
+    default_locales: ['fr', 'en']
     supported_currencies: ['EUR', 'GBP', 'USD']
     web_asset_event_guideline_path: 'css/event'
     bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
@@ -315,6 +317,8 @@ infrastructure:
     print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
     export_transactions_path: '%kernel.root_dir%/../web/uploads/export_transactions'
     export_order_path: '%kernel.root_dir%/../web/uploads/export_orders'
+    export_planner_path: '%kernel.root_dir%/../web/uploads/export_planner'
+    import_planner_path: '%kernel.root_dir%/../web/uploads/import_planner'
     package:
         default_labels:
             plans:

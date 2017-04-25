@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 
 class UpdateMeetingRequest
 {
@@ -33,11 +32,6 @@ class UpdateMeetingRequest
     public $description;
 
     /**
-     * @var User
-     */
-    public $editor;
-
-    /**
      * @var Sheet
      */
     public $sheetEditor;
@@ -47,13 +41,11 @@ class UpdateMeetingRequest
      *
      * @param Request $meetingRequest
      * @param Sheet   $sheetEditor
-     * @param User    $editor
      */
-    public function __construct(Request $meetingRequest, Sheet $sheetEditor, User $editor)
+    public function __construct(Request $meetingRequest, Sheet $sheetEditor)
     {
         $this->meetingRequest = $meetingRequest;
         $this->sheetEditor    = $sheetEditor;
-        $this->editor         = $editor;
         $this->description    = null;
 
         if ($meetingRequest->isSender($sheetEditor)) {

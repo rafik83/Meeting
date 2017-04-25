@@ -40,7 +40,7 @@ Feature: Register with participant step
     When I press "register.finalize"
     Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
     Then the "event.preregistered" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
-    And I should be on this page "/fr/sheet"
+    And I should be on this page "/fr/sheet/1"
     And I should see "sheet.welcome.title"
     And I should see "sheet.welcome.sheetContent"
     And I should see "sheet.welcome.packageContent"

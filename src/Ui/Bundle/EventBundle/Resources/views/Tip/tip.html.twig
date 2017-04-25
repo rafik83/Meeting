@@ -1,0 +1,29 @@
+{% if tipTranslationViews is defined and tipTranslationViews is not empty %}
+    {% for tipTranslationView in tipTranslationViews %}
+       <div class="row">
+           <div class="col-md-12 tip" role="alert">
+               <a href="#" data-toggle="modal" data-target="#tipModal-{{ tipTranslationView.id }}">
+                   <i class="icon-Alerter_1"></i> {{ tipTranslationView.title }}
+               </a>
+           </div>
+       </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="tipModal-{{ tipTranslationView.id }}" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel-{{ tipTranslationView.id }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.close'|trans }}"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="tipModal-{{ tipTranslationView.id }}-title">{{ tipTranslationView.title }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ tipTranslationView.content|html }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'modal.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

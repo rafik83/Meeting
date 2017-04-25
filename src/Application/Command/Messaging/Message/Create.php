@@ -14,24 +14,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 final class Create
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
-    public $subject;
+    /** @var array */
+    public $translations;
 
-    /**
-     * @var string
-     */
-    public $content;
-
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
     /**
@@ -40,6 +29,10 @@ final class Create
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        foreach ($event->getLocales() as $locale) {
+            $this->translations[$locale] = ['locale' => $locale];
+        }
     }
 
     /**

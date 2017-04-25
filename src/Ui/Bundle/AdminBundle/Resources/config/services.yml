@@ -112,6 +112,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
         tags:
@@ -120,6 +121,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
         tags:
@@ -207,13 +209,18 @@ services:
 
     form_type_messaging_message.create_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType
-        arguments:
-            - '@ui.helper.messaging_message_placeholder_helper'
         tags:
             - { name: form.type }
 
     form_type_messaging_message.update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\UpdateType
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type }
+
+    form_type_messaging_message.message_translation_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\MessageTranslationType
         arguments:
             - '@ui.helper.messaging_message_placeholder_helper'
         tags:
@@ -259,7 +266,12 @@ services:
             - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }
-
+    form_type.admin.tip_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\TipTranslationType
+        arguments:
+            - '%infrastructure.preferred_locales%'
+        tags:
+            - { name: form.type }
     #
     # Helper
     #

@@ -5,6 +5,5 @@
 {% endblock %}
 
 {% block content %}
-    {% set isRequestMeetingEnabled = isCatalog is defined and isCatalog == true and userSheet != sheet %}
     {{ include('EventBundle:Sheet/Partial:sheet-content.html.twig') }}
 {% endblock %}

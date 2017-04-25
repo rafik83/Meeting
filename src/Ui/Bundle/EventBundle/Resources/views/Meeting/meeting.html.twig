@@ -33,7 +33,7 @@
                 <span>{{ meeting.begin|date('H:i', meeting.timeZone) }} - {{ meeting.end|date('H:i', meeting.timeZone) }}</span>
             </p>
             {% if meeting.isSheetDetailsSeeAble %}
-                <a href="{{ path('event_catalog_complete_sheet', {'sheet': meeting.sheetMetId }) }}" target="_blank">
+                <a href="{{ path('event_catalog_complete_sheet', { sheet: sheetId, sheetToDisplay: meeting.sheetMetId }) }}" target="_blank">
                     <i class="icon icon-Document_1"></i>
                     {{ 'agenda.meeting.details'|trans }}
                 </a>

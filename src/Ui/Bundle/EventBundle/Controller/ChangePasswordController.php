@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ChangePassword;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\ChangePasswordType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,17 +25,19 @@ class ChangePasswordController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function changePasswordAction(Request $request, EventDomain $eventDomain)
+    public function changePasswordAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $changePassword = new ChangePassword($this->getUser());
 
         $form = $this->createForm(ChangePasswordType::class, $changePassword, [
-            'action' => $this->generateUrl('event_change_password'),
+            'action' => $this->generateUrl('event_change_password', ['sheet' => $sheet->getId()]),
             'method' => 'POST',
         ]);
 
@@ -46,6 +50,7 @@ class ChangePasswordController extends Controller
 
         return $this->render('EventBundle:ChangePassword:change_password.html.twig', [
             'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
             'form'  => $form->createView(),
         ]);
     }

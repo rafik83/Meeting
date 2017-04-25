@@ -5,7 +5,12 @@
         </div>
         <footer>
             <div class="actions">
-                <a id="complete-sheet-link-{{ catalogSheetPreviewView.id }}" href="{{ path('event_catalog_complete_sheet', {'sheet': catalogSheetPreviewView.id }) }}" target="_blank"><i class="icon-Document_1"></i> <span>{{ 'catalog.complete_sheet'|trans }}</span></a>
+                <a id="complete-sheet-link-{{ catalogSheetPreviewView.id }}"
+                   href="{{ path('event_catalog_complete_sheet', { sheet: viewer.id, sheetToDisplay: catalogSheetPreviewView.id }) }}"
+                   target="_blank">
+                    <i class="icon-Document_1"></i>
+                    <span>{{ 'catalog.complete_sheet'|trans }}</span>
+                </a>
                 {#<a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>#}
             </div>
 

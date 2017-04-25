@@ -75,7 +75,6 @@ class ApproveRequestHandler
     public function handle(ApproveRequest $approveRequest)
     {
         if (!$this->permissionManager->isAllowedToApprove(
-            $approveRequest->editor,
             $approveRequest->request,
             $approveRequest->sheet
         )) {

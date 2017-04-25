@@ -24,11 +24,11 @@
                     <p class="help">{{ item.help(locale, fallback) }}</p>
                 {% endif %}
             </div>
-            {% if not isCatalog %}
                 <footer>
-                    <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}" class="edit-link"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                {% if not isCatalog %}
+                    <a href="{{ path('event_sheet_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="edit-link"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                {% endif %}
                 </footer>
-            {% endif %}
         </section>
 
     {% elseif nomenclature.depth == 2 %}
@@ -49,11 +49,11 @@
                     {% endfor %}
                 </ul>
             </div>
-            {% if not isCatalog %}
                 <footer>
-                    <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                {% if not isCatalog %}
+                    <a class="edit-link" href="{{ path('event_sheet_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                {% endif %}
                 </footer>
-            {% endif %}
         </section>
 
     {% elseif nomenclature.depth == 3 %}
@@ -75,11 +75,11 @@
                         </ul>
                     </div>
 
-                    {% if not isCatalog %}
-                        <footer>
-                            <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
-                        </footer>
-                    {% endif %}
+                    <footer>
+                        {% if not isCatalog %}
+                            <a class="edit-link" href="{{ path('event_sheet_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                        {% endif %}
+                    </footer>
                 </section>
             {% endfor %}
         {% else %}
@@ -95,11 +95,11 @@
                     <p class="help">{{ item.help|localize(locale, fallback) }}</p>
                 </div>
 
-                {% if not isCatalog %}
-                    <footer>
-                        <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
-                    </footer>
-                {% endif %}
+                <footer>
+                    {% if not isCatalog %}
+                        <a class="edit-link" href="{{ path('event_sheet_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                    {% endif %}
+                </footer>
             </section>
         {% endif %}
     {% endif %}

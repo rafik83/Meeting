@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
+use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -28,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -56,6 +58,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $routerInterface   = $this->prophesize(RouterInterface::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $sheetIndicatorsViewQueryHandler = $this->prophesize(SheetIndicatorsViewQueryHandler::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $meetingRepository->countMeetingsOfEvent($event)->shouldBeCalled()->willReturn([12 => ['countMeetings' => 10]]);
 
         $product = new Product($event, 'plan', 'name', 'img.png', 10, 1, 1, 1, true);
@@ -65,6 +68,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser->guessSheetTitle($sheet, 'fr')->shouldBeCalled()->willReturn('Titre fiche');
         $routerInterface->generate('admin_sheet_details', Argument::any())->willReturn('/my-url');
 
+        $participantInfoGuesser->guessParticipantCompleteName($participant, 'fr')->shouldBeCalled();
         $sheetIndicatorsViewQueryHandler->handle(new SheetIndicatorsViewQuery($sheet))->shouldNotBeCalled();
 
         $query   = new SheetListViewQuery($event, 'fr');
@@ -73,10 +77,13 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetInfoGuesser->reveal(),
             $sheetIndicatorsViewQueryHandler->reveal(),
             $meetingRepository->reveal(),
-            $routerInterface->reveal()
+            $routerInterface->reveal(),
+            $participantInfoGuesser->reveal()
         );
 
         $view = $handler->handle($query);
+
+        $expectedParticipant = new AgendaParticipantView(1, null, 'email@email.com', []);
 
         $sheetIndicatorView = new SheetIndicatorsView(0, 0, 0, 0, 0, 10);
         $expectedView = new SheetView(
@@ -85,8 +92,10 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             '',
             1,
             $sheetIndicatorView,
+            false,
             null,
-            '/my-url'
+            '/my-url',
+            [$expectedParticipant]
         );
 
         $this->assertEquals($expectedView, $view[0]);

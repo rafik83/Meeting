@@ -31,11 +31,11 @@ catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'
 catalog.meeting_request.proposition.approved: 'Accepted proposal'
-catalog.meeting_request.proposition.placed: 'Meeting proposal accepted - meeting planned'
+catalog.meeting_request.proposition.placed: 'Meeting planned'
 catalog.meeting_request.proposition.refused: 'Refused proposal'
 catalog.meeting_request.refuse: Refuse
 catalog.meeting_request.request.approved: 'Accepted request'
-catalog.meeting_request.request.placed: 'You request accepted - Meeting planned'
+catalog.meeting_request.request.placed: 'Meeting planned'
 catalog.meeting_request.request.refused: 'Refused request'
 catalog.noResult: 'No result'
 catalog.noVisibleTypes: 'You can''t access to any participant''s type'
@@ -50,9 +50,9 @@ common.update: Modify
 common.validate: Validate
 event.info.close: Close
 event.info.contact: 'Useful information'
-event.meeting.listRequest.filter.all: 'All'
-event.meeting.listRequest.filter.requests: 'My requests only'
+event.meeting.listRequest.filter.all: All
 event.meeting.listRequest.filter.propositions: 'Requests received only'
+event.meeting.listRequest.filter.requests: 'My requests only'
 gender.man: Mr
 gender.woman: Mrs
 happening.participationCancel.action: Cancel

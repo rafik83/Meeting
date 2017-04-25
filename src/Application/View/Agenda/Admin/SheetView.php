@@ -36,13 +36,6 @@ class SheetView
     public $type;
 
     /**
-     * "Nom du suivi commercial"
-     *
-     * @var string|null
-     */
-    public $follower;
-
-    /**
      * "Nombre de participants de la fiche"
      *
      * @var int
@@ -127,13 +120,46 @@ class SheetView
     public $hasNotEnoughAvailableSlot;
 
     /**
+     * @var bool
+     */
+    public $hasFollower;
+
+    /**
+     * @var array
+     */
+    public $participants;
+
+    /**
+     * Suivi commercial
+     *
+     * @var null|FollowerView
+     */
+    public $follower;
+
+    /**
+     * "La fiche a des créneaux disponibles"
+     *
+     * @var bool
+     */
+    public $hasAvailableSlots;
+
+    /**
+     * "A encore des demandes/propositions validées et non placées"
+     *
+     * @var bool
+     */
+    public $hasValidatedRequestNotScheduled;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
      * @param int                 $countParticipant
      * @param SheetIndicatorsView $sheetIndicatorsView
-     * @param string|null         $follower
+     * @param bool                $hasFollower
+     * @param null|FollowerView   $follower
      * @param string              $url
+     * @param array               $participants
      */
     public function __construct(
         $id,
@@ -141,8 +167,10 @@ class SheetView
         $type,
         $countParticipant,
         SheetIndicatorsView $sheetIndicatorsView,
+        $hasFollower,
         $follower,
-        $url
+        $url,
+        array $participants
     ) {
         $this->id                       = $id;
         $this->title                    = $title;
@@ -155,11 +183,15 @@ class SheetView
         $this->countPlacedMeetings      = $sheetIndicatorsView->countPlacedMeetings;
         $this->usableSlots              = $sheetIndicatorsView->usableSlots;
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
+        $this->hasFollower              = $hasFollower;
         $this->url                      = $url;
+        $this->participants             = $participants;
         $this->follower                 = $follower;
 
-        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
-        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
-        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
+        $this->hasNotEnoughAvailableSlot       = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
+        $this->hasNotSentMeetingRequest        = $sheetIndicatorsView->hasNotSentMeetingRequest;
+        $this->hasMeetingToApprove             = $sheetIndicatorsView->hasMeetingToApprove;
+        $this->hasAvailableSlots               = $sheetIndicatorsView->hasAvailableSlots;
+        $this->hasValidatedRequestNotScheduled = $sheetIndicatorsView->hasValidatedRequestNotScheduled;
     }
 }
