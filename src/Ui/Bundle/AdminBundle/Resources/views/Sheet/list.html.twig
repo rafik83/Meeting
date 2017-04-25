@@ -182,6 +182,11 @@
                     {% if sheet.countParticipant > 1 %}
                         <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
                     {% endif %}
+                    {% if sheet.hasGroup %}
+                        <span class="label label-success">
+                            <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ sheet.groupTitle }}"></i>
+                        </span>
+                    {% endif %}
                     <br>
                     <small>
                         {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }}
