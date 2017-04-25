@@ -99,8 +99,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $event->getId(),
             $admin->getEmail(),
             $locale,
-            $lockMeetingRequest,
             $solutionType,
+            $lockMeetingRequest
         ]);
 
         $this->setJob($job);
