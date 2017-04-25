@@ -74,7 +74,7 @@ class UserToGroupManagerChecker
      */
     private function isUserAlreadyManagerOnSameEvent(Event $event, User $user)
     {
-        return null === $this->groupRepository->getByEventAndManager($event, $user) ? false : true;
+        return null !== $this->groupRepository->getByEventAndManager($event, $user);
     }
 
     /**

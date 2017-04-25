@@ -38,9 +38,9 @@ class CreateHandler
         SheetRepositoryInterface $sheetRepository,
         \DateTimeInterface $dateTime
     ) {
-        $this->groupRepository           = $groupRepository;
-        $this->sheetRepository           = $sheetRepository;
-        $this->dateTime                  = $dateTime;
+        $this->groupRepository = $groupRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->dateTime        = $dateTime;
     }
 
     /**

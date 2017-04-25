@@ -18,9 +18,9 @@ class UserAlreadyParticipantOrOwnerOnGroupOnSameEventException extends GroupExce
     /**
      * UserNotAllowedToManageGroupException constructor.
      *
-     * @param string $email
+     * @param string|null $email
      */
-    public function __construct($email = '')
+    public function __construct($email = null)
     {
         $this->email = $email;
     }

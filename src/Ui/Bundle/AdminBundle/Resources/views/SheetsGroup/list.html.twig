@@ -40,6 +40,10 @@
                         {{ groupView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     </td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">{{ 'admin.sheets_group.no_result'|trans }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

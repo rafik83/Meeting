@@ -2562,12 +2562,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
 
     query.sheet.group.admin.group_view_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
 
     query.sheet.group.admin.group_list_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQueryHandler
