@@ -165,6 +165,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.tip.repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\TipRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
     repository.trace_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\TraceRepository
         arguments:
@@ -537,14 +542,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Update }
     vimeet_infrastructure.vimeet.application.command.meeting.update_spot_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpotHandler
         arguments:
@@ -605,14 +602,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Cancel }
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
         arguments:
@@ -639,6 +628,19 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings }
+    command.tip.create_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\CreateHandler
+        arguments:
+            - '@repository.tip.repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Create }
+    command.tip.update_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\UpdateHandler
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Update }
     command.transaction.create_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\CreateHandler
         arguments:
@@ -1902,20 +1904,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Paginator\Paginator
 
     #
-    # Schedule component
-    #
-    vimeet.application.components.schedule.schedule_builder:
-        class: Proximum\Vimeet\Application\Components\Schedule\ScheduleBuilder
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-            - '@vimeet_infrastructure.repository.happening_repository'
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-
-    #
     # Meeting Component
     #
     vimeet_infrastructure.application.components.meeting.request_view_builder:
@@ -2466,6 +2454,18 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery }
+    query.tip.tip_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Tip\TipViewQueryHandler
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipViewQuery }
+    query.tip.tip_translation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
     query.type.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler
         arguments:
@@ -4106,6 +4106,7 @@ services:
             - '%mailer_sender%'
             - '@repository.file_repository'
             - '@datetime'
+            - '@query.tip.tip_translation_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
     ###### Job

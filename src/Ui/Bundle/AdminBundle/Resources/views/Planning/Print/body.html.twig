@@ -1,3 +1,11 @@
+{% if planning.tipTranslationViews is defined and planning.tipTranslationViews is not empty %}
+    {% for translation in planning.tipTranslationViews %}
+        <div class="tip-message">
+            <p>{{ translation.title }}</p>
+            <p>{{ translation.content }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
 <div class="participant-name">
     <h1>{{ planning.sheetTitle }}</h1>
     <h2>{{ planning.participantName }}</h2>

@@ -1,0 +1,13 @@
+Proximum\Vimeet\Application\Command\Tip\Create:
+    properties:
+        title:
+            - NotBlank: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title: ~
+                        locale:
+                            - NotBlank: ~
+                        content:
+                            - NotBlank: ~
