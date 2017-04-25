@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Messaging\Emailing;
 
 use Proximum\Vimeet\Domain\Exception\Messaging\UndefinedSubstitutionProviderException;
-use Proximum\Vimeet\Domain\Messaging\InvalidMessagePlaceholderException;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\SubstitutionsProviders;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
