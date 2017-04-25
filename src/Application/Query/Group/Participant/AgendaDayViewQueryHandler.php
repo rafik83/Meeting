@@ -7,18 +7,18 @@ use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 class AgendaDayViewQueryHandler
 {
     /**
-     * @var SlotViewQueryHandler
+     * @var SlotViewsQueryHandler
      */
-    private $slotViewQueryHandler;
+    private $slotsViewQueryHandler;
 
     /**
      * AgendaDayViewQueryHandler constructor.
      *
-     * @param SlotViewQueryHandler $slotViewQueryHandler
+     * @param SlotViewsQueryHandler $slotViewsQueryHandler
      */
-    public function __construct(SlotViewQueryHandler $slotViewQueryHandler)
+    public function __construct(SlotViewsQueryHandler $slotViewsQueryHandler)
     {
-        $this->slotViewQueryHandler = $slotViewQueryHandler;
+        $this->slotViewsQueryHandler = $slotViewsQueryHandler;
     }
 
     /**
@@ -28,8 +28,8 @@ class AgendaDayViewQueryHandler
      */
     public function handle(AgendaDayViewQuery $query)
     {
-        $slotViews = $this->slotViewQueryHandler->handle(
-            new SlotViewQuery(
+        $slotViews = $this->slotsViewQueryHandler->handle(
+            new SlotViewsQuery(
                 $query->event,
                 $query->day
             )

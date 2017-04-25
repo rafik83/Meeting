@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Group\Participant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 
-class SlotViewQuery
+class SlotViewsQuery
 {
     /** @var Event */
     public $event;
@@ -14,7 +14,7 @@ class SlotViewQuery
     public $day;
 
     /**
-     * SlotViewQuery constructor.
+     * SlotViewsQuery constructor.
      *
      * @param Event $event
      * @param Day   $day

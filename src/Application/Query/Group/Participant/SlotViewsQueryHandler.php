@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Group\Participant;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\SlotView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
-class SlotViewQueryHandler
+class SlotViewsQueryHandler
 {
     /**
      * @var MeetingSlotRepositoryInterface
@@ -23,11 +23,11 @@ class SlotViewQueryHandler
     }
 
     /**
-     * @param SlotViewQuery $query
+     * @param SlotViewsQuery $query
      *
-     * @return array
+     * @return array|SlotView[]
      */
-    public function handle(SlotViewQuery $query)
+    public function handle(SlotViewsQuery $query)
     {
         $slots = $this->meetingSlotRepository->findByEventAndDay($query->event, $query->day);
 

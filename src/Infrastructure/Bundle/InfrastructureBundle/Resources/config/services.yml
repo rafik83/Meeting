@@ -2595,7 +2595,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\AgendaDayViewQuery }
 
     query.sheet.group.participant.slot_view_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
