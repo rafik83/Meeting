@@ -66,7 +66,7 @@ class InvoicesLinkSubstitution implements SubstituteInterface
 
         $links = $this->twig
             ->load('MailBundle:Mail/Invoice:_invoiceLink.html.twig')
-            ->render(['invoiceUrlViews' => $invoiceUrlViews]);
+            ->render(['invoiceUrlViews' => $invoiceUrlViews, 'locale' => $locale]);
 
         return $links;
     }

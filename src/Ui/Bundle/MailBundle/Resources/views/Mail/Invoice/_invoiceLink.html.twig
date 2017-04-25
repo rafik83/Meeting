@@ -2,7 +2,7 @@
 
 {% for invoiceUrlView in invoiceUrlViews  %}
     {{ macros.button(
-        'mail.sheet.invoiced.link'|trans({'%invoiceNumber%': invoiceUrlView.number}, 'mail', mail.locale),
+        'mail.sheet.invoiced.link'|trans({'%invoiceNumber%': invoiceUrlView.number}, 'mail', locale),
         invoiceUrlView.url
     ) }}
 {% endfor %}
