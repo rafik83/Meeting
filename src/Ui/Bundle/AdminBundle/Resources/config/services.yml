@@ -222,6 +222,7 @@ services:
     form_type_messaging_message.message_translation_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\MessageTranslationType
         arguments:
+            - '%infrastructure.preferred_locales%'
             - '@ui.helper.messaging_message_placeholder_helper'
         tags:
             - { name: form.type }
