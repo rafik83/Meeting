@@ -285,7 +285,14 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
-            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true AND EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet AND r.to IN (:sheets)) OR (r.to = sheet AND r.from IN (:sheets)))')
+            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
+            ->andWhere(
+                'EXISTS (
+                    SELECT r.id FROM Entity:Meeting\Request r
+                    WHERE (r.from = sheet AND r.to IN (:sheets))
+                    OR (r.to = sheet AND r.from IN (:sheets))
+                )'
+            )
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets);
 

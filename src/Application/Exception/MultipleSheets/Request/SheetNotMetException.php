@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\Group\Request;
+namespace Proximum\Vimeet\Application\Exception\MultipleSheets\Request;
 
-class NoResultException extends GroupRequestException
+class SheetNotMetException extends GroupRequestException
 {
 }

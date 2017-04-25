@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Query\Group\Request;
+namespace Proximum\Vimeet\Tests\Application\Query\MultipleSheets\Request;
 
 use Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache;
-use Proximum\Vimeet\Application\Query\Group\Request\ParticipantViewQuery;
-use Proximum\Vimeet\Application\Query\Group\Request\ParticipantViewQueryHandler;
-use Proximum\Vimeet\Application\View\Group\Request\ParticipantView;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQuery;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\View\MultipleSheets\Request\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase

@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Group\Request;
+namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
 use Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache;
-use Proximum\Vimeet\Application\View\Group\Request\ParticipantView;
+use Proximum\Vimeet\Application\View\MultipleSheets\Request\ParticipantView;
 
 class ParticipantViewQueryHandler
 {

@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Group\Request;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
-use Proximum\Vimeet\Application\Query\Group\Request\SheetViewQuery;
-use Proximum\Vimeet\Application\Query\Group\Request\SheetViewQueryHandler;
-use Proximum\Vimeet\Application\View\Group\Request\SheetView;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQuery;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQueryHandler;
+use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
