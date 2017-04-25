@@ -13,6 +13,7 @@ namespace Application\Command\Sheet\Group;
 use Prophecy\Promise\ThrowPromise;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler;
+use Proximum\Vimeet\Application\Exception\Group\NoSheetSelectedForGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -31,12 +32,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $event      = EventFactory::createEvent('Concerto en fa mineur de P.Sebastien');
         $user       = UserFactory::create('p.seb@elao.com');
         $sheet      = SheetFactory::create($event, $user, $dateTime);
-        $sheetViews = [new SheetView(1, 'fiche 1'),];
+        $sheetViews = [new SheetView(1, 'fiche 1')];
 
-        $groupRepository           = $this->prophesize(GroupRepositoryInterface::class);
-        $sheetRepository           = $this->prophesize(SheetRepositoryInterface::class);
+        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
         $create        = new Create($event, $user, $sheetViews);
+        $create->sheetViews['sheetViews'] = $sheetViews;
         $create->title = 'Groupe';
         $group         = new Group($event, $user, 'Groupe', $dateTime);
 
@@ -48,6 +50,30 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->getSheetById(1)->shouldBeCalled()->willReturn($sheet);
         $groupRepository->add($group)->shouldBeCalled();
+
+        $handler->handle($create);
+    }
+
+    public function testHandleWithNoSheetSelected()
+    {
+        $this->expectException(NoSheetSelectedForGroupException::class);
+
+        $dateTime   = new \DateTime();
+        $event      = EventFactory::createEvent('Concerto en fa mineur de P.Sebastien');
+        $user       = UserFactory::create('p.seb@elao.com');
+        $sheetViews = [new SheetView(1, 'fiche 1')];
+
+        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+
+        $create        = new Create($event, $user, $sheetViews);
+        $create->title = 'Groupe';
+
+        $handler = new CreateHandler(
+            $groupRepository->reveal(),
+            $sheetRepository->reveal(),
+            $dateTime
+        );
 
         $handler->handle($create);
     }

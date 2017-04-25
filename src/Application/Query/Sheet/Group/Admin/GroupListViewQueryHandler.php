@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 
 class GroupListViewQueryHandler
 {
-    /** @var GroupViewQueryHandler */
+    /** @var AdminGroupViewQueryHandler */
     private $groupViewQueryHandler;
 
     /** @var GroupRepositoryInterface */
@@ -24,11 +24,11 @@ class GroupListViewQueryHandler
     /**
      * GroupListViewQueryHandler constructor.
      *
-     * @param GroupViewQueryHandler    $groupViewQueryHandler
+     * @param AdminGroupViewQueryHandler    $groupViewQueryHandler
      * @param GroupRepositoryInterface $groupRepository
      */
     public function __construct(
-        GroupViewQueryHandler $groupViewQueryHandler,
+        AdminGroupViewQueryHandler $groupViewQueryHandler,
         GroupRepositoryInterface $groupRepository
     ) {
         $this->groupViewQueryHandler = $groupViewQueryHandler;
@@ -47,7 +47,7 @@ class GroupListViewQueryHandler
 
         if (!empty($sheetsGroups)) {
             foreach ($sheetsGroups as $group) {
-                $groupViews[] = $this->groupViewQueryHandler->handle(new GroupViewQuery($group));
+                $groupViews[] = $this->groupViewQueryHandler->handle(new AdminGroupViewQuery($group));
             }
         }
 

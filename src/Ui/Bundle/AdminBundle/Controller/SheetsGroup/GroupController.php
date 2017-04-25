@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Exception\Group\NoSheetsAvailableForUserAndForEvent;
+use Proximum\Vimeet\Application\Exception\Group\NoSheetSelectedForGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
@@ -77,9 +78,9 @@ class GroupController extends Controller
                     'user'  => $userView->id,
                 ]);
             } catch (UserNotAllowedToManageGroupException $exception) {
-                $this->notifyFormError($form, $exception->email,  'validators.group.user_not_allowed_to_manage');
+                $this->notifyFormError($form, 'email', 'validators.group.user_not_allowed_to_manage', ['%email%' => $exception->email]);
             } catch (UserNotFoundForGivenEmailException $exception) {
-                $this->notifyFormError($form, $exception->email,  'validators.group.email_not_found');
+                $this->notifyFormError($form, 'email', 'validators.group.email_not_found', ['%email%' => $exception->email]);
             }
         }
 
@@ -125,11 +126,15 @@ class GroupController extends Controller
         $command = new Create($event, $user, $sheetViews);
         $form    = $this->createForm(CreateType::class, $command, ['sheetViews' => $sheetViews]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.group.create.success');
+        try {
+            if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+                $this->get('tactician.commandbus')->handle($command);
+                $this->addFlash('success', 'flash.admin.group.create.success');
 
-            return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
+            }
+        } catch (NoSheetSelectedForGroupException $exception) {
+            $this->notifyFormError($form, 'sheetViews', 'validators.group.no_sheet_selected');
         }
 
         return $this->render('@Admin/SheetsGroup/create.html.twig', [
@@ -141,17 +146,18 @@ class GroupController extends Controller
 
     /**
      * @param FormInterface $form
-     * @param string        $userEmail
+     * @param string        $field
      * @param string        $translationKey
+     * @param array         $options
      */
-    private function notifyFormError(FormInterface $form, $userEmail, $translationKey)
+    private function notifyFormError(FormInterface $form, $field, $translationKey, array $options = [])
     {
         $translator = $this->get('translator');
 
-        $form->get('email')->addError(
+        $form->get($field)->addError(
             new FormError($translator->trans(
                 $translationKey,
-                ['%email%' => $userEmail],
+                $options,
                 'validators'
             ))
         );

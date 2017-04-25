@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
-class GroupViewQuery
+class AdminGroupViewQuery
 {
     /** @var Group */
     public $group;

@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView as AdminGroupView;
 
-class GroupViewQueryHandler
+class AdminGroupViewQueryHandler
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -35,11 +35,11 @@ class GroupViewQueryHandler
     }
 
     /**
-     * @param GroupViewQuery $groupViewQuery
+     * @param AdminGroupViewQuery $groupViewQuery
      *
      * @return AdminGroupView
      */
-    public function handle(GroupViewQuery $groupViewQuery)
+    public function handle(AdminGroupViewQuery $groupViewQuery)
     {
         $sheets = $this->sheetRepository->getByGroup($groupViewQuery->group);
 
