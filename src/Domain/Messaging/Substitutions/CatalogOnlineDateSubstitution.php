@@ -29,6 +29,10 @@ class CatalogOnlineDateSubstitution implements SubstituteInterface
 
         $catalogOnlineDate = $event->getConfiguration()->getCatalogOnlineDate();
 
-        return $catalogOnlineDate !== null ? $dateFormatter->format($catalogOnlineDate) : '';
+        if ($catalogOnlineDate !== null) {
+            $formattedDate = $dateFormatter->format($catalogOnlineDate);
+        }
+
+        return isset($formattedDate) && $formattedDate !== false ? $formattedDate : '';
     }
 }

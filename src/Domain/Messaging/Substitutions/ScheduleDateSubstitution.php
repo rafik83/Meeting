@@ -29,6 +29,10 @@ class ScheduleDateSubstitution implements SubstituteInterface
 
         $schedulePublishDate = $event->getConfiguration()->getSchedulePublishDate();
 
-        return $schedulePublishDate !== null ? $dateFormatter->format($schedulePublishDate) : '';
+        if ($schedulePublishDate !== null) {
+            $formattedDate = $dateFormatter->format($schedulePublishDate);
+        }
+
+        return isset($formattedDate) && $formattedDate !== false ? $formattedDate : '';
     }
 }
