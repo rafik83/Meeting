@@ -52,6 +52,9 @@ class BatchHandler
      */
     private $batchGenerateInvoiceHandler;
 
+    /** @var BatchAssignToGroupHandler */
+    private $batchAssignToGroupHandler;
+
     /**
      * BatchHandler constructor.
      *
@@ -63,6 +66,7 @@ class BatchHandler
      * @param BatchDraftHandler              $batchDraftHandler
      * @param BatchValidationValidateHandler $batchValidationValidateHandler
      * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
+     * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
      */
     public function __construct(
         BatchValidateHandler $batchValidateHandler,
@@ -72,7 +76,8 @@ class BatchHandler
         BatchCatalogHandler $batchCatalogHandler,
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler,
-        BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler
+        BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
+        BatchAssignToGroupHandler $batchAssignToGroupHandler
     ) {
         $this->batchValidateHandler           = $batchValidateHandler;
         $this->batchAssignHandler             = $batchAssignHandler;
@@ -82,6 +87,7 @@ class BatchHandler
         $this->batchDraftHandler              = $batchDraftHandler;
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
         $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
+        $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
     }
 
     /**
@@ -147,6 +153,12 @@ class BatchHandler
            return $this->batchGenerateInvoiceHandler->handle(
                new BatchGenerateInvoice($batch->ids, $batch->admin)
            );
+        }
+
+        if ($batch->assignToGroup && $batch->group !== null) {
+            return $this->batchAssignToGroupHandler->handle(
+                new BatchAssignToGroup($batch->ids, $batch->group, $batch->locale)
+            );
         }
 
         return new BatchResult(0, $batch->getMessage() . 'no_action');

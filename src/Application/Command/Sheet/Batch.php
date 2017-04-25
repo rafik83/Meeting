@@ -96,16 +96,19 @@ class Batch extends AbstractBatch
      */
     public $assignToGroup;
 
-    /**
-     * @var Group
-     */
+    /** @var Group|null */
     public $group;
 
+    /** @var string */
+    public $locale;
+
     /**
-     * @param Admin $admin
+     * @param Admin  $admin
+     * @param string $locale
      */
-    public function __construct(Admin $admin)
+    public function __construct(Admin $admin, $locale)
     {
-        $this->admin = $admin;
+        $this->admin  = $admin;
+        $this->locale = $locale;
     }
 }
