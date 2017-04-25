@@ -39,6 +39,7 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository->getAllSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$sheet]);
 
         $view = $handler->handle($sheetViewQuery);
+
         $this->assertEquals([$expectedView], $view);
     }
 

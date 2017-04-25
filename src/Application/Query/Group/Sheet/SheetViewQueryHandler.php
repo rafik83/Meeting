@@ -50,16 +50,17 @@ class SheetViewQueryHandler
             $sheetViewQuery->event
         );
 
-
         if (empty($sheets)) {
             throw new NoSheetsAvailableForUserAndForEvent();
         }
 
         foreach ($sheets as $sheet) {
-            $sheetViews[] = new SheetView(
-                $sheet->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheetViewQuery->locale)
-            );
+            if (!$sheet->hasGroup()) {
+                $sheetViews[] = new SheetView(
+                    $sheet->getId(),
+                    $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheetViewQuery->locale)
+                );
+            }
         }
         
         return $sheetViews;

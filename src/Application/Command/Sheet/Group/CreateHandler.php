@@ -51,7 +51,10 @@ class CreateHandler
 
         foreach ($command->sheetViews['sheetViews'] as $sheetView) {
             $sheet = $this->sheetRepository->getSheetById($sheetView->id);
-            $sheet->setGroup($group);
+
+            if (!$sheet->hasGroup()) {
+                $sheet->setGroup($group);
+            }
         }
 
         $this->groupRepository->add($group);

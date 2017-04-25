@@ -874,4 +874,12 @@ class Sheet implements TraceableInterface
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasGroup()
+    {
+        return null !== $this->getGroup();
+    }
 }

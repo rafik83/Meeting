@@ -266,11 +266,4 @@ interface SheetRepositoryInterface
      * @return bool
      */
     public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    public function hasGroup(Sheet $sheet);
 }
