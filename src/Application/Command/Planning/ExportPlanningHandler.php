@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Planning;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -64,6 +66,9 @@ class ExportPlanningHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var TipTranslationViewQueryHandler */
+    private $tipTranslationViewQueryHandler;
+
     /**
      * @param TypeRepositoryInterface        $typeRepository
      * @param ParticipantRepositoryInterface $participantRepository
@@ -77,6 +82,7 @@ class ExportPlanningHandler
      * @param string                         $mailSender
      * @param FileRepositoryInterface        $fileRepository
      * @param \DateTimeInterface             $dateTime
+     * @param TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
      */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
@@ -90,20 +96,22 @@ class ExportPlanningHandler
         $printPlanningPath,
         $mailSender,
         FileRepositoryInterface $fileRepository,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
     ) {
-        $this->typeRepository               = $typeRepository;
-        $this->participantRepository        = $participantRepository;
-        $this->participantInfoGuesserCache  = $participantInfoGuesserCache;
-        $this->sheetInfoGuesserCache        = $sheetInfoGuesserCache;
-        $this->participantPlanningDisplayer = $participantPlanningDisplayer;
-        $this->templating                   = $templating;
-        $this->localFileStorageAdapter      = $localFileStorageAdapter;
-        $this->mailer                       = $mailer;
-        $this->printPlanningPath            = $printPlanningPath;
-        $this->mailSender                   = $mailSender;
-        $this->fileRepository               = $fileRepository;
-        $this->dateTime                     = $dateTime;
+        $this->typeRepository                 = $typeRepository;
+        $this->participantRepository          = $participantRepository;
+        $this->participantInfoGuesserCache    = $participantInfoGuesserCache;
+        $this->sheetInfoGuesserCache          = $sheetInfoGuesserCache;
+        $this->participantPlanningDisplayer   = $participantPlanningDisplayer;
+        $this->templating                     = $templating;
+        $this->localFileStorageAdapter        = $localFileStorageAdapter;
+        $this->mailer                         = $mailer;
+        $this->printPlanningPath              = $printPlanningPath;
+        $this->mailSender                     = $mailSender;
+        $this->fileRepository                 = $fileRepository;
+        $this->dateTime                       = $dateTime;
+        $this->tipTranslationViewQueryHandler = $tipTranslationViewQueryHandler;
     }
 
     /**
@@ -126,7 +134,17 @@ class ExportPlanningHandler
         $plannings = [];
         $this->participantPlanningDisplayer->preloadForParticipants($participants);
 
+        $tipTranslationViews = [];
+
         foreach ($participants as $participant) {
+            if (!isset($tipTranslationViews[$participant->getLocale()])) {
+                $tipTranslationViewQuery = new TipTranslationViewQuery(
+                    TipTranslationViewQueryHandler::CONTEXT_PRINT_PLANNING,
+                    $event->getAvailableLocale($participant->getLocale())
+                );
+                $tipTranslationViews[$participant->getLocale()] = $this->tipTranslationViewQueryHandler->handle($tipTranslationViewQuery);
+            }
+
             $plannings[] = new PlanningPrint(
                 $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback()), // Sheet title
                 $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $event->getFallback()), // Participant name
@@ -142,7 +160,8 @@ class ExportPlanningHandler
                 $event->getConfiguration()->getContactFirstName(), // event contact first name
                 $event->getConfiguration()->getContactLastName(), // event contact last name
                 $event->getConfiguration()->getOrganiserPhone(), // event organiser phone
-                $event->getOrganiserEmail() // event organiser email
+                $event->getOrganiserEmail(), // event organiser email
+                $tipTranslationViews[$participant->getLocale()] // Tip messages
             );
         }
 
