@@ -419,6 +419,8 @@ class SheetController extends Controller
             'uid'                => $key,
             'currency'           => $eventDomain->getEvent()->getCurrency(),
             'vatMode'            => $eventDomain->getEvent()->getMode(),
+            'isRequestMeetingEnabled' => false,
+            'isCatalog'               => false,
         ]);
     }
 
