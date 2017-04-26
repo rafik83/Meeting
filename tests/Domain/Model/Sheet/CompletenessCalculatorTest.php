@@ -191,7 +191,16 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
             'text' => 'description',
         ]);
 
-        $collection = new TemplateObject\ItemCollection('aaa123aa', 'collection', ['required' => true], 'fr', 'fr');
+        $collection = new TemplateObject\ItemCollection(
+            'aaa123aa',
+            'collection',
+            [
+                'required' => true,
+                'translatable' => true,
+            ],
+            'fr',
+            'fr'
+        );
         $collection->addItem(new TemplateObject\Item(new TemplateObject\ItemCollection('col123co', 'collection', [], 'fr', 'fr'), 'title_col'));
 
         $blockSheetTemplate->addChild(0, '69b3cde2', $title);
