@@ -1003,6 +1003,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 
+    command.group.user_search_handler:
+            class: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUserHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.user_repository'
+                - '@user_to_group_manager_checker'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser }
+
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
         arguments:
@@ -4236,15 +4244,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
 
     #
-    # Group - Search user view query
+    # Group
     #
-    query.group.user_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\SearchUserQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@user_to_group_manager_checker'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\SearchUserQuery }
     query.group.sheet.sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQueryHandler
         arguments:

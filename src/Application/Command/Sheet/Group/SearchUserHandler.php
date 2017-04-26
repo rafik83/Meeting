@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Group;
+namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 use Proximum\Vimeet\Domain\View\Group\UserView;
 
-class SearchUserQueryHandler
+class SearchUserHandler
 {
     /** @var UserRepositoryInterface */
     private $userRepository;
@@ -27,7 +27,7 @@ class SearchUserQueryHandler
     private $userToGroupManagerChecker;
 
     /**
-     * SearchUserQueryHandler constructor.
+     * SearchUserHandler constructor.
      *
      * @param UserRepositoryInterface   $userRepository
      * @param UserToGroupManagerChecker $userToGroupManagerChecker
@@ -41,14 +41,14 @@ class SearchUserQueryHandler
     }
 
     /**
-     * @param SearchUserQuery $query
+     * @param SearchUser $query
      *
      * @return UserView
      *
      * @throws UserNotAllowedToManageGroupException
      * @throws UserNotFoundForGivenEmailException
      */
-    public function handle(SearchUserQuery $query)
+    public function handle(SearchUser $query)
     {
         $user = $this->userRepository->findByEmail($query->email);
 

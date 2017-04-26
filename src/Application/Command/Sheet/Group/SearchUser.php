@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Group;
+namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SearchUserQuery
+class SearchUser
 {
     /** @var Event */
     public $event;
@@ -21,7 +21,7 @@ class SearchUserQuery
     public $email;
 
     /**
-     * SearchUserQuery constructor.
+     * SearchUser constructor.
      *
      * @param Event  $event
      */

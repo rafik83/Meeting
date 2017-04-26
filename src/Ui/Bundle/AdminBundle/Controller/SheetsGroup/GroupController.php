@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
+use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailException;
 use Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery;
-use Proximum\Vimeet\Application\Query\Group\SearchUserQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -64,7 +64,7 @@ class GroupController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $searchUser = new SearchUserQuery($event);
+        $searchUser = new SearchUser($event);
         $form       = $this->createForm(SearchType::class, $searchUser, ['event' => $event]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

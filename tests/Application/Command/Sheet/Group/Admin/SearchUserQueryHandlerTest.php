@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Group;
+namespace Application\Command\Sheet\Group\Admin;
 
-use Proximum\Vimeet\Application\Query\Group\SearchUserQuery;
-use Proximum\Vimeet\Application\Query\Group\SearchUserQueryHandler;
+use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
+use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUserHandler;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 use Proximum\Vimeet\Domain\View\Group\UserView;
@@ -30,10 +30,10 @@ class SearchUserQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $expectedView = new UserView(null, 'p.seb@elao.com', 'p.seb@elao.com');
 
-        $command = new SearchUserQuery($event);
+        $command = new SearchUser($event);
         $command->email = 'p.seb@elao.com';
 
-        $handler = new SearchUserQueryHandler($userRepository->reveal(), $userToManagerChecker->reveal());
+        $handler = new SearchUserHandler($userRepository->reveal(), $userToManagerChecker->reveal());
 
         $userRepository->findByEmail($command->email)->shouldBeCalled()->willReturn($user);
         $userToManagerChecker->isUserToGroupManagerAllowed($event, $user)->shouldBeCalled()->willReturn(true);
