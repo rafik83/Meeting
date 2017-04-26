@@ -12,38 +12,58 @@
             </h1>
         </header>
         <div class="main__container">
+            <div class="pull-right">
+                <a href="{{ path('event_sheet_group_participants_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
+                    {{ 'group.home.link.participants'|trans }}
+                </a>
+                <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
+                    {{ 'group.home.link.request'|trans }}
+                </a>
+            </div>
             <table class="table">
                 <thead>
                 <tr>
                     <th>
                         {{ 'sheet.title'|trans }}
-                        <div class="pull-right">
-                            <a href="{{ path('event_sheet_group_participants_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
-                                {{ 'group.home.link.participants'|trans }}
-                            </a>
-                            <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
-                                {{ 'group.home.link.request'|trans }}
-                            </a>
-                        </div>
                     </th>
+                    <th>
+                    </th>
+                    {% for day in groupView.days %}
+                        <th class="col-md-1 text-center">
+                            {{ 'group.participants_list.day.label'|trans }} {{ loop.index }}
+                        </th>
+                    {% endfor %}
                 </tr>
                 </thead>
                 <tbody>
                 {% for sheetView in groupView.sheetViews %}
                     <tr>
-                        <td>
+                        <td rowspan="{{ sheetView.participantViews|length }}">
                             <a href="{{ path('event_sheet_group_switch_to', {sheetGroup: groupView.id, sheet: sheetView.id}) }}">
                                 {{ sheetView.title }}
                             </a>
                         </td>
+                        <td>
+                            {% for participantView in sheetView.participantViews %}
+                                <div>{{ participantView.fullName }}</div>
+                            {% endfor %}
+                        </td>
+                            {% for dayNumber, day in groupView.days %}
+                                <td class="text-nowrap">
+                                    {% for participantView in sheetView.participantViews %}
+                                        {% for dayViewNumber, dayView in participantView.dayViews %}
+                                            {% if dayNumber == dayViewNumber %}
+                                                <div class="text-center">
+                                                {% for slotView in dayView.slotViews %}
+                                                    <div data-toggle="tooltip" title="{{ 'group.participants_list.slot.tooltip'|trans }} {{ slotView.beginEndHour }}" class="glyphicon glyphicon-stop participant-icon {{ slotView.isAnAvailableSlot ? "participant-available" : "participant-not-available" }}"></div>
+                                                {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                   {% endfor %}
+                                </td>
+                            {% endfor %}
                     </tr>
-                    {% for participantView in sheetView.participantViews %}
-                        <tr>
-                            <td>
-                                {{ participantView.fullName }}
-                            </td>
-                        </tr>
-                    {% endfor %}
                 {% endfor %}
                 </tbody>
             </table>

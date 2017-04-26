@@ -2583,8 +2583,8 @@ services:
         arguments:
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@repository.event.day_repository'
             - '@query.sheet.group.participant.agenda_day_view_handler'
+            - '@components.group.participant_days_views_builder_cache'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQuery }
 
@@ -3800,6 +3800,16 @@ services:
         shared: false
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
+    #
+    # Participant Day Views Builder Cache
+    #
+    components.group.participant_days_views_builder_cache:
+        class: Proximum\Vimeet\Application\Command\Group\ParticipantDayViewsBuilderCache
+        shared: false
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
 
     #
     # Planner

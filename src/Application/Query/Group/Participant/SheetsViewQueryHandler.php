@@ -5,7 +5,6 @@ namespace Proximum\Vimeet\Application\Query\Group\Participant;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\SheetView;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetsViewQueryHandler
 {

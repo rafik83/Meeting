@@ -84,6 +84,8 @@ gender.man: Monsieur
 gender.woman: Madame
 group.home.link.participants: 'Participants par fiche'
 group.home.link.request: 'Gestion des RDVs'
+group.participants_list.day.label: 'Jour'
+group.participants_list.slot.tooltip: 'Créneau de'
 group.request.list.link.home: 'Retour à la gestion de mon entité'
 group.request.list.no-preference: 'Pas de préférence'
 group.request.list.state.approved: Acceptée

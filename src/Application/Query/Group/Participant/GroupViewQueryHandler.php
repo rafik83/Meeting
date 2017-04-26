@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\GroupView;
+use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GroupViewQueryHandler

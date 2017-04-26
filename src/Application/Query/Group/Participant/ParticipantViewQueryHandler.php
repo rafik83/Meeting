@@ -23,33 +23,38 @@ class ParticipantViewQueryHandler
     private $meetingSlotRepository;
 
     /**
-     * @var DayRepositoryInterface
-     */
-    private $dayRepository;
-
-    /**
      * @var AgendaDayViewQueryHandler
      */
     private $agendaDayViewQueryHandler;
+
+    /**
+     * @var ParticipantDayViewsBuilderCache
+     */
+    private $participantDayViewsBuilderCache;
+
+    /**
+     * @var AgendaDayView[]
+     */
+    private $dayViewsSkeleton;
 
     /**
      * ParticipantViewQueryHandler constructor.
      *
      * @param ParticipantInfoGuesser          $participantInfoGuesser
      * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
-     * @param DayRepositoryInterface          $dayRepository
      * @param AgendaDayViewQueryHandler       $agendaDayViewQueryHandler
+     * @param ParticipantDayViewsBuilderCache $participantDayViewsBuilderCache
      */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        DayRepositoryInterface $dayRepository,
-        AgendaDayViewQueryHandler $agendaDayViewQueryHandler
+        AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
+        ParticipantDayViewsBuilderCache $participantDayViewsBuilderCache
     ) {
-        $this->participantInfoGuesser    = $participantInfoGuesser;
-        $this->meetingSlotRepository     = $meetingSlotRepository;
-        $this->dayRepository             = $dayRepository;
-        $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
+        $this->participantInfoGuesser          = $participantInfoGuesser;
+        $this->meetingSlotRepository           = $meetingSlotRepository;
+        $this->agendaDayViewQueryHandler       = $agendaDayViewQueryHandler;
+        $this->participantDayViewsBuilderCache = $participantDayViewsBuilderCache;
     }
 
     /**
