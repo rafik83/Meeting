@@ -30,12 +30,11 @@ class SlotViewsQueryHandler
     public function handle(SlotViewsQuery $query)
     {
         $slots = $this->meetingSlotRepository->findByEventAndDay($query->event, $query->day);
-
         $slotViews = [];
 
-        array_map(function($slot) {
+        foreach ($slots as $slot) {
             $slotViews[] = new SlotView($slot);
-        }, $slots);
+        }
 
         return $slotViews;
     }

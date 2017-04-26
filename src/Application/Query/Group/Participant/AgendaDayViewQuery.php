@@ -17,21 +17,14 @@ class AgendaDayViewQuery
     public $day;
 
     /**
-     * @var int
-     */
-    public $dayNumber;
-
-    /**
      * AgendaDayViewQuery constructor.
      *
      * @param Event     $event
      * @param Event\Day $day
-     * @param int       $dayNumber
      */
-    public function __construct(Event $event, Event\Day $day, $dayNumber)
+    public function __construct(Event $event, Event\Day $day)
     {
         $this->event     = $event;
         $this->day       = $day;
-        $this->dayNumber = $dayNumber;
     }
 }

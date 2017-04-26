@@ -18,7 +18,7 @@ class ParticipantController extends Controller
         $event = $eventDomain->getEvent();
 
         $groupView = $this->get('tactician.commandbus.query')->handle(
-            new GroupViewQuery($sheetGroup)
+            new GroupViewQuery($sheetGroup, $event)
         );
 
         return $this->render('EventBundle:Sheet/Group/Participant:list.html.twig', [

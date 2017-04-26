@@ -8,20 +8,30 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 class SlotView
 {
     /**
+     * @var \DateTimeInterface
+     */
+    public $begin;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $end;
+
+    /**
      * @var string
      */
     public $beginEndHour;
 
-    /** @var bool  */
+    /** @var bool */
     public $available = false;
 
     /**
-     * AbstractSlotView constructor.
-     *
      * @param MeetingSlot $slot
      */
     public function __construct(MeetingSlot $slot)
     {
+        $this->begin        = $slot->getBegin();
+        $this->end          = $slot->getEnd();
         $this->beginEndHour = $this->getFormattedHour($slot);
     }
 

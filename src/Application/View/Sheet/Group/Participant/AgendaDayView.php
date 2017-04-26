@@ -19,12 +19,10 @@ class AgendaDayView
     /**
      * AgendaDayView constructor.
      *
-     * @param int        $day
      * @param SlotView[] $slotViews
      */
-    public function __construct($day, array $slotViews)
+    public function __construct(array $slotViews)
     {
         $this->slotViews = $slotViews;
-        $this->day       = $day;
     }
 }

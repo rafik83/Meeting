@@ -40,13 +40,14 @@ class SheetsViewQueryHandler
      */
     public function handle(SheetsViewQuery $query)
     {
-        $sheetViews = array_map(function (Sheet $sheet) {
+        $sheetViews = [];
+        foreach ($query->sheets as $sheet) {
 
             $participantViews = [];
             foreach ($sheet->getParticipants()->toArray() as $participant) {
                 $participantViews[] = $this
                     ->participantViewQueryHandler
-                    ->handle(new ParticipantViewQuery($participant, $sheet->getEvent()));
+                    ->handle(new ParticipantViewQuery($participant, $sheet->getEvent(), $query->eventDays));
             }
 
             usort($participantViews,
@@ -55,12 +56,12 @@ class SheetsViewQueryHandler
                 }
             );
 
-            return new SheetView(
+            $sheetViews[] = new SheetView(
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($sheet),
                 $participantViews
             );
-        }, $query->sheets);
+        }
 
         usort($sheetViews,
             function (SheetView $one, SheetView $other) {

@@ -25,19 +25,25 @@ class GroupViewQueryHandler
     /** @var SheetsViewQueryHandler $sheetsViewQueryHandler */
     private $sheetsViewQueryHandler;
 
+    /** @var DayRepositoryInterface */
+    private $dayRepository;
+
     /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param SheetsViewQueryHandler   $sheetsViewQueryHandler
+     * @param DayRepositoryInterface   $dayRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        SheetsViewQueryHandler $sheetsViewQueryHandler
+        SheetsViewQueryHandler $sheetsViewQueryHandler,
+        DayRepositoryInterface $dayRepository
     ) {
         $this->sheetRepository        = $sheetRepository;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->sheetsViewQueryHandler = $sheetsViewQueryHandler;
+        $this->dayRepository = $dayRepository;
     }
 
     /**
@@ -48,8 +54,14 @@ class GroupViewQueryHandler
     public function handle(GroupViewQuery $groupViewQuery)
     {
         $sheets     = $this->sheetRepository->getByGroup($groupViewQuery->group);
-        $sheetViews = $this->sheetsViewQueryHandler->handle(new SheetsViewQuery($sheets));
+        $eventDays  = $this->dayRepository->findByEvent($groupViewQuery->event);
+        $sheetViews = $this->sheetsViewQueryHandler->handle(new SheetsViewQuery($sheets, $eventDays));
 
-        return new GroupView($groupViewQuery->group->getId(), $groupViewQuery->group->getTitle(), $sheetViews);
+        return new GroupView(
+            $groupViewQuery->group->getId(),
+            $groupViewQuery->group->getTitle(),
+            $sheetViews,
+            $eventDays
+        );
     }
 }

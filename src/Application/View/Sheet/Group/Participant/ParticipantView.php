@@ -13,16 +13,21 @@ class ParticipantView
     /** @var string $fullName */
     public $fullName;
 
+    /** @var array */
+    public $dayViews;
+
     /**
      * ParticipantView constructor.
      *
      * @param string $firstName
      * @param string $lastName
+     * @param array  $dayViews
      */
-    public function __construct($firstName, $lastName)
+    public function __construct($firstName, $lastName, array $dayViews)
     {
         $this->firstName = $firstName;
         $this->lastName  = $lastName;
         $this->fullName  = $firstName . ' ' . $lastName;
+        $this->dayViews  = $dayViews;
     }
 }

@@ -2566,6 +2566,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@query.sheet.group.participant.sheets_view_handler'
+            - '@repository.event.day_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQuery }
 
@@ -2599,7 +2600,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQuery }
 
     #
     # Program query
