@@ -25,6 +25,7 @@ catalog.action.meeting.request.approve: 'Proposition reçue'
 catalog.action.meeting.request.approved: 'Demande acceptée'
 catalog.action.meeting.request.back: Retour
 catalog.action.meeting.request.create: 'Demander en RDV'
+catalog.action.meeting.request.discussion: 'Echanges'
 catalog.action.meeting.request.pending: 'Demande en attente'
 catalog.action.meeting.request.refuse: 'Proposition reçue'
 catalog.action.meeting.request.show.refuse: 'Demande refusée'

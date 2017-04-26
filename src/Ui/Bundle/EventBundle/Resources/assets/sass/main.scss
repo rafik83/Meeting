@@ -103,6 +103,10 @@
     clear: both;
 }
 
+.ft-size-18 {
+  font-size: 18px !important;
+}
+
 .notification-not-read {
     font-weight: bold;
 }
@@ -205,6 +209,10 @@
 
 .underline {
   text-decoration: underline;
+}
+
+.no-underline {
+  text-decoration: none !important;
 }
 
 .product-limite {

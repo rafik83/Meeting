@@ -19,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
-use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Rule\Composer;
 
 class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -43,6 +42,7 @@ class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRequest->getFromSheet()->willReturn($sheet->reveal());
         $meetingRequest->getToSheet()->willReturn($sheet2->reveal());
         $meetingRequest->getState()->willReturn(Request::STATE_SENT);
+        $meetingRequest->hasMessage()->willReturn(true);
         $sheet->getType()->willReturn($type1->reveal());
         $sheet2->getType()->willReturn($type2->reveal());
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
@@ -79,7 +79,9 @@ class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             false,
             false,
             false,
-            false
+            false,
+            false,
+            true
         );
 
         $this->assertEquals($expected, $result);
