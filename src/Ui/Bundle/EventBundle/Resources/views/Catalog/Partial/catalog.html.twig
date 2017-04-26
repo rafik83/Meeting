@@ -1,4 +1,4 @@
-{{ include('EventBundle:Catalog:Partial/search.html.twig', { sheet: sheet, searchForm: searchForm, typeViews: typeViews, total: paginatedResult.total }, false) }}
+{{ include('EventBundle:Catalog:Partial/search.html.twig', { sheet: sheet, searchForm: searchForm, typeViews: typeViews, total: paginatedResult.total, tipTranslationViews: tipTranslationViews }, false) }}
 
 <div class="catalog__list catalog__list--block">
     {{ include('EventBundle:Catalog:Partial/list.html.twig', { sheet: sheet, paginatedResult: paginatedResult, 'viewer': sheet, 'page': page, isCatalog: isCatalog }, false) }}

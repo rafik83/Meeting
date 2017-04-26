@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Tip\Tip:
+    type:  entity
+    table: tip
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        onMeetingManagement:
+            type: boolean
+        onCatalog:
+            type: boolean
+        onPrintPlanning:
+            type: boolean
+        createdAt:
+            type: datetime
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Tip\TipTranslation
+            mappedBy: tip
+            indexBy: locale
+            cascade: ['persist', 'remove']

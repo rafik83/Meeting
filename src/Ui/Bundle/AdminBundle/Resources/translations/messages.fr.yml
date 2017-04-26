@@ -18,8 +18,6 @@ admin.admin_list.table.title.firstname: Prénom
 admin.admin_list.table.title.lastname: Nom
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'Liste des utilisateurs du backoffice'
-admin.agenda.tab.sheet.title.label: 'Fiches'
-admin.agenda.tab.spot.title.label: 'Lieux'
 admin.agenda.countPendingProposition: 'Nombre de propositions reçues à valider'
 admin.agenda.countPlacedMeetings: 'Nombre de RDV'
 admin.agenda.countProposition: 'Nombre de propositions reçues'
@@ -35,22 +33,22 @@ admin.agenda.export.participant_schedules.title: 'Export des participants et pla
 admin.agenda.export.title: 'Rendez-vous / Export'
 admin.agenda.filters.follower.label: 'Suivi commercial'
 admin.agenda.filters.follower.unassigned.label: 'Non assigné'
+admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
-admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
-admin.agenda.filters.hasValidatedRequestNotScheduled.label: 'A encore des demandes/propositions validées et non placées'
 admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'Au moins 1 participant est totalement indisponible avec au moins une demande de rendez-vous attribuée'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
 admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
-admin.agenda.filters.hasScheduledMeeting.no: 'Non'
-admin.agenda.filters.hasScheduledMeeting.yes: 'Oui'
+admin.agenda.filters.hasScheduledMeeting.no: Non
+admin.agenda.filters.hasScheduledMeeting.yes: Oui
 admin.agenda.filters.hasSentMeetingRequest.all: 'Peu importe'
 admin.agenda.filters.hasSentMeetingRequest.label: 'A fait des demandes de rendez-vous'
-admin.agenda.filters.hasSentMeetingRequest.no: 'Non'
-admin.agenda.filters.hasSentMeetingRequest.yes: 'Oui'
+admin.agenda.filters.hasSentMeetingRequest.no: Non
+admin.agenda.filters.hasSentMeetingRequest.yes: Oui
+admin.agenda.filters.hasValidatedRequestNotScheduled.label: 'A encore des demandes/propositions validées et non placées'
 admin.agenda.filters.indicators.label: Indicateurs
 admin.agenda.filters.reset.label: Reset
-admin.agenda.filters.search: 'Rechercher'
+admin.agenda.filters.search: Rechercher
 admin.agenda.filters.submit.label: 'Filtrer les fiches'
 admin.agenda.filters.title.label: 'Filtre fiche'
 admin.agenda.filters.type: 'Type de participation'
@@ -100,8 +98,7 @@ admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
-admin.agenda.sheet.loader: 'Chargement des fiches ...'
-admin.agenda.spot.loader: 'Chargement des lieux ...'
+admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
 admin.agenda.sort.alphabetical.label: Alphabétique
@@ -112,6 +109,9 @@ admin.agenda.sort.request.label: 'Nombre de demandes'
 admin.agenda.sort.scheduled_meeting.label: 'Nombre de RDV positionnés'
 admin.agenda.sort.submit.label: 'Trier les fiches'
 admin.agenda.sort.title.label: Trier
+admin.agenda.spot.loader: 'Chargement des lieux ...'
+admin.agenda.tab.sheet.title.label: Fiches
+admin.agenda.tab.spot.title.label: Lieux
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
@@ -135,13 +135,15 @@ admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
+admin.event.days: 'Jours de l''événement'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
-admin.event.days: "Jours de l'événement"
 admin.event.list.currents.title: 'Événements actuels'
 admin.event.list.pasts.title: 'Événements passés'
 admin.event.page.invoice.title: Factures
 admin.event.page.list.title: 'Liste de mes événements'
+admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
+admin.event.page.orderFinder.title: 'Recherche commande'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
 admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
 admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
@@ -428,7 +430,7 @@ admin.order.link: Commandes
 admin.order.sheet: Fiche
 admin.order.title: 'Liste des commandes'
 admin.order.total: Total
-admin.order.totalWithoutVat: Total HT
+admin.order.totalWithoutVat: 'Total HT'
 admin.order.type: 'Type de participation'
 admin.organizer_template_list.table.column.action: Action
 admin.organizer_template_list.table.column.date: 'Date de création'
@@ -479,8 +481,8 @@ admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
 admin.planner.export: Exporter
-admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
 admin.planner.export.heading: admin.planner.export.heading
+admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
 admin.planner.heading.export: 'Exporter les données pour l''algorithme'
 admin.planner.heading.import: 'Importer une solution depuis l''algorithme'
 admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvelle solution supprime l''ensemble des rendez-vous positionnés sur cet événement'
@@ -608,8 +610,8 @@ admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
-admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.balance: 'Balance TTC'
+admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
@@ -619,6 +621,7 @@ admin.sheet.export.fields.owner_email: 'Email propriétaire'
 admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
 admin.sheet.export.fields.registration_date: 'Date inscription'
+admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
 admin.sheet.export.fields.status: 'Statut fiche'
@@ -698,6 +701,21 @@ admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
+admin.tip.empty: 'Aucun message d''aide'
+admin.tip.link: 'Messages d''aide'
+admin.tip.list.title: 'Messages d''aide'
+admin.tip.create.link: 'Nouveau'
+admin.tip.create.title: 'Nouveau message d''aide'
+admin.tip.update.title: 'Mise à jour du message d''aide'
+admin.tip.column.title: 'Libellé back office'
+admin.tip.column.translation: 'Langue(s)'
+admin.tip.column.locale: 'Langue'
+admin.tip.column.content: 'Contenu'
+admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.catalog: 'Catalogue'
+admin.tip.column.visible.print_planning: 'Impression planning'
+admin.tip.visible: 'Liste des pages concernées'
+admin.tip.update.link: 'Modifier'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'

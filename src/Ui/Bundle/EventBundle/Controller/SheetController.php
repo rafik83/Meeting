@@ -120,16 +120,18 @@ class SheetController extends Controller
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'                  => $eventDomain->getEvent(),
-            'sheet'                  => $sheet,
-            'taggedData'             => $taggedData,
-            'locale'                 => $locale,
-            'nomenclatures'          => $nomenclatures,
-            'participants'           => $participants,
-            'templateData'           => $templateData,
-            'popinWelcome'           => $popinWelcome,
-            'sheetValidationView'    => (isset($sheetValidationView)) ? $sheetValidationView : null,
-            'participantProductView' => $participantProductView,
+            'event'                   => $eventDomain->getEvent(),
+            'sheet'                   => $sheet,
+            'taggedData'              => $taggedData,
+            'locale'                  => $locale,
+            'nomenclatures'           => $nomenclatures,
+            'participants'            => $participants,
+            'templateData'            => $templateData,
+            'popinWelcome'            => $popinWelcome,
+            'sheetValidationView'     => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'participantProductView'  => $participantProductView,
+            'isRequestMeetingEnabled' => false,
+            'isCatalog'               => false,
         ]);
     }
 

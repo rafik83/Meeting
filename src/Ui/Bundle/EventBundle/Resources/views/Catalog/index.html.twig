@@ -10,6 +10,7 @@
 
 {% block content %}
     <div class="catalog catalog--advanced">
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
             searchForm: searchForm,
             typeViews: typeViews,
@@ -17,7 +18,8 @@
             sheet: sheet,
             seeMoreButton: seeMoreButton,
             page: page,
-            isCatalog: isCatalog
+            isCatalog: isCatalog,
+            tipTranslationViews: null
         }, false) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}

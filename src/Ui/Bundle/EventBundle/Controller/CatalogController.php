@@ -19,6 +19,8 @@ use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -85,7 +87,10 @@ class CatalogController extends Controller
         $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
 
         if (empty($visibleTypes)) {
-            return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
+            return $this->render(
+                'EventBundle:Catalog:no-visible-type.html.twig',
+                ['event' => $event, 'sheet' => $sheet]
+            );
         }
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(
@@ -160,7 +165,7 @@ class CatalogController extends Controller
                     [
                         'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
                             'paginatedResult' => $paginatedResult,
-                            'viewer'          =>  $sheet,
+                            'viewer'          => $sheet,
                             'page'            => $page,
                             'isCatalog'       => true,
                         ]),
@@ -173,15 +178,22 @@ class CatalogController extends Controller
             $template = 'EventBundle:Catalog:index.html.twig';
         }
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_CATALOG,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render($template, [
-            'event'           => $event,
-            'sheet'           => $sheet,
-            'page'            => 1,
-            'isCatalog'       => true,
-            'typeViews'       => $typeViews,
-            'paginatedResult' => $paginatedResult,
-            'seeMoreButton'   => $seeMoreButton,
-            'searchForm'      => $searchForm->createView(),
+            'event'               => $event,
+            'sheet'               => $sheet,
+            'page'                => 1,
+            'isCatalog'           => true,
+            'typeViews'           => $typeViews,
+            'paginatedResult'     => $paginatedResult,
+            'seeMoreButton'       => $seeMoreButton,
+            'searchForm'          => $searchForm->createView(),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 
@@ -347,21 +359,22 @@ class CatalogController extends Controller
             ;
         }
 
-        return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'                        => $event,
-            'userSheet'                    => $sheet,
-            'sheet'                        => $sheetToDisplay,
-            'taggedData'                   => $taggedData,
-            'locale'                       => $locale,
-            'nomenclatures'                => $nomenclatures,
-            'participants'                 => $participants,
-            'templateData'                 => $templateData,
-            'isCatalog'                    => true,
-            'meetingRequest'               => $meetingRequest,
-            'isMeetingPublished'           => $isMeetingPublished,
-            'isMeetingRequestUpdateLocked' => $isMeetingRequestUpdateLocked,
-            'isMeetingRequestClosed'       =>$isMeetingRequestClosed,
-            'isAnsweringMeetingRequestClosed' =>$isAnsweringMeetingRequestClosed,
+        return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
+            'event'                           => $event,
+            'sheet'                           => $sheet,
+            'sheetToDisplay'                  => $sheetToDisplay,
+            'taggedData'                      => $taggedData,
+            'locale'                          => $locale,
+            'nomenclatures'                   => $nomenclatures,
+            'participants'                    => $participants,
+            'templateData'                    => $templateData,
+            'meetingRequest'                  => $meetingRequest,
+            'isMeetingPublished'              => $isMeetingPublished,
+            'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
+            'isMeetingRequestClosed'          => $isMeetingRequestClosed,
+            'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
+            'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
+            'isCatalog'                       => true,
         ]);
     }
 

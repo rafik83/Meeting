@@ -33,11 +33,11 @@ catalog.meeting_request.approve: Accepter
 catalog.meeting_request.create: 'Demander en RDV'
 catalog.meeting_request.pending: 'Demande en attente'
 catalog.meeting_request.proposition.approved: 'Proposition reçue acceptée'
-catalog.meeting_request.proposition.placed: 'Proposition reçue acceptée - RDV plannifié'
+catalog.meeting_request.proposition.placed: 'RDV planifié'
 catalog.meeting_request.proposition.refused: 'Proposition reçue refusée'
 catalog.meeting_request.refuse: Refuser
 catalog.meeting_request.request.approved: 'Votre demande acceptée'
-catalog.meeting_request.request.placed: 'Votre demande acceptée - RDV planifié'
+catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Votre demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
@@ -50,19 +50,19 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
-event.activateAccount.expired.title: 'Votre invitation a expiré'
 event.activateAccount.expired.explanation: 'Votre invitation a expiré, vous pouvez recevoir une nouvelle invitation par email en cliquant sur le bouton ci-dessous'
 event.activateAccount.expired.resend: 'Recevoir une nouvelle invitation par email'
-event.activateAccount.resendToken.title: Une nouvelle invitation vous a été envoyée
-event.activateAccount.resendToken.explanation: Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte
+event.activateAccount.expired.title: 'Votre invitation a expiré'
+event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte'
+event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
-event.meeting.request.closed: Les demandes de rendez-vous sont terminées
-event.meeting.request.answering.closed: Les validations de rendez-vous sont terminées
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
-event.meeting.listRequest.filter.all: 'Toutes'
-event.meeting.listRequest.filter.requests: 'Mes demandes'
+event.meeting.listRequest.filter.all: Toutes
 event.meeting.listRequest.filter.propositions: 'Propositions reçues'
+event.meeting.listRequest.filter.requests: 'Mes demandes'
+event.meeting.request.answering.closed: 'Les validations de rendez-vous sont terminées'
+event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
 event.sheet.export.fields.participant_email: 'Email participant'
 event.sheet.export.fields.participant_firstname: Prénom
@@ -83,18 +83,18 @@ event.sheet.export.fields.sheet_zipcode: 'Code postal'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.request: 'Gestion des RDVs'
-group.request.title: 'Gestion des rendez-vous de l''entité %groupTitle%'
 group.request.list.link.home: 'Retour à la gestion de mon entité'
-group.request.list.table.header.otherSheet: Autre fiche
-group.request.list.table.header.status: Statut
-group.request.list.table.header.sheetConcerned: 'Mes fiches concernées'
-group.request.list.table.header.participants: Participants
-group.request.list.table.no-result: Pas de demandes de rendez-vous
 group.request.list.no-preference: 'Pas de préférence'
 group.request.list.state.approved: Acceptée
+group.request.list.state.planned: 'Rendez-vous planifié'
 group.request.list.state.refused: Refusée
-group.request.list.state.sent: En attente
-group.request.list.state.planned: Rendez-vous planifié
+group.request.list.state.sent: 'En attente'
+group.request.list.table.header.otherSheet: 'Autre fiche'
+group.request.list.table.header.participants: Participants
+group.request.list.table.header.sheetConcerned: 'Mes fiches concernées'
+group.request.list.table.header.status: Statut
+group.request.list.table.no-result: 'Pas de demandes de rendez-vous'
+group.request.title: 'Gestion des rendez-vous de l''entité %groupTitle%'
 happening.participate.action: Participer
 happening.participate.detail: Détail
 happening.participate.full: Complet
@@ -120,6 +120,7 @@ login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
 modal.back: Retour
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
+modal.close: 'Fermer'
 multiple_sheets.select_sheet: 'Sélectionner une fiche'
 navigation.category.billing: Facturation
 navigation.category.catalog: Catalogue
@@ -165,7 +166,7 @@ navigation.links.planning.final_date: 'Publication le'
 navigation.links.planning.flash_presentation: 'Présentations flash'
 navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
-navigation.links.returnToSelectSheet: Mes fiches
+navigation.links.returnToSelectSheet: 'Mes fiches'
 navigation.links.sheet.locale: Version
 navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'
@@ -327,8 +328,8 @@ sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
 sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nET\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
-sheetGroup.impersonateAs : '%fromEmail% connecté en tant que %toFirstName% %toLastName% (%toEmail%)'
-sheetGroup.quitImpersonation : Quitter
+sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFirstName% %toLastName% (%toEmail%)'
+sheetGroup.quitImpersonation: Quitter
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total

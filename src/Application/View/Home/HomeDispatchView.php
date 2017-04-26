@@ -22,8 +22,11 @@ class HomeDispatchView
     /** @var string */
     private $type;
 
-    /** @var null|Sheet|Group */
-    private $object;
+    /** @var null|Sheet */
+    private $sheet;
+
+    /** @var null|Group */
+    private $group;
 
     /**
      * @param string           $type
@@ -44,7 +47,12 @@ class HomeDispatchView
         }
 
         $this->type = $type;
-        $this->object = $object;
+
+        if ($object instanceof Group) {
+            $this->group = $object;
+        } elseif ($object instanceof Sheet) {
+            $this->sheet = $object;
+        }
     }
 
     /**
@@ -76,11 +84,11 @@ class HomeDispatchView
      */
     public function getGroup()
     {
-        if (!$this->isGroup()) {
+        if (!$this->group instanceof Group) {
             throw new \LogicException('getGroup() method cannot be called in this context');
         }
 
-        return $this->object;
+        return $this->group;
     }
 
     /**
@@ -88,10 +96,10 @@ class HomeDispatchView
      */
     public function getSheet()
     {
-        if (!$this->isOneSheet()) {
-            throw new \LogicException('getSheet() methode cannot be called in this context');
+        if (!$this->sheet instanceof Sheet) {
+            throw new \LogicException('getSheet() method cannot be called in this context');
         }
 
-        return $this->object;
+        return $this->sheet;
     }
 }
