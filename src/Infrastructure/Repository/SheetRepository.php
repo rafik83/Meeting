@@ -645,7 +645,8 @@ class SheetRepository implements SheetRepositoryInterface
                 'WITH',
                 '(sheet.owner = :user OR participant.user = :user) 
                 AND sheet.event = :event
-                And sheet.enable = true'
+                AND sheet.enable = true
+                AND sheet.group IS NOT NULL'
             )
             ->setParameter('user', $user)
             ->setParameter('event', $event)
