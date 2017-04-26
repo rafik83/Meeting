@@ -11,7 +11,6 @@
 namespace Application\Query\Group\Sheet;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
-use Proximum\Vimeet\Application\Exception\Group\NoSheetsAvailableForUserAndForEvent;
 use Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
@@ -41,22 +40,5 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $view = $handler->handle($sheetViewQuery);
 
         $this->assertEquals([$expectedView], $view);
-    }
-
-    public function testWithoutSheets()
-    {
-        $this->expectException(NoSheetsAvailableForUserAndForEvent::class);
-
-        $sheetRepository  = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesserCache::class);
-
-        $event = EventFactory::createEvent('title');
-        $user  = UserFactory::create('test@elao.com');
-
-        $sheetViewQuery = new SheetViewQuery($event, $user, 'fr');
-        $handler        = new SheetViewQueryHandler($sheetRepository->reveal(), $sheetInfoGuesser->reveal());
-
-        $sheetRepository->getAllSheetsByUserAndEvent($user, $event)->shouldBeCalled();
-        $handler->handle($sheetViewQuery);
     }
 }

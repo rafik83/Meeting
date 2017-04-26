@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
-use Proximum\Vimeet\Application\Exception\Group\NoSheetsAvailableForUserAndForEvent;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
@@ -113,14 +112,7 @@ class GroupController extends Controller
         }
 
         $querySheets = new SheetViewQuery($event, $user, $event->getAvailableLocale($request->getLocale()));
-
-        try {
-            $sheetViews = $this->get('tactician.commandbus')->handle($querySheets);
-        } catch (NoSheetsAvailableForUserAndForEvent $exception) {
-            $this->addFlash('error', 'flash.admin.group.create.error.no_sheet_available');
-
-            return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
-        }
+        $sheetViews  = $this->get('tactician.commandbus')->handle($querySheets);
 
         $command = new Create($event, $user, $sheetViews);
         $form    = $this->createForm(CreateType::class, $command, ['sheetViews' => $sheetViews]);

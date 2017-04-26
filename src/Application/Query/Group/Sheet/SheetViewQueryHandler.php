@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Group\Sheet;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
-use Proximum\Vimeet\Application\Exception\Group\NoSheetsAvailableForUserAndForEvent;
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -39,8 +38,6 @@ class SheetViewQueryHandler
      * @param SheetViewQuery $sheetViewQuery
      *
      * @return SheetView[]
-     *
-     * @throws NoSheetsAvailableForUserAndForEvent
      */
     public function handle(SheetViewQuery $sheetViewQuery)
     {
@@ -49,10 +46,6 @@ class SheetViewQueryHandler
             $sheetViewQuery->user,
             $sheetViewQuery->event
         );
-
-        if (empty($sheets)) {
-            throw new NoSheetsAvailableForUserAndForEvent();
-        }
 
         foreach ($sheets as $sheet) {
             if (!$sheet->hasGroup()) {
