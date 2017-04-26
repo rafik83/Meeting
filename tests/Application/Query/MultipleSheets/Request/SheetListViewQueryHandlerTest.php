@@ -43,6 +43,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetMet1 = $this->prophesize(Sheet::class);
         $sheetMet2 = $this->prophesize(Sheet::class);
+        $sheetMet3 = $this->prophesize(Sheet::class);
 
         $multipleSheets = [
             1 => $sheet1->reveal(),
@@ -54,6 +55,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetMet2,
             $sheet1,
             $sheet2,
+            $sheetMet3,
         ];
 
         $sheet1->getEvent()->shouldBeCalled()->willReturn($event->reveal());
@@ -61,16 +63,18 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2->getId()->shouldBeCalled()->willReturn(2);
         $sheetMet1->getId()->shouldBeCalled()->willReturn(3);
         $sheetMet2->getId()->shouldBeCalled()->willReturn(4);
+        $sheetMet3->getId()->shouldBeCalled()->willReturn(5);
 
         $locale = 'fr';
         $page   = 1;
-        $limit  = 10; // To ease test
+        $limit  = 4; // To ease test
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesserCache::class);
-        $sheetInfoGuesser->guessSheetTitle($sheetMet1, $locale)->shouldBeCalled()->willReturn('Met 1');
-        $sheetInfoGuesser->guessSheetTitle($sheetMet2, $locale)->shouldBeCalled()->willReturn('Met 2');
-        $sheetInfoGuesser->guessSheetTitle($sheet1, $locale)->shouldBeCalled()->willReturn('Sheet 1');
-        $sheetInfoGuesser->guessSheetTitle($sheet2, $locale)->shouldBeCalled()->willReturn('Sheet 2');
+        $sheetInfoGuesser->guessSheetTitle($sheetMet1->reveal(), $locale)->shouldBeCalled()->willReturn('A');
+        $sheetInfoGuesser->guessSheetTitle($sheetMet2->reveal(), $locale)->shouldBeCalled()->willReturn('B');
+        $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), $locale)->shouldBeCalled()->willReturn('C');
+        $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->shouldBeCalled()->willReturn('D');
+        $sheetInfoGuesser->guessSheetTitle($sheetMet3->reveal(), $locale)->shouldBeCalled()->willReturn('Z');
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
@@ -84,11 +88,11 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
-        $request1->getToSheet()->shouldBeCalled()->willReturn($sheet1->reveal());
+        $request1->getToSheet()->willReturn($sheet1->reveal());
 
         $request2 = $this->prophesize(Request::class);
         $request2->getFromSheet()->shouldBeCalled()->willReturn($sheetMet2->reveal());
-        $request2->getToSheet()->shouldBeCalled()->willReturn($sheet1->reveal());
+        $request2->getToSheet()->willReturn($sheet1->reveal());
 
         $request3 = $this->prophesize(Request::class);
         $request3->getFromSheet()->shouldBeCalled()->willReturn($sheet1->reveal());
@@ -97,7 +101,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository
             ->getRequestsOfSheetsWithSheets(
                 $event->reveal(),
-                $sheetsMet,
+                [$sheetMet1->reveal(), $sheetMet2->reveal(), $sheet1->reveal(), $sheet2->reveal()],
                 $multipleSheets
             )
             ->shouldBeCalled()
@@ -127,10 +131,10 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($requestView3);
 
-        $sheetView1 = new SheetView(3, 'Met 1', $sheetMet1->reveal());
-        $sheetView2 = new SheetView(4, 'Met 2', $sheetMet2->reveal());
-        $sheetView3 = new SheetView(1, 'Sheet 1', $sheet1->reveal());
-        $sheetView4 = new SheetView(2, 'Sheet 2', $sheet2->reveal());
+        $sheetView1 = new SheetView(3, 'A', $sheetMet1->reveal());
+        $sheetView2 = new SheetView(4, 'B', $sheetMet2->reveal());
+        $sheetView3 = new SheetView(1, 'C', $sheet1->reveal());
+        $sheetView4 = new SheetView(2, 'D', $sheet2->reveal());
 
         $sheetViewQueryHandler
             ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
@@ -149,15 +153,14 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($sheetView4);
 
-        $expectedSheetView1 = new SheetView(3, 'Met 1', $sheetMet1->reveal());
+        $expectedSheetView1 = new SheetView(3, 'A', $sheetMet1->reveal());
         $expectedSheetView1->addRequest($requestView1->reveal());
-        $expectedSheetView1->addRequest($requestView2->reveal());
 
-        $expectedSheetView2 = new SheetView(4, 'Met 2', $sheetMet2->reveal());
-        $expectedSheetView2->addRequest($requestView3->reveal());
+        $expectedSheetView2 = new SheetView(4, 'B', $sheetMet2->reveal());
+        $expectedSheetView2->addRequest($requestView2->reveal());
 
-        $expectedSheetView2 = new SheetView(4, 'Met 2', $sheetMet2->reveal());
-        $expectedSheetView2->addRequest($requestView3->reveal());
+        $expectedSheetView3 = new SheetView(1, 'C', $sheet1->reveal());
+        $expectedSheetView3->addRequest($requestView3->reveal());
 
         $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
@@ -179,9 +182,9 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $expected = new SheetListView(
-            [3 => $expectedSheetView1, 1 => $expectedSheetView2],
+            [3 => $expectedSheetView1, 4 => $expectedSheetView2, 1 => $expectedSheetView3],
             1,
-            1,
+            2,
             false,
             false,
             false

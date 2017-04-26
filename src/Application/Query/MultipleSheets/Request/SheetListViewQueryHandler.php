@@ -86,7 +86,7 @@ class SheetListViewQueryHandler
         $firstSheet = reset($query->sheets);
 
         if (false === $firstSheet) {
-            throw new \InvalidArgumentException('At least one sheet must be provided in SheetListViewQuery::sheets');
+            throw new NoResultException('At least one sheet must be provided in SheetListViewQuery::sheets');
         }
 
         $event = $firstSheet->getEvent();
