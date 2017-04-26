@@ -138,6 +138,7 @@ class SheetSearchQueryBuilder
         $this->filterByHasScheduledMeeting($filters);
         $this->filterByHasInvoice($filters);
         $this->filterByImported($filters);
+        $this->filterByCanceledAttendance($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
@@ -611,6 +612,22 @@ class SheetSearchQueryBuilder
         if (true === $hasNestedMustNot) {
             $nestedMustNot->setQuery($boolQueryMustNot)->setPath('booleanFilter');
             $this->query->addMustNot($nestedMustNot);
+        }
+    }
+
+    /**
+     * Filter sheet with canceled attendance
+     * @see Sheet::attend()
+     *
+     * @param array $filters
+     */
+    protected function filterByCanceledAttendance(array &$filters)
+    {
+        if (isset($filters['cancelAttendance'])) {
+            $matchAttend = new Term();
+            $matchAttend->setTerm('attend', !$filters['cancelAttendance']);
+
+            $this->query->addMust($matchAttend);
         }
     }
 
