@@ -23,7 +23,7 @@ class Create
     public $user;
 
     /** @var SheetView[] */
-    public $sheetViews = [];
+    public $sheetViews;
 
     /** @var string */
     public $title;

@@ -26,7 +26,11 @@ class AbstractGroupType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('sheetViews', SheetCheckboxType::class, ['sheetViews' => $options['sheetViews']])
+            ->add('sheetViews', SheetCheckboxType::class,
+                [
+                    'sheetViews' => $options['sheetViews'],
+                    'required'   => false,
+                ])
             ->add('submit', SubmitType::class);
     }
 
