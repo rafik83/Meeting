@@ -1670,6 +1670,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invo\BatchGenerateInvoice }
+    command.sheet.attend_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AttendHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@sheet.happening_participation.enable_disable_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Attend }
 
     #
     # Security
@@ -2787,6 +2795,13 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHandler
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
+    query.sheet.attend.sheet_attendance_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQuery }
 
     ##
     # Navigation builder

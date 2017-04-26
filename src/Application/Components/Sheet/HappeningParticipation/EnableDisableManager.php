@@ -15,6 +15,9 @@ use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class EnableDisableManager
 {
+    const DISABLE_HAPPENING_PARTICIPATION = false;
+    const ENABLE_HAPPENING_PARTICIPATION = true;
+
     /**
      * @var HappeningParticipationRepositoryInterface
      */
