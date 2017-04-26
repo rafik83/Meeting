@@ -191,8 +191,12 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
             'text' => 'description',
         ]);
 
+        $collection = new TemplateObject\ItemCollection('aaa123aa', 'collection', ['required' => true], 'fr', 'fr');
+        $collection->addItem(new TemplateObject\Item(new TemplateObject\ItemCollection('col123co', 'collection', [], 'fr', 'fr'), 'title_col'));
+
         $blockSheetTemplate->addChild(0, '69b3cde2', $title);
         $blockSheetTemplate->addChild(0, '69b3cde3', $description);
+        $blockSheetTemplate->addChild(0, 'aaa123aaa', $collection);
         $sheetTemplateData->addChild(0, '811f6edfa', $blockSheetTemplate);
 
         // Registration Template Data
@@ -226,7 +230,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expectedSheet = SheetFactory::create(null, $user, $datetime);
-        $expectedSheet->setCompleteness(75);
+        $expectedSheet->setCompleteness(83);
 
         // Mock
         $templateDataFactory         = $this->prophesize(TemplateDataFactory::class);
@@ -245,7 +249,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $sheetCompletenessRepository->removeForSheet($sheet)->shouldBeCalled();
 
         $sheetCompletenessRepository->add(new SheetCompleteness($sheet, 'fr', 100))->shouldBeCalled();
-        $sheetCompletenessRepository->add(new SheetCompleteness($sheet, 'en', 50))->shouldBeCalled();
+        $sheetCompletenessRepository->add(new SheetCompleteness($sheet, 'en', 66))->shouldBeCalled();
 
         $sheetRepository->set(Argument::that(function (Sheet $sheet) use ($expectedSheet) {
             return $sheet->getCompleteness() === $expectedSheet->getCompleteness();
