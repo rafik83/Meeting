@@ -84,9 +84,6 @@ class UpdateMeetingRequestHandler
 
         $this->handleAddRemoveParticipant($updateRequest);
 
-        // Save request
-        $this->requestRepository->set($updateRequest->meetingRequest);
-
         // Add message
         if ($updateRequest->description) {
             $message = new Message(
@@ -97,7 +94,11 @@ class UpdateMeetingRequestHandler
             );
 
             $this->messageRepository->add($message);
+            $updateRequest->meetingRequest->setHasMessage(true);
         }
+
+        // Save request
+        $this->requestRepository->set($updateRequest->meetingRequest);
     }
 
     /**

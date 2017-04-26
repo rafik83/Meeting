@@ -44,9 +44,9 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $refuseRequest->message = 'this is a test';
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, false, true);
         $expectedRequest->refuse($dateTime);
-        $expectedMessage = new Message($expectedRequest, $sheetTo, 'this is a test', $dateTime);
+        $expectedMessage = new Message($request, $sheetTo, 'this is a test', $dateTime);
         $exectedEvent    = new RefusedRequestEvent($user, $request, $dateTime, 'this is a test');
 
         // Dependencies
@@ -55,6 +55,50 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
+
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $eventDispatcher->dispatch('meeting_request.refused', $exectedEvent);
+
+        // Handle
+
+        $handler = new RefuseRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $dateTime
+        );
+
+        $handler->handle($refuseRequest);
+    }
+
+    public function testHandleWithoutMessage()
+    {
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user      = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
+        $user3     = new User('test3@test.fr', 'test', 'test', 'fr');
+        $dateTime  = new DateTime();
+        $sheetFrom = new Sheet($event, $type, [], $user2, $dateTime);
+        $sheetTo   = new Sheet($event, $type, [], $user3, $dateTime);
+
+        // Request to refuse
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $refuseRequest = new RefuseRequest($request, $user, $dateTime);
+
+        // Expected
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, false, false);
+        $expectedRequest->refuse($dateTime);
+        $expectedMessage = new Message($request, $sheetTo, 'this is a test', $dateTime);
+        $exectedEvent    = new RefusedRequestEvent($user, $request, $dateTime, 'this is a test');
+
+        // Dependencies
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldBeCalled();
+
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldNotBeCalled();
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $eventDispatcher->dispatch('meeting_request.refused', $exectedEvent);
