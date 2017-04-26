@@ -166,3 +166,13 @@ Feature: Sheet participations list filters
     Then I should not see "World Company Inc"
     And I should not see "Hello World Company"
     And I should not see "Aanera"
+
+  Scenario: I can filter sheet with cancelled attend
+    Given I am logged with "test@test.com" on admin
+    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I should see "admin.sheet.list.filters.label"
+    And I check radio "cancelAttendance_0"
+    When I press "form.admin.sheet.filter.children.submit.label"
+    Then I should not see "Hello World Company"
+    And I should not see "Aanera"
+    And I should not see "World Company Inc"
