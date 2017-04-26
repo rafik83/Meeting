@@ -167,6 +167,11 @@ abstract class AbstractFilterType extends AbstractType
                 'expanded'                  => true,
                 'multiple'                  => false,
             ])
+            ->add('attend', YesNoType::class, [
+                'label'    => 'form.sheet_filter.children.attend.label',
+                'required' => false,
+                'expanded' => true,
+            ])
         ;
 
         /** @var Event $event */
