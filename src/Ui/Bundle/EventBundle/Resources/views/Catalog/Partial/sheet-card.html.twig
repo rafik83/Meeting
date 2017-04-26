@@ -3,7 +3,7 @@
         <div class="content__sheet-card">
             {% if catalogSheetPreviewView.hasMessage and catalogSheetPreviewView.meetingRequest is not null %}
                 <a href="{{ path('event_catalog_meeting_request_discussion', { 'sheet': viewer.id, 'meetingRequest': catalogSheetPreviewView.meetingRequest.id }) }}" data-toggle="modal" data-target="#request-modal" class="pull-right no-underline ft-size-18">
-                    <i class="icon-Message_1"></i>
+                    <i class="icon-Message_1 ft-bold"></i>
                 </a>
             {% endif %}
             {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog }, false) }}
