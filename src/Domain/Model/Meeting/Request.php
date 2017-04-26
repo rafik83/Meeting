@@ -89,6 +89,13 @@ class Request implements MessageSubjectInterface
     private $disabled;
 
     /**
+     * Aggregate to know if a request has messages
+     *
+     * @var bool
+     */
+    private $hasMessage;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
@@ -98,6 +105,7 @@ class Request implements MessageSubjectInterface
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
      * @param bool               $disabled
+     * @param bool               $hasMessage
      */
     public function __construct(
         Sheet $from,
@@ -106,7 +114,8 @@ class Request implements MessageSubjectInterface
         array $toParticipants,
         DateTimeInterface $createdAt,
         User $creator,
-        $disabled = false
+        $disabled = false,
+        $hasMessage = false
     ) {
         $this->from             = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
@@ -118,6 +127,7 @@ class Request implements MessageSubjectInterface
         $this->creator          = $creator;
         $this->disabled         = $disabled;
         $this->meeting          = new ArrayCollection();
+        $this->hasMessage       = $hasMessage;
     }
 
     /**
@@ -644,5 +654,21 @@ class Request implements MessageSubjectInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param bool $hasMessage
+     */
+    public function setHasMessage($hasMessage)
+    {
+        $this->hasMessage = $hasMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMessage()
+    {
+        return $this->hasMessage;
     }
 }
