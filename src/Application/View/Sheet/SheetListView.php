@@ -127,6 +127,11 @@ class SheetListView
     public $countParticipant;
 
     /**
+     * @var bool
+     */
+    public $attend;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
@@ -136,6 +141,7 @@ class SheetListView
      * @param int                  $completeness
      * @param bool                 $enabled
      * @param bool                 $inCatalog
+     * @param                      $attend
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
@@ -155,6 +161,7 @@ class SheetListView
         $completeness,
         $enabled,
         $inCatalog,
+        $attend,
         array $categories,
         $type,
         SheetParticipantView $owner,
@@ -173,6 +180,7 @@ class SheetListView
         $this->completeness       = $completeness;
         $this->enabled            = $enabled;
         $this->inCatalog          = $inCatalog;
+        $this->attend             = $attend;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;

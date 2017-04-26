@@ -173,6 +173,9 @@
                     {% if sheet.countParticipant > 1 %}
                         <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
                     {% endif %}
+                    {% if not sheet.attend %}
+                        <span class="label label-danger">{{ 'event.sheet.attend.cancel'|trans }}</span>
+                    {% endif %}
                     <br>
                     <small>
                         {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }}
