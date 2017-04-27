@@ -4382,8 +4382,8 @@ services:
     domain.messaging.substitutions.participant_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\ParticipantSubstitution
         arguments:
-            - '@domain.messaging.substitutions.firstname_substitution'
-            - '@domain.messaging.substitutions.lastname_substitution'
+            - '@domain.messaging.substitutions.owner_firstname_substitution'
+            - '@domain.messaging.substitutions.owner_lastname_substitution'
     domain.messaging.substitutions.invoices_link_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\InvoicesLinkSubstitution
         arguments:
