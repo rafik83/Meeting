@@ -5,7 +5,7 @@ function ShowMoreParticipants(element)
     this.showMoreButton = element.querySelector('.show-more-button');
     this.showMoreZone   = element.querySelector('.show-more-zone');
 
-    if (this.showMoreButton !== null) {
+    if (this.showMoreButton !== null && this.showMoreZone !== null) {
         this.showMoreTranslation = this.showMoreButton.getAttribute('data-show-more-translation');
         this.showLessTranslation = this.showMoreButton.getAttribute('data-show-less-translation');
 
