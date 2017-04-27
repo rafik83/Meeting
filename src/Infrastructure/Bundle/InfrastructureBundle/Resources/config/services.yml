@@ -4365,10 +4365,10 @@ services:
 
     domain.messaging.substitutions.event_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\EventSubstitution
-    domain.messaging.substitutions.firstname_substitution:
-        class: Proximum\Vimeet\Domain\Messaging\Substitutions\FirstnameSubstitution
-    domain.messaging.substitutions.lastname_substitution:
-        class: Proximum\Vimeet\Domain\Messaging\Substitutions\LastnameSubstitution
+    domain.messaging.substitutions.owner_firstname_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\OwnerFirstnameSubstitution
+    domain.messaging.substitutions.owner_lastname_substitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\OwnerLastnameSubstitution
     domain.messaging.substitutions.participant_type_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\ParticipantTypeSubstitution
     domain.messaging.substitutions.schedule_date_substitution:
@@ -4399,8 +4399,8 @@ services:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\SubstitutionsProviders
         calls:
             - ['registerSubstitution', ['%%event%%', '@domain.messaging.substitutions.event_substitution']]
-            - ['registerSubstitution', ['%%firstname%%', '@domain.messaging.substitutions.firstname_substitution']]
-            - ['registerSubstitution', ['%%lastname%%', '@domain.messaging.substitutions.lastname_substitution']]
+            - ['registerSubstitution', ['%%firstname%%', '@domain.messaging.substitutions.owner_firstname_substitution']]
+            - ['registerSubstitution', ['%%lastname%%', '@domain.messaging.substitutions.owner_lastname_substitution']]
             - ['registerSubstitution', ['%%participationType%%', '@domain.messaging.substitutions.participant_type_substitution']]
             - ['registerSubstitution', ['%%sheetLink%%', '@domain.messaging.substitutions.sheet_link_substitution']]
             - ['registerSubstitution', ['%%catalogOnlineDate%%', '@domain.messaging.substitutions.catalog_online_date_substitution']]

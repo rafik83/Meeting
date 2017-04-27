@@ -51,7 +51,8 @@ class MessageFactory
                     $event,
                     $sheets,
                     Events::SHEET_VALIDATED,
-                    'mail.sheet.validated.subject', 'MailBundle:Mail:Sheet/sheetValidated.html.twig',
+                    'mail.sheet.validated.subject',
+                    'MailBundle:Mail:Sheet/sheetValidated.html.twig',
                     $sendEmailToTeam
                 );
                 break;
@@ -60,7 +61,8 @@ class MessageFactory
                     $event,
                     $sheets,
                     Events::SHEET_VALIDATION_VALIDATE,
-                    'mail.sheet.validation.validate.subject', 'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
+                    'mail.sheet.validation.validate.subject',
+                    'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
                     $sendEmailToTeam
                 );
                 break;
@@ -69,7 +71,8 @@ class MessageFactory
                     $event,
                     $sheets,
                     Events::SHEET_VALIDATION_DRAFT,
-                    'mail.sheet.validation.draft.subject', 'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig',
+                    'mail.sheet.validation.draft.subject',
+                    'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig',
                     $sendEmailToTeam
                 );
                 break;

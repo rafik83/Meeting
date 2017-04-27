@@ -68,7 +68,9 @@ class ProcessHandler
     {
         $receivers = [];
 
-        $billingInfos = $this->getBillingInfosIndexedBySheetId($process->sheets);
+        if ($process->message->isSendEmailToBillingInfo()) {
+            $billingInfos = $this->getBillingInfosIndexedBySheetId($process->sheets);
+        }
 
         foreach ($process->sheets as $sheet) {
             $locale = $sheet->getOwnerLocale();

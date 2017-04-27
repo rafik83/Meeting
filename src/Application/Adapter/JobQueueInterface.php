@@ -28,12 +28,10 @@ interface JobQueueInterface
     /**
      * @param Event  $event
      * @param Int[]  $sheetIds
-     * @param string $emailId
+     * @param string $emailName
      * @param bool   $sendEmailToTeam
-     *
-     * @return
      */
-    public function sendEmailing(Event $event, array $sheetIds, $emailId, $sendEmailToTeam = false);
+    public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false);
 
     /**
      * @param Type[] $types

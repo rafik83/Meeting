@@ -15,24 +15,24 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 class ParticipantSubstitution implements SubstituteInterface
 {
     /**
-     * @var FirstnameSubstitution
+     * @var OwnerFirstnameSubstitution
      */
     private $firstnameSubstitution;
 
     /**
-     * @var LastnameSubstitution
+     * @var OwnerLastnameSubstitution
      */
     private $lastnameSubstitution;
 
     /**
      * ParticipantSubstitution constructor.
      *
-     * @param FirstnameSubstitution $firstnameSubstitution
-     * @param LastnameSubstitution  $lastnameSubstitution
+     * @param OwnerFirstnameSubstitution $firstnameSubstitution
+     * @param OwnerLastnameSubstitution  $lastnameSubstitution
      */
     public function __construct(
-        FirstnameSubstitution $firstnameSubstitution,
-        LastnameSubstitution $lastnameSubstitution
+        OwnerFirstnameSubstitution $firstnameSubstitution,
+        OwnerLastnameSubstitution $lastnameSubstitution
     ) {
         $this->firstnameSubstitution = $firstnameSubstitution;
         $this->lastnameSubstitution  = $lastnameSubstitution;

@@ -50,12 +50,12 @@ class BatchAcceptHandler
         // Get sheets unaccepted by id
         $sheets = $this->sheetRepository->getSheetsUnacceptedById($batchAccept->ids);
 
-        $this->sheetRepository->updateStateBySheetsId(
-            $batchAccept->ids,
-            Sheet::STATE_ACCEPTED
-        );
-
         if (!empty($batchAccept->ids)) {
+            $this->sheetRepository->updateStateBySheetsId(
+                $batchAccept->ids,
+                Sheet::STATE_ACCEPTED
+            );
+
             $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
         }
 

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
-use Proximum\Vimeet\Domain\Messaging\Substitutions\LastnameSubstitution;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\OwnerLastnameSubstitution;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -28,7 +28,7 @@ class LastnameSubstitutionTest extends \PHPUnit_Framework_TestCase
         $sheet  = SheetFactory::create($event, $user);
         $locale = 'fr';
 
-        $substitution = new LastnameSubstitution();
+        $substitution = new OwnerLastnameSubstitution();
         $firstname    = $substitution->getValue($sheet, $locale);
 
         $this->assertEquals('larose', $firstname);
