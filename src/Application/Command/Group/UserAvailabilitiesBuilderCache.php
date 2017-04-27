@@ -19,7 +19,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class UserAvailabilitiesBuilderCache
 {
-    /** @var array */
+    /** @var AgendaDayView[] */
     private $dayViews = [];
 
     /**
@@ -53,11 +53,11 @@ class UserAvailabilitiesBuilderCache
      */
     public function buildAvailabilitiesByUserAndEventFromSkeleton(User $user, Event $event, array $skeletonDayViews)
     {
-        if (array_key_exists($user->getId(), $this->dayViews)) {
+        if (isset($this->dayViews[$user->getId()])) {
             return $this->dayViews[$user->getId()];
         }
 
-        $dayViews  = $this->setUserAvailabilities(
+        $dayViews = $this->setUserAvailabilities(
             $skeletonDayViews,
             $this->getSlotsByUserAndEvent($user, $event)
         );
@@ -87,8 +87,8 @@ class UserAvailabilitiesBuilderCache
     }
 
     /**
-     * @param array $skeletonDayViews
-     * @param array $userSlots
+     * @param AgendaDayView[] $skeletonDayViews
+     * @param MeetingSlot[] $userSlots
      *
      * @return AgendaDayView[]
      */

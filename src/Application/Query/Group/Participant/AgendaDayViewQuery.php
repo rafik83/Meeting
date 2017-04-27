@@ -2,29 +2,20 @@
 
 namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 
 class AgendaDayViewQuery
 {
     /**
-     * @var Event
-     */
-    public $event;
-
-    /**
-     * @var Event\Day
+     * @var Day
      */
     public $day;
 
     /**
-     * AgendaDayViewQuery constructor.
-     *
-     * @param Event     $event
-     * @param Event\Day $day
+     * @param Day $day
      */
-    public function __construct(Event $event, Event\Day $day)
+    public function __construct(Day $day)
     {
-        $this->event     = $event;
-        $this->day       = $day;
+        $this->day = $day;
     }
 }

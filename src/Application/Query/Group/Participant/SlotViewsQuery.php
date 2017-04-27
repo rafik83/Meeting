@@ -7,21 +7,16 @@ use Proximum\Vimeet\Domain\Model\Event\Day;
 
 class SlotViewsQuery
 {
-    /** @var Event */
-    public $event;
-
     /** @var Day */
     public $day;
 
     /**
      * SlotViewsQuery constructor.
      *
-     * @param Event $event
      * @param Day   $day
      */
-    public function __construct(Event $event, Day $day)
+    public function __construct(Day $day)
     {
-        $this->event = $event;
-        $this->day   = $day;
+        $this->day = $day;
     }
 }

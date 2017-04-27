@@ -29,10 +29,7 @@ class AgendaDayViewQueryHandler
     public function handle(AgendaDayViewQuery $query)
     {
         $slotViews = $this->slotViewsQueryHandler->handle(
-            new SlotViewsQuery(
-                $query->event,
-                $query->day
-            )
+            new SlotViewsQuery($query->day)
         );
 
         return new AgendaDayView($slotViews);

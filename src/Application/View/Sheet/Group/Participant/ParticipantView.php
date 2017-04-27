@@ -4,24 +4,24 @@ namespace Proximum\Vimeet\Application\View\Sheet\Group\Participant;
 
 class ParticipantView
 {
-    /** @var string $firstName */
+    /** @var string */
     public $firstName;
 
-    /** @var string $lastName */
+    /** @var string */
     public $lastName;
 
-    /** @var string $fullName */
+    /** @var string */
     public $fullName;
 
-    /** @var array */
+    /** @var AgendaDayView[] */
     public $dayViews;
 
     /**
      * ParticipantView constructor.
      *
-     * @param string $firstName
-     * @param string $lastName
-     * @param array  $dayViews
+     * @param string          $firstName
+     * @param string          $lastName
+     * @param AgendaDayView[] $dayViews
      */
     public function __construct($firstName, $lastName, array $dayViews)
     {

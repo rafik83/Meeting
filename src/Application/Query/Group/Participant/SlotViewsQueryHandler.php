@@ -25,11 +25,11 @@ class SlotViewsQueryHandler
     /**
      * @param SlotViewsQuery $query
      *
-     * @return array|SlotView[]
+     * @return SlotView[]
      */
     public function handle(SlotViewsQuery $query)
     {
-        $slots = $this->meetingSlotRepository->findByEventAndDay($query->event, $query->day);
+        $slots = $this->meetingSlotRepository->findByEventAndDay($query->day->getEvent(), $query->day);
         $slotViews = [];
 
         foreach ($slots as $slot) {

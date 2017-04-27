@@ -72,28 +72,24 @@ class ParticipantViewQueryHandler
             ->buildAvailabilitiesByUserAndEventFromSkeleton(
                 $query->participant->getUser(),
                 $query->event,
-                $this->buildDayViewsSkeleton($query->event, $query->eventDays)
+                $this->buildDayViewsSkeleton($query->eventDays)
             );
 
         return new ParticipantView($firstName, $lastName, $dayViews);
     }
 
     /**
-     * @param Event $event
      * @param Day[] $eventDays
      *
      * @return AgendaDayView[]
      */
-    private function buildDayViewsSkeleton(Event $event, array $eventDays)
+    private function buildDayViewsSkeleton(array $eventDays)
     {
         $dayViews = [];
 
         foreach ($eventDays as $day) {
             $dayViews[] = $this->agendaDayViewQueryHandler->handle(
-                new AgendaDayViewQuery(
-                    $event,
-                    $day
-                )
+                new AgendaDayViewQuery($day)
             );
         }
 

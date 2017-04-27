@@ -23,7 +23,7 @@ class GroupView
     /** @var SheetView[] */
     public $sheetViews;
 
-    /** @var array|Day[] */
+    /** @var Day[] */
     public $days;
 
     /**

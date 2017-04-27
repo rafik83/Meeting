@@ -14,7 +14,7 @@ class ParticipantViewQuery
     /** @var Event */
     public $event;
 
-    /** @var array|Day[] */
+    /** @var Day[] */
     public $eventDays;
 
     /**
