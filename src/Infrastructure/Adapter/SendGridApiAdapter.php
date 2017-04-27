@@ -130,7 +130,8 @@ class SendGridApiAdapter implements SendGridApiAdapterInterface
             $personalization = new Personalization();
             $personalization->addTo(new Email(null, (string) $email));
 
-            if ($message->isSendToEmailTeam()) {
+            // Also send email to team in BCC
+            if ($message->isSendToEmailTeam() && $message->getEvent()->getEmailTeam() !== null) {
                 $personalization->addBcc(new Email(null, (string) $message->getEvent()->getEmailTeam()));
             }
 
