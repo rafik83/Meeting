@@ -80,7 +80,7 @@ class ProcessHandler
 
             $email = $sheet->getOwner()->getEmail();
             $index = $email . $sheet->getId();
-
+            
             if ($process->message->isSendEmailToBillingInfo() && isset($billingInfos[$sheet->getId()])) {
                 $billingInfo      = $billingInfos[$sheet->getId()];
                 $billingInfoIndex = $billingInfo->getEmail() . $sheet->getId();
