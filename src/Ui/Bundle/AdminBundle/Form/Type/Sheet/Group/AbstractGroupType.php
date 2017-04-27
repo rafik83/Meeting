@@ -24,14 +24,19 @@ class AbstractGroupType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('title', TextType::class)
-            ->add('sheetViews', SheetCheckboxType::class,
+        $builder->add('title', TextType::class);
+
+        if (isset($options['sheetViews'])) {
+            $builder->add('sheetViews', SheetCheckboxType::class,
                 [
                     'sheetViews' => $options['sheetViews'],
-                    'required'   => false,
-                ])
-            ->add('submit', SubmitType::class);
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                ]);
+        }
+
+        $builder->add('submit', SubmitType::class);
     }
 
     /**

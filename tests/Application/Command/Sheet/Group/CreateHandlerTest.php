@@ -10,16 +10,12 @@
 
 namespace Application\Command\Sheet\Group;
 
-use Prophecy\Promise\ThrowPromise;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler;
-use Proximum\Vimeet\Application\Exception\Group\NoSheetSelectedForGroupException;
-use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
@@ -38,7 +34,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
         $create        = new Create($event, $user, $sheetViews);
-        $create->sheetViews['sheetViews'] = $sheetViews;
+        $create->sheetViews = $sheetViews;
         $create->title = 'Groupe';
         $group         = new Group($event, $user, 'Groupe', $dateTime);
 

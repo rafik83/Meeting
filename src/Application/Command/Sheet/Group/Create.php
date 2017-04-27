@@ -39,6 +39,6 @@ class Create
     {
         $this->event      = $event;
         $this->user       = $user;
-        $this->sheetViews = $sheetViews;
+        $this->sheetViews = [];
     }
 }

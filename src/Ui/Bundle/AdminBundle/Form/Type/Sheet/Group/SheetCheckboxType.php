@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group;
 
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\ChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SheetCheckboxType extends AbstractType
@@ -21,30 +21,25 @@ class SheetCheckboxType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        if (!empty($options['sheetViews'])) {
-            $builder->add('sheetViews', ChoiceType::class, [
-                'choices' => $options['sheetViews'],
-                'choice_label' => function (SheetView $sheetView) {
-                    return $sheetView->title;
-                },
-                'choice_value' => function (SheetView $sheetView) {
-                    return $sheetView->id;
-                },
-                'multiple' => true,
-                'expanded' => true,
-                'label' => false,
-            ]);
-        }
+        $resolver->setRequired(['sheetViews']);
+        $resolver->setAllowedTypes('sheetViews', 'array');
+        $resolver->setDefaults([
+            'choice_label' => function (SheetView $sheetView) {
+                return $sheetView->title;
+            },
+            'choices' => function (Options $options) {
+                return $options['sheetViews'];
+            }
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function getParent()
     {
-        $resolver->setRequired(['sheetViews']);
-        $resolver->setAllowedTypes('sheetViews', 'array');
+        return ChoiceType::class;
     }
 }

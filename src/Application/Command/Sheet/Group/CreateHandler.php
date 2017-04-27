@@ -49,13 +49,11 @@ class CreateHandler
     {
         $group = new Group($command->event, $command->user, $command->title, $this->dateTime);
 
-        if (isset($command->sheetViews['sheetViews'])) {
-            foreach ($command->sheetViews['sheetViews'] as $sheetView) {
-                $sheet = $this->sheetRepository->getSheetById($sheetView->id);
+        foreach ($command->sheetViews as $sheetView) {
+            $sheet = $this->sheetRepository->getSheetById($sheetView->id);
 
-                if (!$sheet->hasGroup()) {
-                    $sheet->setGroup($group);
-                }
+            if (!$sheet->hasGroup()) {
+                $sheet->setGroup($group);
             }
         }
 
