@@ -805,7 +805,7 @@ module.exports = {
         /**
          * FocusedSheet or sheetmet for a given meetingRequest is not attend
          *
-         * @param meetingRequest
+         * @param {object} meetingRequest
          * @returns boolean
          */
         oneOfSheetsNotAttend: function (meetingRequest) {
