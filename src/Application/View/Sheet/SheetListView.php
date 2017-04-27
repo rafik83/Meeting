@@ -141,7 +141,7 @@ class SheetListView
      * @param int                  $completeness
      * @param bool                 $enabled
      * @param bool                 $inCatalog
-     * @param                      $attend
+     * @param bool                 $attend
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
