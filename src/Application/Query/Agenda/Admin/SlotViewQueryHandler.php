@@ -75,6 +75,12 @@ class SlotViewQueryHandler
         $slotViews = [];
 
         foreach ($slots as $slot) {
+            if (false === $query->sheet->attend()) {
+                $slotViews[] = new UnavailabilitySlotView($slot, SlotAvailability::UNAVAILABILITY);
+
+                continue;
+            }
+
             $slotAvailabilityView = $this->slotAvailability->isAvailable($slot, $query->participant);
 
             if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
