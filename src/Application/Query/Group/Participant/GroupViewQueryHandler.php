@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\GroupView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -20,9 +19,6 @@ class GroupViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /** @var SheetInfoGuesser */
-    private $sheetInfoGuesser;
-
     /** @var SheetsViewQueryHandler $sheetsViewQueryHandler */
     private $sheetsViewQueryHandler;
 
@@ -31,18 +27,15 @@ class GroupViewQueryHandler
 
     /**
      * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param SheetsViewQueryHandler   $sheetsViewQueryHandler
      * @param DayRepositoryInterface   $dayRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
         SheetsViewQueryHandler $sheetsViewQueryHandler,
         DayRepositoryInterface $dayRepository
     ) {
         $this->sheetRepository        = $sheetRepository;
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->sheetsViewQueryHandler = $sheetsViewQueryHandler;
         $this->dayRepository = $dayRepository;
     }
