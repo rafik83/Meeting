@@ -212,6 +212,10 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse(
                 'admin.agenda.request.transformIntoMeeting.noSpotAvailable'
             );
+        } catch (\Exception $exception) {
+            return $this->createErrorJsonResponse(
+                'admin.agenda.request.transformIntoMeeting.error'
+            );
         }
 
         return new JsonResponse($requestSlotView);
@@ -320,7 +324,7 @@ class MeetingController extends Controller
             );
         } catch (\Exception $exception) {
             return $this->createErrorJsonResponse(
-                'admin.agenda.meeting.updateSlot.error'
+                'admin.agenda.request.transformIntoMeeting.error'
             );
         }
 

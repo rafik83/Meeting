@@ -562,6 +562,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@query.agenda.admin.request_slot_view_query_handler'
+            - '@domain.meeting.request_can_be_meeting_checker'
             - '@datetime'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
@@ -2748,6 +2749,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.meeting.request_can_be_meeting_checker'
     query.agenda.admin.request.request_sheets_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQueryHandler
         arguments:
@@ -3957,6 +3959,12 @@ services:
     #
     domain.meeting.visio_guesser:
           class: Proximum\Vimeet\Domain\Meeting\VisioGuesser
+
+    #
+    # Meeting Request
+    #
+    domain.meeting.request_can_be_meeting_checker:
+          class: Proximum\Vimeet\Domain\Meeting\RequestCanBeMeetingChecker
 
     #
     # Form extension

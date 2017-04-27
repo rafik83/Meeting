@@ -12,10 +12,12 @@ namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingRequestCanNotBeMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
+use Proximum\Vimeet\Domain\Meeting\RequestCanBeMeetingChecker;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
@@ -32,6 +34,9 @@ class TransformRequestIntoMeetingHandler
     /** @var RequestSlotViewQueryHandler */
     private $requestSlotViewQueryHandler;
 
+    /** @var RequestCanBeMeetingChecker */
+    private $requestCanBeMeetingChecker;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -42,6 +47,7 @@ class TransformRequestIntoMeetingHandler
      * @param MeetingRepositoryInterface  $meetingRepository
      * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
+     * @param RequestCanBeMeetingChecker  $requestCanBeMeetingChecker
      * @param \DateTimeInterface          $dateTime
      * @param DelayedEventDispatcher      $eventDispatcher
      */
@@ -49,12 +55,14 @@ class TransformRequestIntoMeetingHandler
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
+        RequestCanBeMeetingChecker $requestCanBeMeetingChecker,
         \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->meetingRepository           = $meetingRepository;
         $this->spotRepository              = $spotRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
+        $this->requestCanBeMeetingChecker  = $requestCanBeMeetingChecker;
         $this->dateTime                    = $dateTime;
         $this->eventDispatcher             = $eventDispatcher;
     }
@@ -62,11 +70,16 @@ class TransformRequestIntoMeetingHandler
     /**
      * @param TransformRequestIntoMeeting $transformRequestIntoMeeting
      *
+     * @throws MeetingRequestCanNotBeMeetingException
      * @throws NoSpotsAvailableForThisSlotAndMeetingException
      * @throws SlotNotAvailableForThisMeetingException
      */
     public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting)
     {
+        if (false === $this->requestCanBeMeetingChecker->handle($transformRequestIntoMeeting->meetingRequest)) {
+            throw new MeetingRequestCanNotBeMeetingException();
+        }
+
         // Get available slots
         $meetingUpdateSlotView = $this->requestSlotViewQueryHandler->handle(
             new RequestSlotViewQuery(
