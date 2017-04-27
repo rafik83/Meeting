@@ -17,13 +17,10 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
-class ParticipantDayViewsBuilderCache
+class UserAvailabilitiesBuilderCache
 {
     /** @var array */
     private $dayViews = [];
-
-    /** @var Event */
-    private $event;
 
     /**
      * @var ParticipantRepositoryInterface
@@ -36,8 +33,6 @@ class ParticipantDayViewsBuilderCache
     private $meetingSlotRepository;
 
     /**
-     * ParticipantDayViewsBuilderCache constructor.
-     *
      * @param ParticipantRepositoryInterface $participantRepository
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      */
@@ -56,14 +51,16 @@ class ParticipantDayViewsBuilderCache
      *
      * @return AgendaDayView[]
      */
-    public function buildDayViewsByUserAndEventFromSkeleton(User $user, Event $event, array $skeletonDayViews)
+    public function buildAvailabilitiesByUserAndEventFromSkeleton(User $user, Event $event, array $skeletonDayViews)
     {
         if (array_key_exists($user->getId(), $this->dayViews)) {
             return $this->dayViews[$user->getId()];
         }
 
-        $userSlots = $this->getSlotsByUserAndEvent($user, $event);
-        $dayViews  = $this->setSkeletonDayViewsFromUserAvailableSlots($skeletonDayViews, $userSlots);
+        $dayViews  = $this->setUserAvailabilities(
+            $skeletonDayViews,
+            $this->getSlotsByUserAndEvent($user, $event)
+        );
 
         return $this->dayViews[$user->getId()] = $dayViews;
     }
@@ -95,7 +92,7 @@ class ParticipantDayViewsBuilderCache
      *
      * @return AgendaDayView[]
      */
-    private function setSkeletonDayViewsFromUserAvailableSlots(array $skeletonDayViews, array $userSlots)
+    private function setUserAvailabilities(array $skeletonDayViews, array $userSlots)
     {
         foreach ($userSlots as $userSlot) {
             foreach($skeletonDayViews as $dayView) {

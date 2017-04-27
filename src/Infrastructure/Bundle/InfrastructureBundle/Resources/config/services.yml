@@ -3805,7 +3805,7 @@ services:
     # Participant Day Views Builder Cache
     #
     components.group.participant_days_views_builder_cache:
-        class: Proximum\Vimeet\Application\Command\Group\ParticipantDayViewsBuilderCache
+        class: Proximum\Vimeet\Application\Command\Group\UserAvailabilitiesBuilderCache
         shared: false
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'

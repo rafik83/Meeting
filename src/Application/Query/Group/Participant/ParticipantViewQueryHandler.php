@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Group\Participant;
 
-use Proximum\Vimeet\Application\Command\Group\ParticipantDayViewsBuilderCache;
+use Proximum\Vimeet\Application\Command\Group\UserAvailabilitiesBuilderCache;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -28,33 +28,28 @@ class ParticipantViewQueryHandler
     private $agendaDayViewQueryHandler;
 
     /**
-     * @var ParticipantDayViewsBuilderCache
+     * @var UserAvailabilitiesBuilderCache
      */
-    private $participantDayViewsBuilderCache;
-
-    /**
-     * @var AgendaDayView[]
-     */
-    private $dayViewsSkeleton;
+    private $userAvailabilitiesBuilderCache;
 
     /**
      * ParticipantViewQueryHandler constructor.
      *
-     * @param ParticipantInfoGuesser          $participantInfoGuesser
-     * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
-     * @param AgendaDayViewQueryHandler       $agendaDayViewQueryHandler
-     * @param ParticipantDayViewsBuilderCache $participantDayViewsBuilderCache
+     * @param ParticipantInfoGuesser         $participantInfoGuesser
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     * @param AgendaDayViewQueryHandler      $agendaDayViewQueryHandler
+     * @param UserAvailabilitiesBuilderCache $userAvailabilitiesBuilderCache
      */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
-        ParticipantDayViewsBuilderCache $participantDayViewsBuilderCache
+        UserAvailabilitiesBuilderCache $userAvailabilitiesBuilderCache
     ) {
-        $this->participantInfoGuesser          = $participantInfoGuesser;
-        $this->meetingSlotRepository           = $meetingSlotRepository;
-        $this->agendaDayViewQueryHandler       = $agendaDayViewQueryHandler;
-        $this->participantDayViewsBuilderCache = $participantDayViewsBuilderCache;
+        $this->participantInfoGuesser         = $participantInfoGuesser;
+        $this->meetingSlotRepository          = $meetingSlotRepository;
+        $this->agendaDayViewQueryHandler      = $agendaDayViewQueryHandler;
+        $this->userAvailabilitiesBuilderCache = $userAvailabilitiesBuilderCache;
     }
 
     /**
@@ -73,8 +68,8 @@ class ParticipantViewQueryHandler
             ->guessParticipantLastName($query->participant, $query->participant->getLocale());
 
         $dayViews = $this
-            ->participantDayViewsBuilderCache
-            ->buildDayViewsByUserAndEventFromSkeleton(
+            ->userAvailabilitiesBuilderCache
+            ->buildAvailabilitiesByUserAndEventFromSkeleton(
                 $query->participant->getUser(),
                 $query->event,
                 $this->buildDayViewsSkeleton($query->event, $query->eventDays)
