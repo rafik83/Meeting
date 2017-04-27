@@ -56,6 +56,7 @@ class BatchType extends AbstractType
                 'event'       => $options['event'],
                 'placeholder' => '',
                 'required'    => false,
+                'unassigned'  => true,
             ])
             ->add('validateComment', TextareaType::class, [
                 'required' => false,

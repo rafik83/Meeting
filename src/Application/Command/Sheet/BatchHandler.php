@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
+
 class BatchHandler
 {
     /**
@@ -99,8 +101,12 @@ class BatchHandler
             ));
         }
 
-        if ($batch->assign && $batch->follower) {
-            return $this->batchAssignHandler->handle(new BatchAssign($batch->ids, $batch->follower));
+        if ($batch->assign && $batch->follower !== null) {
+            return $this->batchAssignHandler->handle(new BatchAssign(
+                $batch->ids,
+                $batch->follower !== FollowerChoiceType::UNASSIGNED_FOLLOWER ? $batch->follower : null,
+                $batch->follower === FollowerChoiceType::UNASSIGNED_FOLLOWER
+            ));
         }
 
         if ($batch->accept) {

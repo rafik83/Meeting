@@ -41,9 +41,19 @@ class BatchAssignHandler
 
         // Assign admin to sheets
         foreach ($sheets as $sheet) {
-            $this->sheetRepository->set($sheet->assign($batchAssign->admin));
+            if (false === $batchAssign->unassigned) {
+                $this->sheetRepository->set($sheet->assign($batchAssign->admin));
+            } else {
+                $this->sheetRepository->set($sheet->unAssign());
+            }
         }
 
-        return new BatchResult(count($sheets), $batchAssign->getMessage() . 'assign.success');
+        $endMessage = 'assign.success';
+
+        if ($batchAssign->unassigned) {
+            $endMessage = 'unassign.success';
+        }
+
+        return new BatchResult(count($sheets), $batchAssign->getMessage() . $endMessage);
     }
 }
