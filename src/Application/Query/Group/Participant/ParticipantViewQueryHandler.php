@@ -5,9 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Group\Participant;
 use Proximum\Vimeet\Application\Command\Group\UserAvailabilitiesBuilderCache;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\ParticipantView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantViewQueryHandler
@@ -16,11 +14,6 @@ class ParticipantViewQueryHandler
      * @var ParticipantInfoGuesser
      */
     private $participantInfoGuesser;
-
-    /**
-     * @var MeetingSlotRepositoryInterface
-     */
-    private $meetingSlotRepository;
 
     /**
      * @var AgendaDayViewQueryHandler
@@ -36,18 +29,15 @@ class ParticipantViewQueryHandler
      * ParticipantViewQueryHandler constructor.
      *
      * @param ParticipantInfoGuesser         $participantInfoGuesser
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      * @param AgendaDayViewQueryHandler      $agendaDayViewQueryHandler
      * @param UserAvailabilitiesBuilderCache $userAvailabilitiesBuilderCache
      */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
-        MeetingSlotRepositoryInterface $meetingSlotRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
         UserAvailabilitiesBuilderCache $userAvailabilitiesBuilderCache
     ) {
         $this->participantInfoGuesser         = $participantInfoGuesser;
-        $this->meetingSlotRepository          = $meetingSlotRepository;
         $this->agendaDayViewQueryHandler      = $agendaDayViewQueryHandler;
         $this->userAvailabilitiesBuilderCache = $userAvailabilitiesBuilderCache;
     }

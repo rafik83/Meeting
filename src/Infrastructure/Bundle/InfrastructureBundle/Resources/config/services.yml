@@ -2581,7 +2581,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@query.sheet.group.participant.agenda_day_view_handler'
             - '@components.group.participant_days_views_builder_cache'
         tags:
