@@ -33,7 +33,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
-        $create        = new Create($event, $user, $sheetViews);
+        $create        = new Create($event, $user);
         $create->sheetViews = $sheetViews;
         $create->title = 'Groupe';
         $group         = new Group($event, $user, 'Groupe', $dateTime);

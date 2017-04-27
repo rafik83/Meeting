@@ -114,7 +114,7 @@ class GroupController extends Controller
         $querySheets = new SheetViewQuery($event, $user, $event->getAvailableLocale($request->getLocale()));
         $sheetViews  = $this->get('tactician.commandbus')->handle($querySheets);
 
-        $command = new Create($event, $user, $sheetViews);
+        $command = new Create($event, $user);
         $form    = $this->createForm(CreateType::class, $command, ['sheetViews' => $sheetViews]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
