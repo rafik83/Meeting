@@ -799,6 +799,27 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+
+        /**
+         * FocusedSheet or sheetmet for a given meetingRequest is not attend
+         *
+         * @param meetingRequest
+         * @returns boolean
+         */
+        oneOfSheetsNotAttend: function (meetingRequest) {
+            if (null === this.focusedSheet) {
+                return false;
+            }
+
+            if (false === this.focusedSheet.attend) {
+                return true;
+            }
+
+            var sheetMet = this.findSheetBySheetId(meetingRequest.sheetMetId);
+
+            return false === sheetMet.attend;
         }
     }
 };

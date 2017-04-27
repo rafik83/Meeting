@@ -126,7 +126,7 @@
                                 <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
                             </tr>
                             <tr v-for="request in focusedSheet.requests">
-                                <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request }">
+                                <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request, 'sheet-cancelled-attendance': oneOfSheetsNotAttend(request) }">
                                     <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" class="pull-right" v-on:click="showParticipants(request)">
                                         <span class="glyphicon glyphicon-cog"></span>
                                     </a>
@@ -134,11 +134,13 @@
                                        title="{{ 'admin.agenda.request.transformIntoMeeting.label'|trans }}"
                                        class="pull-right"
                                        v-on:click="loadSlotsForRequest(request)"
-                                       v-show="request.isTransformableIntoMeeting && !focusedSheet.isAgendaLoading && null === meetingRequestToTransformIntoMeeting">
+                                       v-show="!oneOfSheetsNotAttend(request) && request.isTransformableIntoMeeting && !focusedSheet.isAgendaLoading && null === meetingRequestToTransformIntoMeeting">
                                         <span class="glyphicon glyphicon-move"></span>
                                     </a>
 
-                                    <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.cancel'|trans }}" v-on:click="cancelSlotAction()" class="pull-right" v-show="meetingRequestToTransformIntoMeeting === request">
+                                    <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.cancel'|trans }}"
+                                       v-on:click="cancelSlotAction()" class="pull-right"
+                                       v-show="!oneOfSheetsNotAttend(request) && meetingRequestToTransformIntoMeeting === request">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </a>
 
@@ -150,9 +152,9 @@
                                     <i class="icon icon-Profil_1"></i>
                                     ${ request.participantsName }
 
-                                    <span v-if="request.participants.length == 0">
-                                    {{ 'admin.agenda.requestsList.noPreference'|trans }}
-                                </span>
+                                    <span v-show="request.participants.length == 0">
+                                        {{ 'admin.agenda.requestsList.noPreference'|trans }}
+                                    </span>
                                 </td>
                             </tr>
                         </table>
