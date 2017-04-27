@@ -71,7 +71,7 @@
                             </td>
                         </tr>
                         <tr v-for="sheet in sheetsIterator" v-on:refresh-list="refreshList">
-                            <td>
+                            <td v-bind:class="{ 'sheet-cancelled-attendance': false === sheet.attend }">
                                 <span class="label label-info pull-right" v-if="sheet.countParticipant > 1"><i class="icon icon-Profil_1"></i> ${ sheet.countParticipant }</span>
 
                                 <a v-bind:href="sheet.url" target="_blank" title="{{ 'admin.agenda.sheet.see'|trans }}" class="link-to-sheet"><span class="glyphicon"></span></a>
@@ -88,7 +88,7 @@
                                 </div>
 
                                 <table class="table-no-margin-bottom table table-condensed table-bordered">
-                                    <tr>
+                                    <tr v-bind:class="{ 'sheet-cancelled-attendance': false === sheet.attend }">
                                         <td class="text-center col-custom-7">${ sheet.countRequest }</td>
                                         <td class="text-center col-custom-7">${ sheet.countProposition }</td>
                                         <td class="text-center col-custom-7">${ sheet.countValidatedRequest }
