@@ -206,7 +206,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
-        return $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->count()->getIntResult();
+        return $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending()->count()->getIntResult();
     }
 
     /**
@@ -454,9 +454,17 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
         ;
 
-        if (!empty($filters) && isset($filters['disabled'])) {
-            $queryBuilder->where('request.disabled = :disabled')
-                ->setParameter('disabled', $filters['disabled']);
+        if (!empty($filters)) {
+            if (isset($filters['disabled'])) {
+                $queryBuilder->where('request.disabled = :disabled')
+                    ->setParameter('disabled', $filters['disabled']);
+            }
+            if (isset($filters['isToAttending'])) {
+                $queryBuilder->join('request.to', 'to', 'WITH', 'to.attend = true');
+            }
+            if (isset($filters['isFromAttending'])) {
+                $queryBuilder->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
+            }
         }
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);

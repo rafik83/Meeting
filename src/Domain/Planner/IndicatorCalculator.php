@@ -95,7 +95,12 @@ class IndicatorCalculator
 
         $meetingRequestsCount = $this
             ->requestRepository
-            ->countSheetState($sheet, ['state' => Request::STATE_APPROVED, 'disabled' => false]);
+            ->countSheetState($sheet, [
+                'state'           => Request::STATE_APPROVED,
+                'disabled'        => false,
+                'isFromAttending' => true,
+                'isToAttending'   => true,
+            ]);
 
         if ($this->slotsUsable === null) {
             $slotUsables = [];
