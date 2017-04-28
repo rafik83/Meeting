@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
@@ -25,6 +26,7 @@ use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Unavailability\UnavailabilityVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -46,6 +48,7 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
+        $this->denyAccessUnlessGranted(UnavailabilityVoter::CREATE, $sheet);
 
         $event = $eventDomain->getEvent();
         $user  = $this->getUser();
@@ -170,12 +173,17 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+        $this->denyAccessUnlessGranted(UnavailabilityVoter::REMOVE, $unavailability);
 
         if (!$sheet->hasParticipant($participant)) {
             throw $this->createNotFoundException('The participant given is not on the sheet');
         }
 
-        $this->get('tactician.commandbus')->handle(new Remove($unavailability));
+        try {
+            $this->get('tactician.commandbus')->handle(new Remove($unavailability));
+        } catch (CanNotDeleteUnavailabilityException $exception) {
+            $this->addFlash('error', 'flash.unavailability.remove.cancelAttendance.error');
+        }
 
         return $this->redirectToRoute(
             'event_agenda_participant',

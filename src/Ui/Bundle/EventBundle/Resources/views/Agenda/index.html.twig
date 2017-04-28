@@ -36,9 +36,11 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="pull-right mg-tp">
-                <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
-            </div>
+            {% if sheet.attend %}
+                <div class="pull-right mg-tp">
+                    <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="agenda-container">
@@ -56,7 +58,7 @@
                             {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'isUserAloneParticipant': agenda.isUserAloneParticipant }) }}
                         {% endfor %}
                         {% for unavailability in day.unavailabilities %}
-                            {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
+                            {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'unavailability': unavailability, 'participantId': agenda.participant.id, 'attend': agenda.sheet.attend }) }}
                         {% endfor %}
                         {% for mass in day.masses %}
                             {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
@@ -70,9 +72,11 @@
             {% endfor %}
         </div>
     </div>
-    <div class="pull-right mg-tp mg-bt">
-        <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
-    </div>
-    {{ include('EventBundle:Agenda:modal.html.twig') }}
+    {% if sheet.attend %}
+        <div class="pull-right mg-tp mg-bt">
+            <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
+        </div>
+        {{ include('EventBundle:Agenda:modal.html.twig') }}
+    {% endif %}
     {{ include('EventBundle:Program/Partials:modal.html.twig', {}, false) }}
 {% endblock %}
