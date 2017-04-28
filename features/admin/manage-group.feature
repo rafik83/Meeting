@@ -14,6 +14,7 @@ Feature: Manage Group
     And I should see "awsm@example.com"
 
   Scenario: I an create a group
+    As an admin I need to be able to create a group from an user email
     Given I am logged as admin
     And the event "Multisheet event" is created
     And the user "multisheet@example.com" is created
@@ -23,6 +24,11 @@ Feature: Manage Group
     When I fill in the following:
       | search_user_sheets_group_email | multisheet@example.com |
     And I press "search_user_sheets_group_submit"
-    Then I should be on this page "/admin/fr/event/1/sheets-group/1/create"
-    And I should see "multisheet@example.com"
-
+    Then I should be on this page "/admin/fr/event/1/sheets-group/2/create"
+    And the response should contain "multisheet@example.com"
+    When I fill in the following:
+      | create_sheets_group_title | "Group title" |
+    And I press "create_sheets_group_submit"
+    Then I should be on this page "/admin/fr/event/1/sheets-group/list"
+    And I should see "Group title"
+    And I should see "flash.admin.group.create.success"
