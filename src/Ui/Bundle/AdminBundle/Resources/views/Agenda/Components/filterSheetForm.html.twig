@@ -61,7 +61,7 @@
                     {{ 'admin.agenda.filters.hasMeetingToApprove.label'|trans }}
                 </div>
                 <div class="col-md-6">
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasMeetingToApprove" v-bind:value="true">
+                    <input name="hasMeetingToApprove" type="checkbox" v-model:value="filters.hasMeetingToApprove" v-bind:value="true">
                 </div>
             </div>
             <div class="form-group row">
@@ -69,7 +69,7 @@
                     {{ 'admin.agenda.filters.hasNotEnoughtAvailableSlot.label'|trans }}
                 </div>
                 <div class="col-md-6">
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasNotEnoughAvailableSlot" v-bind:value="true">
+                    <input name="hasNotEnoughtAvailableSlot" type="checkbox" v-model:value="filters.hasNotEnoughAvailableSlot" v-bind:value="true">
                 </div>
             </div>
             <div class="form-group row">
@@ -77,7 +77,7 @@
                     {{ 'admin.agenda.filters.hasAvailableSlot.label'|trans }}
                 </div>
                 <div class="col-md-6">
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasAvailableSlots" v-bind:value="true">
+                    <input name="hasAvailableSlot" type="checkbox" v-model:value="filters.hasAvailableSlots" v-bind:value="true">
                 </div>
             </div>
             <div class="form-group row">
@@ -85,7 +85,15 @@
                     {{ 'admin.agenda.filters.hasValidatedRequestNotScheduled.label'|trans }}
                 </div>
                 <div class="col-md-6">
-                    <input name="selectedTypes" type="checkbox" v-model:value="filters.hasValidatedRequestNotScheduled" v-bind:value="true">
+                    <input name="hasValidatedRequestNotScheduled" type="checkbox" v-model:value="filters.hasValidatedRequestNotScheduled" v-bind:value="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    {{ 'admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label'|trans }}
+                </div>
+                <div class="col-md-6">
+                    <input name="hasParticipantUnavailableWithMeetingRequest" type="checkbox" v-model:value="filters.hasParticipantUnavailableWithMeetingRequest" v-bind:value="true">
                 </div>
             </div>
             <div class="form-group">

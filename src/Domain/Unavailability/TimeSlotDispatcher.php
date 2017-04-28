@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Unavailability;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -35,21 +37,30 @@ class TimeSlotDispatcher
      */
     private $massAssignmentRepository;
 
+    /** @var Participant[] */
+    private $participantsDispatched = [];
+
+    /** @var JobQueueInterface */
+    private $jobQueueInterface;
+
     /**
      * TimeSlotDispatcher constructor.
      *
      * @param ParticipantRepositoryInterface    $participantRepository
      * @param MassRepositoryInterface           $massRepository
      * @param MassAssignmentRepositoryInterface $massAssignmentRepository
+     * @param JobQueueInterface                 $jobQueueInterface
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         MassRepositoryInterface $massRepository,
-        MassAssignmentRepositoryInterface $massAssignmentRepository
+        MassAssignmentRepositoryInterface $massAssignmentRepository,
+        JobQueueInterface $jobQueueInterface
     ) {
         $this->participantRepository    = $participantRepository;
         $this->massRepository           = $massRepository;
         $this->massAssignmentRepository = $massAssignmentRepository;
+        $this->jobQueueInterface        = $jobQueueInterface;
     }
 
     /**
@@ -78,6 +89,8 @@ class TimeSlotDispatcher
             $assignment = new MassAssignment($mass, $participant, $timeSlot->getFrom(), $timeSlot->getTo());
 
             $this->massAssignmentRepository->add($assignment);
+
+            $this->participantsDispatched[$participant->getId()] = $participant;
         }
     }
 
@@ -88,10 +101,16 @@ class TimeSlotDispatcher
      */
     public function dispatchAll(Event $event)
     {
+        $this->participantsDispatched = [];
+
         $unavailabilities = $this->massRepository->findDispatchByEvent($event);
 
         foreach ($unavailabilities as $unavailability) {
             $this->dispatch($unavailability);
+        }
+
+        if (!empty($this->participantsDispatched)) {
+            $this->jobQueueInterface->aggregateParticipantsGivenFullUnavailability($this->participantsDispatched);
         }
     }
 }

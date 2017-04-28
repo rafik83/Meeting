@@ -346,6 +346,14 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    event_listener_aggregate.aggregate_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Aggregate\AggregateEventSubscriber
+        arguments:
+            - '@domain.unavailability.participant_unavailable_aggregator'
+            - '@domain.request.participant_assigned_aggregator'
+        tags:
+            - { name: kernel.event_subscriber }
+
     #
     # Twig extension
     #

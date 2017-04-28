@@ -36,6 +36,7 @@ admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
+admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'Au moins 1 participant est totalement indisponible avec au moins une demande de rendez-vous attribuée'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
 admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
 admin.agenda.filters.hasScheduledMeeting.no: Non

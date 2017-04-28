@@ -12,6 +12,10 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
@@ -196,6 +200,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))->shouldBeCalled();
+
         $participate = new Participate($happening, $sheet, $user, []);
 
         $handler = new ParticipateHandler(
@@ -251,6 +258,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
+
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, [$participant]);
 
@@ -317,6 +327,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant1, $participant2], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant1))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))->shouldBeCalled();
+
         $handler = new ParticipateHandler(
             $happeningParticipationRepository->reveal(),
             $participantRepository->reveal(),
@@ -381,6 +395,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant2], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant1))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))->shouldBeCalled();
+
         $handler = new ParticipateHandler(
             $happeningParticipationRepository->reveal(),
             $participantRepository->reveal(),
@@ -434,6 +452,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
+
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, [$participant]);
 
@@ -499,6 +520,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             )
         )->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))->shouldBeCalled();
+
         $participate = new Participate($happening, $sheet, $user, [$participant], 'My question is...');
 
         $handler = new ParticipateHandler(
@@ -548,6 +572,9 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
+
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, []);
 

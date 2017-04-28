@@ -8,7 +8,5 @@ Proximum\Vimeet\Application\Command\Transaction\Update:
         date:
             - NotBlank: ~
             - DateTime: ~
-        mode:
-            - NotBlank: ~
         reference:
             - Type: { type: string }
