@@ -8,8 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Domain\Transaction;
+namespace Proximum\Vimeet\Tests\Domain\Unavailability;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -37,11 +38,13 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
         $massRepository           = $this->prophesize(MassRepositoryInterface::class);
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $jobQueueAdapter          = $this->prophesize(JobQueueInterface::class);
 
         $dispatcher = new TimeSlotDispatcher(
             $participantRepository->reveal(),
             $massRepository->reveal(),
-            $massAssignmentRepository->reveal()
+            $massAssignmentRepository->reveal(),
+            $jobQueueAdapter->reveal()
         );
 
         $dispatcher->dispatch($mass);
@@ -57,11 +60,13 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
         $massRepository           = $this->prophesize(MassRepositoryInterface::class);
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $jobQueueAdapter          = $this->prophesize(JobQueueInterface::class);
 
         $dispatcher = new TimeSlotDispatcher(
             $participantRepository->reveal(),
             $massRepository->reveal(),
-            $massAssignmentRepository->reveal()
+            $massAssignmentRepository->reveal(),
+            $jobQueueAdapter->reveal()
         );
 
         $dispatcher->dispatch($mass);
@@ -82,18 +87,20 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
         $massRepository           = $this->prophesize(MassRepositoryInterface::class);
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $jobQueueAdapter          = $this->prophesize(JobQueueInterface::class);
 
         $dispatcher = new TimeSlotDispatcher(
             $participantRepository->reveal(),
             $massRepository->reveal(),
-            $massAssignmentRepository->reveal()
+            $massAssignmentRepository->reveal(),
+            $jobQueueAdapter->reveal()
         );
 
         $participants = [
-            $this->createParticipant($mass->getEvent(), 'foobar0@test.com'),
-            $this->createParticipant($mass->getEvent(), 'foobar1@test.com'),
-            $this->createParticipant($mass->getEvent(), 'foobar2@test.com'),
-            $this->createParticipant($mass->getEvent(), 'foobar3@test.com'),
+            $this->createParticipant($mass->getEvent(), 'foobar0@test.com', 1),
+            $this->createParticipant($mass->getEvent(), 'foobar1@test.com', 2),
+            $this->createParticipant($mass->getEvent(), 'foobar2@test.com', 3),
+            $this->createParticipant($mass->getEvent(), 'foobar3@test.com', 4),
         ];
 
         $participantRepository->findByEventWithoutDispatch($mass->getEvent(), $mass)->shouldBeCalled()
@@ -127,11 +134,20 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         ];
 
         $participants = [
-            $this->createParticipant($event, 'foobar0@test.com'),
-            $this->createParticipant($event, 'foobar1@test.com'),
-            $this->createParticipant($event, 'foobar2@test.com'),
-            $this->createParticipant($event, 'foobar3@test.com'),
+            $this->createParticipant($event, 'foobar0@test.com', 1),
+            $this->createParticipant($event, 'foobar1@test.com', 2),
+            $this->createParticipant($event, 'foobar2@test.com', 3),
+            $this->createParticipant($event, 'foobar3@test.com', 4),
         ];
+
+        $jobQueueAdapter = $this->prophesize(JobQueueInterface::class);
+
+        $jobQueueAdapter->aggregateParticipantsGivenFullUnavailability([
+            1 => $participants[0],
+            2 => $participants[1],
+            3 => $participants[2],
+            4 => $participants[3],
+        ])->shouldBeCalled();
 
         // Mock
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
@@ -141,7 +157,8 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new TimeSlotDispatcher(
             $participantRepository->reveal(),
             $massRepository->reveal(),
-            $massAssignmentRepository->reveal()
+            $massAssignmentRepository->reveal(),
+            $jobQueueAdapter->reveal()
         );
 
         // Assets
@@ -193,12 +210,21 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
      *
      * @return Participant
      */
-    private function createParticipant(Event $event, $email)
+    private function createParticipant(Event $event, $email, $id)
     {
         $user  = new User($email, '', '', 'fr');
         $sheet = new Sheet($event, new Type($event), [], $user, new \DateTime());
 
-        return new Participant($sheet, $user, [], true);
+        $reflection = new \ReflectionClass(Participant::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+
+        $participant = new Participant($sheet, $user, [], true);
+
+        $property->setValue($participant, $id);
+        $property->setAccessible(false);
+
+        return $participant;
     }
 
     /**

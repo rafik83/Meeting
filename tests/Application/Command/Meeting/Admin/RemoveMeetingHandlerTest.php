@@ -8,16 +8,18 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin;
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQueryHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingUnParticipateEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -25,8 +27,13 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveMeetingHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private $participant;
+
     public function testHandle()
     {
         $this->handleFromMeeting($this->getMeeting());
@@ -58,15 +65,20 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                     $meeting->getToSheet()
                 ])
             )->shouldBeCalled();
+
+            $eventDispatcher->dispatch(
+                Events::MEETING_UN_PARTICIPATE,
+                new MeetingUnParticipateEvent($this->participant->reveal())
+            );
         }
 
-        $handler = new RemoveMeetingViewQueryHandler(
+        $handler = new RemoveMeetingHandler(
             $meetingRepository->reveal(),
             $translator->reveal(),
             $eventDispatcher->reveal()
         );
 
-        $handler->handle(new RemoveMeetingViewQuery($meeting, $admin));
+        $handler->handle(new RemoveMeeting($meeting, $admin));
     }
 
     private function getMeeting($blockedSlot = false)
@@ -76,8 +88,9 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = EventFactory::createEvent();
         $sheet1   = SheetFactory::create($event);
         $sheet2   = SheetFactory::create($event);
+        $this->participant = $this->prophesize(Participant::class);
 
-        $request = new Meeting\Request($sheet1, [], $sheet2, [], $dateTime, $user);
+        $request = new Meeting\Request($sheet1, [$this->participant->reveal()], $sheet2, [], $dateTime, $user);
         $slot    = new MeetingSlot($event, $dateTime, $dateTime, $blockedSlot);
         $spot    = new Spot('ref', $event, 100, 200, 150, true);
 

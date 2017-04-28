@@ -10,32 +10,38 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest\Admin;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingUnParticipateEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\InvalidParticipantException;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateParticipantsHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
+
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
 
     /**
      * @param RequestRepositoryInterface     $requestRepository
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param DelayedEventDispatcher         $eventDispatcher
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->requestRepository     = $requestRepository;
         $this->participantRepository = $participantRepository;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -68,9 +74,33 @@ class UpdateParticipantsHandler
             }
         }
 
+        $oldFromParticipants = $updateParticipants->request->getFromParticipantsArray();
+        $oldToParticipants   = $updateParticipants->request->getToParticipantsArray();
+
         $updateParticipants->request->updateFromParticipants($fromParticipants);
         $updateParticipants->request->updateToParticipants($toParticipants);
 
         $this->requestRepository->set($updateParticipants->request);
+
+        $oldParticipants = array_merge($oldFromParticipants, $oldToParticipants);
+        $newParticipants = array_merge($fromParticipants, $toParticipants);
+
+        foreach ($newParticipants as $newParticipant) {
+            if (!in_array($newParticipant, $oldParticipants)) {
+                $this->eventDispatcher->dispatch(
+                    Events::MEETING_PARTICIPATE,
+                    new MeetingParticipateEvent($newParticipant)
+                );
+            }
+        }
+
+        foreach ($oldParticipants as $oldParticipant) {
+            if (!in_array($oldParticipant, $newParticipants)) {
+                $this->eventDispatcher->dispatch(
+                    Events::MEETING_UN_PARTICIPATE,
+                    new MeetingUnParticipateEvent($oldParticipant)
+                );
+            }
+        }
     }
 }
