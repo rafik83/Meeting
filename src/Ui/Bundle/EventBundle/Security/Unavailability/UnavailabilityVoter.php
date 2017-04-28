@@ -89,10 +89,6 @@ class UnavailabilityVoter extends Voter
      */
     private function doesSheetAttendEvent(Sheet $sheet)
     {
-        if ($sheet->attend()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->attend();
     }
 }
