@@ -7,8 +7,10 @@ Proximum\Vimeet\Domain\Model\Trace:
             generator:
                 strategy: AUTO
     fields:
-        object:
+        objectType:
             type: string
+        objectId:
+            type: integer
         action:
             type: string
         date:
@@ -16,6 +18,10 @@ Proximum\Vimeet\Domain\Model\Trace:
         comment:
             type: text
             nullable: true
+    indexes:
+        object_index:
+            columns: [object_type, object_id]
+
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User

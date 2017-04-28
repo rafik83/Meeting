@@ -111,8 +111,8 @@ class PaginatedSheetListViewQueryHandler
             false
         );
 
-        $lastAccepts     = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::ACCEPT);
-        $lastValidates   = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::VALIDATE);
+        $lastAccepts     = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, 'sheet', Trace::ACCEPT);
+        $lastValidates   = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, 'sheet', Trace::VALIDATE);
         $sheets->results = $this->sheetRepository->findFullSheets($sheets->results);
 
         $sheets->results = array_map(function (Sheet $sheet) use ($query, $lastAccepts, $lastValidates) {

@@ -68,6 +68,16 @@ class Trace
     private $comment;
 
     /**
+     * @var string
+     */
+    private $objectType;
+
+    /**
+     * @var int
+     */
+    private $objectId;
+
+    /**
      * @param TraceableInterface $traceable
      * @param string             $action
      * @param DateTimeInterface  $date
@@ -81,10 +91,12 @@ class Trace
         $comment,
         AbstractUser $abstractUser = null
     ) {
-        $this->object  = sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId());
-        $this->action  = $action;
-        $this->date    = $date;
-        $this->comment = $comment;
+        $this->object     = sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId());
+        $this->objectType = $traceable->getTraceableName();
+        $this->objectId   = $traceable->getId();
+        $this->action     = $action;
+        $this->date       = $date;
+        $this->comment    = $comment;
 
         if ($abstractUser instanceof User) {
             $this->user = $abstractUser;
@@ -145,6 +157,22 @@ class Trace
     public function getObject()
     {
         return $this->object;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getObjectId()
+    {
+        return $this->objectId;
     }
 
     /**

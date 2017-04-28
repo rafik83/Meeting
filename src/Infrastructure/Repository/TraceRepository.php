@@ -44,10 +44,10 @@ class TraceRepository implements TraceRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastByTraceableObjectsAndAction(array $objects, $action)
+    public function getLastByTraceableObjectsAndAction(array $objects, $type, $action)
     {
-        $ids = array_map(function (TraceableInterface $object) {
-            return Trace::identifier($object);
+        $ids = array_map(function (TraceableInterface $traceable) {
+            return $traceable->getId();
         }, $objects);
 
         $queryBuilder = $this
@@ -55,11 +55,12 @@ class TraceRepository implements TraceRepositoryInterface
             ->createQueryBuilder()
             ->select('trace')
             ->from(Trace::class, 'trace', 'trace.id')
-            ->leftJoin(Trace::class, 'trace2', 'WITH', 'trace2.action = trace.action AND trace2.object = trace.object AND trace2.id > trace.id')
+            ->leftJoin(Trace::class, 'trace2', 'WITH', 'trace2.action = trace.action AND trace2.objectType = trace.objectType AND trace2.objectId = trace.objectId AND trace2.id > trace.id')
             ->where('trace2.id IS NULL')
-            ->andWhere('trace.object IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->andWhere('trace.objectType = :type AND trace.objectId IN (:ids)')
             ->andWhere('trace.action = :action')
+            ->setParameter('ids', $ids)
+            ->setParameter('type', $type)
             ->setParameter('action', $action);
 
         return $queryBuilder->getQuery()->getResult();
@@ -75,8 +76,9 @@ class TraceRepository implements TraceRepositoryInterface
             ->createQueryBuilder()
             ->select('trace')
             ->from(Trace::class, 'trace', 'trace.id')
-            ->where('trace.object = :object')
-            ->setParameter('object', sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId()));
+            ->where('trace.objectType = :type AND trace.objectId = :id')
+            ->setParameter('type', $traceable->getTraceableName())
+            ->setParameter('id', $traceable->getId());
 
         return $queryBuilder->getQuery()->getResult();
     }
