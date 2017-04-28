@@ -22,16 +22,16 @@ class SearchUserQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $user  = UserFactory::create('p.seb@elao.com');
+        $user  = UserFactory::create('patrick.sebastien@example.com');
         $event = EventFactory::createEvent('Event');
 
         $userRepository       = $this->prophesize(UserRepositoryInterface::class);
         $userToManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
 
-        $expectedView = new UserView(null, 'p.seb@elao.com', 'p.seb@elao.com');
+        $expectedView = new UserView(null, 'patrick.sebastien@example.com', 'patrick.sebastien@example.com');
 
         $command = new SearchUser($event);
-        $command->email = 'p.seb@elao.com';
+        $command->email = 'patrick.sebastien@example.com';
 
         $handler = new SearchUserHandler($userRepository->reveal(), $userToManagerChecker->reveal());
 
