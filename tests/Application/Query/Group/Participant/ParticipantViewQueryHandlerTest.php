@@ -9,7 +9,6 @@ use Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
@@ -28,7 +27,6 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $locale      = 'fr';
 
         $participantInfoGuesser         = $this->prophesize(ParticipantInfoGuesser::class);
-        $meetingSlotRepository          = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $agendaDayViewQueryHandler      = $this->prophesize(AgendaDayViewQueryHandler::class);
         $userAvailabilitiesBuilderCache = $this->prophesize(UserAvailabilitiesBuilderCache::class);
 
@@ -53,7 +51,6 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new ParticipantViewQueryHandler(
             $participantInfoGuesser->reveal(),
-            $meetingSlotRepository->reveal(),
             $agendaDayViewQueryHandler->reveal(),
             $userAvailabilitiesBuilderCache->reveal()
         );
