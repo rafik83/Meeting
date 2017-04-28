@@ -32,7 +32,7 @@ class UnavailabilityVoter extends Voter
         }
 
         // only vote on Sheet objects inside this voter
-        if (!$subject instanceof Unavailability || !$subject instanceof Sheet) {
+        if (!$subject instanceof Unavailability && !$subject instanceof Sheet) {
             return false;
         }
 
