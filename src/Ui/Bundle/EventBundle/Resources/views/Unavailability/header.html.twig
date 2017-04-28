@@ -10,7 +10,7 @@
                 {{ 'unavailability.title'|trans }}
             {% endif %}
         </p>
-        {% if participantId is defined and attend == true %}
+        {% if participantId is defined %}
             <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id, 'participant': participantId, 'sheet': sheetId }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" class="btn btn-primary btn-sm btn-inactive">{{ 'agenda.unavailability.remove'|trans }}</button>

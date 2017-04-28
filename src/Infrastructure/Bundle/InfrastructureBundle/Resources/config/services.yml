@@ -2616,6 +2616,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler
     query.agenda.unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
+    query.agenda.cancel_attendance_unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler
     query.agenda.mass_unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
         arguments:
@@ -2643,6 +2645,7 @@ services:
             - '@query.agenda.unavailability_view_query_handler'
             - '@query.agenda.mass_unavailability_view_query_handler'
             - '@query.agenda.meeting_view_query_handler'
+            - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:
