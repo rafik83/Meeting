@@ -43,6 +43,12 @@ services:
             - '@behat_manager.user'
             - '@behat_manager.type'
 
+    behat_manager.group:
+        class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@behat_manager.sheet'
+
     behat_manager.invoice:
         class: Proximum\Vimeet\Behat\Service\Manager\InvoiceManager
         arguments:
@@ -116,6 +122,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.sheet'
+
+    behat_proxy.group_context:
+        class: Proximum\Vimeet\Behat\Proxy\GroupContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.group'
 
     behat_proxy.invoice_context:
         class: Proximum\Vimeet\Behat\Proxy\InvoiceContextProxy

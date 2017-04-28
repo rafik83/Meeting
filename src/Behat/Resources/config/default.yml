@@ -26,6 +26,8 @@ default:
                     - '@behat_proxy.event_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SheetContext:
                     - '@behat_proxy.sheet_context'
+                - Proximum\Vimeet\Behat\Context\Domain\GroupContext:
+                    - '@behat_proxy.group_context'
                 - Proximum\Vimeet\Behat\Context\Domain\InvoiceContext:
                     - '@behat_proxy.invoice_context'
                 - Proximum\Vimeet\Behat\Context\Domain\ParticipantContext:
