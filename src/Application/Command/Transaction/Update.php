@@ -32,11 +32,6 @@ class Update
     /**
      * @var string
      */
-    public $mode;
-
-    /**
-     * @var string
-     */
     public $reference;
 
     /**
@@ -54,7 +49,6 @@ class Update
         $this->transaction = $transaction;
         $this->amount      = $transaction->getAmount();
         $this->date        = $transaction->getDate();
-        $this->mode        = $transaction->getMode();
         $this->reference   = $transaction->getReference();
         $this->state       = $transaction->getState();
     }
