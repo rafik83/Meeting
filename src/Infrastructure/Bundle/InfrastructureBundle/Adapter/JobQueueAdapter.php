@@ -112,8 +112,8 @@ class JobQueueAdapter implements JobQueueInterface
             $event->getId(),
             $admin->getEmail(),
             $locale,
-            $lockMeetingRequest,
-            $solutionType
+            $solutionType,
+            $lockMeetingRequest
         ]);
 
         $this->setJob($job);
