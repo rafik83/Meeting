@@ -122,7 +122,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function getApprovedRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->sendBy($sheet)->approved();
+        $queryBuilder->sendBy($sheet)->approved()->isFromAttending();
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -144,7 +144,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function getApprovedPropositionReceivedBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->receivedBy($sheet)->approved()->isEnabled();
+        $queryBuilder->receivedBy($sheet)->approved()->isEnabled()->isToAttending();
 
         return $queryBuilder->getQuery()->getResult();
     }
