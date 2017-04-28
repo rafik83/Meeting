@@ -163,6 +163,18 @@
                                         </a>
                                     </li>
                                 {% endif %}
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('admin_invoice_globals_list') }}">
+                                            {{ 'admin.invoice.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_tip_list') }}">
+                                            {{ 'admin.tip.link'|trans }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% endif %}
