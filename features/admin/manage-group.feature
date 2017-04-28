@@ -1,0 +1,28 @@
+@admin @group
+
+Feature: Manage Group
+  As an Admin I need to be able to manage group of sheet
+
+  Scenario: I can see group list
+    Given the database is purged
+    And the event "Awsm Event" is created
+    And the user "awsm@example.com" is created
+    And the group "Awsm Group" is created
+    And I am logged as admin
+    When I go to this page "/admin/fr/event/1/sheets-group/list"
+    Then I should see "Awsm Group"
+    And I should see "awsm@example.com"
+
+  Scenario: I an create a group
+    Given I am logged as admin
+    And the event "Multisheet event" is created
+    And the user "multisheet@example.com" is created
+    And I am on this page "/admin/fr/event/1/sheets-group/list"
+    When I follow "admin.sheets_group.create"
+    Then I should be on this page "/admin/fr/event/1/sheets-group/pre-create"
+    When I fill in the following:
+      | search_user_sheets_group_email | multisheet@example.com |
+    And I press "search_user_sheets_group_submit"
+    Then I should be on this page "/admin/fr/event/1/sheets-group/1/create"
+    And I should see "multisheet@example.com"
+
