@@ -18,9 +18,9 @@ function BatchSelectionHelper(batchForm) {
  */
 BatchSelectionHelper.prototype.toggleSelectionState = function (event) {
     if (this.inputSelectionType.value === 'selection_type_page') {
-        this.selectAll(event.target);
+        this.selectAll(event.currentTarget);
     } else if(this.inputSelectionType.value === 'selection_type_all') {
-        this.selectPage(event.target);
+        this.selectPage(event.currentTarget);
     }
 };
 
