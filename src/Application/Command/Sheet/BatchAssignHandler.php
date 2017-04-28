@@ -41,7 +41,7 @@ class BatchAssignHandler
 
         // Assign admin to sheets
         foreach ($sheets as $sheet) {
-            if (false === $batchAssign->unassigned) {
+            if (false === $batchAssign->unassigned()) {
                 $this->sheetRepository->set($sheet->assign($batchAssign->admin));
             } else {
                 $this->sheetRepository->set($sheet->unAssign());
@@ -50,7 +50,7 @@ class BatchAssignHandler
 
         $endMessage = 'assign.success';
 
-        if ($batchAssign->unassigned) {
+        if ($batchAssign->unassigned()) {
             $endMessage = 'unassign.success';
         }
 

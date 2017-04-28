@@ -25,21 +25,22 @@ class BatchAssign extends AbstractBatch
     public $admin;
 
     /**
-     * @var bool
-     */
-    public $unassigned;
-
-    /**
      * BatchAssign constructor.
      *
      * @param array      $ids
      * @param Admin|null $admin
-     * @param bool       $unassigned
      */
-    public function __construct(array $ids, Admin $admin = null, $unassigned = false)
+    public function __construct(array $ids, Admin $admin = null)
     {
-        $this->ids        = $ids;
-        $this->admin      = $admin;
-        $this->unassigned = $unassigned;
+        $this->ids   = $ids;
+        $this->admin = $admin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function unassigned()
+    {
+        return $this->admin === null;
     }
 }

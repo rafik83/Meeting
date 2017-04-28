@@ -104,8 +104,7 @@ class BatchHandler
         if ($batch->assign && $batch->follower !== null) {
             return $this->batchAssignHandler->handle(new BatchAssign(
                 $batch->ids,
-                $batch->follower !== FollowerConstant::UNASSIGNED_FOLLOWER ? $batch->follower : null,
-                $batch->follower === FollowerConstant::UNASSIGNED_FOLLOWER
+                $batch->follower !== FollowerConstant::UNASSIGNED_FOLLOWER ? $batch->follower : null
             ));
         }
 

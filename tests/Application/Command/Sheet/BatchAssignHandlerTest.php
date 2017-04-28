@@ -43,7 +43,7 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
             return $sheet->getFollower() === $organizer;
         }))->shouldBeCalledTimes(3);
 
-        $command = new BatchAssign([1, 2, 3], $organizer, false);
+        $command = new BatchAssign([1, 2, 3], $organizer);
 
         $handler = new BatchAssignHandler($sheetRepository->reveal());
         $result  = $handler->handle($command);
@@ -76,7 +76,7 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
             return $sheet->getFollower() === null;
         }))->shouldBeCalledTimes(3);
 
-        $command = new BatchAssign([1, 2, 3], null, true);
+        $command = new BatchAssign([1, 2, 3], null);
 
         $handler = new BatchAssignHandler($sheetRepository->reveal());
         $result  = $handler->handle($command);
