@@ -41,7 +41,13 @@ class GroupContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $group = $this->groupContextProxy->getGroupManager()->create($event, null, null, $groupTitle);
+        $user = $this->groupContextProxy->getStorage()->get('user');
+
+        if (null === $user) {
+            throw new \InvalidArgumentException('Missing User');
+        }
+
+        $group = $this->groupContextProxy->getGroupManager()->create($event, $user, null, $groupTitle);
         $this->groupContextProxy->getStorage()->set('group', $group);
     }
 }

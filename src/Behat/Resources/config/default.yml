@@ -24,6 +24,8 @@ default:
                 - Proximum\Vimeet\Behat\Context\FeatureContext: ~
                 - Proximum\Vimeet\Behat\Context\Domain\EventContext:
                     - '@behat_proxy.event_context'
+                - Proximum\Vimeet\Behat\Context\Domain\UserContext:
+                    - '@behat_proxy.user_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SheetContext:
                     - '@behat_proxy.sheet_context'
                 - Proximum\Vimeet\Behat\Context\Domain\GroupContext:

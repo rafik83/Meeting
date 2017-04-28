@@ -105,6 +105,12 @@ services:
             - '@behat_storage'
             - '@behat_manager.event'
 
+    behat_proxy.user_context:
+        class: Proximum\Vimeet\Behat\Proxy\UserContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.user'
+
     behat_proxy.slot_context:
         class: Proximum\Vimeet\Behat\Proxy\SlotContextProxy
         arguments:
