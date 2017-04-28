@@ -36,13 +36,6 @@ class Trace
     private $id;
 
     /**
-     * Composed of TraceableName + ID
-     *
-     * @var string
-     */
-    private $object;
-
-    /**
      * @var string
      */
     private $action;
@@ -91,7 +84,6 @@ class Trace
         $comment,
         AbstractUser $abstractUser = null
     ) {
-        $this->object     = sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId());
         $this->objectType = $traceable->getTraceableName();
         $this->objectId   = $traceable->getId();
         $this->action     = $action;
@@ -154,14 +146,6 @@ class Trace
     /**
      * @return string
      */
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    /**
-     * @return string
-     */
     public function getObjectType()
     {
         return $this->objectType;
@@ -184,21 +168,13 @@ class Trace
     public static function find(array &$traces, TraceableInterface $traceable)
     {
         foreach ($traces as $trace) {
-            if ($trace->getObject() === self::identifier($traceable)) {
+            if ($trace->getObjectType() === $traceable->getTraceableName()
+                && $trace->getId() === $traceable->getId()
+            ) {
                 return $trace;
             }
         }
 
         return null;
-    }
-
-    /**
-     * @param TraceableInterface $traceable
-     *
-     * @return string
-     */
-    public static function identifier(TraceableInterface $traceable)
-    {
-        return $traceable->getTraceableName() . $traceable->getId();
     }
 }
