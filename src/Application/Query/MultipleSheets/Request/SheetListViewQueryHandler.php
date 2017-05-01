@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Group\Request;
+namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
-use Proximum\Vimeet\Application\Exception\Group\Request\NoResultException;
-use Proximum\Vimeet\Application\View\Group\Request\SheetListView;
-use Proximum\Vimeet\Application\View\Group\Request\SheetView;
+use Proximum\Vimeet\Application\Exception\MultipleSheets\Request\NoResultException;
+use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetListView;
+use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -81,14 +81,22 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $query)
     {
-        $event = $query->group->getEvent();
-        $groupSheets = $this->sheetRepository->getByGroup($query->group);
+        $multipleSheets = $query->sheets;
+
+        $firstSheet = reset($query->sheets);
+
+        if (false === $firstSheet) {
+            throw new NoResultException('At least one sheet must be provided in SheetListViewQuery::sheets');
+        }
+
+        $event = $firstSheet->getEvent();
+
         $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
         $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
 
         // sheets met by the group sheets
-        $sheets = $this->sheetRepository->getSheetsMetBySheets($event, $groupSheets);
+        $sheets = $this->sheetRepository->getSheetsMetBySheets($event, $multipleSheets);
 
         $sheetsWithTitle = [];
 
@@ -112,8 +120,6 @@ class SheetListViewQueryHandler
             // If the page is 1 and there is no result, show no result instead of 404
             if ($query->page === 1) {
                 return new SheetListView(
-                    $query->group->getId(),
-                    $query->group->getTitle(),
                     [],
                     $query->page,
                     0,
@@ -133,15 +139,15 @@ class SheetListViewQueryHandler
 
         $sheetViews = $this->getSheetViewsWithRequest(
             $event,
-            $groupSheets,
+            $multipleSheets,
             $sheetsMet,
             $query->locale
         );
 
         return new SheetListView(
-            $query->group->getId(),
-            $query->group->getTitle(),
-            $sheetViews,
+            array_filter($sheetViews, function (SheetView $sheetView) {
+                return $sheetView->numberOfRequest() > 0;
+            }),
             $query->page, // current page
             count($chunks), // total page
             $isMeetingRequestUpdateLocked,
@@ -154,13 +160,13 @@ class SheetListViewQueryHandler
      * Creates the SheetViews and returns them with there requests
      *
      * @param Event   $event
-     * @param Sheet[] $groupSheets
+     * @param Sheet[] $multipleSheets
      * @param Sheet[] $sheetsMet
      * @param string  $locale
      *
      * @return SheetView[]
      */
-    private function getSheetViewsWithRequest(Event $event, array &$groupSheets, array &$sheetsMet, $locale)
+    private function getSheetViewsWithRequest(Event $event, array &$multipleSheets, array &$sheetsMet, $locale)
     {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
@@ -174,10 +180,10 @@ class SheetListViewQueryHandler
         $requests = $this->requestRepository->getRequestsOfSheetsWithSheets(
             $event,
             $sheetsMet,
-            $groupSheets
+            $multipleSheets
         );
 
-        $this->addRequestToSheetViews($requests, $groupSheets, $sheetViews, $locale);
+        $this->addRequestToSheetViews($requests, $multipleSheets, $sheetViews, $locale);
 
         return $sheetViews;
     }
@@ -185,14 +191,14 @@ class SheetListViewQueryHandler
     /**
      * Add RequestView to SheetView
      * @param Request[]   $requests
-     * @param Sheet[]     $groupSheets
+     * @param Sheet[]     $multipleSheets
      * @param SheetView[] $sheetViews
      * @param string      $locale
      */
-    private function addRequestToSheetViews(array &$requests, array &$groupSheets, array &$sheetViews, $locale)
+    private function addRequestToSheetViews(array &$requests, array &$multipleSheets, array &$sheetViews, $locale)
     {
         foreach ($requests as $request) {
-            $sheetMet = $this->getSheetMet($request, $groupSheets);
+            $sheetMet = $this->getSheetMet($request, $multipleSheets);
 
             $requestView = $this->requestViewQueryHandler->handle(
                 new RequestViewQuery($sheetMet, $request, $locale)
@@ -206,19 +212,19 @@ class SheetListViewQueryHandler
 
     /**
      * @param Request $request
-     * @param Sheet[] $groupSheet
+     * @param Sheet[] $multipleSheets
      *
      * @return Sheet
      */
-    private function getSheetMet(Request $request, array &$groupSheet)
+    private function getSheetMet(Request $request, array &$multipleSheets)
     {
         // If the from sheet is not in the group sheet, then the sheet met is the from sheet
-        if (!isset($groupSheet[$request->getFromSheet()->getId()])) {
+        if (!isset($multipleSheets[$request->getFromSheet()->getId()])) {
             return $request->getFromSheet();
         }
 
         // If the to sheet is not in the group sheet, then the sheet met is the to sheet
-        if (!isset($groupSheet[$request->getToSheet()->getId()])) {
+        if (!isset($multipleSheets[$request->getToSheet()->getId()])) {
             return $request->getToSheet();
         }
 

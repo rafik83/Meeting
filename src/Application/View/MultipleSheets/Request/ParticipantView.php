@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Group\Request;
+namespace Proximum\Vimeet\Application\View\MultipleSheets\Request;
 
 class ParticipantView
 {

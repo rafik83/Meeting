@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Group\Request;
+namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
-use Proximum\Vimeet\Application\View\Group\Request\SheetView;
+use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
 
 class SheetViewQueryHandler
 {

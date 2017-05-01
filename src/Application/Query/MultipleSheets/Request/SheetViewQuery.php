@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Group\Request;
+namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 

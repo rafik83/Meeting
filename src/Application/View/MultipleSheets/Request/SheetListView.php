@@ -8,29 +8,17 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Group\Request;
+namespace Proximum\Vimeet\Application\View\MultipleSheets\Request;
 
 class SheetListView
 {
-    /** @var int */
-    public $groupId;
-
-    /** @var string */
-    public $groupTitle;
-
     /** @var SheetView[] */
     public $sheetViews;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $page;
 
-    /**
-     * Number of pages
-     *
-     * @var int
-     */
+    /** @var int Number of pages */
     public $pages;
 
     /** @var bool */
@@ -43,18 +31,14 @@ class SheetListView
     public $isAnsweringMeetingRequestClosed;
 
     /**
-     * @param int         $groupId
-     * @param string      $groupTitle
      * @param SheetView[] $sheetViews
      * @param int         $page
-     * @param int         $pages
+     * @param int         $pages Number of pages
      * @param bool        $isMeetingRequestUpdateLocked
      * @param bool        $isMeetingRequestClosed
      * @param bool        $isAnsweringMeetingRequestClosed
      */
     public function __construct(
-        $groupId,
-        $groupTitle,
         array $sheetViews,
         $page,
         $pages,
@@ -62,8 +46,6 @@ class SheetListView
         $isMeetingRequestClosed,
         $isAnsweringMeetingRequestClosed
     ) {
-        $this->groupId                         = $groupId;
-        $this->groupTitle                      = $groupTitle;
         $this->sheetViews                      = $sheetViews;
         $this->page                            = $page;
         $this->pages                           = $pages;
