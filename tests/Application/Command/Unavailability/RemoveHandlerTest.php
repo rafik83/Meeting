@@ -13,12 +13,15 @@ namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Unavailability\RemoveUnavailabilityEvent;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveTestHandler extends \PHPUnit_Framework_TestCase
@@ -41,7 +44,10 @@ class RemoveTestHandler extends \PHPUnit_Framework_TestCase
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $unavailabilityRepository->remove($unavailability)->shouldBeCalled();
 
-        $handler = new RemoveHandler($unavailabilityRepository->reveal());
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $eventDispatcher->dispatch(Events::UNAVAILABILITY_REMOVED, new RemoveUnavailabilityEvent($participant))->shouldBeCalled();
+
+        $handler = new RemoveHandler($unavailabilityRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($remove);
     }
 
@@ -66,7 +72,9 @@ class RemoveTestHandler extends \PHPUnit_Framework_TestCase
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $unavailabilityRepository->remove($unavailability)->shouldNotBeCalled();
 
-        $handler = new RemoveHandler($unavailabilityRepository->reveal());
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
+        $handler = new RemoveHandler($unavailabilityRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($remove);
     }
 }

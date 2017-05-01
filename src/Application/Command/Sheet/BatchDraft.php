@@ -20,7 +20,7 @@ class BatchDraft extends AbstractBatch
     public $admin;
 
     /**
-     * BatchPending constructor.
+     * BatchDraft constructor.
      *
      * @param array $ids
      * @param Admin $admin

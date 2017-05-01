@@ -711,6 +711,18 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * Un-assign follower for the sheet
+     *
+     * @return Sheet
+     */
+    public function unAssign()
+    {
+        $this->follower = null;
+
+        return $this;
+    }
+
+    /**
      * Get participants users + the owner
      *
      * @return User[]
@@ -868,6 +880,15 @@ class Sheet implements TraceableInterface
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+
+     * @param Group $group
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
     }
 
     /**

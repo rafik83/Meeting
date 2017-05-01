@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Unavailability\RemoveUnavailabilityEvent;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RemoveHandler
 {
@@ -20,14 +23,21 @@ class RemoveHandler
      */
     private $unavailabilityRepository;
 
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
+
     /**
      * RemoveHandler constructor.
      *
      * @param UnavailabilityRepositoryInterface $unavailabilityRepository
+     * @param DelayedEventDispatcher            $eventDispatcher
      */
-    public function __construct(UnavailabilityRepositoryInterface $unavailabilityRepository)
-    {
+    public function __construct(
+        UnavailabilityRepositoryInterface $unavailabilityRepository,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
+        $this->eventDispatcher          = $eventDispatcher;
     }
 
     /**
@@ -42,5 +52,10 @@ class RemoveHandler
         }
 
         $this->unavailabilityRepository->remove($remove->unavailability);
+
+        $this->eventDispatcher->dispatch(
+            Events::UNAVAILABILITY_REMOVED,
+            new RemoveUnavailabilityEvent($remove->unavailability->getParticipant())
+        );
     }
 }

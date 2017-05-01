@@ -1,23 +1,36 @@
-{% extends 'EventBundle:Register:base.html.twig' %}
+{% extends 'EventBundle::base.html.twig' %}
 
 {% block title event.title %}
 
 {% block content %}
-    <section class="main">
+    <section class="main mg-top">
         <header>
             <h1>{{ 'multiple_sheets.select_sheet'|trans }}</h1>
         </header>
 
-        <div class="main__content">
-            <ul class="styled-form">
-                {% for sheetView in sheetViews %}
-                    <li>
-                        <a href="{{ path('event_sheet_default', {'sheet': sheetView.id}) }}">
-                            {{ sheetView.title }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+        <div class="main__container">
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table table-bordered table-hover mg-tp">
+                        <tbody>
+                        {% for sheetView in sheetViews %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('event_sheet_default', {'sheet': sheetView.id}) }}">
+                                        {{ sheetView.title }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ path('event_multiplesheets_request_list') }}" class="btn btn-default pull-right">
+                        {{ 'multiple_sheets.request.title'|trans }}
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}

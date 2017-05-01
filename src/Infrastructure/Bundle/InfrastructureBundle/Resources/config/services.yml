@@ -467,6 +467,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
             - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Remove }
     command.user.forgotten_password_handler:
@@ -539,6 +540,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.update_spot_handler:
@@ -571,6 +573,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants }
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
@@ -906,8 +909,16 @@ services:
             - '@command.sheet.batch_draft_handler'
             - '@command.sheet.batch_validation_validate_handler'
             - '@command.sheet.batch_generate_invoice_handler'
+            - '@command.sheet.batch_assign_to_group_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
+
+    command.sheet.batch_assign_to_group_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignToGroupHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
     command.sheet.accept_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
         arguments:
@@ -1474,12 +1485,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\Mass\CreateHandler
         arguments:
             - '@repository.unavailability.mass_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Create }
     command.unavailability.mass.update_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler
         arguments:
             - '@repository.unavailability.mass_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
     command.unavailability.mass.delete_handler:
@@ -1494,6 +1507,7 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
 
@@ -1502,6 +1516,7 @@ services:
         arguments:
             - '@repository.unavailability.mass_assignment_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update }
 
@@ -2700,14 +2715,14 @@ services:
             - '@repository.unavailability.mass_assignment_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery }
-    query.agenda.remove_meeting_query_handler:
-        class: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQueryHandler
+    query.agenda.remove_meeting_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting }
     query.agenda.request_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQueryHandler
         arguments:
@@ -3614,6 +3629,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@adapter.job_queue_adapter'
 
     #
     # Filter
@@ -4200,30 +4216,87 @@ services:
             - '@adapter.event_url_generator'
 
     #
-    # Group request queries
+    # Aggregator
     #
-    query.group.request.sheet_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\SheetViewQueryHandler
+    domain.request.participant_assigned_aggregator:
+        class: Proximum\Vimeet\Domain\Request\ParticipantAssignedAggregator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+    domain.unavailability.participant_unavailable_aggregator:
+        class: Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+
+    #
+    # Command Aggregator
+    #
+    command.aggregate.participant.full_unavailability_handler:
+        class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@domain.unavailability.participant_unavailable_aggregator'
+    command.aggregate.participant.assigned_to_request_handler:
+        class: Proximum\Vimeet\Application\Command\Aggregate\Participant\AssignedToRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@domain.request.participant_assigned_aggregator'
+    command.aggregate.participant.full_unavailability_for_given_participants_handler:
+        class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityForGivenParticipantsHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.participant_repository'
+             - '@domain.unavailability.participant_unavailable_aggregator'
+
+    #
+    # Symfony Command Aggregator
+    #
+    symfony_command.aggregate.participant.participant_full_unavailability_aggregate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantFullUnavailabilityAggregateCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.aggregate.participant.full_unavailability_handler'
+        tags:
+            - { name: console.command }
+    symfony_command.aggregate.participant.participant_assigned_to_request_aggregate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.aggregate.participant.assigned_to_request_handler'
+        tags:
+            - { name: console.command }
+    symfony_command.aggregate.participant.participants_given_full_unavailability_aggregate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantsGivenFullUnavailabilityAggregateCommand
+        arguments:
+            - '@command.aggregate.participant.full_unavailability_for_given_participants_handler'
+        tags:
+            - { name: console.command }
+
+    #
+    # Multiple sheets request queries
+    #
+    query.multiple_sheets.request.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQueryHandler
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
-    query.group.request.participant_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\ParticipantViewQueryHandler
+    query.multiple_sheets.request.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQueryHandler
         arguments:
             - '@command.planning.participant_info_guesser_cache'
-    query.group.request.request_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\RequestViewQueryHandler
+    query.multiple_sheets.request.request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQueryHandler
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
-            - '@query.group.request.participant_view_query_handler'
-    query.group.request.sheet_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQueryHandler
+            - '@query.multiple_sheets.request.participant_view_query_handler'
+    query.multiple_sheets.request.sheet_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.planning.sheet_info_guesser_cache'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@query.group.request.sheet_view_query_handler'
-            - '@query.group.request.request_view_query_handler'
+            - '@query.multiple_sheets.request.sheet_view_query_handler'
+            - '@query.multiple_sheets.request.request_view_query_handler'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQuery }

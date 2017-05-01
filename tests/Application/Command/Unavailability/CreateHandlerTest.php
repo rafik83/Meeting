@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\CreateHandler;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
@@ -21,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -43,6 +46,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $paticipantInfoGuesser;
 
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
+
     /**
      * Init mock for the suite test
      */
@@ -51,6 +57,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $this->unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $this->participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
         $this->paticipantInfoGuesser    = $this->prophesize(ParticipantInfoGuesser::class);
+        $this->eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
     }
 
     public function testCheckTimeOutOfDayFunctionWithBegin()
@@ -70,7 +77,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $begin      = new \DateTime('2016-10-12 08:00:00.000');
@@ -98,7 +106,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $begin      = new \DateTime('2016-10-12 19:00:00.000');
@@ -124,7 +133,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $begin      = new \DateTime('2016-10-12 12:00:00.000');
@@ -162,7 +172,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -194,7 +205,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -222,7 +234,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -250,7 +263,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -280,7 +294,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -315,7 +330,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -365,7 +381,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -415,7 +432,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -450,7 +468,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -485,7 +504,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -535,7 +555,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -585,7 +606,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $reflection = new \ReflectionClass(CreateHandler::class);
@@ -614,7 +636,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($create);
     }
@@ -661,10 +684,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->add($unavailability)
             ->shouldBeCalled();
 
+        $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($create);
     }
@@ -712,10 +738,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->add($unavailability)
             ->shouldBeCalled();
 
+        $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($create);
     }
@@ -766,10 +795,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->add($expectedUnavailability)
             ->shouldBeCalled();
 
+        $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($create);
     }
@@ -826,7 +858,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->paticipantInfoGuesser->reveal()
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($create);
     }
