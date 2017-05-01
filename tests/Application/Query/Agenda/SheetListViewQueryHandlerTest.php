@@ -160,6 +160,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Titre fiche',
             '',
             1,
+            true,
             $sheetIndicatorView,
             false,
             null,
