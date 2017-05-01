@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
@@ -19,8 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FollowerChoiceType extends AbstractType
 {
-    const UNASSIGNED_FOLLOWER = 'un-assigned-follower';
-
     /**
      * @var AdminRepositoryInterface
      */
@@ -48,7 +47,7 @@ class FollowerChoiceType extends AbstractType
                 $admins = $this->adminRepository->getFollowers($options['event']);
 
                 if ($options['unassigned'] === true) {
-                    return array_merge([self::UNASSIGNED_FOLLOWER], $admins);
+                    return array_merge([FollowerConstant::UNASSIGNED_FOLLOWER], $admins);
                 } else {
                     return $admins;
                 }
@@ -63,8 +62,8 @@ class FollowerChoiceType extends AbstractType
             'choice_value' => function ($admin) {
                 if ($admin instanceof Admin) {
                     return $admin->getId();
-                } elseif ($admin === self::UNASSIGNED_FOLLOWER) {
-                    return self::UNASSIGNED_FOLLOWER;
+                } elseif ($admin === FollowerConstant::UNASSIGNED_FOLLOWER) {
+                    return FollowerConstant::UNASSIGNED_FOLLOWER;
                 } else {
                     return null;
                 }

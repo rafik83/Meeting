@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingRequestCanNotBeMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
@@ -107,22 +108,26 @@ class TransformRequestIntoMeetingHandler
         $fromSheet = $transformRequestIntoMeeting->meetingRequest->getFromSheet();
         $toSheet   = $transformRequestIntoMeeting->meetingRequest->getToSheet();
 
-        $this->meetingRepository->add(
-            new Meeting(
-                $transformRequestIntoMeeting->meetingRequest,
-                $transformRequestIntoMeeting->slot,
-                $fromSheet,
-                $transformRequestIntoMeeting->meetingRequest->getParticipants($fromSheet),
-                $toSheet,
-                $transformRequestIntoMeeting->meetingRequest->getParticipants($toSheet),
-                $this->dateTime,
-                $spot
-            )
+        $meeting = new Meeting(
+            $transformRequestIntoMeeting->meetingRequest,
+            $transformRequestIntoMeeting->slot,
+            $fromSheet,
+            $transformRequestIntoMeeting->meetingRequest->getParticipants($fromSheet),
+            $toSheet,
+            $transformRequestIntoMeeting->meetingRequest->getParticipants($toSheet),
+            $this->dateTime,
+            $spot
         );
+
+        $this->meetingRepository->add($meeting);
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_CREATED,
             new MeetingCreatedEvent([$fromSheet, $toSheet])
         );
+
+        foreach ($meeting->getAllParticipants() as $participant) {
+            $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE, new MeetingParticipateEvent($participant));
+        }
     }
 }

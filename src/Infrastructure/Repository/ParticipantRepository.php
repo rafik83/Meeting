@@ -471,6 +471,22 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventAndInCatalog(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale)
     {
         $queryBuilder = $this
@@ -510,6 +526,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParticipantsWithoutMeetingAndHappening(
         array $participants,
         \DateTimeInterface $begin,

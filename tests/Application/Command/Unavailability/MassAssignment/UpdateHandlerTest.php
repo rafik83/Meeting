@@ -12,6 +12,8 @@ namespace Application\Command\Unavailability\MassAssignment;
 
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Mass\Assignment\AssignmentUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -23,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
@@ -73,6 +76,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant)
+        )->shouldBeCalled();
 
         $massAssignmentRepository->set($massAssignment)->shouldBeCalled();
 
@@ -81,7 +90,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -101,6 +111,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant)
+        )->shouldBeCalled();
 
         $participantRepository->getAvailableParticipants(
             [$participant],
@@ -117,7 +133,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -139,6 +156,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant)
+        )->shouldNotBeCalled();
 
         $participantRepository->getAvailableParticipants(
             [$participant],
@@ -153,7 +176,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -175,6 +199,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant)
+        )->shouldNotBeCalled();
 
         $participantRepository->getAvailableParticipants(
             [$participant],
@@ -189,7 +219,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
