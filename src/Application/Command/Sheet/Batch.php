@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class Batch extends AbstractBatch
 {
@@ -89,10 +90,25 @@ class Batch extends AbstractBatch
     public $generateInvoice;
 
     /**
-     * @param Admin $admin
+     * "Assigner une fiche à un groupe/entité"
+     *
+     * @var bool
      */
-    public function __construct(Admin $admin)
+    public $assignToGroup;
+
+    /** @var Group|null */
+    public $group;
+
+    /** @var string */
+    public $locale;
+
+    /**
+     * @param Admin  $admin
+     * @param string $locale
+     */
+    public function __construct(Admin $admin, $locale)
     {
-        $this->admin = $admin;
+        $this->admin  = $admin;
+        $this->locale = $locale;
     }
 }

@@ -106,6 +106,15 @@
                         <li>{{ form_widget(batch_form.validationStateValidate) }}</li>
                     {% endif %}
 
+                    {% if batch_form.assignToGroup is defined %}
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#sheetAssignToGroup">
+                                {{ 'admin.sheet.assignToGroup'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if batch_form.generateInvoice is defined %}
                         <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.generateInvoice, { 'attr': { 'data-confirm': 'admin.batch_actions.generateInvoice.confirm'|trans({'%prefix%': event.invoicePrefix.prefixExample}) } }) }}</li>
@@ -172,6 +181,11 @@
                     {% endif %}
                     {% if sheet.countParticipant > 1 %}
                         <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
+                    {% endif %}
+                    {% if sheet.hasGroup %}
+                        <span class="label label-success">
+                            <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ sheet.groupTitle }}"></i>
+                        </span>
                     {% endif %}
                     <br>
                     <small>
@@ -282,5 +296,25 @@
             </div>
         </div>
     </div>
+    {% if batch_form.assignToGroup is defined %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="sheetAssignToGroup">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{ 'admin.sheet.assignToGroup'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(batch_form.group) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                        {{ form_widget(batch_form.assignToGroup) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {{ form_end(batch_form) }}
 {% endblock content %}

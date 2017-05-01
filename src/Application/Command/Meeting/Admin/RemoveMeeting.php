@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Meeting;
 
-class RemoveMeetingViewQuery
+class RemoveMeeting
 {
     /**
      * @var Meeting
@@ -26,7 +26,7 @@ class RemoveMeetingViewQuery
     public $user;
 
     /**
-     * RemoveMeetingViewQuery constructor.
+     * RemoveMeeting constructor.
      *
      * @param Meeting $meeting
      * @param Admin   $user
