@@ -587,7 +587,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             'Lastname',
             'ROLE_SUPER_ADMIN',
             new \DateTime()
-        );
+        ); // password: vimeet_admin
         $adminRepository->add($admin);
 
         return $this->iAmLoggedAsAdminWithGivenEmail($email);
