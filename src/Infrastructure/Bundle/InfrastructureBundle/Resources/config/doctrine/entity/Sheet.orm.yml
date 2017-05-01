@@ -35,6 +35,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
             nullable: true
         imported:
             type: boolean
+        attend:
+            type: boolean
+            options:
+                default: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -139,6 +139,13 @@ class Sheet implements TraceableInterface
     private $group;
 
     /**
+     * The attendance of the sheet for the event (présence / Annule sa venue)
+     *
+     * @var bool
+     */
+    private $attend = true;
+
+    /**
      * Sheet constructor.
      *
      * @param Event             $event
@@ -864,10 +871,29 @@ class Sheet implements TraceableInterface
     }
 
     /**
+
      * @param Group $group
      */
     public function setGroup(Group $group)
     {
         $this->group = $group;
+    }
+
+    /**
+     * Cancel/Confirm the attendance of the sheet for the vent
+     *
+     * @param bool $attendance
+     */
+    public function setAttendance($attendance)
+    {
+        $this->attend = $attendance;
+    }
+
+    /**
+     * @return bool
+     */
+    public function attend()
+    {
+        return $this->attend;
     }
 }

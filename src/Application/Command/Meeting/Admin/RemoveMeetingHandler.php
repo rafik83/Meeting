@@ -13,11 +13,12 @@ namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingUnParticipateEvent;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
-class RemoveMeetingViewQueryHandler
+class RemoveMeetingHandler
 {
     /**
      * @var MeetingRepositoryInterface
@@ -52,11 +53,11 @@ class RemoveMeetingViewQueryHandler
     }
 
     /**
-     * @param RemoveMeetingViewQuery $query
+     * @param RemoveMeeting $query
      *
      * @throws LockedException
      */
-    public function handle(RemoveMeetingViewQuery $query)
+    public function handle(RemoveMeeting $query)
     {
         if ($query->meeting->isBlockedSlot()) {
             throw new LockedException($this->translator->trans(
@@ -66,6 +67,7 @@ class RemoveMeetingViewQueryHandler
                 $query->user->getLocale()
             ));
         }
+
         $this->meetingRepository->remove($query->meeting);
 
         $this->eventDispatcher->dispatch(
@@ -75,5 +77,12 @@ class RemoveMeetingViewQueryHandler
                 $query->meeting->getToSheet()
             ])
         );
+
+        foreach ($query->meeting->getAllParticipants() as $participant) {
+            $this->eventDispatcher->dispatch(
+                Events::MEETING_UN_PARTICIPATE,
+                new MeetingUnParticipateEvent($participant)
+            );
+        }
     }
 }

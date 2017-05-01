@@ -1,4 +1,5 @@
 flash.activate_account.success: 'Votre compte a été activé avec succès'
+flash.admin.action.no-available: 'Cette action n''est pas disponible'
 flash.admin.activate_account.success: 'Votre compte a été activé avec succès'
 flash.admin.admin.create.success: 'Le nouvel utilisateur a bien été créé'
 flash.admin.admin.update.success: 'L''utilisateur a bien été modifié'

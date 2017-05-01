@@ -63,4 +63,13 @@ final class Events
     const PARTICIPANT_IMPORTED                 = 'participant.imported';
     const TRANSACTION_CONFIRMED                = 'transaction.confirm';
     const HAPPENING_PARTICIPATED               = 'happening.participated';
+    const HAPPENING_PARTICIPATE                = 'happening.participate';
+    const HAPPENING_UN_PARTICIPATE             = 'happening.un_participate';
+    const UNAVAILABILITY_ADDED                 = 'unavailability.added';
+    const UNAVAILABILITY_REMOVED               = 'unavailability.removed';
+    const REQUEST_PARTICIPATE                  = 'request.participate';
+    const REQUEST_UN_PARTICIPATE               = 'request.un_participate';
+    const MASS_ASSIGNMENT_UPDATED              = 'mass.assignment.updated';
+    const MEETING_PARTICIPATE                  = 'meeting.participate';
+    const MEETING_UN_PARTICIPATE               = 'meeting.un_participate';
 }
