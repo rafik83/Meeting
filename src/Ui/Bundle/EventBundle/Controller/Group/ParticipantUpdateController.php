@@ -75,7 +75,7 @@ class ParticipantUpdateController extends Controller
             }
 
             $this->addFlash(
-                'success',
+                0 === count($updateUsersSheetsResultMessage) ? 'success' : 'warning',
                 $translator->transChoice(
                     'flash.group.participant.update_success',
                     count($updateUsersSheetsResultMessage),
