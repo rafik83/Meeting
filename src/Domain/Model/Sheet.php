@@ -871,6 +871,15 @@ class Sheet implements TraceableInterface
     }
 
     /**
+
+     * @param Group $group
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+    }
+
+    /**
      * Cancel/Confirm the attendance of the sheet for the vent
      *
      * @param bool $attendance

@@ -111,9 +111,9 @@ class PaginatedSheetListViewQueryHandler
             false
         );
 
+        $sheets->results = $this->sheetRepository->findFullSheets($sheets->results);
         $lastAccepts     = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::ACCEPT);
         $lastValidates   = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::VALIDATE);
-        $sheets->results = $this->sheetRepository->findFullSheets($sheets->results);
 
         $sheets->results = array_map(function (Sheet $sheet) use ($query, $lastAccepts, $lastValidates) {
             if ($sheet->isAccepted()) {
@@ -163,11 +163,13 @@ class PaginatedSheetListViewQueryHandler
                 $lastName,
                 $sheet->getOwner()->getEmail()
             ),
-            $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
+            $sheet->getFollower() !== null ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),
             $sheet->countParticipant(),
+            $sheet->getGroup() !== null,
+            $sheet->getGroup() !== null ? $sheet->getGroup()->getTitle() : null,
             $sheet->getSpot() !== null ? $sheet->getSpot()->getReference() : null,
             $trace
         );
