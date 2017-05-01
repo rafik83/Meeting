@@ -22,7 +22,7 @@ class TransformableRequest
         $from = $request->getFromSheet();
         $to   = $request->getToSheet();
 
-        if (false === $from->attend() || false === $to->attend()) {
+        if ($request->isOneOfSheetsNotAttend()) {
             return false;
         }
 
