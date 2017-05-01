@@ -73,7 +73,15 @@ class TransactionRepository implements TransactionRepositoryInterface
      */
     public function remove(Transaction $transaction)
     {
-        $this->entityManager->remove($transaction);
+        $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete(Transaction::class, 'transaction')
+            ->where('transaction = :transaction')
+            ->setParameter('transaction', $transaction)
+            ->getQuery()
+            ->execute();
+
         $this->entityManager->flush($transaction);
     }
 

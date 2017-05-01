@@ -67,4 +67,22 @@ class GroupRepository implements GroupRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheetsGroup')
+            ->from(Group::class, 'sheetsGroup')
+            ->where('sheetsGroup.event = :event')
+            ->setParameter('event', $event)
+            ->orderBy('sheetsGroup.title')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

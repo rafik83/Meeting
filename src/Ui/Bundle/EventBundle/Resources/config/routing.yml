@@ -12,6 +12,11 @@ event_select_sheet:
     methods:  [GET]
     defaults: { _controller: EventBundle:MultipleSheets/Home:selectSheet }
 
+event_multiplesheets_request_list:
+    path: /multiplesheets/request/list
+    methods:  [GET]
+    defaults: { _controller: EventBundle:MultipleSheets/Request:list }
+
 #
 # Register
 #
