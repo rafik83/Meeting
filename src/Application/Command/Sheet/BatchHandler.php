@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
+
 class BatchHandler
 {
     /**
@@ -105,8 +107,11 @@ class BatchHandler
             ));
         }
 
-        if ($batch->assign && $batch->follower) {
-            return $this->batchAssignHandler->handle(new BatchAssign($batch->ids, $batch->follower));
+        if ($batch->assign && $batch->follower !== null) {
+            return $this->batchAssignHandler->handle(new BatchAssign(
+                $batch->ids,
+                $batch->follower !== FollowerConstant::UNASSIGNED_FOLLOWER ? $batch->follower : null
+            ));
         }
 
         if ($batch->accept) {

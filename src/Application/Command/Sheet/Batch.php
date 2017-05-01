@@ -46,7 +46,7 @@ class Batch extends AbstractBatch
     public $disable;
 
     /**
-     * @var Admin
+     * @var Admin|string|null
      */
     public $follower;
 
