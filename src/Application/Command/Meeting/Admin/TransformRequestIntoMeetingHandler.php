@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAnd
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
-use Proximum\Vimeet\Domain\Meeting\RequestCanBeMeetingChecker;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
@@ -34,9 +33,6 @@ class TransformRequestIntoMeetingHandler
     /** @var RequestSlotViewQueryHandler */
     private $requestSlotViewQueryHandler;
 
-    /** @var RequestCanBeMeetingChecker */
-    private $requestCanBeMeetingChecker;
-
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -47,7 +43,6 @@ class TransformRequestIntoMeetingHandler
      * @param MeetingRepositoryInterface  $meetingRepository
      * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
-     * @param RequestCanBeMeetingChecker  $requestCanBeMeetingChecker
      * @param \DateTimeInterface          $dateTime
      * @param DelayedEventDispatcher      $eventDispatcher
      */
@@ -55,14 +50,12 @@ class TransformRequestIntoMeetingHandler
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
-        RequestCanBeMeetingChecker $requestCanBeMeetingChecker,
         \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->meetingRepository           = $meetingRepository;
         $this->spotRepository              = $spotRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
-        $this->requestCanBeMeetingChecker  = $requestCanBeMeetingChecker;
         $this->dateTime                    = $dateTime;
         $this->eventDispatcher             = $eventDispatcher;
     }
@@ -76,7 +69,7 @@ class TransformRequestIntoMeetingHandler
      */
     public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting)
     {
-        if (false === $this->requestCanBeMeetingChecker->handle($transformRequestIntoMeeting->meetingRequest)) {
+        if (false === $transformRequestIntoMeeting->meetingRequest->isTransformableIntoMeeting()) {
             throw new MeetingRequestCanNotBeMeetingException();
         }
 
