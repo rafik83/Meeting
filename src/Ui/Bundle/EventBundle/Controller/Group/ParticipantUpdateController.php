@@ -90,7 +90,7 @@ class ParticipantUpdateController extends Controller
             );
         }
 
-        return $this->render('EventBundle:Sheet/Group/Participant:index.html.twig', [
+        return $this->render('EventBundle:Sheet/Group/Participant:update.html.twig', [
             'event'                => $event,
             'groupView'            => $groupView,
             'userParticipantViews' => $userParticipantViews,

@@ -8,28 +8,24 @@
 <section class="main mg-top">
     <header>
         <h1>
-            {{ groupView.title }}
-            -
-            {{ 'group.participant.title'|trans }}
+            <a href="{{ path('event_sheet_group_index', {'sheetGroup': groupView.id}) }}">{{ groupView.title }}</a>
+            /
+            {{ 'group.participant_update.title'|trans }}
         </h1>
 
     </header>
     <div class="main__container">
         {{ form_start(form) }}
             <div class="text-right">
-                <a href="{{ path('event_sheet_group_index', {'sheetGroup': groupView.id}) }}" class="btn btn-link">
-                    {{ 'group.request.list.link.home'|trans }}
-                </a>
-
                 <button type="submit" class="btn btn-primary">{{ 'form.group.participant.submit'|trans({}, 'forms') }}</button>
             </div>
 
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>{{ 'group.participant.list.participant'|trans }}</th>
-                        <th>{{ 'group.participant.list.email'|trans }}</th>
-                        <th class="col-md-7">{{ 'group.participant.list.sheets'|trans }}</th>
+                        <th>{{ 'group.participant_update.list.participant'|trans }}</th>
+                        <th>{{ 'group.participant_update.list.email'|trans }}</th>
+                        <th class="col-md-7">{{ 'group.participant_update.list.sheets'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
