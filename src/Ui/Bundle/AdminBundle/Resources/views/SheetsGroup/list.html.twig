@@ -1,0 +1,50 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.sheets_group.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">
+        {{ 'admin.sheets_group.title'|trans }}
+    </h1>
+
+    <div>
+        <a href="{{ path('admin_sheets_group_pre_create', {'event': event.id}) }}" class="btn btn-primary new-action">
+            {{ 'admin.sheets_group.create'|trans }}
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'admin.sheets_group.column.title'|trans }}</th>
+                <th>{{ 'admin.sheets_group.column.email_manager'|trans }}</th>
+                <th>{{ 'admin.sheets_group.column.sheet_list'|trans }}</th>
+                <th>{{ 'admin.sheets_group.column.created_at'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for groupView in groupViews %}
+                <tr>
+                    <td>{{ groupView.title }}</td>
+                    <td>{{ groupView.emailManager }}</td>
+                    <td>
+                        <ul>
+                            {% for sheetView in groupView.sheetViews %}
+                                <li>{{ sheetView.title }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        {{ groupView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">{{ 'admin.sheets_group.no_result'|trans }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

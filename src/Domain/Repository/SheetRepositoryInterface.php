@@ -265,4 +265,12 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByTypes(array $types);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
 }

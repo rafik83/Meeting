@@ -996,6 +996,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Index }
 
+    command.sheets_group.create_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
+
+    command.group.user_search_handler:
+            class: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUserHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.user_repository'
+                - '@user_to_group_manager_checker'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser }
+
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
         arguments:
@@ -2565,6 +2582,22 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery }
+
+    query.sheet.group.admin.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
+
+    query.sheet.group.admin.group_list_view_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQueryHandler
+        arguments:
+            - '@query.sheet.group.admin.group_view_handler'
+            - '@repository.sheet.group_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
 
     query.sheet.multiple.multiple_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQueryHandler
@@ -4290,4 +4323,15 @@ services:
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
+
+    #
+    # Group
+    #
+    query.group.sheet.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.planning.sheet_info_guesser_cache'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery }

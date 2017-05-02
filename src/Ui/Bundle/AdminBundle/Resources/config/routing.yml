@@ -1327,6 +1327,31 @@ admin_order_export_file:
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
 
 #
+# Group (Entités multi-fiches)
+#
+admin_sheets_group_list:
+    path: /event/{event}/sheets-group/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:list }
+
+admin_sheets_group_pre_create:
+    path: /event/{event}/sheets-group/pre-create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:preCreate }
+
+admin_sheets_group_create:
+    path: /event/{event}/sheets-group/{user}/create
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:create }
+
+#
 # Sheet attendance
 #
 admin_sheet_attend:
