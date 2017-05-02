@@ -29,11 +29,11 @@ class GroupContext implements Context
     }
 
     /**
-     * @Given /^the group "(?P<groupTitle>[^"]+)" is created$/
+     * @Given /^there is a group "(?P<groupTitle>[^"]+)" managed by this user$/
      *
-     * @param string|null $groupTitle
+     * @param string $groupTitle
      */
-    public function createGroup($groupTitle = null)
+    public function createGroup($groupTitle)
     {
         $event = $this->groupContextProxy->getStorage()->get('event');
 

@@ -7,13 +7,13 @@ Feature: Manage Group
     Given the database is purged
     And the event "Awsm Event" is created
     And the user "awsm@example.com" is created
-    And the group "Awsm Group" is created
+    And there is a group "Awsm Group" managed by this user
     And I am logged as admin
     When I go to this page "/admin/fr/event/1/sheets-group/list"
     Then I should see "Awsm Group"
     And I should see "awsm@example.com"
 
-  Scenario: I an create a group
+  Scenario: I can create a group
     As an admin I need to be able to create a group from an user email
     Given I am logged as admin
     And the event "Multisheet event" is created
@@ -52,5 +52,3 @@ Feature: Manage Group
       | search_user_sheets_group_email | multisheet@example.com |
     And I press "search_user_sheets_group_submit"
     Then I should see "validators.group.user_not_allowed_to_manage"
-
-

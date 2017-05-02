@@ -32,7 +32,7 @@ class GroupFactory
         $title = null
     ) {
         $event    = ($event !== null) ? $event : EventFactory::createEvent();
-        $user     = ($user !== null) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $user     = ($user !== null) ? $user : UserFactory::create();
         $dateTime = ($dateTime !== null) ? $dateTime : new DateTime();
         $title    = ($title !== null) ? $title : 'GroupTitle';
 

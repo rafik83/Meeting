@@ -40,7 +40,7 @@ class GroupManager
     }
 
     /**
-     * @param Event|        $event
+     * @param Event         $event
      * @param User|null     $user
      * @param DateTime|null $dateTime
      * @param string|null   $title

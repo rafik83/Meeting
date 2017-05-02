@@ -29,17 +29,12 @@ class UserContext implements Context
     /**
      * @Given /^the user "(?P<email>[^"]+)" is created$/
      *
-     * @param string|null $email
+     * @param string $email
      */
     public function create($email)
     {
-        $event = $this->userContextProxy->getStorage()->get('event');
-
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
-
         $user = $this->userContextProxy->getUserManager()->create($email);
+
         $this->userContextProxy->getStorage()->set('user', $user);
     }
 }

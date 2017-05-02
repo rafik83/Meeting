@@ -98,7 +98,6 @@ class GroupRepository implements GroupRepositoryInterface
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
-
     }
 
     /**
