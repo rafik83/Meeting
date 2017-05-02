@@ -159,10 +159,18 @@ class SheetView
     public $hasValidatedRequestNotScheduled;
 
     /**
+     * Sheet is attending the event
+     *
+     * @var bool
+     */
+    public $attend;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
      * @param int                 $countParticipant
+     * @param bool                $attend
      * @param SheetIndicatorsView $sheetIndicatorsView
      * @param bool                $hasFollower
      * @param null|FollowerView   $follower
@@ -175,6 +183,7 @@ class SheetView
         $title,
         $type,
         $countParticipant,
+        $attend,
         SheetIndicatorsView $sheetIndicatorsView,
         $hasFollower,
         $follower,
@@ -186,6 +195,7 @@ class SheetView
         $this->title                    = $title;
         $this->type                     = $type;
         $this->countParticipant         = $countParticipant;
+        $this->attend                   = $attend;
         $this->countRequest             = $sheetIndicatorsView->countRequest;
         $this->countProposition         = $sheetIndicatorsView->countProposition;
         $this->countValidatedRequest    = $sheetIndicatorsView->countValidatedRequest;
