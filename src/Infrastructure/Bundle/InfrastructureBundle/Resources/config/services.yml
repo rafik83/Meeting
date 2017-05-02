@@ -4477,7 +4477,6 @@ services:
     ##
     # Substitution Provider
     ##
-
     domain.messaging.substitutions.event_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\EventSubstitution
     domain.messaging.substitutions.owner_firstname_substitution:
