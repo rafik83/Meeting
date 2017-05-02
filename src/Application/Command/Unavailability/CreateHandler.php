@@ -68,7 +68,7 @@ class CreateHandler
         $locale = $create->locale;
 
         if (!$create->sheet->attend()) {
-            throw new CanNotCreateUnavailabilityException('As the sheet does not attend the event');
+            throw new CanNotCreateUnavailabilityException('The sheet does not attend the event');
         }
 
         if (empty($create->participants)) {
