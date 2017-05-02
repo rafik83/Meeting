@@ -12,7 +12,11 @@ function Batch(element)
 {
     this.element = element;
     this.batch   = false;
-    this.batchSelectionHelper = new BatchSelectionHelper(element);
+    this.batchSelectionHelper = null;
+
+    if (document.getElementById('batch-selection-helper') !== null) {
+        this.batchSelectionHelper = new BatchSelectionHelper(element);
+    }
 
     // Add check all
     [].forEach.call(element.querySelectorAll('[data-batch-all]'), function (item) {
@@ -133,12 +137,14 @@ Batch.prototype.toggleHelper = function (forceToggle) {
     var force = forceToggle || false;
     var sheetsPerPage = parseInt(this.element.dataset.pageSheets);
 
-    if (force === true) {
-        this.batchSelectionHelper.toggle(); // show or hide batch selection helper;
-    } else if (this.count() !== sheetsPerPage) {
-        this.batchSelectionHelper.disable();
-    } else if (this.count() === sheetsPerPage) {
-        this.batchSelectionHelper.enable();
+    if (this.batchSelectionHelper !== null) {
+        if (force === true) {
+            this.batchSelectionHelper.toggle(); // show or hide batch selection helper;
+        } else if (this.count() !== sheetsPerPage) {
+            this.batchSelectionHelper.disable();
+        } else if (this.count() === sheetsPerPage) {
+            this.batchSelectionHelper.enable();
+        }
     }
 };
 
