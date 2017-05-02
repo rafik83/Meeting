@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class GroupFactory
 {
     /**
-     * @param Event|null    $event
+     * @param Event         $event
      * @param User|null     $user
      * @param DateTime|null $dateTime
      * @param string|null   $title
@@ -26,12 +26,11 @@ class GroupFactory
      * @return Group
      */
     public static function createGroup(
-        Event $event = null,
+        Event $event,
         User $user = null,
         DateTime $dateTime = null,
         $title = null
     ) {
-        $event    = ($event !== null) ? $event : EventFactory::createEvent();
         $user     = ($user !== null) ? $user : UserFactory::create();
         $dateTime = ($dateTime !== null) ? $dateTime : new DateTime();
         $title    = ($title !== null) ? $title : 'GroupTitle';
