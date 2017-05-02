@@ -885,10 +885,22 @@ class Sheet implements TraceableInterface
 
     /**
      * @param Group $group
+     *
+     * @return $this
      */
     public function setGroup(Group $group)
     {
         $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGroup()
+    {
+        return null !== $this->getGroup();
     }
 
     /**

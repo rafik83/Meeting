@@ -761,4 +761,30 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                '(sheet.owner = :user OR participant.user = :user) 
+                AND sheet.event = :event
+                AND sheet.enable = true
+                AND sheet.group IS NOT NULL'
+            )
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+    }
 }

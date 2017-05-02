@@ -301,4 +301,12 @@ interface SheetRepositoryInterface
      * @param Int[] $ids
      */
     public function batchUnAssignBySheetsId(array $ids);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
 }
