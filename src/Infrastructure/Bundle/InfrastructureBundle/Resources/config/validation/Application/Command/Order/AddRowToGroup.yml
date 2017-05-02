@@ -4,5 +4,9 @@ Proximum\Vimeet\Application\Command\Order\AddRowToGroup:
             - NotBlank: ~
         price:
             - NotNull: ~
+            - Type:
+                type: float
         quantity:
             - NotNull: ~
+            - Type:
+                type: integer
