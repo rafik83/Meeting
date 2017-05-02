@@ -14,6 +14,15 @@
             </h1>
         </header>
         <div class="main__container">
+            <div>
+                {{ 'group.participants_list.caption.label'|trans }}
+                <div>
+                    <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-available"></div> {{ 'group.participants_list.caption.available.label'|trans }}
+                </div>
+                <div>
+                    <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-not-available"></div> {{ 'group.participants_list.caption.unavailable.label'|trans }}
+                </div>
+            </div>
             <table class="table">
                 <thead>
                 <tr>
