@@ -65,9 +65,7 @@ class DayViewQueryHandler
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
-                if ($happening->getHappening()->getBegin() >= $query->day->getStartTime()
-                    && $happening->getHappening()->getEnd() <= $query->day->getEndTime()
-                ) {
+                if ($query->day->contain($happening->getHappening())) {
                     $happeningViews[] = $this->happeningHandler->handle(
                         new HappeningViewQuery(
                             $happening->getHappening(),
@@ -79,9 +77,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->unavailabilities as $unavailability) {
-                if ($unavailability->getBegin() >= $query->day->getStartTime()
-                    && $unavailability->getEnd() <= $query->day->getEndTime()
-                ) {
+                if ($query->day->contain($unavailability)) {
                     $unavailabilities[] = $this->unavailabilityHandler->handle(
                         new UnavailabilityViewQuery($unavailability, $query->event)
                     );
@@ -89,9 +85,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->masses as $mass) {
-                if ($mass->getBegin() >= $query->day->getStartTime()
-                    && $mass->getEnd() <= $query->day->getEndTime()
-                ) {
+                if ($query->day->contain($mass)) {
                     $massView = $this->massHandler->handle(
                         new MassUnavailabilityViewQuery(
                             $mass,
@@ -108,9 +102,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->meetings as $meeting) {
-                if ($meeting->getSlot()->getBegin() >= $query->day->getStartTime()
-                    && $meeting->getSlot()->getEnd() <= $query->day->getEndTime()
-                ) {
+                if ($query->day->contain($meeting->getSlot())) {
                     $meetings[] = $this->meetingHandler->handle(
                         new MeetingViewQuery(
                             $meeting,
