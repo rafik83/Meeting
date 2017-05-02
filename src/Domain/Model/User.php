@@ -28,6 +28,19 @@ class User extends AbstractUser implements MailRecipientInterface
     private $welcomed = false;
 
     /**
+     * @param string $email
+     * @param string $salt
+     * @param string $password
+     * @param string $locale
+     */
+    public function __construct($email, $salt, $password, $locale)
+    {
+        parent::__construct($email, $salt, $password, $locale);
+
+        $this->account = new Account();
+    }
+
+    /**
      * @return Account
      */
     public function getAccount()
