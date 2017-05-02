@@ -10,13 +10,6 @@ class AgendaDayView
     public $slotViews;
 
     /**
-     * Day number incremented
-     *
-     * @var int
-     */
-    public $day;
-
-    /**
      * AgendaDayView constructor.
      *
      * @param SlotView[] $slotViews

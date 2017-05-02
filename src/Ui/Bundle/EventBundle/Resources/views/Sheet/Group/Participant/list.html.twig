@@ -43,25 +43,20 @@
                                 {{ sheetView.title }}
                             </a>
                         </td>
-                        <td>
-                            {% for participantView in sheetView.participantViews %}
-                                <div>{{ participantView.fullName }}</div>
-                            {% endfor %}
-                        </td>
-                        {% for dayNumber, day in groupView.days %}
-                            <td class="text-nowrap">
-                                {% for participantView in sheetView.participantViews %}
-                                    {% for dayViewNumber, dayView in participantView.dayViews %}
-                                        {% if dayNumber == dayViewNumber %}
-                                            <div class="text-center">
-                                            {% for slotView in dayView.slotViews %}
-                                                <div data-toggle="tooltip" title="{{ 'group.participants_list.slot.tooltip'|trans }} {{ slotView.beginEndHour }}" class="glyphicon glyphicon-stop user-availability-icon {{ slotView.isAnAvailableSlot ? "user-available" : "user-not-available" }}"></div>
-                                            {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                               {% endfor %}
+                        {% for participantView in sheetView.participantViews %}
+                            <td>
+                                {{ participantView.fullName }}
                             </td>
+                            {% for dayViewNumber, dayView in participantView.dayViews %}
+                                <td class="text-nowrap text-center">
+                                    {% for slotView in dayView.slotViews %}
+                                        <div data-toggle="tooltip" title="{{ 'group.participants_list.slot.tooltip'|trans }} {{ slotView.beginEndHour }}" class="glyphicon glyphicon-stop user-availability-icon {{ slotView.isAnAvailableSlot ? "user-available" : "user-not-available" }}"></div>
+                                    {% endfor %}
+                                </td>
+                            {% endfor %}
+                            {% if not loop.last %}
+                                </tr><tr>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
