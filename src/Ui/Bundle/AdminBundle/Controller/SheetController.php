@@ -121,7 +121,7 @@ class SheetController extends Controller
         }
 
         // Batch
-        $batch     = new Batch($this->getUser());
+        $batch     = new Batch($this->getUser(), $event->getAvailableLocale($request->getLocale()));
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
@@ -162,7 +162,7 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
-        $batch              = new Batch($this->getUser());
+        $batch              = new Batch($this->getUser(), $event->getAvailableLocale($request->getLocale()));
         $batchForm          = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
@@ -182,6 +182,7 @@ class SheetController extends Controller
                     $batch->disable         = $batchForm->get('disable')->isClicked();
                     $batch->addCatalog      = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog   = $batchForm->get('removeCatalog')->isClicked();
+                    $batch->assignToGroup   = $batchForm->get('assignToGroup')->isClicked();
 
                     if ($batchForm->has('generateInvoice')) {
                         $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();

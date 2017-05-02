@@ -909,8 +909,16 @@ services:
             - '@command.sheet.batch_draft_handler'
             - '@command.sheet.batch_validation_validate_handler'
             - '@command.sheet.batch_generate_invoice_handler'
+            - '@command.sheet.batch_assign_to_group_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
+
+    command.sheet.batch_assign_to_group_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignToGroupHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
     command.sheet.accept_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AcceptHandler
         arguments:
@@ -1677,6 +1685,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Invo\BatchGenerateInvoice }
+    command.sheet.attend_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AttendHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@sheet.happening_participation.enable_disable_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Attend }
 
     #
     # Security
@@ -2794,6 +2810,13 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHandler
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
+    query.sheet.attend.sheet_attendance_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQuery }
 
     ##
     # Navigation builder
@@ -4247,30 +4270,30 @@ services:
             - { name: console.command }
 
     #
-    # Group request queries
+    # Multiple sheets request queries
     #
-    query.group.request.sheet_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\SheetViewQueryHandler
+    query.multiple_sheets.request.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQueryHandler
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
-    query.group.request.participant_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\ParticipantViewQueryHandler
+    query.multiple_sheets.request.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQueryHandler
         arguments:
             - '@command.planning.participant_info_guesser_cache'
-    query.group.request.request_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\RequestViewQueryHandler
+    query.multiple_sheets.request.request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQueryHandler
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
-            - '@query.group.request.participant_view_query_handler'
-    query.group.request.sheet_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQueryHandler
+            - '@query.multiple_sheets.request.participant_view_query_handler'
+    query.multiple_sheets.request.sheet_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.planning.sheet_info_guesser_cache'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@query.group.request.sheet_view_query_handler'
-            - '@query.group.request.request_view_query_handler'
+            - '@query.multiple_sheets.request.sheet_view_query_handler'
+            - '@query.multiple_sheets.request.request_view_query_handler'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Request\SheetListViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQuery }
