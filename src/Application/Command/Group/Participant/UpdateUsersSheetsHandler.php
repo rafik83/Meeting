@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuer
 use Proximum\Vimeet\Application\View\Group\Participant\UpdateUsersSheetsResultView;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\UserToParticipant;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -31,6 +32,9 @@ class UpdateUsersSheetsHandler
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
     /** @var UsersParticipantViewQueryHandler */
     private $usersParticipantViewQueryHandler;
 
@@ -44,6 +48,7 @@ class UpdateUsersSheetsHandler
      * @param ParticipantRepositoryInterface   $participantRepository
      * @param UserRepositoryInterface          $userRepository
      * @param MeetingRepositoryInterface       $meetingRepository
+     * @param RequestRepositoryInterface       $requestRepository
      * @param UsersParticipantViewQueryHandler $usersParticipantViewQueryHandler
      * @param UserToParticipant                $userToParticipant
      * @param SheetInfoGuesserCache            $sheetInfoGuesserCache
@@ -52,6 +57,7 @@ class UpdateUsersSheetsHandler
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
         MeetingRepositoryInterface $meetingRepository,
+        RequestRepositoryInterface $requestRepository,
         UsersParticipantViewQueryHandler $usersParticipantViewQueryHandler,
         UserToParticipant $userToParticipant,
         SheetInfoGuesserCache $sheetInfoGuesserCache
@@ -59,6 +65,7 @@ class UpdateUsersSheetsHandler
         $this->participantRepository = $participantRepository;
         $this->userRepository = $userRepository;
         $this->meetingRepository = $meetingRepository;
+        $this->requestRepository = $requestRepository;
         $this->usersParticipantViewQueryHandler = $usersParticipantViewQueryHandler;
         $this->userToParticipant = $userToParticipant;
         $this->sheetInfoGuesserCache = $sheetInfoGuesserCache;
@@ -104,6 +111,15 @@ class UpdateUsersSheetsHandler
                     if (null !== $participantToDelete) {
                         if (1 === $sheet->countParticipants()) {
                             $updateUsersSheetsResultViews[] = UpdateUsersSheetsResultView::createSheetMustHaveAtLeastOneParticipant(
+                                $userParticipantViews[$userId]->fullname,
+                                $this->sheetInfoGuesserCache->guessSheetTitle($sheet, null)
+                            );
+
+                            continue;
+                        }
+
+                        if (true === $this->requestRepository->hasAssignedRequestByParticipant($participantToDelete)) {
+                            $updateUsersSheetsResultViews[] = UpdateUsersSheetsResultView::createHasMeetingRequestOnSheet(
                                 $userParticipantViews[$userId]->fullname,
                                 $this->sheetInfoGuesserCache->guessSheetTitle($sheet, null)
                             );

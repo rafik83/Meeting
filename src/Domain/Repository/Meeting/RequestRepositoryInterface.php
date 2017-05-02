@@ -245,4 +245,11 @@ interface RequestRepositoryInterface
      * @return bool
      */
     public function participantIsAssignedToAccepted(Participant $participant);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasAssignedRequestByParticipant(Participant $participant);
 }

@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\UserToParticipant;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -33,6 +34,7 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepositoryMock = $this->prophesize(ParticipantRepositoryInterface::class);
         $userRepositoryMock = $this->prophesize(UserRepositoryInterface::class);
         $meetingRepositoryMock = $this->prophesize(MeetingRepositoryInterface::class);
+        $requestRepositoryMock = $this->prophesize(RequestRepositoryInterface::class);
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
@@ -60,6 +62,7 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepositoryMock->reveal(),
             $userRepositoryMock->reveal(),
             $meetingRepositoryMock->reveal(),
+            $requestRepositoryMock->reveal(),
             $usersParticipantViewQueryHandlerMock->reveal(),
             $userToParticipantMock->reveal(),
             $sheetInfoGuesserCacheMock->reveal()
@@ -103,6 +106,7 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepositoryMock = $this->prophesize(ParticipantRepositoryInterface::class);
         $userRepositoryMock = $this->prophesize(UserRepositoryInterface::class);
         $meetingRepositoryMock = $this->prophesize(MeetingRepositoryInterface::class);
+        $requestRepositoryMock = $this->prophesize(RequestRepositoryInterface::class);
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
@@ -128,6 +132,7 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepositoryMock->reveal(),
             $userRepositoryMock->reveal(),
             $meetingRepositoryMock->reveal(),
+            $requestRepositoryMock->reveal(),
             $usersParticipantViewQueryHandlerMock->reveal(),
             $userToParticipantMock->reveal(),
             $sheetInfoGuesserCacheMock->reveal()
@@ -142,6 +147,11 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
             ->getParticipantForUserAndSheet($userMock->reveal(), $sheetMock2->reveal())
             ->shouldBeCalled()
             ->willReturn($participantMock->reveal());
+
+        $requestRepositoryMock
+            ->hasAssignedRequestByParticipant($participantMock->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false);
 
         $meetingRepositoryMock
             ->hasScheduledMeetingByParticipant($participantMock->reveal())
@@ -168,11 +178,12 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testRemoveUserFromSheetButAtLeastOneParticipantOnSheetIsNeeded()
+    public function testRemoveUserFromSheetWithParticipantHasMeetingRequest()
     {
         $participantRepositoryMock = $this->prophesize(ParticipantRepositoryInterface::class);
         $userRepositoryMock = $this->prophesize(UserRepositoryInterface::class);
         $meetingRepositoryMock = $this->prophesize(MeetingRepositoryInterface::class);
+        $requestRepositoryMock = $this->prophesize(RequestRepositoryInterface::class);
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
@@ -198,6 +209,83 @@ class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepositoryMock->reveal(),
             $userRepositoryMock->reveal(),
             $meetingRepositoryMock->reveal(),
+            $requestRepositoryMock->reveal(),
+            $usersParticipantViewQueryHandlerMock->reveal(),
+            $userToParticipantMock->reveal(),
+            $sheetInfoGuesserCacheMock->reveal()
+        );
+
+        $userRepositoryMock
+            ->getByIdsIndexedById([1])
+            ->shouldBeCalled()
+            ->willReturn([1 => $userMock->reveal()]);
+
+        $participantRepositoryMock
+            ->getParticipantForUserAndSheet($userMock->reveal(), $sheetMock2->reveal())
+            ->shouldBeCalled()
+            ->willReturn($participantMock->reveal());
+
+        $meetingRepositoryMock
+            ->hasScheduledMeetingByParticipant($participantMock->reveal())
+            ->shouldNotBeCalled();
+
+        $requestRepositoryMock
+            ->hasAssignedRequestByParticipant($participantMock->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $sheetInfoGuesserCacheMock->guessSheetTitle($sheetMock1->reveal(), null)->shouldNotBeCalled();
+        $sheetInfoGuesserCacheMock
+            ->guessSheetTitle($sheetMock2->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn('Sheet title 2');
+
+        $participantRepositoryMock->delete($participantMock->reveal())->shouldNotBeCalled();
+
+        $updateUsersSheets = new UpdateUsersSheets($groupMock->reveal(), $userParticipantViews);
+
+        $updateUsersSheets->sheetsByUser = [
+            1 => [$sheetMock1->reveal()],
+        ];
+
+        $this->assertEquals(
+            [UpdateUsersSheetsResultView::createHasMeetingRequestOnSheet('Jean Bon', 'Sheet title 2')],
+            $updateUsersSheetsHandler->handle($updateUsersSheets)
+        );
+    }
+
+    public function testRemoveUserFromSheetButAtLeastOneParticipantOnSheetIsNeeded()
+    {
+        $participantRepositoryMock = $this->prophesize(ParticipantRepositoryInterface::class);
+        $userRepositoryMock = $this->prophesize(UserRepositoryInterface::class);
+        $meetingRepositoryMock = $this->prophesize(MeetingRepositoryInterface::class);
+        $requestRepositoryMock = $this->prophesize(RequestRepositoryInterface::class);
+        $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
+        $userToParticipantMock = $this->prophesize(UserToParticipant::class);
+        $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
+
+        $groupMock = $this->prophesize(Group::class);
+
+        $sheetMock1 = $this->prophesize(Sheet::class);
+        $sheetMock2 = $this->prophesize(Sheet::class);
+
+        $userMock = $this->prophesize(User::class);
+
+        $participantMock = $this->prophesize(Participant::class);
+
+        $userParticipantViews = [
+            1 => new UserParticipantView(1, 'jean@bon.com', 'Jean Bon', [$sheetMock1->reveal(), $sheetMock2->reveal()]),
+        ];
+
+        $usersParticipantViewQueryHandlerMock
+            ->handle(new UsersParticipantViewQuery($groupMock->reveal()))
+            ->willReturn($userParticipantViews);
+
+        $updateUsersSheetsHandler = new UpdateUsersSheetsHandler(
+            $participantRepositoryMock->reveal(),
+            $userRepositoryMock->reveal(),
+            $meetingRepositoryMock->reveal(),
+            $requestRepositoryMock->reveal(),
             $usersParticipantViewQueryHandlerMock->reveal(),
             $userToParticipantMock->reveal(),
             $sheetInfoGuesserCacheMock->reveal()
