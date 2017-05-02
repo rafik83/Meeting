@@ -112,7 +112,7 @@ class DayView
     /**
      * @return bool
      */
-    public function hasSheetCancelAttendance()
+    public function isSheetAttendingTheEvent()
     {
         return $this->cancelAttendanceUnavailabilityView === null;
     }

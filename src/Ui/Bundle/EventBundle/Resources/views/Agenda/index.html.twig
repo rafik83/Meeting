@@ -54,7 +54,7 @@
                         </p>
                     </header>
                     <div class="meets">
-                        {% if day.hasSheetCancelAttendance %}
+                        {% if day.isSheetAttendingTheEvent %}
                             {% for happening in day.happenings %}
                                 {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'isUserAloneParticipant': agenda.isUserAloneParticipant }) }}
                             {% endfor %}
