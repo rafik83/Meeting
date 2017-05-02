@@ -114,6 +114,6 @@ class Day
      */
     public function contain(TimeRangeInterface $timeRange)
     {
-        return $timeRange->getBegin()>= $this->startTime && $timeRange->getEnd() <= $this->endTime;
+        return $timeRange->getBegin() >= $this->startTime && $timeRange->getEnd() <= $this->endTime;
     }
 }
