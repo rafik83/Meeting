@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
-
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\CancelAttendanceUnavailabilityView;
