@@ -8,18 +8,12 @@
     <section class="main mg-top">
         <header>
             <h1>
-                {{ groupView.title }}
+                <a href="{{ path('event_sheet_group_index', {'sheetGroup': groupView.id}) }}">{{ groupView.title }}</a>
+                /
+                {{ 'group.participants.title'|trans }}
             </h1>
         </header>
         <div class="main__container">
-            <div class="pull-right">
-                <a href="{{ path('event_sheet_group_participants_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
-                    {{ 'group.home.link.participants'|trans }}
-                </a>
-                <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default">
-                    {{ 'group.home.link.request'|trans }}
-                </a>
-            </div>
             <table class="table">
                 <thead>
                 <tr>

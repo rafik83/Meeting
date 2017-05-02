@@ -143,4 +143,8 @@ AgendaApiEndpoints.prototype.updateParticipantsOfRequestEndpoint = function (req
     return this.getPathname() + '/request/' + requestId + '/update/participants';
 };
 
+AgendaApiEndpoints.prototype.updateSheetAttendance = function (sheetId) {
+    return this.getPathname() + '/sheet/' + sheetId + '/attend/form';
+};
+
 module.exports = AgendaApiEndpoints;

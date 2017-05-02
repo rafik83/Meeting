@@ -7,18 +7,23 @@
     {% endif %}
 
     <div class="section__content">
-        <div class="list list--users">
-            {% if not isCatalog %}
-                {% for participant in participants.cardViews %}
-                    {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog }) }}
-                {% endfor %}
-            {% else %}
-                {% for participant in participants.cardViews %}
-                    {% if loop.index0 < item.numberOfParticipantShown %}
-                        {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog}) }}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+        <div class="list list--users sheet-participants-list-users">
+            {% for participant in participants.cardViews %}
+                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog }) }}
+
+                {% if not loop.last and loop.index == item.numberOfParticipantShown %}
+                    <div class="show-more-zone" style="display: none;">
+                {% endif %}
+                {% if loop.last and loop.index > item.numberOfParticipantShown %}
+                    </div>
+                    <div class="pull-right btn btn-link show-more-button"
+                         data-show-more-translation="{{ 'sheet.participant.seeMore.title'|trans }}"
+                         data-show-less-translation="{{ 'sheet.participant.seeLess.title'|trans }}"
+                        >
+                        <i class="icon-Voir_1"></i> {{ 'sheet.participant.seeMore.title'|trans }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 

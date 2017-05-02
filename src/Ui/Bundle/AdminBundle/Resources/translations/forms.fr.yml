@@ -578,13 +578,20 @@ form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
 form.select_recipients.children.recipients.label: Destinataires
+form.sheet_attendance_choice.children.attend.label: Venue de la fiche
+form.sheet_attendance_choice.children.attend.choice.attend: Présent
+form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
+form.sheet_attendance_choice.children.submit.label: Confirmer la modification
+form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
+form.sheet_batch.children.assignToGroup.label: 'Assigner'
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
+form.sheet_batch.children.group.label: 'Entité'
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -681,6 +688,29 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
+form.tip_create.children.title.label: 'Libellé back office'
+form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_create.children.submit.label: 'Créer le message d''aide'
+form.tip_create.children.translations.label_add: 'Ajouter une traduction'
+form.tip_create.children.translations.label_delete: 'Retirer la traduction'
+form.tip_create.children.translations.label: 'Traductions'
+form.tip_create.children.translations.prototype.label: 'Traductions'
+form.tip_create.children.translations.prototype.children.title.label: 'Libellé'
+form.tip_create.children.translations.prototype.children.locale.label: 'Langue'
+form.tip_create.children.translations.prototype.children.content.label: 'Contenu'
+form.tip_update.children.title.label: 'Libellé back office'
+form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_update.children.translations.prototype.label: 'Traductions'
+form.tip_update.children.translations.prototype.children.title.label: 'Libellé'
+form.tip_update.children.translations.prototype.children.locale.label: 'Langue'
+form.tip_update.children.translations.prototype.children.content.label: 'Contenu'
+form.tip_update.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_update.children.submit.label: 'Mettre à jour'
 form.transaction_find.children.beginDate.label: 'Date de début'
 form.transaction_find.children.date.placeholder: JJ/MM/AAAA
 form.transaction_find.children.endDate.label: 'Date de fin'

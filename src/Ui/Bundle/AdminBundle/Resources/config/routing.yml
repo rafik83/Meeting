@@ -417,6 +417,14 @@ admin_agenda_meeting_request_transform_into_meeting_handler:
     methods: [POST]
     defaults: { _controller: AdminBundle:Agenda/Meeting:handleTransformRequestIntoMeeting }
 
+admin_agenda_sheet_redirect_to_update_attendance:
+    path: /event/{event}/agenda/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:redirectToCancelAttendance }
+
 #
 # Meeting
 #
@@ -1324,3 +1332,34 @@ admin_order_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
+
+#
+# Sheet attendance
+#
+admin_sheet_attend:
+    path: /event/{event}/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:cancelAttendance }
+
+#
+# Tip
+#
+admin_tip_list:
+    path: /tip/list
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Tip:list }
+
+admin_tip_create:
+    path: /tip/create
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Tip:create }
+
+admin_tip_update:
+    path: /tip/{tip}/update
+    requirements:
+        tip: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Tip:update }

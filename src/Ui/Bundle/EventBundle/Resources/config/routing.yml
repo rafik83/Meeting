@@ -12,6 +12,11 @@ event_select_sheet:
     methods:  [GET]
     defaults: { _controller: EventBundle:MultipleSheets/Home:selectSheet }
 
+event_multiplesheets_request_list:
+    path: /multiplesheets/request/list
+    methods:  [GET]
+    defaults: { _controller: EventBundle:MultipleSheets/Request:list }
+
 #
 # Register
 #
@@ -402,61 +407,6 @@ event_catalog_sheet_meeting_request:
         toSheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
-
-#
-# Schedule
-#
-
-event_sheet_schedule:
-    path: /sheet/{sheet}/schedule
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Schedule:display }
-
-event_sheet_schedule_update_unavailability:
-    path: /sheet/{sheet}/schedule/unavailability/{unavailability}/update
-    requirements:
-        sheet: \d+
-        unavailability: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Schedule:updateUnavailability }
-
-event_sheet_schedule_remove_unavailability:
-    path: /sheet/{sheet}/schedule/unavailability/{unavailability}/remove
-    requirements:
-        sheet: \d+
-        unavailability: \d+
-    methods:  [DELETE]
-    defaults: { _controller: EventBundle:Schedule:removeUnavailability }
-
-#
-# Meeting
-#
-
-event_sheet_schedule_meeting:
-    path: /sheet/{sheet}/meeting/{meeting}
-    requirements:
-        sheet: \d+
-        meeting: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Meeting:display }
-
-event_sheet_schedule_meeting_cancel:
-    path: /sheet/{sheet}/meeting/{meeting}/cancel
-    requirements:
-        sheet: \d+
-        meeting: \d+
-    methods:  [GET, DELETE]
-    defaults: { _controller: EventBundle:Meeting:cancel }
-
-event_sheet_schedule_meeting_update:
-    path: /sheet/{sheet}/meeting/{meeting}/update
-    requirements:
-        sheet: \d+
-        meeting: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Meeting:update }
 
 #
 # Meeting Request

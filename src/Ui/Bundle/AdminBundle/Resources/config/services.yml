@@ -112,6 +112,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
         tags:
@@ -120,6 +121,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType
         arguments:
             - '%infrastructure.supported_currencies%'
+            - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
         tags:
@@ -262,6 +264,19 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
             - '@infrastructure.service.boolean_filters_builder'
+        tags:
+            - { name: form.type }
+    form_type.admin.tip_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\TipTranslationType
+        arguments:
+            - '%infrastructure.preferred_locales%'
+        tags:
+            - { name: form.type }
+
+    form_type_group.group_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group\GroupChoiceType
+        arguments:
+            - '@repository.sheet.group_repository'
         tags:
             - { name: form.type }
 

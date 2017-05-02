@@ -21,6 +21,8 @@ use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
@@ -102,17 +104,24 @@ class MeetingRequestController extends Controller
 
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render($template, [
-            'event'                    => $event,
-            'sheet'                    => $sheet,
-            'meetingRequestView'       => $meetingRequestListView,
-            'stateListsView'           => $stateListsView,
-            'searchForm'               => $searchForm->createView(),
-            'isCatalog'                => true, // set menu link visible,
-            'isMeeting'                => true,
-            'isEventOpen'              => $isEventOpen,
+            'event'               => $event,
+            'sheet'               => $sheet,
+            'meetingRequestView'  => $meetingRequestListView,
+            'stateListsView'      => $stateListsView,
+            'searchForm'          => $searchForm->createView(),
+            'isCatalog'           => true, // set menu link visible,
+            'isMeeting'           => true,
+            'isEventOpen'         => $isEventOpen,
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
-            'resultsCount'             => count($meetingRequestListView->getMeetingRequestsView()),
+            'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 
