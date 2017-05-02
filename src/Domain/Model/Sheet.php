@@ -883,7 +883,6 @@ class Sheet implements TraceableInterface
     }
 
     /**
-
      * @param Group $group
      */
     public function setGroup(Group $group)
