@@ -46,7 +46,7 @@ interface GroupRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return Group
+     * @return Group[]
      */
     public function getByEvent(Event $event);
 }
