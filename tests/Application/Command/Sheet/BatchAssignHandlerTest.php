@@ -76,7 +76,7 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
-        $sheetRepository->batchUnAssignBySheetsIds([1, 2, 3])->shouldBeCalled();
+        $sheetRepository->batchUnAssignBySheetsId([1, 2, 3])->shouldBeCalled();
 
         $command = new BatchAssign([1, 2, 3], null);
 

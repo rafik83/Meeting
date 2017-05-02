@@ -50,7 +50,7 @@ class BatchAssignHandler
         if (false === $batchAssign->unassigned()) {
             $this->sheetRepository->batchAssignBySheetsId($batchAssign->ids, $batchAssign->admin);
         } else {
-            $this->sheetRepository->batchUnAssignBySheetsIds($batchAssign->ids);
+            $this->sheetRepository->batchUnAssignBySheetsId($batchAssign->ids);
         }
 
         $endMessage = 'assign.success';

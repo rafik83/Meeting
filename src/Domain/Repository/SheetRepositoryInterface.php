@@ -300,5 +300,5 @@ interface SheetRepositoryInterface
     /**
      * @param Int[] $ids
      */
-    public function batchUnAssignBySheetsIds(array $ids);
+    public function batchUnAssignBySheetsId(array $ids);
 }
