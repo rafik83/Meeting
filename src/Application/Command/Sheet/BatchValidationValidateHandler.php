@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchValidationValidateHandler
 {
@@ -24,30 +24,30 @@ class BatchValidationValidateHandler
     private $sheetRepository;
 
     /**
-     * @var DelayedEventDispatcher
+     * @var BatchJobQueueInterface
      */
-    private $eventDispatcher;
+    private $batchJobQueue;
 
     /**
-     * @var \DateTimeInterface
+     * @var JobQueueInterface
      */
-    private $datetime;
+    private $jobQueue;
 
     /**
      * BatchValidationValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param DelayedEventDispatcher   $eventDispatcher
-     * @param \DateTimeInterface       $datetime
+     * @param BatchJobQueueInterface   $batchJobQueue
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime
+        BatchJobQueueInterface $batchJobQueue,
+        JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->batchJobQueue   = $batchJobQueue;
+        $this->jobQueue        = $jobQueue;
     }
 
     /**
@@ -59,20 +59,19 @@ class BatchValidationValidateHandler
     {
         $sheets = $this->sheetRepository->getSheetsById($batch->ids);
 
-        foreach ($sheets as $sheet) {
-            if (!$sheet->getValidationState() !== Sheet::STATE_VALIDATION_VALIDATED) {
-                $sheet->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
-                $this->sheetRepository->set($sheet);
+        $this->sheetRepository->updateValidationState(
+            $batch->ids,
+            Sheet::STATE_VALIDATION_VALIDATED
+        );
 
-                $this->eventDispatcher->dispatch(
-                    Events::SHEET_VALIDATION_VALIDATE,
-                    new SheetValidationValidateEvent(
-                        $sheet,
-                        $batch->admin,
-                        $this->datetime
-                    )
-                );
-            }
+        if (!empty($batch->ids)) {
+            // reindex sheets
+            $this->jobQueue->indexSheets($batch->ids);
+
+            // send email
+            $this->jobQueue->sendEmailing($batch->event, $batch->ids, Events::SHEET_VALIDATION_VALIDATE, true);
+
+            $this->batchJobQueue->createJob($batch->ids, $batch->admin);
         }
 
         return new BatchResult(count($sheets), $batch->getMessage() . 'validation.validate.success');

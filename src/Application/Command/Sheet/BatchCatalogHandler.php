@@ -10,31 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchCatalogHandler
 {
+    const ADD_CATALOG    = 'add';
+    const REMOVE_CATALOG = 'remove';
+
     /**
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var DelayedEventDispatcher
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
 
     /**
      * @var MeetingRepositoryInterface
@@ -47,34 +37,28 @@ class BatchCatalogHandler
     private $sheetInfoGuesser;
 
     /**
-     * @var EnableDisableManager
+     * @var BatchJobQueueInterface
      */
-    private $enableDisableManager;
+    private $batchJobQueue;
 
     /**
      * BatchCatalogHandler constructor.
      *
      * @param SheetRepositoryInterface   $sheetRepository
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param \DateTimeInterface         $datetime
      * @param MeetingRepositoryInterface $meetingRepository
      * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param EnableDisableManager       $enableDisableManager
+     * @param BatchJobQueueInterface     $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime,
         MeetingRepositoryInterface $meetingRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        EnableDisableManager $enableDisableManager
+        BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository   = $sheetRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->datetime          = $datetime;
         $this->meetingRepository = $meetingRepository;
         $this->sheetInfoGuesser  = $sheetInfoGuesser;
-        $this->enableDisableManager = $enableDisableManager;
+        $this->batchJobQueue     = $batchJobQueue;
     }
 
     /**
@@ -84,52 +68,38 @@ class BatchCatalogHandler
      */
     public function handle(BatchCatalog $command)
     {
-        $sheets = $this->sheetRepository->getSheetsById($command->ids);
-        $ignoredSheets = [];
+        $sheets               = $this->sheetRepository->getSheetsById($command->ids);
+        $ignoredSheets        = [];
         $ignoredSheetsMessage = '';
-        $message = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
+        $message              = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
 
-        foreach ($sheets as $sheet) {
-            // If try to remove from catalog
-            if (!$command->state) {
-                if ($this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
-                    $ignoredSheets[] = $sheet;
+        $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($command->ids);
 
-                    continue;
+        foreach ($command->ids as $index => $id) {
+            if (isset($sheets[$id])) {
+                $sheet = $sheets[$id];
+                // If try to remove from catalog
+                if ($command->state === false) {
+                    if (isset($meetings[$id]) && $meetings[$id] > 0) {
+                        $ignoredSheets[] = $sheet;
+                        $this->excludeSheetFromBatch($command, $index);
+                    }
+                } elseif ($command->state === true) {
+                    if (!$sheet->isEnabled()) {
+                        $ignoredSheets[] = $sheet;
+                        $this->excludeSheetFromBatch($command, $index);
+                    }
                 }
             }
-
-            if ($command->state === true) {
-                if (!$sheet->isEnabled()) {
-                    $ignoredSheets[] = $sheet;
-
-                    continue;
-                }
-                $sheet->setInCatalogAt($this->datetime);
-            }
-            $sheet->setInCatalog($command->state);
-
-            $this->enableDisableManager->update($sheet, $command->state);
-
-            // trace state in catalog change only
-            if ($sheet->isInCatalog() !== $command->state) {
-                $this->eventDispatcher->dispatch(
-                    Events::SHEET_CATALOG,
-                    new SheetCatalogEvent(
-                        $sheet,
-                        $command->admin,
-                        $this->datetime,
-                        $command->state
-                    )
-                );
-            }
-
-            $this->sheetRepository->set($sheet);
         }
+
+        // update sheets in catalog state and set in catalog date
+        $this->sheetRepository->updateInCatalogBySheetsId($command->ids, $command->state);
 
         if (count($ignoredSheets) > 0) {
             $message = $command->state ? 'catalog.add.warning' : 'catalog.remove.warning';
-            $locale = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
+            $locale  = $ignoredSheets[0]->getEvent()->getAvailableLocale($command->admin->getLocale());
+
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ', array_map(function (Sheet $sheet) use ($locale) {
                 return $this->sheetInfoGuesser->guessSheetTitle(
@@ -139,6 +109,23 @@ class BatchCatalogHandler
             }, $ignoredSheets));
         }
 
+        if (!empty($command->ids)) {
+            $this->batchJobQueue->createJob($command->ids, $command->admin, [
+                'state' => $command->state ? self::ADD_CATALOG : self::REMOVE_CATALOG,
+            ]);
+        }
+
         return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
+    }
+
+    /**
+     * Remove a specific sheet id from the pull of batch IDs
+     *
+     * @param BatchCatalog $command
+     * @param int          $index
+     */
+    private function excludeSheetFromBatch(BatchCatalog $command, $index)
+    {
+        unset($command->ids[$index]);
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -31,6 +32,36 @@ interface SheetRepositoryInterface
      * @param Sheet $sheet
      */
     public function set(Sheet $sheet);
+
+    /**
+     * @param int[] $ids
+     * @param bool  $state
+     */
+    public function updateInCatalogBySheetsId(array $ids, $state);
+
+    /**
+     * @param int[] $ids
+     * @param bool  $state
+     */
+    public function updateEnableStateBySheetsId(array $ids, $state);
+
+    /**
+     * @param int[]  $ids
+     * @param string $state
+     */
+    public function updateStateBySheetsId(array $ids, $state);
+
+    /**
+     * @param int[] $ids
+     * @param Admin $admin
+     */
+    public function batchAssignBySheetsId(array $ids, Admin $admin);
+
+    /**
+     * @param int[]  $ids
+     * @param string $state
+     */
+    public function updateValidationState(array $ids, $state);
 
     /**
      * @param Event $event
@@ -265,6 +296,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByTypes(array $types);
+
+    /**
+     * @param Int[] $ids
+     */
+    public function batchUnAssignBySheetsId(array $ids);
 
     /**
      * @param User  $user

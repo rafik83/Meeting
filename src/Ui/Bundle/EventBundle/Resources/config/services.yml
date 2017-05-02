@@ -127,12 +127,6 @@ services:
             - '@markdown'
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type_meeting.meeting_request_update_to_type:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType
-        arguments:
-            - '@template.participant_info_guesser'
-        tags:
-            - { name: form.type }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
         arguments:
@@ -332,17 +326,6 @@ services:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@repository.transaction'
             - '@order.balance'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    event_listener.sheet_invoiced_event_listener:
-        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SheetInvoicedEventSubscriber
-        arguments:
-            - '@components.invoice.invoice_url_view_query_handler'
-            - '@repository.billing_info_repository'
-            - '@adapter.mailer_adapter'
-            - '@event_sender'
-            - '@adapter.event_url_generator'
         tags:
             - { name: kernel.event_subscriber }
 

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -257,7 +258,14 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getSheetsById(array $ids)
     {
-        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('sheet.id');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -607,6 +615,60 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function updateInCatalogBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.inCatalog', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        if ($state === true) {
+            $queryBuilder->set('sheet.inCatalogAt', ':date')
+                ->setParameter('date', new \DateTime());
+        }
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateEnableStateBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.enable', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStateBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.state', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->andWhere('sheet.state != :state')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getBySheetTemplate(SheetTemplate $sheetTemplate)
     {
         $queryBuilder = $this
@@ -623,6 +685,23 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function updateValidationState(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->andWhere('sheet.validationState != :state')
+            ->set('sheet.validationState', ':state')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getByRegistrationTemplate(RegistrationTemplate $registrationTemplate)
     {
         $queryBuilder = $this
@@ -634,6 +713,37 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('registrationTemplate', $registrationTemplate);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function batchAssignBySheetsId(array $ids, Admin $admin)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.follower', ':follower')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('follower', $admin);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function batchUnAssignBySheetsId(array $ids)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.follower', 'NULL')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->execute();
     }
 
     /**

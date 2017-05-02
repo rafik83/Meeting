@@ -11,10 +11,13 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidate;
 use Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Validate;
 use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -27,32 +30,44 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event   = EventFactory::createEvent();
-        $type    = new Type($event);
         $date    = new \DateTime();
         $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
         $comment = 'truc muche';
 
-        $user1  = new User('test@test.com', 'salt', 'password', 'fr');
-        $user2  = new User('test@test.com', 'salt', 'password', 'fr');
-        $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, $date);
-        $sheet1->markAsValidated();
-        $sheet2 = new Sheet($event, $type, [], $user2, $date);
-        $sheet2->markAsValidated();
-        $sheet3 = new Sheet($event, $type, [], $user3, $date);
-        $sheet3->markAsValidated();
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->shouldBeCalled()->willReturn(2);
+        $sheet3 = $this->prophesize(Sheet::class);
+        $sheet3->getId()->shouldBeCalled()->willReturn(3);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $validateHandler = $this->prophesize(ValidateHandler::class);
+        $batchJobQueue   = $this->prophesize(BatchJobQueueInterface::class);
+        $jobQueue        = $this->prophesize(JobQueueInterface::class);
 
-        $sheetRepository->getUnvalidatedSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
-        $validateHandler->handle(Argument::type(Validate::class))->shouldBeCalledTimes(2);
+        $sheetRepository->getUnvalidatedSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
-        $command = new BatchValidate([1, 2, 3], $admin, $comment);
+        $sheetRepository->updateStateBySheetsId([1, 2, 3], Sheet::STATE_VALIDATED)->shouldBeCalled();
 
-        $handler = new BatchValidateHandler($sheetRepository->reveal(), $validateHandler->reveal(), $date);
+        $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
+
+        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATED, true)->shouldBeCalled();
+
+        $batchJobQueue->createJob(
+            [1, 2, 3],
+            $admin,
+            ['comment' => $comment]
+        )->shouldBeCalled();
+
+        $command = new BatchValidate($event, [1, 2, 3], $admin, $comment);
+
+        $handler = new BatchValidateHandler(
+            $sheetRepository->reveal(),
+            $batchJobQueue->reveal(),
+            $jobQueue->reveal()
+        );
         $result  = $handler->handle($command);
 
-        $this->assertEquals(2, $result->count);
+        $this->assertEquals(3, $result->count);
     }
 }

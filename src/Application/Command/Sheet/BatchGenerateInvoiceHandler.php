@@ -32,7 +32,7 @@ class BatchGenerateInvoiceHandler
      */
     public function handle(BatchGenerateInvoice $batchGenerateInvoice)
     {
-        $this->jobQueue->generateInvoice($batchGenerateInvoice->ids, $batchGenerateInvoice->admin);
+        $this->jobQueue->generateInvoice($batchGenerateInvoice->event, $batchGenerateInvoice->ids, $batchGenerateInvoice->admin);
 
         return new BatchResult(
             count($batchGenerateInvoice->ids),

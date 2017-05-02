@@ -124,6 +124,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetIds(Event $event, array $filters, $locale)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $query   = new Query($builder->getQuery());
+        $query->setFields(['id']);
+
+        return array_map(function (Result $sheet) {
+            return $sheet->id[0];
+        }, $this->searchable->search($query, ['limit' => 100000])->getResults());
+    }
 
     /**
      * {@inheritdoc}
