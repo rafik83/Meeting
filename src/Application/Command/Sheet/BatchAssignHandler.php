@@ -41,7 +41,9 @@ class BatchAssignHandler
         // Get sheets
         $sheets = $this->sheetRepository->getSheetsById($batchAssign->ids);
 
-        if (!$batchAssign->admin->isOrganizer() && !$batchAssign->admin->isOperator()) {
+        if ($batchAssign->admin !== null
+            && !$batchAssign->admin->isOrganizer() && !$batchAssign->admin->isOperator()
+        ) {
             throw new SheetException('Follower must be an organizer or operator.');
         }
 

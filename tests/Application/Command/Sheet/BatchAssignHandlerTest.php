@@ -33,16 +33,18 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2   = new Sheet($event, $type, [], $user2, $dateTime);
         $sheet3   = new Sheet($event, $type, [], $user3, $dateTime);
 
-        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER, $dateTime);
+        $organizer = $this->prophesize(Admin::class);
+        $organizer->isOrganizer()->willReturn(true);
+        $organizer->isOperator()->willReturn(false);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
         $sheetRepository
-            ->batchAssignBySheetsId([1, 2, 3], $organizer)
+            ->batchAssignBySheetsId([1, 2, 3], $organizer->reveal())
             ->shouldBeCalled();
 
-        $command = new BatchAssign([1, 2, 3], $organizer);
+        $command = new BatchAssign([1, 2, 3], $organizer->reveal());
 
         $handler = new BatchAssignHandler($sheetRepository->reveal());
         $result  = $handler->handle($command);
@@ -63,17 +65,18 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2   = new Sheet($event, $type, [], $user2, $dateTime);
         $sheet3   = new Sheet($event, $type, [], $user3, $dateTime);
 
-        $organizer = new Admin('test@test.com', '', '', 'fr', 'Test', 'Test', Admin::ROLE_ORGANIZER, $dateTime);
-        $sheet1->assign($organizer);
-        $sheet2->assign($organizer);
-        $sheet3->assign($organizer);
+        $organizer = $this->prophesize(Admin::class);
+        $organizer->isOrganizer()->willReturn(true);
+        $organizer->isOperator()->willReturn(false);
+
+        $sheet1->assign($organizer->reveal());
+        $sheet2->assign($organizer->reveal());
+        $sheet3->assign($organizer->reveal());
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
-        $sheetRepository->set(Argument::that(function (Sheet $sheet) {
-            return $sheet->getFollower() === null;
-        }))->shouldBeCalledTimes(3);
+        $sheetRepository->batchUnAssignBySheetsIds([1, 2, 3])->shouldBeCalled();
 
         $command = new BatchAssign([1, 2, 3], null);
 
