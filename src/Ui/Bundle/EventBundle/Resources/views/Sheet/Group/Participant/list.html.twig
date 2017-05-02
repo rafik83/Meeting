@@ -14,23 +14,23 @@
             </h1>
         </header>
         <div class="main__container">
-            <div>
-                {{ 'group.participants_list.caption.label'|trans }}
-                <div>
-                    <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-available"></div> {{ 'group.participants_list.caption.available.label'|trans }}
-                </div>
-                <div>
-                    <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-not-available"></div> {{ 'group.participants_list.caption.unavailable.label'|trans }}
-                </div>
-            </div>
             <table class="table">
                 <thead>
                 <tr>
-                    <th>
+                    <th rowspan="2">
                         {{ 'sheet.title'|trans }}
                     </th>
-                    <th>
+                    <th rowspan="2">
+                        {{ 'group.participants_list.participant'|trans }}
                     </th>
+                    <th colspan="{{ groupView.days|length }}" class="text-center">
+                        <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-available"></div>
+                        {{ 'group.participants_list.caption.available.label'|trans }}
+                        <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-not-available mg-left"></div>
+                        {{ 'group.participants_list.caption.unavailable.label'|trans }}
+                    </th>
+                </tr>
+                <tr>
                     {% for day in groupView.days %}
                         <th class="col-md-1 text-center">
                             {{ 'group.participants_list.day.label'|trans }} {{ loop.index }}
