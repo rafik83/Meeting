@@ -169,7 +169,7 @@ class Trace
     {
         foreach ($traces as $trace) {
             if ($trace->getObjectType() === $traceable->getTraceableName()
-                && $trace->getId() === $traceable->getId()
+                && $trace->getObjectId() === $traceable->getId()
             ) {
                 return $trace;
             }
