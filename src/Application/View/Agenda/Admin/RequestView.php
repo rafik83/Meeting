@@ -38,6 +38,11 @@ class RequestView
     public $isTransformableIntoMeeting;
 
     /**
+     * @var bool
+     */
+    public $isOneOfSheetsNotAttend;
+
+    /**
      * RequestView constructor.
      *
      * @param int               $requestId
@@ -45,18 +50,21 @@ class RequestView
      * @param int               $sheetMetId
      * @param ParticipantView[] $participants
      * @param bool              $isTransformableIntoMeeting
+     * @param bool              $isOneOfSheetsNotAttend
      */
     public function __construct(
         $requestId,
         $sheetMetTitle,
         $sheetMetId,
         array $participants,
-        $isTransformableIntoMeeting
+        $isTransformableIntoMeeting,
+        $isOneOfSheetsNotAttend
     ) {
         $this->requestId                  = $requestId;
         $this->sheetMetTitle              = $sheetMetTitle;
         $this->sheetMetId                 = $sheetMetId;
         $this->participants               = $participants;
         $this->isTransformableIntoMeeting = $isTransformableIntoMeeting;
+        $this->isOneOfSheetsNotAttend     = $isOneOfSheetsNotAttend;
     }
 }

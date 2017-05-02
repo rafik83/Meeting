@@ -19,6 +19,7 @@ use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
+use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -31,7 +32,6 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilder;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 
 class SheetSearchQueryBuilder
@@ -402,7 +402,7 @@ class SheetSearchQueryBuilder
             $followerQuery = new BoolQuery();
 
             foreach ($followers as $follower) {
-                if ($follower === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
+                if ($follower === FollowerConstant::UNASSIGNED_FOLLOWER) {
                     $matchFollower = new Term();
                     $matchFollower->setTerm('followUp', 0);
                     $followerQuery->addShould($matchFollower);

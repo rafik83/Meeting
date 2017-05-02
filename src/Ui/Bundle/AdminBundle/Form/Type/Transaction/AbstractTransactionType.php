@@ -28,7 +28,6 @@ abstract class AbstractTransactionType extends AbstractType
         $builder
             ->add('amount', NumberType::class)
             ->add('date', DateTimeType::class)
-            ->add('mode', TransactionModeType::class, ['placeholder' => ''])
             ->add('reference', TextType::class, ['required' => false])
             ->add('state', ChoiceType::class, [
                 'required' => true,

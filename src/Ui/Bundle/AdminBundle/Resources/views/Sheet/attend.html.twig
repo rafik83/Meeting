@@ -1,0 +1,21 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.sheet.attend.title'|trans({'%sheetTitle%': view.sheetTitle}) %}
+
+{% block form_title 'admin.sheet.attend.title'|trans({'%sheetTitle%': view.sheetTitle}) %}
+
+{% block form_content %}
+    {% if view.numberOfMeetings > 0 %}
+        <div class="alert alert-danger">
+            {{ 'admin.sheet.attend.danger.numberOfMeetings'|trans({'%numberOfMeetings%': view.numberOfMeetings}) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            {{ 'admin.sheet.attend.info.numberOfMeetings'|trans() }}
+        </div>
+    {% endif %}
+
+    {{ form_row(form.attend) }}
+{% endblock %}
+
+{% block goback_link path('admin_sheet_details', {event: event.id, sheet: view.sheetId}) %}

@@ -120,6 +120,14 @@ class SheetView
     public $hasNotEnoughAvailableSlot;
 
     /**
+     * The sheet has a participant which is not available at all during the event
+     * but has a meeting request explicitly associated to him/her
+     *
+     * @var bool
+     */
+    public $hasParticipantUnavailableWithMeetingRequest;
+
+    /**
      * @var bool
      */
     public $hasFollower;
@@ -151,31 +159,43 @@ class SheetView
     public $hasValidatedRequestNotScheduled;
 
     /**
+     * Sheet is attending the event
+     *
+     * @var bool
+     */
+    public $attend;
+
+    /**
      * @param int                 $id
      * @param string              $title
      * @param string              $type
      * @param int                 $countParticipant
+     * @param bool                $attend
      * @param SheetIndicatorsView $sheetIndicatorsView
      * @param bool                $hasFollower
      * @param null|FollowerView   $follower
      * @param string              $url
      * @param array               $participants
+     * @param bool                $hasParticipantUnavailableWithMeetingRequest
      */
     public function __construct(
         $id,
         $title,
         $type,
         $countParticipant,
+        $attend,
         SheetIndicatorsView $sheetIndicatorsView,
         $hasFollower,
         $follower,
         $url,
-        array $participants
+        array $participants,
+        $hasParticipantUnavailableWithMeetingRequest = false
     ) {
         $this->id                       = $id;
         $this->title                    = $title;
         $this->type                     = $type;
         $this->countParticipant         = $countParticipant;
+        $this->attend                   = $attend;
         $this->countRequest             = $sheetIndicatorsView->countRequest;
         $this->countProposition         = $sheetIndicatorsView->countProposition;
         $this->countValidatedRequest    = $sheetIndicatorsView->countValidatedRequest;
@@ -187,6 +207,12 @@ class SheetView
         $this->url                      = $url;
         $this->participants             = $participants;
         $this->follower                 = $follower;
+
+        $this->hasParticipantUnavailableWithMeetingRequest = $hasParticipantUnavailableWithMeetingRequest;
+
+        $this->hasNotEnoughAvailableSlot = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
+        $this->hasNotSentMeetingRequest  = $sheetIndicatorsView->hasNotSentMeetingRequest;
+        $this->hasMeetingToApprove       = $sheetIndicatorsView->hasMeetingToApprove;
 
         $this->hasNotEnoughAvailableSlot       = $sheetIndicatorsView->hasNotEnoughAvailableSlot;
         $this->hasNotSentMeetingRequest        = $sheetIndicatorsView->hasNotSentMeetingRequest;

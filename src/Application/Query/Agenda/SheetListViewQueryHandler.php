@@ -115,6 +115,8 @@ class SheetListViewQueryHandler
             $follower = $sheet->getFollower() ? $sheet->getFollower() : null;
 
             $participants = [];
+            $hasParticipantUnavailableWithMeetingRequest = false;
+
             foreach ($sheet->getParticipants() as $participant) {
 
                 $fullname = $this
@@ -128,9 +130,14 @@ class SheetListViewQueryHandler
                     $participant->getUser()->getEmail(),
                     []
                 );
+
+                if ($participant->isFullyUnavailable() && $participant->hasRequestAssigned()) {
+                    $hasParticipantUnavailableWithMeetingRequest = true;
+                }
             }
 
             $followerView = null;
+
             if (null !== $follower) {
                 $followerView = new FollowerView(
                         $follower->getId(),
@@ -144,6 +151,7 @@ class SheetListViewQueryHandler
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
+                $sheet->attend(),
                 $sheetIndicatorsView,
                 null !== $follower,
                 $followerView,
@@ -151,7 +159,8 @@ class SheetListViewQueryHandler
                     'admin_sheet_details',
                     ['sheet' => $sheet->getId(), 'event' => $sheetListViewQuery->event->getId()]
                 ),
-                $participants
+                $participants,
+                $hasParticipantUnavailableWithMeetingRequest
             );
         }
 

@@ -36,13 +36,6 @@ class Trace
     private $id;
 
     /**
-     * Composed of TraceableName + ID
-     *
-     * @var string
-     */
-    private $object;
-
-    /**
      * @var string
      */
     private $action;
@@ -68,6 +61,16 @@ class Trace
     private $comment;
 
     /**
+     * @var string
+     */
+    private $objectType;
+
+    /**
+     * @var int
+     */
+    private $objectId;
+
+    /**
      * @param TraceableInterface $traceable
      * @param string             $action
      * @param DateTimeInterface  $date
@@ -81,10 +84,11 @@ class Trace
         $comment,
         AbstractUser $abstractUser = null
     ) {
-        $this->object  = sprintf('%s%s', $traceable->getTraceableName(), $traceable->getId());
-        $this->action  = $action;
-        $this->date    = $date;
-        $this->comment = $comment;
+        $this->objectType = $traceable->getTraceableName();
+        $this->objectId   = $traceable->getId();
+        $this->action     = $action;
+        $this->date       = $date;
+        $this->comment    = $comment;
 
         if ($abstractUser instanceof User) {
             $this->user = $abstractUser;
@@ -142,9 +146,17 @@ class Trace
     /**
      * @return string
      */
-    public function getObject()
+    public function getObjectType()
     {
-        return $this->object;
+        return $this->objectType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getObjectId()
+    {
+        return $this->objectId;
     }
 
     /**
@@ -156,21 +168,13 @@ class Trace
     public static function find(array &$traces, TraceableInterface $traceable)
     {
         foreach ($traces as $trace) {
-            if ($trace->getObject() === self::identifier($traceable)) {
+            if ($trace->getObjectType() === $traceable->getTraceableName()
+                && $trace->getObjectId() === $traceable->getId()
+            ) {
                 return $trace;
             }
         }
 
         return null;
-    }
-
-    /**
-     * @param TraceableInterface $traceable
-     *
-     * @return string
-     */
-    public static function identifier(TraceableInterface $traceable)
-    {
-        return $traceable->getTraceableName() . $traceable->getId();
     }
 }

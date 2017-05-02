@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -96,4 +97,20 @@ interface JobQueueInterface
      * @param Int[] $sheetIds
      */
     public function indexSheets(array $sheetIds);
+
+    /**
+     * @param Event $event
+     * @param bool  $onlyInCatalog
+     */
+    public function aggregateParticipantFullUnavailability(Event $event, $onlyInCatalog = false);
+
+    /**
+     * @param Participant[] $participants
+     */
+    public function aggregateParticipantsGivenFullUnavailability(array $participants);
+
+    /**
+     * @param Event $event
+     */
+    public function aggregateParticipantAssignedToRequest(Event $event);
 }

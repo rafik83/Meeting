@@ -26,7 +26,7 @@ class BatchDraft extends AbstractBatch
     public $event;
 
     /**
-     * BatchPending constructor.
+     * BatchDraft constructor.
      *
      * @param Event $event
      * @param array $ids

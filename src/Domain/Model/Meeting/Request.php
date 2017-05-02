@@ -645,4 +645,12 @@ class Request implements MessageSubjectInterface
 
         return null;
     }
+
+    /**
+     * @return bool
+     */
+    public function isOneOfSheetsNotAttend()
+    {
+        return false === $this->getFromSheet()->attend() || false === $this->getToSheet()->attend();
+    }
 }

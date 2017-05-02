@@ -75,6 +75,11 @@ interface MeetingRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     */
+    public function removeMeetingOfSheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
      *
      * @return int
      */

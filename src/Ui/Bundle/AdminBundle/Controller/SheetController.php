@@ -186,6 +186,7 @@ class SheetController extends Controller
                     $batch->disable         = $batchForm->get('disable')->isClicked();
                     $batch->addCatalog      = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog   = $batchForm->get('removeCatalog')->isClicked();
+                    $batch->assignToGroup   = $batchForm->get('assignToGroup')->isClicked();
 
                     if ($batchForm->has('generateInvoice')) {
                         $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();

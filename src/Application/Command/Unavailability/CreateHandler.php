@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
@@ -18,42 +21,44 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CreateHandler
 {
-    /**
-     * @var UnavailabilityRepositoryInterface
-     */
+    /** @var UnavailabilityRepositoryInterface */
     private $unavailabilityRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
+
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
 
     /**
      * @param UnavailabilityRepositoryInterface $unavailabilityRepository
      * @param ParticipantRepositoryInterface    $participantRepository
      * @param ParticipantInfoGuesser            $participantInfoGuesser
+     * @param DelayedEventDispatcher            $eventDispatcher
      */
     public function __construct(
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         ParticipantRepositoryInterface $participantRepository,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
         $this->participantRepository    = $participantRepository;
         $this->participantInfoGuesser   = $participantInfoGuesser;
+        $this->eventDispatcher          = $eventDispatcher;
     }
 
     /**
      * @param Create $create
      *
+     * @throws CanNotCreateUnavailabilityException
      * @throws NoParticipantSelectedException
      * @throws ParticipantsSelectedWithMeetingOrHappeningException
      * @throws TimeOutOfRangeException
@@ -61,6 +66,10 @@ class CreateHandler
     public function handle(Create $create)
     {
         $locale = $create->locale;
+
+        if (!$create->sheet->attend()) {
+            throw new CanNotCreateUnavailabilityException('The sheet does not attend the event');
+        }
 
         if (empty($create->participants)) {
             throw new NoParticipantSelectedException();
@@ -78,6 +87,11 @@ class CreateHandler
             $unavailability = new Unavailability($participant, $begin, $end, $create->message);
             $this->mergeOverlapUnavailabilities($unavailability);
             $this->unavailabilityRepository->add($unavailability);
+
+            $this->eventDispatcher->dispatch(
+                Events::UNAVAILABILITY_ADDED,
+                new AddUnavailabilityEvent($participant)
+            );
         }
     }
 

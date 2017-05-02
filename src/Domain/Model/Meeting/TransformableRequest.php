@@ -22,6 +22,10 @@ class TransformableRequest
         $from = $request->getFromSheet();
         $to   = $request->getToSheet();
 
+        if ($request->isOneOfSheetsNotAttend()) {
+            return false;
+        }
+
         // oneToOne meeting with no preference
         if (($from->getParticipants()->count() === 1 && $request->hasNoPreference($from))
             && ($to->getParticipants()->count() === 1 && $request->hasNoPreference($to))

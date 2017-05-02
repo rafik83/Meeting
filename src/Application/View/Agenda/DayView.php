@@ -47,14 +47,18 @@ class DayView
      */
     public $meetings;
 
+    /** @var CancelAttendanceUnavailabilityView|null */
+    public $cancelAttendanceUnavailabilityView;
+
     /**
-     * @param \DateTimeInterface       $begin
-     * @param \DateTimeInterface       $end
-     * @param int                      $scale
-     * @param HappeningView[]          $happenings
-     * @param UnavailabilityView[]     $unavailabilities
-     * @param MassUnavailabilityView[] $masses
-     * @param MeetingView[]            $meetings
+     * @param \DateTimeInterface                      $begin
+     * @param \DateTimeInterface                      $end
+     * @param int                                     $scale
+     * @param HappeningView[]                         $happenings
+     * @param UnavailabilityView[]                    $unavailabilities
+     * @param MassUnavailabilityView[]                $masses
+     * @param MeetingView[]                           $meetings
+     * @param CancelAttendanceUnavailabilityView|null $cancelAttendanceUnavailabilityView
      */
     public function __construct(
         \DateTimeInterface $begin,
@@ -63,15 +67,17 @@ class DayView
         array $happenings,
         array $unavailabilities,
         array $masses,
-        array $meetings
+        array $meetings,
+        CancelAttendanceUnavailabilityView $cancelAttendanceUnavailabilityView = null
     ) {
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->scale            = $scale;
-        $this->happenings       = $happenings;
-        $this->unavailabilities = $unavailabilities;
-        $this->masses           = $masses;
-        $this->meetings         = $meetings;
+        $this->begin                              = $begin;
+        $this->end                                = $end;
+        $this->scale                              = $scale;
+        $this->happenings                         = $happenings;
+        $this->unavailabilities                   = $unavailabilities;
+        $this->masses                             = $masses;
+        $this->meetings                           = $meetings;
+        $this->cancelAttendanceUnavailabilityView = $cancelAttendanceUnavailabilityView;
     }
 
     /**
@@ -101,5 +107,13 @@ class DayView
             $this->masses,
             $this->meetings
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSheetAttendingTheEvent()
+    {
+        return $this->cancelAttendanceUnavailabilityView === null;
     }
 }

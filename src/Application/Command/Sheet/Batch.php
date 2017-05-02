@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class Batch extends AbstractBatch
 {
@@ -49,7 +50,7 @@ class Batch extends AbstractBatch
     public $disable;
 
     /**
-     * @var Admin
+     * @var Admin|string|null
      */
     public $follower;
 
@@ -113,6 +114,16 @@ class Batch extends AbstractBatch
      * @var bool
      */
     public $generateInvoice;
+
+    /**
+     * "Assigner une fiche à un groupe/entité"
+     *
+     * @var bool
+     */
+    public $assignToGroup;
+
+    /** @var Group|null */
+    public $group;
 
     /**
      * @param Event  $event

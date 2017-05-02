@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Domain\Model\Unavailability;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Unavailability\InvalidTimeSlotException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
-class Mass
+class Mass implements TimeRangeInterface
 {
     /**
      * @var int
