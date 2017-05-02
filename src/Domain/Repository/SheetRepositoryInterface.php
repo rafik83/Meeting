@@ -296,4 +296,9 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByTypes(array $types);
+
+    /**
+     * @param Int[] $ids
+     */
+    public function batchUnAssignBySheetsIds(array $ids);
 }
