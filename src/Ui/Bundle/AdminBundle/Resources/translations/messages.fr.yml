@@ -36,6 +36,7 @@ admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
+admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'Au moins 1 participant est totalement indisponible avec au moins une demande de rendez-vous attribuée'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
 admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
 admin.agenda.filters.hasScheduledMeeting.no: Non
@@ -99,6 +100,7 @@ admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
+admin.agenda.sheet.attend: 'Modifier la venue de la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
 admin.agenda.sort.alphabetical.label: Alphabétique
 admin.agenda.sort.asc.label: Croissant
@@ -574,6 +576,10 @@ admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
 admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
+admin.sheet.assignToGroup: 'Assigner à une entité'
+admin.sheet.attend.title: 'Modifier la venue de la fiche %sheetTitle%'
+admin.sheet.attend.danger.numberOfMeetings: 'Attention, l''annulation de la venue de cette fiche supprimera %numberOfMeetings% rendez-vous'
+admin.sheet.attend.info.numberOfMeetings: 'Pas de rendez-vous sont positionnés sur cette fiche'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.link: Changer
 admin.sheet.change.type.title: 'Changer le type de participation'
@@ -909,6 +915,8 @@ event.schedule.columns.happening.title: Sous-événements
 event.schedule.columns.meeting.title: Rendez-vous
 event.schedule.columns.unavailability.title: Indisponibilités
 event.sheet.add_participant.title: 'Ajouter un participant'
+event.sheet.attend.cancel: 'A annulé sa venue'
+event.sheet.attend.present: Présent
 event.sheet.billing.title: Facturation
 event.sheet.block.add_participant.title: 'Remplir ce participant'
 event.sheet.block.buy_participant.option: Option

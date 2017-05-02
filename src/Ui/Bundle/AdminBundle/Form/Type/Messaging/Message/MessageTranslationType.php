@@ -13,40 +13,30 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message;
 use Proximum\Vimeet\Ui\Helper\Messaging\MessagePlaceholderHelper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MessageTranslationType extends AbstractType
 {
-    /** @var array */
-    private $preferredLocales;
-
     /** @var MessagePlaceholderHelper */
     private $placeholderHelper;
 
     /**
      * MessageTranslationType constructor.
      *
-     * @param array                    $preferredLocales
      * @param MessagePlaceholderHelper $placeholderHelper
      */
-    public function __construct(array $preferredLocales, MessagePlaceholderHelper $placeholderHelper)
+    public function __construct(MessagePlaceholderHelper $placeholderHelper)
     {
-        $this->preferredLocales = $preferredLocales;
         $this->placeholderHelper = $placeholderHelper;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
+    /** {@inheritdoc} */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('locale', LocaleType::class, ['preferred_choices' => $this->preferredLocales])
             ->add('subject', TextType::class)
-            ->add('content', TextAreaType::class, [
+            ->add('content', TextareaType::class, [
                 'attr' => [
                     'data-placeholders' => json_encode($this->placeholderHelper->getPlaceholderData()),
                 ]

@@ -99,7 +99,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet, participants')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
+            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true AND sheet.attend = true')
             ->where('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
             ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
@@ -265,6 +265,22 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsWithoutGroupInGivenSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.id IN (:sheets) AND sheet.group IS NULL')
+            ->setParameter('sheets', $sheets);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsByEventAndIds(Event $event, array $ids)
     {
         $queryBuilder = $this
@@ -285,7 +301,14 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
-            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true AND EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet AND r.to IN (:sheets)) OR (r.to = sheet AND r.from IN (:sheets)))')
+            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
+            ->andWhere(
+                'EXISTS (
+                    SELECT r.id FROM Entity:Meeting\Request r
+                    WHERE (r.from = sheet AND r.to IN (:sheets))
+                    OR (r.to = sheet AND r.from IN (:sheets))
+                )'
+            )
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets);
 

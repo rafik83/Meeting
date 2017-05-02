@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 
@@ -20,7 +21,7 @@ interface TipRepositoryInterface
      * @param int $page
      * @param int $limit
      *
-     * @return Tip[]
+     * @return PaginatedResult
      */
     public function paginate($page, $limit = 20);
 

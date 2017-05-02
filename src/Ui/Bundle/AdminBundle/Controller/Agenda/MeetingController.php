@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
-use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingViewQuery;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
@@ -357,7 +357,7 @@ class MeetingController extends Controller
         $response = new JsonResponse();
 
         try {
-            $this->get('tactician.commandbus.query')->handle(new RemoveMeetingViewQuery($meeting, $this->getUser()));
+            $this->get('tactician.commandbus.query')->handle(new RemoveMeeting($meeting, $this->getUser()));
         } catch (LockedException $lockedException) {
             $response->setData($lockedException->getMessage());
             $response->setStatusCode(Response::HTTP_LOCKED);

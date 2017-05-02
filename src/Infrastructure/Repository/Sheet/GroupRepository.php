@@ -73,8 +73,7 @@ class GroupRepository implements GroupRepositoryInterface
      */
     public function getAllByEventOrderedByTitle(Event $event)
     {
-        return $this
-            ->entityManager
+        return $this->entityManager
             ->createQueryBuilder()
             ->select('sheetsGroup')
             ->from(Group::class, 'sheetsGroup')
@@ -83,6 +82,23 @@ class GroupRepository implements GroupRepositoryInterface
             ->orderBy('sheetsGroup.title', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheetsGroup')
+            ->from(Group::class, 'sheetsGroup')
+            ->where('sheetsGroup.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+
     }
 
     /**

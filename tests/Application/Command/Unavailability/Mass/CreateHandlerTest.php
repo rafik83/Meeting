@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\CreateHandler;
 use Proximum\Vimeet\Domain\Exception\Unavailability\InvalidTimeSlotException;
@@ -44,6 +45,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->create($expected)->shouldBeCalled();
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+
         // Create
         $create               = new Create($event, null);
         $create->category     = $category;
@@ -62,7 +66,63 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Handler
-        $handler = new CreateHandler($massRepository->reveal());
+        $handler = new CreateHandler(
+            $massRepository->reveal(),
+            $jobQueue->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testHandleNotBlocking()
+    {
+        $event    = EventFactory::createEvent();
+        $category = new Category($event, 'Conference', 'title', '#123123', '#312312');
+        $begin    = new \DateTime('2016-10-10 10:00');
+        $end      = new \DateTime('2016-10-10 12:00');
+
+        // Expected
+        $expected = new Mass(
+            $event,
+            $category,
+            'name',
+            $begin,
+            $end,
+            false
+        );
+        $expected->createTranslation('fr', 'titre', 'description');
+        $expected->createTranslation('en', 'title', 'description');
+
+
+        // Mock
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massRepository->create($expected)->shouldBeCalled();
+
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldNotBeCalled();
+
+        // Create
+        $create               = new Create($event, null);
+        $create->category     = $category;
+        $create->begin        = $begin;
+        $create->end          = $end;
+        $create->blocking     = false;
+        $create->name         = 'name';
+        $create->translations = [
+            'fr' => [
+                'title'       => 'titre',
+                'description' => 'description',
+            ],
+            'en' => [
+                'title'       => 'title',
+                'description' => 'description',
+            ]
+        ];
+
+        // Handler
+        $handler = new CreateHandler(
+            $massRepository->reveal(),
+            $jobQueue->reveal()
+        );
         $handler->handle($create);
     }
 
@@ -94,6 +154,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->create($expected)->shouldBeCalled();
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+
         // Create
         $create               = new Create($event, null);
         $create->category     = $category;
@@ -118,7 +181,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Handler
-        $handler = new CreateHandler($massRepository->reveal());
+        $handler = new CreateHandler($massRepository->reveal(), $jobQueue->reveal());
         $handler->handle($create);
     }
 
@@ -166,6 +229,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->create()->shouldNotBeCalled();
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldNotBeCalled();
+
         // Create
         $create               = new Create($event, null);
         $create->category     = $category;
@@ -187,7 +253,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->timeSlots = $timeSlots;
 
         // Handler
-        $handler = new CreateHandler($massRepository->reveal());
+        $handler = new CreateHandler($massRepository->reveal(), $jobQueue->reveal());
         $handler->handle($create);
     }
 }

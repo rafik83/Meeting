@@ -417,6 +417,14 @@ admin_agenda_meeting_request_transform_into_meeting_handler:
     methods: [POST]
     defaults: { _controller: AdminBundle:Agenda/Meeting:handleTransformRequestIntoMeeting }
 
+admin_agenda_sheet_redirect_to_update_attendance:
+    path: /event/{event}/agenda/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:redirectToCancelAttendance }
+
 #
 # Meeting
 #
@@ -1349,6 +1357,17 @@ admin_sheets_group_create:
         user: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:SheetsGroup/Group:create }
+
+#
+# Sheet attendance
+#
+admin_sheet_attend:
+    path: /event/{event}/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:cancelAttendance }
 
 #
 # Tip
