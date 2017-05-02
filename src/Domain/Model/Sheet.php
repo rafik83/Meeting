@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
  * "Fiche de participation".
@@ -231,7 +232,7 @@ class Sheet implements TraceableInterface
      */
     public function getTraceableName()
     {
-        return 'sheet';
+        return TraceableName::SHEET_TRACEABLE_NAME;
     }
 
     /**
@@ -883,7 +884,6 @@ class Sheet implements TraceableInterface
     }
 
     /**
-
      * @param Group $group
      */
     public function setGroup(Group $group)

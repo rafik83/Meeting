@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Event;
 
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 class Day
 {
@@ -104,5 +105,15 @@ class Day
     public function setEndTime($endTime)
     {
         $this->endTime = $endTime;
+    }
+
+    /**
+     * @param TimeRangeInterface $timeRange
+     *
+     * @return bool
+     */
+    public function contain(TimeRangeInterface $timeRange)
+    {
+        return $timeRange->getBegin() >= $this->startTime && $timeRange->getEnd() <= $this->endTime;
     }
 }

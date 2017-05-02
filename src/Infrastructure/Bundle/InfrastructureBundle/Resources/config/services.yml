@@ -622,15 +622,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting_request.request_to_meetings_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetingsHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings }
     command.tip.create_handler:
         class: Proximum\Vimeet\Application\Command\Tip\CreateHandler
         arguments:
@@ -2658,6 +2649,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler
     query.agenda.unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
+    query.agenda.cancel_attendance_unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler
     query.agenda.mass_unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
         arguments:
@@ -2685,6 +2678,7 @@ services:
             - '@query.agenda.unavailability_view_query_handler'
             - '@query.agenda.mass_unavailability_view_query_handler'
             - '@query.agenda.meeting_view_query_handler'
+            - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:

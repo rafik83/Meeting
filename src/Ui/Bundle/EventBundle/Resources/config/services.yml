@@ -422,6 +422,16 @@ services:
             - { name: security.voter }
         public: false
 
+    security_unavailability.unavailability_voter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Unavailability\UnavailabilityVoter
+        tags:
+            - { name: security.voter }
+
+    security_happening.participation_voter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter
+        tags:
+            - { name: security.voter }
+
     security.app.user_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
         arguments:

@@ -21,12 +21,14 @@
                         </tr>
                         <tr>
                             <td>
-                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
                                 {{ 'admin.agenda.indicators-caption'|trans }}
+                                <br>
+
+                                <small class="text-muted">
+                                    <span class="glyphicon glyphicon-info-sign"></span> {{ 'admin.agenda.indicators-help'|trans }}
+                                </small>
+                                <br>
+
                                 <table class="table-no-margin-bottom table table-condensed table-bordered">
                                     <tr>
                                         <td class="text-center col-custom-7">
@@ -52,11 +54,11 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <p class="text-muted">
-                                    <small>
-                                        <span class="glyphicon glyphicon-info-sign"></span> {{ 'admin.agenda.indicators-help'|trans }}
-                                    </small>
-                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue">
                             </td>
                         </tr>
                         </thead>
@@ -71,7 +73,7 @@
                             </td>
                         </tr>
                         <tr v-for="sheet in sheetsIterator" v-on:refresh-list="refreshList">
-                            <td>
+                            <td v-bind:class="{ 'sheet-cancelled-attendance': false === sheet.attend }">
                                 <span class="label label-info pull-right" v-if="sheet.countParticipant > 1"><i class="icon icon-Profil_1"></i> ${ sheet.countParticipant }</span>
 
                                 <a v-bind:href="sheet.url" target="_blank" title="{{ 'admin.agenda.sheet.see'|trans }}" class="link-to-sheet"><span class="glyphicon"></span></a>
@@ -88,7 +90,7 @@
                                 </div>
 
                                 <table class="table-no-margin-bottom table table-condensed table-bordered">
-                                    <tr>
+                                    <tr v-bind:class="{ 'sheet-cancelled-attendance': false === sheet.attend }">
                                         <td class="text-center col-custom-7">${ sheet.countRequest }</td>
                                         <td class="text-center col-custom-7">${ sheet.countProposition }</td>
                                         <td class="text-center col-custom-7">${ sheet.countValidatedRequest }
@@ -124,7 +126,7 @@
                                 <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
                             </tr>
                             <tr v-for="request in focusedSheet.requests">
-                                <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request }">
+                                <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request, 'sheet-cancelled-attendance': request.isOneOfSheetsNotAttend }">
                                     <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" class="pull-right" v-on:click="showParticipants(request)">
                                         <span class="glyphicon glyphicon-cog"></span>
                                     </a>
@@ -136,7 +138,9 @@
                                         <span class="glyphicon glyphicon-move"></span>
                                     </a>
 
-                                    <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.cancel'|trans }}" v-on:click="cancelSlotAction()" class="pull-right" v-show="meetingRequestToTransformIntoMeeting === request">
+                                    <a href="#" title="{{ 'admin.agenda.request.transformIntoMeeting.cancel'|trans }}"
+                                       v-on:click="cancelSlotAction()" class="pull-right"
+                                       v-show="request.isTransformableIntoMeeting && meetingRequestToTransformIntoMeeting === request">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </a>
 
@@ -148,9 +152,9 @@
                                     <i class="icon icon-Profil_1"></i>
                                     ${ request.participantsName }
 
-                                    <span v-if="request.participants.length == 0">
-                                    {{ 'admin.agenda.requestsList.noPreference'|trans }}
-                                </span>
+                                    <span v-show="request.participants.length == 0">
+                                        {{ 'admin.agenda.requestsList.noPreference'|trans }}
+                                    </span>
                                 </td>
                             </tr>
                         </table>
