@@ -2704,6 +2704,46 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery }
 
+    query.sheet.group.participant.group_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@query.sheet.group.participant.sheets_view_handler'
+            - '@repository.event.day_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQuery }
+
+    query.sheet.group.participant.sheets_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\SheetsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@query.sheet.group.participant.participant_view_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SheetsViewQuery }
+
+    query.sheet.group.participant.participant_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQueryHandler
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@query.sheet.group.participant.agenda_day_view_handler'
+            - '@components.group.participant_days_views_builder_cache'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\ParticipantViewQuery }
+
+    query.sheet.group.participant.agenda_day_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\AgendaDayViewQueryHandler
+        arguments:
+            - '@query.sheet.group.participant.slot_view_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\AgendaDayViewQuery }
+
+    query.sheet.group.participant.slot_view_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQuery }
+
     #
     # Program query
     #
@@ -3995,6 +4035,16 @@ services:
         shared: false
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
+    #
+    # Participant Day Views Builder Cache
+    #
+    components.group.participant_days_views_builder_cache:
+        class: Proximum\Vimeet\Application\Command\Group\UserAvailabilitiesBuilderCache
+        shared: false
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
 
     #
     # Planner

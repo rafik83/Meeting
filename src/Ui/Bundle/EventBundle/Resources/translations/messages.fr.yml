@@ -82,7 +82,14 @@ event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
 gender.man: Monsieur
 gender.woman: Madame
+group.home.link.participants: 'Participants par fiche'
 group.home.link.request: 'Gestion des RDVs'
+group.participants.title: 'Participants par fiche'
+group.participants_list.caption.available.label: 'Disponible pour les RDV'
+group.participants_list.caption.unavailable.label: 'Indisponible'
+group.participants_list.day.label: 'Jour'
+group.participants_list.participant: 'Participant'
+group.participants_list.slot.tooltip: 'Créneau de'
 group.home.link.participant_update: 'Gestion des participants'
 group.participant_update.title: 'Gestion des participants'
 group.participant_update.list.email: Email

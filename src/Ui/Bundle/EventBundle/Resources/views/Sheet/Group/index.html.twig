@@ -13,38 +13,36 @@
     </header>
 
     <div class="main__container">
-        <div class="row">
-            <div class="col-md-8">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>
-                            {{ 'sheet.title'|trans }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for sheetView in groupView.sheetViews %}
-                        <tr>
-                            <td>
-                                <a href="{{ path('event_sheet_group_switch_to', {sheetGroup: groupView.id, sheet: sheetView.id}) }}">
-                                    {{ sheetView.title }}
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
-                    {{ 'group.home.link.request'|trans }}
-                </a>
-                <a href="{{ path('event_sheet_group_participant_update', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right">
-                    {{ 'group.home.link.participant_update'|trans }}
-                </a>
-            </div>
-        </div>
+        <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
+            {{ 'group.home.link.request'|trans }}
+        </a>
+        <a href="{{ path('event_sheet_group_participant_update', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
+            {{ 'group.home.link.participant_update'|trans }}
+        </a>
+        <a href="{{ path('event_sheet_group_participants_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right">
+            {{ 'group.home.link.participants'|trans }}
+        </a>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    {{ 'sheet.title'|trans }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sheetView in groupView.sheetViews %}
+                <tr>
+                    <td>
+                        <a href="{{ path('event_sheet_group_switch_to', {sheetGroup: groupView.id, sheet: sheetView.id}) }}">
+                            {{ sheetView.title }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </section>
 {% endblock %}
