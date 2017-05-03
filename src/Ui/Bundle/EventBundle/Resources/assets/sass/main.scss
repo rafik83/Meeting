@@ -197,6 +197,10 @@
 
   &.success { background: $bg-success-color; }
   &.fail { background: $bg-fail-color; }
+  &.warning {
+    background: $bg-warning-color;
+    color: #333;
+  }
 }
 
 .white {

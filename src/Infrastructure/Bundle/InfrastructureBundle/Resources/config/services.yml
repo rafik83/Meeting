@@ -316,6 +316,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@cart_manager'
             - '@components.user.type_resolver'
+            - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
@@ -1701,6 +1702,18 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Attend }
 
+    command.group.participant.update_users_sheets_handler:
+        class: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheetsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.sheet.group.participant.participant_view_query_handler'
+            - '@participant.user_to_participant'
+            - '@command.planning.sheet_info_guesser_cache'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
 
     #
     # Post Batch Action
@@ -1906,6 +1919,12 @@ services:
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    vimeet_infrastructure.application.components.sorted_sheet:
+        class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+
     #
     # Sheet Request
     #
@@ -2677,6 +2696,13 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQuery }
+
+    query.sheet.group.participant.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery }
 
     #
     # Program query
@@ -3585,6 +3611,15 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # Participant
+    #
+    participant.user_to_participant:
+        class: Proximum\Vimeet\Domain\Participant\UserToParticipant
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.template_data_factory'
 
     #
     # Payment

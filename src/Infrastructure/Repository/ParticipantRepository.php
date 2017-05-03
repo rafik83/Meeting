@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
@@ -200,9 +201,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
+            ->where('participant.user = :userId AND participant.sheet = :sheetId')
             ->setParameter('userId', $user->getId())
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id = :sheetId')
             ->setParameter('sheetId', $sheet->getId())
             ->setMaxResults(1);
 
@@ -219,9 +219,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant.id')
             ->from(Participant::class, 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user = :user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'participant.user = :user AND sheet.event = :event')
             ->setParameter('user', $user)
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -237,8 +236,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
+            ->join('participant.sheet', 'sheet', 'WITH', 'participant.user = :userId AND sheet.event = :eventId')
             ->setParameter('userId', $userId)
             ->setParameter('eventId', $event->getId());
 
@@ -570,5 +568,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByGroup(Group $group)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant, user, sheet')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.group = :group AND sheet.enable = true')
+            ->join('participant.user', 'user')
+            ->setParameter('group', $group)
+            ->orderBy('user.account.lastName')
+            ->addOrderBy('user.account.firstName');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

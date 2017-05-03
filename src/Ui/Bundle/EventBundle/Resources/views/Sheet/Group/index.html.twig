@@ -37,8 +37,11 @@
                 </table>
             </div>
             <div class="col-md-4">
-                <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right">
+                <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
                     {{ 'group.home.link.request'|trans }}
+                </a>
+                <a href="{{ path('event_sheet_group_participant_update', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right">
+                    {{ 'group.home.link.participant_update'|trans }}
                 </a>
             </div>
         </div>

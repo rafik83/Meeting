@@ -121,6 +121,13 @@ interface MeetingRepositoryInterface
     public function countByParticipant(Participant $participant);
 
     /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasScheduledMeetingByParticipant(Participant $participant);
+
+    /**
      * @param Meeting $meeting
      */
     public function remove(Meeting $meeting);

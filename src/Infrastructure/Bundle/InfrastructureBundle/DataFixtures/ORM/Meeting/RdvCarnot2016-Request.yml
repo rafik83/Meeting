@@ -207,7 +207,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
-        state: <randomElement(['sent', 'approved', 'refused'])>
+        state: 'refused'
     meeting_proposition4:
         __construct:
             - '@sheet_exposant4'

@@ -83,6 +83,11 @@ event.sheet.export.fields.sheet_zipcode: 'Code postal'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.request: 'Gestion des RDVs'
+group.home.link.participant_update: 'Gestion des participants'
+group.participant_update.title: 'Gestion des participants'
+group.participant_update.list.email: Email
+group.participant_update.list.participant: Participant
+group.participant_update.list.sheets: Fiches
 group.request.list.link.home: 'Retour à la gestion de mon entité'
 group.request.title: 'Gestion des rendez-vous'
 happening.participate.action: Participer

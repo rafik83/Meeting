@@ -35,12 +35,12 @@ class SheetInfoGuesserCache
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param string|null $locale
      *
      * @return string
      */
-    public function guessSheetTitle(Sheet $sheet, $locale)
+    public function guessSheetTitle(Sheet $sheet, $locale = null)
     {
         $key = $sheet->getId() . $locale;
 
