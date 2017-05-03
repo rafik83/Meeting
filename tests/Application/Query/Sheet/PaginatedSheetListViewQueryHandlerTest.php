@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Trace\TraceableName;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
 class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -128,9 +129,10 @@ class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $trace->getAction()->willReturn('validate');
         $trace->getDate()->willReturn($datetime1);
         $trace->getAuthor()->willReturn('Toto');
-        $trace->getObject()->willReturn('Sheet1');
-        $traceRepository->getLastByTraceableObjectsAndAction([$sheet1->reveal(), $sheet2->reveal()], Trace::ACCEPT)->shouldBeCalled()->willReturn([$trace]);
-        $traceRepository->getLastByTraceableObjectsAndAction([$sheet1->reveal(), $sheet2->reveal()], Trace::VALIDATE)->shouldBeCalled()->willReturn([]);
+        $trace->getObjectType()->willReturn('Sheet');
+        $trace->getObjectId()->willReturn(1);
+        $traceRepository->getLastByTraceableObjectsAndAction([$sheet1->reveal(), $sheet2->reveal()], TraceableName::SHEET_TRACEABLE_NAME, Trace::ACCEPT)->shouldBeCalled()->willReturn([$trace]);
+        $traceRepository->getLastByTraceableObjectsAndAction([$sheet1->reveal(), $sheet2->reveal()], TraceableName::SHEET_TRACEABLE_NAME, Trace::VALIDATE)->shouldBeCalled()->willReturn([]);
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
 
         $handler = new PaginatedSheetListViewQueryHandler(

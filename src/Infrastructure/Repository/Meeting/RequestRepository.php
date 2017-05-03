@@ -620,6 +620,25 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function hasAssignedRequestByParticipant(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request.id')
+            ->from(Request::class, 'request')
+            ->leftjoin('request.fromParticipants', 'fromParticipant')
+            ->leftjoin('request.toParticipants', 'toParticipant')
+            ->where('(fromParticipant.id = :participant OR toParticipant.id = :participant) AND request.disabled = false')
+            ->setParameter('participant', $participant)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @return array
      */
     private function getOrderBy()

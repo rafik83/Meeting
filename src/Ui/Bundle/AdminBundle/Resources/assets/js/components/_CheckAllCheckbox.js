@@ -4,9 +4,10 @@ function CheckAllCheckbox(element, selector)
     this.all     = document.querySelectorAll(selector);
 
     this.element.addEventListener('change', this.check.bind(this));
+    this.element.addEventListener('updateState-checkAllCheckbox', this.updateState.bind(this));
 
     [].forEach.call(this.all, function (item) {
-        item.addEventListener('change', function (event) {
+        item.addEventListener('change', function () {
             if (this.count() === 0) {
                 this.element.checked = false;
             }
@@ -36,6 +37,13 @@ CheckAllCheckbox.prototype.check = function ()
 CheckAllCheckbox.prototype.count = function ()
 {
     return [].reduce.call(this.all, function (previous, current) { return current.checked ? ++previous : previous }, 0);
+};
+
+/**
+ * Update check all state
+ */
+CheckAllCheckbox.prototype.updateState = function () {
+    this.element.checked = this.count() === this.all.length;
 };
 
 module.exports = CheckAllCheckbox;

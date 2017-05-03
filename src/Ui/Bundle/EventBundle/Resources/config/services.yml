@@ -127,12 +127,6 @@ services:
             - '@markdown'
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type_meeting.meeting_request_update_to_type:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType
-        arguments:
-            - '@template.participant_info_guesser'
-        tags:
-            - { name: form.type }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
         arguments:
@@ -239,6 +233,15 @@ services:
         tags:
             - { name: form.type }
 
+    form_type.group.sheet_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\SheetChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@vimeet_infrastructure.application.components.sorted_sheet'
+        tags:
+            - { name: form.type }
+
     #
     # Event Listener
     #
@@ -335,17 +338,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    event_listener.sheet_invoiced_event_listener:
-        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SheetInvoicedEventSubscriber
-        arguments:
-            - '@components.invoice.invoice_url_view_query_handler'
-            - '@repository.billing_info_repository'
-            - '@adapter.mailer_adapter'
-            - '@event_sender'
-            - '@adapter.event_url_generator'
-        tags:
-            - { name: kernel.event_subscriber }
-
     event_listener_aggregate.aggregate_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Aggregate\AggregateEventSubscriber
         arguments:
@@ -413,6 +405,16 @@ services:
             - { name: security.voter }
         public: false
 
+    security_unavailability.unavailability_voter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Unavailability\UnavailabilityVoter
+        tags:
+            - { name: security.voter }
+
+    security_happening.participation_voter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter
+        tags:
+            - { name: security.voter }
+
     security.app.user_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
         arguments:
@@ -445,6 +447,12 @@ services:
         arguments:
             - '%domain%'
             - '%mailer_sender%'
+
+    user_to_group_manager_checker:
+        class: Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
 
     #

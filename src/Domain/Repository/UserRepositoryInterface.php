@@ -55,4 +55,11 @@ interface UserRepositoryInterface
      * @return PaginatedResult
      */
     public function paginate($page, $limit, Event $event, array $filter, $locale);
+
+    /**
+     * @param int[] $ids
+     *
+     * @return User[]
+     */
+    public function getByIdsIndexedById(array $ids);
 }

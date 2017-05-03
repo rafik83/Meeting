@@ -22,11 +22,12 @@ interface TraceRepositoryInterface
 
     /**
      * @param TraceableInterface[] $objects
+     * @param string               $type
      * @param string               $action
      *
      * @return Trace[]
      */
-    public function getLastByTraceableObjectsAndAction(array $objects, $action);
+    public function getLastByTraceableObjectsAndAction(array $objects, $type, $action);
 
     /**
      * @param TraceableInterface $traceable

@@ -312,6 +312,17 @@ event_sheet_group_participants_list:
     defaults: { _controller: EventBundle:Group/Participant:list }
 
 #
+# Sheets group
+#
+
+event_sheet_group_participant_update:
+    path: /sheets-group/{sheetGroup}/participants/update
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Group/ParticipantUpdate:update }
+
+#
 # Sheet Billing
 #
 

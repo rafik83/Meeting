@@ -90,6 +90,11 @@ group.participants_list.caption.unavailable.label: 'Indisponible'
 group.participants_list.day.label: 'Jour'
 group.participants_list.participant: 'Participant'
 group.participants_list.slot.tooltip: 'Créneau de'
+group.home.link.participant_update: 'Gestion des participants'
+group.participant_update.title: 'Gestion des participants'
+group.participant_update.list.email: Email
+group.participant_update.list.participant: Participant
+group.participant_update.list.sheets: Fiches
 group.request.list.link.home: 'Retour à la gestion de mon entité'
 group.request.title: 'Gestion des rendez-vous'
 happening.participate.action: Participer

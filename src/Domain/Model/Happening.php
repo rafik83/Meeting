@@ -17,11 +17,12 @@ use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\Talking;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 /**
  * Domain language: "Conférence"  (aka "Sous-événement")
  */
-class Happening
+class Happening implements TimeRangeInterface
 {
     /**
      * @var int

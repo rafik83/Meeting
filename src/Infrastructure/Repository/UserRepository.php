@@ -150,6 +150,22 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getByIdsIndexedById(array $ids)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user', 'user.id')
+            ->where('user.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param QueryBuilder $queryBuilder
      */
     private function userWithoutSheetQueryBuilder(QueryBuilder $queryBuilder)
