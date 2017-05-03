@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate;
-use Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -141,22 +140,6 @@ class MeetingRequestController extends Controller
             ->findAvailableSlotIdByParticipantsIds($participants);
 
         return new JsonResponse($slots);
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return RedirectResponse
-     */
-    public function transformRequestsToMeetingsAction(Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $requestsToMeetings = new RequestsToMeetings($event, new \DateTime());
-        $this->get('tactician.commandbus')->handle($requestsToMeetings);
-        $this->addFlash('success', 'flash.admin.meeting_request.position.success');
-
-        return $this->redirectToRoute('admin_meeting_request_sheets_list', ['event' => $event->getId()]);
     }
 
     /**

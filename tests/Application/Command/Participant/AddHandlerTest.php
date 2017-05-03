@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -90,6 +91,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcher::class);
         $typeResolver                  = $this->prophesize(TypeResolver::class);
+        $accountSynchronizer           = $this->prophesize(Synchronizer::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedUser,
@@ -161,7 +163,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $activateAccountTokenGenerator->reveal(),
             $eventDispatcher->reveal(),
             $cartManager->reveal(),
-            $typeResolver->reveal()
+            $typeResolver->reveal(),
+            $accountSynchronizer->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
@@ -200,6 +203,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcher::class);
         $typeResolver                  = $this->prophesize(TypeResolver::class);
+        $accountSynchronizer           = $this->prophesize(Synchronizer::class);
 
         $cartManager = $this->prophesize(CartManager::class);
 
@@ -241,7 +245,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $activateAccountTokenGenerator->reveal(),
             $eventDispatcher->reveal(),
             $cartManager->reveal(),
-            $typeResolver->reveal()
+            $typeResolver->reveal(),
+            $accountSynchronizer->reveal()
         );
 
         $handler->handle($add);

@@ -30,4 +30,23 @@ interface GroupRepositoryInterface
      * @return null|Group
      */
     public function getByEventAndManager(Event $event, User $manager);
+
+    /**
+     * @param Event $event
+     *
+     * @return Group[]
+     */
+    public function getAllByEventOrderedByTitle(Event $event);
+
+    /**
+     * @param Group $group
+     */
+    public function add(Group $group);
+
+    /**
+     * @param Event $event
+     *
+     * @return Group[]
+     */
+    public function getByEvent(Event $event);
 }

@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Invoice;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoice;
 use Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler;
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
@@ -39,6 +41,7 @@ class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $createHandler   = $this->prophesize(CreateHandler::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $jobQueue        = $this->prophesize(JobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1])->shouldBeCalled()->willReturn([$sheet]);
 
@@ -65,12 +68,15 @@ class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $command = new BatchGenerateInvoice([1], $admin);
+        $jobQueue->sendEmailing($event, [1], Events::SHEET_INVOICED, true)->shouldBeCalled();
+
+        $command = new BatchGenerateInvoice($event, [1], $admin);
         $handler = new BatchGenerateInvoiceHandler(
             $sheetRepository->reveal(),
             $createHandler->reveal(),
             $eventDispatcher->reveal(),
-            $date
+            $date,
+            $jobQueue->reveal()
         );
 
         $handler->handle($command);

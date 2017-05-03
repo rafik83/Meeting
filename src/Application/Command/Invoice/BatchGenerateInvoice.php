@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class BatchGenerateInvoice
 {
@@ -25,12 +26,19 @@ class BatchGenerateInvoice
     public $admin;
 
     /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @param Event $event
      * @param array $sheetIds
      * @param Admin $admin
      */
-    public function __construct(array $sheetIds, Admin $admin)
+    public function __construct(Event $event, array $sheetIds, Admin $admin)
     {
         $this->sheetIds = $sheetIds;
         $this->admin    = $admin;
+        $this->event    = $event;
     }
 }

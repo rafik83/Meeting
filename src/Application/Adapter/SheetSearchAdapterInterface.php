@@ -51,6 +51,15 @@ interface SheetSearchAdapterInterface
      * @param array  $filters
      * @param string $locale
      *
+     * @return array
+     */
+    public function getSheetIds(Event $event, array $filters, $locale);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
      * @return SheetListView[]
      */
     public function getSheetListView(Event $event, array $filters, $locale);

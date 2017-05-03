@@ -12,6 +12,11 @@ event_select_sheet:
     methods:  [GET]
     defaults: { _controller: EventBundle:MultipleSheets/Home:selectSheet }
 
+event_multiplesheets_request_list:
+    path: /multiplesheets/request/list
+    methods:  [GET]
+    defaults: { _controller: EventBundle:MultipleSheets/Request:list }
+
 #
 # Register
 #
@@ -298,6 +303,24 @@ event_sheet_group_requests_list:
         sheetGroup: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Group/Request:list }
+
+event_sheet_group_participants_list:
+    path: /sheets-group/{sheetGroup}/participants/list
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Group/Participant:list }
+
+#
+# Sheets group
+#
+
+event_sheet_group_participant_update:
+    path: /sheets-group/{sheetGroup}/participants/update
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Group/ParticipantUpdate:update }
 
 #
 # Sheet Billing

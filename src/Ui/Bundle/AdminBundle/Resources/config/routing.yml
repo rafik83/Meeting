@@ -540,13 +540,6 @@ admin_meeting_request_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
 
-admin_transform_requests_to_meetings:
-    path: /event/{event}/meeting-request/transform-requests-to-meetings
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:MeetingRequest:transformRequestsToMeetings }
-
 admin_meeting_request_details:
     path: /event/{event}/meeting-request/{meetingRequest}/details
     requirements:
@@ -1332,6 +1325,31 @@ admin_order_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
+
+#
+# Group (Entités multi-fiches)
+#
+admin_sheets_group_list:
+    path: /event/{event}/sheets-group/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:list }
+
+admin_sheets_group_pre_create:
+    path: /event/{event}/sheets-group/pre-create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:preCreate }
+
+admin_sheets_group_create:
+    path: /event/{event}/sheets-group/{user}/create
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:create }
 
 #
 # Sheet attendance

@@ -18,9 +18,6 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
@@ -37,9 +34,6 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidationDraftMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidationValidateMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
@@ -82,70 +76,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         $this->mailer                          = $mailer;
         $this->sender                          = $sender;
         $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
-    }
-
-    /**
-     * Send email when admin validate user event participation
-     *
-     * @param SheetValidatedEvent $event
-     */
-    public function onSheetValidated(SheetValidatedEvent $event)
-    {
-        $owner = $event->getSheet()->getOwner();
-
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $owner)
-        );
-
-        $mail = new SheetValidatedMail(
-            $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $owner->getEmail(),
-            $owner->getLocale(),
-            $participantMailView
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
-     * @param SheetDraftEvent $event
-     */
-    public function onSheetValidationDraft(SheetDraftEvent $event)
-    {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
-        );
-
-        $mail = new SheetValidationDraftMail(
-            $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getSheet()->getOwner()->getEmail(),
-            $event->getSheet()->getOwner()->getLocale(),
-            $participantMailView
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
-     * @param SheetValidationValidateEvent $event
-     */
-    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
-    {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
-        );
-
-        $mail = new SheetValidationValidateMail(
-            $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getSheet()->getOwner()->getEmail(),
-            $event->getSheet()->getOwner()->getLocale(),
-            $participantMailView
-        );
-
-        $this->mailer->send($mail);
     }
 
     /**
@@ -432,7 +362,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         return [
             Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
             Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
-            Events::SHEET_VALIDATED                    => 'onSheetValidated',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
             Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
             Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
@@ -444,8 +373,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
-            Events::SHEET_VALIDATION_DRAFT             => 'onSheetValidationDraft',
-            Events::SHEET_VALIDATION_VALIDATE          => 'onSheetValidationValidate',
         ];
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\RemoveUnavailabilityEvent;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -41,9 +42,15 @@ class RemoveHandler
 
     /**
      * @param Remove $remove
+     *
+     * @throws CanNotDeleteUnavailabilityException
      */
     public function handle(Remove $remove)
     {
+        if (!$remove->unavailability->getParticipant()->getSheet()->attend()) {
+            throw new CanNotDeleteUnavailabilityException('The sheet does not attend the event, therefore the unavailability can not be remove');
+        }
+
         $this->unavailabilityRepository->remove($remove->unavailability);
 
         $this->eventDispatcher->dispatch(

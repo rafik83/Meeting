@@ -1,3 +1,15 @@
+Proximum\Vimeet\Domain\Model\Event\Day:
+    event_rdv_carnot_2016_day_1:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        startTime: <(new DateTime('18-10-2016 08:00:00.000'))>
+        endTime: <(new DateTime('18-10-2016 18:00:00.000'))>
+    event_rdv_carnot_2016__day_2:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        startTime: <(new DateTime('19-10-2016 08:00:00.000'))>
+        endTime: <(new DateTime('19-10-2016 18:00:00.000'))>
+
 Proximum\Vimeet\Domain\Model\Address (local):
     event_rdv_carnot_2016_payment_address_event:
         __construct:

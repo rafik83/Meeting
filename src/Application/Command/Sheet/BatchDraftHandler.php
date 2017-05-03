@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchDraftHandler
 {
@@ -24,30 +24,30 @@ class BatchDraftHandler
     private $sheetRepository;
 
     /**
-     * @var DelayedEventDispatcher
+     * @var BatchJobQueueInterface
      */
-    private $eventDispatcher;
+    private $batchJobQueue;
 
     /**
-     * @var \DateTimeInterface
+     * @var JobQueueInterface
      */
-    private $datetime;
+    private $jobQueue;
 
     /**
      * BatchPendingHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param DelayedEventDispatcher   $eventDispatcher
-     * @param \DateTimeInterface       $datetime
+     * @param BatchJobQueueInterface   $batchJobQueue
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime
+        BatchJobQueueInterface $batchJobQueue,
+        JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->batchJobQueue   = $batchJobQueue;
+        $this->jobQueue        = $jobQueue;
     }
 
     /**
@@ -59,20 +59,19 @@ class BatchDraftHandler
     {
         $sheets = $this->sheetRepository->getSheetsById($batchPending->ids);
 
-        foreach ($sheets as $sheet) {
-            if (!$sheet->isValidationDraft()) {
-                $sheet->setValidationState(Sheet::STATE_VALIDATION_DRAFT);
-                $this->sheetRepository->set($sheet);
+        $this->sheetRepository->updateValidationState(
+            $batchPending->ids,
+            Sheet::STATE_VALIDATION_DRAFT
+        );
 
-                $this->eventDispatcher->dispatch(
-                    Events::SHEET_VALIDATION_DRAFT,
-                    new SheetDraftEvent(
-                        $sheet,
-                        $batchPending->admin,
-                        $this->datetime
-                    )
-                );
-            }
+        if (!empty($batchPending->ids)) {
+            // send email
+            $this->jobQueue->sendEmailing($batchPending->event, $batchPending->ids, Events::SHEET_VALIDATION_DRAFT, true);
+
+            $this->batchJobQueue->createJob(
+                $batchPending->ids,
+                $batchPending->admin
+            );
         }
 
         return new BatchResult(count($sheets), $batchPending->getMessage() . 'draft.success');

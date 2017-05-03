@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -73,6 +74,11 @@ class AddHandler
     private $typeResolver;
 
     /**
+     * @var Synchronizer
+     */
+    private $accountSynchronizer;
+
+    /**
      * AddHandler constructor.
      *
      * @param UserRepositoryInterface        $userRepository
@@ -83,6 +89,7 @@ class AddHandler
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param CartManager                    $cartManager
      * @param TypeResolver                   $typeResolver
+     * @param Synchronizer                   $accountSynchronizer
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -92,7 +99,8 @@ class AddHandler
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         DelayedEventDispatcher $eventDispatcher,
         CartManager $cartManager,
-        TypeResolver $typeResolver
+        TypeResolver $typeResolver,
+        Synchronizer $accountSynchronizer
     ) {
         $this->userRepository                = $userRepository;
         $this->participantRepository         = $participantRepository;
@@ -102,6 +110,7 @@ class AddHandler
         $this->eventDispatcher               = $eventDispatcher;
         $this->cartManager                   = $cartManager;
         $this->typeResolver                  = $typeResolver;
+        $this->accountSynchronizer           = $accountSynchronizer;
     }
 
     /**
@@ -118,7 +127,14 @@ class AddHandler
             throw new EmailCanNotBeNullException();
         }
 
-        $user = $this->findOrCreateUser($add);
+        $user = $this->userRepository->findByEmail($add->email);
+        $isNewUser = false;
+
+        if (null === $user) {
+            $user = new User($add->email, '', '', $add->locale);
+            $this->userRepository->add($user);
+            $isNewUser = true;
+        }
 
         if ($add->sheet->hasUserParticipant($user)) {
             throw new ParticipantAlreadyExistException('User already linked to this sheet');
@@ -132,7 +148,7 @@ class AddHandler
         }
 
         // Create participant
-        $participant = $this->createAndFillParticipant($add, $user);
+        $participant = $this->createAndFillParticipant($add, $user, $isNewUser);
 
         // Update cart
         $this->cartManager->updateParticipantsQuantity($add->sheet);
@@ -206,29 +222,13 @@ class AddHandler
     }
 
     /**
-     * @param Add $add
-     *
-     * @return User
-     */
-    private function findOrCreateUser(Add $add)
-    {
-        $user = $this->userRepository->findByEmail($add->email);
-
-        if (null === $user) {
-            $user = new User($add->email, '', '', $add->locale);
-            $this->userRepository->add($user);
-        }
-
-        return $user;
-    }
-
-    /**
      * @param Add  $add
      * @param User $user
+     * @param bool $isNewUser
      *
      * @return Participant
      */
-    protected function createAndFillParticipant(Add $add, User $user)
+    protected function createAndFillParticipant(Add $add, User $user, $isNewUser)
     {
         $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
         $templateData->setTaggedData([
@@ -240,6 +240,10 @@ class AddHandler
         $this->participantRepository->add($participant);
 
         $add->sheet->addParticipant($participant);
+
+        if (true === $isNewUser) {
+            $this->accountSynchronizer->set($templateData, $user);
+        }
 
         return $participant;
     }

@@ -48,6 +48,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SheetController extends Controller
 {
+    const SHEETS_PER_PAGE = 100;
+
     /**
      * @param Request $request
      * @param Event   $event
@@ -108,7 +110,7 @@ class SheetController extends Controller
                 $event,
                 $filters,
                 $selectedSheetsPage,
-                100, // number of sheets by page
+                self::SHEETS_PER_PAGE, // number of sheets by page
                 $event->getAvailableLocale($request->getLocale()),
                 $this->getUser()
             );
@@ -121,7 +123,7 @@ class SheetController extends Controller
         }
 
         // Batch
-        $batch     = new Batch($this->getUser());
+        $batch     = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()));
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
@@ -161,8 +163,10 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $filters = $this->get('filter.sheet_filter')->get();
+
         $selectedSheetsPage = $request->query->getInt('page', 1);
-        $batch              = new Batch($this->getUser());
+        $batch              = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()), $filters);
         $batchForm          = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
@@ -182,6 +186,7 @@ class SheetController extends Controller
                     $batch->disable         = $batchForm->get('disable')->isClicked();
                     $batch->addCatalog      = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog   = $batchForm->get('removeCatalog')->isClicked();
+                    $batch->assignToGroup   = $batchForm->get('assignToGroup')->isClicked();
 
                     if ($batchForm->has('generateInvoice')) {
                         $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();

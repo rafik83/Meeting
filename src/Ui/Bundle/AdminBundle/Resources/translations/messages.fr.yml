@@ -129,6 +129,15 @@ admin.common.export.no: Non
 admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
+admin.sheets_group.index: 'Multi-fiches'
+admin.sheets_group.create: 'Nouvelle entité multi-fiches'
+admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
+admin.sheets_group.title: 'Multi-fiches'
+admin.sheets_group.column.email_manager: 'Email du gestionnaire'
+admin.sheets_group.column.title: 'Titre'
+admin.sheets_group.column.sheet_list: 'Liste des fiches'
+admin.sheets_group.column.created_at: 'Date de création'
+admin.sheets_group.no_result: 'Aucuns résultats'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
@@ -562,11 +571,16 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
+admin.sheet.batch.selection.label: "Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées."
+admin.sheet.batch.selectionAll.label: "Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres."
+admin.sheet.batch.cancelSelection.label: "Annuler la sélection complète"
+admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
 admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
+admin.sheet.assignToGroup: 'Assigner à une entité'
 admin.sheet.attend.title: 'Modifier la venue de la fiche %sheetTitle%'
 admin.sheet.attend.danger.numberOfMeetings: 'Attention, l''annulation de la venue de cette fiche supprimera %numberOfMeetings% rendez-vous'
 admin.sheet.attend.info.numberOfMeetings: 'Pas de rendez-vous sont positionnés sur cette fiche'

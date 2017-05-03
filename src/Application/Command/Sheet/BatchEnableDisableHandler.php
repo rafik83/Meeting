@@ -10,41 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager;
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchEnableDisableHandler
 {
+    const STATE_ENABLE  = 'enable';
+    const STATE_DISABLE = 'disable';
+
     /**
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
-
-    /**
-     * @var DelayedEventDispatcher
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var BatchCatalogHandler
-     */
-    private $batchCatalogHandler;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $datetime;
-
-    /**
-     * @var EnableDisableManager
-     */
-    private $enableDisableManager;
 
     /**
      * @var MeetingRepositoryInterface
@@ -57,32 +37,28 @@ class BatchEnableDisableHandler
     private $sheetInfoGuesser;
 
     /**
+     * @var BatchJobQueueInterface
+     */
+    private $batchJobQueue;
+
+    /**
      * BatchEnableDisableHandler constructor.
      *
      * @param SheetRepositoryInterface   $sheetRepository
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param BatchCatalogHandler        $batchCatalogHandler
-     * @param \DateTimeInterface         $datetime
-     * @param EnableDisableManager       $enableDisableManager
      * @param MeetingRepositoryInterface $meetingRepository
      * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param BatchJobQueueInterface     $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher,
-        BatchCatalogHandler $batchCatalogHandler,
-        \DateTimeInterface $datetime,
-        EnableDisableManager $enableDisableManager,
         MeetingRepositoryInterface $meetingRepository,
-        SheetInfoGuesser $sheetInfoGuesser
+        SheetInfoGuesser $sheetInfoGuesser,
+        BatchJobQueueInterface $batchJobQueue
     ) {
-        $this->sheetRepository      = $sheetRepository;
-        $this->eventDispatcher      = $eventDispatcher;
-        $this->batchCatalogHandler  = $batchCatalogHandler;
-        $this->datetime             = $datetime;
-        $this->enableDisableManager = $enableDisableManager;
-        $this->meetingRepository    = $meetingRepository;
-        $this->sheetInfoGuesser     = $sheetInfoGuesser;
+        $this->sheetRepository   = $sheetRepository;
+        $this->meetingRepository = $meetingRepository;
+        $this->sheetInfoGuesser  = $sheetInfoGuesser;
+        $this->batchJobQueue     = $batchJobQueue;
     }
 
     /**
@@ -97,40 +73,35 @@ class BatchEnableDisableHandler
         $ignoredSheets        = [];
         $ignoredSheetsMessage = '';
 
-        foreach ($sheets as $sheet) {
+        $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($batchEnableDisable->ids);
 
-            if ($batchEnableDisable->state === false && $this->meetingRepository->countMeetingsOfSheet($sheet) > 0) {
-                $ignoredSheets[] = $sheet;
+        foreach ($batchEnableDisable->ids as $index => $id) {
+            if (isset($sheets[$id])) {
+                $sheet = $sheets[$id];
 
-                continue;
+                if ($batchEnableDisable->state === false
+                    && isset($meetings[$id])
+                    && $meetings[$id] > 0
+                ) {
+                    $ignoredSheets[] = $sheet;
+                    $this->excludeSheetFromBatch($batchEnableDisable, $index);
+                }
             }
+        }
 
-            $this->enableDisableManager->update($sheet, $batchEnableDisable->state);
-            $this->sheetRepository->set($sheet->setEnable($batchEnableDisable->state));
+        if (!empty($batchEnableDisable->ids)) {
+            $this->sheetRepository->updateEnableStateBySheetsId($batchEnableDisable->ids, $batchEnableDisable->state);
 
-            // remove sheet from catalog if sheet is disable
-            if ($batchEnableDisable->state === false) {
-                $this->batchCatalogHandler->handle(new BatchCatalog(
-                    $batchEnableDisable->ids,
-                    $batchEnableDisable->state,
-                    $batchEnableDisable->admin
-                ));
-            }
-
-            $this->eventDispatcher->dispatch(
-                Events::SHEET_ENABLE_DISABLE,
-                new SheetEnableDisableEvent(
-                    $sheet,
-                    $batchEnableDisable->admin,
-                    $this->datetime,
-                    $batchEnableDisable->state
-                )
+            $this->batchJobQueue->createJob(
+                $batchEnableDisable->ids,
+                $batchEnableDisable->admin,
+                ['state' => $batchEnableDisable->state ? self::STATE_ENABLE : self::STATE_DISABLE]
             );
         }
 
         if (count($ignoredSheets) > 0) {
             $message = 'disable.warning';
-            $locale = $ignoredSheets[0]->getEvent()->getAvailableLocale($batchEnableDisable->admin->getLocale());
+            $locale  = $ignoredSheets[0]->getEvent()->getAvailableLocale($batchEnableDisable->admin->getLocale());
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ',
                 array_map(function (Sheet $sheet) use ($locale) {
@@ -142,5 +113,16 @@ class BatchEnableDisableHandler
         }
 
         return new BatchResult(count($sheets), $batchEnableDisable->getMessage() . $message, $ignoredSheetsMessage);
+    }
+
+    /**
+     * Remove a specific sheet id from the pull of batch IDs
+     *
+     * @param BatchEnableDisable $command
+     * @param int                $index
+     */
+    private function excludeSheetFromBatch(BatchEnableDisable $command, $index)
+    {
+        unset($command->ids[$index]);
     }
 }

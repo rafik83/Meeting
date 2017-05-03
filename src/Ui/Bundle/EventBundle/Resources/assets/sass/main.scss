@@ -197,6 +197,10 @@
 
   &.success { background: $bg-success-color; }
   &.fail { background: $bg-fail-color; }
+  &.warning {
+    background: $bg-warning-color;
+    color: #333;
+  }
 }
 
 .white {
@@ -228,4 +232,20 @@
 
 .see-more-align {
   margin-bottom: 30px;
+}
+
+.user-availability-icon {
+  width: 3px;
+}
+
+.user-availability-icon-caption {
+  margin-right: 15px !important;
+}
+
+.user-available {
+  color: limegreen;
+}
+
+.user-not-available {
+  color: black;
 }

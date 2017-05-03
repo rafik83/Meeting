@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class Unavailability
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
+
+class Unavailability implements TimeRangeInterface
 {
     /**
      * @var int

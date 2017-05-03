@@ -151,6 +151,7 @@ class SheetListViewQueryHandler
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
+                $sheet->attend(),
                 $sheetIndicatorsView,
                 null !== $follower,
                 $followerView,

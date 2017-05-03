@@ -67,4 +67,45 @@ class GroupRepository implements GroupRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllByEventOrderedByTitle(Event $event)
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheetsGroup')
+            ->from(Group::class, 'sheetsGroup')
+            ->where('sheetsGroup.event = :event')
+            ->setParameter('event', $event)
+            ->orderBy('sheetsGroup.title', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheetsGroup')
+            ->from(Group::class, 'sheetsGroup')
+            ->where('sheetsGroup.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Group $group)
+    {
+        $this->entityManager->persist($group);
+        $this->entityManager->flush($group);
+    }
 }

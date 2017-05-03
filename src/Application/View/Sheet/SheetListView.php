@@ -126,6 +126,12 @@ class SheetListView
      */
     public $countParticipant;
 
+    /** @var bool */
+    public $hasGroup;
+
+    /** @var null|string */
+    public $groupTitle;
+
     /**
      * @var bool
      */
@@ -150,6 +156,8 @@ class SheetListView
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
      * @param int                  $countParticipant
+     * @param bool                 $hasGroup
+     * @param string|null          $groupTitle
      * @param string|null          $spotReference
      * @param Trace|null           $trace
      */
@@ -170,6 +178,8 @@ class SheetListView
         \DateTimeInterface $lastLoginAt = null,
         $impersonationToken,
         $countParticipant,
+        $hasGroup = false,
+        $groupTitle = null,
         $spotReference = null,
         Trace $trace = null
     ) {
@@ -190,6 +200,8 @@ class SheetListView
         $this->impersonationToken = $impersonationToken;
         $this->spotReference      = $spotReference;
         $this->countParticipant   = $countParticipant;
+        $this->hasGroup           = $hasGroup;
+        $this->groupTitle         = $groupTitle;
 
         if (null !== $trace) {
             $this->traceAction = $trace->getAction();
