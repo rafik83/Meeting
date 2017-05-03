@@ -1,0 +1,21 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'multiple_sheets.request.title'|trans }} - {{ event.title }}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            <h1>
+                <a href="{{ path('event_select_sheet') }}">{{ 'multiple_sheets.title'|trans }}</a>
+                /
+                {{ 'multiple_sheets.request.title'|trans }}
+            </h1>
+        </header>
+
+        <div class="main__container">
+            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig') }}
+        </div>
+    </section>
+{% endblock %}

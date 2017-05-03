@@ -1,0 +1,62 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
+
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView as AdminGroupView;
+
+class AdminGroupViewQueryHandler
+{
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var SheetInfoGuesser */
+    private $sheetInfoGuesser;
+
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param SheetInfoGuesser         $sheetInfoGuesser
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository, SheetInfoGuesser $sheetInfoGuesser)
+    {
+        $this->sheetRepository  = $sheetRepository;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    }
+
+    /**
+     * @param AdminGroupViewQuery $groupViewQuery
+     *
+     * @return AdminGroupView
+     */
+    public function handle(AdminGroupViewQuery $groupViewQuery)
+    {
+        $sheets = $this->sheetRepository->getByGroup($groupViewQuery->group);
+
+        $sheetViews = array_map(function (Sheet $sheet) {
+            return new SheetView($sheet->getId(), $this->sheetInfoGuesser->guessSheetTitle($sheet));
+        }, $sheets);
+
+        usort($sheetViews, function (SheetView $one, SheetView $other) {
+            return strcasecmp($one->title, $other->title);
+        });
+
+        return new AdminGroupView(
+            $groupViewQuery->group->getId(),
+            $groupViewQuery->group->getTitle(),
+            $groupViewQuery->group->getManager()->getEmail(),
+            $sheetViews,
+            $groupViewQuery->group->getCreatedAt()
+        );
+    }
+}

@@ -657,6 +657,7 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+<<<<<<< HEAD
      * @param bool $hasMessage
      */
     public function setHasMessage($hasMessage)
@@ -670,5 +671,13 @@ class Request implements MessageSubjectInterface
     public function hasMessage()
     {
         return $this->hasMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOneOfSheetsNotAttend()
+    {
+        return false === $this->getFromSheet()->attend() || false === $this->getToSheet()->attend();
     }
 }

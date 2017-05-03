@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -21,30 +24,30 @@ class BatchValidateHandler
     private $sheetRepository;
 
     /**
-     * @var ValidateHandler
+     * @var BatchJobQueueInterface
      */
-    private $validateHandler;
+    private $batchJobQueue;
 
     /**
-     * @var \DateTimeInterface
+     * @var JobQueueInterface
      */
-    private $datetime;
+    private $jobQueue;
 
     /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param ValidateHandler          $validateHandler
-     * @param \DateTimeInterface       $datetime
+     * @param BatchJobQueueInterface   $batchJobQueue
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        ValidateHandler $validateHandler,
-        \DateTimeInterface $datetime
+        BatchJobQueueInterface $batchJobQueue,
+        JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->validateHandler = $validateHandler;
-        $this->datetime        = $datetime;
+        $this->batchJobQueue   = $batchJobQueue;
+        $this->jobQueue        = $jobQueue;
     }
 
     /**
@@ -55,12 +58,25 @@ class BatchValidateHandler
     public function handle(BatchValidate $batchValidate)
     {
         // Get unvalidated sheets
-        $sheets = $this->sheetRepository->getUnvalidatedSheetsById($batchValidate->ids);
+        $sheets   = $this->sheetRepository->getUnvalidatedSheetsById($batchValidate->ids);
+        $sheetIds = array_map(function (Sheet $sheet) {
+            return $sheet->getId();
+        }, $sheets);
 
-        // Validate sheets
-        /** @var Sheet $sheet */
-        foreach ($sheets as $sheet) {
-            $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $this->datetime, $batchValidate->comment));
+        $this->sheetRepository->updateStateBySheetsId($batchValidate->ids, Sheet::STATE_VALIDATED);
+
+        if (!empty($sheetIds)) {
+            // reindex sheet in elasticsearch
+            $this->jobQueue->indexSheets($sheetIds);
+
+            // send email
+            $this->jobQueue->sendEmailing($batchValidate->event, $sheetIds, Events::SHEET_VALIDATED, true);
+
+            $this->batchJobQueue->createJob(
+                $sheetIds,
+                $batchValidate->admin,
+                ['comment' => $batchValidate->comment]
+            );
         }
 
         return new BatchResult(count($sheets), $batchValidate->getMessage() . 'validate.success');

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
@@ -57,6 +58,7 @@ class CreateHandler
     /**
      * @param Create $create
      *
+     * @throws CanNotCreateUnavailabilityException
      * @throws NoParticipantSelectedException
      * @throws ParticipantsSelectedWithMeetingOrHappeningException
      * @throws TimeOutOfRangeException
@@ -64,6 +66,10 @@ class CreateHandler
     public function handle(Create $create)
     {
         $locale = $create->locale;
+
+        if (!$create->sheet->attend()) {
+            throw new CanNotCreateUnavailabilityException('The sheet does not attend the event');
+        }
 
         if (empty($create->participants)) {
             throw new NoParticipantSelectedException();

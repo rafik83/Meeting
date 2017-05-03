@@ -1,12 +1,3 @@
-{% extends 'MailBundle:Mail:base.html.twig' %}
-
 {% block body %}
-    {{ 'mail.sheet.validated.body'|trans({
-        '%event%': mail.sheet.event.title,
-        '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate|localizeddate('medium', 'none', mail.locale),
-        '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate|localizeddate('medium', 'none', mail.locale),
-        '%firstname%': mail.firstname|capitalize,
-        '%lastname%': mail.lastname|upper,
-        '%participationType%': mail.participantType
-    }, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.sheet.validated.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

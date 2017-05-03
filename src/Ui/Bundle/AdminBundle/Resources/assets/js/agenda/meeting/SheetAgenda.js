@@ -15,8 +15,12 @@ module.exports = {
         return {
             availableSlotsForMeeting: [],
             currentAvailableSlotsForMeeting: [],
-            slotToBeMoved: null
+            slotToBeMoved: null,
+            routeToUpdateSheetAttendance: null,
         }
+    },
+    beforeMount: function () {
+        this.routeToUpdateSheetAttendance = api.updateSheetAttendance(this.sheet.id);
     },
     methods: {
         init: function () {

@@ -1,0 +1,32 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.sheets_group.create.title'|trans %}
+
+{% block form_title 'admin.sheets_group.create'|trans %}
+
+{% block form_content %}
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="create_sheets_group_name_manager">
+            {{ 'form.create_sheets_group.children.name_manager.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-md-9">
+            <input type="text" id="create_sheets_group_name_manager" value="{{ user.fullname }}" class="form-control" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="create_sheets_group_email_manager">
+            {{ 'form.create_sheets_group.children.email_manager.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-md-9">
+            <input type="text" id="create_sheets_group_email_manager" value="{{ user.email }}" class="form-control" disabled>
+        </div>
+    </div>
+    {{ form_row(form.title) }}
+
+    {% if form.sheetViews is defined %}
+        {{ form_row(form.sheetViews) }}
+    {% endif %}
+
+{% endblock %}
+
+{% block goback_link path('admin_sheets_group_pre_create', {event: event.id}) %}

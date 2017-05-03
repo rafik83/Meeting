@@ -230,6 +230,8 @@ fos_elastica:
                             type: boolean
                         hasInvoice:
                             type: boolean
+                        attend:
+                            type: boolean
                         organizationCategory:
                             type: string
                             index: "not_analyzed"

@@ -204,6 +204,11 @@
 {% endif %}
 
 {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+    <li>
+        <a href="{{ path('admin_sheets_group_list', { 'event': event.id }) }}">
+            {{ 'admin.sheets_group.index'|trans }}
+        </a>
+    </li>
     <li class="dropdown-submenu">
         <a href="#">{{ 'admin.event.template.link'|trans }}</a>
         <ul class="dropdown-menu">

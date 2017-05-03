@@ -14,18 +14,20 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice;
 use Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $event = EventFactory::createEvent();
         $date  = new \DateTime();
         $admin = new Admin('email@email.com', 'test', 'test', 'fr', 'test', 'test', 'ROLE_SUPER_ADMIN', $date);
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
 
-        $command = new BatchGenerateInvoice([1], $admin);
-        $jobQueue->generateInvoice([1], $admin)->shouldBeCalled();
+        $command = new BatchGenerateInvoice($event, [1], $admin);
+        $jobQueue->generateInvoice($event, [1], $admin)->shouldBeCalled();
 
         $handler = new BatchGenerateInvoiceHandler($jobQueue->reveal());
         $result  = $handler->handle($command);

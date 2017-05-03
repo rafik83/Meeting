@@ -1,0 +1,48 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ groupView.title }} - {{ event.title }}
+{% endblock %}
+
+{% block content %}
+<section class="main mg-top">
+    <header>
+        <h1>
+            <a href="{{ path('event_sheet_group_index', {'sheetGroup': groupView.id}) }}">{{ groupView.title }}</a>
+            /
+            {{ 'group.participant_update.title'|trans }}
+        </h1>
+
+    </header>
+    <div class="main__container">
+        {{ form_start(form) }}
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">{{ 'form.group.participant.submit'|trans({}, 'forms') }}</button>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ 'group.participant_update.list.participant'|trans }}</th>
+                        <th>{{ 'group.participant_update.list.email'|trans }}</th>
+                        <th class="col-md-7">{{ 'group.participant_update.list.sheets'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for userParticipantView in userParticipantViews %}
+                    <tr>
+                        <td>{{ userParticipantView.fullname }}</td>
+                        <td>{{ userParticipantView.email }}</td>
+                        <td>{{ form_row(form.children[userParticipantView.userId]) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">{{ 'form.group.participant.submit'|trans({}, 'forms') }}</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</section>
+{% endblock %}

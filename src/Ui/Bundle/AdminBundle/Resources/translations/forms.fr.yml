@@ -577,14 +577,29 @@ form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
+form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
+form.search_user_sheets_group.children.submit.label: 'Suivant'
+form.create_sheets_group.children.name_manager.label: 'Nom du manager'
+form.create_sheets_group.children.email_manager.label: 'Email du manager'
+form.create_sheets_group.children.title.label: 'Titre de l''entité'
+form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
+form.create_sheets_group.children.submit.label: 'Créer'
+form.create_sheets_group.children.sheetViews.prototype.label: 'Fiches'
 form.select_recipients.children.recipients.label: Destinataires
+form.sheet_attendance_choice.children.attend.label: Venue de la fiche
+form.sheet_attendance_choice.children.attend.choice.attend: Présent
+form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
+form.sheet_attendance_choice.children.submit.label: Confirmer la modification
+form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
+form.sheet_batch.children.assignToGroup.label: 'Assigner'
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
+form.sheet_batch.children.group.label: 'Entité'
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -629,6 +644,7 @@ form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
 form.sheet_filter.children.validationState.label: 'Statut fiche'
+form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler

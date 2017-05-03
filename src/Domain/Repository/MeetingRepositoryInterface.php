@@ -75,6 +75,11 @@ interface MeetingRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     */
+    public function removeMeetingOfSheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
      *
      * @return int
      */
@@ -95,6 +100,13 @@ interface MeetingRepositoryInterface
     public function countMeetingsOfSheet(Sheet $sheet);
 
     /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function countMeetingsOfSheetByIds(array $ids);
+
+    /**
      * @param Event $event
      *
      * @return int[]
@@ -107,6 +119,13 @@ interface MeetingRepositoryInterface
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasScheduledMeetingByParticipant(Participant $participant);
 
     /**
      * @param Meeting $meeting

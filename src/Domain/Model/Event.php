@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
+use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
  * "Evènement".
@@ -652,7 +653,7 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getTraceableName()
     {
-        return 'event';
+        return TraceableName::EVENT_TRACEABLE_NAME;
     }
 
     /**

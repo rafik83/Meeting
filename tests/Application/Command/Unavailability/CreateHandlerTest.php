@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\CreateHandler;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
@@ -795,6 +796,64 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled();
 
         $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+
+        $handler = new CreateHandler(
+            $this->unavailabilityRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testHandleExceptionSheetDoesNotAttendEvent()
+    {
+        $this->expectException(CanNotCreateUnavailabilityException::class);
+
+        $startTime = new \DateTime('2016-10-12 08:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 18:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
+        $event->setDays([$day]);
+        $user                 = UserFactory::create();
+        $sheet                = SheetFactory::create($event, $user);
+        $sheet->setAttendance(false);
+        $participant          = ParticipantFactory::create($sheet, $user);
+        $create               = new Create($event, $sheet, $user, 'fr');
+        $create->participants = [$participant];
+
+        $expectedBegin  = new \DateTime('2016-10-12 08:30:00.000');
+        $expectedBegin2 = new \DateTime('2016-10-12 09:30:00.000');
+        $expectedEnd    = new \DateTime('2016-10-12 12:00:00.000');
+        $expectedEnd2   = new \DateTime('2016-10-12 14:00:00.000');
+
+        $create->time['begin']['hour']   = 10;
+        $create->time['begin']['minute'] = 30;
+
+        $create->time['end']['hour']   = 14;
+        $create->time['end']['minute'] = 00;
+
+        $unavailability         = new Unavailability($participant, $expectedBegin, $expectedEnd);
+        $unavailability2        = new Unavailability($participant, $expectedBegin2, $expectedEnd2);
+        $expectedUnavailability = new Unavailability($participant, $expectedBegin, $expectedEnd2);
+
+        $this->participantRepository
+            ->getParticipantsWithoutMeetingAndHappening([$participant], $expectedBegin, $expectedEnd)
+            ->shouldNotBeCalled()
+            ->willReturn([$participant]);
+
+        $this->unavailabilityRepository
+            ->getOverlapUnavailabilities($unavailability)
+            ->shouldNotBeCalled()
+            ->willReturn([$unavailability2]);
+
+        $this->unavailabilityRepository
+            ->remove($unavailability2)
+            ->shouldNotBeCalled();
+
+        $this->unavailabilityRepository
+            ->add($expectedUnavailability)
+            ->shouldNotBeCalled();
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),

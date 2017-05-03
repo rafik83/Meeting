@@ -53,7 +53,6 @@ class UpdateHandler
         $this->transactionRepository->set($update->transaction->update(
             $update->amount,
             $update->date,
-            $update->mode,
             $update->reference,
             $update->state
         ));

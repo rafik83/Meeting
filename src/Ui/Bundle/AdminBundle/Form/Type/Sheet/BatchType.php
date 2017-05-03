@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group\GroupChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -56,6 +58,7 @@ class BatchType extends AbstractType
                 'event'       => $options['event'],
                 'placeholder' => '',
                 'required'    => false,
+                'unassigned'  => true,
             ])
             ->add('validateComment', TextareaType::class, [
                 'required' => false,
@@ -63,6 +66,9 @@ class BatchType extends AbstractType
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
             ->add('accept', SubmitType::class)
+            ->add('selectionType', HiddenType::class, [
+                'data' => Batch::SELECTION_TYPE_PAGE,
+            ])
         ;
 
         if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
@@ -72,6 +78,11 @@ class BatchType extends AbstractType
                 ->add('addCatalog', SubmitType::class)
                 ->add('removeCatalog', SubmitType::class)
                 ->add('generateInvoice', SubmitType::class)
+                ->add('group', GroupChoiceType::class, [
+                    'event'    => $options['event'],
+                    'required' => false,
+                ])
+                ->add('assignToGroup', SubmitType::class)
             ;
         }
 

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -99,7 +100,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet, participants')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
+            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true AND sheet.attend = true')
             ->where('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
             ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
@@ -257,7 +258,30 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getSheetsById(array $ids)
     {
-        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('sheet.id');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsWithoutGroupInGivenSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.id IN (:sheets) AND sheet.group IS NULL')
+            ->setParameter('sheets', $sheets);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -285,7 +309,14 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
-            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true AND EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE (r.from = sheet AND r.to IN (:sheets)) OR (r.to = sheet AND r.from IN (:sheets)))')
+            ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
+            ->andWhere(
+                'EXISTS (
+                    SELECT r.id FROM Entity:Meeting\Request r
+                    WHERE (r.from = sheet AND r.to IN (:sheets))
+                    OR (r.to = sheet AND r.from IN (:sheets))
+                )'
+            )
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets);
 
@@ -584,6 +615,60 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function updateInCatalogBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.inCatalog', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        if ($state === true) {
+            $queryBuilder->set('sheet.inCatalogAt', ':date')
+                ->setParameter('date', new \DateTime());
+        }
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateEnableStateBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.enable', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStateBySheetsId(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.state', ':state')
+            ->where('sheet.id IN (:ids)')
+            ->andWhere('sheet.state != :state')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getBySheetTemplate(SheetTemplate $sheetTemplate)
     {
         $queryBuilder = $this
@@ -595,6 +680,23 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('sheetTemplate', $sheetTemplate);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateValidationState(array $ids, $state)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->where('sheet.id IN (:ids)')
+            ->andWhere('sheet.validationState != :state')
+            ->set('sheet.validationState', ':state')
+            ->setParameter('ids', $ids)
+            ->setParameter('state', $state);
+
+        return $queryBuilder->getQuery()->execute();
     }
 
     /**
@@ -616,6 +718,37 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function batchAssignBySheetsId(array $ids, Admin $admin)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.follower', ':follower')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('follower', $admin);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function batchUnAssignBySheetsId(array $ids)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.follower', 'NULL')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getByTypes(array $types)
     {
         $queryBuilder = $this
@@ -627,5 +760,31 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                '(sheet.owner = :user OR participant.user = :user) 
+                AND sheet.event = :event
+                AND sheet.enable = true
+                AND sheet.group IS NOT NULL'
+            )
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
     }
 }

@@ -361,8 +361,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true AND fromSheet.attend = true')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true AND toSheet.attend = true')
             ->join('fromSheet.participants', 'fromParticipants')
             ->join('toSheet.participants', 'toParticipants')
             ->where('request.state = :approved')
@@ -617,6 +617,25 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('approved', Request::STATE_APPROVED);
 
         return ((int) $queryBuilder->getQuery()->getSingleScalarResult()) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAssignedRequestByParticipant(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request.id')
+            ->from(Request::class, 'request')
+            ->leftjoin('request.fromParticipants', 'fromParticipant')
+            ->leftjoin('request.toParticipants', 'toParticipant')
+            ->where('(fromParticipant.id = :participant OR toParticipant.id = :participant) AND request.disabled = false')
+            ->setParameter('participant', $participant)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

@@ -126,6 +126,17 @@ class SheetListView
      */
     public $countParticipant;
 
+    /** @var bool */
+    public $hasGroup;
+
+    /** @var null|string */
+    public $groupTitle;
+
+    /**
+     * @var bool
+     */
+    public $attend;
+
     /**
      * SheetListView constructor.
      *
@@ -136,6 +147,7 @@ class SheetListView
      * @param int                  $completeness
      * @param bool                 $enabled
      * @param bool                 $inCatalog
+     * @param bool                 $attend
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
@@ -144,6 +156,8 @@ class SheetListView
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
      * @param int                  $countParticipant
+     * @param bool                 $hasGroup
+     * @param string|null          $groupTitle
      * @param string|null          $spotReference
      * @param Trace|null           $trace
      */
@@ -155,6 +169,7 @@ class SheetListView
         $completeness,
         $enabled,
         $inCatalog,
+        $attend,
         array $categories,
         $type,
         SheetParticipantView $owner,
@@ -163,6 +178,8 @@ class SheetListView
         \DateTimeInterface $lastLoginAt = null,
         $impersonationToken,
         $countParticipant,
+        $hasGroup = false,
+        $groupTitle = null,
         $spotReference = null,
         Trace $trace = null
     ) {
@@ -173,6 +190,7 @@ class SheetListView
         $this->completeness       = $completeness;
         $this->enabled            = $enabled;
         $this->inCatalog          = $inCatalog;
+        $this->attend             = $attend;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;
@@ -182,6 +200,8 @@ class SheetListView
         $this->impersonationToken = $impersonationToken;
         $this->spotReference      = $spotReference;
         $this->countParticipant   = $countParticipant;
+        $this->hasGroup           = $hasGroup;
+        $this->groupTitle         = $groupTitle;
 
         if (null !== $trace) {
             $this->traceAction = $trace->getAction();

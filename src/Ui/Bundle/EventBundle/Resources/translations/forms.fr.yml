@@ -38,6 +38,7 @@ form.create_unavailability.data.maxLength.translations.plural: 'caractères rest
 form.create_unavailability.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
 form.create_unavailability.data.maxLength.translations.singular: 'caractère restant'
 form.email.placeholder: 'Saisissez votre adresse e-mail'
+form.group.participant.submit: 'Enregistrer'
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
 form.nomenclature_data.children.items.label: 'Sélectionnez :'

@@ -19,6 +19,7 @@ use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
+use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -31,7 +32,6 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilder;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 
 class SheetSearchQueryBuilder
@@ -119,6 +119,9 @@ class SheetSearchQueryBuilder
             return;
         }
 
+        // Remove empty filters before apply elastica filters
+        $this->discardEmptyFilters($filters);
+
         $this->filterByText($filters);
         $this->filterByState($filters);
         $this->filterByValidationState($filters);
@@ -138,6 +141,7 @@ class SheetSearchQueryBuilder
         $this->filterByHasScheduledMeeting($filters);
         $this->filterByHasInvoice($filters);
         $this->filterByImported($filters);
+        $this->filterByCanceledAttendance($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
@@ -179,9 +183,19 @@ class SheetSearchQueryBuilder
     /**
      * @param array $filters
      */
+    private function discardEmptyFilters(array &$filters)
+    {
+        $filters = array_filter($filters, function($filter) {
+            return $filter !== "";
+        });
+    }
+
+    /**
+     * @param array $filters
+     */
     protected function filterByText(array &$filters)
     {
-        if (!isset($filters['text']) || null === $filters['text']) {
+        if (empty($filters['text']) || null === $filters['text']) {
             return;
         }
 
@@ -199,7 +213,7 @@ class SheetSearchQueryBuilder
      */
     protected function filterByContent(array &$filters)
     {
-        if (!isset($filters['content']) || null === $filters['content']) {
+        if (empty($filters['content']) || null === $filters['content']) {
             return;
         }
 
@@ -389,7 +403,7 @@ class SheetSearchQueryBuilder
             $followerQuery = new BoolQuery();
 
             foreach ($followers as $follower) {
-                if ($follower === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
+                if ($follower === FollowerConstant::UNASSIGNED_FOLLOWER) {
                     $matchFollower = new Term();
                     $matchFollower->setTerm('followUp', 0);
                     $followerQuery->addShould($matchFollower);
@@ -611,6 +625,22 @@ class SheetSearchQueryBuilder
         if (true === $hasNestedMustNot) {
             $nestedMustNot->setQuery($boolQueryMustNot)->setPath('booleanFilter');
             $this->query->addMustNot($nestedMustNot);
+        }
+    }
+
+    /**
+     * Filter sheet with canceled attendance
+     * @see Sheet::attend()
+     *
+     * @param array $filters
+     */
+    protected function filterByCanceledAttendance(array &$filters)
+    {
+        if (isset($filters['cancelAttendance'])) {
+            $matchAttend = new Term();
+            $matchAttend->setTerm('attend', !$filters['cancelAttendance']);
+
+            $this->query->addMust($matchAttend);
         }
     }
 

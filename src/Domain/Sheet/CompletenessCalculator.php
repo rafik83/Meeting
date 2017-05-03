@@ -192,16 +192,19 @@ class CompletenessCalculator
 
                     // In case of a required ItemCollection with no item
                     if ($count === 0) {
-                        $count = 1;
-                    }
+                        foreach ($locales as $locale) {
+                            $total[$locale]++;
+                        }
+                    } else {
+                        foreach ($locales as $locale) {
+                            $total[$locale]++;
 
-                    foreach ($locales as $locale) {
-                        $total[$locale] += $count;
-                        foreach ($object->getItems() as $item) {
-                            if (isset($item->getRawTitle()[$locale])
-                                && $item->getRawTitle()[$locale] !== null
-                            ) {
-                                $completed[$locale]++;
+                            foreach ($object->getItems() as $item) {
+                                if (!empty($item->getTitleLocalize($locale))) {
+                                    $completed[$locale]++;
+
+                                    break;
+                                }
                             }
                         }
                     }
