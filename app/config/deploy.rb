@@ -59,7 +59,8 @@ set :backup_path,   "var/backups"
 set :keep_releases, 3
 
 # Tasks
-after 'symfony:cache:warmup', 'app_tasks:install'
+before 'symfony:cache:warmup', 'app_tasks:install'
+after 'symfony:cache:warmup', 'symfony:doctrine:migrations:migrate'
 after :deploy, 'app_tasks:php'
 after :deploy, 'deploy:cleanup'
 
