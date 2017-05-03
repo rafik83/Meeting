@@ -56,8 +56,8 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1);
-        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, false, true);
+        $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -113,9 +113,9 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, false, true);
         $expectedRequest->approve($datetime);
-        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'modif', $datetime);
+        $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -172,8 +172,8 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1);
-        $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, false, true);
+        $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -230,7 +230,65 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, false, true);
+        $expectedRequest->approve($datetime);
+        $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
+
+        //Mock
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldBeCalled();
+
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldBeCalled();
+
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($request, $sheetTo)->shouldBeCalled()->willReturn(true);
+
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
+        //Handler
+        $handler = new UpdateMeetingRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $datetime,
+            $eventDispatcher->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleWithStateApprovedForSheetToWithoutMessage()
+    {
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user1     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user2     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+
+        $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
+        $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
+        $participant3 = $this->createParticipantMock($sheetTo, $user3, 3);
+        $sheetTo->addParticipant($participant1);
+        $sheetTo->addParticipant($participant2);
+        $sheetTo->addParticipant($participant3);
+
+
+        //Actual
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
+        $request->approve($datetime);
+
+        //Command
+        $command = new UpdateMeetingRequest($request, $sheetTo);
+        $command->participants = [$participant1, $participant3];
+
+        //Expected
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, false, false);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
 
@@ -239,7 +297,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
-        $messageRepository->add($expectedMessage)->shouldBeCalled();
+        $messageRepository->add($expectedMessage)->shouldNotBeCalled();
 
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToEditSentOrApproved($request, $sheetTo)->shouldBeCalled()->willReturn(true);

@@ -91,7 +91,8 @@ class MeetingRequestViewQueryHandler
             $query->isMeetingRequestUpdateLocked,
             $isSheetSeeable,
             $query->isMeetingRequestClosed,
-            $query->isAnsweringMeetingRequestClosed
+            $query->isAnsweringMeetingRequestClosed,
+            $query->meetingRequest->hasMessage()
         );
     }
 

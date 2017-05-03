@@ -419,6 +419,14 @@ event_catalog_sheet_meeting_request:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
+event_catalog_meeting_request_discussion:
+    path: /sheet/{sheet}/catalog/meeting-request/{meetingRequest}/discussion
+    requirements:
+        sheet: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:MeetingRequest/Message:displayDiscussion }
+
 #
 # Meeting Request
 #

@@ -17,6 +17,10 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: boolean
             options:
                 default: false
+        hasMessage:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting

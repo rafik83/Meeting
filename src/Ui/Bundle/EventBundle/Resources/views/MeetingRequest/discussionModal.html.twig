@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        <i class="icon-RDV"></i>
+        {{ 'catalog.action.meeting.request.discussion'|trans }}
+    </h4>
+</div>
+<div class="modal-body">
+    <div class="modal-content-request">
+        {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
+    </button>
+</div>
