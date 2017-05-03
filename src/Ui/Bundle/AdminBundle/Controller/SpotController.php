@@ -205,10 +205,10 @@ class SpotController extends Controller
                 $this->get('tactician.commandbus')->handle($batchCreate);
                 $this->addFlash('success', 'flash.admin.spot.batch_create.success');
             } catch (MultipleUniqueReferenceViolationException $exception) {
-                $this->addFlash('warning', [
-                    'message'   => 'flash.admin.spot.batch_create.duplicate',
-                    'arguments' => ['%references%' => $exception->getReferencesAsString()],
-                ]);
+                $this->addFlash('warning', new TransMessage(
+                    'flash.admin.spot.batch_create.duplicate',
+                    ['%references%' => $exception->getReferencesAsString()]
+                ));
             }
 
             return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
