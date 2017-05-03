@@ -207,6 +207,9 @@
                             <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ sheet.groupTitle }}"></i>
                         </span>
                     {% endif %}
+                    {% if not sheet.attend %}
+                        <span class="label label-danger">{{ 'event.sheet.attend.cancel'|trans }}</span>
+                    {% endif %}
                     <br>
                     <small>
                         {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }}

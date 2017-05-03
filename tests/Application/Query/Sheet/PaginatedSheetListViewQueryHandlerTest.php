@@ -78,6 +78,7 @@ class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet1->isInCatalog()->willReturn(true);
         $sheet1->isAccepted()->willReturn(true);
         $sheet1->isValidated()->willReturn(false);
+        $sheet1->attend()->willReturn(true);
 
         $sheet1->getFollower()->willReturn($admin->reveal());
         $sheet2->getFollower()->willReturn(null);
@@ -98,6 +99,7 @@ class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $spot->getReference()->willReturn('Spot 1');
 
         $sheet2->getId()->willReturn(2);
+        $sheet2->attend()->willReturn(false);
         $sheet2->getState()->willReturn('state2');
         $sheet2->getValidationState()->willReturn('validationState2');
         $sheet2->getCompleteness()->willReturn(75);
@@ -162,6 +164,7 @@ class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             45,
             true,
             true,
+            true,
             ['Category'],
             'type1',
             new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr'),
@@ -181,6 +184,7 @@ class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'state2',
             'validationState2',
             75,
+            false,
             false,
             false,
             [],
