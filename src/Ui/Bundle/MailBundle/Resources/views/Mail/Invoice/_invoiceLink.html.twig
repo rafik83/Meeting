@@ -1,0 +1,9 @@
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% for invoiceUrlView in invoiceUrlViews  %}
+    {{ macros.button(
+        'mail.sheet.invoiced.link'|trans({'%invoiceNumber%': invoiceUrlView.number}, 'mail', locale),
+        invoiceUrlView.url
+    ) }}
+    <br>
+{% endfor %}

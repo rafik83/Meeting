@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
@@ -21,7 +22,7 @@ use SendGrid\Email;
 use SendGrid\Mail;
 use SendGrid\Personalization;
 
-class SendGridApiAdapter
+class SendGridApiAdapter implements SendGridApiAdapterInterface
 {
     /**
      * The maximum number of receivers for a sending.
@@ -80,7 +81,7 @@ class SendGridApiAdapter
 
             // For each locale, send the chunck of receivers for this locale with the mail
             foreach ($receiverByLocale as $locale => $receiversForLocale) {
-                $this->doSend($this->prepare(clone $rawMails[$locale], $receiversForLocale));
+                $this->doSend($this->prepare($message, clone $rawMails[$locale], $receiversForLocale));
             }
         }
     }
@@ -117,16 +118,22 @@ class SendGridApiAdapter
     /**
      * Adds receivers and substitutions to a given SendGrid Mail.
      *
+     * @param Message        $message
      * @param Mail           $mail
      * @param ReceiverView[] $receivers An array of ReceiverView instances indexed by email
      *
      * @return Mail
      */
-    private function prepare(Mail $mail, array $receivers)
+    private function prepare(Message $message, Mail $mail, array $receivers)
     {
         foreach ($receivers as $email => $receiver) {
             $personalization = new Personalization();
             $personalization->addTo(new Email(null, (string) $email));
+
+            // Also send email to team in BCC
+            if ($message->isSendToEmailTeam() && $message->getEvent()->getEmailTeam() !== null) {
+                $personalization->addBcc(new Email(null, (string) $message->getEvent()->getEmailTeam()));
+            }
 
             foreach ($receiver->getReplaces() as $placeholder => $value) {
                 $personalization->addSubstitution((string) $placeholder, (string) $value);

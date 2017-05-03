@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 
 class BatchHandler
@@ -50,6 +51,11 @@ class BatchHandler
     private $batchValidationValidateHandler;
 
     /**
+     * @var SheetSearchAdapterInterface
+     */
+    private $sheetSearchAdapter;
+
+    /**
      * @var BatchGenerateInvoiceHandler;
      */
     private $batchGenerateInvoiceHandler;
@@ -60,6 +66,7 @@ class BatchHandler
     /**
      * BatchHandler constructor.
      *
+     * @param SheetSearchAdapterInterface    $sheetSearchAdapter
      * @param BatchValidateHandler           $batchValidateHandler
      * @param BatchAssignHandler             $batchAssignHandler
      * @param BatchAcceptHandler             $batchAcceptHandler
@@ -71,6 +78,7 @@ class BatchHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
      */
     public function __construct(
+        SheetSearchAdapterInterface $sheetSearchAdapter,
         BatchValidateHandler $batchValidateHandler,
         BatchAssignHandler $batchAssignHandler,
         BatchAcceptHandler $batchAcceptHandler,
@@ -81,6 +89,7 @@ class BatchHandler
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler
     ) {
+        $this->sheetSearchAdapter             = $sheetSearchAdapter;
         $this->batchValidateHandler           = $batchValidateHandler;
         $this->batchAssignHandler             = $batchAssignHandler;
         $this->batchAcceptHandler             = $batchAcceptHandler;
@@ -99,8 +108,13 @@ class BatchHandler
      */
     public function handle(Batch $batch)
     {
+        if ($batch->selectionType === Batch::SELECTION_TYPE_ALL) {
+            $batch->ids = $this->sheetSearchAdapter->getSheetIds($batch->event, $batch->filters, $batch->locale);
+        }
+
         if ($batch->validate) {
             return $this->batchValidateHandler->handle(new BatchValidate(
+                $batch->event,
                 $batch->ids,
                 $batch->admin,
                 $batch->validateComment
@@ -144,19 +158,19 @@ class BatchHandler
 
         if ($batch->draft) {
             return $this->batchDraftHandler->handle(
-                new BatchDraft($batch->ids, $batch->admin)
+                new BatchDraft($batch->event, $batch->ids, $batch->admin)
             );
         }
 
         if ($batch->validationValidate) {
             return $this->batchValidationValidateHandler->handle(
-                new BatchValidationValidate($batch->ids, $batch->admin)
+                new BatchValidationValidate($batch->event, $batch->ids, $batch->admin)
             );
         }
         
         if ($batch->generateInvoice) {
            return $this->batchGenerateInvoiceHandler->handle(
-               new BatchGenerateInvoice($batch->ids, $batch->admin)
+               new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
            );
         }
 

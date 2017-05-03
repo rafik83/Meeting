@@ -119,6 +119,9 @@ class SheetSearchQueryBuilder
             return;
         }
 
+        // Remove empty filters before apply elastica filters
+        $this->discardEmptyFilters($filters);
+
         $this->filterByText($filters);
         $this->filterByState($filters);
         $this->filterByValidationState($filters);
@@ -179,9 +182,19 @@ class SheetSearchQueryBuilder
     /**
      * @param array $filters
      */
+    private function discardEmptyFilters(array &$filters)
+    {
+        $filters = array_filter($filters, function($filter) {
+            return $filter !== "";
+        });
+    }
+
+    /**
+     * @param array $filters
+     */
     protected function filterByText(array &$filters)
     {
-        if (!isset($filters['text']) || null === $filters['text']) {
+        if (empty($filters['text']) || null === $filters['text']) {
             return;
         }
 
@@ -199,7 +212,7 @@ class SheetSearchQueryBuilder
      */
     protected function filterByContent(array &$filters)
     {
-        if (!isset($filters['content']) || null === $filters['content']) {
+        if (empty($filters['content']) || null === $filters['content']) {
             return;
         }
 
