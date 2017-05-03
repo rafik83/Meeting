@@ -49,6 +49,8 @@ class CatalogController extends Controller
      */
     public function redirectAction(Request $request, EventDomain $eventDomain)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
         $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
             $this->getUser(),
             $eventDomain->getEvent(),
