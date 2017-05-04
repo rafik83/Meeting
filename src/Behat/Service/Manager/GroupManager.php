@@ -14,6 +14,7 @@ use DateTime;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\GroupFactory;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 
@@ -25,18 +26,24 @@ class GroupManager
     /** @var SheetManager */
     private $sheetManager;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     /**
      * GroupManager constructor.
      *
      * @param GroupRepositoryInterface $groupRepository
+     * @param SheetRepositoryInterface $sheetRepository
      * @param SheetManager             $sheetManager
      */
     public function __construct(
         GroupRepositoryInterface $groupRepository,
+        SheetRepositoryInterface $sheetRepository,
         SheetManager $sheetManager
     ) {
         $this->groupRepository = $groupRepository;
         $this->sheetManager    = $sheetManager;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -52,6 +59,27 @@ class GroupManager
         $group = GroupFactory::createGroup($event, $user, $dateTime, $title);
 
         $this->groupRepository->add($group);
+
+        return $group;
+    }
+
+    /**
+     * @param Event         $event
+     * @param User     $user
+     * @param DateTime|null $dateTime
+     * @param null          $title
+     *
+     * @return Group
+     */
+    public function createWithSheet(Event $event, User $user, Datetime $dateTime = null, $title = null)
+    {
+        $group = GroupFactory::createGroup($event, $user, $dateTime, $title);
+
+        $sheet = $this->sheetManager->create($event, $user);
+        $sheet->setGroup($group);
+
+        $this->groupRepository->add($group);
+        $this->sheetRepository->add($sheet);
 
         return $group;
     }
