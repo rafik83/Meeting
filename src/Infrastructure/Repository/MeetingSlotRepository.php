@@ -260,4 +260,22 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findWithAtLeastOneMeetingByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot.id')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.event = :event')
+            ->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.slot = slot)')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

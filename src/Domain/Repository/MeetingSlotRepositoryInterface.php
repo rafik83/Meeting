@@ -83,4 +83,11 @@ interface MeetingSlotRepositoryInterface
      * @return MeetingSlot[]
      */
     public function findByEventAndDay(Event $event, Day $day);
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function findWithAtLeastOneMeetingByEvent(Event $event);
 }

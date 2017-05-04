@@ -179,11 +179,4 @@ interface MeetingRepositoryInterface
      *  ]
      */
     public function getAllCompleteByEvent(Event $event);
-
-    /**
-     * @param Event $event
-     *
-     * @return array
-     */
-    public function findMeetingSlotIdsWithAtLeastOneMeetingByEvent(Event $event);
 }
