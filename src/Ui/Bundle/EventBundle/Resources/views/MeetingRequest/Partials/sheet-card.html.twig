@@ -6,6 +6,11 @@
                     <i class="icon-Message_1 ft-bold"></i>
                 </a>
             {% endif %}
+            {% if meetingRequestView.isSeenByCurrentUser %}
+                <a href="#" class="pull-right no-underline ft-size-18">
+                    <i class="icon-Voir_1 ft-bold"></i>
+                </a>
+            {% endif %}
             {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog }, false) }}
         </div>
         <footer>

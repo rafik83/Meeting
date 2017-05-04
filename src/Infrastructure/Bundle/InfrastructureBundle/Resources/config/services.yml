@@ -3194,6 +3194,7 @@ services:
             - '@sheet.preview'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@repository.rule_repository'
+            - '@repository.sheet.sheet_viewed_repository'
             - '@domain.rule.composer'
 
     query.meeting.meeting_sheet_view_query_handler:

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
 
 class MeetingRequestViewQueryHandler
@@ -36,27 +37,35 @@ class MeetingRequestViewQueryHandler
      */
     private $ruleRepository;
 
+    /**
+     * @var SheetViewedRepositoryInterface
+     */
+    private $sheetViewedRepository;
+
     /** @var Composer */
     private $ruleComposer;
 
     /**
      * MeetingRequestViewQueryHandler constructor.
      *
-     * @param Preview                 $preview
-     * @param SheetInfoGuesser        $sheetInfoGuesser
-     * @param RuleRepositoryInterface $ruleRepository
-     * @param Composer                $ruleComposer
+     * @param Preview                        $preview
+     * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param RuleRepositoryInterface        $ruleRepository
+     * @param SheetViewedRepositoryInterface $sheetViewedRepository
+     * @param Composer                       $ruleComposer
      */
     public function __construct(
         Preview $preview,
         SheetInfoGuesser $sheetInfoGuesser,
         RuleRepositoryInterface $ruleRepository,
+        SheetViewedRepositoryInterface $sheetViewedRepository,
         Composer $ruleComposer
     ) {
-        $this->preview          = $preview;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
-        $this->ruleRepository   = $ruleRepository;
-        $this->ruleComposer     = $ruleComposer;
+        $this->preview               = $preview;
+        $this->sheetInfoGuesser      = $sheetInfoGuesser;
+        $this->ruleRepository        = $ruleRepository;
+        $this->sheetViewedRepository = $sheetViewedRepository;
+        $this->ruleComposer          = $ruleComposer;
     }
 
     /**
@@ -78,6 +87,8 @@ class MeetingRequestViewQueryHandler
         $previews = $this->preview->getPreview($sheet, $query->locale, $composedRule);
 
         $isSheetSeeable = !empty($rules);
+
+        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($userSheet->getOwner(), $sheet);
         
         return new MeetingRequestView(
             $sheet,
@@ -92,7 +103,8 @@ class MeetingRequestViewQueryHandler
             $isSheetSeeable,
             $query->isMeetingRequestClosed,
             $query->isAnsweringMeetingRequestClosed,
-            $query->meetingRequest->hasMessage()
+            $query->meetingRequest->hasMessage(),
+            $isSeenByCurrentUser
         );
     }
 
