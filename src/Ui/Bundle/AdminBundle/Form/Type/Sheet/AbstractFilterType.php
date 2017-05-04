@@ -172,6 +172,11 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
+            ->add('hasGroup', YesNoType::class, [
+                'label'    => 'form.sheet_filter.children.hasGroup.label',
+                'required' => false,
+                'expanded' => true,
+            ])
         ;
 
         /** @var Event $event */
