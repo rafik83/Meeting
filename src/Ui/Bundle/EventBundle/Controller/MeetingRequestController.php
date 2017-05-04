@@ -56,13 +56,14 @@ class MeetingRequestController extends Controller
     /**
      * List all meeting request of a sheet (sent and received)
      *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return Response
      */
-    public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -87,7 +88,7 @@ class MeetingRequestController extends Controller
         }
 
         $event       = $eventDomain->getEvent();
-        $query       = new MeetingRequestListViewQuery($event, $sheet, $request->getLocale(), $filters);
+        $query       = new MeetingRequestListViewQuery($event, $sheet, $user, $request->getLocale(), $filters);
         $statusQuery = new StateListViewQuery($sheet, $filters);
 
         /** @var MeetingRequestListView $meetingRequestListView */

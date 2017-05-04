@@ -62,15 +62,16 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return Response
      *
      * @throws NotFoundHttpException
      */
-    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -135,7 +136,8 @@ class CatalogController extends Controller
                     $page,
                     48,
                     $locale,
-                    $sheet
+                    $sheet,
+                    $user
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {

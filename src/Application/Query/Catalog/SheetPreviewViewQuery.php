@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class SheetPreviewViewQuery
 {
@@ -35,6 +36,11 @@ class SheetPreviewViewQuery
      */
     public $event;
 
+    /**
+     * @var User
+     */
+    public $user;
+
     /** @var bool */
     public $isMeetingRequestClosed;
 
@@ -46,6 +52,7 @@ class SheetPreviewViewQuery
      * @param Sheet  $sheet
      * @param string $locale
      * @param Sheet  $viewer
+     * @param User   $user
      * @param bool   $isMeetingRequestClosed
      * @param bool   $isAnsweringMeetingRequestClosed
      */
@@ -54,6 +61,7 @@ class SheetPreviewViewQuery
         Sheet $sheet,
         $locale,
         Sheet $viewer,
+        User $user,
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false
     ) {
@@ -61,6 +69,7 @@ class SheetPreviewViewQuery
         $this->sheet                           = $sheet;
         $this->locale                          = $locale;
         $this->viewer                          = $viewer;
+        $this->user                            = $user;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
     }

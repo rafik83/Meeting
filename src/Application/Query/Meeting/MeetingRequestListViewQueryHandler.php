@@ -84,6 +84,7 @@ class MeetingRequestListViewQueryHandler
                 new MeetingRequestViewQuery(
                     $meetingRequest,
                     $query->sheet,
+                    $query->user,
                     $query->locale,
                     $isMeetingPublished,
                     $isMeetingRequestUpdateLocked,

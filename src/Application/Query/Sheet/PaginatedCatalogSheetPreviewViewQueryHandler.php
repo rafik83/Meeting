@@ -105,6 +105,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $sheet,
                             $query->locale,
                             $query->viewer,
+                            $query->user,
                             $isMeetingRequestClosed,
                             $isAnsweringMeetingRequestClosed
                         )

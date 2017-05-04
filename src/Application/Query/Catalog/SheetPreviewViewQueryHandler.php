@@ -91,6 +91,7 @@ class SheetPreviewViewQueryHandler
     public function handle(SheetPreviewViewQuery $catalogSheetPreviewViewQuery)
     {
         $viewer = $catalogSheetPreviewViewQuery->viewer;
+        $user   = $catalogSheetPreviewViewQuery->user;
         $sheet  = $catalogSheetPreviewViewQuery->sheet;
         $locale = $catalogSheetPreviewViewQuery->locale;
         $rules  = $this->ruleRepository->getBySeerTypeAndSeeableType($viewer->getType(), $sheet->getType());
@@ -107,7 +108,7 @@ class SheetPreviewViewQueryHandler
 
         $isMeetingRequestUpdateLocked = $catalogSheetPreviewViewQuery->event->getConfiguration()->isMeetingRequestUpdateLocked();
 
-        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($viewer->getOwner(), $sheet);
+        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($user, $sheet);
 
         return new CatalogSheetPreviewView(
             $sheet->getId(),
