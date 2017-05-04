@@ -142,6 +142,7 @@ class SheetSearchQueryBuilder
         $this->filterByHasInvoice($filters);
         $this->filterByImported($filters);
         $this->filterByCanceledAttendance($filters);
+        $this->filterByHasGroup($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
@@ -641,6 +642,22 @@ class SheetSearchQueryBuilder
             $matchAttend->setTerm('attend', !$filters['cancelAttendance']);
 
             $this->query->addMust($matchAttend);
+        }
+    }
+
+    /**
+     * Filter sheet with group
+     * @see Sheet::hasGroup()
+     *
+     * @param array $filters
+     */
+    protected function filterByHasGroup(array &$filters)
+    {
+        if (isset($filters['hasGroup'])) {
+            $matchHasGroup = new Term();
+            $matchHasGroup->setTerm('hasGroup', $filters['hasGroup']);
+
+            $this->query->addMust($matchHasGroup);
         }
     }
 
