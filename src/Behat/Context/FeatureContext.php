@@ -606,6 +606,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * Page returns 404
+     *
+     * @Then /^this page "(?P<page>[^"]+)" returns 404$/
+     */
+    public function pageReturns404($page)
+    {
+        parent::visit($this->baseUrl . $page);
+        $this->assertResponseStatus(404);
+    }
+
+    /**
      * Checks, that current page PATH is equal to specified.
      *
      * @Then /^(?:|I )should be on this page "(?P<page>[^"]+)"$/
