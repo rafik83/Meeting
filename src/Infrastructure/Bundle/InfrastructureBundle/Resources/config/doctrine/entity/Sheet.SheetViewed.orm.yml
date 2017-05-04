@@ -12,8 +12,12 @@ Proximum\Vimeet\Domain\Model\Sheet\SheetViewed:
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                nullable: false
     uniqueConstraints:
         unique_user_sheet:
             columns:
