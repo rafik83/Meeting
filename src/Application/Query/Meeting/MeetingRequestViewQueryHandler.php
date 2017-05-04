@@ -76,6 +76,7 @@ class MeetingRequestViewQueryHandler
     public function handle(MeetingRequestViewQuery $query)
     {
         $sheet        = $this->getViewedSheet($query);
+        $user         = $query->user;
         $userSheet    = $query->sheet;
         $rules        = $this->ruleRepository->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
         $composedRule = null;
@@ -88,7 +89,7 @@ class MeetingRequestViewQueryHandler
 
         $isSheetSeeable = !empty($rules);
 
-        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($userSheet->getOwner(), $sheet);
+        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($user, $sheet);
         
         return new MeetingRequestView(
             $sheet,

@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -43,7 +44,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user);
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr');
+        $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -66,6 +67,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
+                $user,
                 'fr',
                 false,
                 false,
@@ -105,7 +107,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user);
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr');
+        $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -128,6 +130,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
+                $user,
                 'fr',
                 false,
                 false,
