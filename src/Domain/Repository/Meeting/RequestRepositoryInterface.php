@@ -186,10 +186,11 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     * @param bool  $attending
      *
      * @return int
      */
-    public function countPendingPropositionReceivedBySheet(Sheet $sheet);
+    public function countPendingPropositionReceivedBySheet(Sheet $sheet, $attending = true);
 
     /**
      * @param Sheet $sheet
