@@ -160,6 +160,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\GroupRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.sheet.sheet_viewed_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetViewedRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     repository.admin_activate_account_token_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
