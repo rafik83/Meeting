@@ -14,9 +14,9 @@ use DateTime;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\GroupFactory;
-use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 
 class GroupManager
 {
@@ -65,7 +65,7 @@ class GroupManager
 
     /**
      * @param Event         $event
-     * @param User     $user
+     * @param User          $user
      * @param DateTime|null $dateTime
      * @param null          $title
      *
