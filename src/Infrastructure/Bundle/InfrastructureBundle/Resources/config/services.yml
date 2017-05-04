@@ -811,6 +811,13 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SubmitValidation }
+    command.sheet.sheet_viewed.add_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\AddHandler
+        arguments:
+            - '@repository.sheet.sheet_viewed_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add }
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:

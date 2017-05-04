@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Sheet;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 
 class SheetViewedRepository implements SheetViewedRepositoryInterface
@@ -36,5 +38,24 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
     {
         $this->entityManager->persist($sheetViewed);
         $this->entityManager->flush($sheetViewed);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSheetAlreadySeenByUser(User $user, Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheetViewed.id')
+            ->from(SheetViewed::class, 'sheetViewed')
+            ->where('sheetViewed.sheet = :sheet AND sheetViewed.user = :user')
+            ->setParameters([
+                'sheet' => $sheet,
+                'user'  => $user,
+            ])
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

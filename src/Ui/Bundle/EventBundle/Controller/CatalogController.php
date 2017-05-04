@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
@@ -310,6 +311,10 @@ class CatalogController extends Controller
         if (!$sheetToDisplay->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet to display not in catalog');
         }
+
+        // Mark sheet as viewed by current user
+        $markSheetAsViewedByCurrentUser = new Add($user, $sheetToDisplay);
+        $this->get('command.sheet.sheet_viewed.add_handler')->handle($markSheetAsViewedByCurrentUser);
 
         $locale = $request->getLocale();
 
