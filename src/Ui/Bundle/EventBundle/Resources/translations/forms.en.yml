@@ -60,6 +60,9 @@ form.search.meeting.type.label: 'My meetings'
 form.search.objective.label: Objectives
 form.search.objective.need: 'Answer to my needs'
 form.search.objective.supply: 'To look for my offers'
+form.search.orderBy.alphabetical: 'Alphabetical order'
+form.search.orderBy.dateAddedToCatalog: 'Recent registrations'
+form.search.orderBy.relevance: Relevance
 form.search.position.label: Functions
 form.search.type.label: Participants
 form.sheet_button_link_data.children.submit.label: Save

@@ -98,9 +98,9 @@ admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
+admin.agenda.sheet.attend: 'Modifier la venue de la fiche'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
-admin.agenda.sheet.attend: 'Modifier la venue de la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
 admin.agenda.sort.alphabetical.label: Alphabétique
 admin.agenda.sort.asc.label: Croissant
@@ -129,15 +129,6 @@ admin.common.export.no: Non
 admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
-admin.sheets_group.index: 'Multi-fiches'
-admin.sheets_group.create: 'Nouvelle entité multi-fiches'
-admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
-admin.sheets_group.title: 'Multi-fiches'
-admin.sheets_group.column.email_manager: 'Email du gestionnaire'
-admin.sheets_group.column.title: 'Titre'
-admin.sheets_group.column.sheet_list: 'Liste des fiches'
-admin.sheets_group.column.created_at: 'Date de création'
-admin.sheets_group.no_result: 'Aucuns résultats'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
@@ -571,19 +562,19 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
-admin.sheet.batch.selection.label: "Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées."
-admin.sheet.batch.selectionAll.label: "Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres."
-admin.sheet.batch.cancelSelection.label: "Annuler la sélection complète"
-admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
 admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
 admin.sheet.assignToGroup: 'Assigner à une entité'
-admin.sheet.attend.title: 'Modifier la venue de la fiche %sheetTitle%'
 admin.sheet.attend.danger.numberOfMeetings: 'Attention, l''annulation de la venue de cette fiche supprimera %numberOfMeetings% rendez-vous'
 admin.sheet.attend.info.numberOfMeetings: 'Pas de rendez-vous sont positionnés sur cette fiche'
+admin.sheet.attend.title: 'Modifier la venue de la fiche %sheetTitle%'
+admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
+admin.sheet.batch.cancelSelection.label: 'Annuler la sélection complète'
+admin.sheet.batch.selection.label: 'Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées.'
+admin.sheet.batch.selectionAll.label: 'Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres.'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.link: Changer
 admin.sheet.change.type.title: 'Changer le type de participation'
@@ -691,6 +682,15 @@ admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
+admin.sheets_group.column.created_at: 'Date de création'
+admin.sheets_group.column.email_manager: 'Email du gestionnaire'
+admin.sheets_group.column.sheet_list: 'Liste des fiches'
+admin.sheets_group.column.title: Titre
+admin.sheets_group.create: 'Nouvelle entité multi-fiches'
+admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
+admin.sheets_group.index: Multi-fiches
+admin.sheets_group.no_result: 'Aucuns résultats'
+admin.sheets_group.title: Multi-fiches
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
@@ -719,21 +719,6 @@ admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
-admin.tip.empty: 'Aucun message d''aide'
-admin.tip.link: 'Messages d''aide'
-admin.tip.list.title: 'Messages d''aide'
-admin.tip.create.link: 'Nouveau'
-admin.tip.create.title: 'Nouveau message d''aide'
-admin.tip.update.title: 'Mise à jour du message d''aide'
-admin.tip.column.title: 'Libellé back office'
-admin.tip.column.translation: 'Langue(s)'
-admin.tip.column.locale: 'Langue'
-admin.tip.column.content: 'Contenu'
-admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
-admin.tip.column.visible.catalog: 'Catalogue'
-admin.tip.column.visible.print_planning: 'Impression planning'
-admin.tip.visible: 'Liste des pages concernées'
-admin.tip.update.link: 'Modifier'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'
@@ -759,6 +744,21 @@ admin.template.sheet.table.column.eventType: Événement/Type(s)
 admin.template.sheet.table.column.title: Titre
 admin.template.sheet.titleBase: 'Templates globaux'
 admin.template.sheet.titleEvent: 'Templates assignés'
+admin.tip.column.content: Contenu
+admin.tip.column.locale: Langue
+admin.tip.column.title: 'Libellé back office'
+admin.tip.column.translation: Langue(s)
+admin.tip.column.visible.catalog: Catalogue
+admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.print_planning: 'Impression planning'
+admin.tip.create.link: Nouveau
+admin.tip.create.title: 'Nouveau message d''aide'
+admin.tip.empty: 'Aucun message d''aide'
+admin.tip.link: 'Messages d''aide'
+admin.tip.list.title: 'Messages d''aide'
+admin.tip.update.link: Modifier
+admin.tip.update.title: 'Mise à jour du message d''aide'
+admin.tip.visible: 'Liste des pages concernées'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'
