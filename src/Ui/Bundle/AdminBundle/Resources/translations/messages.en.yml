@@ -23,6 +23,8 @@ admin.agenda.countProposition: 'Number of proposals received'
 admin.agenda.countRequest: 'Number of requests'
 admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
+admin.agenda.export.link: Export
+admin.agenda.export.omz: OMZ
 admin.agenda.link: 'My meetings'
 admin.agenda.remove.confirm: 'Are you sure you want to delete this meeting ?'
 admin.agenda.requestsList.title: 'Validated meetings'
@@ -85,6 +87,7 @@ admin.happening.add: Add
 admin.happening.link: Conferences
 admin.happening.menu.link: Programme
 admin.happening.update: Modify
+admin.invoice.link: Invoicing
 admin.invoice.pdf: 'View final invoice'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request.from: From

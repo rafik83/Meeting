@@ -122,6 +122,12 @@ form.create_partner.children.lastname.label: Nom
 form.create_partner.children.password.label: 'Mot de passe'
 form.create_partner.children.submit.label: Créer
 form.create_partner.children.types.label: 'Types disponibles pour ce collaborateur'
+form.create_sheets_group.children.email_manager.label: 'Email du manager'
+form.create_sheets_group.children.name_manager.label: 'Nom du manager'
+form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
+form.create_sheets_group.children.sheetViews.prototype.label: Fiches
+form.create_sheets_group.children.submit.label: Créer
+form.create_sheets_group.children.title.label: 'Titre de l''entité'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
@@ -578,28 +584,22 @@ form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
 form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
-form.search_user_sheets_group.children.submit.label: 'Suivant'
-form.create_sheets_group.children.name_manager.label: 'Nom du manager'
-form.create_sheets_group.children.email_manager.label: 'Email du manager'
-form.create_sheets_group.children.title.label: 'Titre de l''entité'
-form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
-form.create_sheets_group.children.submit.label: 'Créer'
-form.create_sheets_group.children.sheetViews.prototype.label: 'Fiches'
+form.search_user_sheets_group.children.submit.label: Suivant
 form.select_recipients.children.recipients.label: Destinataires
-form.sheet_attendance_choice.children.attend.label: Venue de la fiche
 form.sheet_attendance_choice.children.attend.choice.attend: Présent
 form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
-form.sheet_attendance_choice.children.submit.label: Confirmer la modification
+form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'
 form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
+form.sheet_attendance_choice.children.submit.label: 'Confirmer la modification'
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
-form.sheet_batch.children.assignToGroup.label: 'Assigner'
+form.sheet_batch.children.assignToGroup.label: Assigner
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
-form.sheet_batch.children.group.label: 'Entité'
+form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -609,6 +609,7 @@ form.sheet_comment.children.filter.label: Filtrer
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
+form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_filter.children.cart.no.label: Sans
 form.sheet_filter.children.cart.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cart.yes.label: Avec
@@ -644,7 +645,6 @@ form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
 form.sheet_filter.children.validationState.label: 'Statut fiche'
-form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler
@@ -697,29 +697,29 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
-form.tip_create.children.title.label: 'Libellé back office'
 form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
 form.tip_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
 form.tip_create.children.submit.label: 'Créer le message d''aide'
+form.tip_create.children.title.label: 'Libellé back office'
+form.tip_create.children.translations.label: Traductions
 form.tip_create.children.translations.label_add: 'Ajouter une traduction'
 form.tip_create.children.translations.label_delete: 'Retirer la traduction'
-form.tip_create.children.translations.label: 'Traductions'
-form.tip_create.children.translations.prototype.label: 'Traductions'
-form.tip_create.children.translations.prototype.children.title.label: 'Libellé'
-form.tip_create.children.translations.prototype.children.locale.label: 'Langue'
-form.tip_create.children.translations.prototype.children.content.label: 'Contenu'
-form.tip_update.children.title.label: 'Libellé back office'
+form.tip_create.children.translations.prototype.children.content.label: Contenu
+form.tip_create.children.translations.prototype.children.locale.label: Langue
+form.tip_create.children.translations.prototype.children.title.label: Libellé
+form.tip_create.children.translations.prototype.label: Traductions
 form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
 form.tip_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
-form.tip_update.children.translations.prototype.label: 'Traductions'
-form.tip_update.children.translations.prototype.children.title.label: 'Libellé'
-form.tip_update.children.translations.prototype.children.locale.label: 'Langue'
-form.tip_update.children.translations.prototype.children.content.label: 'Contenu'
-form.tip_update.children.translations.label_delete: 'Supprimer la traduction'
-form.tip_update.children.translations.label_add: 'Ajouter une traduction'
 form.tip_update.children.submit.label: 'Mettre à jour'
+form.tip_update.children.title.label: 'Libellé back office'
+form.tip_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_update.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_update.children.translations.prototype.children.content.label: Contenu
+form.tip_update.children.translations.prototype.children.locale.label: Langue
+form.tip_update.children.translations.prototype.children.title.label: Libellé
+form.tip_update.children.translations.prototype.label: Traductions
 form.transaction_find.children.beginDate.label: 'Date de début'
 form.transaction_find.children.date.placeholder: JJ/MM/AAAA
 form.transaction_find.children.endDate.label: 'Date de fin'
