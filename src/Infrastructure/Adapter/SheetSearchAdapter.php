@@ -357,7 +357,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     private function findCityQuery(Event $event, $filter)
     {
-        $matchCity = new Query\Bool();
+        $matchCity = new Query\BoolQuery();
         $matchCity->addMust(new Query\Match('event', $event->getId()));
         $matchCity->addMust(new Query\Match('city_autocomplete', $filter));
 
@@ -391,7 +391,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchCountry = new Query\Match('country.label_autocomplete', $filter);
         $matchLocale  = new Query\Match('country.locale', $locale);
 
-        $boolQuery = new Query\Bool();
+        $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
 
