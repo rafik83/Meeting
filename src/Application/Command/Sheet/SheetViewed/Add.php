@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,12 +24,12 @@ class Add
     /**
      * Add constructor.
      *
-     * @param User $user
+     * @param User  $user
      * @param Sheet $sheet
      */
     public function __construct(User $user, Sheet $sheet)
     {
-        $this->user = $user;
+        $this->user  = $user;
         $this->sheet = $sheet;
     }
 }
