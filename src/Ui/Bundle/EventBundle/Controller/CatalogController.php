@@ -119,7 +119,7 @@ class CatalogController extends Controller
             $locale
         );
 
-        if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
+        if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = $searchForm->getData();
         }
 
