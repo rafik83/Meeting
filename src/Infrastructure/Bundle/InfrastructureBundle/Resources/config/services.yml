@@ -4303,6 +4303,13 @@ services:
             - '@query.planning.day.assignment_view_query_handler'
             - '@query.planning.day.unavailability_view_query_handler'
             - '@query.planning.day.meeting_view_query_handler'
+    query.schedule.slot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Schedule\SlotViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Schedule\SlotViewQuery }
     query.planning.planning_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler
         arguments:

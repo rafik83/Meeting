@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Command\MeetingSlot\Remove;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Unlock;
 use Proximum\Vimeet\Application\Command\Schedule\Configure;
 use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException;
+use Proximum\Vimeet\Application\Query\Schedule\SlotQuery;
+use Proximum\Vimeet\Application\Query\Schedule\SlotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day\UpdateType;
@@ -50,7 +52,7 @@ class ScheduleController extends Controller
             return $this->redirectToRoute('admin_schedule_slots', ['event' => $event->getId()]);
         }
 
-        $slots = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findByEvent($event);
+        $slots = $this->get('tactician.commandbus')->handle(new SlotViewQuery($event));
 
         return $this->render('AdminBundle:Schedule:slots.html.twig', [
             'event' => $event,

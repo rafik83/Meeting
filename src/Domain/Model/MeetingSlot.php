@@ -124,7 +124,7 @@ class MeetingSlot implements TimeRangeInterface
     }
 
     /**
-     * @return \DateInterval
+     * @return string
      */
     public function duration()
     {
