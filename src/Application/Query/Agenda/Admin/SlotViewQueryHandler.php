@@ -130,6 +130,13 @@ class SlotViewQueryHandler
                 continue;
             }
 
+            if ($slot->isLocked()) {
+                // Locked Slot is considered as a mass unvailability
+                $slotViews[] = new MassUnavailabilitySlotView($slot, SlotAvailability::MASS_UNAVAILABILITY);
+
+                continue;
+            }
+
             $slotViews[] = new EmptySlotView($slot, $slotAvailabilityView->type);
         }
 
