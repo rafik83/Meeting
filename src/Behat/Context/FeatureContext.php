@@ -542,7 +542,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function iAmLoggedAsAdminWithGivenEmail($email)
     {
-        $this->setBaseUrl('http://vimeet.proximum.dev');
+        $this->setBaseUrl('http://admin.vimeet.proximum.dev');
         $driver = $this->getSession()->getDriver();
         if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
