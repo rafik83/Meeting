@@ -41,9 +41,7 @@ class SlotViewQueryHandler
     {
         $slotViews = [];
 
-        $meetingSlotIds = $this->formatMeetingSlotIds(
-            $this->meetingSlotRepository->findWithAtLeastOneMeetingByEvent($query->event)
-        );
+        $meetingSlotIds = $this->meetingSlotRepository->findWithAtLeastOneMeetingByEvent($query->event);
 
         foreach ($this->meetingSlotRepository->findByEvent($query->event) as $slot) {
             $slotViews[] = new SlotView(
@@ -52,26 +50,10 @@ class SlotViewQueryHandler
                 $slot->duration(),
                 $slot->getId(),
                 $slot->isLocked(),
-                in_array($slot->getId(), $meetingSlotIds)
+                isset($meetingSlotIds[$slot->getId()])
             );
         }
 
         return $slotViews;
-    }
-
-    /**
-     * @param array $meetingSlotIds
-     *
-     * @return array
-     */
-    public function formatMeetingSlotIds(array $meetingSlotIds)
-    {
-        $meetingSlotIdsFormatted = [];
-
-        foreach ($meetingSlotIds as $meetingSlotId) {
-            $meetingSlotIdsFormatted[] = $meetingSlotId['id'];
-        }
-
-        return $meetingSlotIdsFormatted;
     }
 }

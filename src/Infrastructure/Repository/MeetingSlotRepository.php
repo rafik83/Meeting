@@ -270,7 +270,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('slot.id')
-            ->from(MeetingSlot::class, 'slot')
+            ->from(MeetingSlot::class, 'slot', 'slot.id')
             ->where('slot.event = :event')
             ->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.slot = slot)')
             ->setParameter('event', $event)

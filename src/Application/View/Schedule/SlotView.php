@@ -20,7 +20,7 @@ class SlotView
     public $end;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $locked;
 
@@ -37,9 +37,9 @@ class SlotView
     /**
      * SlotView constructor.
      *
-     * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param int                $id
      * @param string             $duration
      * @param bool               $locked
      * @param bool               $disabled
@@ -47,15 +47,15 @@ class SlotView
     public function __construct(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $duration,
         $id,
+        $duration,
         $locked,
         $disabled
     ) {
         $this->begin    = $begin;
         $this->end      = $end;
-        $this->duration = $duration;
         $this->id       = $id;
+        $this->duration = $duration;
         $this->locked   = $locked;
         $this->disabled = $disabled;
     }
