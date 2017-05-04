@@ -4307,7 +4307,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Schedule\SlotViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Schedule\SlotViewQuery }
     query.planning.planning_view_query_handler:

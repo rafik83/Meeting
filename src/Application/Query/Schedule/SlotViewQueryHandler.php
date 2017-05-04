@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Application\Query\Schedule;
 
 use Proximum\Vimeet\Application\View\Schedule\SlotView;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class SlotViewQueryHandler
@@ -14,22 +13,14 @@ class SlotViewQueryHandler
     private $meetingSlotRepository;
 
     /**
-     * @var MeetingRepositoryInterface
-     */
-    private $meetingRepository;
-
-    /**
      * SlotQueryHandler constructor.
      *
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param MeetingRepositoryInterface     $meetingRepository
      */
     public function __construct(
-        MeetingSlotRepositoryInterface $meetingSlotRepository,
-        MeetingRepositoryInterface $meetingRepository
+        MeetingSlotRepositoryInterface $meetingSlotRepository
     ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
-        $this->meetingRepository = $meetingRepository;
     }
 
     /**
