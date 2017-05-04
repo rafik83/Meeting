@@ -25,7 +25,7 @@ class SlotView
     public $locked;
 
     /**
-     * @var \DateInterval
+     * @var string
      */
     public $duration;
 
