@@ -20,11 +20,11 @@ Feature: Impersonation
       | Admin.yml                                                                |
     And elastica is populate
     And I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/sheet"
-    And I am on this page "/admin/fr/event/1/sheet/1"
+    And I am on this page "/fr/event/1/sheet"
+    And I am on this page "/fr/event/1/sheet/1"
     When I follow "admin.sheet.impersonate"
     Then I should be on this url "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/sheet/1"
     And I should see "admin.sheet.exit_impersonation"
     And I should see "sheet.title"
     When I follow "admin.sheet.exit_impersonation"
-    Then I should be on this page "/admin/fr/event/1/sheet/1"
+    Then I should be on this page "/fr/event/1/sheet/1"

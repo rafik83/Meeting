@@ -14,14 +14,14 @@ Feature: Manage Admin
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event"
+    When I go to this page "/fr/event"
     And I follow "admin.admin_list.link"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "DUPONT"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
     And I should see ""
     Then I follow "admin.admin_list.action.create"
-    And I should be on this page "/admin/fr/admin/create"
+    And I should be on this page "/fr/create"
     Then I fill in the following:
       | form.create_admin.children.email.label     | organizer@organizer.com |
       | form.create_admin.children.password.label  | 123456789               |
@@ -30,20 +30,20 @@ Feature: Manage Admin
     And I select "form.create_admin.role.organizer" from "form.create_admin.children.role.label"
     And I check "Les rendez-vous CARNOT 2016"
     And I press "form.create_admin.children.submit.label"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "flash.admin.admin.create.success"
     And I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: I can create an Organizer without events
     Given I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event"
+    When I go to this page "/fr/event"
     And I follow "admin.admin_list.link"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "DUPONT"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
     And I should see ""
     Then I follow "admin.admin_list.action.create"
-    And I should be on this page "/admin/fr/admin/create"
+    And I should be on this page "/fr/create"
     Then I fill in the following:
       | form.create_admin.children.email.label     | disabled@organizer.com |
       | form.create_admin.children.password.label  | 123456789              |
@@ -51,20 +51,20 @@ Feature: Manage Admin
       | form.create_admin.children.firstname.label | Tata                   |
     And I select "form.create_admin.role.organizer" from "form.create_admin.children.role.label"
     And I press "form.create_admin.children.submit.label"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "flash.admin.admin.create.success"
     And I should see "admin.admin_list.table.content.admin.events.none"
 
   Scenario: I can create an Admin link to an event
     Given I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event"
+    When I go to this page "/fr/event"
     And I follow "admin.admin_list.link"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "DUPONT"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
     And I should see ""
     Then I follow "admin.admin_list.action.create"
-    And I should be on this page "/admin/fr/admin/create"
+    And I should be on this page "/fr/create"
     Then I fill in the following:
       | form.create_admin.children.email.label     | event-admin@organizer.com |
       | form.create_admin.children.password.label  | 123456789                 |
@@ -73,15 +73,15 @@ Feature: Manage Admin
     And I select "form.create_admin.role.super_admin" from "form.create_admin.children.role.label"
     And I check "Les rendez-vous CARNOT 2016"
     And I press "form.create_admin.children.submit.label"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "flash.admin.admin.create.success"
     And I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: I can edit an Organizer
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/admin"
+    And I go to this page "/fr/admin"
     And I should see "organizer@organizer.com"
-    And I go to this page "/admin/fr/admin/update/2"
+    And I go to this page "/fr/update/2"
     And I should see "admin.update_admin.title"
     And I fill in the following:
       | form.update_admin.children.email.label     | organizer-updated@organizer.com |
@@ -89,7 +89,7 @@ Feature: Manage Admin
       | form.update_admin.children.firstname.label | MUCHE                           |
     And I uncheck "Les rendez-vous CARNOT 2016"
     And I press "form.update_admin.children.submit.label"
-    Then I should be on this page "/admin/fr/admin"
+    Then I should be on this page "/fr/admin"
     And I should see "flash.admin.admin.update.success"
     And I should see "admin.role.ROLE_ORGANIZER"
     And I should see "admin.admin_list.table.content.admin.events.none"

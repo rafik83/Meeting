@@ -16,9 +16,9 @@ Feature: See, create and update mass unavailability
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/RdvCarnot2016-Category.yml |
       | Admin.yml                                                                        |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/unavailability/mass"
+    When I go to this page "/fr/event/1/unavailability/mass"
     And I follow "admin.unavailability.mass.add"
-    And I should be on this page "/admin/fr/event/1/unavailability/mass/create"
+    And I should be on this page "/fr/event/1/unavailability/mass/create"
     When I fill in the following:
       | unavailability_mass_create[category]                | 1                |
       | unavailability_mass_create[name]                    | MyName           |
@@ -34,7 +34,7 @@ Feature: See, create and update mass unavailability
 
   Scenario: I can update a mass unavailability
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/unavailability/mass/update/1"
+    And I am on this page "/fr/event/1/unavailability/mass/update/1"
     When I fill in the following:
       | unavailability_mass_update[category]                | 1                |
       | unavailability_mass_update[name]                    | SUPERNAME        |

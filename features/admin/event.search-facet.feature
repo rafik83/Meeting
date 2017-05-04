@@ -21,7 +21,7 @@ Feature: See and update search facet
       | Admin.yml                                                                |
     And elastica is populate
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.search_facets.link"
     Then the response status code should be 200
     And I should see "admin.event.search_facet.title"
@@ -37,7 +37,7 @@ Feature: See and update search facet
 
   Scenario: I can enable search type facet and see them in the catalog
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.search_facets.link"
     Then the response status code should be 200
     When I fill in the following:
