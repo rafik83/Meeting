@@ -74,6 +74,9 @@ class CatalogSheetPreviewView
     /** @var bool */
     public $hasMessage;
 
+    /** @var bool */
+    public $isSeenByCurrentUser;
+
     /**
      * @param int             $id
      * @param Sheet           $sheet
@@ -87,6 +90,7 @@ class CatalogSheetPreviewView
      * @param bool            $isMeetingRequestClosed
      * @param bool            $isAnsweringMeetingRequestClosed
      * @param bool            $hasMessage
+     * @param bool            $isSeenByCurrentUser
      */
     public function __construct(
         $id,
@@ -99,7 +103,8 @@ class CatalogSheetPreviewView
         $isMeetingRequestUpdateLocked = false,
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
-        $hasMessage = false
+        $hasMessage = false,
+        $isSeenByCurrentUser = false
     ) {
         $this->id                              = $id;
         $this->sheet                           = $sheet;
@@ -113,6 +118,7 @@ class CatalogSheetPreviewView
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
         $this->hasMessage                      = $hasMessage;
+        $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
     }
 
     /**

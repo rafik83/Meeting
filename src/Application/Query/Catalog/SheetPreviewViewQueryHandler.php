@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
 
 class SheetPreviewViewQueryHandler
@@ -46,17 +47,23 @@ class SheetPreviewViewQueryHandler
     private $meetingRequestRepository;
 
     /**
+     * @var SheetViewedRepositoryInterface
+     */
+    private $sheetViewedRepository;
+
+    /**
      * @var MeetingPublishedAccessChecker
      */
     private $meetingPublishedAccessChecker;
 
     /**
-     * @param SheetInfoGuesser              $sheetInfoGuesser
-     * @param Composer                      $ruleComposer
-     * @param Preview                       $preview
-     * @param RuleRepositoryInterface       $ruleRepository
-     * @param RequestRepositoryInterface    $meetingRequestRepository
-     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+     * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param Composer                       $ruleComposer
+     * @param Preview                        $preview
+     * @param RuleRepositoryInterface        $ruleRepository
+     * @param RequestRepositoryInterface     $meetingRequestRepository
+     * @param SheetViewedRepositoryInterface $sheetViewedRepository
+     * @param MeetingPublishedAccessChecker  $meetingPublishedAccessChecker
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -64,6 +71,7 @@ class SheetPreviewViewQueryHandler
         Preview $preview,
         RuleRepositoryInterface $ruleRepository,
         RequestRepositoryInterface $meetingRequestRepository,
+        SheetViewedRepositoryInterface $sheetViewedRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
         $this->sheetInfoGuesser              = $sheetInfoGuesser;
@@ -71,6 +79,7 @@ class SheetPreviewViewQueryHandler
         $this->preview                       = $preview;
         $this->ruleRepository                = $ruleRepository;
         $this->meetingRequestRepository      = $meetingRequestRepository;
+        $this->sheetViewedRepository         = $sheetViewedRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
@@ -98,6 +107,8 @@ class SheetPreviewViewQueryHandler
 
         $isMeetingRequestUpdateLocked = $catalogSheetPreviewViewQuery->event->getConfiguration()->isMeetingRequestUpdateLocked();
 
+        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($viewer->getOwner(), $sheet);
+
         return new CatalogSheetPreviewView(
             $sheet->getId(),
             $sheet,
@@ -110,7 +121,8 @@ class SheetPreviewViewQueryHandler
             $isMeetingRequestUpdateLocked,
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
-            $meetingRequest !== null ? $meetingRequest->hasMessage() : false
+            $meetingRequest !== null ? $meetingRequest->hasMessage() : false,
+            $isSeenByCurrentUser
         );
     }
 }
