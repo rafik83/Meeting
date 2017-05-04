@@ -81,7 +81,7 @@ class SlotViewQueryHandler
                 continue;
             }
 
-            $slotAvailabilityView = $this->slotAvailability->isAvailable($slot, $query->participant);
+            $slotAvailabilityView = $this->slotAvailability->getSlotAvailability($slot, $query->participant);
 
             if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
                 $slotViews[] = new HappeningUnavailabilitySlotView($slot, $slotAvailabilityView->type);
