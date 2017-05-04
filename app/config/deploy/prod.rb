@@ -30,6 +30,3 @@ end
 
 # Scm
 set :branch, "prod"
-
-# Tasks
-before "symfony:cache:warmup", "symfony:doctrine:migrations:migrate"

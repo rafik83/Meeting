@@ -22,6 +22,3 @@ end
 
 # Scm
 set :branch, "preprod"
-
-# Tasks
-before "symfony:cache:warmup", "symfony:doctrine:migrations:migrate"
