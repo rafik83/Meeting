@@ -516,4 +516,23 @@ class MeetingRepository implements MeetingRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findMeetingSlotIdsWithAtLeastOneMeetingByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot.id')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
+            ->groupBy('meeting.slot')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+
+    }
 }

@@ -160,7 +160,7 @@ interface MeetingRepositoryInterface
      * @return bool
      */
     public function hasScheduledMeeting(Sheet $sheet);
-    
+
     /**
      * @param Event $event
      *
@@ -179,4 +179,11 @@ interface MeetingRepositoryInterface
      *  ]
      */
     public function getAllCompleteByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function findMeetingSlotIdsWithAtLeastOneMeetingByEvent(Event $event);
 }
