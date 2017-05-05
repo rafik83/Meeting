@@ -11,7 +11,8 @@ Feature: Create a sheet
     And I am logged with "group@example.net" on event "http://super-event.vimeet.proximum.dev"
     And I am on this page "/fr/sheets-group/1"
     And I should see "Test"
-    Then I follow "group.home.link.create_sheet"
+    And I should not see "This is the new sheet"
+    When I follow "group.home.link.create_sheet"
     And I should be on this page "/fr/sheets-group/1/sheet/create"
     And I fill in the following:
       | sheet_group_create_sheet_sheet | 0                     |
