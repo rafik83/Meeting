@@ -36,7 +36,29 @@ class RegistrationTemplateManager
     {
         $registrationTemplate = new RegistrationTemplate(
             'RegistrationTemplate',
-            [],
+            [
+                '211b2168' => [
+                    'component' => 'block',
+                    'type'      => '8-4',
+                    'config'    => [],
+                    'children'  => [
+                        [
+                            '0aea62b2' => [
+                                'component' => 'object',
+                                'type'      => 'editable-text',
+                                'config'    => [
+                                    'label'       => ['fr' => 'Titre'],
+                                    'placeholder' => ['fr' => 'Le titre'],
+                                    'help'        => ['fr' => 'Ici le titre'],
+                                    'length'      => 200,
+                                    'required'    => true,
+                                    'tags'        => ["sheet_title","sheet_data"],
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             $event->getLocales(),
             $event->getFallback(),
             new \DateTime(),
