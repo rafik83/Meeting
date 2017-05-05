@@ -40,6 +40,8 @@ class SheetController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($createSheet);
+
             return $this->redirectToRoute('event_sheet_group_index', [
                 'sheetGroup' => $sheetGroup->getId(),
             ]);

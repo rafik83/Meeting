@@ -1714,6 +1714,15 @@ services:
             - '@command.planning.sheet_info_guesser_cache'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
+    command.group.sheet.create_handler:
+        class: Proximum\Vimeet\Application\Command\Group\Sheet\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.sheet.sheet_info_setter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Sheet\Create }
 
     #
     # Post Batch Action
