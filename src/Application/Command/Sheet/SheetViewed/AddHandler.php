@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\User\ImpersonatingUserChecker;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AddHandler
 {
