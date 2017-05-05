@@ -44,7 +44,6 @@ class Version20170505095139 extends AbstractMigration
 
         // Everything ok, drop unavailability_backup
         $this->addSql('DROP TABLE unavailability_backup');
-
     }
 
     /**
@@ -58,6 +57,6 @@ class Version20170505095139 extends AbstractMigration
         $this->addSql('DROP TABLE unavailability');
         $this->addSql('CREATE TABLE unavailability LIKE unavailability_backup');
         $this->addSql('INSERT unavailability SELECT * FROM unavailability_backup');
-        $this->addSql('DROP TABLE unavailability');
+        $this->addSql('DROP TABLE unavailability_backup');
     }
 }
