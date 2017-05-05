@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\User\ImpersonatingUserChecker;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -33,6 +34,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
     /** @var SheetRepositoryInterface */
     private $sheetViewedRepository;
+
+    /** @var ImpersonatingUserChecker */
+    private $impersonatingUserChecker;
 
     /** @var Add */
     private $command;
@@ -54,15 +58,21 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $this->user     = UserFactory::create();
         $this->dateTime = new \DateTime();
 
-        $this->sheetViewedRepository = $this->prophesize(SheetViewedRepositoryInterface::class);
+        $this->sheetViewedRepository    = $this->prophesize(SheetViewedRepositoryInterface::class);
+        $this->impersonatingUserChecker = $this->prophesize(ImpersonatingUserChecker::class);
 
         $this->command     = new Add($this->user, $this->sheet);
-        $this->handler     = new AddHandler($this->sheetViewedRepository->reveal(), $this->dateTime);
+        $this->handler     = new AddHandler(
+            $this->sheetViewedRepository->reveal(),
+            $this->impersonatingUserChecker->reveal(),
+            $this->dateTime
+        );
         $this->sheetViewed = new SheetViewed($this->command->sheet, $this->command->user, $this->dateTime);
     }
 
     public function testHandle()
     {
+        $this->impersonatingUserChecker->isImpersonated()->shouldBeCalled()->willReturn(false);
         $this->sheetViewedRepository->isSheetAlreadySeenByUser($this->user, $this->sheet)->shouldBeCalled()->willReturn(false);
         $this->sheetViewedRepository->add($this->sheetViewed)->shouldBeCalled();
 
@@ -71,7 +81,17 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testWithSheetAlreadyViewed()
     {
+        $this->impersonatingUserChecker->isImpersonated()->shouldBeCalled()->willReturn(false);
         $this->sheetViewedRepository->isSheetAlreadySeenByUser($this->user, $this->sheet)->shouldBeCalled()->willReturn(true);
+        $this->sheetViewedRepository->add($this->sheetViewed)->shouldNotBeCalled();
+
+        $this->handler->handle($this->command);
+    }
+
+    public function testWithImpersonatedUser()
+    {
+        $this->impersonatingUserChecker->isImpersonated()->shouldBeCalled()->willReturn(true);
+        $this->sheetViewedRepository->isSheetAlreadySeenByUser($this->user, $this->sheet)->shouldNotBeCalled();
         $this->sheetViewedRepository->add($this->sheetViewed)->shouldNotBeCalled();
 
         $this->handler->handle($this->command);

@@ -12,11 +12,16 @@ namespace Proximum\Vimeet\Application\Command\Sheet\SheetViewed;
 
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\User\ImpersonatingUserChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AddHandler
 {
     /** @var SheetViewedRepositoryInterface */
     private $sheetViewedRepository;
+
+    /** @var ImpersonatingUserChecker */
+    private $impersonatingUserChecker;
 
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -25,14 +30,17 @@ class AddHandler
      * AddHandler constructor.
      *
      * @param SheetViewedRepositoryInterface $sheetViewedRepository
+     * @param ImpersonatingUserChecker       $impersonatingUserChecker
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         SheetViewedRepositoryInterface $sheetViewedRepository,
+        ImpersonatingUserChecker $impersonatingUserChecker,
         \DateTimeInterface $dateTime
     ) {
-        $this->sheetViewedRepository = $sheetViewedRepository;
-        $this->dateTime              = $dateTime;
+        $this->sheetViewedRepository    = $sheetViewedRepository;
+        $this->impersonatingUserChecker = $impersonatingUserChecker;
+        $this->dateTime                 = $dateTime;
     }
 
     /**
@@ -42,9 +50,11 @@ class AddHandler
      */
     public function handle(Add $command)
     {
-        if (!$this->sheetViewedRepository->isSheetAlreadySeenByUser($command->user, $command->sheet)) {
-            $sheetViewed = new SheetViewed($command->sheet, $command->user, $this->dateTime);
-            $this->sheetViewedRepository->add($sheetViewed);
+        if (!$this->impersonatingUserChecker->isImpersonated()) {
+            if (!$this->sheetViewedRepository->isSheetAlreadySeenByUser($command->user, $command->sheet)) {
+                $sheetViewed = new SheetViewed($command->sheet, $command->user, $this->dateTime);
+                $this->sheetViewedRepository->add($sheetViewed);
+            }
         }
     }
 }

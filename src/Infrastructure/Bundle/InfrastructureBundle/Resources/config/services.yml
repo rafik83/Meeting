@@ -815,6 +815,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\AddHandler
         arguments:
             - '@repository.sheet.sheet_viewed_repository'
+            - '@impersonating_user_checker'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add }

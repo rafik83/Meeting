@@ -32,7 +32,7 @@ class ImpersonatingUserChecker
      */
     public function isImpersonated()
     {
-        return ($this->isUserWasPreviousAdmin() && $this->isUserWasPreviousUser());
+        return ($this->isUserWasPreviousAdmin() || $this->isUserWasPreviousUser());
     }
 
     /**
