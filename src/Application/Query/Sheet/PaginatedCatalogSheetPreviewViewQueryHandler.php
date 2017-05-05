@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
@@ -26,6 +27,11 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
+
+    /**
+     * @var SheetViewedRepositoryInterface
+     */
+    private $sheetViewedRepository;
 
     /**
      * @var SheetSearchAdapterInterface
@@ -50,6 +56,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
 
     /**
      * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetViewedRepositoryInterface       $sheetViewedRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
      * @param TemplateDataFactory                  $templateDataFactory
@@ -58,6 +65,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
+        SheetViewedRepositoryInterface $sheetViewedRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
@@ -65,6 +73,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->sheetRepository                      = $sheetRepository;
+        $this->sheetViewedRepository                = $sheetViewedRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
         $this->templateDataFactory                  = $templateDataFactory;
@@ -91,12 +100,18 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
+        $seenSheets               = $this->sheetViewedRepository->getSheetsAlreadySeenByUser($query->user, $paginatedResult->results);
+        $seenSheetIndexed         = [];
+
+        foreach($seenSheets as $seenSheet) {
+            $seenSheetIndexed[$seenSheet->getSheet()->getId()] = $seenSheet;
+        }
 
         $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         $paginatedResult->results = array_map(
-            function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed) {
+            function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed, $seenSheetIndexed) {
                 return $this
                     ->sheetPreviewViewQueryHandler
                     ->handle(
@@ -105,9 +120,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $sheet,
                             $query->locale,
                             $query->viewer,
-                            $query->user,
                             $isMeetingRequestClosed,
-                            $isAnsweringMeetingRequestClosed
+                            $isAnsweringMeetingRequestClosed,
+                            isset($seenSheetIndexed[$sheet->getId()])
                         )
                     );
             },

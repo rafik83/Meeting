@@ -47,11 +47,6 @@ class SheetPreviewViewQueryHandler
     private $meetingRequestRepository;
 
     /**
-     * @var SheetViewedRepositoryInterface
-     */
-    private $sheetViewedRepository;
-
-    /**
      * @var MeetingPublishedAccessChecker
      */
     private $meetingPublishedAccessChecker;
@@ -62,7 +57,6 @@ class SheetPreviewViewQueryHandler
      * @param Preview                        $preview
      * @param RuleRepositoryInterface        $ruleRepository
      * @param RequestRepositoryInterface     $meetingRequestRepository
-     * @param SheetViewedRepositoryInterface $sheetViewedRepository
      * @param MeetingPublishedAccessChecker  $meetingPublishedAccessChecker
      */
     public function __construct(
@@ -71,7 +65,6 @@ class SheetPreviewViewQueryHandler
         Preview $preview,
         RuleRepositoryInterface $ruleRepository,
         RequestRepositoryInterface $meetingRequestRepository,
-        SheetViewedRepositoryInterface $sheetViewedRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
         $this->sheetInfoGuesser              = $sheetInfoGuesser;
@@ -79,7 +72,6 @@ class SheetPreviewViewQueryHandler
         $this->preview                       = $preview;
         $this->ruleRepository                = $ruleRepository;
         $this->meetingRequestRepository      = $meetingRequestRepository;
-        $this->sheetViewedRepository         = $sheetViewedRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
@@ -91,7 +83,6 @@ class SheetPreviewViewQueryHandler
     public function handle(SheetPreviewViewQuery $catalogSheetPreviewViewQuery)
     {
         $viewer = $catalogSheetPreviewViewQuery->viewer;
-        $user   = $catalogSheetPreviewViewQuery->user;
         $sheet  = $catalogSheetPreviewViewQuery->sheet;
         $locale = $catalogSheetPreviewViewQuery->locale;
         $rules  = $this->ruleRepository->getBySeerTypeAndSeeableType($viewer->getType(), $sheet->getType());
@@ -108,8 +99,6 @@ class SheetPreviewViewQueryHandler
 
         $isMeetingRequestUpdateLocked = $catalogSheetPreviewViewQuery->event->getConfiguration()->isMeetingRequestUpdateLocked();
 
-        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($user, $sheet);
-
         return new CatalogSheetPreviewView(
             $sheet->getId(),
             $sheet,
@@ -123,7 +112,7 @@ class SheetPreviewViewQueryHandler
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
             $meetingRequest !== null ? $meetingRequest->hasMessage() : false,
-            $isSeenByCurrentUser
+            $catalogSheetPreviewViewQuery->isSeenByCurrentUser
         );
     }
 }

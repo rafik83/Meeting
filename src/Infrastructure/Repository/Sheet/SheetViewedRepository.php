@@ -58,4 +58,22 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsAlreadySeenByUser(User $user, array $sheetIds)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheetViewed')
+            ->from(SheetViewed::class, 'sheetViewed')
+            ->where('sheetViewed.sheet IN (:sheetIds) AND sheetViewed.user = :user')
+            ->setParameters([
+                'sheetIds' => $sheetIds,
+                'user'  => $user,
+            ]);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

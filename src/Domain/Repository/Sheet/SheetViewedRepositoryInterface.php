@@ -26,4 +26,12 @@ interface SheetViewedRepositoryInterface
      * @return bool
      */
     public function isSheetAlreadySeenByUser(User $user, Sheet $sheet);
+
+    /**
+     * @param User  $user
+     * @param array $sheetIds
+     *
+     * @return SheetViewed[]
+     */
+    public function getSheetsAlreadySeenByUser(User $user, array $sheetIds);
 }

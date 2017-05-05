@@ -2486,7 +2486,6 @@ services:
             - '@sheet.preview'
             - '@repository.rule_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@repository.sheet.sheet_viewed_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
@@ -2494,6 +2493,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.sheet.sheet_viewed_repository'
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
             - '@template.template_data_factory'
