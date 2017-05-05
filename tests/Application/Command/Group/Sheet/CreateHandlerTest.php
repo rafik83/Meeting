@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Group\Sheet\Create;
 use Proximum\Vimeet\Application\Command\Group\Sheet\CreateHandler;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -110,6 +111,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $delayedEventDispatcher->dispatch(
             Events::MUST_SELECT_PACKAGE,
             Argument::that(function ($input) {return $input instanceof MustSelectPackageEvent;})
+        )->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(
+            Events::SHEET_CREATE_BY_GROUP_MANAGER,
+            Argument::that(function ($input) {return $input instanceof SheetCreatedByManagerEvent;})
         )->shouldBeCalled();
 
         // Handler

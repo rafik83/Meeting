@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Group\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -108,5 +109,10 @@ class CreateHandler
 
         $mustSelectPackageEvent = new MustSelectPackageEvent($newSheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $mustSelectPackageEvent);
+
+        $this->eventDispatcher->dispatch(
+            Events::SHEET_CREATE_BY_GROUP_MANAGER,
+            new SheetCreatedByManagerEvent($newSheet, $this->datetime)
+        );
     }
 }
