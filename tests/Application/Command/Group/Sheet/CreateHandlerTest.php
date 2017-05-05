@@ -12,8 +12,12 @@ namespace Proximum\Vimeet\Tests\Application\Command\Group\Sheet;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Group\Sheet\Create;
 use Proximum\Vimeet\Application\Command\Group\Sheet\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -57,7 +61,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $originalSheet->getOwner()->willReturn($owner->reveal());
         $originalSheet->getGroup()->willReturn($group->reveal());
         $originalSheet->getRegistrationData()->willReturn(['54321' => ['content' => 'sheet title']]);
-        $originalSheet->attend()->willReturn(true);
         $originalSheet->getFollower()->willReturn(null);
         $originalSheet->getSpot()->willReturn($spot->reveal());
         $originalSheet->getParticipants()->willReturn(new ArrayCollection([$participant1->reveal(), $participant2->reveal()]));
@@ -99,11 +102,22 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             && $input->isRegistrationComplete() === false;
         }))->shouldBeCalled();
 
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $delayedEventDispatcher->dispatch(
+            Events::SHEET_UPDATED,
+            Argument::that(function ($input) {return $input instanceof SheetUpdatedEvent;})
+        )->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(
+            Events::MUST_SELECT_PACKAGE,
+            Argument::that(function ($input) {return $input instanceof MustSelectPackageEvent;})
+        )->shouldBeCalled();
+
         // Handler
         $handler = new CreateHandler(
             $sheetRepository->reveal(),
             $sheetInfoSetter->reveal(),
             $participantRepository->reveal(),
+            $delayedEventDispatcher->reveal(),
             $date
         );
 

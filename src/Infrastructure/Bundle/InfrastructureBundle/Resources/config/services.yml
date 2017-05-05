@@ -1720,6 +1720,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.sheet.sheet_info_setter'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Sheet\Create }

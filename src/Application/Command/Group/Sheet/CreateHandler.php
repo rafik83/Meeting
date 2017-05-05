@@ -10,6 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Group\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -30,21 +34,27 @@ class CreateHandler
     /** @var SheetInfoSetter */
     private $sheetInfoSetter;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
     /**
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param SheetInfoSetter                $sheetInfoSetter
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param \DateTimeInterface             $datetime
+     * @param SheetRepositoryInterface        $sheetRepository
+     * @param SheetInfoSetter                 $sheetInfoSetter
+     * @param ParticipantRepositoryInterface  $participantRepository
+     * @param DelayedEventDispatcherInterface $eventDispatcher
+     * @param \DateTimeInterface              $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoSetter $sheetInfoSetter,
         ParticipantRepositoryInterface $participantRepository,
+        DelayedEventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $datetime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->sheetInfoSetter       = $sheetInfoSetter;
         $this->participantRepository = $participantRepository;
+        $this->eventDispatcher       = $eventDispatcher;
         $this->datetime              = $datetime;
     }
 
@@ -55,6 +65,7 @@ class CreateHandler
     {
         $originalSheet = $command->sheet;
 
+        // The new sheet should not be in catalog and the state should be draft
         $newSheet = new Sheet(
             $originalSheet->getEvent(),
             $originalSheet->getType(),
@@ -70,14 +81,10 @@ class CreateHandler
             $newSheet->setSpot($originalSheet->getSpot());
         }
 
-        $newSheet->setAttendance($originalSheet->attend());
-
         // Set the follower of the original sheet to the new one
         if (null !== $originalSheet->getFollower()) {
             $newSheet->assign($originalSheet->getFollower());
         }
-
-        // The new sheet should not be in catalog and the state should be draft
 
         $this->sheetInfoSetter->setSheetTitle($newSheet, $command->title);
 
@@ -94,5 +101,12 @@ class CreateHandler
 
             $this->participantRepository->add($newParticipant);
         }
+
+        // Send Sheet Update Event to calculate completeness of the sheet
+        $sheetUpdatedEvent = new SheetUpdatedEvent($newSheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
+
+        $mustSelectPackageEvent = new MustSelectPackageEvent($newSheet);
+        $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $mustSelectPackageEvent);
     }
 }
