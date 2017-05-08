@@ -1864,6 +1864,11 @@ services:
         arguments:
             - '@fos_elastica.object_persister.app.sheet'
 
+    adapter.authorization_checker:
+        class: Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter
+        arguments:
+            - '@security.authorization_checker'
+
     #
     # Components
     #
