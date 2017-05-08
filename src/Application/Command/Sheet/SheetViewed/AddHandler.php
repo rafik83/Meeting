@@ -10,16 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\SheetViewed;
 
+use Proximum\Vimeet\Application\Adapter\ImpersonatingUserCheckerInterface;
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\User\ImpersonatingUserChecker;
 
 class AddHandler
 {
     /** @var SheetViewedRepositoryInterface */
     private $sheetViewedRepository;
 
-    /** @var ImpersonatingUserChecker */
+    /** @var ImpersonatingUserCheckerInterface */
     private $impersonatingUserChecker;
 
     /** @var \DateTimeInterface */
@@ -28,13 +28,13 @@ class AddHandler
     /**
      * AddHandler constructor.
      *
-     * @param SheetViewedRepositoryInterface $sheetViewedRepository
-     * @param ImpersonatingUserChecker       $impersonatingUserChecker
-     * @param \DateTimeInterface             $dateTime
+     * @param SheetViewedRepositoryInterface    $sheetViewedRepository
+     * @param ImpersonatingUserCheckerInterface $impersonatingUserChecker
+     * @param \DateTimeInterface                $dateTime
      */
     public function __construct(
         SheetViewedRepositoryInterface $sheetViewedRepository,
-        ImpersonatingUserChecker $impersonatingUserChecker,
+        ImpersonatingUserCheckerInterface $impersonatingUserChecker,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetViewedRepository    = $sheetViewedRepository;

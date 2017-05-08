@@ -10,6 +10,7 @@
 
 namespace Application\Command\Sheet\SheetViewed;
 
+use Proximum\Vimeet\Application\Adapter\ImpersonatingUserCheckerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\AddHandler;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\User\ImpersonatingUserChecker;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -35,7 +35,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var SheetRepositoryInterface */
     private $sheetViewedRepository;
 
-    /** @var ImpersonatingUserChecker */
+    /** @var ImpersonatingUserCheckerInterface */
     private $impersonatingUserChecker;
 
     /** @var Add */
@@ -59,7 +59,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $this->dateTime = new \DateTime();
 
         $this->sheetViewedRepository    = $this->prophesize(SheetViewedRepositoryInterface::class);
-        $this->impersonatingUserChecker = $this->prophesize(ImpersonatingUserChecker::class);
+        $this->impersonatingUserChecker = $this->prophesize(ImpersonatingUserCheckerInterface::class);
 
         $this->command     = new Add($this->user, $this->sheet);
         $this->handler     = new AddHandler(
