@@ -37,7 +37,6 @@ class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $ruleRepository   = $this->prophesize(RuleRepositoryInterface::class);
         $ruleComposer     = $this->prophesize(Composer::class);
-        $sheetViewedRepository = $this->prophesize(SheetViewedRepositoryInterface::class);
 
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
@@ -59,7 +58,6 @@ class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $preview->reveal(),
             $sheetInfoGuesser->reveal(),
             $ruleRepository->reveal(),
-            $sheetViewedRepository->reveal(),
             $ruleComposer->reveal()
         );
 

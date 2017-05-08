@@ -57,6 +57,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $sheetViewedRepository                = $this->prophesize(SheetViewedRepositoryInterface::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [])
@@ -83,6 +84,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
+            $sheetViewedRepository->reveal(),
             $meetingRequestViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
@@ -120,6 +122,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $sheetViewedRepository                = $this->prophesize(SheetViewedRepositoryInterface::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [])
@@ -144,8 +147,11 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
 
+        $sheetViewedRepository->isSheetAlreadySeenByUser($query->user, $query->sheet)->shouldBeCalled()->willReturn(false);
+
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
+            $sheetViewedRepository->reveal(),
             $meetingRequestViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),

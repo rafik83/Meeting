@@ -52,6 +52,9 @@ class MeetingRequestViewQuery
     /** @var bool */
     public $isAnsweringMeetingRequestClosed;
 
+    /** @var bool */
+    public $isSeenByUser;
+
     /**
      * MeetingRequestViewQuery constructor.
      *
@@ -63,6 +66,7 @@ class MeetingRequestViewQuery
      * @param bool           $isMeetingRequestUpdateLocked
      * @param bool           $isMeetingRequestClosed
      * @param bool           $isAnsweringMeetingRequestClosed
+     * @param bool           $isSeenByUser
      */
     public function __construct(
         MeetingRequest $meetingRequest,
@@ -72,7 +76,8 @@ class MeetingRequestViewQuery
         $isMeetingPublished,
         $isMeetingRequestUpdateLocked,
         $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false
+        $isAnsweringMeetingRequestClosed = false,
+        $isSeenByUser = false
     ) {
         $this->meetingRequest                  = $meetingRequest;
         $this->locale                          = $locale;
@@ -82,5 +87,6 @@ class MeetingRequestViewQuery
         $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
+        $this->isSeenByUser                    = $isSeenByUser;
     }
 }

@@ -3182,6 +3182,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@repository.sheet.sheet_viewed_repository'
             - '@query.meeting_request.meeting_request_view_query_handler'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.meeting_request_access_checker'
@@ -3195,7 +3196,6 @@ services:
             - '@sheet.preview'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@repository.rule_repository'
-            - '@repository.sheet.sheet_viewed_repository'
             - '@domain.rule.composer'
 
     query.meeting.meeting_sheet_view_query_handler:
