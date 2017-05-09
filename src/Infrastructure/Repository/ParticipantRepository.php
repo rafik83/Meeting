@@ -355,6 +355,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR :end BETWEEN u.begin AND u.end
                         )
                 )";
+
+            $queryBuilder->setParameter('eventId', $eventId);
         }
 
         $queryBuilder->andWhere(
@@ -404,7 +406,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         }
 
         $queryBuilder
-            ->setParameter('eventId', $eventId)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end);
 
