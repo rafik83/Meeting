@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
@@ -63,6 +64,10 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->getAllRequestBySheet($sheet, [])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
+
+        $viewedSheetListViewQueryHandler
+            ->handle(new ViewedSheetListViewQuery($user, [$sheet->getId()]))
+            ->shouldBeCalled();
 
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
@@ -128,6 +133,10 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->getAllRequestBySheet($sheet, [])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
+
+        $viewedSheetListViewQueryHandler
+            ->handle(new ViewedSheetListViewQuery($user, [$sheet->getId()]))
+            ->shouldBeCalled();
 
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(

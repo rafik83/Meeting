@@ -45,7 +45,7 @@ class ViewedSheetListViewQueryHandler
 
         $seenSheetsIndexed = [];
         foreach ($seenSheets as $seenSheet) {
-            $seenSheetsIndexed[$seenSheet->getId()] = $seenSheet;
+            $seenSheetsIndexed[$seenSheet->getSheet()->getId()] = $seenSheet;
         }
 
         return $seenSheetsIndexed;
