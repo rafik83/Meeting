@@ -70,7 +70,7 @@ interface MeetingSlotRepositoryInterface
      *
      * @return MeetingSlot[]
      */
-    public function findAvailableSlotsByParticipantsIds(
+    public function findAvailableSlotsByParticipants(
         Event $event,
         array $participants,
         $ignoreMeetings = false,

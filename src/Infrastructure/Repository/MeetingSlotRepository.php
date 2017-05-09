@@ -133,7 +133,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAvailableSlotsByParticipantsIds(
+    public function findAvailableSlotsByParticipants(
         Event $event,
         array $participants,
         $ignoreMeetings = false,

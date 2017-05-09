@@ -96,10 +96,10 @@ class SlotAvailability
     private $meetingsSortByParticipant = [];
 
     /**
-     * Array of unavailability [participantId][1 => unavailability, 2 => unavailability]
+     * Array of unavailability [userId][1 => unavailability, 2 => unavailability]
      * @var array
      */
-    private $unavailabilitySortByParticipant = [];
+    private $unavailabilitySortByUser = [];
 
     /**
      * Array of mass assignment [participantId][1 => assignment, 2 => assignment]
@@ -151,7 +151,7 @@ class SlotAvailability
 
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
-        $this->assignUnavailabilitySortByParticipant($unavailability);
+        $this->assignUnavailabilitySortByUser($unavailability);
         $this->assingMassAssignmentSortByParticipant($massAssignments);
     }
 
@@ -180,10 +180,10 @@ class SlotAvailability
     /**
      * @param Unavailability[] $unavailabilities
      */
-    private function assignUnavailabilitySortByParticipant(array $unavailabilities)
+    private function assignUnavailabilitySortByUser(array $unavailabilities)
     {
         foreach ($unavailabilities as $unavailability) {
-            $this->unavailabilitySortByParticipant[$unavailability->getParticipant()->getId()][] = $unavailability;
+            $this->unavailabilitySortByUser[$unavailability->getUser()->getId()][] = $unavailability;
         }
     }
 
@@ -276,7 +276,7 @@ class SlotAvailability
         if ($this->unavailability === null) {
             $this->unavailability = $this->unavailabilityRepository->getByEvent($event);
 
-            $this->assignUnavailabilitySortByParticipant($this->unavailability);
+            $this->assignUnavailabilitySortByUser($this->unavailability);
         }
 
         if ($this->massUnavailability === null) {
@@ -298,15 +298,12 @@ class SlotAvailability
      */
     private function hasUnavailability(MeetingSlot $slot, Participant $participant)
     {
-        if (!isset($this->unavailabilitySortByParticipant[$participant->getId()])) {
+        if (!isset($this->unavailabilitySortByUser[$participant->getUser()->getId()])) {
             return false;
         }
 
-        foreach ($this->unavailabilitySortByParticipant[$participant->getId()] as $unavailability) {
-            if ($unavailability->getParticipant() !== $participant) {
-                continue;
-            }
-
+        /** @var Unavailability $unavailability */
+        foreach ($this->unavailabilitySortByUser[$participant->getUser()->getId()] as $unavailability) {
             if ($slot->getBegin() >= $unavailability->getBegin() && $slot->getBegin() < $unavailability->getEnd()) {
                 return true;
             }

@@ -49,7 +49,7 @@ class ParticipantUnavailableAggregator
             return;
         }
 
-        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $event,
             [$firstParticipant]
         );

@@ -79,7 +79,7 @@ class UserAvailabilitiesBuilderCache
             return [];
         }
 
-        return $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+        return $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $event,
             $participants,
             true

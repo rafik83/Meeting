@@ -52,7 +52,7 @@ class RequestSlotViewQueryHandler
             throw new MeetingRequestCanNotBeMeetingException();
         }
 
-        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meetingRequest->getEvent(),
             $query->meetingRequest->getAllParticipants(),
             false

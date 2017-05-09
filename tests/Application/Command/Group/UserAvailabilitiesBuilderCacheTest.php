@@ -49,9 +49,9 @@ class UserAvailabilitiesBuilderCacheTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant->reveal()]);
 
-        $meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+        $meetingSlotRepository->findAvailableSlotsByParticipants(
             $event,
-            [10], // participant id
+            $participant->reveal(),
             true
         )->shouldBeCalled()->willReturn([$meetingSlot]);
 

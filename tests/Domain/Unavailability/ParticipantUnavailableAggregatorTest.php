@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
@@ -23,6 +24,7 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
     public function testAggregateWithNoSlot()
     {
         $event = $this->prophesize(Event::class);
+        $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
         $participant = $this->prophesize(Participant::class);
         $participant->getSheet()->willReturn($sheet->reveal());
@@ -30,9 +32,16 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
         $sheet->getEvent()->willReturn($event->reveal());
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
-        $meetingSlotRepository->findAvailableSlotsByParticipantsIds($event->reveal(), [123])->shouldBeCalled()->willReturn([]);
+        $meetingSlotRepository->findAvailableSlotsByParticipants($event->reveal(), [$participant->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->getAllParticipantForUser($event->reveal(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant])
+        ;
         $participantRepository->set($participant->reveal())->shouldBeCalled();
 
         $participant->setFullyUnavailable(true)->shouldBeCalled();
@@ -41,12 +50,13 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
             $meetingSlotRepository->reveal(),
             $participantRepository->reveal()
         );
-        $participantUnavailableAggregator->aggregateUnavailability($participant->reveal());
+        $participantUnavailableAggregator->aggregateUnavailability($user->reveal(), $event->reveal());
     }
 
     public function testAggregateWithSlots()
     {
         $event = $this->prophesize(Event::class);
+        $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
         $slot  = $this->prophesize(MeetingSlot::class);
         $participant = $this->prophesize(Participant::class);
@@ -55,9 +65,16 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
         $sheet->getEvent()->willReturn($event->reveal());
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
-        $meetingSlotRepository->findAvailableSlotsByParticipantsIds($event->reveal(), [123])->shouldBeCalled()->willReturn([$slot->reveal()]);
+        $meetingSlotRepository->findAvailableSlotsByParticipants($event->reveal(), [$participant->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$slot->reveal()])
+        ;
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->getAllParticipantForUser($event->reveal(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant])
+        ;
         $participantRepository->set($participant->reveal())->shouldBeCalled();
 
         $participant->setFullyUnavailable(false)->shouldBeCalled();
@@ -66,6 +83,6 @@ class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
             $meetingSlotRepository->reveal(),
             $participantRepository->reveal()
         );
-        $participantUnavailableAggregator->aggregateUnavailability($participant->reveal());
+        $participantUnavailableAggregator->aggregateUnavailability($user->reveal(), $event->reveal());
     }
 }

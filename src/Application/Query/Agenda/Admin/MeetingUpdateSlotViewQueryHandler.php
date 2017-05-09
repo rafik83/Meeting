@@ -41,7 +41,7 @@ class MeetingUpdateSlotViewQueryHandler
      */
     public function handle(MeetingUpdateSlotViewQuery $query)
     {
-        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meeting->getEvent(),
             $query->meeting->getAllParticipants(),
             false,
