@@ -1,0 +1,20 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'mail.sheet.group.created.body'|trans({
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+
+    {{ macros.button(
+        'mail.sheet.group.show.link'|trans({}, 'mail', mail.locale),
+        url('event_sheet_group_index', {'group': mail.group.id, '_locale': mail.locale})
+    ) }}
+
+    <br>
+
+{% endblock %}

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
@@ -34,6 +35,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
@@ -355,6 +357,27 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetGroupCreatedEvent $event
+     */
+    public function onSheetGroupCreated(SheetGroupCreatedEvent $event)
+    {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getUser())
+        );
+
+        $mail = new SheetGroupCreatedMail(
+            $this->sender->generate($event->getEvent()),
+            $event->getUser()->getEmail(),
+            $event->getUser()->getLocale(),
+            $event->getEvent(),
+            $participantMailView,
+            $event->getGroup()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -373,6 +396,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
+            Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated'
         ];
     }
 }
