@@ -983,6 +983,7 @@ services:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 

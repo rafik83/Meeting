@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateHandler
 {
@@ -25,21 +28,27 @@ class CreateHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
     /**
      * CreateHandler constructor.
      *
-     * @param GroupRepositoryInterface  $groupRepository
-     * @param SheetRepositoryInterface  $sheetRepository
-     * @param \DateTimeInterface        $dateTime
+     * @param GroupRepositoryInterface $groupRepository
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param \DateTimeInterface       $dateTime
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         GroupRepositoryInterface $groupRepository,
         SheetRepositoryInterface $sheetRepository,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->groupRepository = $groupRepository;
         $this->sheetRepository = $sheetRepository;
         $this->dateTime        = $dateTime;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -58,5 +67,13 @@ class CreateHandler
         }
 
         $this->groupRepository->add($group);
+
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
+            new SheetGroupCreatedEvent(
+                $command->event,
+                $command->user,
+                $group
+            )
+        );
     }
 }

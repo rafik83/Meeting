@@ -12,6 +12,8 @@ namespace Application\Command\Sheet\Group;
 
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
@@ -19,6 +21,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,6 +35,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
         $create        = new Create($event, $user);
         $create->sheetViews = $sheetViews;
@@ -41,11 +45,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler(
             $groupRepository->reveal(),
             $sheetRepository->reveal(),
-            $dateTime
+            $dateTime,
+            $eventDispatcher->reveal()
         );
 
         $sheetRepository->getSheetById(1)->shouldBeCalled()->willReturn($sheet);
         $groupRepository->add($group)->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
+            new SheetGroupCreatedEvent($event, $user, $group)
+        )->shouldBeCalled();
 
         $handler->handle($create);
     }

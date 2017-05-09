@@ -55,4 +55,12 @@ class SheetGroupCreatedMail extends UserMail
 
         $this->group = $group;
     }
+
+    /**
+     * @return Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
 }
