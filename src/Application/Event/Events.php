@@ -20,6 +20,7 @@ final class Events
     const SHEET_VALIDATION_DRAFT               = 'sheet.validation.draft';
     const SHEET_VALIDATION_PENDING             = 'sheet.validation.pending';
     const SHEET_VALIDATION_VALIDATE            = 'sheet.validation.validate';
+    const SHEET_GROUP_CREATED                  = 'sheet.group.created';
     const USER_MAIL_CHANGED                    = 'change_mail';
     const MEETING_PARTICIPANT_ADDED            = 'meeting.participant.added';
     const MEETING_PARTICIPANT_REMOVED          = 'meeting.participant.removed';
