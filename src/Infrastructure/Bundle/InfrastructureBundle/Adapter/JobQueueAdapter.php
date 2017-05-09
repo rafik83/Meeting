@@ -20,9 +20,10 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantFullUnavailabilityAggregateCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantsGivenFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
@@ -179,9 +180,9 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function aggregateParticipantFullUnavailability(Event $event, $onlyInCatalog = false)
+    public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false)
     {
-        $job = new Job(ParticipantFullUnavailabilityAggregateCommand::NAME, [
+        $job = new Job(UsersFullUnavailabilityByEventAggregateCommand::NAME, [
             $event->getId(),
             $onlyInCatalog
         ]);
@@ -191,13 +192,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function aggregateParticipantsGivenFullUnavailability(array $participants)
+    public function aggregateUsersFullUnavailability(Event $event, array $users)
     {
-        if (!empty($participants)) {
-            $job = new Job(ParticipantsGivenFullUnavailabilityAggregateCommand::NAME, [
-                implode(',', array_map(function (Participant $participant) {
-                    return $participant->getId();
-                }, $participants))
+        if (!empty($users)) {
+            $job = new Job(UsersFullUnavailabilityAggregateCommand::NAME, [
+                $event->getId(),
+                implode(',', array_map(function (User $user) {
+                    return $user->getId();
+                }, $users))
             ]);
             $this->setJob($job);
         }

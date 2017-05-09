@@ -57,7 +57,7 @@ class CreateHandler
         $this->massRepository->create($mass);
 
         if ($create->blocking === true) {
-            $this->jobQueueAdapter->aggregateParticipantFullUnavailability($create->event);
+            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($create->event);
         }
     }
 }

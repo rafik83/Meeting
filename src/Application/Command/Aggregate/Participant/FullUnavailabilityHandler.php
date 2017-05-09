@@ -11,28 +11,31 @@
 namespace Proximum\Vimeet\Application\Command\Aggregate\Participant;
 
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
 
 class FullUnavailabilityHandler
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var ParticipantUnavailableAggregator
-     */
+    /** @var ParticipantUnavailableAggregator */
     private $participantUnavailableAggregator;
 
     /**
+     * @param UserRepositoryInterface          $userRepository
      * @param ParticipantRepositoryInterface   $participantRepository
      * @param ParticipantUnavailableAggregator $participantUnavailableAggregator
      */
     public function __construct(
+        UserRepositoryInterface $userRepository,
         ParticipantRepositoryInterface $participantRepository,
         ParticipantUnavailableAggregator $participantUnavailableAggregator
     ) {
+        $this->userRepository                   = $userRepository;
         $this->participantRepository            = $participantRepository;
         $this->participantUnavailableAggregator = $participantUnavailableAggregator;
     }
@@ -43,13 +46,13 @@ class FullUnavailabilityHandler
     public function handle(FullUnavailability $fullUnavailability)
     {
         if ($fullUnavailability->onlyCatalog) {
-            $participants = $this->participantRepository->findByEventAndInCatalog($fullUnavailability->event);
+            $users = $this->userRepository->findByEventAndInCatalog($fullUnavailability->event);
         } else {
-            $participants = $this->participantRepository->findByEvent($fullUnavailability->event);
+            $users = $this->userRepository->findByEvent($fullUnavailability->event);
         }
 
-         foreach ($participants as $participant) {
-             $this->participantUnavailableAggregator->aggregateUnavailability($participant);
-         }
+        foreach ($users as $user) {
+            $this->participantUnavailableAggregator->aggregateUnavailability($user, $fullUnavailability->event);
+        }
     }
 }
