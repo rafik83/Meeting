@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\SheetChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -27,9 +26,14 @@ class CreateType extends AbstractType
     {
         $builder
             ->add('sheet', SheetChoiceType::class, [
-                'attr'     => ['class' => 'select2 form-control'],
-                'group'    => $options['group'],
-                'required' => true,
+                'attr'        => [
+                    'class'               => 'form-control select2',
+                    'data-disallow-clear' => 'true',
+                    'data-placeholder'    => '',
+                ],
+                'group'       => $options['group'],
+                'required'    => true,
+                'placeholder' => '',
             ])
             ->add('title', TextType::class, [
                 'required' => true,
