@@ -65,8 +65,6 @@ BatchSelectionHelper.prototype.selectPage = function (helper) {
     if (parseInt(helper.dataset.isSelectAllEnabled) === 1) {
         helper.innerHTML = helper.dataset.allLabel;
     }
-
-    this.triggerChange(this.helper.dataset.pageSheets);
 };
 
 BatchSelectionHelper.prototype.changeSelectionType = function (type) {
