@@ -13,11 +13,12 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
@@ -29,9 +30,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private $sheetRepository;
 
     /**
-     * @var SheetViewedRepositoryInterface
+     * @var ViewedSheetListViewQueryHandler
      */
-    private $sheetViewedRepository;
+    private $viewedSheetListViewQueryHandler;
 
     /**
      * @var SheetSearchAdapterInterface
@@ -56,26 +57,26 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
 
     /**
      * @param SheetRepositoryInterface             $sheetRepository
-     * @param SheetViewedRepositoryInterface       $sheetViewedRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler       $viewedSheetListViewQueryHandler
      * @param TemplateDataFactory                  $templateDataFactory
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        SheetViewedRepositoryInterface $sheetViewedRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
+        ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->sheetRepository                      = $sheetRepository;
-        $this->sheetViewedRepository                = $sheetViewedRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
+        $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
         $this->templateDataFactory                  = $templateDataFactory;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
@@ -100,12 +101,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
-        $seenSheets               = $this->sheetViewedRepository->getSheetsAlreadySeenByUser($query->user, $paginatedResult->results);
-        $seenSheetIndexed         = [];
-
-        foreach($seenSheets as $seenSheet) {
-            $seenSheetIndexed[$seenSheet->getSheet()->getId()] = $seenSheet;
-        }
+        $seenSheetIndexed         = $this->viewedSheetListViewQueryHandler->handle(
+            new ViewedSheetListViewQuery($query->user, $paginatedResult->results)
+        );
 
         $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);

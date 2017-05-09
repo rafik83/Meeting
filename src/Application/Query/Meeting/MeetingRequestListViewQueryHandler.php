@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 
 class MeetingRequestListViewQueryHandler
 {
@@ -25,14 +26,14 @@ class MeetingRequestListViewQueryHandler
     private $meetingRequestRepository;
 
     /**
-     * @var SheetViewedRepositoryInterface
-     */
-    private $sheetViewedRepository;
-
-    /**
      * @var MeetingRequestViewQueryHandler
      */
     private $meetingRequestViewQueryHandler;
+
+    /**
+     * @var ViewedSheetListViewQueryHandler
+     */
+    private $viewedSheetListViewQueryHandler;
 
     /**
      * @var MeetingPublishedAccessChecker
@@ -49,23 +50,23 @@ class MeetingRequestListViewQueryHandler
      * MeetingRequestListViewQueryHandler constructor.
      *
      * @param RequestRepositoryInterface           $meetingRequestRepository
-     * @param SheetViewedRepositoryInterface       $sheetViewedRepository
      * @param MeetingRequestViewQueryHandler       $meetingRequestViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
      * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         RequestRepositoryInterface $meetingRequestRepository,
-        SheetViewedRepositoryInterface $sheetViewedRepository,
         MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler,
+        ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->meetingRequestRepository             = $meetingRequestRepository;
-        $this->sheetViewedRepository                = $sheetViewedRepository;
         $this->meetingRequestViewQueryHandler       = $meetingRequestViewQueryHandler;
+        $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
         $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
@@ -81,15 +82,21 @@ class MeetingRequestListViewQueryHandler
         $meetingRequests = $this->meetingRequestRepository
             ->getAllRequestBySheet($query->sheet, $query->filters);
 
+        $sheetsIds = [];
+        foreach ($meetingRequests as $meetingRequest) {
+            $sheetsIds[] = $meetingRequest->getToSheet()->getId();
+        }
+
+        $viewedSheetListView = $this->viewedSheetListViewQueryHandler->handle(
+            new ViewedSheetListViewQuery($query->user, $sheetsIds)
+        );
+
         $meetingRequestListView = new MeetingRequestListView();
         $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
         $isMeetingRequestUpdateLocked    = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
         $isMeetingrequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
-
-        // To extract to MeetingRequestListViewQueryHandler
-        $isSeenByCurrentUser = $this->sheetViewedRepository->isSheetAlreadySeenByUser($query->user, $query->sheet);
 
         foreach ($meetingRequests as $meetingRequest) {
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
@@ -102,7 +109,7 @@ class MeetingRequestListViewQueryHandler
                     $isMeetingRequestUpdateLocked,
                     $isMeetingrequestClosed,
                     $isAnsweringMeetingRequestClosed,
-                    $isSeenByCurrentUser
+                    isset($viewedSheetListView[$meetingRequest->getToSheet()->getId()])
                 )
             );
 
