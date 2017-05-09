@@ -4495,7 +4495,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityHandler
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
             - '@domain.unavailability.participant_unavailable_aggregator'
     command.aggregate.participant.assigned_to_request_handler:
         class: Proximum\Vimeet\Application\Command\Aggregate\Participant\AssignedToRequestHandler

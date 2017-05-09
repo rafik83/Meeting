@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Aggregate\Participant;
 
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
 
@@ -19,24 +18,18 @@ class FullUnavailabilityHandler
     /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
-
     /** @var ParticipantUnavailableAggregator */
     private $participantUnavailableAggregator;
 
     /**
      * @param UserRepositoryInterface          $userRepository
-     * @param ParticipantRepositoryInterface   $participantRepository
      * @param ParticipantUnavailableAggregator $participantUnavailableAggregator
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
-        ParticipantRepositoryInterface $participantRepository,
         ParticipantUnavailableAggregator $participantUnavailableAggregator
     ) {
         $this->userRepository                   = $userRepository;
-        $this->participantRepository            = $participantRepository;
         $this->participantUnavailableAggregator = $participantUnavailableAggregator;
     }
 

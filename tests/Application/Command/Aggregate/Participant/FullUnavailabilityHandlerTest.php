@@ -29,7 +29,6 @@ class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $user3 = $this->prophesize(User::class);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
         $userRepository
             ->findByEventAndInCatalog($event->reveal())
@@ -63,7 +62,6 @@ class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new FullUnavailabilityHandler(
             $userRepository->reveal(),
-            $participantRepository->reveal(),
             $participantFullUnavailabilityAggregator->reveal()
         );
 
@@ -78,7 +76,6 @@ class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $user3 = $this->prophesize(User::class);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
         $userRepository
             ->findByEvent($event->reveal())
@@ -112,7 +109,6 @@ class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new FullUnavailabilityHandler(
             $userRepository->reveal(),
-            $participantRepository->reveal(),
             $participantFullUnavailabilityAggregator->reveal()
         );
 
