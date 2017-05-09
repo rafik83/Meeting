@@ -1488,6 +1488,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler
         arguments:
             - '@repository.unavailability.mass_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
     command.unavailability.create_handler:
