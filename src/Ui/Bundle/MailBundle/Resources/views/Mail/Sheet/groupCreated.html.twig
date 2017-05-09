@@ -12,7 +12,7 @@
 
     {{ macros.button(
         'mail.sheet.group.show.link'|trans({}, 'mail', mail.locale),
-        url('event_sheet_group_index', {'sheetGroup': mail.group.id, '_locale': mail.locale})
+        'https://' ~ mail.event.domain ~ path('event_sheet_group_index', {'sheetGroup': mail.group.id, '_locale': mail.locale})
     ) }}
 
     <br>
