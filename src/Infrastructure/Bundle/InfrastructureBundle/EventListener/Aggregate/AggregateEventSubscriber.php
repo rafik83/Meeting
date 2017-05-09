@@ -60,19 +60,25 @@ class AggregateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param AbstractHappeningEvent $event
+     * @param AbstractHappeningEvent $happeningEvent
      */
-    public function onHappeningParticipationChanged(AbstractHappeningEvent $event)
+    public function onHappeningParticipationChanged(AbstractHappeningEvent $happeningEvent)
     {
-        $this->participantUnavailableAggregator->aggregateUnavailability($event->participant);
+        $this->participantUnavailableAggregator->aggregateUnavailability(
+            $happeningEvent->participant->getUser(),
+            $happeningEvent->participant->getSheet()->getEvent()
+        );
     }
 
     /**
-     * @param AssignmentUpdatedEvent $event
+     * @param AssignmentUpdatedEvent $assignmentUpdatedEvent
      */
-    public function onMassAssignmentChanged(AssignmentUpdatedEvent $event)
+    public function onMassAssignmentChanged(AssignmentUpdatedEvent $assignmentUpdatedEvent)
     {
-        $this->participantUnavailableAggregator->aggregateUnavailability($event->participant);
+        $this->participantUnavailableAggregator->aggregateUnavailability(
+            $assignmentUpdatedEvent->participant->getUser(),
+            $assignmentUpdatedEvent->participant->getSheet()->getEvent()
+        );
     }
 
     /**
