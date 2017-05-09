@@ -4505,7 +4505,6 @@ services:
     command.aggregate.participant.full_unavailability_for_given_participants_handler:
         class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityForGivenUsersInEventHandler
         arguments:
-             - '@vimeet_infrastructure.repository.participant_repository'
              - '@vimeet_infrastructure.repository.user_repository'
              - '@domain.unavailability.participant_unavailable_aggregator'
 

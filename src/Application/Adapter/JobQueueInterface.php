@@ -107,8 +107,6 @@ interface JobQueueInterface
     /**
      * @param Event  $event
      * @param User[] $users
-     *
-     * @return
      */
     public function aggregateUsersFullUnavailability(Event $event, array $users);
 
