@@ -318,12 +318,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         Happening $exceptedHappening = null,
         $exceptAllUnavailabilities = false
     ) {
+        if (empty($participants)) {
+            return [];
+        }
+
+        $firstParticipant = reset($participants);
+
+        if (!$firstParticipant instanceof Participant) {
+            return [];
+        }
+
+        $eventId = $firstParticipant->getSheet()->getEvent()->getId();
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->where('participant IN (:participants)')
+            ->join('participant.user', 'user', 'WITH', 'participant IN (:participants)')
             ->setParameter('participants', $participants);
 
         $unavailabilityConditions = "1 = 1";
@@ -335,7 +347,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT u.id
                     FROM Entity:Unavailability u
                     WHERE
-                        u.participant = participant
+                        u.user = user AND u.event = :eventId
                         AND (
                             u.begin BETWEEN :begin AND :end
                             OR u.end BETWEEN :begin AND :end
@@ -392,6 +404,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         }
 
         $queryBuilder
+            ->setParameter('eventId', $eventId)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end);
 
