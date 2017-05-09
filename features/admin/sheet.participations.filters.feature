@@ -182,7 +182,8 @@ Feature: Sheet participations list filters
     And the event "Best of web" is created
     And I am logged as admin
     And the user "sheetgroup@example.com" is created
-    And there is a group "Sheet Group" with a sheet managed by this user
+    And there is a group "Sheet Group" managed by this user
+    And there is a sheet in this group
     And elastica is populate
     When I go to "/admin/fr/event/1/sheet?orderBy=created_at&hasGroup=1"
     Then I should see "sheetgroup@example.com"

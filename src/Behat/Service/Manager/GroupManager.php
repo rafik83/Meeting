@@ -64,22 +64,17 @@ class GroupManager
     }
 
     /**
-     * @param Event         $event
-     * @param User          $user
-     * @param DateTime|null $dateTime
-     * @param null          $title
+     * @param Event $event
+     * @param User  $user
+     * @param Group $group
      *
      * @return Group
      */
-    public function createWithSheet(Event $event, User $user, Datetime $dateTime = null, $title = null)
+    public function assignSheetToGroup(Event $event, User $user, Group $group)
     {
-        $group = GroupFactory::createGroup($event, $user, $dateTime, $title);
-
         $sheet = $this->sheetManager->create($event, $user);
-        $sheet->setGroup($group);
 
-        $this->groupRepository->add($group);
-        $this->sheetRepository->add($sheet);
+        $this->sheetRepository->set($sheet->setGroup($group));
 
         return $group;
     }

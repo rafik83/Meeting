@@ -655,7 +655,7 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['hasGroup'])) {
             $matchHasGroup = new Term();
-            $matchHasGroup->setTerm('hasGroup', $filters['hasGroup']);
+            $matchHasGroup->setTerm('hasGroup', (bool) $filters['hasGroup']);
 
             $this->query->addMust($matchHasGroup);
         }
@@ -721,7 +721,7 @@ class SheetSearchQueryBuilder
     private function filterByHasHappeningParticipation(array &$filters)
     {
         if (isset($filters['hasHappeningParticipation'])) {
-            $this->query->addMust((new Term())->setTerm('hasHappeningParticipation', (bool)$filters['hasHappeningParticipation']));
+            $this->query->addMust((new Term())->setTerm('hasHappeningParticipation', (bool) $filters['hasHappeningParticipation']));
         }
     }
 
