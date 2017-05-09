@@ -103,7 +103,7 @@ interface ParticipantRepositoryInterface
      * @param Event $event
      * @param User  $user
      *
-     * @return array
+     * @return Participant[]
      */
     public function getAllParticipantForUser(Event $event, User $user);
 

@@ -54,7 +54,7 @@ class RequestSlotViewQueryHandler
 
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
             $query->meetingRequest->getEvent(),
-            $query->meetingRequest->getParticipantsId(),
+            $query->meetingRequest->getAllParticipants(),
             false
         );
 

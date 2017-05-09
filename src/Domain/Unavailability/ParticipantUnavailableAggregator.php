@@ -10,7 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Unavailability;
 
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -35,15 +36,27 @@ class ParticipantUnavailableAggregator
     }
 
     /**
-     * @param Participant $participant
+     * @param User  $user
+     * @param Event $event
      */
-    public function aggregateUnavailability(Participant $participant)
+    public function aggregateUnavailability(User $user, Event $event)
     {
-        $event  = $participant->getSheet()->getEvent();
-        $slots  = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds($event, [$participant->getId()]);
+        $participants = $this->participantRepository->getAllParticipantForUser($event, $user);
 
-        $participant->setFullyUnavailable(empty($slots));
+        $firstParticipant = reset($participants);
 
-        $this->participantRepository->set($participant);
+        if (false === $firstParticipant) {
+            return;
+        }
+
+        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+            $event,
+            [$firstParticipant]
+        );
+
+        foreach ($participants as $participant) {
+            $participant->setFullyUnavailable(empty($slots));
+            $this->participantRepository->set($participant);
+        }
     }
 }

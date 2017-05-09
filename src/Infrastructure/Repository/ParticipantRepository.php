@@ -217,7 +217,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('participant.id')
+            ->select('participant')
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'participant.user = :user AND sheet.event = :event')
             ->setParameter('user', $user)

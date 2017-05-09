@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 interface MeetingSlotRepositoryInterface
 {
@@ -62,16 +63,16 @@ interface MeetingSlotRepositoryInterface
     public function countByEvent(Event $event);
 
     /**
-     * @param Event   $event
-     * @param array   $participantsId
-     * @param bool    $ignoreMeetings
-     * @param Meeting $exceptedMeeting
+     * @param Event         $event
+     * @param Participant[] $participants
+     * @param bool          $ignoreMeetings
+     * @param Meeting       $exceptedMeeting
      *
      * @return MeetingSlot[]
      */
     public function findAvailableSlotsByParticipantsIds(
         Event $event,
-        array $participantsId,
+        array $participants,
         $ignoreMeetings = false,
         Meeting $exceptedMeeting = null
     );

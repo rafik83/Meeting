@@ -76,13 +76,13 @@ class UserAvailabilitiesBuilderCache
     {
         $participants = $this->participantRepository->getParticipantsByUserForEvent($user->getId(), $event);
 
-        $participantIds = array_map(function (Participant $participant) {
-            return $participant->getId();
-        }, $participants);
+        if (empty($participants)) {
+            return [];
+        }
 
         return $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
             $event,
-            $participantIds,
+            $participants,
             true
         );
     }

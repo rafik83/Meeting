@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
@@ -134,10 +135,14 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
      */
     public function findAvailableSlotsByParticipantsIds(
         Event $event,
-        array $participantsId,
+        array $participants,
         $ignoreMeetings = false,
         Meeting $exceptedMeeting = null
     ) {
+        $userIds = array_map(function (Participant $participant) {
+            return $participant->getUser()->getId();
+        }, $participants);
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -158,7 +163,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                             LEFT JOIN m.toParticipants tp
                             WHERE m.slot = slot
                             AND m.state = :meetingState
-                            AND (fp.id IN (:ids) OR tp.id IN (:ids))
+                            AND (fp.id IN (:participants) OR tp.id IN (:participants))
                             %s
                         )',
                         null !== $exceptedMeeting ? 'AND m != :exceptedMeeting' : ''
@@ -175,7 +180,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT u.id FROM Entity:Unavailability u
-                WHERE u.participant IN (:ids)
+                WHERE u.user IN (:userIds)
                 AND (
                     slot.begin = u.begin
                     OR u.end = slot.end
@@ -190,7 +195,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->andWhere('NOT EXISTS (
                 SELECT hp.id FROM Entity:HappeningParticipation hp
                 JOIN hp.happening h
-                WHERE hp.participant IN (:ids)
+                WHERE hp.participant IN (:participants)
                 AND (
                     slot.begin = h.begin
                     OR h.end = slot.end
@@ -220,7 +225,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->andWhere('NOT EXISTS (
                 SELECT assignment.id FROM Entity:Unavailability\MassAssignment assignment
                 JOIN assignment.mass massUnavailability
-                WHERE assignment.participant IN (:ids)
+                WHERE assignment.participant IN (:participants)
                 AND massUnavailability.blocking = true
                 AND assignment.enabled = true
                 AND (
@@ -232,7 +237,10 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                 )
         )');
 
-        $queryBuilder->setParameter('ids', $participantsId);
+        $queryBuilder
+            ->setParameter('participants', $participants)
+            ->setParameter('userIds', $userIds)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

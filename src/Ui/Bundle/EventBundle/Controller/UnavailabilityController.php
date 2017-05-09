@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Unavailability\UnavailabilityVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -48,7 +47,12 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
-        $this->denyAccessUnlessGranted(UnavailabilityVoter::CREATE, $sheet);
+
+        if (!$sheet->attend()) {
+            throw $this->createAccessDeniedException(
+                'Can not create unavailability as the given sheet is not attending'
+            );
+        }
 
         $event = $eventDomain->getEvent();
         $user  = $this->getUser();
@@ -174,7 +178,12 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
-        $this->denyAccessUnlessGranted(UnavailabilityVoter::REMOVE, $unavailability);
+
+        if (!$sheet->attend()) {
+            throw $this->createAccessDeniedException(
+                'Can not create unavailability as the given sheet is not attending'
+            );
+        }
 
         if (!$sheet->hasParticipant($participant)) {
             throw $this->createNotFoundException('The participant given is not on the sheet');

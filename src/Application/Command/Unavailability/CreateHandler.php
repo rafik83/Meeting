@@ -84,6 +84,9 @@ class CreateHandler
 
         // Merge overlap unavailability and Save unavailability
         foreach ($create->participants as $participant) {
+            $user = $participant->getUser();
+            $event = $participant->getSheet()->getEvent();
+
             $unavailability = new Unavailability(
                 $participant->getUser(),
                 $participant->getSheet()->getEvent(),
@@ -97,7 +100,7 @@ class CreateHandler
 
             $this->eventDispatcher->dispatch(
                 Events::UNAVAILABILITY_ADDED,
-                new AddUnavailabilityEvent($participant)
+                new AddUnavailabilityEvent($user, $event)
             );
         }
     }
