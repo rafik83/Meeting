@@ -129,20 +129,24 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         $fromSheetParticipants = $rawMeeting->getFromParticipants()->toArray();
         $toSheetParticipants   = $rawMeeting->getToParticipants()->toArray();
 
+        $fromUserIds = array_map(function (Participant $participant) {
+            return $participant->getUser()->getId();
+        }, $fromSheetParticipants);
+
+        $toUserIds = array_map(function (Participant $participant) {
+            return $participant->getUser()->getId();
+        }, $toSheetParticipants);
+
         $rawData = [
             self::COL_MEETING_ID              => $rawMeeting->getId(),
             self::COL_FROM_SHEET_ID           => $rawMeeting->getFromSheet()->getId(),
             self::COL_FROM_SHEET_TITLE        => $rawMeeting->getFromSheet()->getTitle(),
             self::COL_FROM_SHEET_PARTICIPANTS => $this->getParticipantsRawData($fromSheetParticipants),
-            self::COL_FROM_USER_IDS           => array_map(function (Participant $participant) {
-                return $participant->getUser()->getId();
-            }, $fromSheetParticipants),
+            self::COL_FROM_USER_IDS           => implode(',', $fromUserIds),
             self::COL_TO_SHEET_ID             => $rawMeeting->getToSheet()->getId(),
             self::COL_TO_SHEET_TITLE          => $rawMeeting->getToSheet()->getTitle(),
             self::COL_TO_SHEET_PARTICIPANTS   => $this->getParticipantsRawData($toSheetParticipants),
-            self::COL_TO_USER_IDS             => array_map(function (Participant $participant) {
-                return $participant->getUser()->getId();
-            }, $toSheetParticipants),
+            self::COL_TO_USER_IDS             => implode(',', $toUserIds),
             self::COL_DAY                     => $this->dayFormatter->format($meeting['meetingBegin']),
             self::COL_HOUR_BEGIN              => $this->timeFormatter->format($meeting['meetingBegin']),
             self::COL_HOUR_END                => $this->timeFormatter->format($meeting['meetingEnd']),
