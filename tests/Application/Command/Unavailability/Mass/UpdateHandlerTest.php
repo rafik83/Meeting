@@ -22,7 +22,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event    = EventFactory::createEvent();
+        $event       = EventFactory::createEvent();
         $oldCategory = new Category($event, 'Conference', 'old title', '#AABBCC', '#CCBBAA');
         $category    = new Category($event, 'Conference', 'title', '#123123', '#312312');
         $oldBegin    = new \DateTime('2016-10-10 10:00:00.000');
@@ -61,7 +61,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -126,7 +126,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -191,7 +191,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -262,7 +262,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
