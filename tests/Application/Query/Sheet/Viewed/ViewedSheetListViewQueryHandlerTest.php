@@ -26,19 +26,19 @@ class ViewedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTwo = SheetFactory::create();
         $user     = UserFactory::create();
 
-        $sheetIds = [
-            $sheetOne->getId(),
-            $sheetTwo->getId(),
+        $sheets = [
+            $sheetOne,
+            $sheetTwo,
         ];
 
         $sheetViewedRepository = $this->prophesize(SheetViewedRepositoryInterface::class);
 
         $sheetViewedOne = new SheetViewed($sheetOne, $user, $dateTime);
         $expectedView   = ['' => true];
-        $query          = new ViewedSheetListViewQuery($user, $sheetIds);
+        $query          = new ViewedSheetListViewQuery($user, $sheets);
         $handler        = new ViewedSheetListViewQueryHandler($sheetViewedRepository->reveal());
 
-        $sheetViewedRepository->getSheetsAlreadySeenByUser($user, $sheetIds)
+        $sheetViewedRepository->getSheetsAlreadySeenByUser($user, $sheets)
             ->shouldBeCalled()
             ->willReturn([$sheetViewedOne]);
 

@@ -36,7 +36,7 @@ class ViewedSheetListViewQueryHandler
     {
         $seenSheets = $this->sheetViewedRepository->getSheetsAlreadySeenByUser(
             $viewedSheetListViewQuery->user,
-            $viewedSheetListViewQuery->sheetIds
+            $viewedSheetListViewQuery->sheets
         );
 
         if (empty($seenSheets)) {
