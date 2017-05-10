@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Viewed;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class ViewedSheetListViewQuery
@@ -17,18 +18,18 @@ class ViewedSheetListViewQuery
     /** @var User */
     public $user;
 
-    /** @var int[] */
-    public $sheetIds;
+    /** @var Sheet[] */
+    public $sheets;
 
     /**
      * ViewedSheetListViewQuery constructor.
      *
      * @param User  $user
-     * @param int[] $sheetIds
+     * @param Sheet[] $sheets
      */
-    public function __construct(User $user, array $sheetIds)
+    public function __construct(User $user, array $sheets)
     {
-        $this->user     = $user;
-        $this->sheetIds = $sheetIds;
+        $this->user   = $user;
+        $this->sheets = $sheets;
     }
 }
