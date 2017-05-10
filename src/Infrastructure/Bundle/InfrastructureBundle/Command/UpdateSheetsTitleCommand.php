@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -61,8 +60,8 @@ class UpdateSheetsTitleCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sheetsIterableResult  = [];
-        $eventId = $input->getArgument('eventId');
+        $sheetsIterableResult = [];
+        $eventId              = $input->getArgument('eventId');
 
         if (null !== $eventId) {
             $event = $this->eventRepository->getById($eventId);
@@ -81,19 +80,21 @@ class UpdateSheetsTitleCommand extends Command
                 ->getQuery()->iterate();
         }
 
-        $batchSize = 500;
-        $i         = 0;
-        $progress = new ProgressBar($output);
+        $batchSize        = 500;
+        $i                = 0;
+        $progress         = new ProgressBar($output);
+        $sheetToBeUpdated = [];
 
         foreach ($sheetsIterableResult as $row) {
             /** @var Sheet $sheet */
-            $sheet = $row[0];
-            $sheetTitle = $this->sheetInfoGuesserCache->guessSheetTitle($sheet);
-            $sheet->setTitle($sheetTitle);
+            $sheet              = $row[0];
+            $sheetTitle         = $this->sheetInfoGuesserCache->guessSheetTitle($sheet);
+            $sheetToBeUpdated[] = $sheet->setTitle($sheetTitle);
 
             if (($i % $batchSize) === 0) {
-                $this->entityManager->flush();
+                $this->entityManager->flush($sheetToBeUpdated);
                 $this->entityManager->clear();
+                $sheetToBeUpdated = [];
             }
 
             ++$i;
