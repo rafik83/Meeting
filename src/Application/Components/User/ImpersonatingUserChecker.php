@@ -10,20 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Components\User;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ImpersonatingUserCheckerInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter;
 
 class ImpersonatingUserChecker implements ImpersonatingUserCheckerInterface
 {
-    /** @var AuthorizationCheckerAdapter */
+    /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
     /**
      * ImpersonatingUserChecker constructor.
      *
-     * @param AuthorizationCheckerAdapter $authorizationChecker
+     * @param AuthorizationCheckerAdapterInterface $authorizationChecker
      */
-    public function __construct(AuthorizationCheckerAdapter $authorizationChecker)
+    public function __construct(AuthorizationCheckerAdapterInterface $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
     }

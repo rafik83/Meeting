@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface as SymfonyAuthorizationCheckerInterface;
 
-class AuthorizationCheckerAdapter
+class AuthorizationCheckerAdapter implements AuthorizationCheckerAdapterInterface
 {
     /** @var SymfonyAuthorizationCheckerInterface */
     private $authorizationChecker;
@@ -28,12 +29,7 @@ class AuthorizationCheckerAdapter
     }
 
     /**
-     * Checks if the attributes are granted against the current authentication token and optionally supplied object.
-     *
-     * @param mixed $attributes
-     * @param mixed $object
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isGranted($attributes, $object = null)
     {
