@@ -49,11 +49,10 @@ class AddHandler
      */
     public function handle(Add $command)
     {
-        if (!$this->impersonatingUserChecker->isImpersonated()) {
-            if (!$this->sheetViewedRepository->isSheetAlreadySeenByUser($command->user, $command->sheet)) {
+        if (!$this->impersonatingUserChecker->isImpersonated()
+            && !$this->sheetViewedRepository->isSheetAlreadySeenByUser($command->user, $command->sheet)) {
                 $sheetViewed = new SheetViewed($command->sheet, $command->user, $this->dateTime);
                 $this->sheetViewedRepository->add($sheetViewed);
-            }
         }
     }
 }
