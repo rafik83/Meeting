@@ -82,13 +82,13 @@ class MeetingRequestListViewQueryHandler
         $meetingRequests = $this->meetingRequestRepository
             ->getAllRequestBySheet($query->sheet, $query->filters);
 
-        $sheetsIds = [];
+        $sheets = [];
         foreach ($meetingRequests as $meetingRequest) {
-            $sheetsIds[] = $meetingRequest->getToSheet()->getId();
+            $sheets[] = $meetingRequest->getToSheet();
         }
 
         $viewedSheetListView = $this->viewedSheetListViewQueryHandler->handle(
-            new ViewedSheetListViewQuery($query->user, $sheetsIds)
+            new ViewedSheetListViewQuery($query->user, $sheets)
         );
 
         $meetingRequestListView = new MeetingRequestListView();

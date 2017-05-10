@@ -66,7 +66,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$meetingRequest]);
 
         $viewedSheetListViewQueryHandler
-            ->handle(new ViewedSheetListViewQuery($user, [$sheet->getId()]))
+            ->handle(new ViewedSheetListViewQuery($user, [$sheet]))
             ->shouldBeCalled();
 
         $meetingRequestViewQueryHandler
@@ -135,7 +135,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$meetingRequest]);
 
         $viewedSheetListViewQueryHandler
-            ->handle(new ViewedSheetListViewQuery($user, [$sheet->getId()]))
+            ->handle(new ViewedSheetListViewQuery($user, [$sheet]))
             ->shouldBeCalled();
 
         $meetingRequestViewQueryHandler

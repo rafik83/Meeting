@@ -17,14 +17,14 @@ class ViewedSheetListViewQuery
     /** @var User */
     public $user;
 
-    /** @var array */
+    /** @var int[] */
     public $sheetIds;
 
     /**
      * ViewedSheetListViewQuery constructor.
      *
      * @param User  $user
-     * @param array $sheetIds
+     * @param int[] $sheetIds
      */
     public function __construct(User $user, array $sheetIds)
     {

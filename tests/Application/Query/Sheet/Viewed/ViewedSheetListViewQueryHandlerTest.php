@@ -34,7 +34,7 @@ class ViewedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetViewedRepository = $this->prophesize(SheetViewedRepositoryInterface::class);
 
         $sheetViewedOne = new SheetViewed($sheetOne, $user, $dateTime);
-        $expectedView   = ['' => $sheetViewedOne];
+        $expectedView   = ['' => true];
         $query          = new ViewedSheetListViewQuery($user, $sheetIds);
         $handler        = new ViewedSheetListViewQueryHandler($sheetViewedRepository->reveal());
 

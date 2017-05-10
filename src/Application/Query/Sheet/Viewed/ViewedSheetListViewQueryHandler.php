@@ -30,7 +30,7 @@ class ViewedSheetListViewQueryHandler
     /**
      * @param ViewedSheetListViewQuery $viewedSheetListViewQuery
      *
-     * @return array
+     * @return array indexed by Sheet id
      */
     public function handle(ViewedSheetListViewQuery $viewedSheetListViewQuery)
     {
@@ -45,7 +45,7 @@ class ViewedSheetListViewQueryHandler
 
         $seenSheetsIndexed = [];
         foreach ($seenSheets as $seenSheet) {
-            $seenSheetsIndexed[$seenSheet->getSheet()->getId()] = $seenSheet;
+            $seenSheetsIndexed[$seenSheet->getSheet()->getId()] = true;
         }
 
         return $seenSheetsIndexed;
