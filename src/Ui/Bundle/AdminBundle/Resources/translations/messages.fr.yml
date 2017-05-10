@@ -313,6 +313,8 @@ admin.meeting.export.fields.from_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.export.fields.from_sheet_title: 'Titre fiche demandeur'
 admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandé'
+admin.meeting.export.fields.from_sheet_participant_fullname: 'Prénom Nom utilisateurs demandeurs'
+admin.meeting.export.fields.to_sheet_participant_fullname: 'Prénom Nom utilisateurs demandés'
 admin.meeting.export.fields.spot: Lieu
 admin.meeting.export.fields.to_sheet_id: 'ID demandé'
 admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
