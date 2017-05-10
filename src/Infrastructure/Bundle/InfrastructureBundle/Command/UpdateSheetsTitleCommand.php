@@ -81,7 +81,7 @@ class UpdateSheetsTitleCommand extends Command
                 ->getQuery()->iterate();
         }
 
-        $batchSize = 200;
+        $batchSize = 500;
         $i         = 0;
         $progress = new ProgressBar($output);
 
