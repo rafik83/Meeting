@@ -22,14 +22,18 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
 {
     const COL_MEETING_ID              = 'meeting_id';
     const COL_FROM_SHEET_ID           = 'from_sheet_id';
+    const COL_FROM_SHEET_TITLE        = 'from_sheet_title';
     const COL_FROM_SHEET_PARTICIPANTS = 'from_sheet_participants';
+    const COL_FROM_USER_IDS           = 'from_user_ids';
     const COL_TO_SHEET_ID             = 'to_sheet_id';
+    const COL_TO_SHEET_TITLE          = 'to_sheet_title';
     const COL_TO_SHEET_PARTICIPANTS   = 'to_sheet_participants';
+    const COL_TO_USER_IDS             = 'to_user_ids';
     const COL_DAY                     = 'day';
     const COL_HOUR_BEGIN              = 'hour_begin';
     const COL_HOUR_END                = 'hour_end';
     const COL_SPOT                    = 'spot';
-    const EXPORT_BASE_KEY = 'admin.meeting.export.fields.';
+    const EXPORT_BASE_KEY             = 'admin.meeting.export.fields.';
 
     /**
      * @var string
@@ -121,16 +125,24 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     private function getMeetingRawData($meeting)
     {
         /** @var Meeting $rawMeeting */
-        $rawMeeting = $meeting['meeting'];
+        $rawMeeting            = $meeting['meeting'];
         $fromSheetParticipants = $rawMeeting->getFromParticipants()->toArray();
         $toSheetParticipants   = $rawMeeting->getToParticipants()->toArray();
 
         $rawData = [
             self::COL_MEETING_ID              => $rawMeeting->getId(),
             self::COL_FROM_SHEET_ID           => $rawMeeting->getFromSheet()->getId(),
+            self::COL_FROM_SHEET_TITLE        => $rawMeeting->getFromSheet()->getTitle(),
             self::COL_FROM_SHEET_PARTICIPANTS => $this->getParticipantsRawData($fromSheetParticipants),
+            self::COL_FROM_USER_IDS           => array_map(function (Participant $participant) {
+                return $participant->getUser()->getId();
+            }, $fromSheetParticipants),
             self::COL_TO_SHEET_ID             => $rawMeeting->getToSheet()->getId(),
+            self::COL_TO_SHEET_TITLE          => $rawMeeting->getToSheet()->getTitle(),
             self::COL_TO_SHEET_PARTICIPANTS   => $this->getParticipantsRawData($toSheetParticipants),
+            self::COL_TO_USER_IDS             => array_map(function (Participant $participant) {
+                return $participant->getUser()->getId();
+            }, $toSheetParticipants),
             self::COL_DAY                     => $this->dayFormatter->format($meeting['meetingBegin']),
             self::COL_HOUR_BEGIN              => $this->timeFormatter->format($meeting['meetingBegin']),
             self::COL_HOUR_END                => $this->timeFormatter->format($meeting['meetingEnd']),
@@ -197,9 +209,13 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         return [
             self::COL_MEETING_ID,
             self::COL_FROM_SHEET_ID,
+            self::COL_FROM_SHEET_TITLE,
             self::COL_FROM_SHEET_PARTICIPANTS,
+            self::COL_FROM_USER_IDS,
             self::COL_TO_SHEET_ID,
+            self::COL_TO_SHEET_TITLE,
             self::COL_TO_SHEET_PARTICIPANTS,
+            self::COL_TO_USER_IDS,
             self::COL_DAY,
             self::COL_HOUR_BEGIN,
             self::COL_HOUR_END,
