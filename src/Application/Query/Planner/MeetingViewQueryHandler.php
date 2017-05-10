@@ -26,7 +26,7 @@ use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 class MeetingViewQueryHandler
 {
     /** @var SheetView[] */
-    private $sheets;
+    private $sheets = [];
 
     /** @var ParticipantView[] */
     private $participants;

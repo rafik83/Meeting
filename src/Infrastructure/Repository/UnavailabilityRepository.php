@@ -137,7 +137,7 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('unavailability, participant')
+            ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
             ->join(
                 Participant::class,
