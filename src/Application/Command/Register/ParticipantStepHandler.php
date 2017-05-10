@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ParticipantStepHandler
@@ -99,6 +100,13 @@ class ParticipantStepHandler
 
             if ($templateObject->hasTag(Tag::SHEET_DATA)) {
                 $sheetData = array_merge($sheetData, [$key => $value]);
+            }
+
+            // set sheet title
+            if ($templateObject->hasTag(Tag::SHEET_TITLE)
+                && $templateObject instanceof ContentObjectInterface
+            ) {
+                $participantStep->sheet->setTitle($templateObject->getContentValue());
             }
 
             $templateData->getBlock(intval($participantStep->step))->getObject($key)->setData($value);
