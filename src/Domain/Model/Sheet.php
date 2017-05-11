@@ -149,7 +149,7 @@ class Sheet implements TraceableInterface
     /**
      * @var string
      */
-    private $title;
+    private $title = '';
 
     /**
      * Sheet constructor.
