@@ -56,6 +56,8 @@ class EventController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
         /** @var Admin $admin */
         $admin  = $this->getUser();
         $events = $this->get('tactician.commandbus.query')->handle(new EventListQuery($admin));

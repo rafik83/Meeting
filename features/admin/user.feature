@@ -16,16 +16,16 @@ Feature:
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    When I go to this page "/admin/fr/event/1/users"
+    And I am on this page "/fr/event"
+    When I go to this page "/fr/event/1/users"
     Then I should see "user_asddays_1@proximum.com"
     And I should see "user_asddays_2@proximum.com"
     And I should see "user_asddays_3@proximum.com"
 
   Scenario: I can filter users by sheet type
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    And I go to this page "/admin/fr/event/1/users"
+    And I am on this page "/fr/event"
+    And I go to this page "/fr/event/1/users"
     And I should see "user_asddays_1@proximum.com"
     And I should see "user_asddays_2@proximum.com"
     And I should see "user_asddays_3@proximum.com"
@@ -45,8 +45,8 @@ Feature:
 
   Scenario: I can filter users by type and participation
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    And I go to this page "/admin/fr/event/1/users"
+    And I am on this page "/fr/event"
+    And I go to this page "/fr/event/1/users"
     And I should see "user_asddays_1@proximum.com"
     And I should see "user_asddays_2@proximum.com"
     And I should see "user_asddays_3@proximum.com"
@@ -57,13 +57,13 @@ Feature:
     But I should not see "user_asddays_1@proximum.com"
     But I should not see "user_asddays_2@proximum.com"
     But I should not see "user_asddays_3@proximum.com"
-    When I go to this page "/admin/fr/event/1/users?participation=withoutSheet&type=3&text=user_asddays_2"
+    When I go to this page "/fr/event/1/users?participation=withoutSheet&type=3&text=user_asddays_2"
     Then I should see "admin.zero-result"
 
   Scenario: I can filter users by participation with sheet or without sheet
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    And I go to this page "/admin/fr/event/1/users"
+    And I am on this page "/fr/event"
+    And I go to this page "/fr/event/1/users"
     When I follow "admin.users.withSheet"
     Then I should see "form.user_filter.children.participation.label: admin.users.withSheet"
     And I should see "user_asddays_1@proximum.com"
@@ -79,13 +79,13 @@ Feature:
 
   Scenario: I can search user by name or email
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    When I go to this page "/admin/fr/event/1/users?text=john&participation=withSheet"
+    And I am on this page "/fr/event"
+    When I go to this page "/fr/event/1/users?text=john&participation=withSheet"
     Then I should see "user_asddays_1@proximum.com"
     But I should not see "user_asddays_2@proximum.com"
     And I should not see "user_asddays_3@proximum.com"
     And I should not see "user_asddays_4@proximum.com"
-    When I go to this page "/admin/fr/event/1/users?text=asddays_2&participation=withSheet"
+    When I go to this page "/fr/event/1/users?text=asddays_2&participation=withSheet"
     Then I should see "user_asddays_2@proximum.com"
     But I should not see "user_asddays_1@proximum.com"
     And I should not see "user_asddays_3@proximum.com"
@@ -93,8 +93,8 @@ Feature:
 
   Scenario: I can see details information from an user
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    And I go to this page "/admin/fr/event/1/users"
+    And I am on this page "/fr/event"
+    And I go to this page "/fr/event/1/users"
     And I follow "Investisseur"
     And I should see "user_asddays_3@proximum.com"
     When I follow "admin.users.details"
@@ -104,4 +104,4 @@ Feature:
     And I should see "user_asddays_3@proximum.com"
     And I should see "ASD Days" in the ".eventElement" element
     When I follow "ASD Days"
-    Then I should be on this page "/admin/fr/event/1/sheet/3"
+    Then I should be on this page "/fr/event/1/sheet/3"
