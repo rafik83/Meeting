@@ -97,7 +97,7 @@ class ScheduleController extends Controller
      */
     public function lockAction(Event $event, MeetingSlot $meetingSlot)
     {
-        return $this->handleAndRedirect($event, $meetingSlot, new Lock($meetingSlot));
+        return $this->handleAndRedirect($event, $meetingSlot, new Lock($meetingSlot, $event));
     }
 
     /**
