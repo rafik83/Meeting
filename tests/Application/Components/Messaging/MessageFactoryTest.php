@@ -1,0 +1,108 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Components\Messaging;
+
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessage;
+use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
+use Proximum\Vimeet\Application\Components\Messaging\MessageFactory;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Domain\Model\Event;
+
+class MessageFactoryTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var ObjectProphecy */
+    private $event;
+
+    /** @var ObjectProphecy */
+    private $createMessageHandler;
+
+    public function setUp()
+    {
+        $this->event = $this->prophesize(Event::class);
+        $this->createMessageHandler = $this->prophesize(CreateMessageHandler::class);
+    }
+
+    public function testCreateSheetValidated()
+    {
+        $this->createMessageHandler->handle(
+            new CreateMessage(
+                $this->event->reveal(),
+                Events::SHEET_VALIDATED,
+                'mail.sheet.validated.subject',
+                'MailBundle:Mail:Sheet/sheetValidated.html.twig',
+                false
+            )
+        )->shouldBeCalled();
+
+        $factory = new MessageFactory($this->createMessageHandler->reveal());
+        $factory->create($this->event->reveal(), Events::SHEET_VALIDATED, false);
+    }
+
+    public function testCreateSheetValidationValidate()
+    {
+        $this->createMessageHandler->handle(
+            new CreateMessage(
+                $this->event->reveal(),
+                Events::SHEET_VALIDATION_VALIDATE,
+                'mail.sheet.validation.validate.subject',
+                'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
+                true
+            )
+        )->shouldBeCalled();
+
+        $factory = new MessageFactory($this->createMessageHandler->reveal());
+        $factory->create($this->event->reveal(), Events::SHEET_VALIDATION_VALIDATE, true);
+    }
+
+    public function testCreateSheetValidationDraft()
+    {
+        $this->createMessageHandler->handle(
+            new CreateMessage(
+                $this->event->reveal(),
+                Events::SHEET_VALIDATION_DRAFT,
+                'mail.sheet.validation.draft.subject',
+                'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig',
+                true
+            )
+        )->shouldBeCalled();
+
+        $factory = new MessageFactory($this->createMessageHandler->reveal());
+        $factory->create($this->event->reveal(), Events::SHEET_VALIDATION_DRAFT, true);
+    }
+
+    public function testCreateSheetInvoiced()
+    {
+        $this->createMessageHandler->handle(
+            new CreateMessage(
+                $this->event->reveal(),
+                Events::SHEET_INVOICED,
+                'mail.sheet.invoiced.subject',
+                'MailBundle:Mail:Invoice/sheetInvoiced.html.twig',
+                false,
+                true
+            )
+        )->shouldBeCalled();
+
+        $factory = new MessageFactory($this->createMessageHandler->reveal());
+        $factory->create($this->event->reveal(), Events::SHEET_INVOICED, false);
+    }
+
+    public function testCreateException()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->createMessageHandler->handle(Argument::any())->shouldNotBeCalled();
+
+        $factory = new MessageFactory($this->createMessageHandler->reveal());
+        $factory->create($this->event->reveal(), 'other', false);
+    }
+}
