@@ -36,20 +36,18 @@ class MessageFactory
 
     /**
      * @param Event   $event
-     * @param Sheet[] $sheets
      * @param string  $messageId
      * @param bool    $sendEmailToTeam
      *
      * @return Message
      * @throw \InvalidArgumentException
      */
-    public function create(Event $event, array $sheets, $messageId, $sendEmailToTeam = false)
+    public function create(Event $event, $messageId, $sendEmailToTeam = false)
     {
         switch ($messageId) {
             case Events::SHEET_VALIDATED:
                 $command = new CreateMessage(
                     $event,
-                    $sheets,
                     Events::SHEET_VALIDATED,
                     'mail.sheet.validated.subject',
                     'MailBundle:Mail:Sheet/sheetValidated.html.twig',
@@ -59,7 +57,6 @@ class MessageFactory
             case Events::SHEET_VALIDATION_VALIDATE:
                 $command = new CreateMessage(
                     $event,
-                    $sheets,
                     Events::SHEET_VALIDATION_VALIDATE,
                     'mail.sheet.validation.validate.subject',
                     'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
@@ -69,7 +66,6 @@ class MessageFactory
             case Events::SHEET_VALIDATION_DRAFT:
                 $command = new CreateMessage(
                     $event,
-                    $sheets,
                     Events::SHEET_VALIDATION_DRAFT,
                     'mail.sheet.validation.draft.subject',
                     'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig',
@@ -79,7 +75,6 @@ class MessageFactory
             case Events::SHEET_INVOICED:
                 $command = new CreateMessage(
                     $event,
-                    $sheets,
                     Events::SHEET_INVOICED,
                     'mail.sheet.invoiced.subject',
                     'MailBundle:Mail:Invoice/sheetInvoiced.html.twig',

@@ -73,7 +73,7 @@ class ProcessHandler
         }
 
         foreach ($process->sheets as $sheet) {
-            $locale = $sheet->getOwnerLocale();
+            $locale = $sheet->getEvent()->getAvailableLocale($sheet->getOwnerLocale());
 
             // replace all placeholders by content
             $substitutions = $this->substitutionResolver->getSubstitutions($sheet, $locale);

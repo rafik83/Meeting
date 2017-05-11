@@ -97,7 +97,7 @@ class SendEmailingCommand extends Command
             throw new \InvalidArgumentException('Event not found.');
         }
 
-        $message = $this->messageFactory->create($event, $sheets, $messageId, $sendEmailToTeam);
+        $message = $this->messageFactory->create($event, $messageId, $sendEmailToTeam);
 
         $this->processHandler->handle(new Process($message, $sheets));
     }
