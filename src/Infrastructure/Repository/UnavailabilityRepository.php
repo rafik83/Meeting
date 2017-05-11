@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class UnavailabilityRepository implements UnavailabilityRepositoryInterface
@@ -63,13 +64,21 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
      */
     public function findByParticipant(Participant $participant)
     {
+        return $this->findByUserAndEvent($participant->getUser(), $participant->getSheet()->getEvent());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByUserAndEvent(User $user, Event $event)
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
             ->where('unavailability.user = :user AND unavailability.event = :event')
-            ->setParameters(['user' => $participant->getUser(), 'event' => $participant->getSheet()->getEvent()])
+            ->setParameters(['user' => $user, 'event' => $event])
         ;
 
         return $queryBuilder->getQuery()->getResult();
