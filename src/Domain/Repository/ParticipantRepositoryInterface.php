@@ -130,14 +130,6 @@ interface ParticipantRepositoryInterface
     public function getInactiveParticipantForSheet(Sheet $sheet);
 
     /**
-     * @param Sheet   $sheet
-     * @param Meeting $meeting
-     *
-     * @return Participant[]
-     */
-    public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
-
-    /**
      * @param Event $event
      *
      * @return int
@@ -170,14 +162,6 @@ interface ParticipantRepositoryInterface
         Happening $exceptedHappening = null,
         $exceptAllUnavailabilities = false
     );
-
-    /**
-     * @param array   $participants
-     * @param Meeting $meeting
-     *
-     * @return Participant[]
-     */
-    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting);
 
     /**
      * @param array     $participants

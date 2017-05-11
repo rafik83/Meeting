@@ -263,14 +263,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting)
-    {
-        return $this->getAvailableParticipantsForMeeting($sheet->getParticipants()->toArray(), $meeting);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function countByEnabledSheet(Event $event)
     {
         $queryBuilder = $this
@@ -281,7 +273,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.enable = :enable AND sheet.event = :event')
             ->setParameter('event', $event)
             ->setParameter('enable', true);
-
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -410,19 +401,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('end', $end);
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting)
-    {
-        return $this->getAvailableParticipants(
-            $participants,
-            $meeting->getSlot()->getBegin(),
-            $meeting->getSlot()->getEnd(),
-            $meeting
-        );
     }
 
     /**

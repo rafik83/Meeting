@@ -107,13 +107,6 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: form.type }
-    vimeet_app.form_type_participant.meeting_participant_choice_type:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\MeetingParticipantChoiceType
-        arguments:
-            - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.repository.participant_repository'
-        tags:
-            - { name: form.type }
     vimeet_app.form_type_participant.participant_entity_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantEntityType
         arguments:
