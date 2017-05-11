@@ -36,7 +36,7 @@ class LockHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->handle(new Lock($unlockedMeetingSlot, $event));
     }
 
-    public function testHandleException()
+    public function testIsNotAllowedToLockSlotException()
     {
         $this->expectException(IsNotAllowedToLockSlotException::class);
 
