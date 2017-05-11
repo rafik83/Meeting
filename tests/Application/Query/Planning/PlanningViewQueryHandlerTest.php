@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planning;
 
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Planning\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
@@ -115,31 +114,39 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
 
-        $dayViewQueryHandler->handle(
-            new DayViewQuery(
-                $sheet->reveal(),
-                $day1,
-                $locale,
-                [$unavailability1->reveal(), $unavailability2->reveal()],
-                [$happening->reveal()],
-                [$mass1, $mass2],
-                [$assignment],
-                [$meeting->reveal()]
+        $dayViewQueryHandler
+            ->handle(
+                new DayViewQuery(
+                    $sheet->reveal(),
+                    $day1,
+                    $locale,
+                    [$unavailability1->reveal(), $unavailability2->reveal()],
+                    [$happening->reveal()],
+                    [$mass1, $mass2],
+                    [$assignment],
+                    [$meeting->reveal()]
+                )
             )
-        )->shouldBeCalled()->willReturn(new DayView($beginDay1, $endDay1, [], [], [], [], []));
+            ->shouldBeCalled()
+            ->willReturn(new DayView($beginDay1, $endDay1, [], [], [], [], []))
+        ;
 
-        $dayViewQueryHandler->handle(
-            new DayViewQuery(
-                $sheet->reveal(),
-                $day2,
-                $locale,
-                [$unavailability1->reveal(), $unavailability2->reveal()],
-                [$happening->reveal()],
-                [$mass1, $mass2],
-                [$assignment],
-                [$meeting->reveal()]
+        $dayViewQueryHandler
+            ->handle(
+                new DayViewQuery(
+                    $sheet->reveal(),
+                    $day2,
+                    $locale,
+                    [$unavailability1->reveal(), $unavailability2->reveal()],
+                    [$happening->reveal()],
+                    [$mass1, $mass2],
+                    [$assignment],
+                    [$meeting->reveal()]
+                )
             )
-        )->shouldBeCalled()->willReturn(new DayView($beginDay2, $endDay2, [], [], [], [], []));
+            ->shouldBeCalled()
+            ->willReturn(new DayView($beginDay2, $endDay2, [], [], [], [], []))
+        ;
 
         $query   = new PlanningViewQuery($event, $participant->reveal(), $locale);
         $handler = new PlanningViewQueryHandler(
@@ -205,15 +212,12 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailability1 = $this->prophesize(Unavailability::class);
         $unavailability1->getUser()->willReturn($user1->reveal());
 
-        $user2 = $this->prophesize(User::class);
-        $user2->getId()->willReturn(2);
-
         $unavailability2 = $this->prophesize(Unavailability::class);
-        $unavailability2->getUser()->willReturn($user2->reveal());
+        $unavailability2->getUser()->willReturn($user1->reveal());
 
-        $participant->getSheet()->willReturn($sheet);
+        $participant->getSheet()->willReturn($sheet->reveal());
         $participant->getId()->willReturn(1234);
-        $participant->getUser()->willReturn($user1);
+        $participant->getUser()->willReturn($user1->reveal());
 
         $sheet->getEvent()->willReturn($event);
 
@@ -261,60 +265,34 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
 
-        $expectedDayViewQuery1 = new DayViewQuery(
-            $sheet->reveal(),
-            $day1,
-            $locale,
-            [$unavailability1->reveal(), $unavailability2->reveal()],
-            [$happening->reveal()],
-            [$mass1, $mass2],
-            [$assignment],
-            [$meeting->reveal()]
-        );
-
         $dayViewQueryHandler
             ->handle(
-                Argument::that(
-                    function (DayViewQuery $dayViewQuery) use ($expectedDayViewQuery1) {
-                        return $dayViewQuery->sheet === $expectedDayViewQuery1->sheet
-                            && $dayViewQuery->locale === $expectedDayViewQuery1->locale
-                            && $dayViewQuery->day === $expectedDayViewQuery1->day
-                            && $dayViewQuery->unavailabilities === $expectedDayViewQuery1->unavailabilities
-                            && $dayViewQuery->happenings === $expectedDayViewQuery1->happenings
-                            && $dayViewQuery->masses === $expectedDayViewQuery1->masses
-                            && $dayViewQuery->assignments === $expectedDayViewQuery1->assignments
-                            && $dayViewQuery->meetings === $expectedDayViewQuery1->meetings;
-                    }
+                new DayViewQuery(
+                    $sheet->reveal(),
+                    $day1,
+                    $locale,
+                    [$unavailability1->reveal(), $unavailability2->reveal()],
+                    [$happening->reveal()],
+                    [$mass1, $mass2],
+                    [$assignment],
+                    [$meeting->reveal()]
                 )
             )
             ->shouldBeCalled()
             ->willReturn(new DayView($beginDay1, $endDay1, [], [], [], [], []))
         ;
 
-        $expectedDayViewQuery2 = new DayViewQuery(
-            $sheet->reveal(),
-            $day2,
-            $locale,
-            [$unavailability1->reveal(), $unavailability2->reveal()],
-            [$happening->reveal()],
-            [$mass1, $mass2],
-            [$assignment],
-            [$meeting->reveal()]
-        );
-
         $dayViewQueryHandler
             ->handle(
-                Argument::that(
-                    function (DayViewQuery $dayViewQuery) use ($expectedDayViewQuery2) {
-                        return $dayViewQuery->sheet === $expectedDayViewQuery2->sheet
-                            && $dayViewQuery->locale === $expectedDayViewQuery2->locale
-                            && $dayViewQuery->day === $expectedDayViewQuery2->day
-                            && $dayViewQuery->unavailabilities === $expectedDayViewQuery2->unavailabilities
-                            && $dayViewQuery->happenings === $expectedDayViewQuery2->happenings
-                            && $dayViewQuery->masses === $expectedDayViewQuery2->masses
-                            && $dayViewQuery->assignments === $expectedDayViewQuery2->assignments
-                            && $dayViewQuery->meetings === $expectedDayViewQuery2->meetings;
-                    }
+                new DayViewQuery(
+                    $sheet->reveal(),
+                    $day2,
+                    $locale,
+                    [$unavailability1->reveal(), $unavailability2->reveal()],
+                    [$happening->reveal()],
+                    [$mass1, $mass2],
+                    [$assignment],
+                    [$meeting->reveal()]
                 )
             )
             ->shouldBeCalled()
@@ -366,9 +344,11 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $end2   = new \DateTime('2016-10-13 13:30');
         $begin3 = new \DateTime('2016-10-12 14:00');
         $end3   = new \DateTime('2016-10-12 14:30');
-        $mass1  = new Mass($event, $category->reveal(), 'mass1', $begin1, $end1, true, false);
+
+        $mass1 = new Mass($event, $category->reveal(), 'mass1', $begin1, $end1, true, false);
         $mass2 = new Mass($event, $category->reveal(), 'mass2', $begin2, $end2, true, false);
         $mass3 = new Mass($event, $category->reveal(), 'mass3', $begin3, $end3, true, true);
+
         $assignment = new MassAssignment($mass3, $participant->reveal(), $begin3, $end3);
 
         $meeting = $this->prophesize(Meeting::class);
@@ -382,14 +362,12 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailability1 = $this->prophesize(Unavailability::class);
         $unavailability1->getUser()->willReturn($user1->reveal());
 
-        $user2 = $this->prophesize(User::class);
-        $user2->getId()->willReturn(2);
         $unavailability2 = $this->prophesize(Unavailability::class);
-        $unavailability2->getUser()->willReturn($user2->reveal());
+        $unavailability2->getUser()->willReturn($user1->reveal());
 
         $participant->getId()->willReturn(1234);
         $participant->getUser()->willReturn($user1->reveal());
-        $participant->getSheet()->willReturn($sheet);
+        $participant->getSheet()->willReturn($sheet->reveal());
         $sheet->getEvent()->willReturn($event);
 
         // Mock
@@ -415,30 +393,40 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView1 = new DayView($beginDay1, $endDay1, [], [], [], [], []);
         $dayView2 = new DayView($beginDay2, $endDay2, [], [], [], [], []);
-        $dayViewQueryHandler->handle(
-            new DayViewQuery(
-                $sheet->reveal(),
-                $day1,
-                $locale,
-                [$unavailability1->reveal(), $unavailability2],
-                [$happening->reveal()],
-                [$mass1, $mass2],
-                [$assignment],
-                [$meeting->reveal()]
+
+        $dayViewQueryHandler
+            ->handle(
+                new DayViewQuery(
+                    $sheet->reveal(),
+                    $day1,
+                    $locale,
+                    [$unavailability1->reveal(), $unavailability2],
+                    [$happening->reveal()],
+                    [$mass1, $mass2],
+                    [$assignment],
+                    [$meeting->reveal()]
+                )
             )
-        )->shouldBeCalled()->willReturn($dayView1);
-        $dayViewQueryHandler->handle(
-            new DayViewQuery(
-                $sheet->reveal(),
-                $day2,
-                $locale,
-                [$unavailability1->reveal(), $unavailability2],
-                [$happening->reveal()],
-                [$mass1, $mass2],
-                [$assignment],
-                [$meeting->reveal()]
+            ->shouldBeCalled()
+            ->willReturn($dayView1)
+        ;
+
+        $dayViewQueryHandler
+            ->handle(
+                new DayViewQuery(
+                    $sheet->reveal(),
+                    $day2,
+                    $locale,
+                    [$unavailability1->reveal(), $unavailability2],
+                    [$happening->reveal()],
+                    [$mass1, $mass2],
+                    [$assignment],
+                    [$meeting->reveal()]
+                )
             )
-        )->shouldBeCalled()->willReturn($dayView2);
+            ->shouldBeCalled()
+            ->willReturn($dayView2)
+        ;
 
         $query   = new PlanningViewQuery($event, $participant->reveal(), $locale);
         $handler = new PlanningViewQueryHandler(
