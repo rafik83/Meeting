@@ -78,10 +78,10 @@
                         <td class="text-center">
                             {% if slot.disabled == true %}
                                 <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
-                                    <div class="btn {% if slot.locked ? 'btn-default' : 'btn-success active' %}"  disabled="disabled">
+                                    <div class="btn {{ slot.locked ? 'btn-default' : 'btn-success active' }}"  disabled="disabled">
                                         <i class="glyphicon glyphicon-ok"></i>
                                     </div>
-                                    <div class="btn {% if slot.locked ? 'btn-danger active' : 'btn-default' %} " disabled="disabled">
+                                    <div class="btn {{ slot.locked ? 'btn-danger active' : 'btn-default' }} " disabled="disabled">
                                         <i class="glyphicon glyphicon-lock"></i>
                                     </div>
                                 </div>
