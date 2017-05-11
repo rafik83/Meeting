@@ -107,7 +107,7 @@ group.request.list.table.header.participants: Participants
 group.request.list.table.header.sheetConcerned: 'Mes fiches concernées'
 group.request.list.table.header.status: Statut
 group.request.list.table.no-result: 'Pas de demandes de rendez-vous'
-group.request.title: 'Gestion des rendez-vous de l''entité %groupTitle%'
+group.request.title: 'Gestion des rendez-vous de l''entité'
 happening.participate.action: Participer
 happening.participate.detail: Détail
 happening.participate.full: Complet
@@ -142,6 +142,7 @@ multiple_sheets.request.list.state.sent: 'En attente'
 multiple_sheets.request.list.table.header.otherSheet: 'Autre fiche'
 multiple_sheets.request.list.table.header.participants: Participants
 multiple_sheets.request.list.table.header.sheetConcerned: 'Mes fiches concernées'
+multiple_sheets.request.list.table.header.side: ''
 multiple_sheets.request.list.table.header.status: Statut
 multiple_sheets.request.list.table.no-result: 'Pas de demandes de rendez-vous'
 multiple_sheets.request.title: 'Gestion des rendez-vous'
