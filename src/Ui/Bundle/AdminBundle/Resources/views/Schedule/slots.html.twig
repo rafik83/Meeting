@@ -112,7 +112,13 @@
                             {% endif %}
                         </td>
                         <td class="text-right">
-                            {{ delete_button(path('admin_schedule_slot_remove', {'event': event.id, 'meetingSlot': slot.id, }), 'admin.schedule.slot.remove'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.schedule.slot.remove.confirm'|trans}) }}
+                            {% if not slot.disabled %}
+                                {{ delete_button(path('admin_schedule_slot_remove', {'event': event.id, 'meetingSlot': slot.id, }), 'admin.schedule.slot.remove'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.schedule.slot.remove.confirm'|trans}) }}
+                            {% else %}
+                                <div class="btn btn-sm btn-danger disabled" disabled data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
+                                    {{ 'admin.schedule.slot.remove'|trans }}
+                                </div>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
