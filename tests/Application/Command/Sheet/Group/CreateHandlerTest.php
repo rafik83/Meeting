@@ -53,7 +53,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $groupRepository->add($group)->shouldBeCalled();
 
         $eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            new SheetGroupCreatedEvent($event, $user, $group)
+            new SheetGroupCreatedEvent($group)
         )->shouldBeCalled();
 
         $handler->handle($create);

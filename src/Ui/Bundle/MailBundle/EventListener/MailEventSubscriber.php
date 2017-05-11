@@ -362,14 +362,14 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onSheetGroupCreated(SheetGroupCreatedEvent $event)
     {
         $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery(null, $event->getUser())
+            new ParticipantMailViewQuery(null, $event->getGroup()->getManager())
         );
 
         $mail = new SheetGroupCreatedMail(
-            $this->sender->generate($event->getEvent()),
-            $event->getUser()->getEmail(),
-            $event->getUser()->getLocale(),
-            $event->getEvent(),
+            $this->sender->generate($event->getGroup()->getEvent()),
+            $event->getGroup()->getManager()->getEmail(),
+            $event->getGroup()->getManager()->getLocale(),
+            $event->getGroup()->getEvent(),
             $participantMailView,
             $event->getGroup()
         );

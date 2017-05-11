@@ -69,11 +69,7 @@ class CreateHandler
         $this->groupRepository->add($group);
 
         $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            new SheetGroupCreatedEvent(
-                $command->event,
-                $command->user,
-                $group
-            )
+            new SheetGroupCreatedEvent($group)
         );
     }
 }
