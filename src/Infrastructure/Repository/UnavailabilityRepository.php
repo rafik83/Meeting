@@ -122,9 +122,9 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
                 'WITH',
                 'participant.sheet = :sheet AND participant.user = unavailability.user AND unavailability.event = :event'
             )
-            ->setParameters(['sheet' => $sheet, 'event' => $sheet->getEvent()])
             ->where('participant.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->setParameters(['sheet' => $sheet, 'event' => $sheet->getEvent()])
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
