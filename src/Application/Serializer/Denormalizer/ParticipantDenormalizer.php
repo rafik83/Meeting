@@ -151,9 +151,17 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             try {
-                list($sheetData, $participantData) = $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
+                list($sheetData, $participantData, $sheetTitle) = $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
 
-                $this->createEntities($context, $email, $users, $sheetData, $participantData, $registrationTemplate);
+                $this->createEntities(
+                    $context,
+                    $email,
+                    $users,
+                    $sheetTitle,
+                    $sheetData,
+                    $participantData,
+                    $registrationTemplate
+                );
 
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
@@ -216,7 +224,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param TemplateData   $registrationTemplate
      * @param array          $context
      *
-     * @return array
+     * @return array of sheetData, participantData and sheetTitle
      * @throws InvalidObjectContentException
      */
     private function handleRow(
@@ -227,6 +235,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     ) {
         $sheetData       = [];
         $participantData = [];
+        $sheetTitle      = '';
 
         foreach ($row as $key => $column) {
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
@@ -241,6 +250,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             if (!$templateObject instanceof ContentObjectInterface) {
                 continue;
+            }
+
+            if ($templateObject->hasTag(Tag::SHEET_TITLE)) {
+                $sheetTitle = $templateObject->getContentValue();
             }
 
             try {
@@ -284,7 +297,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
         }
 
-        return [$sheetData, $participantData];
+        return [$sheetData, $participantData, $sheetTitle];
     }
 
     /**
@@ -301,6 +314,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array        $context
      * @param string       $email
      * @param User[]       $users
+     * @param string       $sheetTitle
      * @param array        $sheetData
      * @param array        $participantData
      * @param TemplateData $registrationTemplate
@@ -309,6 +323,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         array $context,
         $email,
         &$users,
+        $sheetTitle,
         $sheetData,
         $participantData,
         TemplateData $registrationTemplate
@@ -325,6 +340,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
         $sheet->setImported(true);
+        $sheet->setTitle($sheetTitle);
 
         $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);
