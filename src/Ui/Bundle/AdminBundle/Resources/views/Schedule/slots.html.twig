@@ -76,50 +76,39 @@
                         <td>{{ slot.end|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
                         <td>{{ slot.duration }}</td>
                         <td class="text-center">
-                            {% if slot.locked %}
-                                <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                    <div class="btn-group" role="group" aria-label="locked">
-                                        {% if slot.disabled == true %}
-                                            <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
-                                                <div class="btn btn-default"  disabled="disabled">
-                                                    <i class="glyphicon glyphicon-ok"></i>
-                                                </div>
-                                                <div class="btn btn-danger active" disabled="disabled">
-                                                    <i class="glyphicon glyphicon-lock"></i>
-                                                </div>
-                                            </div>
-                                        {% else %}
+                            {% if slot.disabled == true %}
+                                <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
+                                    <div class="btn {% if slot.locked ? 'btn-default' : 'btn-success active' %}"  disabled="disabled">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </div>
+                                    <div class="btn {% if slot.locked ? 'btn-danger active' : 'btn-default' %} " disabled="disabled">
+                                        <i class="glyphicon glyphicon-lock"></i>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% if slot.locked %}
+                                    <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                        <div class="btn-group" role="group" aria-label="locked">
                                             <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlock'|trans }}">
                                                 <i class="glyphicon glyphicon-ok"></i>
                                             </button>
                                             <button type="button" class="btn btn-danger active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.locked'|trans }}">
                                                 <i class="glyphicon glyphicon-lock"></i>
                                             </button>
-                                        {% endif %}
-                                    </div>
-                                </form>
-                            {% else %}
-                                <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                    <div class="btn-group" role="group" aria-label="locked">
-                                        {% if slot.disabled == true %}
-                                            <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
-                                                <div class="btn btn-success active" disabled="disabled">
-                                                    <i class="glyphicon glyphicon-ok"></i>
-                                                </div>
-                                                <div class="btn btn-default" disabled="disabled">
-                                                    <i class="glyphicon glyphicon-lock"></i>
-                                                </div>
-                                            </div>
-                                        {% else %}
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                        <div class="btn-group" role="group" aria-label="locked">
                                             <button type="button" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlocked'|trans }}">
                                                 <i class="glyphicon glyphicon-ok"></i>
                                             </button>
                                             <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.lock'|trans }}">
                                                 <i class="glyphicon glyphicon-lock"></i>
                                             </button>
-                                        {% endif %}
-                                    </div>
-                                </form>
+                                        </div>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td class="text-right">

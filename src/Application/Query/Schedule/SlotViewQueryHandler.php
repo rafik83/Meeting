@@ -32,16 +32,16 @@ class SlotViewQueryHandler
     {
         $slotViews = [];
 
-        $meetingSlotIds = $this->meetingSlotRepository->findWithAtLeastOneMeetingByEvent($query->event);
+        $meetingSlotWithMeetingIds = $this->meetingSlotRepository->findWithAtLeastOneMeetingByEvent($query->event);
 
         foreach ($this->meetingSlotRepository->findByEvent($query->event) as $slot) {
             $slotViews[] = new SlotView(
                 $slot->getBegin(),
                 $slot->getEnd(),
-                $slot->duration(),
                 $slot->getId(),
+                $slot->duration(),
                 $slot->isLocked(),
-                isset($meetingSlotIds[$slot->getId()])
+                isset($meetingSlotWithMeetingIds[$slot->getId()])
             );
         }
 
