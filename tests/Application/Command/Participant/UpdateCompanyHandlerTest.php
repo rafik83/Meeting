@@ -219,6 +219,7 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
 
         $expectedSheet = new Sheet($event, $type, [], $user, $now);
+        $expectedSheet->setTitle('foo');
         $expectedSheet->setRegistrationData([
             "3ad4b72f" => ['text' => 'foo'],
             "9ef18c06" => ['url' => 'http://www.foo.com'],
@@ -227,20 +228,10 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
             "d224f0e7" => ['text' => 'FooVille'],
             "e801edd4" => ['country' => 'FR'],
         ]);
-        $expectedParticipant = new Participant(
-            $expectedSheet,
-            $user,
-            [],
-            true
-        );
 
         $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
-            function(SheetUpdatedEvent $sheetUpdatedEvent){
-                return true;
-            }
-        ))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::type(SheetUpdatedEvent::class))->shouldBeCalled();
 
         $handler = new UpdateCompanyHandler(
             $sheetRepository->reveal(),
