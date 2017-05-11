@@ -45,25 +45,12 @@ class UnavailabilityController extends Controller
     public function createAction(Request $request, EventDomain $eventDomain, Participant $participant, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
-
-        if (!$sheet->attend()) {
-            throw $this->createAccessDeniedException(
-                'Can not create unavailability as the given sheet is not attending'
-            );
-        }
+        $this->checkSheetHasParticipant($sheet, $participant);
 
         $event = $eventDomain->getEvent();
         $user  = $this->getUser();
-
-        if (!$sheet->hasParticipant($participant)) {
-            throw $this->createNotFoundException(sprintf(
-                'The given participant %s is not on the sheet %s',
-                $participant->getId(),
-                $sheet->getId()
-            ));
-        }
 
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
 
@@ -176,18 +163,9 @@ class UnavailabilityController extends Controller
     ) {
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_REMOVE, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
-
-        if (!$sheet->attend()) {
-            throw $this->createAccessDeniedException(
-                'Can not create unavailability as the given sheet is not attending'
-            );
-        }
-
-        if (!$sheet->hasParticipant($participant)) {
-            throw $this->createNotFoundException('The participant given is not on the sheet');
-        }
+        $this->checkSheetHasParticipant($sheet, $participant);
 
         try {
             $this->get('tactician.commandbus')->handle(new Remove($unavailability));
@@ -230,5 +208,22 @@ class UnavailabilityController extends Controller
         return new FormError(
             $this->get('translator')->trans('validators.unavailability.participantsNotSelected', [], 'validators')
         );
+    }
+
+    /**
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     */
+    private function checkSheetHasParticipant(Sheet $sheet, Participant $participant)
+    {
+        if (!$sheet->hasParticipant($participant)) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The given participant %s is not on the sheet %s',
+                    $participant->getId(),
+                    $sheet->getId()
+                )
+            );
+        }
     }
 }
