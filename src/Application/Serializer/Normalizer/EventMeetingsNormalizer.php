@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -59,24 +58,14 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     private $timeFormatter;
 
     /**
-     * @var ParticipantInfoGuesserCache
+     * @param TranslatorInterface        $translator
+     * @param MeetingRepositoryInterface $meetingRepository
      */
-    private $participantInfoGuesserCache;
-
-    /**
-     * @param TranslatorInterface         $translator
-     * @param MeetingRepositoryInterface  $meetingRepository
-     * @param ParticipantInfoGuesserCache $participantInfoGuesserCache
-     */
-    public function __construct(
-        TranslatorInterface $translator,
-        MeetingRepositoryInterface $meetingRepository,
-        ParticipantInfoGuesserCache $participantInfoGuesserCache
-    ) {
+    public function __construct(TranslatorInterface $translator, MeetingRepositoryInterface $meetingRepository)
+    {
         parent::__construct($translator);
 
-        $this->meetingRepository           = $meetingRepository;
-        $this->participantInfoGuesserCache = $participantInfoGuesserCache;
+        $this->meetingRepository = $meetingRepository;
     }
 
     /**
@@ -255,7 +244,7 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     private function getSheetParticipantsFullName($sheetParticipants, $locale)
     {
         $fromSheetParticipantFullName = array_map(function (Participant $participant) use ($locale) {
-            return $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $locale);
+            return $participant->getFullname();
         }, $sheetParticipants);
 
         return $fromSheetParticipantFullName;
