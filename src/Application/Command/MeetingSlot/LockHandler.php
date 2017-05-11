@@ -37,7 +37,9 @@ class LockHandler
      */
     public function handle(Lock $command)
     {
-        $meetingSlotWithMeetingIds = $this->meetingSlotRepository->findWithAtLeastOneMeetingByEvent($command->event);
+        $meetingSlotWithMeetingIds = $this
+            ->meetingSlotRepository
+            ->findWithAtLeastOneMeetingByEvent($command->meetingSlot->getEvent());
 
         if (isset($meetingSlotWithMeetingIds[$command->meetingSlot->getId()])) {
             throw new IsNotAllowedToLockSlotException('Slot already used by scheduled meetings');

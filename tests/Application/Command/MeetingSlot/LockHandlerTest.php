@@ -44,11 +44,12 @@ class LockHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingSlot = $this->prophesize(MeetingSlot::class);
         $meetingSlot->getId()->shouldBeCalled()->willReturn(1);
+        $meetingSlot->getEvent()->shouldBeCalled()->willReturn($event);
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $meetingSlotRepository->findWithAtLeastOneMeetingByEvent($event)->shouldBeCalled()->willReturn(['1' => 'meeting']);
 
         $handler = new LockHandler($meetingSlotRepository->reveal());
-        $handler->handle(new Lock($meetingSlot->reveal(), $event));
+        $handler->handle(new Lock($meetingSlot->reveal()));
     }
 }

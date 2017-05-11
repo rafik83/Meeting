@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class Lock
@@ -21,19 +20,12 @@ class Lock
     public $meetingSlot;
 
     /**
-     * @var Event
-     */
-    public $event;
-
-    /**
      * Lock constructor.
      *
      * @param MeetingSlot $meetingSlot
-     * @param Event       $event
      */
-    public function __construct(MeetingSlot $meetingSlot, Event $event)
+    public function __construct(MeetingSlot $meetingSlot)
     {
         $this->meetingSlot = $meetingSlot;
-        $this->event       = $event;
     }
 }
