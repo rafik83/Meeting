@@ -314,7 +314,6 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet to display not in catalog');
         }
 
-        // Mark sheet as viewed by current user if user is not impersonated
         $markSheetAsViewedByCurrentUser = new Add($user, $sheetToDisplay);
         $this->get('command.sheet.sheet_viewed.add_handler')->handle($markSheetAsViewedByCurrentUser);
 
