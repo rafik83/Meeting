@@ -12,14 +12,8 @@ namespace Proximum\Vimeet\Application\View\Agenda\Slot;
 
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
-class MeetingOnOtherSheetView
+class MeetingOnOtherSheetView extends AbstractSlotView
 {
-    /** @var MeetingSlot */
-    public $slot;
-
-    /** @var string */
-    public $type;
-
     /** @var string */
     public $sheetTitle;
 
@@ -36,8 +30,8 @@ class MeetingOnOtherSheetView
      */
     public function __construct(MeetingSlot $slot, $type, $sheetTitle, $sheetId)
     {
-        $this->slot       = $slot;
-        $this->type       = $type;
+        parent::__construct($slot, $type);
+
         $this->sheetTitle = $sheetTitle;
         $this->sheetId    = $sheetId;
     }
