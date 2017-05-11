@@ -32,6 +32,7 @@ class SlotAvailability
     const MASS_UNAVAILABILITY            = 'mass_unavailability';
     const SLOT_AVAILABLE                 = 'slot_available';
     const MASS_ASSIGNMENT_UNAVAILABILITY = 'mass_assignment_unavailability';
+    const MEETING_ON_OTHER_SHEET         = 'meeting_on_other_sheet';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -82,6 +83,11 @@ class SlotAvailability
      * @var MassAssignment[]
      */
     private $massAssignment = null;
+
+    /**
+     * @var Meeting[]
+     */
+    private $meetingOtherSheets = null;
 
     /**
      * Array of happeningParticipation [participantId][1 => happeningParticipation, 2 => happeningParticipation]
@@ -136,18 +142,21 @@ class SlotAvailability
      * @param Unavailability[]         $unavailability
      * @param Mass[]                   $massUnavailability
      * @param MassAssignment[]         $massAssignments
+     * @param Meeting[]                $meetingOtherSheets
      */
     public function preload(
         array $happenings = [],
         array $meetings = [],
         array $unavailability = [],
         array $massUnavailability = [],
-        array $massAssignments = []
+        array $massAssignments = [],
+        array $meetingOtherSheets = []
     ) {
         $this->happenings         = $happenings;
         $this->meetings           = $meetings;
         $this->unavailability     = $unavailability;
         $this->massUnavailability = $massUnavailability;
+        $this->meetingOtherSheets = $meetingOtherSheets;
 
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
@@ -221,6 +230,10 @@ class SlotAvailability
 
         if (($meeting = $this->hasMeeting($slot, $participant)) !== false) {
             return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
+        }
+
+        if (($meetingOtherSheet = $this->hasMeetingOnOtherSheet($slot)) !== false) {
+            return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, $meetingOtherSheet);
         }
 
         if ($this->hasUnavailability($slot, $participant)) {
@@ -487,6 +500,24 @@ class SlotAvailability
         foreach ($this->meetingsSortByParticipant[$participant->getId()] as $meeting) {
             if ($meeting->getSlot() === $slot) {
                 return $meeting;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     *
+     * @return Meeting|false
+     */
+    private function hasMeetingOnOtherSheet(MeetingSlot $slot)
+    {
+        foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
+            if ($meetingOtherSheet->getSlot()->getBegin() >= $slot->getBegin()
+                && $meetingOtherSheet->getSlot()->getEnd() <= $slot->getEnd()
+            ) {
+                return $meetingOtherSheet;
             }
         }
 

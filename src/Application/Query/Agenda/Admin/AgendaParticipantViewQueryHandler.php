@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class AgendaParticipantViewQueryHandler
@@ -20,6 +21,11 @@ class AgendaParticipantViewQueryHandler
      * @var DayRepositoryInterface
      */
     private $dayRepository;
+
+    /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
 
     /**
      * @var AgendaDayViewQueryHandler
@@ -32,15 +38,18 @@ class AgendaParticipantViewQueryHandler
 
     /**
      * @param DayRepositoryInterface    $dayRepository
+     * @param MeetingRepositoryInterface $meetingRepository
      * @param AgendaDayViewQueryHandler $agendaDayViewQueryHandler
      * @param ParticipantInfoGuesser    $participantInfoGuesser
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
+        MeetingRepositoryInterface $meetingRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->dayRepository             = $dayRepository;
+        $this->meetingRepository         = $meetingRepository;
         $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
         $this->participantInfoGuesser    = $participantInfoGuesser;
     }
@@ -53,6 +62,10 @@ class AgendaParticipantViewQueryHandler
     public function handle(AgendaParticipantViewQuery $query)
     {
         $eventDays = $this->dayRepository->findByEvent($query->event);
+
+        $meetingsOtherSheets = $this
+            ->meetingRepository
+            ->findByUserByEventExceptSheet($query->event, $query->participant->getUser(), $query->sheet);
 
         $dayViews = [];
 
@@ -68,7 +81,8 @@ class AgendaParticipantViewQueryHandler
                     $query->unavailabilites,
                     $query->masses,
                     $query->meetings,
-                    $query->massAssignments
+                    $query->massAssignments,
+                    $meetingsOtherSheets
                 )
             );
         }

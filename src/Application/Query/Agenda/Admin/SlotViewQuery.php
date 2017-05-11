@@ -68,6 +68,11 @@ class SlotViewQuery
     public $massAssignments;
 
     /**
+     * @var Meeting[]
+     */
+    public $meetingOtherSheets;
+
+    /**
      * SlotViewQuery constructor.
      *
      * @param Event                    $event
@@ -79,6 +84,7 @@ class SlotViewQuery
      * @param Mass[]                   $masses
      * @param Meeting[]                $meetings
      * @param MassAssignment[]         $massAssignments
+     * @param Meeting[]                $meetingOtherSheets
      */
     public function __construct(
         Event $event,
@@ -89,7 +95,8 @@ class SlotViewQuery
         array $unavailabilities,
         array $masses,
         array $meetings,
-        array $massAssignments
+        array $massAssignments,
+        array $meetingOtherSheets
     ) {
         $this->day              = $day;
         $this->event            = $event;
@@ -100,5 +107,6 @@ class SlotViewQuery
         $this->sheet            = $sheet;
         $this->participant      = $participant;
         $this->massAssignments  = $massAssignments;
+        $this->meetingOtherSheets = $meetingOtherSheets;
     }
 }

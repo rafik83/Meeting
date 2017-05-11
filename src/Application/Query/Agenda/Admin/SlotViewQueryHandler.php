@@ -16,9 +16,11 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\EmptySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\HappeningUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassAssignmentUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassUnavailabilitySlotView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingOnOtherSheetView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\UnavailabilitySlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
+use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailabilityView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class SlotViewQueryHandler
@@ -69,7 +71,8 @@ class SlotViewQueryHandler
             $query->meetings,
             $query->unavailabilities,
             $query->masses,
-            $query->massAssignments
+            $query->massAssignments,
+            $query->meetingOtherSheets
         );
 
         $slotViews = [];
@@ -105,6 +108,21 @@ class SlotViewQueryHandler
                     $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet),
                     $slotAvailabilityView->meeting->isBlockedSpot(),
                     $slotAvailabilityView->meeting->isBlockedSlot()
+                );
+
+                continue;
+            }
+
+            if ($slotAvailabilityView->type === SlotAvailability::MEETING_ON_OTHER_SHEET
+                && $slotAvailabilityView->meeting !== null
+            ) {
+                $sheetMet = $slotAvailabilityView->meeting->getSheetMet($query->sheet);
+
+                $slotViews[] = new MeetingOnOtherSheetView(
+                    $slot,
+                    $slotAvailabilityView->type,
+                    $this->sheetInfoGuesser->guessSheetTitle($sheetMet),
+                    $sheetMet->getId()
                 );
 
                 continue;
