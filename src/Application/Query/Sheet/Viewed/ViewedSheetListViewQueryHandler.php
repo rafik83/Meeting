@@ -30,7 +30,7 @@ class ViewedSheetListViewQueryHandler
     /**
      * @param ViewedSheetListViewQuery $viewedSheetListViewQuery
      *
-     * @return array $seenSheetsIndexed
+     * @return array array of seen sheets indexed by seenSheet id
      */
     public function handle(ViewedSheetListViewQuery $viewedSheetListViewQuery)
     {
