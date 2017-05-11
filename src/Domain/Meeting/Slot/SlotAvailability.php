@@ -513,6 +513,10 @@ class SlotAvailability
      */
     private function hasMeetingOnOtherSheet(MeetingSlot $slot)
     {
+        if (empty($this->meetingOtherSheets)) {
+            return false;
+        }
+        
         foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
             if ($meetingOtherSheet->getSlot()->getBegin() >= $slot->getBegin()
                 && $meetingOtherSheet->getSlot()->getEnd() <= $slot->getEnd()
