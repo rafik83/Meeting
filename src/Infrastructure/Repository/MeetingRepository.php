@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
@@ -201,6 +202,32 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->leftJoin('meeting.toParticipants', 'toParticipant')
             ->where('fromParticipant.id IN (:participants) OR toParticipant.id IN (:participants)')
             ->setParameter('participants', $participants)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByUserByEventExceptSheet(Event $event, User $user, Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting, fromSheet, toSheet, slot')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.fromParticipants', 'fromParticipants')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('
+                (meeting.toSheet != :exceptSheet AND toParticipants.user = :user)
+                OR (meeting.fromSheet != :exceptSheet AND fromParticipants.user = :user)'
+            )
+            ->setParameter('exceptSheet', $sheet)
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
             ->andWhere('meeting.state = :state')
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 

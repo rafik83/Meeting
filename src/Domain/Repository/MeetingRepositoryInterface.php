@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface MeetingRepositoryInterface
 {
@@ -60,6 +61,15 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findByParticipants(array $participants);
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     * @param Sheet $sheet
+     *
+     * @return Meeting[]
+     */
+    public function findByUserByEventExceptSheet(Event $event, User $user, Sheet $sheet);
 
     /**
      * @param Sheet $sheet
