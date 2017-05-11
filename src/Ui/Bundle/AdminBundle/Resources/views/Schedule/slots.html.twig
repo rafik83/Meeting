@@ -75,9 +75,9 @@
                         <td>{{ slot.begin|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
                         <td>{{ slot.end|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
                         <td>{{ slot.duration }}</td>
-                        <td class="text-center">
+                        <td class="text-center col-md-1">
                             {% if slot.disabled == true %}
-                                <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
+                                <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}" class="btn-group" role="group">
                                     <div class="btn {{ slot.locked ? 'btn-default' : 'btn-success active' }}"  disabled="disabled">
                                         <i class="glyphicon glyphicon-ok"></i>
                                     </div>
