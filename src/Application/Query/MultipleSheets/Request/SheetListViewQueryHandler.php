@@ -96,7 +96,12 @@ class SheetListViewQueryHandler
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
 
         // sheets met by the group sheets
-        $sheets = $this->sheetRepository->getSheetsMetBySheets($event, $multipleSheets);
+        $sheets = $this->sheetRepository->getSheetsMetBySheets(
+            $event,
+            $multipleSheets,
+            $query->filterRequestView->state,
+            $query->filterRequestView->type
+        );
 
         $sheetsWithTitle = [];
 
@@ -141,7 +146,9 @@ class SheetListViewQueryHandler
             $event,
             $multipleSheets,
             $sheetsMet,
-            $query->locale
+            $query->locale,
+            $query->filterRequestView->state,
+            $query->filterRequestView->type
         );
 
         return new SheetListView(
@@ -159,15 +166,23 @@ class SheetListViewQueryHandler
     /**
      * Creates the SheetViews and returns them with there requests
      *
-     * @param Event   $event
-     * @param Sheet[] $multipleSheets
-     * @param Sheet[] $sheetsMet
-     * @param string  $locale
+     * @param Event       $event
+     * @param Sheet[]     $multipleSheets
+     * @param Sheet[]     $sheetsMet
+     * @param string      $locale
+     * @param string|null $state
+     * @param string|null $type
      *
      * @return SheetView[]
      */
-    private function getSheetViewsWithRequest(Event $event, array &$multipleSheets, array &$sheetsMet, $locale)
-    {
+    private function getSheetViewsWithRequest(
+        Event $event,
+        array &$multipleSheets,
+        array &$sheetsMet,
+        $locale,
+        $state,
+        $type
+    ) {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
 
@@ -180,7 +195,9 @@ class SheetListViewQueryHandler
         $requests = $this->requestRepository->getRequestsOfSheetsWithSheets(
             $event,
             $sheetsMet,
-            $multipleSheets
+            $multipleSheets,
+            $state,
+            $type
         );
 
         $this->addRequestToSheetViews($requests, $multipleSheets, $sheetViews, $locale);

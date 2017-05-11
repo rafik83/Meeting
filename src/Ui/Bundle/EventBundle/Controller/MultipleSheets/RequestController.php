@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MultipleSheets;
 
 use Proximum\Vimeet\Application\Exception\MultipleSheets\Request\NoResultException;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQuery;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request\FilterRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +35,17 @@ class RequestController extends Controller
     {
         $event = $eventDomain->getEvent();
 
+        $filter = new FilterRequestView();
+        $form = $this->createForm(FilterRequestType::class, $filter, [
+            'submit'             => true,
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'required'           => false,
+            'allow_extra_fields' => true,
+        ]);
+
+        $form->handleRequest($request);
+
         try {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
@@ -43,7 +56,8 @@ class RequestController extends Controller
                     $sheets,
                     $request->getLocale(),
                     $request->get('page', 1),
-                    self::PAGINATE_REQUEST_LIMIT
+                    self::PAGINATE_REQUEST_LIMIT,
+                    $filter
                 )
             );
         } catch (NoResultException $exception) {

@@ -509,8 +509,31 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet)
-    {
+    public function getRequestsOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null
+    ) {
+        $typeCondition = '(
+            (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))
+            OR (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))
+        )';
+        $stateCondition = '';
+
+        if ($state !== null && in_array($state, Request::getAllStates())) {
+            $stateCondition = sprintf("AND request.state = '%s'", $state);
+        }
+
+        if ($type !== null) {
+            if ($type === Request::TYPE_PROPOSITION) {
+                $typeCondition = '(fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))';
+            } elseif ($type === Request::TYPE_REQUEST) {
+                $typeCondition = '(toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))';
+            }
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -519,8 +542,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
             ->leftJoin('request.meeting', 'meeting')
-            ->where('fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)')
-            ->orWhere('toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)')
+            ->where(sprintf('%s %s', $typeCondition, $stateCondition))
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);

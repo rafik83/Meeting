@@ -302,8 +302,23 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsMetBySheets(Event $event, array $sheets)
+    public function getSheetsMetBySheets(Event $event, array $sheets, $state = null, $type = null)
     {
+        $typeCondition  = '(r.from = sheet AND r.to IN (:sheets) OR r.to = sheet AND r.from IN (:sheets))';
+        $stateCondition = '';
+
+        if ($type !== null) {
+            if ($type === Request::TYPE_REQUEST) {
+                $typeCondition = 'r.from = sheet AND r.to IN (:sheets)';
+            } elseif ($type === Request::TYPE_PROPOSITION) {
+                $typeCondition = 'r.to = sheet AND r.from IN (:sheets)';
+            }
+        }
+
+        if ($state !== null && in_array($state, Request::getAllStates())) {
+            $stateCondition = sprintf("AND r.state = '%s'", $state);
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -311,11 +326,11 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->andWhere(
-                'EXISTS (
+                sprintf(
+                    'EXISTS (
                     SELECT r.id FROM Entity:Meeting\Request r
-                    WHERE (r.from = sheet AND r.to IN (:sheets))
-                    OR (r.to = sheet AND r.from IN (:sheets))
-                )'
+                    WHERE %s %s
+                )', $typeCondition, $stateCondition)
             )
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets);

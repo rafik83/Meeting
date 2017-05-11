@@ -26,17 +26,22 @@ class SheetListViewQuery
     /** @var int */
     public $limit;
 
+    /** @var FilterRequestView */
+    public $filterRequestView;
+
     /**
-     * @param Sheet[] $sheets indexed by sheet id
-     * @param string  $locale
-     * @param int     $page
-     * @param int     $limit
+     * @param Sheet[]           $sheets indexed by sheet id
+     * @param string            $locale
+     * @param int               $page
+     * @param int               $limit
+     * @param FilterRequestView $filterRequestView
      */
-    public function __construct(array $sheets, $locale, $page, $limit)
+    public function __construct(array $sheets, $locale, $page, $limit, FilterRequestView $filterRequestView)
     {
         $this->sheets = $sheets;
         $this->locale = $locale;
         $this->page = $page;
         $this->limit = $limit;
+        $this->filterRequestView = $filterRequestView;
     }
 }
