@@ -211,7 +211,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUserByEventExceptSheet(Event $event, User $user, Sheet $sheet)
+    public function findByUserAndEventExceptSheet(Event $event, User $user, Sheet $sheet)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('meeting, fromSheet, toSheet, slot')

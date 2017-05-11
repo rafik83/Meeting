@@ -69,7 +69,7 @@ interface MeetingRepositoryInterface
      *
      * @return Meeting[]
      */
-    public function findByUserByEventExceptSheet(Event $event, User $user, Sheet $sheet);
+    public function findByUserAndEventExceptSheet(Event $event, User $user, Sheet $sheet);
 
     /**
      * @param Sheet $sheet

@@ -65,7 +65,7 @@ class AgendaParticipantViewQueryHandler
 
         $meetingsOtherSheets = $this
             ->meetingRepository
-            ->findByUserByEventExceptSheet($query->event, $query->participant->getUser(), $query->sheet);
+            ->findByUserAndEventExceptSheet($query->event, $query->participant->getUser(), $query->sheet);
 
         $dayViews = [];
 
