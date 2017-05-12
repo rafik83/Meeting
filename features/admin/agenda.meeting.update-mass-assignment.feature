@@ -24,7 +24,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/ASDDays2016-Meeting.yml               |
     And I am logged with "test@test.com" on admin
-    When I send a GET request to "admin/fr/event/1/agenda/mass/1/detail"
+    When I send a GET request to "/fr/event/1/agenda/mass/1/detail"
     Then the JSON should be equal to:
       """
       {
@@ -58,7 +58,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
 
   Scenario: I can update a dispatched mass assignment
     Given I am logged with "test@test.com" on admin
-    When I send a POST request to "admin/fr/event/1/agenda/mass/1/update" with parameters:
+    When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
     | key     | value            |
     | begin   | 12/10/2016 13:30 |
     | end     | 12/10/2016 13:45 |
@@ -67,7 +67,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     
   Scenario: I can disable a dispatched mass assignment
     Given I am logged with "test@test.com" on admin
-    When I send a POST request to "admin/fr/event/1/agenda/mass/1/update" with parameters:
+    When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
       | key     | value            |
       | begin   | 12/10/2016 13:00 |
       | end     | 12/10/2016 13:30 |
@@ -76,7 +76,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
 
   Scenario: I cannot update a dispatched mass assignment that overlap on meeting
     Given I am logged with "test@test.com" on admin
-    When I send a POST request to "admin/fr/event/1/agenda/mass/1/update" with parameters:
+    When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
       | key     | value            |
       | begin   | 12/10/2016 01:00 |
       | end     | 12/10/2016 02:00 |
@@ -89,7 +89,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
 
   Scenario: I cannot update a dispatched mass assignment out of bounded mass
     Given I am logged with "test@test.com" on admin
-    When I send a POST request to "admin/fr/event/1/agenda/mass/1/update" with parameters:
+    When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
       | key     | value            |
       | begin   | 12/10/2016 11:00 |
       | end     | 12/10/2016 12:00 |
@@ -101,7 +101,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     """
   Scenario: I cannot update a dispatched mass assignment without POST parameters:
     Given I am logged with "test@test.com" on admin
-    When I send a POST request to "admin/fr/event/1/agenda/mass/1/update"
+    When I send a POST request to "/fr/event/1/agenda/mass/1/update"
     Then the response status code should be 422
     And the JSON should be equal to:
     """

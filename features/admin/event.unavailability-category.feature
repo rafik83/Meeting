@@ -15,9 +15,9 @@ Feature: See, create and update unavailability category
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml           |
       | Admin.yml                                                                   |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/unavailability/category"
+    When I go to this page "/fr/event/1/unavailability/category"
     And I follow "admin.unavailability.category.add"
-    And I should be on this page "/admin/fr/event/1/unavailability/category/create"
+    And I should be on this page "/fr/event/1/unavailability/category/create"
     When I fill in the following:
       | unavailability_category_create[picto]      | Dejeuner   |
       | unavailability_category_create[title]      | MyCategory |
@@ -29,7 +29,7 @@ Feature: See, create and update unavailability category
 
   Scenario: I can update an unavailability category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/unavailability/category/update/1"
+    And I am on this page "/fr/event/1/unavailability/category/update/1"
     When I fill in the following:
       | unavailability_category_update[picto]      | Dejeuner       |
       | unavailability_category_update[title]      | MyNewCategory2 |

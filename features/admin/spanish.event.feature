@@ -14,38 +14,38 @@ Feature: Update spanish event
       | Admin.yml                                                       |
     And elastica is populate
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/en/event"
+    When I go to this page "/en/event"
     Then I should see "Evento en español"
 
   Scenario: I can see the event on front
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.see_on_front.link"
     Then I should be on this url "http://spanish-event.vimeet.proximum.dev/app_test.php/es/"
 
   Scenario: I can see the update event form
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.update.link"
-    Then I should be on this page "/admin/en/event/1/update"
+    Then I should be on this page "/en/event/1/update"
     When I press "form.event_update.children.submit.label"
     Then I should see "flash.admin.event.update.success"
 
   Scenario: I can see the who see who list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.rule.link"
-    Then I should be on this page "/admin/en/event/1/who-see-who"
+    Then I should be on this page "/en/event/1/who-see-who"
 
   Scenario: I can add a who see who rule
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1/who-see-who"
+    And I am on this page "/en/event/1/who-see-who"
     When I fill in the following:
       | who_see_who_seer    | type:1 |
       | who_see_who_seeable | type:2 |
       | priority            | 2      |
     And I press "form.who_see_who.children.submit.label"
-    Then I should be on this page "/admin/en/event/1/who-see-who/see-what/1"
+    Then I should be on this page "/en/event/1/who-see-who/see-what/1"
     And I should see "Who.see_who_but_dont_see"
     And I should see "form.rule_see_what.children.seeWhat.label"
     Then I select "participant_position" from "form.rule_see_what.children.seeWhat.label"
@@ -55,65 +55,65 @@ Feature: Update spanish event
 
   Scenario: I can see types list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.type.link"
-    Then I should be on this page "/admin/en/event/1/type"
+    Then I should be on this page "/en/event/1/type"
     And I should see "Exponente"
     And I should see "Inversor"
 
   Scenario: I can see categories list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.category.link"
-    Then I should be on this page "/admin/en/event/1/category"
+    Then I should be on this page "/en/event/1/category"
 
   Scenario: I can add a category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1/category"
+    And I am on this page "/en/event/1/category"
     When I follow "admin.category.add"
-    Then I should be on this page "/admin/en/event/1/category/create"
+    Then I should be on this page "/en/event/1/category/create"
     When I fill in the following:
       | category_create[translations][es][title] | Some label |
     And I check "Exponente"
     And I press "form.category_create.children.submit.label"
-    Then I should be on this page "/admin/en/event/1/category"
+    Then I should be on this page "/en/event/1/category"
     And I should see "flash.admin.category.create.success"
 
   Scenario: I can see meeting requests list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.meeting_request.link"
-    Then I should be on this page "/admin/en/event/1/meeting-request"
+    Then I should be on this page "/en/event/1/meeting-request"
 
   Scenario: I can see meeting list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.meeting.link"
-    Then I should be on this page "/admin/en/event/1/meeting"
+    Then I should be on this page "/en/event/1/meeting"
 
   Scenario: I can see sheet list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.sheet.link"
-    Then I should be on this page "/admin/en/event/1/sheet"
+    Then I should be on this page "/en/event/1/sheet"
 
   Scenario: I can see happening list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.happening.link"
-    Then I should be on this page "/admin/en/event/1/happening"
+    Then I should be on this page "/en/event/1/happening"
 
   Scenario: I can see happening speaker list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.happening_speaker.link"
-    Then I should be on this page "/admin/en/event/1/happening/speaker"
+    Then I should be on this page "/en/event/1/happening/speaker"
 
   Scenario: I can add a happening speaker
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1/happening/speaker"
+    And I am on this page "/en/event/1/happening/speaker"
     And I follow "admin.happening_speaker.add"
-    And I should be on this page "/admin/en/event/1/happening/speaker/create"
+    And I should be on this page "/en/event/1/happening/speaker/create"
     When I fill in the following:
       | create_speaker[firstname]                  | Henry     |
       | create_speaker[lastname]                   | Dupont    |
@@ -124,15 +124,15 @@ Feature: Update spanish event
 
   Scenario: I can see happening categories lis
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.happening_category.link"
-    Then I should be on this page "/admin/en/event/1/happening/category"
+    Then I should be on this page "/en/event/1/happening/category"
 
   Scenario: I can add a happening category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1/happening/category"
+    And I am on this page "/en/event/1/happening/category"
     And I follow "admin.happening_category.add"
-    And I should be on this page "/admin/en/event/1/happening/category/create"
+    And I should be on this page "/en/event/1/happening/category/create"
     When I fill in the following:
       | category_create[rank]                    | 1             |
       | category_create[picto]                   | Cafe_1        |
@@ -142,9 +142,9 @@ Feature: Update spanish event
 
   Scenario: I can add a happening
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1/happening"
+    And I am on this page "/en/event/1/happening"
     And I follow "admin.happening.add"
-    And I should be on this page "/admin/en/event/1/happening/create"
+    And I should be on this page "/en/event/1/happening/create"
     When I select "CategoryLabel" from "happening_create[category]"
     And I fill in the following:
       | happening_create[translations][es][title]       | HappeningTitle       |
@@ -158,6 +158,6 @@ Feature: Update spanish event
 
   Scenario: I can see spot list
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.spot.link"
-    Then I should be on this page "/admin/en/event/1/spot"
+    Then I should be on this page "/en/event/1/spot"
