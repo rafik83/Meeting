@@ -72,7 +72,8 @@ class RequestController extends Controller
 
         return $this->render('EventBundle:MultipleSheets/Request:index.html.twig', [
             'event'         => $event,
-            'sheetListView' => $sheetListView
+            'filterForm'    => $form->createView(),
+            'sheetListView' => $sheetListView,
         ]);
     }
 }
