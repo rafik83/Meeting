@@ -75,6 +75,7 @@ class CreateHandler
             $this->datetime,
             $originalSheet->getGroup()
         );
+        $newSheet->setTitle($command->title);
         $newSheet->setRegistrationData($originalSheet->getRegistrationData());
 
         // Set the spot of the original sheet to the new one
