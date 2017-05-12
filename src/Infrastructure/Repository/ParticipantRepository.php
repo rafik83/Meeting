@@ -352,16 +352,18 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-            // Participant have not already a meeting during this period
+                // Participant have not already a meeting during this period
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
                     JOIN m.slot slot
                     LEFT JOIN m.fromParticipants fp
+                    LEFT JOIN fp.user fpUser
                     LEFT JOIN m.toParticipants tp
+                    LEFT JOIN tp.user tpUser
                     WHERE
                         " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
-                        AND (fp.id = participant OR tp.id = participant)
+                        AND (fpUser = user OR tpUser = user)
                         AND (
                             slot.begin BETWEEN :begin AND :end
                             OR slot.end BETWEEN :begin AND :end
@@ -374,9 +376,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
                     JOIN hp.happening h
+                    JOIN hp.participant p
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
-                        AND hp.participant = participant
+                        AND p.user = user
                         AND (
                             h.begin BETWEEN :begin AND :end
                             OR h.end BETWEEN :begin AND :end
