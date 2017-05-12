@@ -147,6 +147,11 @@ class Sheet implements TraceableInterface
     private $attend = true;
 
     /**
+     * @var string
+     */
+    private $title = '';
+
+    /**
      * Sheet constructor.
      *
      * @param Event             $event
@@ -919,5 +924,25 @@ class Sheet implements TraceableInterface
     public function attend()
     {
         return $this->attend;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return Sheet
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }
