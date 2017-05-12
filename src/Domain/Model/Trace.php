@@ -29,6 +29,7 @@ class Trace
     const VALIDATION_DRAFT     = 'validation_draft';
     const VALIDATION_VALIDATE  = 'validation_validate';
     const PARTICIPANT_IMPORTED = 'participant_imported';
+    const SHEET_CREATED_BY_GROUP_MANAGER = 'sheet_created_by_group_manager';
 
     /**
      * @var int

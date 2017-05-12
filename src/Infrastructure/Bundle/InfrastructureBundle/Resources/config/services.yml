@@ -1714,6 +1714,16 @@ services:
             - '@command.planning.sheet_info_guesser_cache'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
+    command.group.sheet.create_handler:
+        class: Proximum\Vimeet\Application\Command\Group\Sheet\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.sheet.sheet_info_setter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Sheet\Create }
 
     #
     # Post Batch Action
@@ -2199,6 +2209,14 @@ services:
         class: Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser
         arguments:
             - '@tagged_info_guesser'
+            - '@template.template_data_factory'
+
+    #
+    # Setter
+    #
+    template.sheet.sheet_info_setter:
+        class: Proximum\Vimeet\Domain\Sheet\SheetInfoSetter
+        arguments:
             - '@template.template_data_factory'
 
     #

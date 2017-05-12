@@ -119,12 +119,12 @@ class TemplateDataFactory
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param string|null $locale
      *
      * @return TemplateData
      */
-    public function createRegistrationFromSheet(Sheet $sheet, $locale)
+    public function createRegistrationFromSheet(Sheet $sheet, $locale = null)
     {
         return $this
             ->loadNomenclatures($sheet->getEvent())
