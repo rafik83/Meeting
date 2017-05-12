@@ -177,6 +177,14 @@ interface SheetRepositoryInterface
     public function getSheetsByEventAndIds(Event $event, array $ids);
 
     /**
+     * @param Event   $event
+     * @param Sheet[] $sheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsMetBySheets(Event $event, array $sheets);
+
+    /**
      * @param Event       $event
      * @param Sheet[]     $sheets
      * @param int         $page
@@ -186,7 +194,14 @@ interface SheetRepositoryInterface
      *
      * @return PaginatedResult
      */
-    public function getSheetsMetBySheets(Event $event, array $sheets, $page, $limit, $state = null, $type = null);
+    public function getSheetsMetBySheetsPaginated(
+        Event $event,
+        array $sheets,
+        $page,
+        $limit,
+        $state = null,
+        $type = null
+    );
 
     /**
      * @param array $ids

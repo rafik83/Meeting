@@ -12,26 +12,61 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request;
 
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class FilterRequestType extends AbstractType
 {
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /**
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param TranslatorInterface      $translator
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository, TranslatorInterface $translator)
+    {
+        $this->sheetRepository = $sheetRepository;
+        $this->translator = $translator;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('otherSheet', ChoiceType::class, [
+                'choices' => $this->sheetRepository->getSheetsMetBySheets($options['event'], $options['sheets']),
+                'choice_label' => function (Sheet $sheet) {
+                    return $sheet->getTitle();
+                },
+                'required' => false,
+                'attr'     => [
+                    'class'               => 'form-control select2',
+                    'data-disallow-clear' => 'true',
+                    'data-placeholder'    => '',
+                ],
+            ])
             ->add('state', ChoiceType::class, [
                 'required' => false,
                 'choices' => Request::getAllStates(),
                 'choice_label' => function ($value) {
                     return 'form.multiple_sheet_request_filter_request_type.children.state.filter.' . $value;
                 },
-                'placeholder' => 'form.multiple_sheet_request_filter_request_type.children.state.filter.all',
+                'attr'     => [
+                    'class'               => 'form-control select2',
+                    'data-disallow-clear' => 'true',
+                    'data-placeholder'    => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.state.filter.all', [], 'forms'),
+                ],
             ])
             ->add('type', ChoiceType::class, [
                 'required'     => false,
@@ -39,7 +74,11 @@ class FilterRequestType extends AbstractType
                 'choice_label' => function ($value) {
                     return 'form.multiple_sheet_request_filter_request_type.children.type.filter.' . $value;
                 },
-                'placeholder'  => 'form.multiple_sheet_request_filter_request_type.children.type.filter.all',
+                'attr'     => [
+                    'class'               => 'form-control select2',
+                    'data-disallow-clear' => 'true',
+                    'data-placeholder'    => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.type.filter.all', [], 'forms'),
+                ],
             ])
         ;
     }
@@ -50,7 +89,9 @@ class FilterRequestType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setDefault('data_class', FilterRequestView::class);
+            ->setDefault('data_class', FilterRequestView::class)
+            ->setRequired(['event', 'sheets'])
+        ;
     }
 
     /**

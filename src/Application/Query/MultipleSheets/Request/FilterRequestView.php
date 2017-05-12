@@ -10,11 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class FilterRequestView
 {
-    /** @var string */
+    /** @var Sheet|null */
+    public $otherSheet;
+
+    /** @var string|null */
     public $type;
 
-    /** @var string */
+    /** @var string|null */
     public $state;
 }

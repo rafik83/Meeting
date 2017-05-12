@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -89,15 +90,19 @@ class SheetListViewQueryHandler
         $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
 
-        // sheets met by the group sheets
-        $sheets = $this->sheetRepository->getSheetsMetBySheets(
-            $event,
-            $multipleSheets,
-            $query->page,
-            $query->limit,
-            $query->filterRequestView->state,
-            $query->filterRequestView->type
-        );
+        if ($query->filterRequestView->otherSheet === null) {
+            // sheets met by the group sheets
+            $sheets = $this->sheetRepository->getSheetsMetBySheetsPaginated(
+                $event,
+                $multipleSheets,
+                $query->page,
+                $query->limit,
+                $query->filterRequestView->state,
+                $query->filterRequestView->type
+            );
+        } else {
+            $sheets = new PaginatedResult([$query->filterRequestView->otherSheet], $query->page, $query->limit, 1, []);
+        }
 
         if ($sheets->total === 0 || $sheets->count() === 0) {
             if ($query->page === 1) {

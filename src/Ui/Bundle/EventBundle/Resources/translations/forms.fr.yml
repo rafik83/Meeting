@@ -109,6 +109,7 @@ form.sheet_media_collection_data.children.medias.prototype.children.type.label: 
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
 form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_media_collection_data.children.submit.label: Enregistrer
+form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Autre fiche'
 form.multiple_sheet_request_filter_request_type.children.state.label: Statut
 form.multiple_sheet_request_filter_request_type.children.state.filter.all: Tous
 form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Accepté

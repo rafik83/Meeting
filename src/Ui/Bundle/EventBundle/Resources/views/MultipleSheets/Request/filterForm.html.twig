@@ -3,7 +3,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th class="col-md-3"></th>
+                <th class="col-md-3">
+                    {{ form_label(filterForm.otherSheet) }}
+                </th>
                 <th class="col-md-2">
                     {{ form_label(filterForm.state) }}
                 </th>
@@ -17,7 +19,9 @@
         </thead>
         <tbody>
             <tr>
-                <th class="col-md-3"></th>
+                <th class="col-md-3">
+                    {{ form_widget(filterForm.otherSheet) }}
+                </th>
                 <th class="col-md-2">
                     {{ form_widget(filterForm.state) }}
                 </th>

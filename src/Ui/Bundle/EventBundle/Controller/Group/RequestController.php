@@ -45,6 +45,8 @@ class RequestController extends Controller
             'csrf_protection'    => false,
             'required'           => false,
             'allow_extra_fields' => true,
+            'event'              => $eventDomain->getEvent(),
+            'sheets'             => $sheets,
         ]);
 
         $form->handleRequest($request);

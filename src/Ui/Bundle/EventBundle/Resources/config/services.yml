@@ -241,6 +241,13 @@ services:
             - '@vimeet_infrastructure.application.components.sorted_sheet'
         tags:
             - { name: form.type }
+    form_type.multiple_sheet.request.filter_request_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request\FilterRequestType
+        arguments:
+             - '@vimeet_infrastructure.repository.sheet_repository'
+             - '@translator'
+        tags:
+            - { name: form.type }
 
     #
     # Event Listener

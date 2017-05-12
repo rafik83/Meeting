@@ -39,7 +39,8 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true',
+            minimumResultsForSearch: 5
         });
     });
 

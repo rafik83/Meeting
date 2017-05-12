@@ -35,6 +35,10 @@ class RequestController extends Controller
     {
         $event = $eventDomain->getEvent();
 
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetsByUserAndEvent($user, $event);
+
         $filterRequestView = new FilterRequestView();
         $form = $this->createForm(FilterRequestType::class, $filterRequestView, [
             'submit'             => true,
@@ -42,15 +46,13 @@ class RequestController extends Controller
             'csrf_protection'    => false,
             'required'           => false,
             'allow_extra_fields' => true,
+            'sheets'             => $sheets,
+            'event'              => $eventDomain->getEvent(),
         ]);
 
         $form->handleRequest($request);
 
         try {
-            $sheets = $this
-                ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetsByUserAndEvent($user, $event);
-
             $sheetListView = $this->get('tactician.commandbus.query')->handle(
                 new SheetListViewQuery(
                     $sheets,
