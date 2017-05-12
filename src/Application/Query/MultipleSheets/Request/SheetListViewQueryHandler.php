@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
-use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Exception\MultipleSheets\Request\NoResultException;
 use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetListView;
 use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
