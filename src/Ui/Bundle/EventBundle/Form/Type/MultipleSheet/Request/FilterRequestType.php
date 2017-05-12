@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,14 +30,22 @@ class FilterRequestType extends AbstractType
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
     /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param TranslatorInterface      $translator
+     * @param UserRepositoryInterface  $userRepository
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, TranslatorInterface $translator)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        TranslatorInterface $translator,
+        UserRepositoryInterface $userRepository
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->translator = $translator;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -82,6 +92,17 @@ class FilterRequestType extends AbstractType
                 'choices'      => $options['sheets'],
                 'choice_label' => function (Sheet $sheet) {
                     return $sheet->getTitle();
+                },
+                'attr'         => [
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => '',
+                ],
+            ])
+            ->add('user', ChoiceType::class, [
+                'required'     => false,
+                'choices'      => $this->userRepository->getUsersParticipantOfSheets($options['sheets']),
+                'choice_label' => function (User $user) {
+                    return $user->getFullname();
                 },
                 'attr'         => [
                     'class'            => 'form-control select2',

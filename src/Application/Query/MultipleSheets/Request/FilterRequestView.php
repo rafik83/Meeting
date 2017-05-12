@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class FilterRequestView
 {
@@ -25,4 +26,7 @@ class FilterRequestView
 
     /** @var Sheet|null */
     public $sheetConcerned;
+
+    /** @var User|null */
+    public $user;
 }

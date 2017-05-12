@@ -16,7 +16,9 @@
                 <th class="col-md-3">
                     {{ form_label(filterForm.sheetConcerned) }}
                 </th>
-                <th class="col-md-2"></th>
+                <th class="col-md-2">
+                    {{ form_label(filterForm.user) }}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +39,10 @@
                     {{ form_widget(filterForm.sheetConcerned) }}
                     {{ form_errors(filterForm.sheetConcerned) }}
                 </th>
-                <th class="col-md-2"></th>
+                <th class="col-md-2">
+                    {{ form_widget(filterForm.user) }}
+                    {{ form_errors(filterForm.user) }}
+                </th>
             </tr>
         </tbody>
     </table>

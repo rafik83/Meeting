@@ -87,6 +87,7 @@ class SheetListViewQueryHandler
             throw new NoResultException('At least one sheet must be provided in SheetListViewQuery::sheets');
         }
 
+        /** @var Event $event */
         $event = $firstSheet->getEvent();
 
         $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();

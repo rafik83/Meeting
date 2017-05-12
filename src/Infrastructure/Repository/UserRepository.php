@@ -15,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -214,5 +215,23 @@ class UserRepository implements UserRepositoryInterface
                     ->setParameter('types', $filter['types']);
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsersParticipantOfSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user', 'user.id')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user AND participant.sheet IN (:sheets)')
+            ->addOrderBy('user.account.lastName', 'ASC')
+            ->setParameter('sheets', $sheets)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
