@@ -35,8 +35,8 @@ class RequestController extends Controller
     {
         $event = $eventDomain->getEvent();
 
-        $filter = new FilterRequestView();
-        $form = $this->createForm(FilterRequestType::class, $filter, [
+        $filterRequestView = new FilterRequestView();
+        $form = $this->createForm(FilterRequestType::class, $filterRequestView, [
             'submit'             => true,
             'method'             => 'GET',
             'csrf_protection'    => false,
@@ -57,7 +57,7 @@ class RequestController extends Controller
                     $request->getLocale(),
                     $request->get('page', 1),
                     self::PAGINATE_REQUEST_LIMIT,
-                    $filter
+                    $filterRequestView
                 )
             );
         } catch (NoResultException $exception) {
