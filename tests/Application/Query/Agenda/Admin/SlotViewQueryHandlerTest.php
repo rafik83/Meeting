@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\View\Agenda\Slot\MassUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\UnavailabilitySlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
@@ -64,7 +65,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massAssignments
         )->shouldBeCalled();
 
-        $slotAvailability->isAvailable($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
+        $slotAvailability->getSlotAvailability($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet, $locale)->shouldNotBeCalled();
 
@@ -157,7 +158,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massAssignments
         )->shouldBeCalled();
 
-        $slotAvailability->isAvailable($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
+        $slotAvailability->getSlotAvailability($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet2)->shouldBeCalled()->willReturn('sheetMetTitle');
 
@@ -233,7 +234,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
         ;
 
-        $slotAvailability->isAvailable($slot, $participant)->shouldNotBeCalled();
+        $slotAvailability->getSlotAvailability($slot, $participant)->shouldNotBeCalled();
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet, $locale)->shouldNotBeCalled();
 
@@ -261,6 +262,76 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             new UnavailabilitySlotView(
                 $slot,
                 SlotAvailability::UNAVAILABILITY
+            ),
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testLockedSlotHandle()
+    {
+        $event       = EventFactory::createEvent();
+        $start       = new \DateTime();
+        $end         = new \DateTime();
+        $day         = new Day($event, $start, $end);
+        $locale      = 'fr';
+        $user        = new User('john@doh.com', 'salt', 'password', $locale);
+        $sheet       = SheetFactory::create($event, $user);
+        $participant = ParticipantFactory::create($sheet, $user);
+
+        $happenings       = [];
+        $unavailabilities = [];
+        $masses           = [];
+        $meetings         = [];
+        $massAssignments  = [];
+
+        $slot = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
+        $slot->lock();
+
+        $slotAvailabilityView = new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE);
+
+        // Mock
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $slotAvailability      = $this->prophesize(SlotAvailability::class);
+
+        $meetingSlotRepository->findByEventAndDay($event, $day)->shouldBeCalled()->willReturn([$slot]);
+
+        $slotAvailability->preload(
+            $happenings,
+            $meetings,
+            $unavailabilities,
+            $masses,
+            $massAssignments
+        )->shouldBeCalled();
+
+        $slotAvailability->getSlotAvailability($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $sheetInfoGuesser->guessSheetTitle($sheet, $locale)->shouldNotBeCalled();
+
+        $handler = new SlotViewQueryHandler(
+            $meetingSlotRepository->reveal(),
+            $slotAvailability->reveal(),
+            $sheetInfoGuesser->reveal()
+        );
+
+        $result = $handler->handle(
+            new SlotViewQuery(
+                $event,
+                $day,
+                $sheet,
+                $participant,
+                $happenings,
+                $unavailabilities,
+                $masses,
+                $meetings,
+                $massAssignments
+            )
+        );
+
+        $expected = [
+            new MassUnavailabilitySlotView(
+                $slot,
+                SlotAvailability::MASS_UNAVAILABILITY
             ),
         ];
 

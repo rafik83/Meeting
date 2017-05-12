@@ -96,6 +96,9 @@ form.sheet_editable_text_data.children.submit.label: Enregistrer
 form.sheet_editable_text_data.data.maxLength.translations.plural: 'caractères restants'
 form.sheet_editable_text_data.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
 form.sheet_editable_text_data.data.maxLength.translations.singular: 'caractère restant'
+form.sheet_group_create_sheet.children.sheet.label: Fiche à dupliquer
+form.sheet_group_create_sheet.children.title.label: Titre de la nouvelle fiche
+form.sheet_group_create_sheet.children.submit.label: Créer la fiche
 form.sheet_image_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_image_data.children.submit.label: Enregistrer
 form.sheet_item_collection_data.children.items.label_add: Ajouter

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
@@ -154,6 +155,20 @@ class TraceEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetCreatedByManagerEvent $event
+     */
+    public function onSheetCreateByGroupManager(SheetCreatedByManagerEvent $event)
+    {
+        $this->addTrace(
+            $event->sheet,
+            Trace::SHEET_CREATED_BY_GROUP_MANAGER,
+            $event->date,
+            '',
+            $event->sheet->getGroup()->getManager()
+        );
+    }
+
+    /**
      * @param TraceableInterface $traceable
      * @param string             $action
      * @param DateTimeInterface  $date
@@ -184,14 +199,15 @@ class TraceEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_ACCEPTED            => 'onSheetAccepted',
-            Events::SHEET_VALIDATED           => 'onSheetValidated',
-            Events::SHEET_ENABLE_DISABLE      => 'onSheetEnableDisable',
-            Events::SHEET_CATALOG             => 'onSheetCatalog',
-            Events::SHEET_CHANGED_TYPE        => 'onSheetChangedType',
-            Events::SHEET_VALIDATION_DRAFT    => 'onSheetValidationDraft',
-            Events::SHEET_VALIDATION_VALIDATE => 'onSheetValidationValidate',
-            Events::PARTICIPANT_IMPORTED      => 'onParticipantImported',
+            Events::SHEET_ACCEPTED                => 'onSheetAccepted',
+            Events::SHEET_VALIDATED               => 'onSheetValidated',
+            Events::SHEET_ENABLE_DISABLE          => 'onSheetEnableDisable',
+            Events::SHEET_CATALOG                 => 'onSheetCatalog',
+            Events::SHEET_CHANGED_TYPE            => 'onSheetChangedType',
+            Events::SHEET_VALIDATION_DRAFT        => 'onSheetValidationDraft',
+            Events::SHEET_VALIDATION_VALIDATE     => 'onSheetValidationValidate',
+            Events::PARTICIPANT_IMPORTED          => 'onParticipantImported',
+            Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreateByGroupManager',
         ];
     }
 }

@@ -208,6 +208,16 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
+    public function getSheetObjects()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->hasTag(Tag::SHEET_DATA);
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
     public function getParticipantAndSheetDataExceptedImageObject()
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
@@ -515,6 +525,16 @@ class Block extends AbstractChild
         return array_map(function (TemplateObject $object) {
             return $object->getData();
         }, $this->getObjects());
+    }
+
+    /**
+     * @return array
+     */
+    public function getSheetData()
+    {
+        return array_map(function (TemplateObject $object) {
+            return $object->getData();
+        }, $this->getSheetObjects());
     }
 
     /**
