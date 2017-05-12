@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipantStepHandler
