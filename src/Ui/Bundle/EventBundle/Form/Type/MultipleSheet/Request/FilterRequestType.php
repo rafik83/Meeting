@@ -51,9 +51,8 @@ class FilterRequestType extends AbstractType
                 },
                 'required' => false,
                 'attr'     => [
-                    'class'               => 'form-control select2',
-                    'data-disallow-clear' => 'true',
-                    'data-placeholder'    => '',
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => '',
                 ],
             ])
             ->add('state', ChoiceType::class, [
@@ -63,9 +62,8 @@ class FilterRequestType extends AbstractType
                     return 'form.multiple_sheet_request_filter_request_type.children.state.filter.' . $value;
                 },
                 'attr'     => [
-                    'class'               => 'form-control select2',
-                    'data-disallow-clear' => 'true',
-                    'data-placeholder'    => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.state.filter.all', [], 'forms'),
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.state.filter.all', [], 'forms'),
                 ],
             ])
             ->add('type', ChoiceType::class, [
@@ -75,9 +73,19 @@ class FilterRequestType extends AbstractType
                     return 'form.multiple_sheet_request_filter_request_type.children.type.filter.' . $value;
                 },
                 'attr'     => [
-                    'class'               => 'form-control select2',
-                    'data-disallow-clear' => 'true',
-                    'data-placeholder'    => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.type.filter.all', [], 'forms'),
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.type.filter.all', [], 'forms'),
+                ],
+            ])
+            ->add('sheetConcerned', ChoiceType::class, [
+                'required'     => false,
+                'choices'      => $options['sheets'],
+                'choice_label' => function (Sheet $sheet) {
+                    return $sheet->getTitle();
+                },
+                'attr'         => [
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => '',
                 ],
             ])
         ;

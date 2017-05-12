@@ -174,7 +174,9 @@ class SheetRepository implements SheetRepositoryInterface
             )
             ->setParameter('event', $event)
             ->setParameter('user', $user)
-            ->groupBy('sheet.id');
+            ->groupBy('sheet.id')
+            ->orderBy('sheet.title')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -638,6 +640,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.group = :group AND sheet.enable=true')
             ->setParameter('group', $group)
+            ->orderBy('sheet.title')
             ->getQuery()
             ->getResult();
     }

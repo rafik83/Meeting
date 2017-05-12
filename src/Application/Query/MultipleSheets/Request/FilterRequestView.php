@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -22,4 +22,7 @@ class FilterRequestView
 
     /** @var string|null */
     public $state;
+
+    /** @var Sheet|null */
+    public $sheetConcerned;
 }

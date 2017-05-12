@@ -78,6 +78,10 @@ class SheetListViewQueryHandler
     {
         $multipleSheets = $query->sheets;
 
+        if ($query->filterRequestView->sheetConcerned !== null) {
+            $multipleSheets = [$query->filterRequestView->sheetConcerned];
+        }
+
         $firstSheet = reset($query->sheets);
 
         if (false === $firstSheet) {

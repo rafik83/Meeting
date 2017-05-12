@@ -13,7 +13,9 @@
                     {{ form_label(filterForm.type) }}
 
                 </th>
-                <th class="col-md-3"></th>
+                <th class="col-md-3">
+                    {{ form_label(filterForm.sheetConcerned) }}
+                </th>
                 <th class="col-md-2"></th>
             </tr>
         </thead>
@@ -21,14 +23,20 @@
             <tr>
                 <th class="col-md-3">
                     {{ form_widget(filterForm.otherSheet) }}
+                    {{ form_errors(filterForm.otherSheet) }}
                 </th>
                 <th class="col-md-2">
                     {{ form_widget(filterForm.state) }}
+                    {{ form_errors(filterForm.state) }}
                 </th>
                 <th class="col-md-2">
                     {{ form_widget(filterForm.type) }}
+                    {{ form_errors(filterForm.type) }}
                 </th>
-                <th class="col-md-3"></th>
+                <th class="col-md-3">
+                    {{ form_widget(filterForm.sheetConcerned) }}
+                    {{ form_errors(filterForm.sheetConcerned) }}
+                </th>
                 <th class="col-md-2"></th>
             </tr>
         </tbody>

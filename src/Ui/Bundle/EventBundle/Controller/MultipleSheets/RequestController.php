@@ -52,6 +52,10 @@ class RequestController extends Controller
 
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $filterRequestView = new FilterRequestView();
+        }
+
         try {
             $sheetListView = $this->get('tactician.commandbus.query')->handle(
                 new SheetListViewQuery(
