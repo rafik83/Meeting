@@ -527,9 +527,9 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         if ($type !== null) {
-            if ($type === Request::TYPE_PROPOSITION) {
+            if ($type === Request::TYPE_REQUEST) {
                 $typeCondition = '(fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))';
-            } elseif ($type === Request::TYPE_REQUEST) {
+            } elseif ($type === Request::TYPE_PROPOSITION) {
                 $typeCondition = '(toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))';
             }
         }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
@@ -31,13 +32,20 @@ class SheetRepository implements SheetRepositoryInterface
     private $entityManager;
 
     /**
+     * @var Paginator
+     */
+    private $paginator;
+
+    /**
      * SheetRepository constructor.
      *
      * @param EntityManager $entityManager
+     * @param Paginator     $paginator
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -302,16 +310,16 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsMetBySheets(Event $event, array $sheets, $state = null, $type = null)
+    public function getSheetsMetBySheets(Event $event, array $sheets, $page, $limit, $state = null, $type = null)
     {
         $typeCondition  = '(r.from = sheet AND r.to IN (:sheets) OR r.to = sheet AND r.from IN (:sheets))';
         $stateCondition = '';
 
         if ($type !== null) {
             if ($type === Request::TYPE_REQUEST) {
-                $typeCondition = 'r.from = sheet AND r.to IN (:sheets)';
-            } elseif ($type === Request::TYPE_PROPOSITION) {
                 $typeCondition = 'r.to = sheet AND r.from IN (:sheets)';
+            } elseif ($type === Request::TYPE_PROPOSITION) {
+                $typeCondition = 'r.from = sheet AND r.to IN (:sheets)';
             }
         }
 
@@ -323,7 +331,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from(Sheet::class, 'sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->andWhere(
                 sprintf(
@@ -333,9 +341,11 @@ class SheetRepository implements SheetRepositoryInterface
                 )', $typeCondition, $stateCondition)
             )
             ->setParameter('event', $event)
-            ->setParameter('sheets', $sheets);
+            ->setParameter('sheets', $sheets)
+            ->orderBy('sheet.title', 'asc')
+        ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
     }
 
     /**

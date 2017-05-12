@@ -48,6 +48,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
     vimeet_infrastructure.repository.spot_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\SpotRepository
         arguments:
@@ -4559,7 +4560,6 @@ services:
         class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.planning.sheet_info_guesser_cache'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.multiple_sheets.request.sheet_view_query_handler'
             - '@query.multiple_sheets.request.request_view_query_handler'

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -178,12 +179,14 @@ interface SheetRepositoryInterface
     /**
      * @param Event       $event
      * @param Sheet[]     $sheets
+     * @param int         $page
+     * @param int         $limit
      * @param string|null $state
      * @param string|null $type
      *
-     * @return Sheet[]
+     * @return PaginatedResult
      */
-    public function getSheetsMetBySheets(Event $event, array $sheets, $state = null, $type = null);
+    public function getSheetsMetBySheets(Event $event, array $sheets, $page, $limit, $state = null, $type = null);
 
     /**
      * @param array $ids
