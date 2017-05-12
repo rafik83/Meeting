@@ -17,13 +17,13 @@ Feature: Manage products selection templates
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
       | Admin.yml                                                             |
      And I am logged with "test@test.com" on admin
-     And I am on this page "/admin/fr/event"
+     And I am on this page "/fr/event"
      And I follow "admin.package.link"
-     And I should be on this page "/admin/fr/template/package"
+     And I should be on this page "/fr/template/package"
     When I fill in "form.package_create.children.title.label" with "My template"
      And I select "ASD Days" from "form.package_create.children.event.label"
      And I press "form.package_create.children.submit.label"
-    Then I should be on this page "/admin/fr/template/package/3/update"
+    Then I should be on this page "/fr/template/package/3/update"
      And the "form.package_update.children.title.label" field should contain "My template"
 
   Scenario: Update a package template
@@ -40,11 +40,11 @@ Feature: Manage products selection templates
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
       | Admin.yml                                                             |
       And I am logged with "test@test.com" on admin
-      And I am on this page "/admin/fr/event"
+      And I am on this page "/fr/event"
       And I follow "admin.package.link"
-      And I should be on this page "/admin/fr/template/package"
+      And I should be on this page "/fr/template/package"
      Then I follow "admin.package.update"
-      And I should be on this page "/admin/fr/template/package/1/update"
+      And I should be on this page "/fr/template/package/1/update"
      When I fill in the following:
       | package_update_plans_labels_fr                  | Mes formules  |
       | package_update_plans_labels_en                  | My packages   |
@@ -56,7 +56,7 @@ Feature: Manage products selection templates
      And I check "package_update_participantAndPlanning_enabled"
      And I check "package_update_options_enabled"
      And I press "form.package_update.children.submit.label"
-    Then I should be on this page "/admin/fr/template/package/1/update"
+    Then I should be on this page "/fr/template/package/1/update"
      And I should see "flash.admin.template.package.update.success"
       And the "package_update_plans_labels_fr" field should contain "Mes formules"
       And the "package_update_plans_labels_en" field should contain "My packages"

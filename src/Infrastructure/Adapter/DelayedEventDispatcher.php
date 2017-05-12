@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class DelayedEventDispatcher implements EventDispatcherInterface
+class DelayedEventDispatcher implements EventDispatcherInterface, DelayedEventDispatcherInterface
 {
     /**
      * @var EventDispatcherInterface

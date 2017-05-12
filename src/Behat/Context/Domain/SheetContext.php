@@ -40,4 +40,25 @@ class SheetContext implements Context
         $sheet = $this->sheetContextProxy->getSheetManager()->create($event);
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
+
+    /**
+     * @Given /^there is a sheet in this group with the title "(?P<title>[^"]+)"$/
+     */
+    public function thereIsASheetInThisGroup($title)
+    {
+        $event = $this->sheetContextProxy->getStorage()->get('event');
+        $group = $this->sheetContextProxy->getStorage()->get('group');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        if (null === $group) {
+            throw new \InvalidArgumentException('Missing Group');
+        }
+
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title, $group);
+
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
 }

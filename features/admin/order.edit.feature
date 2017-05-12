@@ -20,7 +20,7 @@ Feature: Edit an order
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | Admin.yml                                                                |
     When I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/order/1/row/add/to-group/5"
+    And I am on this page "/fr/event/1/order/1/row/add/to-group/5"
     Then I fill in the following:
       | order_row_label    | My awesome reduction |
       | order_row_price    | -500                 |
@@ -44,7 +44,7 @@ Feature: Edit an order
 
   Scenario: Update custom row
     Given I am logged with "test@test.com" on admin
-    When I am on this page "/admin/fr/event/1/order/1/edit"
+    When I am on this page "/fr/event/1/order/1/edit"
     And I follow "admin.order_edit.edit_custom_row"
     Then the response status code should be 200
     When I fill in the following:
@@ -70,7 +70,7 @@ Feature: Edit an order
 
   Scenario: Remove custom row
     Given I am logged with "test@test.com" on admin
-    When I am on this page "/admin/fr/event/1/order/1/edit"
+    When I am on this page "/fr/event/1/order/1/edit"
     And I follow "admin.order_edit.remove_custom_row"
     When the response status code should be 200
     Then I should not see "Another awesome reduction"

@@ -12,7 +12,7 @@ Feature: See and update payment conditions
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.paymentConditions.link"
     Then the response status code should be 200
     And I check "event_payment_conditions_update_allowDeposit"
@@ -32,7 +32,7 @@ Feature: See and update payment conditions
 
   Scenario: See payment conditions
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.paymentConditions.link"
     Then the response status code should be 200
     And the "event_payment_conditions_update_allowDeposit" checkbox should be checked

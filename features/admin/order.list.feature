@@ -17,12 +17,12 @@ Feature: List and filter orders
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/order"
+    When I go to this page "/fr/event/1/order"
     Then I should see "admin.order.title"
 
   Scenario: Filter event orders
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/order"
+    And I am on this page "/fr/event/1/order"
     Then I should see "Aanera"
     And I should see "Hello World Company"
     When I select "3" from "product"
@@ -32,18 +32,18 @@ Feature: List and filter orders
 
   Scenario: Filter disabled sheet orders
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/order?enabled=1"
+    And I am on this page "/fr/event/1/order?enabled=1"
     Then I should see "form.order_filter.children.sheet.enabled.label"
     And I should see "Aanera"
     And I should see "Hello World Company"
-    When I go to this page "/admin/fr/event/1/order?enabled=0"
+    When I go to this page "/fr/event/1/order?enabled=0"
     Then I should not see "Aanera"
     And I should not see "Hello World Company"
 
   Scenario: Filter order by product and enabled sheet
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/order?enabled=1"
-    When I go to this page "/admin/fr/event/1/order?enabled=1&product=2"
+    And I am on this page "/fr/event/1/order?enabled=1"
+    When I go to this page "/fr/event/1/order?enabled=1&product=2"
     Then I should not see "Aanera"
     And I should not see "Hello World Company"
 

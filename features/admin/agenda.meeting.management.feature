@@ -17,7 +17,7 @@ Feature: Update meeting spot and slot in agenda via the API
     # Create another sheet not concerned by the meeting
     And there is a sheet
     And spot "A4" is assigned to this sheet
-    When I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-spot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/1/update-spot"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
@@ -37,7 +37,7 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can change the spot for a meeting
     Given I am logged as admin
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
       """
       {
           "spotId": 2,
@@ -50,7 +50,7 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can get available spots for a meeting via the API
     Given I am logged as admin
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot"
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot"
     Then the response status code should be 422
     And the JSON should be equal to:
       """
@@ -60,7 +60,7 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can not change the spot for a meeting because given spot not available
     Given I am logged as admin
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
       """
       {
           "spotId": 4,
@@ -77,7 +77,7 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can not change the spot for a meeting when spot is blocked
     Given I am logged as admin
-    And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+    And I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
       """
       {
           "spotId": 2,
@@ -86,7 +86,7 @@ Feature: Update meeting spot and slot in agenda via the API
       }
       """
     And the response status code should be 200
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
       """
       {
           "spotId": 3,
@@ -110,7 +110,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And there is an active spot "A3" with meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A1"
     And there is a meeting on spot "A2"
-    When I send a GET request to "/admin/fr/event/1/agenda/meeting/2/update-spot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/2/update-spot"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
@@ -135,7 +135,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A1"
     And there is a meeting on spot "A2"
-    When I send a GET request to "/admin/fr/event/1/agenda/meeting/2/update-spot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/2/update-spot"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
@@ -157,7 +157,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And I am logged as admin
     And there are 3 slots in this event
     And there is a meeting on slot "1"
-    When I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-slot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/1/update-slot"
     Then the JSON should be equal to:
       """
       {
@@ -171,7 +171,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And I am logged as admin
     And there are 3 slots in this event
     And there is a meeting on slot "3"
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-slot" with body:
       """
       {
           "slotId": 1
@@ -189,14 +189,14 @@ Feature: Update meeting spot and slot in agenda via the API
     And there is a participant for this sheet
     And there is a meeting on slot "1" and spot "A1" for this participant
     And there is a meeting on slot "2" and spot "A1" for this participant
-    And I send a GET request to "/admin/fr/event/1/agenda/meeting/1/update-slot"
+    And I send a GET request to "/fr/event/1/agenda/meeting/1/update-slot"
     And the JSON should be equal to:
       """
       {
           "availableSlotsId": [1]
       }
       """
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-slot" with body:
       """
       {
           "slotId": 2
@@ -214,7 +214,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And I am logged as admin
     And there are 2 slots in this event
     And there is a meeting on slot "1"
-    And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+    And I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
       """
       {
           "spotId": 1,
@@ -223,7 +223,7 @@ Feature: Update meeting spot and slot in agenda via the API
       }
       """
     And the response status code should be 200
-    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-slot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-slot" with body:
       """
       {
           "slotId": 2

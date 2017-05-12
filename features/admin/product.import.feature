@@ -19,11 +19,11 @@ Feature: Import products and package from an event
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/2/product"
+    When I go to this page "/fr/event/2/product"
     Then I follow "admin.package.import.link"
-    And I should be on this page "/admin/fr/event/2/product/import"
+    And I should be on this page "/fr/event/2/product/import"
     Then I select "ASD Days" from "import_products_and_template_event"
     And I press "form.import_products_and_template.children.submit.label"
-    Then I should be on this page "/admin/fr/event/2/product"
+    Then I should be on this page "/fr/event/2/product"
     And I should see "Option chaise"
     And I should see "Option A"

@@ -18,13 +18,13 @@ Feature: Update a participation category
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/category"
+    When I go to this page "/fr/event/1/category"
     Then I should see "Exposant"
     And I should see "Visiteur"
 
   Scenario: I can add a category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/category/create"
+    And I am on this page "/fr/event/1/category/create"
     When I fill in the following:
       | category_create_translations_fr_title | category title fr |
       | category_create_translations_en_title | category title en |
@@ -35,7 +35,7 @@ Feature: Update a participation category
 
   Scenario: I can add an remove a type in a category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/category/1/update"
+    And I am on this page "/fr/event/1/category/1/update"
     And the "category_update_types_0" checkbox should be checked
     And the "category_update_types_1" checkbox should be checked
     And the "category_update_types_2" checkbox should not be checked
@@ -43,7 +43,7 @@ Feature: Update a participation category
     And I uncheck "category_update_types_0"
     And I press "form.category_update.children.submit.label"
     Then I should see "flash.admin.category.update.success"
-    When I go to "/admin/fr/event/1/category/1/update"
+    When I go to "/fr/event/1/category/1/update"
     Then the "category_update_types_0" checkbox should not be checked
     And the "category_update_types_1" checkbox should be checked
     And the "category_update_types_2" checkbox should be checked

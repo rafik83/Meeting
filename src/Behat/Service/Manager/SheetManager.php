@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\SheetInfoSetter;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class SheetManager
@@ -28,29 +29,37 @@ class SheetManager
     /** @var TypeManager */
     private $typeManager;
 
+    /** @var SheetInfoSetter */
+    private $sheetInfoSetter;
+
     /**
      * @param SheetRepositoryInterface $sheetRepository
+     * @param SheetInfoSetter          $sheetInfoSetter
      * @param UserManager              $userManager
      * @param TypeManager              $typeManager
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
+        SheetInfoSetter $sheetInfoSetter,
         UserManager $userManager,
         TypeManager $typeManager
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->userManager     = $userManager;
         $this->typeManager     = $typeManager;
+        $this->sheetInfoSetter = $sheetInfoSetter;
     }
 
     /**
-     * @param Event     $event
-     * @param User|null $user
-     * @param Type|null $type
+     * @param Event            $event
+     * @param User|null        $user
+     * @param Type|null        $type
+     * @param string|null      $title
+     * @param Sheet\Group|null $group
      *
      * @return Sheet
      */
-    public function create(Event $event, User $user = null, Type $type = null)
+    public function create(Event $event, User $user = null, Type $type = null, $title = null, Sheet\Group $group = null)
     {
         if (null === $user) {
             $user = $this->userManager->create();
@@ -63,6 +72,15 @@ class SheetManager
         $sheet = SheetFactory::create($event, $user, new \DateTime(), $type);
         $sheet->setData([]);
         $sheet->setRegistrationData([]);
+
+        if (null !== $group) {
+            $sheet->setGroup($group);
+        }
+
+        if (null !== $title) {
+            $this->sheetInfoSetter->setSheetTitle($sheet, $title);
+        }
+
         $this->sheetRepository->add($sheet);
 
         return $sheet;
