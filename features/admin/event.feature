@@ -15,16 +15,16 @@ Feature: See, create and update event
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
-    When I go to this page "/admin/en/event"
+    When I go to this page "/en/event"
     Then I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: create event
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event"
+    And I am on this page "/en/event"
     And I should see "admin.event.create.title"
     Then I follow "admin.event.create.title"
     Then the response status code should be 200
-    And I should be on this page "/admin/en/event/create"
+    And I should be on this page "/en/event/create"
     And I fill in the following:
       | form.event_create.children.title.label         | Super Event                     |
       | form.event_create.children.domain.label        | super-event.vimeet.proximum.dev |
@@ -43,15 +43,15 @@ Feature: See, create and update event
     And I press "form.event_create.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.event.create.success"
-    And I should be on this page "/admin/en/event"
+    And I should be on this page "/en/event"
     And I should see "Super Event"
 
   Scenario: update event
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.update.link"
     Then the response status code should be 200
-    And I should be on this page "/admin/en/event/1/update"
+    And I should be on this page "/en/event/1/update"
     And I fill in the following:
       | event_update_title                       | Other event                                                                    |
       | event_update_translations_fr_description | LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE                                  |
@@ -65,7 +65,7 @@ Feature: See, create and update event
     And I should see "flash.admin.event.update.success"
     And the "event_update_emailTeam" field should contain "team-event@example.net"
     And the "event_update_analyticsCode" field should contain "analyticsCode"
-    When I go to "/admin/fr/event"
+    When I go to "/fr/event"
     Then I should see "Other event"
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr"
     Then the response status code should be 200
@@ -75,10 +75,10 @@ Feature: See, create and update event
 
   Scenario: update invoice prefix on event
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1"
+    And I am on this page "/en/event/1"
     When I follow "admin.event.update.link"
     Then the response status code should be 200
-    And I should be on this page "/admin/en/event/1/update"
+    And I should be on this page "/en/event/1/update"
     And I select "RdvCarnot" from "event_update_invoicePrefix"
     And I press "form.event_update.children.submit.label"
     Then the response status code should be 200

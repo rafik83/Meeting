@@ -19,8 +19,8 @@ Feature: See meeting request
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
+    And I am on this page "/fr/event"
     When I follow "admin.meeting_request.link"
-    And I should be on this page "/admin/fr/event/1/meeting-request"
+    And I should be on this page "/fr/event/1/meeting-request"
     And I should see "WorldCompanyInc"
 

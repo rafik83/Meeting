@@ -9,7 +9,7 @@ Feature: Manage Group
     And the user "awsm@example.com" is created
     And there is a group "Awsm Group" managed by this user
     And I am logged as admin
-    When I go to this page "/admin/fr/event/1/sheets-group/list"
+    When I go to this page "/fr/event/1/sheets-group/list"
     Then I should see "Awsm Group"
     And I should see "awsm@example.com"
 
@@ -18,18 +18,18 @@ Feature: Manage Group
     Given I am logged as admin
     And the event "Multisheet event" is created
     And the user "multisheet@example.com" is created
-    And I am on this page "/admin/fr/event/1/sheets-group/list"
+    And I am on this page "/fr/event/1/sheets-group/list"
     When I follow "admin.sheets_group.create"
-    Then I should be on this page "/admin/fr/event/1/sheets-group/pre-create"
+    Then I should be on this page "/fr/event/1/sheets-group/pre-create"
     When I fill in the following:
       | search_user_sheets_group_email | multisheet@example.com |
     And I press "search_user_sheets_group_submit"
-    Then I should be on this page "/admin/fr/event/1/sheets-group/2/create"
+    Then I should be on this page "/fr/event/1/sheets-group/2/create"
     And the response should contain "multisheet@example.com"
     When I fill in the following:
       | create_sheets_group_title | "Group title" |
     And I press "create_sheets_group_submit"
-    Then I should be on this page "/admin/fr/event/1/sheets-group/list"
+    Then I should be on this page "/fr/event/1/sheets-group/list"
     And I should see "Group title"
     And I should see "flash.admin.group.create.success"
     And the "sheet.group.created" mail should be sent to "multisheet@example.com" from "no-reply@super-event.vimeet.proximum.dev"
@@ -37,9 +37,9 @@ Feature: Manage Group
 
   Scenario: I should see an error if user doesn't exist
     Given I am logged as admin
-    And I am on this page "/admin/fr/event/1/sheets-group/list"
+    And I am on this page "/fr/event/1/sheets-group/list"
     When I follow "admin.sheets_group.create"
-    Then I should be on this page "/admin/fr/event/1/sheets-group/pre-create"
+    Then I should be on this page "/fr/event/1/sheets-group/pre-create"
     When I fill in the following:
       | search_user_sheets_group_email | inexistant_user@example.com |
     And I press "search_user_sheets_group_submit"
@@ -47,9 +47,9 @@ Feature: Manage Group
 
   Scenario: I should see an error if user is already group manager
     Given I am logged as admin
-    And I am on this page "/admin/fr/event/1/sheets-group/list"
+    And I am on this page "/fr/event/1/sheets-group/list"
     When I follow "admin.sheets_group.create"
-    Then I should be on this page "/admin/fr/event/1/sheets-group/pre-create"
+    Then I should be on this page "/fr/event/1/sheets-group/pre-create"
     When I fill in the following:
       | search_user_sheets_group_email | multisheet@example.com |
     And I press "search_user_sheets_group_submit"

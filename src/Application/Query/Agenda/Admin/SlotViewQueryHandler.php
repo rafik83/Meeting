@@ -81,7 +81,7 @@ class SlotViewQueryHandler
                 continue;
             }
 
-            $slotAvailabilityView = $this->slotAvailability->isAvailable($slot, $query->participant);
+            $slotAvailabilityView = $this->slotAvailability->getSlotAvailability($slot, $query->participant);
 
             if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
                 $slotViews[] = new HappeningUnavailabilitySlotView($slot, $slotAvailabilityView->type);
@@ -126,6 +126,13 @@ class SlotViewQueryHandler
                 } else {
                     $slotViews[] = new MassUnavailabilitySlotView($slot, $slotAvailabilityView->type);
                 }
+
+                continue;
+            }
+
+            if ($slot->isLocked()) {
+                // Locked Slot is considered as a mass unvailability
+                $slotViews[] = new MassUnavailabilitySlotView($slot, SlotAvailability::MASS_UNAVAILABILITY);
 
                 continue;
             }

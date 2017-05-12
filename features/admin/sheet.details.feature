@@ -21,12 +21,12 @@ Feature: See sheet details
       | Admin.yml                                                                |
     And elastica is populate
     And I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event"
+    And I go to "/fr/event"
     When I follow "admin.sheet.link"
     Then the response status code should be 200
-    And I should be on this page "/admin/fr/event/1/sheet"
+    And I should be on this page "/fr/event/1/sheet"
     And I should see "WorldCompanyInc"
-    Then I go to this page "/admin/fr/event/1/sheet/1"
+    Then I go to this page "/fr/event/1/sheet/1"
     And I should see "WorldCompanyInc"
     And I should see "Paul"
     And I should see "Gascoigne"
@@ -44,25 +44,25 @@ Feature: See sheet details
 
   Scenario: I can add a comment on a sheet
     Given I am logged with "test@test.com" on admin
-    Then I go to this page "/admin/fr/event/1/sheet/1"
+    Then I go to this page "/fr/event/1/sheet/1"
     And I should see "WorldCompanyInc"
     Then I fill in the following:
       | sheet_comment_text | This is a test |
     And I press "form.sheet_comment.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/sheet/1"
+    Then I should be on this page "/fr/event/1/sheet/1"
     And I should see "flash.admin.sheet.add_comment.success"
     And I should see "This is a test"
     And I should see "admin.sheet.details.comments.author"
 
   Scenario: I can change the sheet type
     Given I am logged with "test@test.com" on admin
-    Then I go to this page "/admin/fr/event/1/sheet/1"
+    Then I go to this page "/fr/event/1/sheet/1"
     And I should see "WorldCompanyInc"
     And the ".label-sheet-type" element should contain "Exposant"
     And I should not see "admin.sheet.trace.changed_type"
     Then I check the "Investisseur" radio
     And I press "form.change_type.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/sheet/1"
+    Then I should be on this page "/fr/event/1/sheet/1"
     And I should see "flash.admin.sheet.change_type.success"
     And the "sheet.changed_type" mail should be sent to "test@elao.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
     And the "sheet.changed_type" mail should be sent in bcc to "team-project@example.net" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
@@ -71,7 +71,7 @@ Feature: See sheet details
 
   Scenario: I cant change a sheet type and I can see generated invoice, and cannot edit order when sheet has at least one invoiced order
     Given I am logged with "test@test.com" on admin
-    Then I go to this page "/admin/fr/event/1/sheet/21"
+    Then I go to this page "/fr/event/1/sheet/21"
     And I should not see "form.change_type.children.submit.label"
     And I should see "Rdv2017-0001"
     And I should not see "admin.order_edit.link"

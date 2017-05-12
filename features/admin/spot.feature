@@ -16,7 +16,7 @@ Feature: Spot feature
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-MeetingSlot.yml     |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/spot"
+    When I go to this page "/fr/event/1/spot"
     Then I should see "G0345"
     And I should see "A008"
     And I should see "B090"
@@ -25,11 +25,11 @@ Feature: Spot feature
 
   Scenario: I can create spot
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1"
+    And I go to "/fr/event/1"
     And I follow "admin.spot.link"
-    Then I should be on this page "/admin/fr/event/1/spot"
+    Then I should be on this page "/fr/event/1/spot"
     When I follow "admin.spot.listSpot.add"
-    Then I should be on this page "/admin/fr/event/1/spot/create"
+    Then I should be on this page "/fr/event/1/spot/create"
     When I fill in the following:
       | spot_create_reference       | D098 |
       | spot_create_size            | 3    |
@@ -39,13 +39,13 @@ Feature: Spot feature
       | spot_create_visio           | 1    |
     And I check "spot_create_active"
     And I press "form.spot_create.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/spot"
+    Then I should be on this page "/fr/event/1/spot"
     And I should see "flash.admin.spot.create.success"
     And I should see "90"
 
   Scenario: I can filter spots with active filter
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot"
+    And I go to this page "/fr/event/1/spot"
     And I should see "A008"
     And I should see "F098"
     When I follow "admin.spot.active.yes"
@@ -54,7 +54,7 @@ Feature: Spot feature
 
   Scenario: I can filter spots with reference filter
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot"
+    And I go to this page "/fr/event/1/spot"
     When I fill in the following:
       | form.filter_spot_type.children.reference.label | A |
     And I press "submit"
@@ -66,7 +66,7 @@ Feature: Spot feature
 
   Scenario: I can filter spots with meetingCapacity filter
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot"
+    And I go to this page "/fr/event/1/spot"
     When I fill in the following:
       | form.filter_spot_type.children.meetingCapacity.label | 5 |
     And I press "submit"
@@ -78,7 +78,7 @@ Feature: Spot feature
 
   Scenario: I can filter spots using all filters
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot?active=0"
+    And I go to this page "/fr/event/1/spot?active=0"
     When I fill in the following:
       | form.filter_spot_type.children.reference.label       | F09 |
       | form.filter_spot_type.children.size.label            | 6   |
@@ -93,7 +93,7 @@ Feature: Spot feature
 
   Scenario: I can disable spot in batch mode
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot?active=1"
+    And I go to this page "/fr/event/1/spot?active=1"
     And I should see "G0345"
     And I should see "A008"
     And I should see "B090"
@@ -101,32 +101,32 @@ Feature: Spot feature
     And I check "batch_checkbox_2"
     And I press "admin.spot.disable"
     Then I should see "flash.admin.spot_batch.disable.success"
-    And I go to this page "/admin/fr/event/1/spot?active=0"
+    And I go to this page "/fr/event/1/spot?active=0"
     And I should see "G0345"
     And I should see "A008"
     And I should not see "B090"
 
   Scenario: I can set spot unavailabilities
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot"
+    And I go to this page "/fr/event/1/spot"
     And I should see "A100"
     And I should see "B090"
     When I check "batch_checkbox_4"
     And I check "batch_checkbox_3"
     When I press "admin.spot.unavailability"
-    Then I should be on this page "/admin/fr/event/1/spot/unavailability/batch"
+    Then I should be on this page "/fr/event/1/spot/unavailability/batch"
     And I should see "admin.spot.batch_unavailability.title"
     When I check "spot_batch_unavailability_meetingSlots_0"
     And I check "spot_batch_unavailability_meetingSlots_1"
     Then I press "form.spot_batch_unavailability.children.submit.label"
-    And I should be on this page "/admin/fr/event/1/spot"
+    And I should be on this page "/fr/event/1/spot"
     And I should see "flash.admin.spot_batch.spotUnavailability.success"
     And I should see "✓" in the "#spot-4" element
     And I should see "✓" in the "#spot-3" element
 
   Scenario: I can delete spot in batch mode
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/spot"
+    And I go to this page "/fr/event/1/spot"
     And I should see "G0345"
     And I should see "A008"
     And I should see "B090"

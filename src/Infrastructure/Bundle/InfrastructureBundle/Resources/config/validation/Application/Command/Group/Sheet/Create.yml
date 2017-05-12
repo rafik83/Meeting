@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Group\Sheet\Create:
+    properties:
+        sheet:
+            - NotNull: ~
+        title:
+            - NotBlank: ~

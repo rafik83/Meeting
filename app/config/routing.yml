@@ -1,19 +1,49 @@
-default:
-    path: /
-    host: '%domain%'
+#
+# Admin
+#
+root_admin:
+    path: /{_locale}
+    host: '%admin_domain%'
     defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: '/%locale%/'
+        _controller: FrameworkBundle:Redirect:redirect
+        route: admin_event_list
         permanent: true
     methods: [GET]
 
+default_admin:
+    path: /
+    host: '%admin_domain%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: '/%locale%/event'
+        permanent: true
+    methods: [GET]
+
+vimeet_admin:
+    resource: '@AdminBundle/Resources/config/routing.yml'
+    prefix:   /{_locale}
+    host: '%admin_domain%'
+    requirements:
+        _locale: fr|en
+    defaults:
+        _locale: '%locale%'
+
+JMSJobQueueBundle:
+    resource: "@JMSJobQueueBundle/Controller/"
+    prefix: /{_locale}/jobs
+    host: '%admin_domain%'
+    type: annotation
+
+#
+# Event
+#
 default_event:
     path: /
     methods: [GET]
 
 vimeet_event:
     resource: '@EventBundle/Resources/config/routing.yml'
-    prefix:   /{_locale}
+    prefix: /{_locale}
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
@@ -26,38 +56,3 @@ payum_notify:
 
 payum_authorize:
     resource: "@PayumBundle/Resources/config/routing/authorize.xml"
-
-JMSJobQueueBundle:
-    resource: "@JMSJobQueueBundle/Controller/"
-    type: annotation
-    prefix: /admin/{_locale}/jobs
-
-#
-# Admin redirect
-#
-root_admin:
-    path: /admin/{_locale}
-    host: '%domain%'
-    defaults:
-        _controller: FrameworkBundle:Redirect:redirect
-        route: admin_event_list
-        permanent: true
-    methods: [GET]
-
-default_admin:
-    path: /admin
-    host: '%domain%'
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: '/admin/%locale%/event'
-        permanent: true
-    methods: [GET]
-
-vimeet_admin:
-    resource: '@AdminBundle/Resources/config/routing.yml'
-    prefix:   /admin/{_locale}
-    requirements:
-        _locale: fr|en
-    defaults:
-        _locale: '%locale%'
-    host:     '%domain%'
