@@ -4563,8 +4563,6 @@ services:
     #
     query.multiple_sheets.request.sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQueryHandler
-        arguments:
-            - '@command.planning.sheet_info_guesser_cache'
     query.multiple_sheets.request.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQueryHandler
         arguments:
@@ -4572,7 +4570,6 @@ services:
     query.multiple_sheets.request.request_view_query_handler:
         class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQueryHandler
         arguments:
-            - '@command.planning.sheet_info_guesser_cache'
             - '@query.multiple_sheets.request.participant_view_query_handler'
     query.multiple_sheets.request.sheet_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQueryHandler

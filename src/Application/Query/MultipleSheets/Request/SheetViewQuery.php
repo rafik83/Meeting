@@ -17,16 +17,11 @@ class SheetViewQuery
     /** @var Sheet */
     public $sheet;
 
-    /** @var string */
-    public $locale;
-
     /**
      * @param Sheet  $sheet
-     * @param string $locale
      */
-    public function __construct(Sheet $sheet, $locale)
+    public function __construct(Sheet $sheet)
     {
         $this->sheet  = $sheet;
-        $this->locale = $locale;
     }
 }

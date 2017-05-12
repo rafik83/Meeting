@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\MultipleSheets\Request;
 
-use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQuery;
@@ -31,16 +30,15 @@ class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetMet = $this->prophesize(Sheet::class);
         $request->getId()->willReturn(123);
         $sheetMet->getId()->willReturn(432);
+        $sheetMet->getTitle()->willReturn('sheet Met title');
         $request->getState()->willReturn('sent');
         $request->getSheetMet($sheet->reveal())->willReturn($sheetMet);
         $request->isSender($sheetMet->reveal())->willReturn(false);
         $request->getParticipantsOfSheetInRequest($sheetMet->reveal())->willReturn([]);
         $request->hasMeeting()->willReturn(false);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesserCache::class);
-        $sheetInfoGuesser->guessSheetTitle($sheetMet->reveal(), $locale)->shouldBeCalled()->willReturn('sheet Met title');
         $participantViewQueryHandler = $this->prophesize(ParticipantViewQueryHandler::class);
 
-        $handler = new RequestViewQueryHandler($sheetInfoGuesser->reveal(), $participantViewQueryHandler->reveal());
+        $handler = new RequestViewQueryHandler($participantViewQueryHandler->reveal());
         $result = $handler->handle(
             new RequestViewQuery($sheet->reveal(), $request->reveal(), $locale)
         );
@@ -68,6 +66,7 @@ class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetMet = $this->prophesize(Sheet::class);
         $request->getId()->willReturn(123);
         $sheetMet->getId()->willReturn(432);
+        $sheetMet->getTitle()->willReturn('sheet Met title');
         $participant1 = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
         $request->getState()->willReturn('approved');
@@ -78,8 +77,6 @@ class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $participant2->reveal()
         ]);
         $request->hasMeeting()->willReturn(true);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesserCache::class);
-        $sheetInfoGuesser->guessSheetTitle($sheetMet->reveal(), $locale)->shouldBeCalled()->willReturn('sheet Met title');
         $participantViewQueryHandler = $this->prophesize(ParticipantViewQueryHandler::class);
         $participantView1 = new ParticipantView('complete Name 1');
         $participantView2 = new ParticipantView('complete Name 2');
@@ -92,7 +89,7 @@ class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($participantView2);
 
-        $handler = new RequestViewQueryHandler($sheetInfoGuesser->reveal(), $participantViewQueryHandler->reveal());
+        $handler = new RequestViewQueryHandler($participantViewQueryHandler->reveal());
         $result = $handler->handle(
             new RequestViewQuery($sheet->reveal(), $request->reveal(), $locale)
         );

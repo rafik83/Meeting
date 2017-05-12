@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Group\Request;
 
-use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetViewQueryHandler;
 use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
@@ -20,14 +19,12 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $locale = 'fr';
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->willReturn(12345);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesserCache::class);
-        $sheetInfoGuesser->guessSheetTitle($sheet->reveal(), $locale)->shouldBeCalled()->willReturn('Sheet Title');
+        $sheet->getTitle()->willReturn('Sheet Title');
 
-        $handler = new SheetViewQueryHandler($sheetInfoGuesser->reveal());
-        $result = $handler->handle(new SheetViewQuery($sheet->reveal(), $locale));
+        $handler = new SheetViewQueryHandler();
+        $result = $handler->handle(new SheetViewQuery($sheet->reveal()));
 
         $expected = new SheetView(12345, 'Sheet Title', $sheet->reveal());
 
