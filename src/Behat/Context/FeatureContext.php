@@ -601,7 +601,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function goToThisPage($page)
     {
-        parent::visit($this->baseUrl . $page);
+        $this->visit($this->baseUrl . $page);
         $this->assertResponseStatus(200);
     }
 
@@ -612,7 +612,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function pageReturns404($page)
     {
-        parent::visit($this->baseUrl . $page);
+        $this->visit($this->baseUrl . $page);
         $this->assertResponseStatus(404);
     }
 
@@ -623,7 +623,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function shouldBeOnThisPage($page)
     {
-        parent::assertPageAddress($this->baseUrl . $page);
+        $this->assertPageAddress($this->baseUrl . $page);
         $this->assertResponseStatus(200);
     }
 
