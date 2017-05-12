@@ -46,6 +46,11 @@
             </tr>
         </tbody>
     </table>
-    <div class="text-right">{{ form_row(filterForm.submit) }}</div>
+    <div class="text-right">
+        <a href="{{ resetLink }}" title="{{ 'multiple_sheets.request.filter.reset'|trans }}" class="btn btn-link">
+            {{ 'multiple_sheets.request.filter.reset'|trans }}
+        </a>
+        {{ form_row(filterForm.submit) }}
+    </div>
     {{ form_end(filterForm) }}
 </div>

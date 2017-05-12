@@ -15,7 +15,9 @@
         </header>
 
         <div class="main__container">
-            {{ include('EventBundle:MultipleSheets/Request:filterForm.html.twig') }}
+            {{ include('EventBundle:MultipleSheets/Request:filterForm.html.twig', {'resetLink': path('event_multiplesheets_request_list')}) }}
+        </div>
+        <div class="main__container">
             {{ include('EventBundle:MultipleSheets/Request:requests.html.twig') }}
         </div>
     </section>
