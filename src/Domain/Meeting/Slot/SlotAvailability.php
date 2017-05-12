@@ -232,7 +232,7 @@ class SlotAvailability
             return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
         }
 
-        if (($meetingOtherSheet = $this->hasMeetingOnOtherSheet($slot)) !== false) {
+        if (($meetingOtherSheet = $this->hasMeetingOnOtherSheet($slot, $participant)) !== false) {
             return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, $meetingOtherSheet);
         }
 
@@ -508,20 +508,26 @@ class SlotAvailability
 
     /**
      * @param MeetingSlot $slot
+     * @param Participant $participant
      *
-     * @return Meeting|false
+     * @return false|Meeting
      */
-    private function hasMeetingOnOtherSheet(MeetingSlot $slot)
+    private function hasMeetingOnOtherSheet(MeetingSlot $slot, Participant $participant)
     {
         if (empty($this->meetingOtherSheets)) {
             return false;
         }
-        
+
         foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
-            if ($meetingOtherSheet->getSlot()->getBegin() >= $slot->getBegin()
-                && $meetingOtherSheet->getSlot()->getEnd() <= $slot->getEnd()
-            ) {
-                return $meetingOtherSheet;
+            if ($participant->getSheet() !== $meetingOtherSheet->getToSheet()) {
+                if ($meetingOtherSheet->getRequest()->getCreator()->getId() === $participant->getUser()->getId()) {
+                    if ($meetingOtherSheet->getSlot()->getBegin() >= $slot->getBegin()
+                        && $meetingOtherSheet->getSlot()->getEnd() <= $slot->getEnd()
+                    ) {
+                        return $meetingOtherSheet;
+                    }
+                }
+
             }
         }
 
