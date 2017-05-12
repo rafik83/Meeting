@@ -368,7 +368,9 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new SheetGroupCreatedMail(
             $this->sender->generate($event->getGroup()->getEvent()),
             $event->getGroup()->getManager()->getEmail(),
-            $event->getGroup()->getManager()->getLocale(),
+            $event->getGroup()->getEvent()->getAvailableLocale(
+                $event->getGroup()->getManager()->getLocale()
+            ),
             $event->getGroup()->getEvent(),
             $participantMailView,
             $event->getGroup()
