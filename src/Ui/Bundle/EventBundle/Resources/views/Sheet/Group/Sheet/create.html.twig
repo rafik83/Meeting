@@ -1,0 +1,31 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form '@Ui/default.html.twig' %}
+
+{% block title event.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'group.sheet.create.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content">
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+                <div class="inputs">
+                    {{ form_row(form.sheet) }}
+                    {{ form_row(form.title) }}
+
+                    <div class="validation">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="icon-Suivant_3"></i> {{ 'form.sheet_group_create_sheet.children.submit.label'|trans({}, 'forms') }}
+                        </button>
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </div>
+{% endblock %}

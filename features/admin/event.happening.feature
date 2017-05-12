@@ -17,9 +17,9 @@ Feature: See, create and update happening
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml                |
       | Admin.yml                                                                   |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/happening"
+    When I go to this page "/fr/event/1/happening"
     And I follow "admin.happening.add"
-    And I should be on this page "/admin/fr/event/1/happening/create"
+    And I should be on this page "/fr/event/1/happening/create"
     When I fill in the following:
       | happening_create[category]                | 1                |
       | happening_create[translations][fr][title] | MyHappening      |
@@ -34,7 +34,7 @@ Feature: See, create and update happening
 
   Scenario: I can update a happening
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/happening/1/update"
+    And I am on this page "/fr/event/1/happening/1/update"
     When I fill in the following:
       | happening_update[category]                | 1              |
       | happening_update[translations][fr][title] | Starting event |
@@ -42,20 +42,20 @@ Feature: See, create and update happening
       | happening_update[questionAllowed]         | 0              |
       | happening_update[limitParticipant]        | 100            |
     And I press "form.happening_update.children.submit.label"
-    And I should be on this page "/admin/fr/event/1/happening/1/update"
+    And I should be on this page "/fr/event/1/happening/1/update"
     Then I should see "flash.admin.happening.update.success"
     And the "happening_update[translations][fr][title]" field should contain "Starting event"
     And the "happening_update[limitParticipant]" field should contain "100"
 
   Scenario: I can see a list of happening
     Given I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/happening"
+    When I go to this page "/fr/event/1/happening"
     Then I should see "admin.happening.title"
     And I should see "Starting event"
 
   Scenario: I can export happening participant
     Given I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/happening"
+    When I go to this page "/fr/event/1/happening"
     Then I should see "admin.happening.button.export"
     When I follow "admin.happening.button.export"
-    Then I should be on this page "/admin/fr/event/1/happening"
+    Then I should be on this page "/fr/event/1/happening"
