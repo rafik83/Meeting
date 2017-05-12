@@ -514,16 +514,17 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheets,
         array $sheetsMet,
         $state = null,
-        $type = null
+        $type = null,
+        User $user = null
     ) {
         $typeCondition = '(
             (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))
             OR (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))
         )';
-        $stateCondition = '';
+        $stateCondition = '1 = 1';
 
         if ($state !== null && in_array($state, Request::getAllStates())) {
-            $stateCondition = sprintf("AND request.state = '%s'", $state);
+            $stateCondition = sprintf("request.state = '%s'", $state);
         }
 
         if ($type !== null) {
@@ -542,10 +543,19 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
             ->leftJoin('request.meeting', 'meeting')
-            ->where(sprintf('%s %s', $typeCondition, $stateCondition))
+            ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);
+
+        if ($user !== null) {
+            $queryBuilder
+                ->leftJoin('request.fromParticipants', 'fp')
+                ->leftJoin('request.toParticipants', 'tp')
+                ->andWhere('(tp.user = :user OR fp.user = :user)')
+                ->setParameter('user', $user)
+            ;
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

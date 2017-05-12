@@ -130,6 +130,7 @@ interface RequestRepositoryInterface
      * @param Sheet[]     $sheetsMet
      * @param string|null $state
      * @param string|null $type
+     * @param User|null   $user
      *
      * @return Request[]
      */
@@ -138,7 +139,8 @@ interface RequestRepositoryInterface
         array $sheets,
         array $sheetsMet,
         $state = null,
-        $type = null
+        $type = null,
+        User $user = null
     );
 
     /**

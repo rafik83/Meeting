@@ -335,10 +335,19 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsMetBySheetsPaginated(Event $event, array $sheets, $page, $limit, $state = null, $type = null)
-    {
+    public function getSheetsMetBySheetsPaginated(
+        Event $event,
+        array $sheets,
+        $page,
+        $limit,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
         $typeCondition  = '(r.from = sheet AND r.to IN (:sheets) OR r.to = sheet AND r.from IN (:sheets))';
-        $stateCondition = '';
+        $stateCondition = '1 = 1';
+        $userCondition  = '1 = 1';
+        $userJoinCondition = '';
 
         if ($type !== null) {
             if ($type === Request::TYPE_REQUEST) {
@@ -352,6 +361,11 @@ class SheetRepository implements SheetRepositoryInterface
             $stateCondition = sprintf("AND r.state = '%s'", $state);
         }
 
+        if ($user !== null) {
+            $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
+            $userCondition = '(fp.user = :user OR tp.user = :user)';
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -362,13 +376,18 @@ class SheetRepository implements SheetRepositoryInterface
                 sprintf(
                     'EXISTS (
                     SELECT r.id FROM Entity:Meeting\Request r
-                    WHERE %s %s
-                )', $typeCondition, $stateCondition)
+                    %s
+                    WHERE %s AND %s AND %s
+                )', $userJoinCondition, $typeCondition, $stateCondition, $userCondition)
             )
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->orderBy('sheet.title', 'asc')
         ;
+
+        if ($user !== null) {
+            $queryBuilder->setParameter('user', $user);
+        }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
     }

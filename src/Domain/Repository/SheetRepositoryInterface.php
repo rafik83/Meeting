@@ -191,6 +191,7 @@ interface SheetRepositoryInterface
      * @param int         $limit
      * @param string|null $state
      * @param string|null $type
+     * @param User|null   $user
      *
      * @return PaginatedResult
      */
@@ -200,7 +201,8 @@ interface SheetRepositoryInterface
         $page,
         $limit,
         $state = null,
-        $type = null
+        $type = null,
+        User $user = null
     );
 
     /**

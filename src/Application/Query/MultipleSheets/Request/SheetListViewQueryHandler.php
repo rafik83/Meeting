@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -78,7 +79,10 @@ class SheetListViewQueryHandler
         $multipleSheets = $query->sheets;
 
         if ($query->filterRequestView->sheetConcerned !== null) {
-            $multipleSheets = [$query->filterRequestView->sheetConcerned];
+            $sheetConcerned = $query->filterRequestView->sheetConcerned;
+            $multipleSheets = [
+                $sheetConcerned->getId() => $sheetConcerned
+            ];
         }
 
         $firstSheet = reset($query->sheets);
@@ -102,10 +106,19 @@ class SheetListViewQueryHandler
                 $query->page,
                 $query->limit,
                 $query->filterRequestView->state,
-                $query->filterRequestView->type
+                $query->filterRequestView->type,
+                $query->filterRequestView->user
             );
         } else {
-            $sheets = new PaginatedResult([$query->filterRequestView->otherSheet], $query->page, $query->limit, 1, []);
+            $otherSheet = $query->filterRequestView->otherSheet;
+
+            $sheets = new PaginatedResult(
+                [$otherSheet->getId() => $otherSheet],
+                $query->page,
+                $query->limit,
+                1,
+                []
+            );
         }
 
         if ($sheets->total === 0 || $sheets->count() === 0) {
@@ -129,7 +142,8 @@ class SheetListViewQueryHandler
             $sheets->results,
             $query->locale,
             $query->filterRequestView->state,
-            $query->filterRequestView->type
+            $query->filterRequestView->type,
+            $query->filterRequestView->user
         );
 
         return new SheetListView(
@@ -153,6 +167,7 @@ class SheetListViewQueryHandler
      * @param string      $locale
      * @param string|null $state
      * @param string|null $type
+     * @param User|null   $user
      *
      * @return SheetView[]
      */
@@ -162,7 +177,8 @@ class SheetListViewQueryHandler
         array &$sheetsMet,
         $locale,
         $state,
-        $type
+        $type,
+        User $user = null
     ) {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
@@ -178,7 +194,8 @@ class SheetListViewQueryHandler
             $multipleSheets,
             $sheetsMet,
             $state,
-            $type
+            $type,
+            $user
         );
 
         $this->addRequestToSheetViews($requests, $multipleSheets, $sheetViews, $locale);
