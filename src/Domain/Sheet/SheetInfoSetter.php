@@ -17,6 +17,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 
 class SheetInfoSetter
 {
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
     /**
      * @param TemplateDataFactory $templateDataFactory
      */
