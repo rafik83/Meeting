@@ -322,6 +322,7 @@ class SlotAvailability
             return false;
         }
 
+        /** @var Unavailability $unavailability */
         foreach ($this->unavailabilitySortByParticipant[$participant->getId()] as $unavailability) {
             if ($unavailability->getParticipant() !== $participant) {
                 continue;
@@ -527,13 +528,10 @@ class SlotAvailability
 
         foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
 
-            if ($meetingOtherSheet->getSlot()->getBegin() >= $slot->getBegin()
-                && $meetingOtherSheet->getSlot()->getEnd() <= $slot->getEnd()
+            if ($meetingOtherSheet->getSlot()->getBegin() === $slot->getBegin()
+                && $meetingOtherSheet->getSlot()->getEnd() === $slot->getEnd()
             ) {
-
-                if ($meetingOtherSheet->hasFromParticipant($participant)
-                    || $meetingOtherSheet->hasToParticipant($participant)
-                ) {
+                if ($meetingOtherSheet->hasUser($participant->getUser())) {
                     return $meetingOtherSheet;
                 }
             }

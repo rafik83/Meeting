@@ -411,4 +411,18 @@ class Meeting implements MessageSubjectInterface
     {
         return $this->slot->getEvent();
     }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function hasUser(User $user)
+    {
+        foreach ($this->getAllParticipants() as $participant) {
+            return $participant->getUser() === $user;
+        }
+
+        return false;
+    }
 }
