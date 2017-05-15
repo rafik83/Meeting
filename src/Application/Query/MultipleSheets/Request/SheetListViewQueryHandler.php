@@ -130,7 +130,7 @@ class SheetListViewQueryHandler
                 []
             );
 
-            $allSheetMet = [$otherSheet->getId() => $otherSheet];
+            $allSheetMet = [$otherSheet];
         }
 
         if ($sheets->total === 0 || $sheets->count() === 0) {

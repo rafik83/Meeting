@@ -79,6 +79,12 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
         ;
 
+        $sheetRepository
+            ->getSheetsMetBySheets($event->reveal(), $multipleSheets, null, null, null)
+            ->shouldBeCalled()
+            ->willReturn($sheetsMet)
+        ;
+
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
         $request1->getToSheet()->willReturn($sheet1->reveal());
@@ -163,6 +169,19 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
+        $requestRepository
+            ->countRequestOfSheetsWithSheets(
+                $event,
+                $multipleSheets,
+                $sheetsMet,
+                null,
+                null,
+                null
+            )
+            ->shouldBeCalled()
+            ->willReturn(12)
+        ;
+
         $handler = new SheetListViewQueryHandler(
             $sheetRepository->reveal(),
             $requestRepository->reveal(),
@@ -181,6 +200,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [3 => $expectedSheetView1, 4 => $expectedSheetView2, 1 => $expectedSheetView3],
             1,
             2,
+            12,
             false,
             false,
             false
@@ -227,6 +247,11 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldNotBeCalled()
         ;
 
+        $sheetRepository
+            ->getSheetsMetBySheets($event->reveal(), $multipleSheets, null, null, null)
+            ->shouldNotBeCalled()
+        ;
+
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
         $request1->getToSheet()->willReturn($sheet1->reveal());
@@ -242,6 +267,19 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             )
             ->shouldBeCalled()
             ->willReturn([$request1->reveal()])
+        ;
+
+        $requestRepository
+            ->countRequestOfSheetsWithSheets(
+                $event->reveal(),
+                $multipleSheets,
+                $sheetsMet,
+                null,
+                null,
+                null
+            )
+            ->shouldBeCalled()
+            ->willReturn(12)
         ;
 
         $requestView1 = $this->prophesize(RequestView::class);
@@ -285,6 +323,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [3 => $expectedSheetView1],
             1,
             1,
+            12,
             false,
             false,
             false
@@ -337,6 +376,12 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->getSheetsMetBySheetsPaginated($event->reveal(), $multipleSheets, 1, 4, null, Request::TYPE_REQUEST, null)
             ->shouldBeCalled()
             ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
+        ;
+
+        $sheetRepository
+            ->getSheetsMetBySheets($event->reveal(), $multipleSheets, null, Request::TYPE_REQUEST, null)
+            ->shouldBeCalled()
+            ->willReturn($sheetsMet)
         ;
 
         $request1 = $this->prophesize(Request::class);
@@ -423,6 +468,19 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
+        $requestRepository
+            ->countRequestOfSheetsWithSheets(
+                $event,
+                $multipleSheets,
+                $sheetsMet,
+                null,
+                Request::TYPE_REQUEST,
+                null
+            )
+            ->shouldBeCalled()
+            ->willReturn(12)
+        ;
+
         $handler = new SheetListViewQueryHandler(
             $sheetRepository->reveal(),
             $requestRepository->reveal(),
@@ -442,6 +500,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [3 => $expectedSheetView1, 4 => $expectedSheetView2, 1 => $expectedSheetView3],
             1,
             2,
+            12,
             false,
             false,
             false
@@ -497,6 +556,12 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
         ;
 
+        $sheetRepository
+            ->getSheetsMetBySheets($event->reveal(), $multipleSheets, Request::STATE_SENT, Request::TYPE_REQUEST, $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetsMet)
+        ;
+
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
         $request1->getToSheet()->willReturn($sheet1->reveal());
@@ -526,6 +591,19 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                     $request3->reveal(),
                 ]
             )
+        ;
+
+        $requestRepository
+            ->countRequestOfSheetsWithSheets(
+                $event,
+                $multipleSheets,
+                $sheetsMet,
+                Request::STATE_SENT,
+                Request::TYPE_REQUEST,
+                $user->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(12)
         ;
 
         $requestView1 = $this->prophesize(RequestView::class);
@@ -603,6 +681,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [3 => $expectedSheetView1, 4 => $expectedSheetView2, 1 => $expectedSheetView3],
             1,
             2,
+            12,
             false,
             false,
             false
@@ -652,6 +731,12 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
         ;
 
+        $sheetRepository
+            ->getSheetsMetBySheets($event->reveal(), [1 => $sheet1->reveal()], Request::STATE_SENT, Request::TYPE_REQUEST, $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetsMet)
+        ;
+
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
         $request1->getToSheet()->willReturn($sheet1->reveal());
@@ -681,6 +766,19 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                     $request3->reveal(),
                 ]
             )
+        ;
+
+        $requestRepository
+            ->countRequestOfSheetsWithSheets(
+                $event,
+                [1 => $sheet1->reveal()],
+                $sheetsMet,
+                Request::STATE_SENT,
+                Request::TYPE_REQUEST,
+                $user->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(12)
         ;
 
         $requestView1 = $this->prophesize(RequestView::class);
@@ -754,6 +852,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [3 => $expectedSheetView1, 4 => $expectedSheetView2, 2 => $expectedSheetView3],
             1,
             2,
+            12,
             false,
             false,
             false
