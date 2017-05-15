@@ -20,7 +20,6 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingOnOtherSheetView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\UnavailabilitySlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
-use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailabilityView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class SlotViewQueryHandler
