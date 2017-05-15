@@ -522,9 +522,7 @@ class SlotAvailability
         }
 
         foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
-            if ($this->isSlotsBeginEndHourEquals($meetingOtherSheet, $slot)
-                && $meetingOtherSheet->hasUser($participant->getUser())
-            ) {
+            if ($meetingOtherSheet->getSlot() === $slot && $meetingOtherSheet->hasUser($participant->getUser())) {
 
                 return $meetingOtherSheet;
             }
@@ -576,18 +574,4 @@ class SlotAvailability
 
         return false;
     }
-
-    /**
-     * Return true if Two slot are equals (Same DateTime)
-     *
-     * @param Meeting     $meeting
-     * @param MeetingSlot $slot
-     *
-     * @return bool
-     */
-    private function isSlotsBeginEndHourEquals(Meeting $meeting, MeetingSlot $slot)
-    {
-        return $meeting->getSlot()->getBegin() === $slot->getBegin() && $meeting->getSlot()->getEnd() === $slot->getEnd();
-    }
-
 }
