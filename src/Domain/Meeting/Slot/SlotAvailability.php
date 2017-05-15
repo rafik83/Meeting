@@ -163,7 +163,7 @@ class SlotAvailability
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
         $this->assignUnavailabilitySortByParticipant($unavailability);
-        $this->assingMassAssignmentSortByParticipant($massAssignments);
+        $this->assignMassAssignmentSortByParticipant($massAssignments);
     }
 
     /**
@@ -201,7 +201,7 @@ class SlotAvailability
     /**
      * @param MassAssignment[] $massAssignments
      */
-    private function assingMassAssignmentSortByParticipant(array $massAssignments)
+    private function assignMassAssignmentSortByParticipant(array $massAssignments)
     {
         foreach ($massAssignments as $assignment) {
             $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()][] = $assignment;
@@ -301,7 +301,7 @@ class SlotAvailability
         if ($this->massAssignment === null) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
 
-            $this->assingMassAssignmentSortByParticipant($this->massAssignment);
+            $this->assignMassAssignmentSortByParticipant($this->massAssignment);
         }
     }
 
