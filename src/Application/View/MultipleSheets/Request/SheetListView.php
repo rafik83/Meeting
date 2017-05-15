@@ -21,6 +21,9 @@ class SheetListView
     /** @var int Number of pages */
     public $pages;
 
+    /** @var int Number of requests */
+    public $totalRequest;
+
     /** @var bool */
     public $isMeetingRequestUpdateLocked;
 
@@ -34,6 +37,7 @@ class SheetListView
      * @param SheetView[] $sheetViews
      * @param int         $page
      * @param int         $pages Number of pages
+     * @param int         $totalRequest
      * @param bool        $isMeetingRequestUpdateLocked
      * @param bool        $isMeetingRequestClosed
      * @param bool        $isAnsweringMeetingRequestClosed
@@ -42,6 +46,7 @@ class SheetListView
         array $sheetViews,
         $page,
         $pages,
+        $totalRequest,
         $isMeetingRequestUpdateLocked,
         $isMeetingRequestClosed,
         $isAnsweringMeetingRequestClosed
@@ -49,6 +54,7 @@ class SheetListView
         $this->sheetViews                      = $sheetViews;
         $this->page                            = $page;
         $this->pages                           = $pages;
+        $this->totalRequest                    = $totalRequest;
         $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;

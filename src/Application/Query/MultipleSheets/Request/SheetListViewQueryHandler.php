@@ -98,6 +98,8 @@ class SheetListViewQueryHandler
         $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
 
+        $allSheetMet = null;
+
         if ($query->filterRequestView->otherSheet === null) {
             // sheets met by the group sheets
             $sheets = $this->sheetRepository->getSheetsMetBySheetsPaginated(
@@ -105,6 +107,14 @@ class SheetListViewQueryHandler
                 $multipleSheets,
                 $query->page,
                 $query->limit,
+                $query->filterRequestView->state,
+                $query->filterRequestView->type,
+                $query->filterRequestView->user
+            );
+
+            $allSheetMet = $this->sheetRepository->getSheetsMetBySheets(
+                $event,
+                $multipleSheets,
                 $query->filterRequestView->state,
                 $query->filterRequestView->type,
                 $query->filterRequestView->user
@@ -119,6 +129,8 @@ class SheetListViewQueryHandler
                 1,
                 []
             );
+
+            $allSheetMet = [$otherSheet->getId() => $otherSheet];
         }
 
         if ($sheets->total === 0 || $sheets->count() === 0) {
@@ -126,6 +138,7 @@ class SheetListViewQueryHandler
                 return new SheetListView(
                     [],
                     $query->page,
+                    0,
                     0,
                     $isMeetingRequestUpdateLocked,
                     $isMeetingRequestClosed,
@@ -146,12 +159,23 @@ class SheetListViewQueryHandler
             $query->filterRequestView->user
         );
 
+        // Total of requests
+        $numberOfRequests = $this->requestRepository->countRequestOfSheetsWithSheets(
+            $event,
+            $multipleSheets,
+            $allSheetMet,
+            $query->filterRequestView->state,
+            $query->filterRequestView->type,
+            $query->filterRequestView->user
+        );
+
         return new SheetListView(
             array_filter($sheetViews, function (SheetView $sheetView) {
                 return $sheetView->numberOfRequest() > 0;
             }),
             $query->page, // current page
             $sheets->pages, // total page
+            $numberOfRequests, // total of requests
             $isMeetingRequestUpdateLocked,
             $isMeetingRequestClosed,
             $isAnsweringMeetingRequestClosed
