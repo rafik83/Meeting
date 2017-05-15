@@ -26,13 +26,13 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class SlotAvailability
 {
-    const HAPPENING_UNAVAILABILITY = 'happening_unavailability';
-    const UNAVAILABILITY = 'unavailability';
-    const MEETING_UNAVAILABILITY = 'meeting_unavailability';
-    const MASS_UNAVAILABILITY = 'mass_unavailability';
-    const SLOT_AVAILABLE = 'slot_available';
-    const MASS_ASSIGNMENT_UNAVAILABILITY = 'mass_assignment_unavailability';
-    const MEETING_ON_OTHER_SHEET = 'meeting_on_other_sheet';
+    const HAPPENING_UNAVAILABILITY          = 'happening_unavailability';
+    const UNAVAILABILITY                    = 'unavailability';
+    const MEETING_UNAVAILABILITY            = 'meeting_unavailability';
+    const MASS_UNAVAILABILITY               = 'mass_unavailability';
+    const SLOT_AVAILABLE                    = 'slot_available';
+    const MASS_ASSIGNMENT_UNAVAILABILITY    = 'mass_assignment_unavailability';
+    const MEETING_ON_OTHER_SHEET            = 'meeting_on_other_sheet';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -117,10 +117,10 @@ class SlotAvailability
      * SlotAvailability constructor.
      *
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param UnavailabilityRepositoryInterface $unavailabilityRepository
-     * @param MassRepositoryInterface $massUnavailabilityRepository
-     * @param MeetingRepositoryInterface $meetingRepositoryInterface
-     * @param MassAssignmentRepositoryInterface $massAssignmentRepository
+     * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
+     * @param MassRepositoryInterface                   $massUnavailabilityRepository
+     * @param MeetingRepositoryInterface                $meetingRepositoryInterface
+     * @param MassAssignmentRepositoryInterface         $massAssignmentRepository
      */
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
@@ -131,19 +131,19 @@ class SlotAvailability
     )
     {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->unavailabilityRepository = $unavailabilityRepository;
-        $this->massUnavailabilityRepository = $massUnavailabilityRepository;
-        $this->meetingRepositoryInterface = $meetingRepositoryInterface;
-        $this->massAssignmentRepository = $massAssignmentRepository;
+        $this->unavailabilityRepository         = $unavailabilityRepository;
+        $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
+        $this->meetingRepositoryInterface       = $meetingRepositoryInterface;
+        $this->massAssignmentRepository         = $massAssignmentRepository;
     }
 
     /**
-     * @param HappeningParticipation[] $happenings
-     * @param Meeting[] $meetings
-     * @param Unavailability[] $unavailability
-     * @param Mass[] $massUnavailability
-     * @param MassAssignment[] $massAssignments
-     * @param Meeting[] $meetingOtherSheets
+     * @param HappeningParticipation[]  $happenings
+     * @param Meeting[]                 $meetings
+     * @param Unavailability[]          $unavailability
+     * @param Mass[]                    $massUnavailability
+     * @param MassAssignment[]          $massAssignments
+     * @param Meeting[]                 $meetingOtherSheets
      */
     public function preload(
         array $happenings = [],
@@ -154,11 +154,11 @@ class SlotAvailability
         array $meetingOtherSheets = []
     )
     {
-        $this->happenings = $happenings;
-        $this->meetings = $meetings;
-        $this->unavailability = $unavailability;
-        $this->massUnavailability = $massUnavailability;
-        $this->meetingOtherSheets = $meetingOtherSheets;
+        $this->happenings           = $happenings;
+        $this->meetings             = $meetings;
+        $this->unavailability       = $unavailability;
+        $this->massUnavailability   = $massUnavailability;
+        $this->meetingOtherSheets   = $meetingOtherSheets;
 
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
@@ -381,7 +381,7 @@ class SlotAvailability
 
     /**
      * @param Participant $participant
-     * @param Mass $mass
+     * @param Mass        $mass
      *
      * @return null
      */
@@ -453,13 +453,13 @@ class SlotAvailability
         return false;
     }
 
-    const ASSIGNMENT_DISABLED = 'disabled';
-    const ASSIGNMENT_FOUND = 'found';
-    const ASSIGNMENT_NOT_FOUND = 'not_found';
+    const ASSIGNMENT_DISABLED   = 'disabled';
+    const ASSIGNMENT_FOUND      = 'found';
+    const ASSIGNMENT_NOT_FOUND  = 'not_found';
 
     /**
      * @param MassAssignment $massAssignment
-     * @param MeetingSlot $slot
+     * @param MeetingSlot    $slot
      *
      * @return string
      */
