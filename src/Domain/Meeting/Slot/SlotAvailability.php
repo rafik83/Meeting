@@ -112,7 +112,7 @@ class SlotAvailability
      * @var array
      */
     private $massAssignmentSortByParticipant = [];
-    
+
     /**
      * SlotAvailability constructor.
      *
