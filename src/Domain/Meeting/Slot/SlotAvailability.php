@@ -112,12 +112,7 @@ class SlotAvailability
      * @var array
      */
     private $massAssignmentSortByParticipant = [];
-
-    /**
-     * @var Array of meeting on other sheets [participantId][1 => meeting, 2 => meeting]
-     */
-    //private $meetingOtherSheetsSortByParticipant = [];
-
+    
     /**
      * SlotAvailability constructor.
      *
