@@ -144,6 +144,25 @@ interface RequestRepositoryInterface
     );
 
     /**
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param Sheet[]     $sheetsMet
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
+     *
+     * @return int
+     */
+    public function countRequestOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    );
+
+    /**
      * @param Event $event
      * @param User  $user
      *

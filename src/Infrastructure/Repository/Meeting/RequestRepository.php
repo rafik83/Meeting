@@ -517,6 +517,49 @@ class RequestRepository implements RequestRepositoryInterface
         $type = null,
         User $user = null
     ) {
+        $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
+
+        $queryBuilder->select('request, fromSheet, toSheet, meeting');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRequestOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
+
+        $queryBuilder->select('count(request)');
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param Sheet[]     $sheetsMet
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
+     *
+     * @return QueryBuilder
+     */
+    private function requestOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
         $typeCondition = '(
             (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))
             OR (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))
@@ -538,7 +581,6 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('request, fromSheet, toSheet, meeting')
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
@@ -557,7 +599,7 @@ class RequestRepository implements RequestRepositoryInterface
             ;
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
     }
 
     /**
