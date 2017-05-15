@@ -358,7 +358,7 @@ class SheetRepository implements SheetRepositoryInterface
         }
 
         if ($state !== null && in_array($state, Request::getAllStates())) {
-            $stateCondition = sprintf("AND r.state = '%s'", $state);
+            $stateCondition = sprintf("r.state = '%s'", $state);
         }
 
         if ($user !== null) {
