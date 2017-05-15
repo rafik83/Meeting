@@ -17,7 +17,7 @@ Feature: See, create and update happening category
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml                |
       | Admin.yml                                                                   |
     And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event/1/happening/category"
+    When I go to this page "/fr/event/1/happening/category"
     Then I should see "Présentation flash"
     And I should see "Conférence"
     And I should see "Atelier"
@@ -28,9 +28,9 @@ Feature: See, create and update happening category
 
   Scenario: I can create a happening category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/happening/category"
+    And I am on this page "/fr/event/1/happening/category"
     And I follow "admin.happening_category.add"
-    And I should be on this page "/admin/fr/event/1/happening/category/create"
+    And I should be on this page "/fr/event/1/happening/category/create"
     When I fill in the following:
       | category_create[rank]                    | 1             |
       | category_create[picto]                   | Dejeuner      |
@@ -44,7 +44,7 @@ Feature: See, create and update happening category
 
   Scenario: I can update a happening category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event/1/happening/category/7/update"
+    And I am on this page "/fr/event/1/happening/category/7/update"
     When I fill in the following:
       | category_update[rank]                    | 2              |
       | category_update[picto]                   | Dejeuner       |

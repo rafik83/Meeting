@@ -15,12 +15,12 @@ Feature: Handle Product
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admins.yml                                                               |
     And I am logged with "test2@test.com" on admin
-    Given I go to this page "/admin/fr/event"
+    Given I go to this page "/fr/event"
     Then I follow "admin.product.link"
-    And I should be on this page "/admin/fr/event/1/product"
+    And I should be on this page "/fr/event/1/product"
     And I should see "admin.zero-result"
     Then I follow "admin.product_create.option.title"
-    And I should be on this page "/admin/fr/event/1/product/create/option"
+    And I should be on this page "/fr/event/1/product/create/option"
     And I fill in the following:
       | form.product_create_option.children.name.label        | ProductTitre |
       | product_create_option_translations_fr_title           | Titre fr     |
@@ -28,10 +28,10 @@ Feature: Handle Product
       | form.product_create_option.children.unitPrice.label   | 20           |
       | form.product_create_option.children.quantityMax.label | 4            |
     And I press "form.product_create_option.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/product"
+    Then I should be on this page "/fr/event/1/product"
     And I should see "admin.product.create.success"
 
   Scenario: I see the list of products of an event
     Given I am logged with "test2@test.com" on admin
-    And I go to this page "/admin/fr/event/1/product"
+    And I go to this page "/fr/event/1/product"
     Then I should see "ProductTitre"

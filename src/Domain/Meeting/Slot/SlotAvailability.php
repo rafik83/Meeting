@@ -248,6 +248,8 @@ class SlotAvailability
      * @param Participant $participant
      *
      * @return SlotAvailabilityView
+     *
+     * @deprecated use getSlotAvailability()
      */
     public function isAvailable(MeetingSlot $slot, Participant $participant)
     {

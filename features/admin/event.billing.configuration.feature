@@ -12,14 +12,14 @@ Feature: Edit event billing configuration
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
-    Then I am on this page "/admin/fr/event"
-    And I go to this page "/admin/fr/event/1/billing/configuration"
+    Then I am on this page "/fr/event"
+    And I go to this page "/fr/event/1/billing/configuration"
     Then the response status code should be 200
     And I should see "event.billing.configuration.title"
 
   Scenario: I can update event billing configuration
     Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/event/1/billing/configuration"
+    And I go to this page "/fr/event/1/billing/configuration"
     And I fill in the following:
       | form.event_billing_configuration.children.legalInfo.label                                        | Informations légales   |
       | form.event_billing_configuration.children.translations.prototype.children.bankInfo.label         | Infos banques          |

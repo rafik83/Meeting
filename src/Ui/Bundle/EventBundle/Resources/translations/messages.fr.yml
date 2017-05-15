@@ -84,6 +84,7 @@ event.sheet.export.fields.sheet_zipcode: 'Code postal'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.participant_update: 'Gestion des participants'
+group.home.link.create_sheet: 'Créer une fiche'
 group.home.link.participants: 'Participants par fiche'
 group.home.link.request: 'Gestion des RDVs'
 group.participant_update.list.email: Email
@@ -108,6 +109,7 @@ group.request.list.table.header.sheetConcerned: 'Mes fiches concernées'
 group.request.list.table.header.status: Statut
 group.request.list.table.no-result: 'Pas de demandes de rendez-vous'
 group.request.title: 'Gestion des rendez-vous de l''entité %groupTitle%'
+group.sheet.create.title: Création d'une nouvelle fiche
 happening.participate.action: Participer
 happening.participate.detail: Détail
 happening.participate.full: Complet

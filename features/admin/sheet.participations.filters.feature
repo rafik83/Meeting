@@ -24,14 +24,14 @@ Feature: Sheet participations list filters
       | Admin.yml                                                                |
     And elastica is populate
     And I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event"
+    And I go to "/fr/event"
     When I follow "admin.sheet.link"
-    Then I should be on this page "/admin/fr/event/1/sheet?orderBy=created_at"
+    Then I should be on this page "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
 
   Scenario: I can filter sheet by enabled state
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check the "form.sheet_filter.children.enabledState.enabled.label" radio
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -46,7 +46,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet by validation state
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check "event.sheet.validationState.draft"
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -62,7 +62,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet by state
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check "event.sheet.state.pending"
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -78,7 +78,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet by completeness
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check the "event.sheet.completed.incomplete" radio
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -93,7 +93,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet in catalog
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check the "boolean.yes" radio
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -108,7 +108,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet by type
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check "Fournisseur"
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -124,7 +124,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet has remaining to pay
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check the "form.sheet_filter.children.hasRemainingToPay.no.label" radio
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -139,7 +139,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet has order to pay
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check the "form.sheet_filter.children.order.no.label" radio
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -154,7 +154,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet has cart
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check the "form.sheet_filter.children.cart.no.label" radio
     When I press "form.admin.sheet.filter.children.submit.label"
@@ -169,7 +169,7 @@ Feature: Sheet participations list filters
 
   Scenario: I can filter sheet with cancelled attend
     Given I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event/1/sheet?orderBy=created_at"
+    And I go to "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"
     And I check radio "cancelAttendance_0"
     When I press "form.admin.sheet.filter.children.submit.label"

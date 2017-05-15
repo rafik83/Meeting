@@ -4,7 +4,7 @@ default:
             kernel:
                env: test
         Behat\MinkExtension:
-            base_url:  'http://vimeet.proximum.dev/app_test.php'
+            base_url:  'http://admin.vimeet.proximum.dev/app_test.php'
             sessions:
                 default:
                     symfony2: ~

@@ -18,7 +18,7 @@ Feature: See planner page
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Happening.yml         |
       | Admin.yml                                                                |
     When I am logged with "test@test.com" on admin
-    And I go to "/admin/fr/event"
+    And I go to "/fr/event"
     And I follow "admin.planner.index"
     Then the response status code should be 200
-    And I should be on this page "/admin/fr/event/1/planner"
+    And I should be on this page "/fr/event/1/planner"

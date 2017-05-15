@@ -23,6 +23,7 @@ class UserFactory
     {
         $email = $email === null ? 'email@email.com' : $email;
 
-        return new User($email, 'salt', 'password', 'fr');
+        // p@ssw0rd
+        return new User($email, "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5", "q5sEATy5kfjoDYZqxBP7vNVJwqQ=", 'fr');
     }
 }

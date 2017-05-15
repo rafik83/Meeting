@@ -42,8 +42,7 @@ security:
 
         admin:
             anonymous: ~
-            host: '%domain%'
-            pattern: ^/admin
+            host: '%admin_domain%'
             provider: admin_provider
             form_login:
                 login_path: admin_login
@@ -86,15 +85,15 @@ security:
                 parameter: _switchto
 
     access_control:
-        - { path: ^/admin/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
-        - { path: ^/admin/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
-        - { path: ^/admin/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
-        - { path: ^/admin/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
-        - { path: '^/admin/(fr|en)/event$', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%domain%' }
-        - { path: '^/admin/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%domain%' }
-        - { path: '^/admin/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%domain%' }
-        - { path: ^/admin/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%domain%' }
-        - { path: ^/admin, role: ROLE_ALLOWED_TO_ADMIN, host: '%domain%' }
+        - { path: ^/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+        - { path: ^/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+        - { path: ^/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+        - { path: ^/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event$', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
+        - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
+        - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
         # Front
         - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }
         # Print
