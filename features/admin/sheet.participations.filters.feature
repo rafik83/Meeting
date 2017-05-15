@@ -185,8 +185,8 @@ Feature: Sheet participations list filters
     And there is a group "Sheet Group" managed by this user
     And there is a sheet in this group
     And elastica is populate
-    When I go to "/admin/fr/event/1/sheet?orderBy=created_at&hasGroup=1"
+    When I go to "/fr/event/1/sheet?orderBy=created_at&hasGroup=1"
     Then I should see "sheetgroup@example.com"
-    When I go to "/admin/fr/event/1/sheet?orderBy=created_at&hasGroup=0"
+    When I go to "/fr/event/1/sheet?orderBy=created_at&hasGroup=0"
     Then I should not see "sheetgroup@example.com"
 
