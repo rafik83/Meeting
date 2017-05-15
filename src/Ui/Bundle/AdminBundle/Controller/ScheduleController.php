@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Command\MeetingSlot\Remove;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Unlock;
 use Proximum\Vimeet\Application\Command\Schedule\Configure;
 use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException;
-use Proximum\Vimeet\Application\Query\Schedule\SlotQuery;
 use Proximum\Vimeet\Application\Query\Schedule\SlotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
