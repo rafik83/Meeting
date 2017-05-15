@@ -544,6 +544,9 @@ form.promotion_code_create.children.title.label: Titre
 form.promotion_code_create.children.validUntil.label: 'Valide jusqu''au'
 form.promotion_code_translation.children.description.label: Description
 form.promotion_code_translation.children.label.label: Libellé
+form.promotion_code_promotion.children.type.free: 'offert'
+form.promotion_code_promotion.children.type.percentOff: '% de réduction'
+form.promotion_code_promotion.children.type.valueOff: 'réduction'
 form.promotion_code_update.children.code.label: Code
 form.promotion_code_update.children.promotions.label: Promotions
 form.promotion_code_update.children.promotions.label_add: Ajouter
