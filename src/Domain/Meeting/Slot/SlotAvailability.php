@@ -521,7 +521,9 @@ class SlotAvailability
         }
 
         foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
-            if ($meetingOtherSheet->getSlot() === $slot && $meetingOtherSheet->hasUser($participant->getUser())) {
+            if ($meetingOtherSheet->getSlot()->getId() === $slot->getId()
+                && $meetingOtherSheet->hasUser($participant->getUser())
+            ) {
 
                 return $meetingOtherSheet;
             }

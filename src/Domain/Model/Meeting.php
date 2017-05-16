@@ -420,7 +420,9 @@ class Meeting implements MessageSubjectInterface
     public function hasUser(User $user)
     {
         foreach ($this->getAllParticipants() as $participant) {
-            return $participant->getUser() === $user;
+            if ($participant->getUser()->getId() === $user->getId()) {
+                return true;
+            }
         }
 
         return false;
