@@ -14,7 +14,9 @@ use Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailability
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
 
 class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
@@ -22,38 +24,44 @@ class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleOnlyCatalog()
     {
         $event = $this->prophesize(Event::class);
-        $participant1 = $this->prophesize(Participant::class);
-        $participant2 = $this->prophesize(Participant::class);
-        $participant3 = $this->prophesize(Participant::class);
+        $user1 = $this->prophesize(User::class);
+        $user2 = $this->prophesize(User::class);
+        $user3 = $this->prophesize(User::class);
 
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+
+        $userRepository
             ->findByEventAndInCatalog($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([
-                $participant1->reveal(),
-                $participant2->reveal(),
-                $participant3->reveal(),
-            ])
+            ->willReturn(
+                [
+                    $user1->reveal(),
+                    $user2->reveal(),
+                    $user3->reveal(),
+                ]
+            )
         ;
 
-        $participantRepository
+        $userRepository
             ->findByEvent($event->reveal())
             ->shouldNotBeCalled();
 
         $participantFullUnavailabilityAggregator = $this->prophesize(ParticipantUnavailableAggregator::class);
+
         $participantFullUnavailabilityAggregator
-            ->aggregateUnavailability($participant1->reveal())
+            ->aggregateUnavailability($user1->reveal(), $event->reveal())
             ->shouldBeCalled();
+
         $participantFullUnavailabilityAggregator
-            ->aggregateUnavailability($participant2->reveal())
+            ->aggregateUnavailability($user2->reveal(), $event->reveal())
             ->shouldBeCalled();
+
         $participantFullUnavailabilityAggregator
-            ->aggregateUnavailability($participant3->reveal())
+            ->aggregateUnavailability($user3->reveal(), $event->reveal())
             ->shouldBeCalled();
 
         $handler = new FullUnavailabilityHandler(
-            $participantRepository->reveal(),
+            $userRepository->reveal(),
             $participantFullUnavailabilityAggregator->reveal()
         );
 
@@ -63,38 +71,44 @@ class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
-        $participant1 = $this->prophesize(Participant::class);
-        $participant2 = $this->prophesize(Participant::class);
-        $participant3 = $this->prophesize(Participant::class);
+        $user1 = $this->prophesize(User::class);
+        $user2 = $this->prophesize(User::class);
+        $user3 = $this->prophesize(User::class);
 
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+
+        $userRepository
             ->findByEvent($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([
-                $participant1->reveal(),
-                $participant2->reveal(),
-                $participant3->reveal(),
-            ])
+            ->willReturn(
+                [
+                    $user1->reveal(),
+                    $user2->reveal(),
+                    $user3->reveal(),
+                ]
+            )
         ;
 
-        $participantRepository
+        $userRepository
             ->findByEventAndInCatalog($event->reveal())
             ->shouldNotBeCalled();
 
         $participantFullUnavailabilityAggregator = $this->prophesize(ParticipantUnavailableAggregator::class);
+
         $participantFullUnavailabilityAggregator
-            ->aggregateUnavailability($participant1->reveal())
+            ->aggregateUnavailability($user1->reveal(), $event->reveal())
             ->shouldBeCalled();
+
         $participantFullUnavailabilityAggregator
-            ->aggregateUnavailability($participant2->reveal())
+            ->aggregateUnavailability($user2->reveal(), $event->reveal())
             ->shouldBeCalled();
+
         $participantFullUnavailabilityAggregator
-            ->aggregateUnavailability($participant3->reveal())
+            ->aggregateUnavailability($user3->reveal(), $event->reveal())
             ->shouldBeCalled();
 
         $handler = new FullUnavailabilityHandler(
-            $participantRepository->reveal(),
+            $userRepository->reveal(),
             $participantFullUnavailabilityAggregator->reveal()
         );
 

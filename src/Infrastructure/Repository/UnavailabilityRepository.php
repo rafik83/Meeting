@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class UnavailabilityRepository implements UnavailabilityRepositoryInterface
@@ -63,13 +64,22 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
      */
     public function findByParticipant(Participant $participant)
     {
+        return $this->findByUserAndEvent($participant->getUser(), $participant->getSheet()->getEvent());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByUserAndEvent(User $user, Event $event)
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
-            ->where('unavailability.participant = :participant')
-            ->setParameter('participant', $participant);
+            ->where('unavailability.user = :user AND unavailability.event = :event')
+            ->setParameters(['user' => $user, 'event' => $event])
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -79,13 +89,28 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
      */
     public function findByParticipants(array $participants)
     {
+        /** @var Participant|false $firstParticipant */
+        $firstParticipant = reset($participants);
+
+        if (false === $firstParticipant) {
+            return [];
+        }
+
+        $event = $firstParticipant->getSheet()->getEvent();
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
-            ->join('unavailability.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
-            ->setParameter('participants', $participants);
+            ->join(
+                Participant::class,
+                'participant',
+                'WITH',
+                'participant IN (:participants) AND participant.user = unavailability.user AND unavailability.event = :event'
+            )
+            ->setParameters(['participants' => $participants, 'event' => $event])
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -100,9 +125,15 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ->createQueryBuilder()
             ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
-            ->join('unavailability.participant', 'participant')
+            ->join(
+                Participant::class,
+                'participant',
+                'WITH',
+                'participant.sheet = :sheet AND participant.user = unavailability.user AND unavailability.event = :event'
+            )
             ->where('participant.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->setParameters(['sheet' => $sheet, 'event' => $sheet->getEvent()])
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -115,11 +146,16 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('unavailability, participant')
+            ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
-            ->join('unavailability.participant', 'participant')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
-            ->setParameter('event', $event);
+            ->join(
+                Participant::class,
+                'participant',
+                'WITH',
+                'participant.user = unavailability.user AND unavailability.event = :event'
+            )
+            ->setParameter('event', $event)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -134,8 +170,9 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ->createQueryBuilder()
             ->select('COUNT(unavailability)')
             ->from(Unavailability::class, 'unavailability')
-            ->where('unavailability.participant = :participant')
-            ->setParameter('participant', $participant);
+            ->where('unavailability.user = :user AND unavailability.event = :event')
+            ->setParameters(['user' => $participant->getUser(), 'event' => $participant->getSheet()->getEvent()])
+        ;
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -152,8 +189,8 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
         $queryBuilder
             ->select('unavailability')
             ->from(Unavailability::class, 'unavailability')
-            ->where('unavailability.participant = :participant')
-            ->setParameter('participant', $unavailability->getParticipant())
+            ->where('unavailability.user = :user AND unavailability.event = :event')
+            ->setParameters(['user' => $unavailability->getUser(), 'event' => $unavailability->getEvent()])
             ->andWhere($queryBuilder->expr()->orX(
                 'unavailability.begin BETWEEN :begin AND :end',
                 'unavailability.end BETWEEN :begin AND :end',

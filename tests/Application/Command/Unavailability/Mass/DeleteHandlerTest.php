@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\Mass;
 
-
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
@@ -32,11 +32,14 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->remove($mass)->shouldBeCalled();
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+
         // Delete
         $delete = new Delete($mass);
 
         // Handler
-        $handler = new DeleteHandler($massRepository->reveal());
+        $handler = new DeleteHandler($massRepository->reveal(), $jobQueue->reveal());
         $handler->handle($delete);
     }
 }

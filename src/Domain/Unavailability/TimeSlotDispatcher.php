@@ -12,9 +12,9 @@ namespace Proximum\Vimeet\Domain\Unavailability;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
@@ -37,8 +37,8 @@ class TimeSlotDispatcher
      */
     private $massAssignmentRepository;
 
-    /** @var Participant[] */
-    private $participantsDispatched = [];
+    /** @var User[] */
+    private $usersDispatched = [];
 
     /** @var JobQueueInterface */
     private $jobQueueInterface;
@@ -90,7 +90,8 @@ class TimeSlotDispatcher
 
             $this->massAssignmentRepository->add($assignment);
 
-            $this->participantsDispatched[$participant->getId()] = $participant;
+            $user = $participant->getUser();
+            $this->usersDispatched[$user->getId()] = $user;
         }
     }
 
@@ -101,7 +102,7 @@ class TimeSlotDispatcher
      */
     public function dispatchAll(Event $event)
     {
-        $this->participantsDispatched = [];
+        $this->usersDispatched = [];
 
         $unavailabilities = $this->massRepository->findDispatchByEvent($event);
 
@@ -109,8 +110,8 @@ class TimeSlotDispatcher
             $this->dispatch($unavailability);
         }
 
-        if (!empty($this->participantsDispatched)) {
-            $this->jobQueueInterface->aggregateParticipantsGivenFullUnavailability($this->participantsDispatched);
+        if (!empty($this->usersDispatched)) {
+            $this->jobQueueInterface->aggregateUsersFullUnavailability($event, $this->usersDispatched);
         }
     }
 }

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Group;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -76,13 +75,13 @@ class UserAvailabilitiesBuilderCache
     {
         $participants = $this->participantRepository->getParticipantsByUserForEvent($user->getId(), $event);
 
-        $participantIds = array_map(function (Participant $participant) {
-            return $participant->getId();
-        }, $participants);
+        if (empty($participants)) {
+            return [];
+        }
 
-        return $this->meetingSlotRepository->findAvailableSlotsByParticipantsIds(
+        return $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $event,
-            $participantIds,
+            $participants,
             true
         );
     }

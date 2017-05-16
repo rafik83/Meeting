@@ -41,11 +41,14 @@ class AggregateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param AbstractUnavailabilityEvent $event
+     * @param AbstractUnavailabilityEvent $unavailabilityEvent
      */
-    public function onUnavailabilityChanged(AbstractUnavailabilityEvent $event)
+    public function onUnavailabilityChanged(AbstractUnavailabilityEvent $unavailabilityEvent)
     {
-        $this->participantUnavailableAggregator->aggregateUnavailability($event->participant);
+        $this->participantUnavailableAggregator->aggregateUnavailability(
+            $unavailabilityEvent->user,
+            $unavailabilityEvent->event
+        );
     }
 
     /**
@@ -57,19 +60,25 @@ class AggregateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param AbstractHappeningEvent $event
+     * @param AbstractHappeningEvent $happeningEvent
      */
-    public function onHappeningParticipationChanged(AbstractHappeningEvent $event)
+    public function onHappeningParticipationChanged(AbstractHappeningEvent $happeningEvent)
     {
-        $this->participantUnavailableAggregator->aggregateUnavailability($event->participant);
+        $this->participantUnavailableAggregator->aggregateUnavailability(
+            $happeningEvent->participant->getUser(),
+            $happeningEvent->participant->getSheet()->getEvent()
+        );
     }
 
     /**
-     * @param AssignmentUpdatedEvent $event
+     * @param AssignmentUpdatedEvent $assignmentUpdatedEvent
      */
-    public function onMassAssignmentChanged(AssignmentUpdatedEvent $event)
+    public function onMassAssignmentChanged(AssignmentUpdatedEvent $assignmentUpdatedEvent)
     {
-        $this->participantUnavailableAggregator->aggregateUnavailability($event->participant);
+        $this->participantUnavailableAggregator->aggregateUnavailability(
+            $assignmentUpdatedEvent->participant->getUser(),
+            $assignmentUpdatedEvent->participant->getSheet()->getEvent()
+        );
     }
 
     /**
@@ -86,15 +95,15 @@ class AggregateEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::UNAVAILABILITY_ADDED        => 'onUnavailabilityChanged',
-            Events::UNAVAILABILITY_REMOVED      => 'onUnavailabilityChanged',
-            Events::REQUEST_PARTICIPATE         => 'onRequestParticipationChanged',
-            Events::REQUEST_UN_PARTICIPATE      => 'onRequestParticipationChanged',
-            Events::HAPPENING_PARTICIPATE       => 'onHappeningParticipationChanged',
-            Events::HAPPENING_UN_PARTICIPATE    => 'onHappeningParticipationChanged',
-            Events::MASS_ASSIGNMENT_UPDATED     => 'onMassAssignmentChanged',
-            Events::MEETING_PARTICIPATE         => 'onMeetingChanged',
-            Events::MEETING_UN_PARTICIPATE      => 'onMeetingChanged',
+            Events::UNAVAILABILITY_ADDED     => 'onUnavailabilityChanged',
+            Events::UNAVAILABILITY_REMOVED   => 'onUnavailabilityChanged',
+            Events::REQUEST_PARTICIPATE      => 'onRequestParticipationChanged',
+            Events::REQUEST_UN_PARTICIPATE   => 'onRequestParticipationChanged',
+            Events::HAPPENING_PARTICIPATE    => 'onHappeningParticipationChanged',
+            Events::HAPPENING_UN_PARTICIPATE => 'onHappeningParticipationChanged',
+            Events::MASS_ASSIGNMENT_UPDATED  => 'onMassAssignmentChanged',
+            Events::MEETING_PARTICIPATE      => 'onMeetingChanged',
+            Events::MEETING_UN_PARTICIPATE   => 'onMeetingChanged',
         ];
     }
 }
