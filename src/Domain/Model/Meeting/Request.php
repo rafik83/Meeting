@@ -657,7 +657,6 @@ class Request implements MessageSubjectInterface
     }
 
     /**
-<<<<<<< HEAD
      * @param bool $hasMessage
      */
     public function setHasMessage($hasMessage)

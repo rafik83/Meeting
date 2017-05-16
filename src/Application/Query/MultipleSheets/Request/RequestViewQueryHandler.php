@@ -10,27 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
-use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\View\MultipleSheets\Request\RequestView;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 class RequestViewQueryHandler
 {
-    /** @var SheetInfoGuesserCache */
-    private $sheetInfoGuesser;
-
     /** @var ParticipantViewQueryHandler */
     private $participantViewQueryHandler;
 
     /**
-     * @param SheetInfoGuesserCache       $sheetInfoGuesser
      * @param ParticipantViewQueryHandler $participantViewQueryHandler
      */
-    public function __construct(
-        SheetInfoGuesserCache $sheetInfoGuesser,
-        ParticipantViewQueryHandler $participantViewQueryHandler
-    ) {
-        $this->sheetInfoGuesser            = $sheetInfoGuesser;
+    public function __construct(ParticipantViewQueryHandler $participantViewQueryHandler)
+    {
         $this->participantViewQueryHandler = $participantViewQueryHandler;
     }
 
@@ -47,7 +39,7 @@ class RequestViewQueryHandler
             $query->request->getId(),
             $query->request,
             $sheetMet->getId(),
-            $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
+            $sheetMet->getTitle(),
             $sheetMet,
             $query->request->getState(),
             $query->request->isSender($sheetMet) ? RequestView::TYPE_REQUEST : RequestView::TYPE_PROPOSITION,

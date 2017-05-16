@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
-use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Exception\MultipleSheets\Request\NoResultException;
 use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetListView;
 use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
@@ -18,7 +17,9 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -26,9 +27,6 @@ class SheetListViewQueryHandler
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
-
-    /** @var SheetInfoGuesserCache */
-    private $sheetInfoGuesser;
 
     /** @var RequestRepositoryInterface */
     private $requestRepository;
@@ -47,7 +45,6 @@ class SheetListViewQueryHandler
 
     /**
      * @param SheetRepositoryInterface             $sheetRepository
-     * @param SheetInfoGuesserCache                $sheetInfoGuesser
      * @param RequestRepositoryInterface           $requestRepository
      * @param SheetViewQueryHandler                $sheetViewQueryHandler
      * @param RequestViewQueryHandler              $requestViewQueryHandler
@@ -56,7 +53,6 @@ class SheetListViewQueryHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        SheetInfoGuesserCache $sheetInfoGuesser,
         RequestRepositoryInterface $requestRepository,
         SheetViewQueryHandler $sheetViewQueryHandler,
         RequestViewQueryHandler $requestViewQueryHandler,
@@ -64,7 +60,6 @@ class SheetListViewQueryHandler
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
         $this->sheetRepository  = $sheetRepository;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->requestRepository = $requestRepository;
         $this->sheetViewQueryHandler = $sheetViewQueryHandler;
         $this->requestViewQueryHandler = $requestViewQueryHandler;
@@ -83,45 +78,67 @@ class SheetListViewQueryHandler
     {
         $multipleSheets = $query->sheets;
 
+        if ($query->filterRequestView->sheetConcerned !== null) {
+            $sheetConcerned = $query->filterRequestView->sheetConcerned;
+            $multipleSheets = [
+                $sheetConcerned->getId() => $sheetConcerned
+            ];
+        }
+
         $firstSheet = reset($query->sheets);
 
         if (false === $firstSheet) {
             throw new NoResultException('At least one sheet must be provided in SheetListViewQuery::sheets');
         }
 
+        /** @var Event $event */
         $event = $firstSheet->getEvent();
 
         $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
         $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
 
-        // sheets met by the group sheets
-        $sheets = $this->sheetRepository->getSheetsMetBySheets($event, $multipleSheets);
+        $allSheetMet = null;
 
-        $sheetsWithTitle = [];
+        if ($query->filterRequestView->otherSheet === null) {
+            // sheets met by the group sheets
+            $sheets = $this->sheetRepository->getSheetsMetBySheetsPaginated(
+                $event,
+                $multipleSheets,
+                $query->page,
+                $query->limit,
+                $query->filterRequestView->state,
+                $query->filterRequestView->type,
+                $query->filterRequestView->user
+            );
 
-        foreach ($sheets as $sheet) {
-            $sheetsWithTitle[$sheet->getId()] = [
-                'title' => $this->sheetInfoGuesser->guessSheetTitle($sheet, $query->locale),
-                'sheet' => $sheet,
-            ];
+            $allSheetMet = $this->sheetRepository->getSheetsMetBySheets(
+                $event,
+                $multipleSheets,
+                $query->filterRequestView->state,
+                $query->filterRequestView->type,
+                $query->filterRequestView->user
+            );
+        } else {
+            $otherSheet = $query->filterRequestView->otherSheet;
+
+            $sheets = new PaginatedResult(
+                [$otherSheet->getId() => $otherSheet],
+                $query->page,
+                $query->limit,
+                1,
+                []
+            );
+
+            $allSheetMet = [$otherSheet];
         }
 
-        usort($sheetsWithTitle, function ($sheetOne, $sheetTwo) {
-            return strcasecmp($sheetOne['title'], $sheetTwo['title']);
-        });
-
-        // split the sheetsWithTitle into multiple chunk with the limit provided
-        // it is used as the pagination
-        // the chunks array is used after to count the total page possible
-        $chunks = array_chunk($sheetsWithTitle, $query->limit);
-
-        if (!isset($chunks[$query->page - 1])) {
-            // If the page is 1 and there is no result, show no result instead of 404
+        if ($sheets->total === 0 || $sheets->count() === 0) {
             if ($query->page === 1) {
                 return new SheetListView(
                     [],
                     $query->page,
+                    0,
                     0,
                     $isMeetingRequestUpdateLocked,
                     $isMeetingRequestClosed,
@@ -132,16 +149,24 @@ class SheetListViewQueryHandler
             throw new NoResultException();
         }
 
-        /** @var Sheet[] $sheetsMet */
-        $sheetsMet = array_map(function ($sheetMet) {
-            return $sheetMet['sheet'];
-        }, $chunks[$query->page - 1]);
-
         $sheetViews = $this->getSheetViewsWithRequest(
             $event,
             $multipleSheets,
-            $sheetsMet,
-            $query->locale
+            $sheets->results,
+            $query->locale,
+            $query->filterRequestView->state,
+            $query->filterRequestView->type,
+            $query->filterRequestView->user
+        );
+
+        // Total of requests
+        $numberOfRequests = $this->requestRepository->countRequestOfSheetsWithSheets(
+            $event,
+            $multipleSheets,
+            $allSheetMet,
+            $query->filterRequestView->state,
+            $query->filterRequestView->type,
+            $query->filterRequestView->user
         );
 
         return new SheetListView(
@@ -149,7 +174,8 @@ class SheetListViewQueryHandler
                 return $sheetView->numberOfRequest() > 0;
             }),
             $query->page, // current page
-            count($chunks), // total page
+            $sheets->pages, // total page
+            $numberOfRequests, // total of requests
             $isMeetingRequestUpdateLocked,
             $isMeetingRequestClosed,
             $isAnsweringMeetingRequestClosed
@@ -159,28 +185,39 @@ class SheetListViewQueryHandler
     /**
      * Creates the SheetViews and returns them with there requests
      *
-     * @param Event   $event
-     * @param Sheet[] $multipleSheets
-     * @param Sheet[] $sheetsMet
-     * @param string  $locale
+     * @param Event       $event
+     * @param Sheet[]     $multipleSheets
+     * @param Sheet[]     $sheetsMet
+     * @param string      $locale
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
      *
      * @return SheetView[]
      */
-    private function getSheetViewsWithRequest(Event $event, array &$multipleSheets, array &$sheetsMet, $locale)
-    {
+    private function getSheetViewsWithRequest(
+        Event $event,
+        array &$multipleSheets,
+        array &$sheetsMet,
+        $locale,
+        $state,
+        $type,
+        User $user = null
+    ) {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
 
         foreach ($sheetsMet as $sheetMet) {
-            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(
-                new SheetViewQuery($sheetMet, $locale)
-            );
+            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(new SheetViewQuery($sheetMet));
         }
 
         $requests = $this->requestRepository->getRequestsOfSheetsWithSheets(
             $event,
+            $multipleSheets,
             $sheetsMet,
-            $multipleSheets
+            $state,
+            $type,
+            $user
         );
 
         $this->addRequestToSheetViews($requests, $multipleSheets, $sheetViews, $locale);

@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MultipleSheets;
 
 use Proximum\Vimeet\Application\Exception\MultipleSheets\Request\NoResultException;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQuery;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request\FilterRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,17 +35,35 @@ class RequestController extends Controller
     {
         $event = $eventDomain->getEvent();
 
-        try {
-            $sheets = $this
-                ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetsByUserAndEvent($user, $event);
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetsByUserAndEvent($user, $event);
 
+        $filterRequestView = new FilterRequestView();
+        $form = $this->createForm(FilterRequestType::class, $filterRequestView, [
+            'submit'             => true,
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'required'           => false,
+            'allow_extra_fields' => true,
+            'sheets'             => $sheets,
+            'event'              => $eventDomain->getEvent(),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $filterRequestView = new FilterRequestView();
+        }
+
+        try {
             $sheetListView = $this->get('tactician.commandbus.query')->handle(
                 new SheetListViewQuery(
                     $sheets,
                     $request->getLocale(),
                     $request->get('page', 1),
-                    self::PAGINATE_REQUEST_LIMIT
+                    self::PAGINATE_REQUEST_LIMIT,
+                    $filterRequestView
                 )
             );
         } catch (NoResultException $exception) {
@@ -52,7 +72,8 @@ class RequestController extends Controller
 
         return $this->render('EventBundle:MultipleSheets/Request:index.html.twig', [
             'event'         => $event,
-            'sheetListView' => $sheetListView
+            'filterForm'    => $form->createView(),
+            'sheetListView' => $sheetListView,
         ]);
     }
 }

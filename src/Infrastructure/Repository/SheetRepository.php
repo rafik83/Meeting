@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
@@ -31,13 +33,20 @@ class SheetRepository implements SheetRepositoryInterface
     private $entityManager;
 
     /**
+     * @var Paginator
+     */
+    private $paginator;
+
+    /**
      * SheetRepository constructor.
      *
      * @param EntityManager $entityManager
+     * @param Paginator     $paginator
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
-        $this->entityManager  = $entityManager;
+        $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -166,7 +175,9 @@ class SheetRepository implements SheetRepositoryInterface
             )
             ->setParameter('event', $event)
             ->setParameter('user', $user)
-            ->groupBy('sheet.id');
+            ->groupBy('sheet.id')
+            ->orderBy('sheet.title')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -302,25 +313,97 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsMetBySheets(Event $event, array $sheets)
-    {
+    public function getSheetsMetBySheets(
+        Event $event,
+        array $sheets,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $queryBuilder = $this->getSheetsMetBySheetsBuilder($event, $sheets, $state, $type, $user);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsMetBySheetsPaginated(
+        Event $event,
+        array $sheets,
+        $page,
+        $limit,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $queryBuilder = $this->getSheetsMetBySheetsBuilder($event, $sheets, $state, $type, $user);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'sheet', 'id');
+    }
+
+    /**
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
+     *
+     * @return QueryBuilder
+     */
+    private function getSheetsMetBySheetsBuilder(
+        Event $event,
+        array $sheets,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $typeCondition  = '(r.from = sheet AND r.to IN (:sheets) OR r.to = sheet AND r.from IN (:sheets))';
+        $stateCondition = '1 = 1';
+        $userCondition  = '1 = 1';
+        $userJoinCondition = '';
+
+        if ($type !== null) {
+            if ($type === Request::TYPE_REQUEST) {
+                $typeCondition = 'r.to = sheet AND r.from IN (:sheets)';
+            } elseif ($type === Request::TYPE_PROPOSITION) {
+                $typeCondition = 'r.from = sheet AND r.to IN (:sheets)';
+            }
+        }
+
+        if ($state !== null && in_array($state, Request::getAllStates())) {
+            $stateCondition = sprintf("r.state = '%s'", $state);
+        }
+
+        if ($user !== null) {
+            $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
+            $userCondition = '(fp.user = :user OR tp.user = :user)';
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet')
-            ->from(Sheet::class, 'sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->andWhere(
-                'EXISTS (
+                sprintf(
+                    'EXISTS (
                     SELECT r.id FROM Entity:Meeting\Request r
-                    WHERE (r.from = sheet AND r.to IN (:sheets))
-                    OR (r.to = sheet AND r.from IN (:sheets))
-                )'
+                    %s
+                    WHERE %s AND %s AND %s
+                )', $userJoinCondition, $typeCondition, $stateCondition, $userCondition)
             )
             ->setParameter('event', $event)
-            ->setParameter('sheets', $sheets);
+            ->setParameter('sheets', $sheets)
+            ->orderBy('sheet.title', 'asc')
+        ;
 
-        return $queryBuilder->getQuery()->getResult();
+        if ($user !== null) {
+            $queryBuilder->setParameter('user', $user);
+        }
+
+        return $queryBuilder;
     }
 
     /**
@@ -590,6 +673,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.group = :group AND sheet.enable=true')
             ->setParameter('group', $group)
+            ->orderBy('sheet.title')
             ->getQuery()
             ->getResult();
     }

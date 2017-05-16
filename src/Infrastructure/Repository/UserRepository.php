@@ -261,4 +261,22 @@ class UserRepository implements UserRepositoryInterface
             }
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsersParticipantOfSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user', 'user.id')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user AND participant.sheet IN (:sheets)')
+            ->addOrderBy('user.account.lastName', 'ASC')
+            ->setParameter('sheets', $sheets)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

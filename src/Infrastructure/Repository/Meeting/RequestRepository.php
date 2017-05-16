@@ -509,23 +509,97 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet)
-    {
+    public function getRequestsOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
+
+        $queryBuilder->select('request, fromSheet, toSheet, meeting');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRequestOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
+
+        $queryBuilder->select('count(request)');
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param Sheet[]     $sheetsMet
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
+     *
+     * @return QueryBuilder
+     */
+    private function requestOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    ) {
+        $typeCondition = '(
+            (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))
+            OR (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))
+        )';
+        $stateCondition = '1 = 1';
+
+        if ($state !== null && in_array($state, Request::getAllStates())) {
+            $stateCondition = sprintf("request.state = '%s'", $state);
+        }
+
+        if ($type !== null) {
+            if ($type === Request::TYPE_REQUEST) {
+                $typeCondition = '(fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))';
+            } elseif ($type === Request::TYPE_PROPOSITION) {
+                $typeCondition = '(toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))';
+            }
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('request, fromSheet, toSheet, meeting')
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
             ->leftJoin('request.meeting', 'meeting')
-            ->where('fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)')
-            ->orWhere('toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)')
+            ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
             ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);
 
-        return $queryBuilder->getQuery()->getResult();
+        if ($user !== null) {
+            $queryBuilder
+                ->leftJoin('request.fromParticipants', 'fp')
+                ->leftJoin('request.toParticipants', 'tp')
+                ->andWhere('(tp.user = :user OR fp.user = :user)')
+                ->setParameter('user', $user)
+            ;
+        }
+
+        return $queryBuilder;
     }
 
     /**
