@@ -554,6 +554,7 @@ admin.schedule.days.link: Définir
 admin.schedule.days.startTime: 'Heure de début'
 admin.schedule.days.title: 'Jours de l''événement'
 admin.schedule.link: Agenda
+admin.schedule.slot.disabled: 'Il y a des RDV sur ce créneau'
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
 admin.schedule.slot.remove: Supprimer

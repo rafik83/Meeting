@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\MeetingSlot;
 
 use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
 use Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler;
+use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToLockSlotException;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -29,8 +30,26 @@ class LockHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $meetingSlotRepository->set($lockedMeetingSlot)->shouldBeCalled();
+        $meetingSlotRepository->findWithAtLeastOneMeetingByEvent($event)->shouldBeCalled();
 
         $handler = new LockHandler($meetingSlotRepository->reveal());
-        $handler->handle(new Lock($unlockedMeetingSlot));
+        $handler->handle(new Lock($unlockedMeetingSlot, $event));
+    }
+
+    public function testIsNotAllowedToLockSlotException()
+    {
+        $this->expectException(IsNotAllowedToLockSlotException::class);
+
+        $event = EventFactory::createEvent();
+
+        $meetingSlot = $this->prophesize(MeetingSlot::class);
+        $meetingSlot->getId()->shouldBeCalled()->willReturn(1);
+        $meetingSlot->getEvent()->shouldBeCalled()->willReturn($event);
+
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $meetingSlotRepository->findWithAtLeastOneMeetingByEvent($event)->shouldBeCalled()->willReturn(['1' => 'meeting']);
+
+        $handler = new LockHandler($meetingSlotRepository->reveal());
+        $handler->handle(new Lock($meetingSlot->reveal()));
     }
 }

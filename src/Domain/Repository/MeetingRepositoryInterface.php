@@ -160,7 +160,7 @@ interface MeetingRepositoryInterface
      * @return bool
      */
     public function hasScheduledMeeting(Sheet $sheet);
-    
+
     /**
      * @param Event $event
      *

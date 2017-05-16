@@ -75,33 +75,50 @@
                         <td>{{ slot.begin|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
                         <td>{{ slot.end|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
                         <td>{{ slot.duration }}</td>
-                        <td class="text-center">
-                            {% if slot.locked %}
-                                <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                    <div class="btn-group" role="group" aria-label="locked">
-                                        <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlock'|trans }}">
-                                            <i class="glyphicon glyphicon-ok"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.locked'|trans }}">
-                                            <i class="glyphicon glyphicon-lock"></i>
-                                        </button>
+                        <td class="text-center col-md-1">
+                            {% if slot.disabled == true %}
+                                <div data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}" class="btn-group" role="group">
+                                    <div class="btn {{ slot.locked ? 'btn-default' : 'btn-success active' }}"  disabled="disabled">
+                                        <i class="glyphicon glyphicon-ok"></i>
                                     </div>
-                                </form>
+                                    <div class="btn {{ slot.locked ? 'btn-danger active' : 'btn-default' }} " disabled="disabled">
+                                        <i class="glyphicon glyphicon-lock"></i>
+                                    </div>
+                                </div>
                             {% else %}
-                                <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                    <div class="btn-group" role="group" aria-label="locked">
-                                        <button type="button" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlocked'|trans }}">
-                                            <i class="glyphicon glyphicon-ok"></i>
-                                        </button>
-                                        <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.lock'|trans }}">
-                                            <i class="glyphicon glyphicon-lock"></i>
-                                        </button>
-                                    </div>
-                                </form>
+                                {% if slot.locked %}
+                                    <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                        <div class="btn-group" role="group" aria-label="locked">
+                                            <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlock'|trans }}">
+                                                <i class="glyphicon glyphicon-ok"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.locked'|trans }}">
+                                                <i class="glyphicon glyphicon-lock"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                        <div class="btn-group" role="group" aria-label="locked">
+                                            <button type="button" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlocked'|trans }}">
+                                                <i class="glyphicon glyphicon-ok"></i>
+                                            </button>
+                                            <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.lock'|trans }}">
+                                                <i class="glyphicon glyphicon-lock"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td class="text-right">
-                            {{ delete_button(path('admin_schedule_slot_remove', {'event': event.id, 'meetingSlot': slot.id, }), 'admin.schedule.slot.remove'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.schedule.slot.remove.confirm'|trans}) }}
+                            {% if not slot.disabled %}
+                                {{ delete_button(path('admin_schedule_slot_remove', {'event': event.id, 'meetingSlot': slot.id, }), 'admin.schedule.slot.remove'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.schedule.slot.remove.confirm'|trans}) }}
+                            {% else %}
+                                <div class="btn btn-sm btn-danger disabled" disabled data-toggle="tooltip" title="{{ 'admin.schedule.slot.disabled'|trans }}">
+                                    {{ 'admin.schedule.slot.remove'|trans }}
+                                </div>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
