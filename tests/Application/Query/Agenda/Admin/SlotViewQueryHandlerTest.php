@@ -293,6 +293,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $masses           = [];
         $meetings         = [];
         $massAssignments  = [];
+        $meetingOtherSheets = [];
 
         $slot = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
         $slot->lock();
@@ -310,7 +311,8 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetings,
             $unavailabilities,
             $masses,
-            $massAssignments
+            $massAssignments,
+            $meetingOtherSheets
         )->shouldBeCalled();
 
         $slotAvailability->getSlotAvailability($slot, $participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
@@ -333,7 +335,8 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 $unavailabilities,
                 $masses,
                 $meetings,
-                $massAssignments
+                $massAssignments,
+                $meetingOtherSheets
             )
         );
 
