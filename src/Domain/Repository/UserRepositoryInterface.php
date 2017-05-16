@@ -62,4 +62,18 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function getByIdsIndexedById(array $ids);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findByEventAndInCatalog(Event $event);
 }

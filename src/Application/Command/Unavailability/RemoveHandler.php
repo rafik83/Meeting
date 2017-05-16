@@ -47,15 +47,14 @@ class RemoveHandler
      */
     public function handle(Remove $remove)
     {
-        if (!$remove->unavailability->getParticipant()->getSheet()->attend()) {
-            throw new CanNotDeleteUnavailabilityException('The sheet does not attend the event, therefore the unavailability can not be remove');
-        }
+        $user = $remove->unavailability->getUser();
+        $event = $remove->unavailability->getEvent();
 
         $this->unavailabilityRepository->remove($remove->unavailability);
 
         $this->eventDispatcher->dispatch(
             Events::UNAVAILABILITY_REMOVED,
-            new RemoveUnavailabilityEvent($remove->unavailability->getParticipant())
+            new RemoveUnavailabilityEvent($user, $event)
         );
     }
 }

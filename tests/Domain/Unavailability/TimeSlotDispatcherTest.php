@@ -133,21 +133,44 @@ class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
             $this->createMass(new \DateTime('2017-01-30 16:00:00'), new \DateTime('2017-01-30 19:00:00'), true, $timeSlots2, $event),
         ];
 
+        $user1 = $this->prophesize(User::class);
+        $user2 = $this->prophesize(User::class);
+        $user3 = $this->prophesize(User::class);
+        $user4 = $this->prophesize(User::class);
+
+        $participant1 = $this->prophesize(Participant::class);
+        $participant2 = $this->prophesize(Participant::class);
+        $participant3 = $this->prophesize(Participant::class);
+        $participant4 = $this->prophesize(Participant::class);
+
+        $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $participant2->getUser()->shouldBeCalled()->willReturn($user2->reveal());
+        $participant3->getUser()->shouldBeCalled()->willReturn($user3->reveal());
+        $participant4->getUser()->shouldBeCalled()->willReturn($user4->reveal());
+
         $participants = [
-            $this->createParticipant($event, 'foobar0@test.com', 1),
-            $this->createParticipant($event, 'foobar1@test.com', 2),
-            $this->createParticipant($event, 'foobar2@test.com', 3),
-            $this->createParticipant($event, 'foobar3@test.com', 4),
+            $participant1->reveal(),
+            $participant2->reveal(),
+            $participant3->reveal(),
+            $participant4->reveal(),
         ];
+
+        $user1->getId()->shouldBeCalled()->willReturn(1);
+        $user2->getId()->shouldBeCalled()->willReturn(2);
+        $user3->getId()->shouldBeCalled()->willReturn(3);
+        $user4->getId()->shouldBeCalled()->willReturn(4);
 
         $jobQueueAdapter = $this->prophesize(JobQueueInterface::class);
 
-        $jobQueueAdapter->aggregateParticipantsGivenFullUnavailability([
-            1 => $participants[0],
-            2 => $participants[1],
-            3 => $participants[2],
-            4 => $participants[3],
-        ])->shouldBeCalled();
+        $jobQueueAdapter->aggregateUsersFullUnavailability(
+            $event,
+            [
+                1 => $user1->reveal(),
+                2 => $user2->reveal(),
+                3 => $user3->reveal(),
+                4 => $user4->reveal(),
+            ]
+        )->shouldBeCalled();
 
         // Mock
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);

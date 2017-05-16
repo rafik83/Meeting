@@ -75,9 +75,9 @@ class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
 
         $meetingSlotRepository
-            ->findAvailableSlotsByParticipantsIds(
+            ->findAvailableSlotsByParticipants(
                 $event,
-                [88, 93],
+                [$fromParticipant, $toParticipant],
                 false,
                 $meeting
             )

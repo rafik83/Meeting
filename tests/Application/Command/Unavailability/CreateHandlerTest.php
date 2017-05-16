@@ -664,7 +664,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['end']['hour']   = 14;
         $create->time['end']['minute'] = 00;
 
-        $unavailability = new Unavailability($participant, $expectedBegin, $expectedEnd);
+        $unavailability = new Unavailability($user, $event, $expectedBegin, $expectedEnd);
 
         $this->participantRepository
             ->getParticipantsWithoutMeetingAndHappening([$participant], $expectedBegin, $expectedEnd)
@@ -684,7 +684,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->add($unavailability)
             ->shouldBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($user, $event))
+            ->shouldBeCalled();
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -718,7 +721,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['end']['hour']   = 14;
         $create->time['end']['minute'] = 00;
 
-        $unavailability = new Unavailability($participant, $expectedBegin, $expectedEnd, 'Ceci est un message de test');
+        $unavailability = new Unavailability($user, $event, $expectedBegin, $expectedEnd, 'Ceci est un message de test');
 
         $this->participantRepository
             ->getParticipantsWithoutMeetingAndHappening([$participant], $expectedBegin, $expectedEnd)
@@ -738,7 +741,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->add($unavailability)
             ->shouldBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($user, $event))
+            ->shouldBeCalled()
+        ;
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -773,9 +780,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['end']['hour']   = 14;
         $create->time['end']['minute'] = 00;
 
-        $unavailability         = new Unavailability($participant, $expectedBegin, $expectedEnd);
-        $unavailability2        = new Unavailability($participant, $expectedBegin2, $expectedEnd2);
-        $expectedUnavailability = new Unavailability($participant, $expectedBegin, $expectedEnd2);
+        $unavailability         = new Unavailability($user, $event, $expectedBegin, $expectedEnd);
+        $unavailability2        = new Unavailability($user, $event, $expectedBegin2, $expectedEnd2);
+        $expectedUnavailability = new Unavailability($user, $event, $expectedBegin, $expectedEnd2);
 
         $this->participantRepository
             ->getParticipantsWithoutMeetingAndHappening([$participant], $expectedBegin, $expectedEnd)
@@ -795,7 +802,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->add($expectedUnavailability)
             ->shouldBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($participant))->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(Events::UNAVAILABILITY_ADDED, new AddUnavailabilityEvent($user, $event))
+            ->shouldBeCalled();
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -833,9 +843,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->time['end']['hour']   = 14;
         $create->time['end']['minute'] = 00;
 
-        $unavailability         = new Unavailability($participant, $expectedBegin, $expectedEnd);
-        $unavailability2        = new Unavailability($participant, $expectedBegin2, $expectedEnd2);
-        $expectedUnavailability = new Unavailability($participant, $expectedBegin, $expectedEnd2);
+        $unavailability         = new Unavailability($user, $event, $expectedBegin, $expectedEnd);
+        $unavailability2        = new Unavailability($user, $event, $expectedBegin2, $expectedEnd2);
+        $expectedUnavailability = new Unavailability($user, $event, $expectedBegin, $expectedEnd2);
 
         $this->participantRepository
             ->getParticipantsWithoutMeetingAndHappening([$participant], $expectedBegin, $expectedEnd)

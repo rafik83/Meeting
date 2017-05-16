@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipantStepHandler
 {
@@ -42,7 +42,7 @@ class ParticipantStepHandler
     private $accountSynchronizer;
 
     /**
-     * @var DelayedEventDispatcher
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -60,7 +60,7 @@ class ParticipantStepHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
-     * @param DelayedEventDispatcher         $eventDispatcher
+     * @param EventDispatcherInterface         $eventDispatcher
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param UserRepositoryInterface        $userRepository
      */
@@ -68,7 +68,7 @@ class ParticipantStepHandler
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        DelayedEventDispatcher $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         ParticipantInfoGuesser $participantInfoGuesser,
         UserRepositoryInterface $userRepository
     ) {

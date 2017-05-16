@@ -166,6 +166,52 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->join(
+                'participant.sheet',
+                'sheet',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true'
+            )
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventAndInCatalog(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->join(
+                'participant.sheet',
+                'sheet',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true'
+            )
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param QueryBuilder $queryBuilder
      */
     private function userWithoutSheetQueryBuilder(QueryBuilder $queryBuilder)

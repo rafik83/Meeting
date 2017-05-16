@@ -10,7 +10,7 @@ Feature: See the dashboard of an event
     And I am logged as admin
     When I go to this page "/fr/event/1/dashboard"
     Then I should see "admin.event.dashboard.title"
-    And I should see "347,60 €" in the ".dashboard-total-orders" element
+    And I should see "323,00 €" in the ".dashboard-total-orders" element
     And I should see "0,00 €" in the ".dashboard-total-paid" element
     And I should see "347,60 €" in the ".dashboard-total-remaining-to-pay" element
     And I should see "admin.sheet.dashboard.totalSheet"

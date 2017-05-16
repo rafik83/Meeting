@@ -217,7 +217,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('participant.id')
+            ->select('participant')
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'participant.user = :user AND sheet.event = :event')
             ->setParameter('user', $user)
@@ -263,14 +263,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting)
-    {
-        return $this->getAvailableParticipantsForMeeting($sheet->getParticipants()->toArray(), $meeting);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function countByEnabledSheet(Event $event)
     {
         $queryBuilder = $this
@@ -281,7 +273,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.enable = :enable AND sheet.event = :event')
             ->setParameter('event', $event)
             ->setParameter('enable', true);
-
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -318,12 +309,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         Happening $exceptedHappening = null,
         $exceptAllUnavailabilities = false
     ) {
+        if (empty($participants)) {
+            return [];
+        }
+
+        $firstParticipant = reset($participants);
+
+        if (!$firstParticipant instanceof Participant) {
+            return [];
+        }
+
+        $eventId = $firstParticipant->getSheet()->getEvent()->getId();
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->where('participant IN (:participants)')
+            ->join('participant.user', 'user', 'WITH', 'participant IN (:participants)')
             ->setParameter('participants', $participants);
 
         $unavailabilityConditions = "1 = 1";
@@ -335,7 +338,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT u.id
                     FROM Entity:Unavailability u
                     WHERE
-                        u.participant = participant
+                        u.user = user AND u.event = :eventId
                         AND (
                             u.begin BETWEEN :begin AND :end
                             OR u.end BETWEEN :begin AND :end
@@ -343,20 +346,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR :end BETWEEN u.begin AND u.end
                         )
                 )";
+
+            $queryBuilder->setParameter('eventId', $eventId);
         }
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-            // Participant have not already a meeting during this period
+                // Participant have not already a meeting during this period
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
                     JOIN m.slot slot
                     LEFT JOIN m.fromParticipants fp
+                    LEFT JOIN fp.user fpUser
                     LEFT JOIN m.toParticipants tp
+                    LEFT JOIN tp.user tpUser
                     WHERE
                         " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
-                        AND (fp.id = participant OR tp.id = participant)
+                        AND (fpUser = user OR tpUser = user)
                         AND (
                             slot.begin BETWEEN :begin AND :end
                             OR slot.end BETWEEN :begin AND :end
@@ -369,9 +376,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
                     JOIN hp.happening h
+                    JOIN hp.participant p
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
-                        AND hp.participant = participant
+                        AND p.user = user
                         AND (
                             h.begin BETWEEN :begin AND :end
                             OR h.end BETWEEN :begin AND :end
@@ -396,19 +404,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('end', $end);
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting)
-    {
-        return $this->getAvailableParticipants(
-            $participants,
-            $meeting->getSlot()->getBegin(),
-            $meeting->getSlot()->getEnd(),
-            $meeting
-        );
     }
 
     /**

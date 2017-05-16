@@ -15,8 +15,7 @@ use Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
-use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class UnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,10 +24,9 @@ class UnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event = EventFactory::createEvent();
         $begin = new \DateTime('2016-10-12 12:00:00');
         $end   = new \DateTime('2016-10-12 14:00:00');
-        $sheet       = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
+        $user = UserFactory::create();
 
-        $unavailability = new Unavailability($participant, $begin, $end);
+        $unavailability = new Unavailability($user, $event, $begin, $end);
         $reflection = new \ReflectionClass(Unavailability::class);
         $property   = $reflection->getProperty('id');
         $property->setAccessible(true);

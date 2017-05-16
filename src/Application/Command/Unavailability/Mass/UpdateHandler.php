@@ -62,7 +62,7 @@ class UpdateHandler
             || $oldEnd->format('Y/m/d H:i') !== $update->end->format('Y/m/d H:i')
             || $oldBlocking !== $update->blocking
         ) {
-            $this->jobQueueAdapter->aggregateParticipantFullUnavailability($update->mass->getEvent());
+            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
         }
     }
 }

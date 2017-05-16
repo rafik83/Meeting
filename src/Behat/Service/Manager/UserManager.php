@@ -28,7 +28,7 @@ class UserManager
     }
 
     /**
-     * @param null $email
+     * @param string|null $email
      *
      * @return User
      */
