@@ -57,23 +57,19 @@ class CreateMessageHandler
     {
         $message = new Message($command->event, $this->dateTime, $command->name, $command->sendToEmailTeam, $command->sendEmailToBillingInfo);
 
-        foreach ($command->sheets as $sheet) {
-            $locale = $sheet->getOwnerLocale();
+        foreach ($command->event->getLocales() as $locale) {
+            $emailSubject = $this->translator->trans(
+                $command->subject,
+                [], // no parameters because substitutions provider will do it itself
+                'mail',
+                $locale
+            );
 
-            if (!$message->hasTranslation($locale)) {
-                $emailSubject = $this->translator->trans(
-                    $command->subject,
-                    [], // no parameters because substitutions provider will do it itself
-                    'mail',
-                    $locale
-                );
+            $emailContent = $this->twig
+                ->load($command->emailTemplate)
+                ->render(['mail' => new MessageContentMail($message, $command->event, $locale)]);
 
-                $emailContent = $this->twig
-                    ->load($command->emailTemplate)
-                    ->render(['mail' => new MessageContentMail($message, $command->event, $locale)]);
-
-                $message->translate($locale, $emailSubject, $emailContent, $this->dateTime);
-            }
+            $message->translate($locale, $emailSubject, $emailContent, $this->dateTime);
         }
 
         return $message;
