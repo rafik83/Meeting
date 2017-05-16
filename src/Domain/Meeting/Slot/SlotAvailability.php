@@ -128,8 +128,7 @@ class SlotAvailability
         MassRepositoryInterface $massUnavailabilityRepository,
         MeetingRepositoryInterface $meetingRepositoryInterface,
         MassAssignmentRepositoryInterface $massAssignmentRepository
-    )
-    {
+    ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
         $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
@@ -138,12 +137,12 @@ class SlotAvailability
     }
 
     /**
-     * @param HappeningParticipation[]  $happenings
-     * @param Meeting[]                 $meetings
-     * @param Unavailability[]          $unavailability
-     * @param Mass[]                    $massUnavailability
-     * @param MassAssignment[]          $massAssignments
-     * @param Meeting[]                 $meetingOtherSheets
+     * @param HappeningParticipation[] $happenings
+     * @param Meeting[]                $meetings
+     * @param Unavailability[]         $unavailability
+     * @param Mass[]                   $massUnavailability
+     * @param MassAssignment[]         $massAssignments
+     * @param Meeting[]                $meetingOtherSheets
      */
     public function preload(
         array $happenings = [],
@@ -154,11 +153,11 @@ class SlotAvailability
         array $meetingOtherSheets = []
     )
     {
-        $this->happenings           = $happenings;
-        $this->meetings             = $meetings;
-        $this->unavailability       = $unavailability;
-        $this->massUnavailability   = $massUnavailability;
-        $this->meetingOtherSheets   = $meetingOtherSheets;
+        $this->happenings         = $happenings;
+        $this->meetings           = $meetings;
+        $this->unavailability     = $unavailability;
+        $this->massUnavailability = $massUnavailability;
+        $this->meetingOtherSheets = $meetingOtherSheets;
 
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);

@@ -37,10 +37,10 @@ class AgendaParticipantViewQueryHandler
     private $participantInfoGuesser;
 
     /**
-     * @param DayRepositoryInterface    $dayRepository
+     * @param DayRepositoryInterface     $dayRepository
      * @param MeetingRepositoryInterface $meetingRepository
-     * @param AgendaDayViewQueryHandler $agendaDayViewQueryHandler
-     * @param ParticipantInfoGuesser    $participantInfoGuesser
+     * @param AgendaDayViewQueryHandler  $agendaDayViewQueryHandler
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
