@@ -50,4 +50,28 @@ class GroupContext implements Context
         $group = $this->groupContextProxy->getGroupManager()->create($event, $user, null, $groupTitle);
         $this->groupContextProxy->getStorage()->set('group', $group);
     }
+
+    /**
+     * @Given /^there is a sheet in this group$/
+     */
+    public function assignSheetToGroup()
+    {
+        $group = $this->groupContextProxy->getStorage()->get('group');
+        $event = $this->groupContextProxy->getStorage()->get('event');
+        $user  = $this->groupContextProxy->getStorage()->get('user');
+
+        if (null === $group) {
+            throw new \InvalidArgumentException('Missing Group');
+        }
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        if (null === $user) {
+            throw new \InvalidArgumentException('Missing User');
+        }
+
+        $this->groupContextProxy->getGroupManager()->assignSheetToGroup($event, $user, $group);
+    }
 }

@@ -176,3 +176,17 @@ Feature: Sheet participations list filters
     Then I should not see "Hello World Company"
     And I should not see "Aanera"
     And I should not see "World Company Inc"
+
+  Scenario: I can filter sheet with group
+    Given the database is purged
+    And the event "Best of web" is created
+    And I am logged as admin
+    And the user "sheetgroup@example.com" is created
+    And there is a group "Sheet Group" managed by this user
+    And there is a sheet in this group
+    And elastica is populate
+    When I go to "/fr/event/1/sheet?orderBy=created_at&hasGroup=1"
+    Then I should see "sheetgroup@example.com"
+    When I go to "/fr/event/1/sheet?orderBy=created_at&hasGroup=0"
+    Then I should not see "sheetgroup@example.com"
+
