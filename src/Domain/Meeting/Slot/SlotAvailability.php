@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
@@ -26,12 +27,13 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class SlotAvailability
 {
-    const HAPPENING_UNAVAILABILITY       = 'happening_unavailability';
-    const UNAVAILABILITY                 = 'unavailability';
-    const MEETING_UNAVAILABILITY         = 'meeting_unavailability';
-    const MASS_UNAVAILABILITY            = 'mass_unavailability';
-    const SLOT_AVAILABLE                 = 'slot_available';
-    const MASS_ASSIGNMENT_UNAVAILABILITY = 'mass_assignment_unavailability';
+    const HAPPENING_UNAVAILABILITY          = 'happening_unavailability';
+    const UNAVAILABILITY                    = 'unavailability';
+    const MEETING_UNAVAILABILITY            = 'meeting_unavailability';
+    const MASS_UNAVAILABILITY               = 'mass_unavailability';
+    const SLOT_AVAILABLE                    = 'slot_available';
+    const MASS_ASSIGNMENT_UNAVAILABILITY    = 'mass_assignment_unavailability';
+    const MEETING_ON_OTHER_SHEET            = 'meeting_on_other_sheet';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -82,6 +84,11 @@ class SlotAvailability
      * @var MassAssignment[]
      */
     private $massAssignment = null;
+
+    /**
+     * @var Meeting[]
+     */
+    private $meetingOtherSheets = null;
 
     /**
      * Array of happeningParticipation [participantId][1 => happeningParticipation, 2 => happeningParticipation]
@@ -136,23 +143,27 @@ class SlotAvailability
      * @param Unavailability[]         $unavailability
      * @param Mass[]                   $massUnavailability
      * @param MassAssignment[]         $massAssignments
+     * @param Meeting[]                $meetingOtherSheets
      */
     public function preload(
         array $happenings = [],
         array $meetings = [],
         array $unavailability = [],
         array $massUnavailability = [],
-        array $massAssignments = []
-    ) {
+        array $massAssignments = [],
+        array $meetingOtherSheets = []
+    )
+    {
         $this->happenings         = $happenings;
         $this->meetings           = $meetings;
         $this->unavailability     = $unavailability;
         $this->massUnavailability = $massUnavailability;
+        $this->meetingOtherSheets = $meetingOtherSheets;
 
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
         $this->assignUnavailabilitySortByUser($unavailability);
-        $this->assingMassAssignmentSortByParticipant($massAssignments);
+        $this->assignMassAssignmentSortByParticipant($massAssignments);
     }
 
     /**
@@ -190,7 +201,7 @@ class SlotAvailability
     /**
      * @param MassAssignment[] $massAssignments
      */
-    private function assingMassAssignmentSortByParticipant(array $massAssignments)
+    private function assignMassAssignmentSortByParticipant(array $massAssignments)
     {
         foreach ($massAssignments as $assignment) {
             $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()][] = $assignment;
@@ -221,6 +232,10 @@ class SlotAvailability
 
         if (($meeting = $this->hasMeeting($slot, $participant)) !== false) {
             return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
+        }
+
+        if (($otherSheet = $this->getMeetingOnOtherSheet($slot, $participant)) !== null) {
+            return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, null, null, $otherSheet);
         }
 
         if ($this->hasUnavailability($slot, $participant)) {
@@ -288,7 +303,7 @@ class SlotAvailability
         if ($this->massAssignment === null) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
 
-            $this->assingMassAssignmentSortByParticipant($this->massAssignment);
+            $this->assignMassAssignmentSortByParticipant($this->massAssignment);
         }
     }
 
@@ -436,9 +451,9 @@ class SlotAvailability
         return false;
     }
 
-    const ASSIGNMENT_DISABLED  = 'disabled';
-    const ASSIGNMENT_FOUND     = 'found';
-    const ASSIGNMENT_NOT_FOUND = 'not_found';
+    const ASSIGNMENT_DISABLED   = 'disabled';
+    const ASSIGNMENT_FOUND      = 'found';
+    const ASSIGNMENT_NOT_FOUND  = 'not_found';
 
     /**
      * @param MassAssignment $massAssignment
@@ -496,6 +511,31 @@ class SlotAvailability
      * @param MeetingSlot $slot
      * @param Participant $participant
      *
+     * @return null|Sheet
+     */
+    private function getMeetingOnOtherSheet(MeetingSlot $slot, Participant $participant)
+    {
+        if (empty($this->meetingOtherSheets)) {
+            return null;
+        }
+
+        foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
+            if ($meetingOtherSheet->getSlot()->getId() === $slot->getId()) {
+                $otherSheet = $meetingOtherSheet->getSheetByUser($participant->getUser());
+
+                if ($otherSheet !== null) {
+                    return $otherSheet;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param Participant $participant
+     *
      * @return bool
      */
     private function hasHappening(MeetingSlot $slot, Participant $participant)
@@ -506,7 +546,7 @@ class SlotAvailability
 
         foreach ($this->happeningsSortByParticipant[$participant->getId()] as $happening) {
             $happeningBegin = $happening->getHappening()->getBegin();
-            $happeningEnd   = $happening->getHappening()->getEnd();
+            $happeningEnd = $happening->getHappening()->getEnd();
 
             if ($happening->getParticipant() !== $participant) {
                 continue;

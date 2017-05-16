@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\View\MeetingView;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
@@ -210,6 +211,32 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByUserAndEventExceptSheet(Event $event, User $user, Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting, slot', 'fromParticipants', 'toParticipants')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.fromParticipants', 'fromParticipants')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('
+                (meeting.toSheet != :exceptSheet AND toParticipants.user = :user)
+                OR (meeting.fromSheet != :exceptSheet AND fromParticipants.user = :user)'
+            )
+            ->setParameter('exceptSheet', $sheet)
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this
@@ -222,10 +249,8 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->join('meeting.spot', 'spot')
             ->join('meeting.slot', 'slot')
             ->join('meeting.request', 'request')
-            ->leftJoin('meeting.fromParticipants', 'fromParticipantSelected')
-            ->leftJoin('meeting.toParticipants', 'toParticipantSelected')
-            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
-            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->join('meeting.fromParticipants', 'fromParticipantSelected')
+            ->join('meeting.toParticipants', 'toParticipantSelected')
             ->where('fromSheet = :sheet OR toSheet = :sheet')
             ->setParameter('sheet', $sheet)
             ->andWhere('meeting.state = :state')

@@ -72,6 +72,11 @@ class AgendaDayViewQuery
     public $massAssignments;
 
     /**
+     * @var Meeting[]
+     */
+    public $meetingOtherSheets;
+
+    /**
      * @param Sheet                    $sheet
      * @param Day                      $day
      * @param int                      $dayNumber
@@ -82,6 +87,7 @@ class AgendaDayViewQuery
      * @param Mass[]                   $masses
      * @param Meeting[]                $meetings
      * @param MassAssignment[]         $massAssigments
+     * @param Meeting[]                $meetingOtherSheets
      */
     public function __construct(
         Sheet $sheet,
@@ -93,7 +99,8 @@ class AgendaDayViewQuery
         array $unavailabilities = [],
         array $masses = [],
         array $meetings = [],
-        array $massAssigments = []
+        array $massAssigments = [],
+        array $meetingOtherSheets = []
     ) {
         $this->day              = $day;
         $this->dayNumber        = $dayNumber;
@@ -105,5 +112,6 @@ class AgendaDayViewQuery
         $this->sheet            = $sheet;
         $this->participant      = $participant;
         $this->massAssignments  = $massAssigments;
+        $this->meetingOtherSheets = $meetingOtherSheets;
     }
 }

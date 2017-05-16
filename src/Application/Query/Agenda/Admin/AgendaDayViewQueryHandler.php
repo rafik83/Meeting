@@ -46,7 +46,8 @@ class AgendaDayViewQueryHandler
                 $query->unavailabilities,
                 $query->masses,
                 $query->meetings,
-                $query->massAssignments
+                $query->massAssignments,
+                $query->meetingOtherSheets
             )
         );
 
