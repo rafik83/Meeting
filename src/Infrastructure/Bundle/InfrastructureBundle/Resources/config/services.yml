@@ -3968,6 +3968,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@command.planning.participant_info_guesser_cache'
         tags:
             - { name: serializer.normalizer }
 
