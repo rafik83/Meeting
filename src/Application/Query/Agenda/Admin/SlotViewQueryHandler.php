@@ -112,16 +112,12 @@ class SlotViewQueryHandler
                 continue;
             }
 
-            if ($slotAvailabilityView->type === SlotAvailability::MEETING_ON_OTHER_SHEET
-                && $slotAvailabilityView->meeting !== null
-            ) {
-                $sheetMet = $slotAvailabilityView->meeting->getSheetMet($query->sheet);
-
+            if ($slotAvailabilityView->type === SlotAvailability::MEETING_ON_OTHER_SHEET) {
                 $slotViews[] = new MeetingOnOtherSheetView(
                     $slot,
                     $slotAvailabilityView->type,
-                    $this->sheetInfoGuesser->guessSheetTitle($sheetMet),
-                    $sheetMet->getId()
+                    $this->sheetInfoGuesser->guessSheetTitle($slotAvailabilityView->otherSheet),
+                    $slotAvailabilityView->otherSheet->getId()
                 );
 
                 continue;

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
@@ -233,8 +234,8 @@ class SlotAvailability
             return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
         }
 
-        if (($meetingOtherSheet = $this->hasMeetingOnOtherSheet($slot, $participant)) !== false) {
-            return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, $meetingOtherSheet);
+        if (($otherSheet = $this->hasMeetingOnOtherSheet($slot, $participant)) !== false) {
+            return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, null, null, $otherSheet);
         }
 
         if ($this->hasUnavailability($slot, $participant)) {
@@ -512,7 +513,7 @@ class SlotAvailability
      * @param MeetingSlot $slot
      * @param Participant $participant
      *
-     * @return false|Meeting
+     * @return false|Sheet
      */
     private function hasMeetingOnOtherSheet(MeetingSlot $slot, Participant $participant)
     {
@@ -521,11 +522,12 @@ class SlotAvailability
         }
 
         foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
-            if ($meetingOtherSheet->getSlot()->getId() === $slot->getId()
-                && $meetingOtherSheet->hasUser($participant->getUser())
-            ) {
+            if ($meetingOtherSheet->getSlot()->getId() === $slot->getId()) {
+                $otherSheet = $meetingOtherSheet->getSheetByUser($participant->getUser());
 
-                return $meetingOtherSheet;
+                if ($otherSheet !== false) {
+                    return $otherSheet;
+                }
             }
         }
 

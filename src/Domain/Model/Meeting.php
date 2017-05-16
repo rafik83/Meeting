@@ -415,13 +415,19 @@ class Meeting implements MessageSubjectInterface
     /**
      * @param User $user
      *
-     * @return bool
+     * @return Sheet|false
      */
-    public function hasUser(User $user)
+    public function getSheetByUser(User $user)
     {
-        foreach ($this->getAllParticipants() as $participant) {
+        foreach ($this->getToParticipants() as $participant) {
             if ($participant->getUser()->getId() === $user->getId()) {
-                return true;
+                return $this->toSheet;
+            }
+        }
+
+        foreach ($this->getFromParticipants() as $participant) {
+            if ($participant->getUser()->getId() === $user->getId()) {
+                return $this->fromSheet;
             }
         }
 
