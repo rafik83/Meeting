@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassUnavailabilitySlotView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingOnOtherSheetView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\UnavailabilitySlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
@@ -77,6 +78,9 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
+    /** @var SheetInfoGuesser */
+    private $sheetInfoGuesser;
+
     /** @var SlotAvailability */
     private $slotAvailability;
 
@@ -104,6 +108,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $this->slotAvailability      = $this->prophesize(SlotAvailability::class);
+        $this->sheetInfoGuesser      = $this->prophesize(SheetInfoGuesser::class);
 
     }
     
@@ -113,23 +118,15 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->meetingSlotRepository->findByEventAndDay($this->event, $this->day)->shouldBeCalled()->willReturn([$this->slot]);
 
-        $this->slotAvailability->preload(
-            $this->happenings,
-            $this->meetings,
-            $this->unavailabilities,
-            $this->masses,
-            $this->massAssignments,
-            $this->meetingOtherSheets
-        )->shouldBeCalled();
+        $this->preloadMethodShouldBeCalled();
 
         $this->slotAvailability->getSlotAvailability($this->slot, $this->participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $sheetInfoGuesser->guessSheetTitle($this->sheet, $this->locale)->shouldNotBeCalled();
+        $this->sheetInfoGuesser->guessSheetTitle($this->sheet, $this->locale)->shouldNotBeCalled();
 
         $handler = new SlotViewQueryHandler(
             $this->meetingSlotRepository->reveal(),
             $this->slotAvailability->reveal(),
-            $sheetInfoGuesser->reveal()
+            $this->sheetInfoGuesser->reveal()
         );
 
         $result = $handler->handle(new SlotViewQuery(
@@ -159,26 +156,15 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->meetingSlotRepository->findByEventAndDay($this->event, $this->day)->shouldBeCalled()->willReturn([$this->slot]);
 
-        $this->slotAvailability
-            ->preload(
-                $this->happenings,
-                $this->meetings,
-                $this->unavailabilities,
-                $this->masses,
-                $this->massAssignments,
-                $this->meetingOtherSheets
-            )
-            ->shouldBeCalled()
-        ;
+        $this->preloadMethodShouldBeCalled();
 
         $this->slotAvailability->getSlotAvailability($this->slot, $this->participant)->shouldNotBeCalled();
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $sheetInfoGuesser->guessSheetTitle($this->sheet, $this->locale)->shouldNotBeCalled();
+        $this->sheetInfoGuesser->guessSheetTitle($this->sheet, $this->locale)->shouldNotBeCalled();
 
         $handler = new SlotViewQueryHandler(
             $this->meetingSlotRepository->reveal(),
             $this->slotAvailability->reveal(),
-            $sheetInfoGuesser->reveal()
+            $this->sheetInfoGuesser->reveal()
         );
 
         $result = $handler->handle(
@@ -214,23 +200,15 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->meetingSlotRepository->findByEventAndDay($this->event, $this->day)->shouldBeCalled()->willReturn([$this->slot]);
 
-        $this->slotAvailability->preload(
-            $this->happenings,
-            $this->meetings,
-            $this->unavailabilities,
-            $this->masses,
-            $this->massAssignments,
-            $this->meetingOtherSheets
-        )->shouldBeCalled();
+        $this->preloadMethodShouldBeCalled();
 
         $this->slotAvailability->getSlotAvailability($this->slot, $this->participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $sheetInfoGuesser->guessSheetTitle($this->sheet, $this->locale)->shouldNotBeCalled();
+        $this->sheetInfoGuesser->guessSheetTitle($this->sheet, $this->locale)->shouldNotBeCalled();
 
         $handler = new SlotViewQueryHandler(
             $this->meetingSlotRepository->reveal(),
             $this->slotAvailability->reveal(),
-            $sheetInfoGuesser->reveal()
+            $this->sheetInfoGuesser->reveal()
         );
 
         $result = $handler->handle(
@@ -298,23 +276,15 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->meetingSlotRepository->findByEventAndDay($this->event, $day)->shouldBeCalled()->willReturn([$slot]);
 
-        $this->slotAvailability->preload(
-            $this->happenings,
-            $this->meetings,
-            $this->unavailabilities,
-            $this->masses,
-            $this->massAssignments,
-            $this->meetingOtherSheets
-        )->shouldBeCalled();
+        $this->preloadMethodShouldBeCalled();
 
         $this->slotAvailability->getSlotAvailability($slot, $this->participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
-        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $sheetInfoGuesser->guessSheetTitle($sheet2)->shouldBeCalled()->willReturn('sheetMetTitle');
+        $this->sheetInfoGuesser->guessSheetTitle($sheet2)->shouldBeCalled()->willReturn('sheetMetTitle');
 
         $handler = new SlotViewQueryHandler(
             $this->meetingSlotRepository->reveal(),
             $this->slotAvailability->reveal(),
-            $sheetInfoGuesser->reveal()
+            $this->sheetInfoGuesser->reveal()
         );
 
         $result = $handler->handle(new SlotViewQuery(
@@ -348,6 +318,61 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testMeetingOnOthersheet()
     {
-        
+        $slotAvailabilityView = new SlotAvailabilityView(
+            SlotAvailability::MEETING_ON_OTHER_SHEET,
+            null,
+            null,
+            $this->sheet
+        );
+
+        $this->meetingSlotRepository->findByEventAndDay($this->event, $this->day)->shouldBeCalled()->willReturn([$this->slot]);
+
+        $this->preloadMethodShouldBeCalled();
+
+        $this->slotAvailability->getSlotAvailability($this->slot, $this->participant)->shouldBeCalled()->willReturn($slotAvailabilityView);
+        $this->sheetInfoGuesser->guessSheetTitle($this->sheet)->shouldBeCalled()->willReturn('otherSheetTitle');
+
+        $handler = new SlotViewQueryHandler(
+            $this->meetingSlotRepository->reveal(),
+            $this->slotAvailability->reveal(),
+            $this->sheetInfoGuesser->reveal()
+        );
+
+        $result = $handler->handle(new SlotViewQuery(
+            $this->event,
+            $this->day,
+            $this->sheet,
+            $this->participant,
+            $this->happenings,
+            $this->unavailabilities,
+            $this->masses,
+            $this->meetings,
+            $this->massAssignments,
+            $this->meetingOtherSheets
+        ));
+
+        $expected = [new MeetingOnOtherSheetView(
+            $this->slot,
+            SlotAvailability::MEETING_ON_OTHER_SHEET,
+            'otherSheetTitle',
+            ''
+        )];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    private function preloadMethodShouldBeCalled()
+    {
+        return $this
+            ->slotAvailability
+            ->preload(
+                $this->happenings,
+                $this->meetings,
+                $this->unavailabilities,
+                $this->masses,
+                $this->massAssignments,
+                $this->meetingOtherSheets
+            )
+            ->shouldBeCalled();
     }
 }
