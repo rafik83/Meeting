@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -20,16 +21,22 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_MEETING_ID              = 'meeting_id';
-    const COL_FROM_SHEET_ID           = 'from_sheet_id';
-    const COL_FROM_SHEET_PARTICIPANTS = 'from_sheet_participants';
-    const COL_TO_SHEET_ID             = 'to_sheet_id';
-    const COL_TO_SHEET_PARTICIPANTS   = 'to_sheet_participants';
-    const COL_DAY                     = 'day';
-    const COL_HOUR_BEGIN              = 'hour_begin';
-    const COL_HOUR_END                = 'hour_end';
-    const COL_SPOT                    = 'spot';
-    const EXPORT_BASE_KEY = 'admin.meeting.export.fields.';
+    const COL_MEETING_ID                      = 'meeting_id';
+    const COL_FROM_SHEET_ID                   = 'from_sheet_id';
+    const COL_FROM_SHEET_TITLE                = 'from_sheet_title';
+    const COL_FROM_SHEET_PARTICIPANT_FULLNAME = 'from_sheet_participant_fullname';
+    const COL_FROM_SHEET_PARTICIPANTS         = 'from_sheet_participants';
+    const COL_FROM_USER_IDS                   = 'from_user_ids';
+    const COL_TO_SHEET_ID                     = 'to_sheet_id';
+    const COL_TO_SHEET_TITLE                  = 'to_sheet_title';
+    const COL_TO_SHEET_PARTICIPANT_FULLNAME   = 'to_sheet_participant_fullname';
+    const COL_TO_SHEET_PARTICIPANTS           = 'to_sheet_participants';
+    const COL_TO_USER_IDS                     = 'to_user_ids';
+    const COL_DAY                             = 'day';
+    const COL_HOUR_BEGIN                      = 'hour_begin';
+    const COL_HOUR_END                        = 'hour_end';
+    const COL_SPOT                            = 'spot';
+    const EXPORT_BASE_KEY                     = 'admin.meeting.export.fields.';
 
     /**
      * @var string
@@ -52,16 +59,24 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     private $timeFormatter;
 
     /**
-     * @param TranslatorInterface        $translator
-     * @param MeetingRepositoryInterface $meetingRepository
+     * @var ParticipantInfoGuesserCache
+     */
+    private $participantInfoGuesserCache;
+
+    /**
+     * @param TranslatorInterface         $translator
+     * @param MeetingRepositoryInterface  $meetingRepository
+     * @param ParticipantInfoGuesserCache $participantInfoGuesserCache
      */
     public function __construct(
         TranslatorInterface $translator,
-        MeetingRepositoryInterface $meetingRepository
+        MeetingRepositoryInterface $meetingRepository,
+        ParticipantInfoGuesserCache $participantInfoGuesserCache
     ) {
         parent::__construct($translator);
 
-        $this->meetingRepository = $meetingRepository;
+        $this->meetingRepository           = $meetingRepository;
+        $this->participantInfoGuesserCache = $participantInfoGuesserCache;
     }
 
     /**
@@ -93,7 +108,7 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         );
 
         foreach ($this->meetingRepository->getAllCompleteByEvent($object->event) as $meeting) {
-            $rawMeetings[] = $this->getMeetingRawData($meeting);
+            $rawMeetings[] = $this->getMeetingRawData($meeting, $availableLocale);
         }
 
         $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
@@ -115,26 +130,44 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
 
     /**
      * @param Meeting $meeting
+     * @param string  $locale
      *
      * @return array Raw data about meeting
      */
-    private function getMeetingRawData($meeting)
+    private function getMeetingRawData($meeting, $locale)
     {
         /** @var Meeting $rawMeeting */
-        $rawMeeting = $meeting['meeting'];
+        $rawMeeting            = $meeting['meeting'];
         $fromSheetParticipants = $rawMeeting->getFromParticipants()->toArray();
         $toSheetParticipants   = $rawMeeting->getToParticipants()->toArray();
 
+        $fromUserIds = array_map(function (Participant $participant) {
+            return $participant->getUser()->getId();
+        }, $fromSheetParticipants);
+
+        $toUserIds = array_map(function (Participant $participant) {
+            return $participant->getUser()->getId();
+        }, $toSheetParticipants);
+
+        $fromSheetParticipantsFullName = $this->getSheetParticipantsFullName($fromSheetParticipants, $locale);
+        $toSheetParticipantsFullName   = $this->getSheetParticipantsFullName($toSheetParticipants, $locale);
+
         $rawData = [
-            self::COL_MEETING_ID              => $rawMeeting->getId(),
-            self::COL_FROM_SHEET_ID           => $rawMeeting->getFromSheet()->getId(),
-            self::COL_FROM_SHEET_PARTICIPANTS => $this->getParticipantsRawData($fromSheetParticipants),
-            self::COL_TO_SHEET_ID             => $rawMeeting->getToSheet()->getId(),
-            self::COL_TO_SHEET_PARTICIPANTS   => $this->getParticipantsRawData($toSheetParticipants),
-            self::COL_DAY                     => $this->dayFormatter->format($meeting['meetingBegin']),
-            self::COL_HOUR_BEGIN              => $this->timeFormatter->format($meeting['meetingBegin']),
-            self::COL_HOUR_END                => $this->timeFormatter->format($meeting['meetingEnd']),
-            self::COL_SPOT                    => $meeting['spotReference'],
+            self::COL_MEETING_ID                      => $rawMeeting->getId(),
+            self::COL_FROM_SHEET_ID                   => $rawMeeting->getFromSheet()->getId(),
+            self::COL_FROM_SHEET_TITLE                => $rawMeeting->getFromSheet()->getTitle(),
+            self::COL_FROM_SHEET_PARTICIPANT_FULLNAME => implode(',', $fromSheetParticipantsFullName),
+            self::COL_FROM_SHEET_PARTICIPANTS         => $this->getParticipantsRawData($fromSheetParticipants),
+            self::COL_FROM_USER_IDS                   => implode(',', $fromUserIds),
+            self::COL_TO_SHEET_ID                     => $rawMeeting->getToSheet()->getId(),
+            self::COL_TO_SHEET_TITLE                  => $rawMeeting->getToSheet()->getTitle(),
+            self::COL_TO_SHEET_PARTICIPANT_FULLNAME   => implode(',', $toSheetParticipantsFullName),
+            self::COL_TO_SHEET_PARTICIPANTS           => $this->getParticipantsRawData($toSheetParticipants),
+            self::COL_TO_USER_IDS                     => implode(',', $toUserIds),
+            self::COL_DAY                             => $this->dayFormatter->format($meeting['meetingBegin']),
+            self::COL_HOUR_BEGIN                      => $this->timeFormatter->format($meeting['meetingBegin']),
+            self::COL_HOUR_END                        => $this->timeFormatter->format($meeting['meetingEnd']),
+            self::COL_SPOT                            => $meeting['spotReference'],
         ];
 
         return $rawData;
@@ -197,13 +230,34 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         return [
             self::COL_MEETING_ID,
             self::COL_FROM_SHEET_ID,
+            self::COL_FROM_SHEET_TITLE,
+            self::COL_FROM_SHEET_PARTICIPANT_FULLNAME,
             self::COL_FROM_SHEET_PARTICIPANTS,
+            self::COL_FROM_USER_IDS,
             self::COL_TO_SHEET_ID,
+            self::COL_TO_SHEET_TITLE,
+            self::COL_TO_SHEET_PARTICIPANT_FULLNAME,
             self::COL_TO_SHEET_PARTICIPANTS,
+            self::COL_TO_USER_IDS,
             self::COL_DAY,
             self::COL_HOUR_BEGIN,
             self::COL_HOUR_END,
             self::COL_SPOT,
         ];
+    }
+
+    /**
+     * @param array  $sheetParticipants
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function getSheetParticipantsFullName($sheetParticipants, $locale)
+    {
+        $fromSheetParticipantFullName = array_map(function (Participant $participant) use ($locale) {
+            return $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $locale);
+        }, $sheetParticipants);
+
+        return $fromSheetParticipantFullName;
     }
 }

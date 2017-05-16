@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 
 class DeleteHandler
@@ -20,11 +21,18 @@ class DeleteHandler
     private $massRepository;
 
     /**
-     * @param MassRepositoryInterface $massRepository
+     * @var JobQueueInterface
      */
-    public function __construct(MassRepositoryInterface $massRepository)
+    private $jobQueueAdapter;
+
+    /**
+     * @param MassRepositoryInterface $massRepository
+     * @param JobQueueInterface       $jobQueueAdapter
+     */
+    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter)
     {
         $this->massRepository = $massRepository;
+        $this->jobQueueAdapter = $jobQueueAdapter;
     }
 
     /**
@@ -32,6 +40,13 @@ class DeleteHandler
      */
     public function handle(Delete $delete)
     {
+        $isBlocking = $delete->mass->isBlocking();
+        $event = $delete->mass->getEvent();
+
         $this->massRepository->remove($delete->mass);
+
+        if ($isBlocking) {
+            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($event);
+        }
     }
 }

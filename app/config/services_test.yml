@@ -48,6 +48,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
         arguments:
             - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@behat_manager.sheet'
 
     behat_manager.invoice:

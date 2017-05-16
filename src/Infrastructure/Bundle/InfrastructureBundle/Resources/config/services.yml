@@ -984,6 +984,7 @@ services:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 
@@ -1489,6 +1490,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler
         arguments:
             - '@repository.unavailability.mass_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
     command.unavailability.create_handler:
@@ -3968,6 +3970,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@command.planning.participant_info_guesser_cache'
         tags:
             - { name: serializer.normalizer }
 
@@ -4521,7 +4524,7 @@ services:
     command.aggregate.participant.full_unavailability_handler:
         class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityHandler
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@domain.unavailability.participant_unavailable_aggregator'
     command.aggregate.participant.assigned_to_request_handler:
         class: Proximum\Vimeet\Application\Command\Aggregate\Participant\AssignedToRequestHandler
@@ -4529,16 +4532,16 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@domain.request.participant_assigned_aggregator'
     command.aggregate.participant.full_unavailability_for_given_participants_handler:
-        class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityForGivenParticipantsHandler
+        class: Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityForGivenUsersInEventHandler
         arguments:
-             - '@vimeet_infrastructure.repository.participant_repository'
+             - '@vimeet_infrastructure.repository.user_repository'
              - '@domain.unavailability.participant_unavailable_aggregator'
 
     #
     # Symfony Command Aggregator
     #
-    symfony_command.aggregate.participant.participant_full_unavailability_aggregate_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantFullUnavailabilityAggregateCommand
+    symfony_command.aggregate.full_unavailability.users_full_unavailability_by_event_aggregate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.aggregate.participant.full_unavailability_handler'
@@ -4551,9 +4554,10 @@ services:
             - '@command.aggregate.participant.assigned_to_request_handler'
         tags:
             - { name: console.command }
-    symfony_command.aggregate.participant.participants_given_full_unavailability_aggregate_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantsGivenFullUnavailabilityAggregateCommand
+    symfony_command.aggregate.full_unavailability.users_full_unavailability_aggregate_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand
         arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
             - '@command.aggregate.participant.full_unavailability_for_given_participants_handler'
         tags:
             - { name: console.command }

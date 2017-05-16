@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
@@ -132,12 +133,16 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAvailableSlotsByParticipantsIds(
+    public function findAvailableSlotsByParticipants(
         Event $event,
-        array $participantsId,
+        array $participants,
         $ignoreMeetings = false,
         Meeting $exceptedMeeting = null
     ) {
+        $userIds = array_map(function (Participant $participant) {
+            return $participant->getUser()->getId();
+        }, $participants);
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -155,10 +160,12 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                         'NOT EXISTS (
                             SELECT m.id FROM Entity:Meeting m
                             LEFT JOIN m.fromParticipants fp
+                            LEFT JOIN fp.user fpUser
                             LEFT JOIN m.toParticipants tp
+                            LEFT JOIN tp.user tpUser
                             WHERE m.slot = slot
                             AND m.state = :meetingState
-                            AND (fp.id IN (:ids) OR tp.id IN (:ids))
+                            AND (fpUser.id IN (:userIds) OR tpUser.id IN (:userIds))
                             %s
                         )',
                         null !== $exceptedMeeting ? 'AND m != :exceptedMeeting' : ''
@@ -174,14 +181,14 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         // Participants have not unavailability during this slot
         $queryBuilder
             ->andWhere('NOT EXISTS (
-                SELECT u.id FROM Entity:Unavailability u
-                WHERE u.participant IN (:ids)
+                SELECT unavailability.id FROM Entity:Unavailability unavailability
+                WHERE unavailability.user IN (:userIds)
                 AND (
-                    slot.begin = u.begin
-                    OR u.end = slot.end
-                    OR u.begin < slot.begin AND slot.begin < u.end
-                    OR u.begin < slot.end AND slot.end < u.end
-                    OR slot.begin < u.begin AND u.begin < slot.end
+                    slot.begin = unavailability.begin
+                    OR unavailability.end = slot.end
+                    OR unavailability.begin < slot.begin AND slot.begin < unavailability.end
+                    OR unavailability.begin < slot.end AND slot.end < unavailability.end
+                    OR slot.begin < unavailability.begin AND unavailability.begin < slot.end
                 )
             )');
 
@@ -189,15 +196,15 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT hp.id FROM Entity:HappeningParticipation hp
-                JOIN hp.happening h
-                WHERE hp.participant IN (:ids)
-                AND (
-                    slot.begin = h.begin
-                    OR h.end = slot.end
-                    OR h.begin < slot.begin AND slot.begin < h.end
-                    OR h.begin < slot.end AND slot.end < h.end
-                    OR slot.begin < h.begin AND h.begin < slot.end
-                )
+                JOIN hp.participant hpParticipant
+                    WITH hpParticipant.user IN (:userIds)
+                JOIN hp.happening happening
+                WHERE
+                    slot.begin = happening.begin
+                    OR happening.end = slot.end
+                    OR happening.begin < slot.begin AND slot.begin < happening.end
+                    OR happening.begin < slot.end AND slot.end < happening.end
+                    OR slot.begin < happening.begin AND happening.begin < slot.end
             )');
 
         // No blocking mass unvailabilities during this slot
@@ -219,20 +226,21 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT assignment.id FROM Entity:Unavailability\MassAssignment assignment
+                JOIN assignment.participant assignmentParticipant
+                    WITH assignment.enabled = true AND assignmentParticipant.user IN (:userIds)
                 JOIN assignment.mass massUnavailability
-                WHERE assignment.participant IN (:ids)
-                AND massUnavailability.blocking = true
-                AND assignment.enabled = true
-                AND (
+                    WITH massUnavailability.blocking = true
+                WHERE
                     slot.begin = assignment.begin
                     OR assignment.end = slot.end
                     OR assignment.begin < slot.begin AND slot.begin < assignment.end
                     OR assignment.begin < slot.end AND slot.end < assignment.end
                     OR slot.begin < assignment.begin AND assignment.begin < slot.end
-                )
-        )');
+            )');
 
-        $queryBuilder->setParameter('ids', $participantsId);
+        $queryBuilder
+            ->setParameter('userIds', $userIds)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

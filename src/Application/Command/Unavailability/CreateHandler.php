@@ -84,13 +84,23 @@ class CreateHandler
 
         // Merge overlap unavailability and Save unavailability
         foreach ($create->participants as $participant) {
-            $unavailability = new Unavailability($participant, $begin, $end, $create->message);
+            $user = $participant->getUser();
+            $event = $participant->getSheet()->getEvent();
+
+            $unavailability = new Unavailability(
+                $participant->getUser(),
+                $participant->getSheet()->getEvent(),
+                $begin,
+                $end,
+                $create->message
+            );
+
             $this->mergeOverlapUnavailabilities($unavailability);
             $this->unavailabilityRepository->add($unavailability);
 
             $this->eventDispatcher->dispatch(
                 Events::UNAVAILABILITY_ADDED,
-                new AddUnavailabilityEvent($participant)
+                new AddUnavailabilityEvent($user, $event)
             );
         }
     }

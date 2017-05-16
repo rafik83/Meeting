@@ -62,15 +62,12 @@ class UnavailabilityTest extends \PHPUnit_Framework_TestCase
      */
     public function testMerge(\DateTime $a, \DateTime $b, \DateTime $c, \DateTime $d, \DateTime $e, \DateTime $f)
     {
-        $event                 = EventFactory::createEvent();
-        $type                  = new Type($event);
-        $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
-        $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());
-        $participant           = new Participant($sheet, $user, [], true, true);
+        $event = EventFactory::createEvent();
+        $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
 
-        $expected      = new Unavailability($participant, $e, $f);
-        $unvailability = new Unavailability($participant, $a, $b);
-        $unvailability->merge(new Unavailability($participant, $c, $d));
+        $expected      = new Unavailability($user, $event, $e, $f);
+        $unvailability = new Unavailability($user, $event, $a, $b);
+        $unvailability->merge(new Unavailability($user, $event, $c, $d));
 
         $this->assertEquals($expected, $unvailability);
     }

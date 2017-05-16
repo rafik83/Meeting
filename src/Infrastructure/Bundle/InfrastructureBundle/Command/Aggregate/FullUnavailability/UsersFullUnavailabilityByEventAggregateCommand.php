@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability;
 
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailability;
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityHandler;
@@ -18,9 +18,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParticipantFullUnavailabilityAggregateCommand extends Command
+class UsersFullUnavailabilityByEventAggregateCommand extends Command
 {
-    const NAME = 'vimeet:participant:aggregate-full-unavailability';
+    const NAME = 'vimeet:aggregate-full-unavailability:event';
 
     /** @var EventRepositoryInterface */
     private $eventRepository;
@@ -50,7 +50,7 @@ class ParticipantFullUnavailabilityAggregateCommand extends Command
         $this
             ->setName(self::NAME)
             ->setDescription('Aggregate the participant full unavailability flag')
-            ->addArgument('event', InputArgument::REQUIRED, 'Event id')
+            ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
             ->addArgument('onlyCatalog', inputArgument::OPTIONAL, 'Only the participant in catalog')
         ;
     }
@@ -60,7 +60,7 @@ class ParticipantFullUnavailabilityAggregateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $event = $this->eventRepository->getById($input->getArgument('event'));
+        $event = $this->eventRepository->getById($input->getArgument('eventId'));
 
         if (null === $event) {
             throw new \Exception('Event not found.');

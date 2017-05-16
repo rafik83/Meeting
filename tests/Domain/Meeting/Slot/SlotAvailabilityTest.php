@@ -617,7 +617,12 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $beginM         = new \DateTime('2016-10-12 08:30:00.000');
         $endM           = new \DateTime('2016-10-12 08:45:00.000');
-        $unavailability = new Unavailability($this->participant, $beginM, $endM);
+        $unavailability = new Unavailability(
+            $this->participant->getUser(),
+            $this->participant->getSheet()->getEvent(),
+            $beginM,
+            $endM
+        );
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
@@ -651,7 +656,12 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
         $endM           = new \DateTime('2016-10-12 09:45:00.000');
-        $unavailability = new Unavailability($this->participant, $beginM, $endM);
+        $unavailability = new Unavailability(
+            $this->participant->getUser(),
+            $this->participant->getSheet()->getEvent(),
+            $beginM,
+            $endM
+        );
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
@@ -685,7 +695,12 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $beginM         = new \DateTime('2016-10-12 08:30:00.000');
         $endM           = new \DateTime('2016-10-12 09:45:00.000');
-        $unavailability = new Unavailability($this->participant, $beginM, $endM);
+        $unavailability = new Unavailability(
+            $this->participant->getUser(),
+            $this->participant->getSheet()->getEvent(),
+            $beginM,
+            $endM
+        );
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
@@ -719,7 +734,12 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
         $endM           = new \DateTime('2016-10-12 10:45:00.000');
-        $unavailability = new Unavailability($this->participant, $beginM, $endM);
+        $unavailability = new Unavailability(
+            $this->participant->getUser(),
+            $this->participant->getSheet()->getEvent(),
+            $beginM,
+            $endM
+        );
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
@@ -772,7 +792,12 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
 
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
         $endM           = new \DateTime('2016-10-12 10:45:00.000');
-        $unavailability = new Unavailability($this->participant, $beginM, $endM);
+        $unavailability = new Unavailability(
+            $this->participant->getUser(),
+            $this->participant->getSheet()->getEvent(),
+            $beginM,
+            $endM
+        );
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$unavailability]);
@@ -937,7 +962,12 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
 
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
         $endM           = new \DateTime('2016-10-12 10:45:00.000');
-        $unavailability = new Unavailability($this->participant, $beginM, $endM);
+        $unavailability = new Unavailability(
+            $this->participant->getUser(),
+            $this->participant->getSheet()->getEvent(),
+            $beginM,
+            $endM
+        );
 
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');

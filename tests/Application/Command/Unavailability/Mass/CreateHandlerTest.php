@@ -46,7 +46,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->create($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -98,7 +98,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->create($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -155,7 +155,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->create($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -230,7 +230,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository->create()->shouldNotBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateParticipantFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
 
         // Create
         $create               = new Create($event, null);

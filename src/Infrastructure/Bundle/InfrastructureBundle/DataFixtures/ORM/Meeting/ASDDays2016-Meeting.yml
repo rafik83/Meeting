@@ -43,6 +43,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
 Proximum\Vimeet\Domain\Model\Unavailability:
     unavailability_01:
         __construct:
-            - '@participant_asddays_1'
+            - '@user_asddays_1'
+            - '@event_asddays_2016'
             - <(new DateTime('2016-10-12 10:00:00'))>
             - <(new DateTime('2016-10-12 11:00:00'))>

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
+/**
+ * User's Unavailability for an Event
+ */
 class Unavailability implements TimeRangeInterface
 {
     /**
@@ -20,9 +23,14 @@ class Unavailability implements TimeRangeInterface
     private $id;
 
     /**
-     * @var Participant
+     * @var User
      */
-    private $participant;
+    private $user;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     /**
      * @var \DateTimeInterface
@@ -40,19 +48,24 @@ class Unavailability implements TimeRangeInterface
     private $message;
 
     /**
-     * Unavailability constructor.
-     *
-     * @param Participant        $participant
+     * @param User               $user
+     * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string|null        $message
      */
-    public function __construct(Participant $participant, \DateTimeInterface $begin, \DateTimeInterface $end, $message = null)
-    {
-        $this->participant = $participant;
-        $this->begin       = $begin;
-        $this->end         = $end;
-        $this->message     = $message;
+    public function __construct(
+        User $user,
+        Event $event,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        $message = null
+    ) {
+        $this->user    = $user;
+        $this->event   = $event;
+        $this->begin   = $begin;
+        $this->end     = $end;
+        $this->message = $message;
     }
 
     /**
@@ -66,13 +79,19 @@ class Unavailability implements TimeRangeInterface
     }
 
     /**
-     * Get participant.
-     *
-     * @return Participant
+     * @return User
      */
-    public function getParticipant()
+    public function getUser()
     {
-        return $this->participant;
+        return $this->user;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 
     /**

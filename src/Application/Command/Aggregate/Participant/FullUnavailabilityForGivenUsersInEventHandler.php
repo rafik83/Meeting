@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Aggregate\Participant;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
 
-class FullUnavailabilityHandler
+class FullUnavailabilityForGivenUsersInEventHandler
 {
     /** @var UserRepositoryInterface */
     private $userRepository;
@@ -29,23 +29,20 @@ class FullUnavailabilityHandler
         UserRepositoryInterface $userRepository,
         ParticipantUnavailableAggregator $participantUnavailableAggregator
     ) {
-        $this->userRepository                   = $userRepository;
+        $this->userRepository = $userRepository;
         $this->participantUnavailableAggregator = $participantUnavailableAggregator;
     }
 
     /**
-     * @param FullUnavailability $fullUnavailability
+     * @param FullUnavailabilityForGivenUsersInEvent $fullUnavailabilityForGivenUsersInEvent
      */
-    public function handle(FullUnavailability $fullUnavailability)
+    public function handle(FullUnavailabilityForGivenUsersInEvent $fullUnavailabilityForGivenUsersInEvent)
     {
-        if ($fullUnavailability->onlyCatalog) {
-            $users = $this->userRepository->findByEventAndInCatalog($fullUnavailability->event);
-        } else {
-            $users = $this->userRepository->findByEvent($fullUnavailability->event);
-        }
+        $event = $fullUnavailabilityForGivenUsersInEvent->event;
+        $users = $this->userRepository->getByIdsIndexedById($fullUnavailabilityForGivenUsersInEvent->userIds);
 
         foreach ($users as $user) {
-            $this->participantUnavailableAggregator->aggregateUnavailability($user, $fullUnavailability->event);
+            $this->participantUnavailableAggregator->aggregateUnavailability($user, $event);
         }
     }
 }

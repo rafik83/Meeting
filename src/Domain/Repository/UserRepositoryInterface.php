@@ -70,4 +70,18 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function getUsersParticipantOfSheets(array $sheets);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findByEventAndInCatalog(Event $event);
 }

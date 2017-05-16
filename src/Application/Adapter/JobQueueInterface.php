@@ -14,10 +14,10 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface JobQueueInterface
 {
@@ -102,12 +102,13 @@ interface JobQueueInterface
      * @param Event $event
      * @param bool  $onlyInCatalog
      */
-    public function aggregateParticipantFullUnavailability(Event $event, $onlyInCatalog = false);
+    public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false);
 
     /**
-     * @param Participant[] $participants
+     * @param Event  $event
+     * @param User[] $users
      */
-    public function aggregateParticipantsGivenFullUnavailability(array $participants);
+    public function aggregateUsersFullUnavailability(Event $event, array $users);
 
     /**
      * @param Event $event

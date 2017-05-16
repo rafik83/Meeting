@@ -56,7 +56,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
         $happeningParticipation = new HappeningParticipation($happening, $participant);
 
-        $unavailability = new Unavailability($participant, $begin, $end);
+        $unavailability = new Unavailability($user, $event, $begin, $end);
 
         // Mock
         $dayRepository  = $this->prophesize(DayRepositoryInterface::class);
@@ -135,7 +135,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
         $happeningParticipation = new HappeningParticipation($happening, $participant2);
 
-        $unavailability = new Unavailability($participant2, $begin, $end);
+        $unavailability = new Unavailability($user2, $event, $begin, $end);
 
         // Mock
         $dayRepository  = $this->prophesize(DayRepositoryInterface::class);
