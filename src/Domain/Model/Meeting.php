@@ -415,7 +415,7 @@ class Meeting implements MessageSubjectInterface
     /**
      * @param User $user
      *
-     * @return Sheet|false
+     * @return Sheet|null
      */
     public function getSheetByUser(User $user)
     {
@@ -431,6 +431,6 @@ class Meeting implements MessageSubjectInterface
             }
         }
 
-        return false;
+        return null;
     }
 }
