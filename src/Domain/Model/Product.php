@@ -701,21 +701,24 @@ class Product
     }
 
     /**
-     * @param string $name
-     * @param string $image
-     * @param int    $availabilityCurrent
-     * @param int    $availabilityMax
-     * @param float  $unitPrice
+     * @param string      $name
+     * @param null|string $image
+     * @param int         $availabilityCurrent
+     * @param int         $availabilityMax
+     * @param float       $unitPrice
      *
      * @return Product
      */
     public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax, $unitPrice)
     {
         $this->name                = $name;
-        $this->image               = $image;
         $this->availabilityCurrent = $availabilityCurrent;
         $this->availabilityMax     = $availabilityMax;
         $this->unitPrice           = $unitPrice;
+
+        if (null !== $image) {
+            $this->image = $image;
+        }
 
         return $this;
     }
@@ -846,7 +849,7 @@ class Product
 
     /**
      * @param string                  $name
-     * @param string                  $image
+     * @param null|string             $image
      * @param int                     $quantityMax
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
@@ -871,7 +874,6 @@ class Product
         \DateTimeInterface $buyableUntil = null
     ) {
         $this->name                  = $name;
-        $this->image                 = $image;
         $this->quantityMax           = $quantityMax;
         $this->availabilityCurrent   = $availabilityCurrent;
         $this->availabilityMax       = $availabilityMax;
@@ -880,6 +882,10 @@ class Product
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
         $this->unitPrice             = $unitPrice;
+
+        if (null !== $image) {
+            $this->image = $image;
+        }
 
         return $this;
     }
