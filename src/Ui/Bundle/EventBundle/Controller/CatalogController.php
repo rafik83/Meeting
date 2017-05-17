@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
@@ -61,15 +62,16 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return Response
      *
      * @throws NotFoundHttpException
      */
-    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -134,7 +136,8 @@ class CatalogController extends Controller
                     $page,
                     48,
                     $locale,
-                    $sheet
+                    $sheet,
+                    $user
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
@@ -310,6 +313,9 @@ class CatalogController extends Controller
         if (!$sheetToDisplay->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet to display not in catalog');
         }
+
+        $markSheetAsViewedByCurrentUser = new Add($user, $sheetToDisplay);
+        $this->get('command.sheet.sheet_viewed.add_handler')->handle($markSheetAsViewedByCurrentUser);
 
         $locale = $request->getLocale();
 

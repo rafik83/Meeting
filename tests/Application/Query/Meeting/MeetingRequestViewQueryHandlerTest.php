@@ -19,7 +19,9 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +31,7 @@ class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $datetime = new \DateTime();
         $sheet            = $this->prophesize(Sheet::class);
         $sheet2           = $this->prophesize(Sheet::class);
+        $user             = UserFactory::create();
         $meetingRequest   = $this->prophesize(Request::class);
         $preview          = $this->prophesize(Preview::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
@@ -61,6 +64,7 @@ class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $result = $handler->handle(new MeetingRequestViewQuery(
             $meetingRequest->reveal(),
             $sheet->reveal(),
+            $user,
             $locale,
             false,
             false,

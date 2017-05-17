@@ -450,6 +450,10 @@ services:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
 
+    impersonating_user_checker:
+        class: Proximum\Vimeet\Application\Components\User\ImpersonatingUserChecker
+        arguments:
+            - '@adapter.authorization_checker'
 
     #
     # Validators

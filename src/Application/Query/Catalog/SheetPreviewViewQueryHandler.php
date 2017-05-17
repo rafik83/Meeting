@@ -51,12 +51,12 @@ class SheetPreviewViewQueryHandler
     private $meetingPublishedAccessChecker;
 
     /**
-     * @param SheetInfoGuesser              $sheetInfoGuesser
-     * @param Composer                      $ruleComposer
-     * @param Preview                       $preview
-     * @param RuleRepositoryInterface       $ruleRepository
-     * @param RequestRepositoryInterface    $meetingRequestRepository
-     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+     * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param Composer                       $ruleComposer
+     * @param Preview                        $preview
+     * @param RuleRepositoryInterface        $ruleRepository
+     * @param RequestRepositoryInterface     $meetingRequestRepository
+     * @param MeetingPublishedAccessChecker  $meetingPublishedAccessChecker
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -110,7 +110,8 @@ class SheetPreviewViewQueryHandler
             $isMeetingRequestUpdateLocked,
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
-            $meetingRequest !== null ? $meetingRequest->hasMessage() : false
+            $meetingRequest !== null ? $meetingRequest->hasMessage() : false,
+            $catalogSheetPreviewViewQuery->isSeenByCurrentUser
         );
     }
 }

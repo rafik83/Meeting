@@ -42,10 +42,10 @@ class MeetingRequestViewQueryHandler
     /**
      * MeetingRequestViewQueryHandler constructor.
      *
-     * @param Preview                 $preview
-     * @param SheetInfoGuesser        $sheetInfoGuesser
-     * @param RuleRepositoryInterface $ruleRepository
-     * @param Composer                $ruleComposer
+     * @param Preview                        $preview
+     * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param RuleRepositoryInterface        $ruleRepository
+     * @param Composer                       $ruleComposer
      */
     public function __construct(
         Preview $preview,
@@ -53,10 +53,10 @@ class MeetingRequestViewQueryHandler
         RuleRepositoryInterface $ruleRepository,
         Composer $ruleComposer
     ) {
-        $this->preview          = $preview;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
-        $this->ruleRepository   = $ruleRepository;
-        $this->ruleComposer     = $ruleComposer;
+        $this->preview               = $preview;
+        $this->sheetInfoGuesser      = $sheetInfoGuesser;
+        $this->ruleRepository        = $ruleRepository;
+        $this->ruleComposer          = $ruleComposer;
     }
 
     /**
@@ -92,7 +92,8 @@ class MeetingRequestViewQueryHandler
             $isSheetSeeable,
             $query->isMeetingRequestClosed,
             $query->isAnsweringMeetingRequestClosed,
-            $query->meetingRequest->hasMessage()
+            $query->meetingRequest->hasMessage(),
+            $query->isSeenByUser
         );
     }
 
