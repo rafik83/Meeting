@@ -3,7 +3,7 @@
     <div class="catalog__item">
         <div class="content__sheet-card">
             {% if meetingRequestView.hasMessage and meetingRequestView.meetingRequest is not null %}
-                <a href="{{ path('event_catalog_meeting_request_discussion', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequest.id }) }}" data-toggle="modal" data-target="#request-modal" class="pull-right no-underline ft-size-18">
+                <a href="{{ path('event_catalog_meeting_request_discussion', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequest.id }) }}" data-toggle="modal" data-target="#request-modal" class="pull-right no-underline ft-size-18 mg-left-8">
                     <i class="icon-Message_1 ft-bold"></i>
                 </a>
             {% endif %}
