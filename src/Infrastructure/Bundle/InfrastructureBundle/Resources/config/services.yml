@@ -1887,6 +1887,7 @@ services:
         arguments:
             - '@security.impersonate'
             - '@adapter.event_url_generator'
+            - '@router'
 
     #
     # Components
