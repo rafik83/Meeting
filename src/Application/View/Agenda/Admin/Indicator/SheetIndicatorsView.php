@@ -53,11 +53,6 @@ class SheetIndicatorsView
     public $countMaxMeetingAvailable;
 
     /**
-     * @var int
-     */
-    public $countTotalMeeting;
-
-    /**
      * @var bool
      */
     public $hasNotSentMeetingRequest;
@@ -95,7 +90,6 @@ class SheetIndicatorsView
      * @param int $countPlacedMeetings
      * @param int $countPendingPropositions
      * @param int $countMaxMeetingAvailable
-     * @param int $countTotalMeeting
      */
     public function __construct(
         $countRequest = 0,
@@ -105,8 +99,7 @@ class SheetIndicatorsView
         $usableSlots = 0,
         $countPlacedMeetings = 0,
         $countPendingPropositions = 0,
-        $countMaxMeetingAvailable = 0,
-        $countTotalMeeting = 0
+        $countMaxMeetingAvailable = 0
     ) {
         $this->countRequest             = $countRequest;
         $this->countProposition         = $countProposition;
@@ -116,7 +109,6 @@ class SheetIndicatorsView
         $this->countPlacedMeetings      = $countPlacedMeetings;
         $this->countPendingPropositions = $countPendingPropositions;
         $this->countMaxMeetingAvailable = $countMaxMeetingAvailable;
-        $this->countTotalMeeting        = $countTotalMeeting;
         $this->hasNotSentMeetingRequest = $this->countRequest === 0;
         $this->hasMeetingToApprove      = $this->countPendingPropositions > 0;
 

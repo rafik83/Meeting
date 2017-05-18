@@ -44,7 +44,7 @@ class SheetIndicatorsViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $requestRepository->reveal(),
             $indicatorCalculator->reveal()
         );
-        $expectedView = new SheetIndicatorsView(1, 1, 1, 1, 1, 1, 1, 1, 2);
+        $expectedView = new SheetIndicatorsView(1, 1, 1, 1, 1, 1, 1, 1);
 
         $requestRepository->countRequestSentBySheet($sheet)->shouldBeCalled()->willReturn($request);
         $requestRepository->countPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn($propositions);

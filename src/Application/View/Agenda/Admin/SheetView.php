@@ -99,13 +99,6 @@ class SheetView
     public $countMaxMeetingAvailable;
 
     /**
-     * "Nombre total de meeting"
-     *
-     * @var int
-     */
-    public $countTotalMeeting;
-
-    /**
      * Sheet details url
      *
      * @var string
@@ -218,7 +211,6 @@ class SheetView
         $this->usableSlots              = $sheetIndicatorsView->usableSlots;
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
         $this->countMaxMeetingAvailable = $sheetIndicatorsView->countMaxMeetingAvailable;
-        $this->countTotalMeeting        = $sheetIndicatorsView->countTotalMeeting;
         $this->hasFollower              = $hasFollower;
         $this->url                      = $url;
         $this->participants             = $participants;
