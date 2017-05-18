@@ -38,7 +38,7 @@ class CatalogAccessVoter extends Voter
      */
     public function supports($attribute, $subject)
     {
-        if (!in_array($attribute, array(self::VIEW))) {
+        if (!in_array($attribute, [self::VIEW])) {
             return false;
         }
 
