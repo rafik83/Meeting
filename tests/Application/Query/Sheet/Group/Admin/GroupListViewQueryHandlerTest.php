@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
@@ -33,6 +34,7 @@ class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
         $user = UserFactory::create();
+        $admin = AdminFactory::create();
 
         $reflectionGroup = new \ReflectionClass(Group::class);
         $propertyGroupId = $reflectionGroup->getProperty('id');
@@ -62,6 +64,7 @@ class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 new SheetView(1, 'Sheet title 1'),
                 new SheetView(2, 'Sheet title 2'),
             ],
+            '_LINK_',
             $datetime
         );
 
@@ -70,11 +73,11 @@ class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $groupRepository->getAllByEventOrderedByTitle($event)->shouldBeCalled()->willReturn([$group]);
 
         $groupViewQueryHandler
-            ->handle(new AdminGroupViewQuery($group))
+            ->handle(new AdminGroupViewQuery($group, $admin))
             ->shouldBeCalled()
             ->willReturn($expectedResult);
 
-        $result = $handler->handle(new GroupListViewQuery($event));
+        $result = $handler->handle(new GroupListViewQuery($event, $admin));
 
         $this->assertEquals([$expectedResult], $result);
     }

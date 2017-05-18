@@ -2723,6 +2723,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
 
@@ -2731,6 +2732,7 @@ services:
         arguments:
             - '@query.sheet.group.admin.group_view_handler'
             - '@repository.sheet.group_repository'
+            - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
 
