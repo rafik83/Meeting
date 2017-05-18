@@ -78,7 +78,8 @@ class SheetIndicatorsViewQueryHandler
             $usableSlots,
             $placedMeetingsNumber,
             $pendingProposition,
-            $maxMeetingAvailable
+            $maxMeetingAvailable,
+            $meetingRequestsCount + $pendingProposition
         );
     }
 }
