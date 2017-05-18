@@ -1882,6 +1882,12 @@ services:
         arguments:
             - '@security.authorization_checker'
 
+    adapter.impersonate_url_generator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ImpersonateUrlGeneratorAdapter
+        arguments:
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'
+
     #
     # Components
     #
