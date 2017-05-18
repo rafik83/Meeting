@@ -67,6 +67,7 @@ class SheetIndicatorsViewQueryHandler
         $slotCount            = $indicator->slotCount;
         $usableSlots          = $indicator->usableSlots;
         $pendingProposition   = $indicator->pendingPropositionCount;
+        $maxMeetingAvailable  = $indicator->maxMeetingAvailable;
         $placedMeetingsNumber = $this->meetingRepository->countMeetingsOfSheet($sheet);
 
         return new SheetIndicatorsView(
@@ -76,7 +77,8 @@ class SheetIndicatorsViewQueryHandler
             $slotCount,
             $usableSlots,
             $placedMeetingsNumber,
-            $pendingProposition
+            $pendingProposition,
+            $maxMeetingAvailable
         );
     }
 }

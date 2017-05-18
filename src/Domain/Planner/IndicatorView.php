@@ -91,6 +91,13 @@ class IndicatorView
     public $pendingPropositionCount;
 
     /**
+     * "Nombre maximum de rendez-vous autorisé (pack de rdv)"
+     *
+     * @var int
+     */
+    public $maxMeetingAvailable;
+
+    /**
      * @param int $slotTotal
      * @param int $participantsCount
      * @param int $unavailabilitiesCount
@@ -119,5 +126,6 @@ class IndicatorView
         $this->availableSlotsCount      = $this->slotsParticipantsCount - $unavailabilitiesCount;
         $this->possibleMeetingsQuantity = max(0, min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount));
         $this->usableSlots              = max(0, min($this->slotCount, $this->availableSlotsCount));
+        $this->maxMeetingAvailable      = $sheetsPlanningQuantity * ( $this->usableSlots - $unavailabilitiesCount);
     }
 }
