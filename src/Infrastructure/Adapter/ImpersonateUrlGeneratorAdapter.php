@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ImpersonateUrlGeneratorAdapter implements ImpersonateUrlGeneratorInterface
 {
@@ -30,17 +31,25 @@ class ImpersonateUrlGeneratorAdapter implements ImpersonateUrlGeneratorInterface
     private $eventUrlGenerator;
 
     /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
      * ImpersonateUrlGeneratorAdapter constructor.
      *
      * @param Impersonate                $impersonate
      * @param EventUrlGeneratorInterface $eventUrlGenerator
+     * @param UrlGeneratorInterface      $urlGenerator
      */
     public function __construct(
         Impersonate $impersonate,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        EventUrlGeneratorInterface $eventUrlGenerator,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->impersonate       = $impersonate;
         $this->eventUrlGenerator = $eventUrlGenerator;
+        $this->urlGenerator      = $urlGenerator;
     }
 
     /**
@@ -55,5 +64,20 @@ class ImpersonateUrlGeneratorAdapter implements ImpersonateUrlGeneratorInterface
             $routeName,
             array_merge(['_switchto' => $impersonationToken], $parameters)
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateExit($routeName, array $parameters = [])
+    {
+        $redirectUrl = $this->urlGenerator->generate($routeName, $parameters);
+
+        return $this->urlGenerator->generate('event', array_merge(
+            [
+                '_switchto' => '_exit',
+                '_redirect' => $redirectUrl,
+            ], $parameters
+        ));
     }
 }

@@ -26,4 +26,12 @@ interface ImpersonateUrlGeneratorInterface
      * @return string
      */
     public function generate(Admin $admin, User $user, Event $event, $routeName, array $parameters = []);
+
+    /**
+     * @param string $routeName
+     * @param array  $parameters
+     *
+     * @return string
+     */
+    public function generateExit($routeName, array $parameters = []);
 }
