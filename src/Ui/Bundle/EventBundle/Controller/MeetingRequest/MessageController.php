@@ -37,7 +37,12 @@ class MessageController extends Controller
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_OPEN_ACCESS', $eventDomain->getEvent());
+
+        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
+
+        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         $discussion = $this
             ->get('tactician.commandbus.query')
