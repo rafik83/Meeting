@@ -40,12 +40,6 @@ class MessageController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted(CatalogAccessVoter::VIEW, $eventDomain->getEvent());
 
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
-
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
         $discussion = $this
             ->get('tactician.commandbus.query')
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
