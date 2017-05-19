@@ -2796,6 +2796,9 @@ services:
         class: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQueryHandler
         arguments:
             - '@adapter.impersonate_url_generator_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery }
+
 
     #
     # Program query

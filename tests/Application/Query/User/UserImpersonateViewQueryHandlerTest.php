@@ -1,0 +1,58 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Query\User;
+
+use Proximum\Vimeet\Application\Adapter\ImpersonateUrlGeneratorInterface;
+use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
+use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQueryHandler;
+use Proximum\Vimeet\Application\View\User\UserImpersonateView;
+use Proximum\Vimeet\Application\View\User\UserView;
+use Proximum\Vimeet\Domain\Model\User\Account;
+use Proximum\Vimeet\Tests\Factory\AdminFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
+
+class UserImpersonateViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $fromUser = AdminFactory::create('admin@vimeet.events', 'vincent', 'larose');
+        $toUser   = UserFactory::create('user@vimeet.events');
+
+        $account = new Account();
+        $account->setFirstName('francois');
+        $account->setLastName('bennet');
+        $toUser->setAccount($account);
+
+        $exitRouteName   = 'admin_sheet_details';
+        $routeParameters = ['sheet' => 1, 'event' => 1];
+        $sheet           = SheetFactory::create();
+
+        $impersonateUrlGenerator = $this->prophesize(ImpersonateUrlGeneratorInterface::class);
+
+        $impersonateUrlGenerator->generateExit($exitRouteName, $routeParameters)
+            ->shouldBeCalled()
+            ->willReturn('_EXIT_URL_');
+
+        $expectedUserImpersonateView = new UserImpersonateView(
+            new UserView('vincent', 'larose', 'admin@vimeet.events'),
+            new UserView('francois', 'bennet', 'user@vimeet.events'),
+            '_EXIT_URL_'
+        );
+
+        $query   = new UserImpersonateViewQuery($fromUser, $toUser, $sheet, $exitRouteName, $routeParameters);
+        $handler = new UserImpersonateViewQueryHandler($impersonateUrlGenerator->reveal());
+
+        $userImpersonateView = $handler->handle($query);
+        
+        $this->assertEquals($expectedUserImpersonateView, $userImpersonateView);
+    }
+}

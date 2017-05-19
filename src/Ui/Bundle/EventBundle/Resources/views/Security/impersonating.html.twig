@@ -1,12 +1,12 @@
-{% if impersonatingUser %}
+{% if impersonateView is not null %}
     <div class="well">
         {{ 'admin.sheet.impersonateAs'|trans({
-            '%adminFullname%': impersonatingUser.fullname,
-            '%adminEmail%': impersonatingUser.email,
-            '%userEmail%': app.user.email
+            '%adminFullname%': impersonateView.toUser.fullname,
+            '%adminEmail%': impersonateView.toUser.email,
+            '%userEmail%': impersonateView.fromUser.email
         }) }}
 
-        <a href="{{ path('event', {'_switchto': '_exit', '_redirect': url('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id })}) }}" class="btn btn-danger">
+        <a href="{{ impersonateView.exitLink }}" class="btn btn-danger">
             {{ 'admin.sheet.exit_impersonation'|trans }}
         </a>
     </div>

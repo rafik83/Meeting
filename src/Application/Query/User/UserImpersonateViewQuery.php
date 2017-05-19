@@ -37,18 +37,30 @@ class UserImpersonateViewQuery
     public $exitRouteName;
 
     /**
+     * @var array
+     */
+    public $routeParameters;
+
+    /**
      * UserImpersonateViewQuery constructor.
      *
      * @param AbstractUser $parentUser
      * @param User         $user
      * @param Sheet        $sheet
      * @param string       $exitRouteName
+     * @param array        $routeParameters
      */
-    public function __construct(AbstractUser $parentUser, User $user, Sheet $sheet, $exitRouteName)
-    {
-        $this->parentUser    = $parentUser;
-        $this->user          = $user;
-        $this->sheet         = $sheet;
-        $this->exitRouteName = $exitRouteName;
+    public function __construct(
+        AbstractUser $parentUser,
+        User $user,
+        Sheet $sheet,
+        $exitRouteName,
+        array $routeParameters = []
+    ) {
+        $this->parentUser      = $parentUser;
+        $this->user            = $user;
+        $this->sheet           = $sheet;
+        $this->exitRouteName   = $exitRouteName;
+        $this->routeParameters = $routeParameters;
     }
 }

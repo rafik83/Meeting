@@ -40,4 +40,12 @@ class UserView
         $this->lastname  = $lastname;
         $this->email     = $email;
     }
+
+    /**
+     * @return string
+     */
+    public function getFullname()
+    {
+        return ucfirst(strtolower($this->firstname)) . ' ' . strtoupper($this->lastname);
+    }
 }

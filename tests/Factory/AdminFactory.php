@@ -17,12 +17,15 @@ class AdminFactory
     /**
      * @param string $email
      *
+     * @param string $firstname
+     * @param string $lastname
+     *
      * @return Admin
      */
-    public static function create($email = 'admin@vimeet.events')
+    public static function create($email = 'admin@vimeet.events', $firstname = 'vincent', $lastname = 'larose')
     {
         $now = new \DateTime();
 
-        return new Admin($email, 'salt', 'password', 'fr', 'vincent', 'larose', 'ROLE_ADMIN', $now);
+        return new Admin($email, 'salt', 'password', 'fr', $firstname, $lastname, 'ROLE_ADMIN', $now);
     }
 }

@@ -38,21 +38,18 @@ class UserImpersonateViewQueryHandler
      */
     public function handle(UserImpersonateViewQuery $query)
     {
-        $exitLink = $this->impersonateUrlGenerator->generateExit($query->exitRouteName, [
-            'event' => $query->sheet->getEvent()->getId(),
-            'sheet' => $query->sheet->getId(),
-        ]);
+        $exitLink = $this->impersonateUrlGenerator->generateExit($query->exitRouteName, $query->routeParameters);
 
         $parentUserView = new UserView(
-            $query->user->getFirstname(),
-            $query->user->getLastname(),
-            $query->user->getEmail()
+            $query->parentUser->getFirstname(),
+            $query->parentUser->getLastname(),
+            $query->parentUser->getEmail()
         );
 
         $userView = new UserView(
             $query->user->getFirstName(),
             $query->user->getLastName(),
-            $query->user->getLocale()
+            $query->user->getEmail()
         );
 
         return new UserImpersonateView($parentUserView, $userView, $exitLink);

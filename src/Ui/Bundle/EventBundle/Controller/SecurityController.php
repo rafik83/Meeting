@@ -10,14 +10,15 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
 use Proximum\Vimeet\Application\View\Sheet\Group\ImpersonationUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,7 +47,7 @@ class SecurityController extends Controller
         $this->get('session')->getFlashBag()->get('register_type');
 
         $email = new Email();
-        $form = $this->createForm(EmailType::class, $email);
+        $form  = $this->createForm(EmailType::class, $email);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             if ($this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email->email)) {
@@ -79,7 +80,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
@@ -95,7 +96,9 @@ class SecurityController extends Controller
         $type         = null;
 
         if (null !== $typeId) {
-            if (is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')->getTypeViewById($typeId, $request->getLocale())) {
+            if (is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')
+                    ->getTypeViewById($typeId, $request->getLocale())
+            ) {
                 $this->addFlash('register_type', $typeId);
             } else {
                 $typeId = null;
@@ -162,14 +165,14 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Event   $event
-     * @param Sheet   $sheet
+     * @param Event $event
+     * @param Sheet $sheet
      *
      * @return Response
      */
     public function impersonatingUserAction(Event $event, Sheet $sheet)
     {
-        $impersonatingUser = null;
+        $userImpersonateView = null;
 
         $token = $this->get('security.token_storage')->getToken();
 
@@ -179,14 +182,25 @@ class SecurityController extends Controller
             foreach ($roles as $role) {
                 if ($role instanceof SwitchUserRole) {
                     $impersonatingUser = $role->getSource()->getUser();
+
+                    $userImpersonateView = $this->get('tactician.commandbus.query')->handle(
+                        new UserImpersonateViewQuery(
+                            $impersonatingUser,
+                            $token->getUser(),
+                            $sheet,
+                            'admin_sheet_details',
+                            ['event' => $sheet->getEvent()->getId(), 'sheet' => $sheet->getId()]
+                        )
+                    );
+                    break;
                 }
             }
         }
 
         return $this->render('EventBundle:Security:impersonating.html.twig', [
-            'impersonatingUser' => $impersonatingUser,
             'event'             => $event,
             'sheet'             => $sheet,
+            'impersonateView'   => $userImpersonateView
         ]);
     }
 
@@ -198,8 +212,12 @@ class SecurityController extends Controller
      *
      * @return RedirectResponse
      */
-    public function switchSheetGroupManagerToSheetUserAction(EventDomain $eventDomain, Group $sheetGroup, UserInterface $user, Sheet $sheet)
-    {
+    public function switchSheetGroupManagerToSheetUserAction(
+        EventDomain $eventDomain,
+        Group $sheetGroup,
+        UserInterface $user,
+        Sheet $sheet
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
 
