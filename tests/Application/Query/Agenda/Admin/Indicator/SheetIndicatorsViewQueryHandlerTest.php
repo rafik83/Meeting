@@ -36,7 +36,7 @@ class SheetIndicatorsViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $request = 1;
         $propositions = 1;
 
-        $indicators = new IndicatorView(1, 1, 0, 1, 1, 1);
+        $indicators = new IndicatorView(1, 1, 0, 1, 1, 1, 0);
 
         $query = new SheetIndicatorsViewQuery($sheet);
         $handler = new SheetIndicatorsViewQueryHandler(
