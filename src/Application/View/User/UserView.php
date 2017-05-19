@@ -46,6 +46,6 @@ class UserView
      */
     public function getFullname()
     {
-        return ucfirst(strtolower($this->firstname)) . ' ' . strtoupper($this->lastname);
+        return $this->firstname . ' ' . $this->lastname;
     }
 }

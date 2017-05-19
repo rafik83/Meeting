@@ -38,12 +38,12 @@ class UserImpersonateViewQueryHandler
      */
     public function handle(UserImpersonateViewQuery $query)
     {
-        $exitLink = $this->impersonateUrlGenerator->generateExit($query->exitRouteName, $query->routeParameters);
+        $exitLink = $this->impersonateUrlGenerator->generateExit($query->exitRouteName, $query->exitRouteParameters);
 
         $parentUserView = new UserView(
-            $query->parentUser->getFirstname(),
-            $query->parentUser->getLastname(),
-            $query->parentUser->getEmail()
+            $query->previousUser->getFirstname(),
+            $query->previousUser->getLastname(),
+            $query->previousUser->getEmail()
         );
 
         $userView = new UserView(

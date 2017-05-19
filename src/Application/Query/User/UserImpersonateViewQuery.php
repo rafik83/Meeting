@@ -18,7 +18,7 @@ class UserImpersonateViewQuery
     /**
      * @var AbstractUser
      */
-    public $parentUser;
+    public $previousUser;
 
     /**
      * @var User
@@ -33,25 +33,25 @@ class UserImpersonateViewQuery
     /**
      * @var array
      */
-    public $routeParameters;
+    public $exitRouteParameters;
 
     /**
      * UserImpersonateViewQuery constructor.
      *
-     * @param AbstractUser $parentUser
+     * @param AbstractUser $previousUser
      * @param User         $user
      * @param string       $exitRouteName
-     * @param array        $routeParameters
+     * @param array        $exitRouteParameters
      */
     public function __construct(
-        AbstractUser $parentUser,
+        AbstractUser $previousUser,
         User $user,
         $exitRouteName,
-        array $routeParameters = []
+        array $exitRouteParameters = []
     ) {
-        $this->parentUser      = $parentUser;
-        $this->user            = $user;
-        $this->exitRouteName   = $exitRouteName;
-        $this->routeParameters = $routeParameters;
+        $this->previousUser        = $previousUser;
+        $this->user                = $user;
+        $this->exitRouteName       = $exitRouteName;
+        $this->exitRouteParameters = $exitRouteParameters;
     }
 }
