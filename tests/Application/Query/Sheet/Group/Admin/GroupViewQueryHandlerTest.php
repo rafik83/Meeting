@@ -58,6 +58,7 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 new SheetView(1, 'Sheet title 1'),
                 new SheetView(2, 'Sheet title 2'),
             ],
+            '_IMPERSONATE_LINK_',
             $datetime
         );
 

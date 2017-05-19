@@ -16,6 +16,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\ImpersonateUrlGeneratorAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ImpersonateUrlGeneratorAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +29,7 @@ class ImpersonateUrlGeneratorAdapterTest extends \PHPUnit_Framework_TestCase
 
         $impersonate       = $this->prophesize(Impersonate::class);
         $eventUrlGenerator = $this->prophesize(EventUrlGeneratorInterface::class);
+        $urlGenerator      = $this->prophesize(UrlGeneratorInterface::class);
 
         $impersonate->getEncodedToken($admin, $user)->shouldBeCalled()->willReturn('_TOKEN_');
 
@@ -39,7 +41,8 @@ class ImpersonateUrlGeneratorAdapterTest extends \PHPUnit_Framework_TestCase
 
         $impersonateUrlGenerator = new ImpersonateUrlGeneratorAdapter(
             $impersonate->reveal(),
-            $eventUrlGenerator->reveal()
+            $eventUrlGenerator->reveal(),
+            $urlGenerator->reveal()
         );
 
         $impersonateUrl = $impersonateUrlGenerator->generate($admin, $user, $event, 'event_sheet', ['sheet' => 1]);

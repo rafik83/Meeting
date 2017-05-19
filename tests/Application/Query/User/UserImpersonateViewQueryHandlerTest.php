@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\View\User\UserImpersonateView;
 use Proximum\Vimeet\Application\View\User\UserView;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Tests\Factory\AdminFactory;
-use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class UserImpersonateViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +33,6 @@ class UserImpersonateViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $exitRouteName   = 'admin_sheet_details';
         $routeParameters = ['sheet' => 1, 'event' => 1];
-        $sheet           = SheetFactory::create();
 
         $impersonateUrlGenerator = $this->prophesize(ImpersonateUrlGeneratorInterface::class);
 
@@ -48,11 +46,11 @@ class UserImpersonateViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             '_EXIT_URL_'
         );
 
-        $query   = new UserImpersonateViewQuery($fromUser, $toUser, $sheet, $exitRouteName, $routeParameters);
+        $query   = new UserImpersonateViewQuery($fromUser, $toUser, $exitRouteName, $routeParameters);
         $handler = new UserImpersonateViewQueryHandler($impersonateUrlGenerator->reveal());
 
         $userImpersonateView = $handler->handle($query);
-        
+
         $this->assertEquals($expectedUserImpersonateView, $userImpersonateView);
     }
 }
