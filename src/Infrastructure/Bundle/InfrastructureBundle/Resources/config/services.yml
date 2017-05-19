@@ -2792,6 +2792,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQuery }
 
+    query.user.user_impersonate_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQueryHandler
+        arguments:
+            - '@adapter.impersonate_url_generator_adapter'
+
     #
     # Program query
     #

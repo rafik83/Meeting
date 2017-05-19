@@ -37,7 +37,7 @@ class GroupView
      * @param string             $title
      * @param string             $emailManager
      * @param SheetView[]        $sheetViews
-     * @param                    $impersonateLink
+     * @param string             $impersonateLink
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
