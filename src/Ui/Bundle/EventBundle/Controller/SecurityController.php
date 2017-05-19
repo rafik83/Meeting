@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
-use Proximum\Vimeet\Application\View\Sheet\Group\ImpersonationUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -166,18 +165,22 @@ class SecurityController extends Controller
 
     /**
      * @param Event $event
-     * @param Sheet $sheet
+     * @param null|Sheet $sheet
      *
      * @return Response
      */
-    public function impersonatingUserAction(Event $event, Sheet $sheet)
+    public function impersonatingUserAction(Event $event, $sheet = null)
     {
         $userImpersonateView = null;
-
         $token = $this->get('security.token_storage')->getToken();
 
         if (null !== $token) {
             $roles = $token->getRoles();
+
+            $exitRoute      = $sheet instanceof Sheet ? 'admin_sheet_details' : 'admin_sheets_group_list';
+            $exitParameters = $sheet instanceof Sheet ?
+                ['event' => $event->getId(), 'sheet' => $sheet->getId()] :
+                ['event' => $event->getId()];
 
             foreach ($roles as $role) {
                 if ($role instanceof SwitchUserRole) {
@@ -187,9 +190,8 @@ class SecurityController extends Controller
                         new UserImpersonateViewQuery(
                             $impersonatingUser,
                             $token->getUser(),
-                            $sheet,
-                            'admin_sheet_details',
-                            ['event' => $sheet->getEvent()->getId(), 'sheet' => $sheet->getId()]
+                            $exitRoute,
+                            $exitParameters
                         )
                     );
                     break;
@@ -198,9 +200,9 @@ class SecurityController extends Controller
         }
 
         return $this->render('EventBundle:Security:impersonating.html.twig', [
-            'event'             => $event,
-            'sheet'             => $sheet,
-            'impersonateView'   => $userImpersonateView
+            'event'           => $event,
+            'sheet'           => $sheet,
+            'impersonateView' => $userImpersonateView,
         ]);
     }
 
@@ -261,7 +263,7 @@ class SecurityController extends Controller
             throw $this->createAccessDeniedException('Given sheet not have group');
         }
 
-        $impersonatingUser = null;
+        $userImpersonateView = null;
 
         $token = $this->get('security.token_storage')->getToken();
 
@@ -270,20 +272,23 @@ class SecurityController extends Controller
 
             foreach ($roles as $role) {
                 if ($role instanceof SwitchUserRole) {
-                    $impersonatingUser = new ImpersonationUserView(
-                        $role->getSource()->getUser()->getEmail(),
-                        $user->getEmail(),
-                        $user->getAccount()->getFirstName(),
-                        $user->getAccount()->getLastName(),
-                        $sheetGroup->getId()
+                    $userImpersonateView = $this->get('tactician.commandbus.query')->handle(
+                        new UserImpersonateViewQuery(
+                            $role->getSource()->getUser(),
+                            $token->getUser(),
+                            'event_sheet_group_unswitch',
+                            ['sheetGroup' => $sheetGroup->getId()]
+                        )
                     );
+                    break;
                 }
             }
         }
 
         return $this->render('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser.html.twig', [
-            'impersonatingUser' => $impersonatingUser,
+            'impersonateView'   => $userImpersonateView,
             'event'             => $event,
+            'sheetGroup'        => $sheetGroup
         ]);
     }
 }

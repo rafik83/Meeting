@@ -1,13 +1,13 @@
-{% if impersonatingUser %}
+{% if impersonateView is not null %}
     <div class="well">
         {{ 'sheetGroup.impersonateAs'|trans({
-            '%fromEmail%': impersonatingUser.fromEmail,
-            '%toEmail%': impersonatingUser.toEmail,
-            '%toFirstName%': impersonatingUser.toFirstName,
-            '%toLastName%': impersonatingUser.toLastName,
+            '%fromEmail%': impersonateView.fromUser.email,
+            '%toEmail%': impersonateView.toUser.email,
+            '%toFirstName%': impersonateView.toUser.firstname,
+            '%toLastName%': impersonateView.toUser.lastname
         }) }}
 
-        <a href="{{ path('event_sheet_group_unswitch', {'sheetGroup' : impersonatingUser.sheetGroupId}) }}" class="btn btn-danger">
+        <a href="{{ path('event_sheet_group_unswitch', {'sheetGroup' : sheetGroup.id}) }}" class="btn btn-danger">
             {{ 'sheetGroup.quitImpersonation'|trans }}
         </a>
     </div>
