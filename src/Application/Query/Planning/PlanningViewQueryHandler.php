@@ -179,7 +179,7 @@ class PlanningViewQueryHandler
         }
 
         if (!isset($this->happeningParticipations[$participant->getId()])) {
-            $this->happeningParticipations[$participant->getId()] = $this->happeningParticipationRepository->findByUser($participant->getUser());
+            $this->happeningParticipations[$participant->getUser()->getId()] = $this->happeningParticipationRepository->findByUser($participant->getUser());
         }
     }
 
@@ -200,7 +200,7 @@ class PlanningViewQueryHandler
         $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByParticipants($participants));
         $this->assignMeetingByParticipant($this->meetingRepository->findByParticipants($participants));
         $this->assignUnavailabilitiesByUser($this->unavailabilityRepository->findByParticipants($participants));
-        $this->assignHappeningsByParticipant($this->happeningParticipationRepository->findByParticipants($participants));
+        $this->assignHappeningsByUser($this->happeningParticipationRepository->findByUsers($participants));
         $this->addEmptyForParticipant($participants);
     }
 
@@ -239,10 +239,10 @@ class PlanningViewQueryHandler
     /**
      * @param HappeningParticipation[] $happenings
      */
-    private function assignHappeningsByParticipant(array $happenings)
+    private function assignHappeningsByUser(array $happenings)
     {
         foreach ($happenings as $happening) {
-            $this->happeningParticipations[$happening->getParticipant()->getId()][] = $happening;
+            $this->happeningParticipations[$happening->getUser()->getId()][] = $happening;
         }
     }
 
@@ -255,7 +255,7 @@ class PlanningViewQueryHandler
         $this->assignMeetingByParticipant($this->meetingRepository->getAllByEvent($event));
         $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByEvent($event));
         $this->assignUnavailabilitiesByUser($this->unavailabilityRepository->getByEvent($event));
-        $this->assignHappeningsByParticipant($this->happeningParticipationRepository->getByEvent($event));
+        $this->assignHappeningsByUser($this->happeningParticipationRepository->getByEvent($event));
         $this->addEmptyForParticipant($this->participantRepository->findByEvent($event));
     }
 
@@ -280,7 +280,7 @@ class PlanningViewQueryHandler
             }
 
             if (!isset($this->happeningParticipations[$participant->getId()])) {
-                $this->happeningParticipations[$participant->getId()] = [];
+                $this->happeningParticipations[$participant->getUser()->getId()] = [];
             }
         }
     }

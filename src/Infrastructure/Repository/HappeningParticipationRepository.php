@@ -79,7 +79,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function findByParticipants(array $participants)
+    public function findByUsers(array $users)
     {
         $queryBuilder = $this
             ->entityManager
@@ -87,8 +87,8 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('participation, happening')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
-            ->join('participation.participant', 'participant', 'WITH', 'participant.id IN (:participants) AND participation.disabled = false')
-            ->setParameter('participants', $participants)
+            ->join('participation.user', 'user', 'WITH', 'user.id IN (:users) AND participation.disabled = false')
+            ->setParameter('users', $users)
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -99,16 +99,20 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
      */
     public function findBySheet(Sheet $sheet)
     {
+        $sheetUsers = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $sheet->getParticipants()->toArray());
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participation, happening')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
-            ->join('participation.participant', 'participant')
             ->where('participation.disabled = false')
-            ->andWhere('participant.sheet = :sheet')
+            ->andWhere('participant.user IN (:users) AND participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
+            ->setParameter('users', $sheetUsers)
         ;
 
         return $queryBuilder->getQuery()->getResult();

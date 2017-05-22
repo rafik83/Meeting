@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface HappeningParticipationRepositoryInterface
 {
@@ -29,27 +30,19 @@ interface HappeningParticipationRepositoryInterface
     public function remove(HappeningParticipation $happeningParticipation);
 
     /**
-     * @param Happening   $happening
-     * @param Participant $participant
-     *
-     * @return null|HappeningParticipation
-     */
-    public function findByHappeningAndParticipant(Happening $happening, Participant $participant);
-
-    /**
-     * @param Participant $participant
+     * @param User $user
      * @param array       $filters
      *
      * @return HappeningParticipation[]
      */
-    public function findByParticipant(Participant $participant, array $filters = []);
+    public function findByUser(User $user, array $filters = []);
 
     /**
-     * @param Participant[] $participants
+     * @param User[] $users
      *
      * @return HappeningParticipation[]
      */
-    public function findByParticipants(array $participants);
+    public function findByUsers(array $users);
 
     /**
      * @param Happening $happening
