@@ -169,7 +169,7 @@ class SecurityController extends Controller
      *
      * @return Response
      */
-    public function impersonatingUserAction(Event $event, Sheet $sheet = null)
+    public function impersonatingUserAction(Event $event, $sheet = null)
     {
         $userImpersonateView = null;
         $token = $this->get('security.token_storage')->getToken();
