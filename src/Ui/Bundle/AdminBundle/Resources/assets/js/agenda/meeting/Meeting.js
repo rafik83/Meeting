@@ -303,8 +303,9 @@ module.exports = {
                 .then(function (response) {
                     var participants = response.data.participants;
                     var requests = response.data.requests;
+                    var indicators = response.data.indicators;
 
-                    this.populateSheetAgenda(sheet, participants, requests);
+                    this.populateSheetAgenda(sheet, participants, requests, indicators);
                 }.bind(this))
                 .catch(function (error) {
                     if (error.response) {
@@ -354,11 +355,14 @@ module.exports = {
          * @param {Object} sheet
          * @param {array} participants
          * @param {array} requests
+         * @param {array} indicators
          */
-        populateSheetAgenda: function (sheet, participants, requests) {
+        populateSheetAgenda: function (sheet, participants, requests, indicators) {
             this.clearAgenda(sheet);
 
             sheet.participants = participants;
+            sheet.indicators   = indicators;
+
             this.populateRequestList(sheet, requests);
 
             // check if sheet already opened
@@ -369,6 +373,7 @@ module.exports = {
             } else {
                 this.$set(this.openedSheets[openedSheetIndex], 'participants', sheet.participants);
                 this.$set(this.openedSheets[openedSheetIndex], 'requests', sheet.requests);
+                this.$set(this.openedSheets[openedSheetIndex], 'indicators', sheet.indicators);
 
                 this.forceUpdateSheet(sheet);
                 this.$forceUpdate();
@@ -411,6 +416,7 @@ module.exports = {
 
             this.openedSheets[sheetIndex].participants = [];
             this.openedSheets[sheetIndex].requests = [];
+            this.openedSheets[sheetIndex].indicators = null;
         },
 
         /**
