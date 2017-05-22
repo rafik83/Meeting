@@ -18,7 +18,7 @@ class Version20170522124244 extends AbstractMigration
         $this->addSql('ALTER TABLE happening_participation ADD user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE happening_participation ADD CONSTRAINT FK_6B31720CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_6B31720CA76ED395 ON happening_participation (user_id)');
-        $this->addSql('UPDATE happening_participation hp JOIN participant p ON hp.participant_ID = p.id SET hp.user_id = participant.user_id');
+        $this->addSql('UPDATE happening_participation hp JOIN participant p ON hp.participant_ID = p.id SET hp.user_id = p.user_id');
     }
 
     /**
