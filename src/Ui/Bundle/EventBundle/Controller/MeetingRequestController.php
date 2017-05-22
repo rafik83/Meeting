@@ -30,6 +30,7 @@ use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
@@ -488,15 +489,17 @@ class MeetingRequestController extends Controller
      * @param bool   $ok
      * @param bool   $close
      * @param string $html
+     * @param string $participantsHtml
      *
      * @return array
      */
-    private function createJsonResponseData($ok, $close, $html)
+    private function createJsonResponseData($ok, $close, $html, $participantsHtml = '')
     {
         return [
-            'status' => $ok === true ? 'ok' : 'error',
-            'close'  => $close,
-            'html'   => $html,
+            'status'           => $ok === true ? 'ok' : 'error',
+            'close'            => $close,
+            'html'             => $html,
+            'participantsHtml' => $participantsHtml,
         ];
     }
 
@@ -701,15 +704,29 @@ class MeetingRequestController extends Controller
                     $this->addFlash('success', 'flash.meeting_request.pending.request.edit.success');
                 }
 
+                $locale = $request->getLocale();
+                $participants = array_map(function (Participant $participant) use ($locale) {
+                        return $this
+                            ->get('template.participant_info_guesser')
+                            ->guessParticipantCompleteName($participant, $locale);
+                    },
+                    $command->participants
+                );
+
                 return new JsonResponse($this->createJsonResponseData(
                     true,
                     false,
                     $this->renderView('EventBundle:MeetingRequest:editRequestSuccess.html.twig', [
                         'isProposition'  => $isProposition,
                         'meetingRequest' => $meetingRequest,
+                    ]),
+                    $this->renderView('EventBundle:MeetingRequest:participantsList.html.twig', [
+                        'participants' => $participants
                     ])
                 ));
+
             } elseif ($isSubmitted && !$form->isValid()) {
+
                 return new JsonResponse($this->createJsonResponseData(
                     false,
                     false,
