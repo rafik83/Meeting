@@ -117,8 +117,8 @@
                 <div class="requests-list" v-if="focusedSheet" ref="focusedSheetRequestList">
                     <p>
                         <b>${ focusedSheet.title }</b>
-                        <span v-bind:class="{'label label-success': focusedSheet.countPlacedMeetings <= focusedSheet.countMaxMeetingAvailable, 'label label-danger': focusedSheet.countPlacedMeetings > focusedSheet.countMaxMeetingAvailable }">
-                            ${ focusedSheet.countPlacedMeetings} / ${ focusedSheet.countMaxMeetingAvailable }
+                        <span v-bind:class="{ 'label label-success': focusedSheet.countPlacedMeetings <= focusedSheet.countMaxMeetingAvailable, 'label label-danger': focusedSheet.countPlacedMeetings > focusedSheet.countMaxMeetingAvailable }">
+                            ${ focusedSheet.countPlacedMeetings } / ${ focusedSheet.countMaxMeetingAvailable }
                         </span>
                         <br>{{ 'admin.agenda.requestsList.title'|trans }}
                     </p>
