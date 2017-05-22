@@ -264,7 +264,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
 
         $happeningSubscriber = $this
             ->happeningParticipationRepository
-            ->checkAnyParticipation($participant) ? 'yes' : 'no';
+            ->checkAnyParticipation($participant->getUser()) ? 'yes' : 'no';
 
         return $this->translator->trans($transKeyHappeningSubscriber . $happeningSubscriber);
     }

@@ -109,8 +109,8 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('participation, happening')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
             ->where('participation.disabled = false')
-            ->andWhere('participant.user IN (:users) AND participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
             ->setParameter('users', $sheetUsers)
         ;
@@ -121,7 +121,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function checkAnyParticipation(Participant $participant)
+    public function checkAnyParticipation(User $user)
     {
         $queryBuilder = $this
             ->entityManager
@@ -129,9 +129,9 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('participation.id')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
-            ->where('participation.participant = :participant')
+            ->where('participation.user = :user')
             ->andWhere('participation.disabled = false')
-            ->setParameter('participant', $participant)
+            ->setParameter('user', $user)
             ->setMaxResults(1)
         ;
 
@@ -210,12 +210,17 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
      */
     public function countParticipationsBySheet(Sheet $sheet)
     {
+        $sheetUsers = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $sheet->getParticipants()->toArray());
+
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(participation.id)')
             ->from(HappeningParticipation::class, 'participation')
             ->where('participation.disabled = false')
-            ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
+            ->setParameter('users', $sheetUsers)
         ;
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
@@ -234,16 +239,21 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
      */
     public function getParticipationsForSheet(Sheet $sheet, $happenings)
     {
+        $sheetUsers = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $sheet->getParticipants()->toArray());
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participation')
             ->from(HappeningParticipation::class, 'participation')
             ->where('participation.disabled = false')
-            ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
             ->join('participation.happening', 'happening', 'WITH', 'happening IN (:happenings)')
             ->setParameter('sheet', $sheet)
             ->setParameter('happenings', $happenings)
+            ->setParameter('users', $sheetUsers)
             ->groupBy('participation.happening, participation.participant')
         ;
 
@@ -253,16 +263,16 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function removeParticipantForHappening(Participant $participant, Happening $happening)
+    public function removeUserForHappening(User $user, Happening $happening)
     {
         $this
             ->entityManager
             ->createQueryBuilder()
             ->delete(HappeningParticipation::class, 'participation')
-            ->where('participation.participant = :participant')
+            ->where('participation.user = :user')
             ->andWhere('participation.disabled = false')
             ->andWhere('participation.happening = :happening')
-            ->setParameter('participant', $participant)
+            ->setParameter('user', $user)
             ->setParameter('happening', $happening)
             ->getQuery()
             ->execute();

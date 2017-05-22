@@ -95,17 +95,17 @@ interface HappeningParticipationRepositoryInterface
     public function getParticipationsForSheet(Sheet $sheet, $happenings);
 
     /**
-     * @param Participant $participant
+     * @param User $user
      * @param Happening   $happening
      */
-    public function removeParticipantForHappening(Participant $participant, Happening $happening);
+    public function removeUserForHappening(User $user, Happening $happening);
 
     /**
-     * @param Participant $participant
+     * @param User $user
      *
      * @return null|int
      */
-    public function checkAnyParticipation(Participant $participant);
+    public function checkAnyParticipation(User $user);
 
     /**
      * @param HappeningParticipation $happeningParticipation

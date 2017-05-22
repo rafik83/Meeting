@@ -126,7 +126,7 @@ class ParticipateHandler
         // Remove deselected participants
         foreach ($previousParticipants as $participant) {
             if (false === in_array($participant, $participate->participants)) {
-                $this->happeningParticipationRepository->removeParticipantForHappening(
+                $this->happeningParticipationRepository->removeUserForHappening(
                     $participant,
                     $participate->happening
                 );
