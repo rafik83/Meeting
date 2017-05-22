@@ -23,3 +23,7 @@ Proximum\Vimeet\Domain\Model\User:
     embedded:
         account:
             class: Proximum\Vimeet\Domain\Model\User\Account
+    oneToMany:
+        happeningParticipations:
+            targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
+            mappedBy: user

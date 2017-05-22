@@ -33,6 +33,11 @@ class HappeningParticipation
     private $disabled = false;
 
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
      * HappeningParticipation constructor.
      *
      * @param Happening   $happening
@@ -94,5 +99,21 @@ class HappeningParticipation
         $this->disabled = $disabled;
 
         return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 }

@@ -27,3 +27,8 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
             inversedBy: happeningParticipations
             joinColumn:
                 onDelete: CASCADE
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            inversedBy: happeningParticipations
+            joinColumn:
+                onDelete: CASCADE
