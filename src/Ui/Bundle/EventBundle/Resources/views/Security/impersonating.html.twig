@@ -1,9 +1,9 @@
 {% if impersonateView is not null %}
     <div class="well">
         {{ 'admin.sheet.impersonateAs'|trans({
-            '%adminFullname%': impersonateView.toUser.fullname,
-            '%adminEmail%': impersonateView.toUser.email,
-            '%userEmail%': impersonateView.fromUser.email
+            '%adminFullname%': impersonateView.fromUser.fullname,
+            '%adminEmail%': impersonateView.fromUser.email,
+            '%userEmail%': impersonateView.toUser.email
         }) }}
 
         <a href="{{ impersonateView.exitLink }}" class="btn btn-danger">
