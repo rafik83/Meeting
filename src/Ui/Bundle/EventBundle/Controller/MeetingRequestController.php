@@ -245,7 +245,8 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $result->meetingRequest,
-                ])
+                ]),
+                $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
 
@@ -318,7 +319,8 @@ class MeetingRequestController extends Controller
                     'meetingRequest'               => $meetingRequest,
                     'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
                     'isMeetingRequestUpdateLocked' =>$eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
-                ])
+                ]),
+                $this->getParticipantsHtml($approveRequest->participants, $request->getLocale())
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
             return new JsonResponse($this->createJsonResponseData(
@@ -704,15 +706,6 @@ class MeetingRequestController extends Controller
                     $this->addFlash('success', 'flash.meeting_request.pending.request.edit.success');
                 }
 
-                $locale = $request->getLocale();
-                $participants = array_map(function (Participant $participant) use ($locale) {
-                        return $this
-                            ->get('template.participant_info_guesser')
-                            ->guessParticipantCompleteName($participant, $locale);
-                    },
-                    $command->participants
-                );
-
                 return new JsonResponse($this->createJsonResponseData(
                     true,
                     false,
@@ -720,9 +713,7 @@ class MeetingRequestController extends Controller
                         'isProposition'  => $isProposition,
                         'meetingRequest' => $meetingRequest,
                     ]),
-                    $this->renderView('EventBundle:MeetingRequest:participantsList.html.twig', [
-                        'participants' => $participants
-                    ])
+                    $this->getParticipantsHtml($command->participants, $request->getLocale())
                 ));
 
             } elseif ($isSubmitted && !$form->isValid()) {
@@ -781,6 +772,27 @@ class MeetingRequestController extends Controller
             'action'    => $this->generateUrl('event_meeting_list_request', [
                 'sheet' => $sheet->getId(),
             ]),
+        ]);
+    }
+
+    /**
+     * @param array  $participants
+     * @param string $locale
+     *
+     * @return string
+     */
+    private function getParticipantsHtml(array $participants, $locale)
+    {
+        $participants = array_map(function (Participant $participant) use ($locale) {
+            return $this
+                ->get('template.participant_info_guesser')
+                ->guessParticipantCompleteName($participant, $locale);
+        },
+            $participants
+        );
+
+        return $this->renderView('EventBundle:MeetingRequest:participantsList.html.twig', [
+            'participants' => $participants
         ]);
     }
 }
