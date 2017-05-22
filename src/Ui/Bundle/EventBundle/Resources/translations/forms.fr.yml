@@ -41,6 +41,19 @@ form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.group.participant.submit: Enregistrer
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
+form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Autre fiche'
+form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: 'Fiche concernée'
+form.multiple_sheet_request_filter_request_type.children.state.filter.all: Tous
+form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Accepté
+form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refusé
+form.multiple_sheet_request_filter_request_type.children.state.filter.sent: 'En attente'
+form.multiple_sheet_request_filter_request_type.children.state.label: Statut
+form.multiple_sheet_request_filter_request_type.children.submit.label: Filtrer
+form.multiple_sheet_request_filter_request_type.children.type.filter.all: Tous
+form.multiple_sheet_request_filter_request_type.children.type.filter.proposition: 'Mes propositions reçues'
+form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'Mes demandes'
+form.multiple_sheet_request_filter_request_type.children.type.label: Type
+form.multiple_sheet_request_filter_request_type.children.user.label: Participant
 form.nomenclature_data.children.items.label: 'Sélectionnez :'
 form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
@@ -96,15 +109,17 @@ form.sheet_editable_text_data.children.submit.label: Enregistrer
 form.sheet_editable_text_data.data.maxLength.translations.plural: 'caractères restants'
 form.sheet_editable_text_data.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
 form.sheet_editable_text_data.data.maxLength.translations.singular: 'caractère restant'
-form.sheet_group_create_sheet.children.sheet.label: Fiche à dupliquer
-form.sheet_group_create_sheet.children.title.label: Titre de la nouvelle fiche
-form.sheet_group_create_sheet.children.submit.label: Créer la fiche
+form.sheet_group_create_sheet.children.sheet.label: 'Fiche à dupliquer'
+form.sheet_group_create_sheet.children.submit.label: 'Créer la fiche'
+form.sheet_group_create_sheet.children.title.label: 'Titre de la nouvelle fiche'
 form.sheet_image_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_image_data.children.submit.label: Enregistrer
 form.sheet_item_collection_data.children.items.label_add: Ajouter
 form.sheet_item_collection_data.children.items.label_delete: '&times;'
 form.sheet_item_collection_data.children.items.prototype.children.title.label: Titre
 form.sheet_item_collection_data.children.submit.label: Enregistrer
+form.sheet_media_data.children.type.document: Document
+form.sheet_media_data.children.type.video: Vidéo
 form.sheet_media_collection_data.children.medias.label_add: Ajouter
 form.sheet_media_collection_data.children.medias.label_delete: '&times;'
 form.sheet_media_collection_data.children.medias.prototype.children.title.label: Titre
@@ -112,18 +127,5 @@ form.sheet_media_collection_data.children.medias.prototype.children.type.label: 
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
 form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_media_collection_data.children.submit.label: Enregistrer
-form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Autre fiche'
-form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: 'Fiche concernée'
-form.multiple_sheet_request_filter_request_type.children.state.label: Statut
-form.multiple_sheet_request_filter_request_type.children.state.filter.all: Tous
-form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Accepté
-form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refusé
-form.multiple_sheet_request_filter_request_type.children.state.filter.sent: En attente
-form.multiple_sheet_request_filter_request_type.children.submit.label: Filtrer
-form.multiple_sheet_request_filter_request_type.children.type.label: Type
-form.multiple_sheet_request_filter_request_type.children.type.filter.all: Tous
-form.multiple_sheet_request_filter_request_type.children.type.filter.request: Mes demandes
-form.multiple_sheet_request_filter_request_type.children.type.filter.proposition: Mes propositions reçues
-form.multiple_sheet_request_filter_request_type.children.user.label: 'Participant'
 gender.man: Monsieur
 gender.woman: Madame

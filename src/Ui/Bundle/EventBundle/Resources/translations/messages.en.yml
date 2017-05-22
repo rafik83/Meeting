@@ -55,6 +55,8 @@ event.meeting.listRequest.filter.propositions: 'Requests received only'
 event.meeting.listRequest.filter.requests: 'My requests only'
 gender.man: Mr
 gender.woman: Mrs
+group.request.list.table.header.otherSheet: 'Other files'
+group.request.list.table.header.sheetConcerned: 'My files'
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
 invoice.list.column.number: 'N° invoice'
@@ -68,6 +70,8 @@ login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Member area'
 modal.back: Back
+multiple_sheets.request.list.table.header.otherSheet: 'Other files'
+multiple_sheets.request.list.table.header.sheetConcerned: 'My files'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'

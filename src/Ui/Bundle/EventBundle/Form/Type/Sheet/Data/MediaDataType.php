@@ -34,8 +34,8 @@ class MediaDataType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'expanded' => true,
                 'choices'  => [
-                    'Document' => 'document',
-                    'Vidéo'    => 'video',
+                    'form.sheet_media_data.children.type.document' => 'document',
+                    'form.sheet_media_data.children.type.video'    => 'video',
                 ],
             ])
         ;
