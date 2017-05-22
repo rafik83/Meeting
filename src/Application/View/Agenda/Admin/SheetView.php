@@ -92,13 +92,6 @@ class SheetView
     public $countPendingPropositions;
 
     /**
-     * "Nombre maximum de rendez-vous autorisé (pack de rdv)"
-     *
-     * @var int
-     */
-    public $countMaxMeetingAvailable;
-
-    /**
      * Sheet details url
      *
      * @var string
@@ -210,7 +203,6 @@ class SheetView
         $this->countPlacedMeetings      = $sheetIndicatorsView->countPlacedMeetings;
         $this->usableSlots              = $sheetIndicatorsView->usableSlots;
         $this->countPendingPropositions = $sheetIndicatorsView->countPendingPropositions;
-        $this->countMaxMeetingAvailable = $sheetIndicatorsView->countMaxMeetingAvailable;
         $this->hasFollower              = $hasFollower;
         $this->url                      = $url;
         $this->participants             = $participants;
