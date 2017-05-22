@@ -116,7 +116,11 @@ class AgendaSheetViewQueryHandler
 
         $unavailabilites = $this->unavailabilityRepository->findBySheet($query->sheet);
         $indicatorView   = $this->indicatorCalculator->getIndicator($query->sheet);
-        $agendaSheetIndicatorView = new AgendaSheetIndicatorView($indicatorView->maxMeetingAvailable);
+
+        $agendaSheetIndicatorView = new AgendaSheetIndicatorView(
+            $indicatorView->maxMeetingAvailable,
+            count($meetings)
+        );
 
         $participants = [];
         $requests     = [];
