@@ -5,7 +5,7 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
         unique_idx_1:
             columns:
                 - happening_id
-                - participant_id
+                - user_id
     id:
         id:
             type: integer
@@ -20,11 +20,6 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
             inversedBy: participations
-            joinColumn:
-                onDelete: CASCADE
-        participant:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant
-            inversedBy: happeningParticipations
             joinColumn:
                 onDelete: CASCADE
         user:

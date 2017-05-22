@@ -23,11 +23,6 @@ class HappeningParticipation
     private $happening;
 
     /**
-     * @var Participant
-     */
-    private $participant;
-
-    /**
      * @var bool
      */
     private $disabled = false;
@@ -40,15 +35,15 @@ class HappeningParticipation
     /**
      * HappeningParticipation constructor.
      *
-     * @param Happening   $happening
-     * @param Participant $participant
-     * @param bool        $disabled
+     * @param Happening $happening
+     * @param User      $user
+     * @param bool      $disabled
      */
-    public function __construct(Happening $happening, Participant $participant, $disabled = false)
+    public function __construct(Happening $happening, User $user, $disabled = false)
     {
-        $this->happening   = $happening;
-        $this->participant = $participant;
-        $this->disabled    = $disabled;
+        $this->happening = $happening;
+        $this->user      = $user;
+        $this->disabled  = $disabled;
     }
 
     /**
@@ -69,16 +64,6 @@ class HappeningParticipation
     public function getHappening()
     {
         return $this->happening;
-    }
-
-    /**
-     * Get participant.
-     *
-     * @return Participant
-     */
-    public function getParticipant()
-    {
-        return $this->participant;
     }
 
     /**
@@ -107,13 +92,5 @@ class HappeningParticipation
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
     }
 }

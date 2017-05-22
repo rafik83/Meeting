@@ -53,11 +53,6 @@ class Participant implements MailRecipientInterface
     private $registrationComplete = false;
 
     /**
-     * @var ArrayCollection
-     */
-    private $happeningParticipations;
-
-    /**
      * @var bool
      */
     private $imported = false;
@@ -92,7 +87,6 @@ class Participant implements MailRecipientInterface
         $this->user                    = $user;
         $this->data                    = $data;
         $this->active                  = $active;
-        $this->happeningParticipations = new ArrayCollection();
     }
 
     /**
@@ -230,14 +224,6 @@ class Participant implements MailRecipientInterface
         $this->registrationComplete = $registrationComplete;
 
         return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getHappeningParticipations()
-    {
-        return $this->happeningParticipations;
     }
 
     /**
