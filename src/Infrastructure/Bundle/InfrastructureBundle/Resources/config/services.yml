@@ -524,12 +524,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
-    vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
-        class: Proximum\Vimeet\Application\Command\Happening\UnparticipateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Unparticipate }
     vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:

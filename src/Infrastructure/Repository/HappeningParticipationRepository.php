@@ -50,27 +50,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         $this->entityManager->remove($happeningParticipation);
         $this->entityManager->flush($happeningParticipation);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findByHappeningAndParticipant(Happening $happening, Participant $participant)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('participation')
-            ->from(HappeningParticipation::class, 'participation')
-            ->where('participation.happening = :happening')
-            ->setParameter('happening', $happening)
-            ->andWhere('participation.participant = :participant')
-            ->andWhere('participation.disabled = false')
-            ->setParameter('participant', $participant)
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
+    
     /**
      * {@inheritdoc}
      */
