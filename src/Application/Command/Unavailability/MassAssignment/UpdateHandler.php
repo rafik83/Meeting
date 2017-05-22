@@ -75,13 +75,14 @@ class UpdateHandler
             return;
         }
 
-        $hasMeetingOrHappening = $this->participantRepository->getAvailableParticipants(
+        $availableParticipants = $this->participantRepository->getAvailableParticipants(
             $participants,
             $update->begin,
             $update->end
         );
 
-        if (count($hasMeetingOrHappening) !== count($participants)) {
+        // If there is at least a participant that is not available, the mass assignment can not be changed
+        if (count($availableParticipants) !== count($participants)) {
             throw new MassAssignmentOnMeetingException();
         }
 
