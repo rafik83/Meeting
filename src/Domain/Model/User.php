@@ -29,11 +29,6 @@ class User extends AbstractUser implements MailRecipientInterface
     private $welcomed = false;
 
     /**
-     * @var ArrayCollection
-     */
-    private $happeningParticipations;
-
-    /**
      * @param string $email
      * @param string $salt
      * @param string $password
@@ -44,7 +39,6 @@ class User extends AbstractUser implements MailRecipientInterface
         parent::__construct($email, $salt, $password, $locale);
 
         $this->account = new Account();
-        $this->happeningParticipations = new ArrayCollection();
     }
 
     /**
@@ -239,13 +233,5 @@ class User extends AbstractUser implements MailRecipientInterface
         }
 
         return $this->account->getGender();
-    }
-
-    /**
-     * @return HappeningParticipation[]
-     */
-    public function getHappeningParticipations()
-    {
-        return $this->happeningParticipations->toArray();
     }
 }
