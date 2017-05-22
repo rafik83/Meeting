@@ -16,7 +16,6 @@ class AdminFactory
 {
     /**
      * @param string $email
-     *
      * @param string $firstname
      * @param string $lastname
      *

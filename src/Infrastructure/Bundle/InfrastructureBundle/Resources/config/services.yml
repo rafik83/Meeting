@@ -2799,7 +2799,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery }
 
-
     #
     # Program query
     #
