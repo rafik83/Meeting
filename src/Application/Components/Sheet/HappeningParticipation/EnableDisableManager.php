@@ -42,7 +42,7 @@ class EnableDisableManager
         foreach ($sheet->getParticipants() as $participant) {
             $happeningParticipations = $this
                 ->happeningParticipationRepository
-                ->findByParticipant($participant);
+                ->findByUser($participant->getUser());
 
             foreach ($happeningParticipations as $participation) {
 

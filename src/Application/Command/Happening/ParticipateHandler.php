@@ -113,7 +113,7 @@ class ParticipateHandler
         foreach ($participate->participants as $participant) {
             if (false === in_array($participant, $previousParticipants)) {
                 $this->happeningParticipationRepository->add(
-                    new HappeningParticipation($participate->happening, $participant)
+                    new HappeningParticipation($participate->happening, $participant->getUser())
                 );
 
                 $this->eventDispatcher->dispatch(

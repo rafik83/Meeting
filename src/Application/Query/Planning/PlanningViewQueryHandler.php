@@ -179,7 +179,7 @@ class PlanningViewQueryHandler
         }
 
         if (!isset($this->happeningParticipations[$participant->getId()])) {
-            $this->happeningParticipations[$participant->getId()] = $this->happeningParticipationRepository->findByParticipant($participant);
+            $this->happeningParticipations[$participant->getId()] = $this->happeningParticipationRepository->findByUser($participant->getUser());
         }
     }
 

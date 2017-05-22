@@ -124,7 +124,7 @@ class AgendaViewQueryHandler
             $masses                  = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
             $happeningParticipations = $this
                 ->happeningParticipationRepository
-                ->findByParticipant($participant, ['disabled' => false]);
+                ->findByUser($participant->getUser(), ['disabled' => false]);
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
                 $meetings = $this->meetingRepository->findByParticipant($participant);
