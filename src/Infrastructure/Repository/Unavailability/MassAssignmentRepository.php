@@ -88,7 +88,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, participant')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
             ->join('assignment.user', 'user')
@@ -119,7 +119,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, participant')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user IN (:sheetUsers)')
             ->join('assignment.mass', 'mass')
@@ -137,7 +137,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user = :user')
             ->join('assignment.mass', 'mass')
@@ -155,7 +155,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user = :user')
             ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
@@ -177,7 +177,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user IN (:users)')
             ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
