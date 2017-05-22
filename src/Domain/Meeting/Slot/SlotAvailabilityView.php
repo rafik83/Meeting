@@ -77,6 +77,7 @@ class SlotAvailabilityView
      */
     public function isMassUnavaibility()
     {
-        return $this->type === SlotAvailability::MASS_UNAVAILABILITY;
+        return $this->type === SlotAvailability::MASS_UNAVAILABILITY
+            || $this->type === SlotAvailability::MASS_ASSIGNMENT_UNAVAILABILITY;
     }
 }
