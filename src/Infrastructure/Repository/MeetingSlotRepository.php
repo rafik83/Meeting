@@ -226,10 +226,8 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT assignment.id FROM Entity:Unavailability\MassAssignment assignment
-                JOIN assignment.participant assignmentParticipant
-                    WITH assignment.enabled = true AND assignmentParticipant.user IN (:userIds)
                 JOIN assignment.mass massUnavailability
-                    WITH massUnavailability.blocking = true
+                    WITH assignment.user IN (:userIds) AND assignment.enabled AND massUnavailability.blocking = true
                 WHERE
                     slot.begin = assignment.begin
                     OR assignment.end = slot.end

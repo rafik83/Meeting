@@ -58,23 +58,30 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        $participants = $this->participantRepository->getAllParticipantForUser(
+            $update->massAssignment->getMass()->getEvent(),
+            $update->massAssignment->getUser()
+        );
+
         // if set to disable, only update enabled state
         if ($update->enabled === false) {
             $update->massAssignment->disable();
             $this->massAssignmentRepository->set($update->massAssignment);
 
-            $this->dispatchUpdateEvent($update->massAssignment->getParticipant());
+            foreach ($participants as $participant) {
+                $this->dispatchUpdateEvent($participant);
+            }
 
             return;
         }
 
         $hasMeetingOrHappening = $this->participantRepository->getAvailableParticipants(
-            [$update->massAssignment->getParticipant()],
+            $participants,
             $update->begin,
             $update->end
         );
 
-        if (count($hasMeetingOrHappening) === 0) {
+        if (count($hasMeetingOrHappening) !== count($participants)) {
             throw new MassAssignmentOnMeetingException();
         }
 
@@ -97,7 +104,9 @@ class UpdateHandler
 
         $this->massAssignmentRepository->set($update->massAssignment);
 
-        $this->dispatchUpdateEvent($update->massAssignment->getParticipant());
+        foreach ($participants as $participant) {
+            $this->dispatchUpdateEvent($participant);
+        }
     }
 
     /**

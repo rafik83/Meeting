@@ -86,7 +86,12 @@ class TimeSlotDispatcher
 
         foreach ($participants as $index => $participant) {
             $timeSlot   = $timeSlots[$index % count($timeSlots)];
-            $assignment = new MassAssignment($mass, $participant, $timeSlot->getFrom(), $timeSlot->getTo());
+            $assignment = new MassAssignment(
+                $mass,
+                $participant->getUser(),
+                $timeSlot->getFrom(),
+                $timeSlot->getTo()
+            );
 
             $this->massAssignmentRepository->add($assignment);
 

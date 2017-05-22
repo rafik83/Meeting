@@ -74,18 +74,6 @@ class MassAssignment
     }
 
     /**
-     * Get participant
-     *
-     * @return null
-     *
-     * @deprecated
-     */
-    public function getParticipant()
-    {
-        return null;
-    }
-
-    /**
      * @return User
      */
     public function getUser()
