@@ -84,10 +84,17 @@ CatalogSheetCard.prototype.handleRequestForm = function (form)
                 });
                 $(this.modal).modal('hide');
                 this.identifyButtons();
+                if (response.participantsHtml) {
+                    $(this.element).find('.participants-list').html(response.participantsHtml);
+                }
             }
         } else {
             if (response.status === 'ok') {
                 $(this.modal).find(".modal-content").html(response.html);
+
+                if (response.participantsHtml) {
+                    $(this.element).find('.participants-list').html(response.participantsHtml);
+                }
             }
         }
 
