@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Token;
 
+use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -42,6 +43,9 @@ class UserEventTokenController extends Controller
                 'already_confirmed' => true,
             ]);
         }
+
+        $confirmAgenda = new ConfirmAgenda($userEventToken);
+        $this->get('tactician.commandbus')->handle($confirmAgenda);
 
         return $this->render('EventBundle:Token\UserEventToken:agenda_confirmation.html.twig', [
             'event'             => $eventDomain->getEvent(),
