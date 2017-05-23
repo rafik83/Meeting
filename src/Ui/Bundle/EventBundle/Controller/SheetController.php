@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -258,27 +259,22 @@ class SheetController extends Controller
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
 
-        $products = $this->get('package.product.template_product_guesser')->getProducts(
-            $object,
-            $sheet->getPackage()
-        );
+        $templateObjectView = $this
+            ->get('tactician.commandbus')
+            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+        ;
 
-        // populate object needed variables
-        $object->setBuyableProducts($products);
-        $object->setSheet($sheet);
-
-        $form  = $this->createObjectForm($object, $locale, $key);
-        $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $form  = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
             'sheet'    => $sheet,
             'uid'      => $key,
-            'label'    => $label,
             'form'     => $form->createView(),
-            'object'   => $object,
             'locale'   => $locale,
             'currency' => $eventDomain->getEvent()->getCurrency(),
             'vatMode'  => $eventDomain->getEvent()->getMode(),
+            'templateObjectView'   => $templateObjectView,
+            'label' => $templateObjectView->label
         ]);
     }
 
