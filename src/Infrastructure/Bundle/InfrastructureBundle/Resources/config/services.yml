@@ -277,6 +277,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\FileRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.token.user_event_token_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Token\UserEventTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
