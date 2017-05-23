@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Token\UserEventToken;
 
+use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda;
+use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgendaHandler;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 
@@ -24,7 +26,8 @@ class confirmAgendaHandlerTest extends \PHPUnit_Framework_TestCase
         $userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
         $userEventTokenRepository->set($userEventToken->reveal())->shouldBeCalled();
 
-        $command = new ConfirmAgenda($userEventToken);
+        $command = new ConfirmAgenda($userEventToken->reveal());
         $handler = new ConfirmAgendaHandler($userEventTokenRepository->reveal(), $dateTime);
+        $handler->handle($command);
     }
 }
