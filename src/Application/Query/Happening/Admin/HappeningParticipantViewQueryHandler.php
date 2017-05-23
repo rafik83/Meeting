@@ -112,10 +112,14 @@ class HappeningParticipantViewQueryHandler
 
         try {
             $sheetName = $this->groupNameResolver->resolve($event, $user);
-            $sheet     = $this->sheetGuesser->getUserSheet($user, $event, $locale);
         } catch (\Exception $exception) {
             $sheetName = '';
-            $sheet     = null;
+        }
+
+        try {
+            $sheet = $this->sheetGuesser->getUserSheet($user, $event, $locale);
+        } catch (\Exception $exception) {
+            $sheet = null;
         }
 
         if ($sheet !== null) {

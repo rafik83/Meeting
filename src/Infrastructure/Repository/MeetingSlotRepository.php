@@ -196,11 +196,10 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT hp.id FROM Entity:HappeningParticipation hp
-                JOIN hp.participant hpParticipant
-                    WITH hpParticipant.user IN (:userIds)
                 JOIN hp.happening happening
                 WHERE
-                    slot.begin = happening.begin
+                    hp.user IN (:userIds)
+                    AND slot.begin = happening.begin
                     OR happening.end = slot.end
                     OR happening.begin < slot.begin AND slot.begin < happening.end
                     OR happening.begin < slot.end AND slot.end < happening.end
