@@ -49,4 +49,12 @@ interface GroupRepositoryInterface
      * @return Group[]
      */
     public function getByEvent(Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Group
+     */
+    public function getByUserAndEvent(User $user, Event $event);
 }
