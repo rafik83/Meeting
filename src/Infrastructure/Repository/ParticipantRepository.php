@@ -376,10 +376,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
                     JOIN hp.happening h
-                    JOIN hp.participant p
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
-                        AND p.user = user
+                        AND hp.user = user
                         AND (
                             h.begin BETWEEN :begin AND :end
                             OR h.end BETWEEN :begin AND :end
