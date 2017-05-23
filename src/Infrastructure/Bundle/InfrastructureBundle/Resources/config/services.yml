@@ -2162,6 +2162,7 @@ services:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@sheet.sheet_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery }
 
