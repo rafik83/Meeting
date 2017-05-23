@@ -249,7 +249,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('sheet', $sheet)
             ->setParameter('happenings', $happenings)
             ->setParameter('users', $sheetUsers)
-            ->groupBy('participation.happening, participation.participant');
+            ->groupBy('participation.happening, participation.user');
 
         return $queryBuilder->getQuery()->getResult();
     }
