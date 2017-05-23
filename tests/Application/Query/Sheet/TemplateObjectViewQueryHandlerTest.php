@@ -1,15 +1,21 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
 use Proximum\Vimeet\Domain\Model\Package;
-use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
-use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
