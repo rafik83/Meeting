@@ -5,19 +5,17 @@
 
     {% for requestView in sheetView.requestViews %}
         <td>
-            <div>
-                <div class="buttons-zone">
-                    {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
-                        'allowedToCreate': false,
-                        'meetingRequest': requestView.request,
-                        'viewed': sheetView.sheet,
-                        'viewer': requestView.sheetMet,
-                        'isMeetingPublished': requestView.planned,
-                        'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
-                        'isMeetingRequestClosed': isMeetingRequestClosed,
-                        'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
-                    }) }}
-                </div>
+            <div class="buttons-zone">
+                {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
+                    'allowedToCreate': false,
+                    'meetingRequest': requestView.request,
+                    'viewed': sheetView.sheet,
+                    'viewer': requestView.sheetMet,
+                    'isMeetingPublished': requestView.planned,
+                    'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                    'isMeetingRequestClosed': isMeetingRequestClosed,
+                    'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
+                }) }}
             </div>
         </td>
         <td class="text-center">
