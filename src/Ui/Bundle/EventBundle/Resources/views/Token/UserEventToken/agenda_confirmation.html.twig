@@ -1,0 +1,21 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title event.title %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'user_event.confirm.agenda.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content styled-form">
+                {% if already_confirmed %}
+                    {{ 'user_event.confirm.agenda.already_confirmed'|trans }}
+                {% else %}
+                    {{ 'user_event.confirm.agenda.success'|trans }}
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endblock %}
