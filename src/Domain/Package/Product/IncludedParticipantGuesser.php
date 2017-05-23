@@ -10,11 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Package\Product;
 
-use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\View\Package\Product\IncludedParticipantView;
 
 class IncludedParticipantGuesser extends AbstractIncludedProductGuesser

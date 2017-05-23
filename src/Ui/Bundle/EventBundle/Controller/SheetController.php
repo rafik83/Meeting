@@ -256,9 +256,6 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
-
         $templateObjectView = $this
             ->get('tactician.commandbus')
             ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
