@@ -15,26 +15,20 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 
 class TimeSlotDispatcher
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
-    private $participantRepository;
+    /** @var UserRepositoryInterface */
+    private $userRepository;
 
-    /**
-     * @var MassRepositoryInterface
-     */
+    /** @var MassRepositoryInterface */
     private $massRepository;
 
-    /**
-     * @var MassAssignmentRepositoryInterface
-     */
+    /** @var MassAssignmentRepositoryInterface */
     private $massAssignmentRepository;
 
     /** @var User[] */
@@ -46,18 +40,18 @@ class TimeSlotDispatcher
     /**
      * TimeSlotDispatcher constructor.
      *
-     * @param ParticipantRepositoryInterface    $participantRepository
+     * @param UserRepositoryInterface           $userRepository
      * @param MassRepositoryInterface           $massRepository
      * @param MassAssignmentRepositoryInterface $massAssignmentRepository
      * @param JobQueueInterface                 $jobQueueInterface
      */
     public function __construct(
-        ParticipantRepositoryInterface $participantRepository,
+        UserRepositoryInterface $userRepository,
         MassRepositoryInterface $massRepository,
         MassAssignmentRepositoryInterface $massAssignmentRepository,
         JobQueueInterface $jobQueueInterface
     ) {
-        $this->participantRepository    = $participantRepository;
+        $this->userRepository           = $userRepository;
         $this->massRepository           = $massRepository;
         $this->massAssignmentRepository = $massAssignmentRepository;
         $this->jobQueueInterface        = $jobQueueInterface;
@@ -82,20 +76,19 @@ class TimeSlotDispatcher
             throw new UnableToDispatchException('No time slot available on this mass unavailability.');
         }
 
-        $participants = $this->participantRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
+        $users = $this->userRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
 
-        foreach ($participants as $index => $participant) {
+        foreach ($users as $index => $user) {
             $timeSlot   = $timeSlots[$index % count($timeSlots)];
             $assignment = new MassAssignment(
                 $mass,
-                $participant->getUser(),
+                $user,
                 $timeSlot->getFrom(),
                 $timeSlot->getTo()
             );
 
             $this->massAssignmentRepository->add($assignment);
 
-            $user = $participant->getUser();
             $this->usersDispatched[$user->getId()] = $user;
         }
     }
