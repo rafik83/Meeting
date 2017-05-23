@@ -3,6 +3,8 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Tip
 {
@@ -22,11 +24,21 @@ class Tip
      * @var string
      */
     public $title;
+
+    /**
+     * @var ArrayCollection
+     */
+    public $events;
     
     /**
      * @var ArrayCollection
      */
     public $translations;
+
+    /**
+     * @var ArrayCollection
+     */
+    public $types;
     
     /**
      * @var bool
@@ -169,6 +181,78 @@ class Tip
     }
 
     /**
+     * @param Event $event
+     */
+    public function setEvent(Event $event)
+    {
+        $this->events->set($event->getId(), $event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function removeEvent(Event $event)
+    {
+        $this->events->removeElement($event);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasEvent(Event $event)
+    {
+        return $this->events->containsKey($event->getId());
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Event|null
+     */
+    public function getEvent(Event $event)
+    {
+        return $this->events->get($event->getId());
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function setType(Type $type)
+    {
+        $this->types->set($type->getId(), $type);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function removeType(Type $type)
+    {
+        $this->types->removeElement($type);
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return bool
+     */
+    public function hasType(Type $type)
+    {
+        return $this->types->contains($type->getId());
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return Type|null
+     */
+    public function getType(Type $type)
+    {
+        return $this->types->get($type->getId());
+    }
+    
+    /**
      * @return int
      */
     public function getId()
@@ -183,13 +267,29 @@ class Tip
     {
         return $this->title;
     }
-    
+
+    /**
+     * @return Event[]
+     */
+    public function getEvents()
+    {
+        return $this->events->toArray();
+    }
+
     /**
      * @return TipTranslation[]
      */
     public function getTranslations()
     {
         return $this->translations->toArray();
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types->toArray();
     }
     
     /**
