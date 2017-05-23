@@ -123,8 +123,9 @@ class UserEventToken
     /**
      * @param \DateTimeInterface $confirmedAt
      */
-    public function setConfirmedAt(\DateTimeInterface $confirmedAt)
+    public function confirm(\DateTimeInterface $confirmedAt)
     {
+        $this->confirmed   = true;
         $this->confirmedAt = $confirmedAt;
     }
 }
