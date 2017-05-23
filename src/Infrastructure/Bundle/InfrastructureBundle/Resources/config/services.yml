@@ -2545,6 +2545,14 @@ services:
             - '@repository.sheet.completeness_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery }
+    query.sheet.template_object_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQueryHandler
+        arguments:
+            - '@template.template_data_factory'
+            - '@package.product.template_product_guesser'
+            - '@package.product.included_product_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery }
 
     query.sheet.dashboard_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler
@@ -3628,6 +3636,11 @@ services:
             - '@order.merger'
     package.product.included_participant_guesser:
         class: Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser
+        arguments:
+            - '@cart_manager'
+            - '@order.merger'
+    package.product.included_product_guesser:
+        class: Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser
         arguments:
             - '@cart_manager'
             - '@order.merger'
