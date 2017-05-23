@@ -51,7 +51,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         $this->entityManager->remove($happeningParticipation);
         $this->entityManager->flush($happeningParticipation);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -64,23 +64,26 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
             ->where('participation.user = :user')
-            ->setParameter('user', $user)
-        ;
+            ->setParameter('user', $user);
 
         if (isset($filters['disabled'])) {
             $queryBuilder
                 ->andWhere('participation.disabled = :disabled')
-                ->setParameter('disabled', $filters['disabled'])
-            ;
+                ->setParameter('disabled', $filters['disabled']);
         }
+
         return $queryBuilder->getQuery()->getResult();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findByUsers(array $users)
+    public function findByUsers(array $participants)
     {
+        $users = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $participants);
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -88,8 +91,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening')
             ->join('participation.user', 'user', 'WITH', 'user.id IN (:users) AND participation.disabled = false')
-            ->setParameter('users', $users)
-        ;
+            ->setParameter('users', $users);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -112,8 +114,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
             ->where('participation.disabled = false')
             ->setParameter('sheet', $sheet)
-            ->setParameter('users', $sheetUsers)
-        ;
+            ->setParameter('users', $sheetUsers);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -132,12 +133,10 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->where('participation.user = :user')
             ->andWhere('participation.disabled = false')
             ->setParameter('user', $user)
-            ->setMaxResults(1)
-        ;
+            ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-
 
     /**
      * {@inheritdoc}
@@ -151,8 +150,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->from(HappeningParticipation::class, 'participation')
             ->where('participation.happening  = :happening')
             ->andWhere('participation.disabled = false')
-            ->setParameter('happening', $happening)
-        ;
+            ->setParameter('happening', $happening);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -170,8 +168,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->join('participation.happening', 'happening')
             ->where('happening.event = :event')
             ->andWhere('participation.disabled = false')
-            ->setParameter('event', $event)
-        ;
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -194,8 +191,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('event', $event)
             ->groupBy('happening.id')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         //  Reformat the array to key (happening id) => value (count participation)
         foreach ($results as $result) {
@@ -220,8 +216,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->where('participation.disabled = false')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
-            ->setParameter('users', $sheetUsers)
-        ;
+            ->setParameter('users', $sheetUsers);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -254,8 +249,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('sheet', $sheet)
             ->setParameter('happenings', $happenings)
             ->setParameter('users', $sheetUsers)
-            ->groupBy('participation.happening, participation.participant')
-        ;
+            ->groupBy('participation.happening, participation.participant');
 
         return $queryBuilder->getQuery()->getResult();
     }

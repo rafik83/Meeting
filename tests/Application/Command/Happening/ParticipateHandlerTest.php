@@ -195,7 +195,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
-        $happeningParticipationRepository->removeParticipantForHappening($participant, $happening)->shouldBeCalled();
+        $happeningParticipationRepository->removeUserForHappening($user, $happening)->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
@@ -253,7 +253,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$participant]);
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant)
+            new HappeningParticipation($happening, $user)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
@@ -317,11 +317,11 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participate = new Participate($happening, $sheet, $user1, [$participant1, $participant2]);
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant1)
+            new HappeningParticipation($happening, $user1)
         )->shouldBeCalled();
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant2)
+            new HappeningParticipation($happening, $user2)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
@@ -386,10 +386,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$participant1, $participant2]);
         $participate = new Participate($happening, $sheet, $user1, [$participant2]);
 
-        $happeningParticipationRepository->removeParticipantForHappening($participant1, $happening)->shouldBeCalled();
+        $happeningParticipationRepository->removeUserForHappening($user1, $happening)->shouldBeCalled();
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant2)
+            new HappeningParticipation($happening, $user2)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
@@ -447,7 +447,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$participant]);
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant)
+            new HappeningParticipation($happening, $user)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
@@ -506,7 +506,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$participant]);
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant)
+            new HappeningParticipation($happening, $user)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
@@ -568,7 +568,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
-        $happeningParticipationRepository->removeParticipantForHappening($participant, $happening)->shouldBeCalled();
+        $happeningParticipationRepository->removeUserForHappening($user, $happening)->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
         $questionRepository->add()->shouldNotBeCalled();

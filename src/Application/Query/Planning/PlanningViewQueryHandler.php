@@ -146,7 +146,7 @@ class PlanningViewQueryHandler
                     $day,
                     $query->locale,
                     $this->unavailabilities[$participant->getUser()->getId()],
-                    $this->happeningParticipations[$participant->getId()],
+                    $this->happeningParticipations[$participant->getUser()->getId()],
                     $this->masses,
                     $this->assignments[$participant->getId()],
                     $this->meetings[$participant->getId()]
@@ -178,7 +178,7 @@ class PlanningViewQueryHandler
             $this->unavailabilities[$participant->getUser()->getId()] = $this->unavailabilityRepository->findByParticipant($participant);
         }
 
-        if (!isset($this->happeningParticipations[$participant->getId()])) {
+        if (!isset($this->happeningParticipations[$participant->getUser()->getId()])) {
             $this->happeningParticipations[$participant->getUser()->getId()] = $this->happeningParticipationRepository->findByUser($participant->getUser());
         }
     }
@@ -279,7 +279,7 @@ class PlanningViewQueryHandler
                 $this->unavailabilities[$participant->getUser()->getId()] = [];
             }
 
-            if (!isset($this->happeningParticipations[$participant->getId()])) {
+            if (!isset($this->happeningParticipations[$participant->getUser()->getId()])) {
                 $this->happeningParticipations[$participant->getUser()->getId()] = [];
             }
         }

@@ -38,11 +38,11 @@ interface HappeningParticipationRepositoryInterface
     public function findByUser(User $user, array $filters = []);
 
     /**
-     * @param User[] $users
+     * @param Participant[] $participants
      *
      * @return HappeningParticipation[]
      */
-    public function findByUsers(array $users);
+    public function findByUsers(array $participants);
 
     /**
      * @param Happening $happening

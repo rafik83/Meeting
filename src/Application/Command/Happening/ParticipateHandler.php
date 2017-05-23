@@ -127,7 +127,7 @@ class ParticipateHandler
         foreach ($previousParticipants as $participant) {
             if (false === in_array($participant, $participate->participants)) {
                 $this->happeningParticipationRepository->removeUserForHappening(
-                    $participant,
+                    $participant->getUser(),
                     $participate->happening
                 );
 
