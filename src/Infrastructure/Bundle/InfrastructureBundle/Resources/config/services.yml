@@ -1744,6 +1744,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Sheet\Create }
 
+    command.token.user_event_token.confirm_agenda_handler:
+        class: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgendaHandler
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda }
+
     #
     # Post Batch Action
     #
