@@ -98,6 +98,11 @@ services:
         arguments:
             - '@repository.billing_info_repository'
 
+    behat_manager.token.user_event_token_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Token\UserEventTokenManager
+        arguments:
+             - '@repository.token.user_event_token_repository'
+
     #
     # Proxies
     #
@@ -161,3 +166,9 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.order'
+
+    behat_proxy.token.user_event_token_context:
+        class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.token.user_event_token_manager'
