@@ -41,7 +41,7 @@ class UserEventTokenContextProxy implements UserEventTokenContextProxyInterface
     }
 
     /**
-     * @return UserEventTokenManager
+     * {@inheritdoc}
      */
     public function getUserEventTokenManager()
     {
