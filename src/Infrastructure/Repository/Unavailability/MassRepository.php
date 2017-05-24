@@ -112,7 +112,7 @@ class MassRepository implements MassRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findBlockingByEvent(Event $event)
+    public function findBlockingByEvent(Event $event, $locale = null)
     {
         $queryBuilder = $this
             ->entityManager
@@ -122,6 +122,12 @@ class MassRepository implements MassRepositoryInterface
             ->where('mass.event = :event')
             ->andWhere('mass.blocking = true')
             ->setParameter('event', $event);
+
+        if ($locale !== null) {
+            $queryBuilder
+                ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
+                ->setParameter('locale', $locale);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
