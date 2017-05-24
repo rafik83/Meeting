@@ -34,7 +34,7 @@ class UpdateHandler
     {
         foreach ($command->tip->getTranslations() as $translation) {
             if (!isset($command->translations[$translation->getLocale()])) {
-                $command->tip->translations->remove($translation->getLocale());
+                $command->tip->removeTranslation($translation->getLocale());
                 $this->tipRepository->removeTranslation($translation);
             }
         }

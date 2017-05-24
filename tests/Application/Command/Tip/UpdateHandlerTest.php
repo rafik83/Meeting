@@ -24,15 +24,13 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
         $tip = new Tip('tipTitle', true, false, true, new \DateTime());
-        $tipTranslation1 = new TipTranslation($tip, new \DateTime(), 'title', 'locale_1', 'content');
-        $tip->translations = new ArrayCollection();
 
-        $tip->translations->set('locale_1', $tipTranslation1);
+        $tip->setTranslation('locale_1', 'title', 'content');
         $command = new Update($tip);
 
-        $this->assertTrue($tip->translations->containsKey('locale_1'));
+        $this->assertTrue($tip->hasTranslation('locale_1'));
 
-        $this->assertFalse($tip->translations->containsKey('locale_2'));
+        $this->assertFalse($tip->hasTranslation('locale_2'));
 
         $tipRepository->set($tip)->shouldBeCalled();
 

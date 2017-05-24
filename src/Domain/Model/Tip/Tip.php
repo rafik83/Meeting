@@ -17,42 +17,42 @@ class Tip
     /**
      * @var int
      */
-    public $id;
+    private $id;
     
     /**
      * @var string
      */
-    public $title;
+    private $title;
 
     /**
      * @var ArrayCollection
      */
-    public $translations;
+    private $translations;
 
     /**
      * @var ArrayCollection
      */
-    public $types;
+    private $types;
     
     /**
      * @var bool
      */
-    public $onMeetingManagement;
+    private $onMeetingManagement;
     
     /**
      * @var bool
      */
-    public $onCatalog;
+    private $onCatalog;
     
     /**
      * @var bool
      */
-    public $onPrintPlanning;
+    private $onPrintPlanning;
 
     /**
      * @var \DateTimeInterface
      */
-    public $createdAt;
+    private $createdAt;
 
     /**
      * Tip constructor.
@@ -172,6 +172,14 @@ class Tip
     public function getTranslation($locale)
     {
         return $this->translations->get($locale);
+    }
+
+    /**
+     * @param string $locale
+     */
+    public function removeTranslation($locale)
+    {
+        $this->translations->remove($locale);
     }
 
     /**
