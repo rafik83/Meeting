@@ -4690,6 +4690,7 @@ services:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution
         arguments:
             - '@adapter.templating_adapter'
+            - '@adapter.event_url_generator'
             - '@domain.token.user_event_token_generator'
 
     #

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Messaging\Substitutions;
 
 use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -27,17 +28,24 @@ class AgendaConfirmationCTASubstitution
     /** @var TemplatingAdapterInterface */
     private $templating;
 
+    /** @var EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
+
     const TEMPLATING_CTA_AGENDA_CONFIRMATION = 'MailBundle:Mail:CTA/confirmAgenda.html.twig';
+    const ROUTE_CTA_AGENDA_CONFIRMATION = 'event_user_event_token_confirm_agenda';
 
     /**
      * @param TemplatingAdapterInterface $templating
+     * @param EventUrlGeneratorInterface $eventUrlGenerator
      * @param UserEventTokenGenerator    $userEventTokenGenerator
      */
     public function __construct(
         TemplatingAdapterInterface $templating,
+        EventUrlGeneratorInterface $eventUrlGenerator,
         UserEventTokenGenerator $userEventTokenGenerator
     ) {
         $this->templating = $templating;
+        $this->eventUrlGenerator = $eventUrlGenerator;
         $this->userEventTokenGenerator = $userEventTokenGenerator;
     }
 
@@ -68,12 +76,18 @@ class AgendaConfirmationCTASubstitution
             UserEventTokenType::AGENDA_CONFIRMATION
         );
 
-        return $this->templating->render(
-            AgendaConfirmationCTASubstitution::TEMPLATING_CTA_AGENDA_CONFIRMATION, [
-                'eventId' => $sheet->getEvent()->getId(),
-                'locale' => $locale,
+        $link = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $sheet->getEvent(),
+            self::ROUTE_CTA_AGENDA_CONFIRMATION,
+            [
+                '_locale' => $locale,
                 'token' => $userEventToken->getToken()
             ]
         );
+
+        return $this->templating->render(self::TEMPLATING_CTA_AGENDA_CONFIRMATION, [
+            'link'   => $link,
+            'locale' => $locale,
+        ]);
     }
 }

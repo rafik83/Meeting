@@ -31,9 +31,13 @@ class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectProphecy */
     private $userEventTokenGenerator;
 
+    /** @var ObjectProphecy */
+    private $eventUrlGenerator;
+
     public function setUp()
     {
         $this->templating = $this->prophesize(TemplatingAdapterInterface::class);
+        $this->eventUrlGenerator = $this->prophesize(EventUrlGeneratorInterface::class);
         $this->userEventTokenGenerator = $this->prophesize(UserEventTokenGenerator::class);
     }
 
@@ -44,6 +48,7 @@ class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
 
         $agendaConfirmationCTASubstitution = new AgendaConfirmationCTASubstitution(
             $this->templating->reveal(),
+            $this->eventUrlGenerator->reveal(),
             $this->userEventTokenGenerator->reveal()
         );
 
@@ -60,6 +65,7 @@ class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
 
         $agendaConfirmationCTASubstitution = new AgendaConfirmationCTASubstitution(
             $this->templating->reveal(),
+            $this->eventUrlGenerator->reveal(),
             $this->userEventTokenGenerator->reveal()
         );
 
@@ -75,23 +81,34 @@ class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
         $recipient->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $sheet = $this->prophesize(Sheet::class);
         $event = $this->prophesize(Event::class);
-        $event->getId()->shouldBeCalled()->willReturn(12);
         $sheet->getEvent()->willReturn($event->reveal());
         $userEventToken = $this->prophesize(UserEventToken::class);
         $userEventToken->getToken()->shouldBeCalled()->willReturn('token');
 
         $agendaConfirmationCTASubstitution = new AgendaConfirmationCTASubstitution(
             $this->templating->reveal(),
+            $this->eventUrlGenerator->reveal(),
             $this->userEventTokenGenerator->reveal()
         );
+
+        $this->eventUrlGenerator
+            ->generateEventAbsoluteUrl(
+                $event->reveal(),
+                AgendaConfirmationCTASubstitution::ROUTE_CTA_AGENDA_CONFIRMATION,
+                [
+                    'token' => 'token',
+                    '_locale' => 'fr',
+                ]
+            )
+            ->shouldBeCalled()
+            ->willReturn('link');
 
         $this->templating
             ->render(
                 AgendaConfirmationCTASubstitution::TEMPLATING_CTA_AGENDA_CONFIRMATION,
                 [
-                    'eventId' => 12,
+                    'link'   => 'link',
                     'locale' => 'fr',
-                    'token' => 'token',
                 ]
             )
             ->shouldBeCalled()
@@ -117,7 +134,6 @@ class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
         $recipient = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
         $event = $this->prophesize(Event::class);
-        $event->getId()->shouldBeCalled()->willReturn(12);
         $sheet->getEvent()->willReturn($event->reveal());
         $participant = $this->prophesize(Participant::class);
         $sheet->getParticipantOwner()->willReturn($participant);
@@ -126,16 +142,28 @@ class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
 
         $agendaConfirmationCTASubstitution = new AgendaConfirmationCTASubstitution(
             $this->templating->reveal(),
+            $this->eventUrlGenerator->reveal(),
             $this->userEventTokenGenerator->reveal()
         );
+
+        $this->eventUrlGenerator
+            ->generateEventAbsoluteUrl(
+                $event->reveal(),
+                AgendaConfirmationCTASubstitution::ROUTE_CTA_AGENDA_CONFIRMATION,
+                [
+                    'token' => 'token',
+                    '_locale' => 'fr',
+                ]
+            )
+            ->shouldBeCalled()
+            ->willReturn('link');
 
         $this->templating
             ->render(
                 AgendaConfirmationCTASubstitution::TEMPLATING_CTA_AGENDA_CONFIRMATION,
                 [
-                    'eventId' => 12,
+                    'link' => 'link',
                     'locale' => 'fr',
-                    'token' => 'token',
                 ]
             )
             ->shouldBeCalled()
