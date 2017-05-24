@@ -25,7 +25,7 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
         $dateTime = new \DateTime();
-        $type = UserEventTokenType::AGENDA_CONFIRMED;
+        $type = UserEventTokenType::AGENDA_CONFIRMATION;
 
         $userEventToken = new UserEventToken($event->reveal(), $user->reveal(), $type, 'token', $dateTime);
 
@@ -49,7 +49,7 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(123);
         $dateTime = new \DateTime();
-        $type = UserEventTokenType::AGENDA_CONFIRMED;
+        $type = UserEventTokenType::AGENDA_CONFIRMATION;
         $uniqid = uniqid(mt_rand());
 
         $token = hash('sha1', sprintf('%s%s%s%s%s', 123, 456, $type, $dateTime->format('c'), $uniqid));

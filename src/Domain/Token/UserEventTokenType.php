@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Token;
 
 class UserEventTokenType
 {
-    const AGENDA_CONFIRMED = 'agenda_confirmed';
+    const AGENDA_CONFIRMATION = 'agenda_confirmation';
 
     /**
      * @return array of UserEventToken type
@@ -20,7 +20,7 @@ class UserEventTokenType
     public static function getUserEventTokenType()
     {
         return [
-            self::AGENDA_CONFIRMED,
+            self::AGENDA_CONFIRMATION,
         ];
     }
 }
