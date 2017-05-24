@@ -767,6 +767,8 @@ admin.tip.list.title: 'Messages d''aide'
 admin.tip.update.link: Modifier
 admin.tip.update.title: 'Mise à jour du message d''aide'
 admin.tip.visible: 'Liste des pages concernées'
+admin.tip.event.affect.link: 'Affecter un message d''aide'
+admin.tip.event.empty: 'Aucun message affecté à cet évènement'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'

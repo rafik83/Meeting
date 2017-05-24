@@ -1381,3 +1381,20 @@ admin_tip_update:
         tip: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Tip:update }
+
+#
+# Tip on event
+#
+admin_tip_event_list:
+    path: /tip/{event}/list
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:TipEvent:list }
+
+admin_tip_event_affect:
+    path: /tip/{event}/affect
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:TipEvent:affect }

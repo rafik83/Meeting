@@ -1,0 +1,30 @@
+{% extends '@Admin/base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.tip.list.title'|trans }}</h1>
+
+    <a href="{{ path('admin_tip_event_affect', { 'event': event.id }) }}" class="btn btn-primary">{{ 'admin.tip.event.affect.link'|trans }}</a>
+
+    {#{% if tipListView.results is not empty %}#}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+
+            </tr>
+            </thead>
+            <tbody>
+        {#{% for tip in tipListView.results %}#}
+                <tr>
+
+                </tr>
+        {#{% endfor %}#}
+            </tbody>
+        </table>
+    {#{% else %}#}
+        <div class="alert alert-info">
+            <p class="center">{{ 'admin.tip.event.empty'|trans }}</p>
+        </div>
+    {#{% endif %}#}
+
+{#{{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': tipListView.results }) }}#}
+{% endblock %}

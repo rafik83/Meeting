@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipRepository implements TipRepositoryInterface
@@ -88,5 +91,19 @@ class TipRepository implements TipRepositoryInterface
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /** {@inheritdoc} */
+    public function paginateByEvent(Event $event, $page, $limit)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip')
+            ->from(Tip::class, 'tip')
+            ->join(Type::class, 'type', 'WITH', 'type.event = :event')
+            ->setParameter('event', $event);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
     }
 }
