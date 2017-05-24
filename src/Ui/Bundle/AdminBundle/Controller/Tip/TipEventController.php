@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery as EventTipListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ class TipEventController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $tipListViewQuery = new TipListViewQuery($event, $request->query->get('page', 1));
+        $tipListViewQuery = new EventTipListViewQuery($event, $request->query->get('page', 1));
 
         $tipListView = $this->get('tactician.commandbus')->handle($tipListViewQuery);
 
