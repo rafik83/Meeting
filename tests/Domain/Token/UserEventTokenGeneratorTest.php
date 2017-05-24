@@ -45,7 +45,7 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGetUserEventTokenForConfirmAgenda()
     {
         $user = $this->prophesize(User::class);
-        $user->getId()->shouldBeCalle()->willReturn(456);
+        $user->getId()->shouldBeCalled()->willReturn(456);
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(123);
         $dateTime = new \DateTime();
@@ -67,6 +67,6 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($token, $result->getToken());
         $this->assertEquals($type, $result->getType());
-        $this->assertEquals($token, $result);
+        $this->assertEquals($expectedUserEventToken, $result);
     }
 }
