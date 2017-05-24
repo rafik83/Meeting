@@ -122,7 +122,8 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user IN (:sheetUsers)')
-            ->join('assignment.mass', 'mass')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
+            ->setParameter('event', $sheet->getEvent())
             ->setParameter('sheetUsers', $sheetUsers)
         ;
 
@@ -141,6 +142,8 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user = :user')
             ->join('assignment.mass', 'mass')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
+            ->setParameter('event', $participant->getSheet()->getEvent())
             ->setParameter('user', $participant->getUser());
         ;
 
@@ -170,9 +173,17 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
      */
     public function findEnabledByParticipants(array $participants)
     {
+        $event = null;
+
         $users = array_map(function (Participant $participant) {
             return $participant->getUser();
         }, $participants);
+
+        $firstParticipant = reset($participants);
+
+        if ($firstParticipant instanceof Participant) {
+            $event = $firstParticipant->getSheet()->getEvent();
+        }
 
         $queryBuilder = $this
             ->entityManager
@@ -180,7 +191,8 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user IN (:users)')
-            ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->setParameter('event', $event)
             ->setParameter('users', $users);
         ;
 
