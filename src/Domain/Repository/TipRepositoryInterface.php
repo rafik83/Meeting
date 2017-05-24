@@ -57,4 +57,11 @@ interface TipRepositoryInterface
      * @return PaginatedResult[]
      */
     public function paginateByEvent(Event $event, $page, $limit);
+
+    /**
+     * @param string $locale
+     *
+     * @return TipTranslationView[]
+     */
+    public function findAll($locale);
 }

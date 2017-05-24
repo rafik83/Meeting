@@ -1,0 +1,45 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Tip;
+
+use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+use \Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+
+class TipListViewQueryHandler
+{
+    /** @var TipRepositoryInterface */
+    private $tipRepository;
+
+    /**
+     * TipListViewQueryHandler constructor.
+     *
+     * @param TipRepositoryInterface $tipRepository
+     */
+    public function __construct(TipRepositoryInterface $tipRepository)
+    {
+        $this->tipRepository = $tipRepository;
+    }
+
+    /**
+     * @param TipListViewQuery $query
+     *
+     * @return TipTranslationView[]
+     *
+     * @throws NoTipAvailableException
+     */
+    public function handle(TipListViewQuery $query)
+    {
+        $tipTranslationViews = $this->tipRepository->findAll($query->locale);
+
+
+        return $tipTranslationViews;
+    }
+}
