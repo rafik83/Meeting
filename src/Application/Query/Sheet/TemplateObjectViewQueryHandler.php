@@ -73,9 +73,6 @@ class TemplateObjectViewQueryHandler
         return new TemplateObjectView(
             $object,
             $label,
-            $object->getType(),
-            $object->getData(),
-            $products,
             $includedProductIds
         );
     }

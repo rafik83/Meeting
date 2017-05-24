@@ -7,7 +7,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 
-class AbstractIncludedProductGuesser
+abstract class AbstractIncludedProductGuesser
 {
     /** @var CartManager */
     private $cartManager;
