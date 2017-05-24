@@ -774,6 +774,8 @@ admin.tip.event.types: 'Type de participation affectés'
 admin.tip.event.pages: 'Page concernées'
 admin.tip.event.no_types: 'Aucun'
 admin.tip.event.no_pages: 'Aucune'
+admin.tip.event.affect.title: 'Gestion des messages d''aide'
+admin.tip.event.affect.form.title: 'Affecter un message d''aide'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'

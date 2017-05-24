@@ -1,0 +1,19 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.tip.event.affect.title'|trans %}
+
+{% block form_title 'admin.tip.event.affect.form.title'|trans %}
+
+{% block form_content %}
+
+    {% if form.tipViews is defined %}
+        {{ form_row(form.tipViews) }}
+    {% endif %}
+
+    {% if form.typeViews is defined %}
+        {{ form_row(form.typeViews) }}
+    {% endif %}
+
+{% endblock %}
+
+{% block goback_link path('admin_tip_event_list', {event: event.id}) %}
