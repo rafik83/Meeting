@@ -45,7 +45,7 @@ class TipListViewQueryHandler
                 $tip->getId(),
                 $tip->getTitle(),
                 $tip->getTypes(),
-                $tips->getPagesTranslations()
+                $tip->getPagesTranslations()
             );
         }
 

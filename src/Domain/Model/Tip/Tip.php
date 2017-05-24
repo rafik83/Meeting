@@ -70,6 +70,7 @@ class Tip
         $this->onCatalog            = $onCatalog;
         $this->onPrintPlanning      = $onPrintPlanning;
         $this->translations         = new ArrayCollection();
+        $this->types                = new ArrayCollection();
         $this->createdAt            = $createdAt;
     }
     
