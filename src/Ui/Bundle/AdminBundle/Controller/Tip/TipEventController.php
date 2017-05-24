@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
