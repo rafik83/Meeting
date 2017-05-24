@@ -3,8 +3,7 @@
         {{ 'sheetGroup.impersonateAs'|trans({
             '%fromEmail%': impersonateView.fromUser.email,
             '%toEmail%': impersonateView.toUser.email,
-            '%toFirstName%': impersonateView.toUser.firstname,
-            '%toLastName%': impersonateView.toUser.lastname
+            '%toFullname%': impersonateView.toUser.fullname,
         }) }}
 
         <a href="{{ path('event_sheet_group_unswitch', {'sheetGroup' : sheetGroup.id}) }}" class="btn btn-danger">
