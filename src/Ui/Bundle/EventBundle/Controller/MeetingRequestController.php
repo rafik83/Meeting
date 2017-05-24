@@ -784,10 +784,10 @@ class MeetingRequestController extends Controller
     private function getParticipantsHtml(array $participants, $locale)
     {
         $participants = array_map(function (Participant $participant) use ($locale) {
-            return $this
-                ->get('template.participant_info_guesser')
-                ->guessParticipantCompleteName($participant, $locale);
-        },
+                return $this
+                    ->get('template.participant_info_guesser')
+                    ->guessParticipantCompleteName($participant, $locale);
+            },
             $participants
         );
 
