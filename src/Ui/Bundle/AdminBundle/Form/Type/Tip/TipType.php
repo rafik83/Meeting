@@ -33,6 +33,15 @@ class TipType extends AbstractType
             ->add('onPrintPlanning', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('onSheet', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('onProgram', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('onAgenda', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type'    => TipTranslationType::class,
                 'allow_add'     => true,
