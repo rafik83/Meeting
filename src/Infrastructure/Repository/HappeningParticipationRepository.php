@@ -101,9 +101,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
      */
     public function findBySheet(Sheet $sheet)
     {
-        $sheetUsers = array_map(function (Participant $participant) {
-            return $participant->getUser();
-        }, $sheet->getParticipants()->toArray());
+        $sheetUsers = $this->getUsersOnSheet($sheet);
 
         $queryBuilder = $this
             ->entityManager
@@ -206,9 +204,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
      */
     public function countParticipationsBySheet(Sheet $sheet)
     {
-        $sheetUsers = array_map(function (Participant $participant) {
-            return $participant->getUser();
-        }, $sheet->getParticipants()->toArray());
+        $sheetUsers = $this->getUsersOnSheet($sheet);
 
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(participation.id)')
@@ -234,9 +230,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
      */
     public function getParticipationsForSheet(Sheet $sheet, $happenings)
     {
-        $sheetUsers = array_map(function (Participant $participant) {
-            return $participant->getUser();
-        }, $sheet->getParticipants()->toArray());
+        $sheetUsers = $this->getUsersOnSheet($sheet);
 
         $queryBuilder = $this
             ->entityManager
@@ -278,5 +272,19 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     public function update(HappeningParticipation $happeningParticipation)
     {
         $this->entityManager->flush($happeningParticipation);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return User[]
+     */
+    private function getUsersOnSheet(Sheet $sheet)
+    {
+        $sheetUsers = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $sheet->getParticipants()->toArray());
+
+        return $sheetUsers;
     }
 }
