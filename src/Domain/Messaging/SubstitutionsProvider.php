@@ -174,7 +174,7 @@ class SubstitutionsProvider
     {
         $event = $sheet->getEvent();
 
-        // If recipient is biling contact:
+        // If recipient is billing contact:
         if ($recipient instanceof BillingInfo) {
             return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', ['_locale' => $locale]);
         }

@@ -1,0 +1,10 @@
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{{ macros.button(
+    'mail.confirm.agenda.link'|trans({}, 'mail', locale),
+    url('event_user_event_token_confirm_agenda', {
+        'event': eventId,
+        'token': token
+        '_locale': locale,
+    })
+) }}
