@@ -4339,6 +4339,7 @@ services:
             - '@template.participant_info_guesser'
             - '@components.token.user.activate_account_token_generator'
             - '@query.sheet.planning.sheet_planning_view_query_handler'
+            - '@domain.messaging.substitutions.agenda_confirmation_ctasubstitution'
 
     domain.messaging.emailing.substitution_resolver:
         class: Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver
@@ -4685,6 +4686,12 @@ services:
             - ['registerSubstitution', ['%%ordersLink%%', '@domain.messaging.substitutions.orders_link_substitution']]
             - ['registerSubstitution', ['%%invoiceLinks%%', '@domain.messaging.substitutions.invoices_link_substitution']]
 
+    domain.messaging.substitutions.agenda_confirmation_ctasubstitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution
+        arguments:
+            - '@adapter.templating_adapter'
+            - '@domain.token.user_event_token_generator'
+
     #
     # Group
     #
@@ -4695,3 +4702,16 @@ services:
             - '@command.planning.sheet_info_guesser_cache'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery }
+
+    #
+    # UserEventToken
+    #
+    domain.token.uniqid_generator:
+        class: Proximum\Vimeet\Domain\Token\UniqidGenerator
+
+    domain.token.user_event_token_generator:
+        class: Proximum\Vimeet\Domain\Token\UserEventTokenGenerator
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@domain.token.uniqid_generator'
+            - '@datetime'
