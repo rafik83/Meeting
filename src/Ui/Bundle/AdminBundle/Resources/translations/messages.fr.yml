@@ -364,6 +364,7 @@ admin.messaging.message.compose.links.orders: 'Liste des commandes'
 admin.messaging.message.compose.links.package: Forfait
 admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
+admin.messaging.message.compose.tags.cta.agendaConfirmation: 'Lien CTA confirmation agenda'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
