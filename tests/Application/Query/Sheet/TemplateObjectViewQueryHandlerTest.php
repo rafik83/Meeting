@@ -54,9 +54,6 @@ class TemplateObjectViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedResult = new TemplateObjectView(
             $templateObject,
             'testLabel',
-            'image',
-            [],
-            $buyableProducts,
             [1]
         );
 
