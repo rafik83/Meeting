@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
+use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use \Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 
@@ -39,6 +40,9 @@ class TipListViewQueryHandler
     {
         $tipTranslationViews = $this->tipRepository->findAll($query->locale);
 
+        if (empty($tipTranslationViews)) {
+            throw new NoTipAvailableException();
+        }
 
         return $tipTranslationViews;
     }
