@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
