@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class TemplateObjectView
