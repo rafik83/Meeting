@@ -15,6 +15,7 @@ use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -430,11 +431,12 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->select('participant')
             ->from(Participant::class, 'participant')
             ->join(
-                'participant.happeningParticipations',
+                HappeningParticipation::class,
                 'happeningParticipation',
                 'WITH',
-                'participant.sheet = :sheet AND happeningParticipation.happening = :happening'
+                'happeningParticipation.user = participant.user AND happeningParticipation.happening = :happening'
             )
+            ->where('participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
             ->setParameter('happening', $happening);
 

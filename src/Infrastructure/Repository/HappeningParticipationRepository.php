@@ -243,13 +243,11 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->createQueryBuilder()
             ->select('participation')
             ->from(HappeningParticipation::class, 'participation')
-            ->where('participation.disabled = false')
-            ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
+            ->join('participation.user', 'user', 'WITH', 'user IN (:users)')
             ->join('participation.happening', 'happening', 'WITH', 'happening IN (:happenings)')
-            ->setParameter('sheet', $sheet)
+            ->where('participation.disabled = false')
             ->setParameter('happenings', $happenings)
-            ->setParameter('users', $sheetUsers)
-            ->groupBy('participation.happening, participation.user');
+            ->setParameter('users', $sheetUsers);
 
         return $queryBuilder->getQuery()->getResult();
     }
