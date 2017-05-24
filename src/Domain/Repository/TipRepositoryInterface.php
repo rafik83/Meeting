@@ -37,6 +37,11 @@ interface TipRepositoryInterface
     public function set(Tip $tip);
 
     /**
+     * @param Tip $tip
+     */
+    public function setTypes(Tip $tip);
+
+    /**
      * @param TipTranslation $translation
      */
     public function removeTranslation(TipTranslation $translation);

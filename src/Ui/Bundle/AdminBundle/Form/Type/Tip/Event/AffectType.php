@@ -21,7 +21,7 @@ class AffectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('tips', TipSelectType::class, [
+            ->add('tip', TipSelectType::class, [
                 'tipViews' => $options['tipViews'],
             ])
             ->add('types', TypeCheckboxType::class, [
@@ -42,6 +42,7 @@ class AffectType extends AbstractType
         $resolver->setAllowedTypes('tipViews', 'array');
     }
 
+    /** {@inheritdoc} */
     public function getBlockPrefix()
     {
         return 'tip_event_affect';

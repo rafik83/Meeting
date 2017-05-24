@@ -43,6 +43,12 @@ class TipEventController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
     public function affectAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -58,15 +64,17 @@ class TipEventController extends Controller
 
         $typeListViewQuery = new TypeListViewQuery($event, $locale);
         $typeViews         = $this->get('tactician.commandbus')->handle($typeListViewQuery);
-        $affect            = new Affect($tipViews, $typeViews);
+        $affect            = new Affect();
 
-        $form = $this->createForm(AffectType::class, null, [
-                'tipViews'  => $affect->tips,
-                'typeViews' => $affect->types,
+        $form = $this->createForm(AffectType::class, $affect, [
+                'tipViews'  => $tipViews,
+                'typeViews' => $typeViews,
             ]);
 
          if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($affect);
 
+            return $this->redirectToRoute('admin_tip_event_list', ['event' => $event]);
          }
 
         return $this->render('@Admin/Tip/Event/affect.html.twig', [

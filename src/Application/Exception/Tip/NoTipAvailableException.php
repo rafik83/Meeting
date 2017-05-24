@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Tip;
 
-
 class NoTipAvailableException extends TipException
 {
     /** @var string */
