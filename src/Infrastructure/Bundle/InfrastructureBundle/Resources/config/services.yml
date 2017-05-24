@@ -1894,6 +1894,11 @@ services:
         arguments:
             - '@security.authorization_checker'
 
+    adapter.templating_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\TemplatingAdapter
+        arguments:
+             - '@twig'
+
     #
     # Components
     #
