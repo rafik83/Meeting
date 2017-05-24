@@ -15,6 +15,12 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             type: boolean
         onPrintPlanning:
             type: boolean
+        onSheet:
+            type: boolean
+        onProgram:
+            type: boolean
+        onAgenda:
+            type: boolean
         createdAt:
             type: datetime
     oneToMany:

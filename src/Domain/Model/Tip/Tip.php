@@ -43,6 +43,15 @@ class Tip
      */
     public $onPrintPlanning;
 
+    /** @var bool */
+    public $onSheet;
+
+    /** @var bool */
+    public $onProgram;
+
+    /** @var bool */
+    public $onAgenda;
+
     /**
      * @var \DateTimeInterface
      */
@@ -214,6 +223,30 @@ class Tip
     public function isOnPrintPlanning()
     {
         return $this->onPrintPlanning;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnSheet()
+    {
+        return $this->onSheet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnProgram()
+    {
+        return $this->onProgram;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnAgenda()
+    {
+        return $this->onAgenda;
     }
 
     /**
