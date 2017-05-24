@@ -26,6 +26,8 @@ class TipEventController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
         $tipListViewQuery = new TipListViewQuery($event, $request->query->get('page', 1));
 
         $tipListView = $this->get('tactician.commandbus')->handle($tipListViewQuery);
