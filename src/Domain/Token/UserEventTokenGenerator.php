@@ -50,7 +50,7 @@ class UserEventTokenGenerator
      */
     public function getUserEventTokenForConfirmAgenda(Event $event, User $user, $type)
     {
-        $userEventToken = $this->userEventTokenRepository->findByEventAndUser($event, $user, $type);
+        $userEventToken = $this->userEventTokenRepository->findByEventAndUserAndType($event, $user, $type);
 
         if ($userEventToken !== null) {
             return $userEventToken;

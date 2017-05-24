@@ -30,7 +30,7 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
         $userEventToken = new UserEventToken($event->reveal(), $user->reveal(), $type, 'token', $dateTime);
 
         $userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
-        $userEventTokenRepository->findByEventAndUser($event, $user, $type)->shouldBeCalled()->willReturn($userEventToken);
+        $userEventTokenRepository->findByEventAndUserAndType($event, $user, $type)->shouldBeCalled()->willReturn($userEventToken);
 
         $uniqidGenerator = $this->prophesize(UniqidGenerator::class);
         $uniqidGenerator->generate()->shouldNotBeCalled();
@@ -56,7 +56,7 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
         $expectedUserEventToken = new UserEventToken($event->reveal(), $user->reveal(), $type, $token, $dateTime);
 
         $userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
-        $userEventTokenRepository->findByEventAndUser($event, $user, $type)->shouldBeCalled()->willReturn(null);
+        $userEventTokenRepository->findByEventAndUserAndType($event, $user, $type)->shouldBeCalled()->willReturn(null);
         $userEventTokenRepository->add($expectedUserEventToken)->shouldBeCalled();
 
         $uniqidGenerator = $this->prophesize(UniqidGenerator::class);

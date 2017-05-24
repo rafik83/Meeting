@@ -51,7 +51,7 @@ class UserEventTokenRepository implements UserEventTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventAndUser(Event $event, User $user, $type)
+    public function findByEventAndUserAndType(Event $event, User $user, $type)
     {
         $queryBuilder = $this
             ->entityManager
