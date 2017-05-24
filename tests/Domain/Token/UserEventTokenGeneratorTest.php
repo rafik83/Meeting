@@ -32,7 +32,10 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
         $userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
         $userEventTokenRepository->findByEventAndUser($event, $user, $type)->shouldBeCalled()->willReturn($userEventToken);
 
-        $generator = new UserEventTokenGenerator($userEventTokenRepository->reveal(), $dateTime);
+        $uniqidGenerator = $this->prophesize(UniqidGenerator::class);
+        $uniqidGenerator->generate()->shouldNotBeCalled();
+
+        $generator = new UserEventTokenGenerator($userEventTokenRepository->reveal(), $uniqidGenerator->reveal(), $dateTime);
         $result = $generator->getUserEventTokenForConfirmAgenda($event->reveal(), $user->reveal(), $type);
 
 
@@ -59,7 +62,7 @@ class UserEventTokenGeneratorTest extends \PHPUnit_Framework_TestCase
         $uniqidGenerator = $this->prophesize(UniqidGenerator::class);
         $uniqidGenerator->generate()->shouldBeCalled()->willReturn($uniqid);
 
-        $generator = new UserEventTokenGenerator($userEventTokenRepository->reveal(), $dateTime);
+        $generator = new UserEventTokenGenerator($userEventTokenRepository->reveal(), $uniqidGenerator->reveal(), $dateTime);
         $result = $generator->getUserEventTokenForConfirmAgenda($event->reveal(), $user->reveal(), $type);
 
         $this->assertEquals($token, $result->getToken());
