@@ -392,7 +392,9 @@ class SlotAvailability
 
             /** @var MassAssignment $massAssignment */
             foreach ($this->massAssignmentSortByUser[$participant->getUser()->getId()] as $massAssignment) {
-                if ($massAssignment->getMass() === $mass && $massAssignment->getUser()->getId() === $participant->getUser()->getId()) {
+                if ($massAssignment->getMass() === $mass
+                    && $massAssignment->getUser()->getId() === $participant->getUser()->getId()
+                ) {
                     return $massAssignment;
                 }
             }
