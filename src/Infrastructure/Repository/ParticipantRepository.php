@@ -340,10 +340,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     WHERE
                         u.user = user AND u.event = :eventId
                         AND (
-                            u.begin BETWEEN :begin AND :end
-                            OR u.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN u.begin AND u.end
-                            OR :end BETWEEN u.begin AND u.end
+                            u.begin >= :begin AND u/begin < :end
+                            OR u.end > :begin AND u.end <= :end
+                            OR :begin >= u.begin AND :begin < u.end
+                            OR :end > u.begin AND :end <= u.end
                         )
                 )";
 
@@ -365,10 +365,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                         " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
                         AND (fpUser = user OR tpUser = user)
                         AND (
-                            slot.begin BETWEEN :begin AND :end
-                            OR slot.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN slot.begin AND slot.end
-                            OR :end BETWEEN slot.begin AND slot.end
+                            slot.begin >= :begin AND slot.begin < :end
+                            OR slot.end > :begin AND slot.end <= :end
+                            OR :begin >= slot.begin AND :begin < slot.end
+                            OR :end > slot.begin AND :end <= slot.end
                         )
                 )",
                 // Participant have not happening during this period
