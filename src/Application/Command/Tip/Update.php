@@ -54,6 +54,8 @@ class Update
         $this->onPrintPlanning     = $tip->isOnPrintPlanning();
         $this->onCatalog           = $tip->isOnCatalog();
         $this->onSheet             = $tip->isOnSheet();
+        $this->onAgenda            = $tip->isOnAgenda();
+        $this->onProgram           = $tip->isOnProgram();
 
         foreach ($this->tip->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

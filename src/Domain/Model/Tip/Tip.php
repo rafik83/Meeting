@@ -89,7 +89,7 @@ class Tip
         $this->translations         = new ArrayCollection();
         $this->createdAt            = $createdAt;
     }
-    
+
     /**
      * Update Tip
      *
@@ -97,6 +97,9 @@ class Tip
      * @param bool   $onMeetingManagement
      * @param bool   $onCatalog
      * @param bool   $onPrintPlanning
+     * @param bool   $onSheet
+     * @param bool   $onAgenda
+     * @param bool   $onProgram
      *
      * @return Tip
      */
@@ -104,12 +107,18 @@ class Tip
         $title,
         $onMeetingManagement,
         $onCatalog,
-        $onPrintPlanning
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
         $this->onCatalog           = $onCatalog;
         $this->onPrintPlanning     = $onPrintPlanning;
+        $this->onSheet             = $onSheet;
+        $this->onAgenda            = $onAgenda;
+        $this->onProgram           = $onProgram;
 
         return $this;
     }
