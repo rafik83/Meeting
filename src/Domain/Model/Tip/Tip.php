@@ -44,13 +44,13 @@ class Tip
     public $onPrintPlanning;
 
     /** @var bool */
-    public $onSheet;
+    private $onSheet;
 
     /** @var bool */
-    public $onProgram;
+    private $onProgram;
 
     /** @var bool */
-    public $onAgenda;
+    private $onAgenda;
 
     /**
      * @var \DateTimeInterface
@@ -64,14 +64,28 @@ class Tip
      * @param bool               $onMeetingManagement
      * @param bool               $onCatalog
      * @param bool               $onPrintPlanning
+     * @param bool               $onSheet
+     * @param bool               $onAgenda
+     * @param bool               $onProgram
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning, \DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        $title,
+        $onMeetingManagement,
+        $onCatalog,
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram,
+        \DateTimeInterface $createdAt
+    ) {
         $this->title                = $title;
         $this->onMeetingManagement  = $onMeetingManagement;
         $this->onCatalog            = $onCatalog;
         $this->onPrintPlanning      = $onPrintPlanning;
+        $this->onSheet              = $onSheet;
+        $this->onAgenda             = $onAgenda;
+        $this->onProgram            = $onProgram;
         $this->translations         = new ArrayCollection();
         $this->createdAt            = $createdAt;
     }

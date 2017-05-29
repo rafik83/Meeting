@@ -23,7 +23,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip = new Tip('tipTitle', true, false, true, new \DateTime());
+        $tip = new Tip('tipTitle', true, false, true, true, false, true, new \DateTime());
         $tipTranslation1 = new TipTranslation($tip, new \DateTime(), 'title', 'locale_1', 'content');
         $tip->translations = new ArrayCollection();
 
