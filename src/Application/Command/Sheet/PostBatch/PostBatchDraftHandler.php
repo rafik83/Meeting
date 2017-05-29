@@ -54,8 +54,6 @@ class PostBatchDraftHandler
      */
     public function handle(PostBatchDraft $command)
     {
-        $this->sheetIndexer->updateSheets($command->sheets);
-
         foreach ($command->sheets as $sheet) {
             if (!$sheet->isValidationDraft()) {
                 $this->eventDispatcher->dispatch(
@@ -68,5 +66,7 @@ class PostBatchDraftHandler
                 );
             }
         }
+
+        $this->sheetIndexer->updateSheets($command->sheets);
     }
 }

@@ -41,9 +41,9 @@ class PromotionType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'placeholder' => '',
                 'choices'     => [
-                    '% de réduction' => Promotion::TYPE_PERCENT_OFF,
-                    'réduction'      => Promotion::TYPE_VALUE_OFF,
-                    'offert'         => Promotion::TYPE_FREE,
+                    'form.promotion_code_promotion.children.type.percentOff' => Promotion::TYPE_PERCENT_OFF,
+                    'form.promotion_code_promotion.children.type.valueOff'   => Promotion::TYPE_VALUE_OFF,
+                    'form.promotion_code_promotion.children.type.free'       => Promotion::TYPE_FREE,
                 ],
             ])
             ->add('value', NumberType::class, [
