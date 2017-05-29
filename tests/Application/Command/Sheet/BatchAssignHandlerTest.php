@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssign;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -44,9 +45,12 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
             ->batchAssignBySheetsId([1, 2, 3], $organizer->reveal())
             ->shouldBeCalled();
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
+
         $command = new BatchAssign([1, 2, 3], $organizer->reveal());
 
-        $handler = new BatchAssignHandler($sheetRepository->reveal());
+        $handler = new BatchAssignHandler($sheetRepository->reveal(), $jobQueue->reveal());
         $result  = $handler->handle($command);
 
         $this->assertEquals(3, $result->count);
@@ -78,9 +82,12 @@ class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->batchUnAssignBySheetsId([1, 2, 3])->shouldBeCalled();
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
+
         $command = new BatchAssign([1, 2, 3], null);
 
-        $handler = new BatchAssignHandler($sheetRepository->reveal());
+        $handler = new BatchAssignHandler($sheetRepository->reveal(), $jobQueue->reveal());
         $result  = $handler->handle($command);
 
         $this->assertEquals(3, $result->count);

@@ -846,6 +846,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAssign }
     command.operator.create_handler:
