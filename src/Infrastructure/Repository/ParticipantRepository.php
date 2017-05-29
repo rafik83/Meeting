@@ -381,10 +381,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
                         AND p.user = user
                         AND (
-                            h.begin BETWEEN :begin AND :end
-                            OR h.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN h.begin AND h.end
-                            OR :end BETWEEN h.begin AND h.end
+                            h.begin >= :begin AND h.begin < :end
+                            OR h.end > :begin AND h.end <= :end
+                            OR :begin >= h.begin AND :begin < h.end
+                            OR :end > h.begin AND :end <= h.end
                         )
                 )",
                 $unavailabilityConditions
@@ -529,7 +529,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     ) {
         return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
     }
-  
+
     /**
      * {@inheritdoc}
      */
@@ -548,7 +548,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
