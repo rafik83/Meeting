@@ -559,13 +559,20 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $participant->getId()->willReturn(654321);
         $participant->getUser()->willReturn($user->reveal());
         $participant->getSheet()->willReturn($this->sheet);
+
         $mass       = new Mass($this->event, $category, 'name', $beginM, $endM, true, true);
         $assignment = new Unavailability\MassAssignment($mass, $user->reveal(), $beginMa, $endMa);
         $assignment->disable();
+
+        // Assertion
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
+
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
+
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
+
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
+
         $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([$assignment]);
 
         $slotAvailability = new SlotAvailability(
