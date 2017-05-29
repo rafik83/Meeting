@@ -42,11 +42,10 @@ interface MassRepositoryInterface
 
     /**
      * @param Event $event
-     * @param string $locale
      *
      * @return Mass[]
      */
-    public function findBlockingByEvent(Event $event, $locale);
+    public function findBlockingByEvent(Event $event);
 
     /**
      * @param Event  $event

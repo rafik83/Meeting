@@ -102,9 +102,7 @@ class AgendaSheetViewQueryHandler
         $meetings                = $this->meetingRepositoryInterface->findBySheet($query->sheet);
         $happeningParticipations = $this->happeningParticipationRepository->findBySheet($query->sheet);
         $assignment              = $this->massAssignmentRepository->findBySheet($query->sheet);
-        $masses                  = $this
-            ->massUnavailabilityRepository
-            ->findBlockingByEvent($query->sheet->getEvent(), $query->locale);
+        $masses                  = $this->massUnavailabilityRepository->findBlockingByEvent($query->sheet->getEvent());
 
         $unavailabilites = $this->unavailabilityRepository->findBySheet($query->sheet);
 
