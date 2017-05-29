@@ -161,8 +161,9 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user = :user')
-            ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
-            ->setParameter('user', $participant->getUser());
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->setParameter('user', $participant->getUser())
+            ->setParameter('event', $participant->getSheet()->getEvent())
         ;
 
         return $queryBuilder->getQuery()->getResult();
