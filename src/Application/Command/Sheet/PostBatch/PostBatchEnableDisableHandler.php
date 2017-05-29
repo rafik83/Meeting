@@ -76,8 +76,6 @@ class PostBatchEnableDisableHandler
     {
         $state = $command->state === BatchEnableDisableHandler::STATE_ENABLE;
 
-        $this->sheetIndexer->updateSheets($command->sheets);
-
         // remove sheet from catalog if sheet is disable
         if ($command->state === BatchEnableDisableHandler::STATE_DISABLE) {
             $this->batchCatalogHandler->handle(new BatchCatalog(
@@ -104,5 +102,7 @@ class PostBatchEnableDisableHandler
                 )
             );
         }
+
+        $this->sheetIndexer->updateSheets($command->sheets);
     }
 }
