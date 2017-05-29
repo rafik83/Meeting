@@ -161,18 +161,19 @@ class SheetParticipantController extends Controller
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'                  => $eventDomain->getEvent(),
-            'sheet'                  => $sheet,
-            'templateData'           => $templateData,
-            'locale'                 => $locale,
-            'nomenclatures'          => $nomenclatures,
-            'taggedData'             => $taggedData,
-            'form_participant'       => $form->createView(),
-            'label'                  => $label,
-            'uid'                    => $key,
-            'participants'           => $participants,
-            'participantProductView' => $participantProductView,
-            'tipTranslationViews'    => $tipTranslationViews,
+            'event'                   => $eventDomain->getEvent(),
+            'form_participant'        => $form->createView(),
+            'isRequestMeetingEnabled' => false,
+            'label'                   => $label,
+            'locale'                  => $locale,
+            'nomenclatures'           => $nomenclatures,
+            'participantProductView'  => $participantProductView,
+            'participants'            => $participants,
+            'sheet'                   => $sheet,
+            'taggedData'              => $taggedData,
+            'templateData'            => $templateData,
+            'tipTranslationViews'     => $tipTranslationViews,
+            'uid'                     => $key,
         ]);
     }
 
@@ -284,17 +285,18 @@ class SheetParticipantController extends Controller
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'               => $eventDomain->getEvent(),
-            'sheet'               => $sheet,
-            'templateData'        => $templateData,
-            'locale'              => $locale,
-            'nomenclatures'       => $nomenclatures,
-            'taggedData'          => $taggedData,
-            'form_remove'         => $form->createView(),
-            'label'               => $label,
-            'uid'                 => $key,
-            'participants'        => $participants,
-            'tipTranslationViews' => $tipTranslationViews,
+            'event'                   => $eventDomain->getEvent(),
+            'form_remove'             => $form->createView(),
+            'isRequestMeetingEnabled' => false,
+            'label'                   => $label,
+            'locale'                  => $locale,
+            'nomenclatures'           => $nomenclatures,
+            'participants'            => $participants,
+            'sheet'                   => $sheet,
+            'taggedData'              => $taggedData,
+            'templateData'            => $templateData,
+            'tipTranslationViews'     => $tipTranslationViews,
+            'uid'                     => $key,
         ]);
     }
 
