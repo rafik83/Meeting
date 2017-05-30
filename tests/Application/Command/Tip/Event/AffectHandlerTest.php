@@ -45,7 +45,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new AffectHandler($tipRepository->reveal(), $typeRepository->reveal());
 
-        $tipRepository->getById(null)->shouldBeCalled()->willReturn($tip);
+        $tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($tip);
 
         $typeRepository->getById(null)->shouldBeCalled()->willReturn($type);
 

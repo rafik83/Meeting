@@ -39,14 +39,15 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getById($id)
+    public function getByTipTranslationId($id)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('tip')
             ->from(Tip::class, 'tip')
-            ->where('tip.id = :id')
+            ->join(TipTranslation::class, 'tipTranslation', 'WITH', 'tip = tipTranslation.tip')
+            ->where('tipTranslation = :id')
             ->setParameter('id', $id);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();

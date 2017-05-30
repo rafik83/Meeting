@@ -38,7 +38,7 @@ class AffectHandler
      */
     public function handle(Affect $affect)
     {
-        $tip = $this->tipRepository->getById($affect->tip->id);
+        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id);
 
         foreach ($affect->types as $typeView) {
             $type = $this->typeRepository->getById($typeView->id);

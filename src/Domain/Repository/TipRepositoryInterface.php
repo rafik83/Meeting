@@ -23,7 +23,7 @@ interface TipRepositoryInterface
      *
      * @return Tip|null
      */
-    public function getById($id);
+    public function getByTipTranslationId($id);
 
     /**
      * @param int $page
