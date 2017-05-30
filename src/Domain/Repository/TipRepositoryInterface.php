@@ -19,6 +19,13 @@ use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 interface TipRepositoryInterface
 {
     /**
+     * @param $id
+     *
+     * @return Tip|null
+     */
+    public function getById($id);
+
+    /**
      * @param int $page
      * @param int $limit
      *

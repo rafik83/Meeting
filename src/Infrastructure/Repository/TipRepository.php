@@ -37,6 +37,20 @@ class TipRepository implements TipRepositoryInterface
         $this->entityManager = $entityManager;
         $this->paginator     = $paginator;
     }
+
+    /** {@inheritdoc} */
+    public function getById($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip')
+            ->from(Tip::class, 'tip')
+            ->where('tip.id = :id')
+            ->setParameter('id', $id);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
     
     /** {@inheritdoc} */
     public function paginate($page, $limit = 20)
@@ -109,7 +123,7 @@ class TipRepository implements TipRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('tip')
-            ->from(Tip::class, 'tip')
+            ->from(Tip::class, 'tip', 'tip.id')
             ->join(Type::class, 'type', 'WITH', 'type.event = :event')
             ->setParameter('event', $event);
 
