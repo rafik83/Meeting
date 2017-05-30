@@ -6,9 +6,36 @@
 
 {% block form_content %}
 
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="tip_name">
+            {{ 'form.tip_event_affect.children.name.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-md-9">
+            <input id="tip_name" value="" class="form-control" disabled>
+        </div>
+    </div>
+
     {% if form.tipViews is defined %}
         {{ form_row(form.tipViews) }}
     {% endif %}
+
+    <div class="form-group">
+        <label for="tip_title" class="col-md-3 control-label">
+            {{ 'form.tip_event_affect.children.title.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-md-9">
+            <input id="tip_title" value="" class="form-control" disabled>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tip_content" class="col-md-3 control-label">
+            {{ 'form.tip_event_affect.children.content.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-md-9">
+            <input id="tip_content" value="" class="form-control" disabled>
+        </div>
+    </div>
 
     {% if form.typeViews is defined %}
         {{ form_row(form.typeViews) }}
