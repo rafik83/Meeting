@@ -12,6 +12,9 @@ class Tip
     const TRANS_VISIBLE_CATALOG = 'admin.tip.column.visible.catalog';
     const TRANS_VISIBLE_MEETING_MANAGEMENT = 'admin.tip.column.visible.meeting_management';
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
+    const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
+    const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
+    const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
 
     /**
      * @var int
@@ -297,6 +300,18 @@ class Tip
 
         if ($this->isOnPrintPlanning()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_PRINT_PLANNING;
+        }
+
+        if ($this->isOnSheet()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_SHEET;
+        }
+
+        if ($this->isOnAgenda()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_AGENDA;
+        }
+
+        if ($this->isOnProgram()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_PROGRAM;
         }
 
         return $pagesTranslations;
