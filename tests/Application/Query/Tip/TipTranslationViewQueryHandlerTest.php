@@ -15,12 +15,14 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         $dateTime = new \DateTime();
+        $event    = EventFactory::createEvent();
 
         $tip = new Tip('tip', true, true, true, $dateTime);
         $tip->setTranslation('fr', 'title', 'content');
@@ -33,12 +35,12 @@ class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $query = new TipTranslationViewQuery('event_catalog_index', 'fr');
+        $query = new TipTranslationViewQuery($event, 'event_catalog_index', 'fr');
         $expectedViews = [$tipView1, $tipView2];
 
         $handler = new TipTranslationViewQueryHandler($tipRepository->reveal());
 
-        $tipRepository->getByContext('onCatalog', $query->locale)->shouldBeCalled()->willReturn($expectedViews);
+        $tipRepository->getByContextAndEvent($query->event, 'onCatalog', $query->locale)->shouldBeCalled()->willReturn($expectedViews);
 
         $views = $handler->handle($query);
         $this->assertEquals($expectedViews, $views);

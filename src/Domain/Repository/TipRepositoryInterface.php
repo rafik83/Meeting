@@ -59,12 +59,13 @@ interface TipRepositoryInterface
     public function removeTipForEvent(Tip $tip);
 
     /**
-     * @param $context
-     * @param $locale
+     * @param Event  $event
+     * @param string $context
+     * @param string $locale
      *
      * @return TipTranslationView[]
      */
-    public function getByContext($context, $locale);
+    public function getByContextAndEvent(Event $event, $context, $locale);
 
     /**
      * @param Event $event

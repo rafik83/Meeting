@@ -139,6 +139,7 @@ class ExportPlanningHandler
         foreach ($participants as $participant) {
             if (!isset($tipTranslationViews[$participant->getLocale()])) {
                 $tipTranslationViewQuery = new TipTranslationViewQuery(
+                    $event,
                     TipTranslationViewQueryHandler::CONTEXT_PRINT_PLANNING,
                     $event->getAvailableLocale($participant->getLocale())
                 );

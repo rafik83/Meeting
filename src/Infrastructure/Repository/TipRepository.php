@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipRepository implements TipRepositoryInterface
@@ -113,7 +112,7 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getByContext($context, $locale)
+    public function getByContextAndEvent(Event $event, $context, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -121,8 +120,11 @@ class TipRepository implements TipRepositoryInterface
             ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content)')
             ->from(Tip::class, 'tip')
             ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
             ->orderBy('tip.createdAt')
-            ->setParameter('locale', $locale);
+            ->groupBy('type.event, tip.id')
+            ->setParameter('locale', $locale)
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

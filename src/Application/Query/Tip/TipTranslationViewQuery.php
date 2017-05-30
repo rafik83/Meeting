@@ -10,8 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class TipTranslationViewQuery
 {
+    /** @var Event $event */
+    public $event;
+
     /** @var string */
     public $context;
 
@@ -21,11 +26,13 @@ class TipTranslationViewQuery
     /**
      * TipTranslationViewQuery constructor.
      *
+     * @param Event  $event
      * @param string $context
      * @param string $locale
      */
-    public function __construct($context, $locale)
+    public function __construct(Event $event, $context, $locale)
     {
+        $this->event   = $event;
         $this->context = $context;
         $this->locale  = $locale;
     }
