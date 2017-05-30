@@ -644,6 +644,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler
         arguments:
             - '@repository.tip.repository'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Affect }
     command.transaction.create_handler:
