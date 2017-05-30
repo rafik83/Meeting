@@ -200,26 +200,6 @@ class Tip
     }
 
     /**
-     * @param Type $type
-     *
-     * @return bool
-     */
-    public function hasType(Type $type)
-    {
-        return $this->types->contains($type->getId());
-    }
-
-    /**
-     * @param Type $type
-     *
-     * @return Type|null
-     */
-    public function getType(Type $type)
-    {
-        return $this->types->get($type->getId());
-    }
-    
-    /**
      * @return int
      */
     public function getId()
