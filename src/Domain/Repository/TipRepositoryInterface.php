@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 
 interface TipRepositoryInterface
 {
@@ -60,12 +61,13 @@ interface TipRepositoryInterface
 
     /**
      * @param Event  $event
+     * @param Type   $type
      * @param string $context
      * @param string $locale
      *
      * @return TipTranslationView[]
      */
-    public function getByContextAndEvent(Event $event, $context, $locale);
+    public function getByContextAndEventAndType(Event $event, Type $type, $context, $locale);
 
     /**
      * @param Event $event

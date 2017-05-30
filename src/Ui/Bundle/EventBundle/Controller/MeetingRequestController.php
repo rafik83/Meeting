@@ -106,7 +106,7 @@ class MeetingRequestController extends Controller
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $event,
+            $sheet->getType(),
             TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
             $request->getLocale()
         );
