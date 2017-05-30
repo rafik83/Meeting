@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
-use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Domain\View\TypeView;
 
 class Affect
 {
-    /** @var Tip */
+    /** @var TipTranslationView */
     public $tip;
 
-    /** @var Type[] */
+    /** @var TypeView[] */
     public $types;
 }
