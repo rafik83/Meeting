@@ -25,7 +25,16 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 $loader = require __DIR__.'/../app/autoload.php';
 
 $kernel = new AppKernel('test', false);
-$kernel->loadClassCache();
+if (PHP_VERSION_ID < 70000) {
+    $kernel->loadClassCache();
+}
+$kernel->boot();
+
+Request::setTrustedProxies(
+    $kernel->getContainer()->getParameter("trusted_proxies"),
+    Request::HEADER_X_FORWARDED_ALL
+);
+
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
