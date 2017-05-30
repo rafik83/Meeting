@@ -3,6 +3,7 @@ default:
         Behat\Symfony2Extension:
             kernel:
                env: test
+               bootstrap: 'vendor/autoload.php'
         Behat\MinkExtension:
             base_url:  'http://admin.vimeet.proximum.dev/app_test.php'
             sessions:

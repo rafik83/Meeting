@@ -5,7 +5,6 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Proximum\\Vimeet\\Tests\\": "tests/",
             "Proximum\\Vimeet\\": "src/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
@@ -13,6 +12,11 @@
             "app/AppKernel.php",
             "app/AppCache.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Proximum\\Vimeet\\Tests\\": "tests/"
+        }
     },
     "require": {
         "php": ">=5.5.9",
