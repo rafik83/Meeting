@@ -10,7 +10,10 @@
 
 namespace Application\Command\Tip\Event;
 
-use Factory\TipFactory;
+use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Tests\Factory\TipFactory;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -21,21 +24,30 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $tipRepository = $this->prophesize(TipRepositoryInterface::class);
+        $tipRepository  = $this->prophesize(TipRepositoryInterface::class);
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
 
         $event = EventFactory::createEvent();
         $tip   = TipFactory::createTip('awesome tip');
-        $types = [
-            new Type($event),
-            new Type($event),
-            new Type($event),
-        ];
+        $type  = new Type($event);
+
+        $tipTranslationView = new TipTranslationView(
+            $tip->getId(),
+            $tip->getTranslationTitle('fr'),
+            $tip->getTranslationContent('fr')
+        );
+        $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
 
         $command = new Affect();
-        $command->tip   = $tip;
-        $command->types = $types;
+        $command->tip   = $tipTranslationView;
+        $command->types = [$typeView];
 
-        $handler = new AffectHandler($tipRepository->reveal());
+
+        $handler = new AffectHandler($tipRepository->reveal(), $typeRepository->reveal());
+
+        $tipRepository->getById(null)->shouldBeCalled()->willReturn($tip);
+
+        $typeRepository->getById(null)->shouldBeCalled()->willReturn($type);
 
         $tipRepository->setTypes($tip)->shouldBeCalled();
 
