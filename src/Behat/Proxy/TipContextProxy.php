@@ -43,7 +43,7 @@ class TipContextProxy implements TipContextProxyInterface
     /**
      * {@inheritdoc}
      */
-    public function getEventManager()
+    public function getTipManager()
     {
         return $this->tipManager;
     }

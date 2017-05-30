@@ -98,6 +98,11 @@ services:
         arguments:
             - '@repository.billing_info_repository'
 
+    behat_manager.tip:
+        class: Proximum\Vimeet\Behat\Service\Manager\TipManager
+        arguments:
+            - '@repository.tip.repository'
+
     #
     # Proxies
     #
@@ -161,3 +166,9 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.order'
+
+    behat_proxy.tip_context:
+        class: Proximum\Vimeet\Behat\Proxy\TipContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.tip'

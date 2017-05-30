@@ -49,20 +49,10 @@ class TipFactory
             $tip->setTranslation($locale, 'title_' . $locale, 'content_' . $locale);
         }
 
-        /** @var Event[] $events */
-        $events = [
-            EventFactory::createEvent('Event_1'),
-            EventFactory::createEvent('Event_2'),
-        ];
+        $event = EventFactory::createEvent('Event_1');
 
-        foreach ($events as $key => $event) {
-            $locale = self::LOCALES[$key];
-
-            $type = new Type($event);
-            $type->translate($locale, 'type_' . $locale, 'description_' . $locale);
-
-            $tip->setType($type);
-        }
+        $type = new Type($event);
+        $tip->setType($type);
 
         return $tip;
     }
