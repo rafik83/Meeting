@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
-use Factory\TipFactory;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\TipFactory;
 
 class TipManager
 {
