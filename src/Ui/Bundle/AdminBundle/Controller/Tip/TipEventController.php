@@ -73,6 +73,7 @@ class TipEventController extends Controller
 
          if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($affect);
+            $this->addFlash('success', 'flash.admin.tip.affect.success');
 
             return $this->redirectToRoute('admin_tip_event_list', ['event' => $event]);
          }
