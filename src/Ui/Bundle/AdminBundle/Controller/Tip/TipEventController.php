@@ -13,13 +13,16 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
+use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery as EventTipListViewQuery;
 use \Proximum\Vimeet\Application\Query\Tip\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\AffectType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,6 +108,20 @@ class TipEventController extends Controller
         return $this->redirectToRoute('admin_tip_event_list', [
             'event' => $event->getId(),
         ]);
+    }
+
+    /**
+     * @param TipTranslation $tipTranslation
+     *
+     * @return JsonResponse
+     */
+    public function previewAction(TipTranslation $tipTranslation)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        $tipTranslationView = $this->get('tactician.commandbus')->handle(new PreviewTipViewQuery($tipTranslation));
+
+        return new JsonResponse($tipTranslationView);
     }
 
     /**
