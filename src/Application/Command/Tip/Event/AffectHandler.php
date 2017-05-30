@@ -17,26 +17,24 @@ class AffectHandler
     /** @var TipRepositoryInterface */
     private $tipRepository;
     
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /**
      * AffectHandler constructor.
      *
      * @param TipRepositoryInterface $tipRepository
-     * @param \DateTimeInterface     $dateTime
      */
-    public function __construct(TipRepositoryInterface $tipRepository, \DateTimeInterface $dateTime)
+    public function __construct(TipRepositoryInterface $tipRepository)
     {
         $this->tipRepository = $tipRepository;
-        $this->dateTime      = $dateTime;
     }
 
-    public function handle(Affect $command)
+    /**
+     * @param Affect $affect
+     */
+    public function handle(Affect $affect)
     {
-        $tip = $command->tip;
+        $tip = $affect->tip;
 
-        foreach ($command->types as $type) {
+        foreach ($affect->types as $type) {
             $tip->setType($type);
         }
 
