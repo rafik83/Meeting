@@ -345,8 +345,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR u.begin <= :begin AND u.end >= :end
                         )
                 )";
-
-            $queryBuilder->setParameter('eventId', $eventId);
         }
 
         $queryBuilder->andWhere(
@@ -355,7 +353,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
-                    JOIN m.slot slot
+                    JOIN m.slot slot WITH slot.event = :eventId
                     LEFT JOIN m.fromParticipants fp
                     LEFT JOIN fp.user fpUser
                     LEFT JOIN m.toParticipants tp
@@ -373,7 +371,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 "NOT EXISTS (
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
-                    JOIN hp.happening h
+                    JOIN hp.happening h WITH h.event = :eventId
                     JOIN hp.participant p
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
@@ -397,6 +395,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         }
 
         $queryBuilder
+            ->setParameter('eventId', $eventId)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end);
 
