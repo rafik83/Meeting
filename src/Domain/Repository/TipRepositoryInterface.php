@@ -54,6 +54,11 @@ interface TipRepositoryInterface
     public function removeTranslation(TipTranslation $translation);
 
     /**
+     * @param Tip $tip
+     */
+    public function removeTipForEvent(Tip $tip);
+
+    /**
      * @param $context
      * @param $locale
      *

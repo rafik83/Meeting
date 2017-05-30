@@ -1398,3 +1398,10 @@ admin_tip_event_affect:
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:Tip/TipEvent:affect }
+
+admin_tip_event_remove:
+    path: /tip/{event}/remove/{tip}
+    methods: [DELETE]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:remove }

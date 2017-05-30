@@ -103,6 +103,16 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
+    public function removeTipForEvent(Tip $tip)
+    {
+        foreach ($tip->getTypes() as $type) {
+            $tip->removeType($type);
+        }
+
+        $this->entityManager->flush($tip);
+    }
+
+    /** {@inheritdoc} */
     public function getByContext($context, $locale)
     {
         $queryBuilder = $this

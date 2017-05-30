@@ -647,6 +647,12 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Affect }
+    command.tip.event.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\Event\RemoveHandler
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Remove }
     command.transaction.create_handler:
         class: Proximum\Vimeet\Application\Command\Transaction\CreateHandler
         arguments:

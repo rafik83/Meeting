@@ -11,13 +11,16 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
+use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery as EventTipListViewQuery;
 use \Proximum\Vimeet\Application\Query\Tip\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\AffectType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -83,5 +86,38 @@ class TipEventController extends Controller
             'event' => $event,
             'form'  => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Tip   $tip
+     *
+     * @return RedirectResponse
+     */
+    public function removeAction(Event $event, Tip $tip)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessIfTipIsNotAffectedToEvent($event, $tip);
+
+        $this->get('tactician.commandbus')->handle(new Remove($tip));
+        $this->addFlash('success', 'flash.admin.tip.remove.success');
+
+        return $this->redirectToRoute('admin_tip_event_list', [
+            'event' => $event->getId(),
+        ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @param Tip $tip
+     */
+    private function denyAccessIfTipIsNotAffectedToEvent(Event $event, Tip $tip)
+    {
+        foreach ($tip->getTypes() as $type) {
+            if ($type->getEvent() !== $event) {
+                throw $this->createAccessDeniedException();
+            }
+        }
     }
 }
