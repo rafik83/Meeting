@@ -1386,22 +1386,23 @@ admin_tip_update:
 # Tip on event
 #
 admin_tip_event_list:
-    path: /tip/{event}/list
+    path: /event/{event}/tip/list
     methods: [GET]
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:Tip/TipEvent:list }
 
 admin_tip_event_affect:
-    path: /tip/{event}/affect
+    path: /event/{event}/tip/affect
     methods: [GET, POST]
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:Tip/TipEvent:affect }
 
 admin_tip_event_remove:
-    path: /tip/{event}/remove/{tip}
+    path: /event/{event}/tip/{tip}/remove/
     methods: [DELETE]
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
+
