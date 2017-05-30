@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Factory;
+namespace Proximum\Vimeet\Tests\Factory;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -57,8 +57,6 @@ class TipFactory
 
         foreach ($events as $key => $event) {
             $locale = self::LOCALES[$key];
-
-            $tip->setEvent($event);
 
             $type = new Type($event);
             $type->translate($locale, 'type_' . $locale, 'description_' . $locale);
