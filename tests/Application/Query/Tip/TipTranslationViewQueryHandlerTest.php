@@ -42,7 +42,12 @@ class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new TipTranslationViewQueryHandler($tipRepository->reveal());
 
-        $tipRepository->getByContextAndEventAndType($query->type, 'onCatalog', $query->locale)->shouldBeCalled()->willReturn($expectedViews);
+        $tipRepository->getByContextAndEventAndType(
+            $query->event,
+            $query->type,
+            'onCatalog',
+            $query->locale
+        )->shouldBeCalled()->willReturn($expectedViews);
 
         $views = $handler->handle($query);
         $this->assertEquals($expectedViews, $views);
