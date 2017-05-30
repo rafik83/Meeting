@@ -14,7 +14,7 @@ default:
             files_path: %paths.base%/src/Behat/Resources/fixtures/Files
         Fidry\AliceBundleExtension\Extension:
             fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
-        Sanpi\Behatch\Extension: ~
+        Behatch\Extension: ~
         FriendsOfBehat\PerformanceExtension: ~
     suites:
         default:
