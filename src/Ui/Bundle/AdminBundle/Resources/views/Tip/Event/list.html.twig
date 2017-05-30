@@ -19,9 +19,7 @@
                     <td>
                         <ul>
                             {% for type in tip.types %}
-                                <li>
-
-                                </li>
+                                <li>{{ type.title(locale) }}</li>
                             {% else %}
                                 <li>{{ 'admin.tip.event.no_types'|trans }}</li>
                             {% endfor %}
@@ -29,8 +27,8 @@
                     </td>
                     <td>
                         <ul>
-                            {% for page in tip.pages %}
-                                <li>{{ page.title }}</li>
+                            {% for page in tip.PagesTranslations %}
+                                <li>{{ page|trans }}{{ not loop.last ? ', ' : '' }}</li>
                             {% else %}
                                 <li>{{ 'admin.tip.event.no_pages'|trans }}</li>
                             {% endfor %}

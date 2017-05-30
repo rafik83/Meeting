@@ -32,9 +32,7 @@ class AffectType extends AbstractType
             ->add('submit', SubmitType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /**{@inheritdoc} */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['typeViews', 'tipViews']);

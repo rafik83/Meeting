@@ -39,7 +39,8 @@ class TipEventController extends Controller
 
         return $this->render('@Admin/Tip/Event/list.html.twig', [
             'event'       => $event,
-            'tipListView' => $tipListView
+            'tipListView' => $tipListView,
+            'locale'      => $event->getAvailableLocale($request->getLocale()),
         ]);
     }
 
@@ -75,7 +76,7 @@ class TipEventController extends Controller
             $this->get('tactician.commandbus')->handle($affect);
             $this->addFlash('success', 'flash.admin.tip.affect.success');
 
-            return $this->redirectToRoute('admin_tip_event_list', ['event' => $event]);
+            return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
          }
 
         return $this->render('@Admin/Tip/Event/affect.html.twig', [
