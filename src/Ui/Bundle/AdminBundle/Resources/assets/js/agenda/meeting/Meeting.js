@@ -16,6 +16,28 @@ var api = new AgendaApiEndpoints();
 
 var SheetFilter = require('./../filters/_SheetsFilter');
 
+var sortConstant  = {
+    asc: 'asc',
+    desc: 'desc',
+    alphabeticalAsc: "alphabeticalAsc",
+    alphabeticalDesc: "alphabeticalDesc",
+    requestAsc: "requestAsc",
+    pendingRequestAsc: "pendingRequestAsc",
+    acceptedRequestAsc: "acceptedRequestAsc",
+    scheduledMeetingAsc: "scheduledMeetingAsc",
+    requestDesc: "requestDesc",
+    pendingRequestDesc: "pendingRequestDesc",
+    acceptedRequestDesc: "acceptedRequestDesc",
+    scheduledMeetingDesc: "scheduledMeetingDesc"
+};
+
+var ascConstant  = [
+    sortConstant.requestAsc,
+    sortConstant.pendingRequestAsc,
+    sortConstant.acceptedRequestAsc,
+    sortConstant.scheduledMeetingAsc
+];
+
 /**
  * Pass axios to Vue
  */
@@ -799,6 +821,96 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+        /**
+         * @param {string} selectedSort
+         */
+        sortSheets: function (selectedSort) {
+
+            var sheetsToSort = this.sheets;
+
+            if (this.filteredSheets.length > 0) {
+                sheetsToSort = this.filteredSheets;
+            }
+
+            var alphabeticalSort = [sortConstant.alphabeticalAsc, sortConstant.alphabeticalDesc];
+
+            if (alphabeticalSort.indexOf(selectedSort) !== -1) {
+                this.refreshList(this.alphabeticalSort(sheetsToSort, selectedSort));
+            }
+
+            this.refreshList(this.numericalSort(sheetsToSort, selectedSort));
+        },
+
+        /**
+         * @param {array} sheets
+         * @param {string} selectedSort
+         */
+        alphabeticalSort: function(sheets, selectedSort) {
+
+            sheets.sort(function (sheet1, sheet2) {
+                if (sheet1.title < sheet2.title) return -1;
+                if (sheet1.title > sheet2.title) return 1;
+                return 0;
+            });
+
+            if (selectedSort === sortConstant.alphabeticalDesc) {
+                sheets.reverse();
+            }
+
+            return sheets
+        },
+
+        /**
+         * @param {array} sheets
+         * @param {string} selectedSort
+         */
+        numericalSort: function(sheets, selectedSort) {
+            var valueToSort = this.getValueToSort(selectedSort);
+
+            if (valueToSort !== null) {
+                var way = sortConstant.asc;
+
+                if (ascConstant.indexOf(selectedSort) === -1) {
+                    way = sortConstant.desc;
+                }
+
+                sheets.sort(function (sheet1, sheet2) {
+                    if (way === sortConstant.asc) {
+                        return sheet1[valueToSort] - sheet2[valueToSort];
+                    } else if (way === sortConstant.desc) {
+                        return sheet2[valueToSort] - sheet1[valueToSort];
+                    }
+                }.bind(this));
+            }
+
+            return sheets;
+        },
+
+        /**
+         * @param {string} valueSelected
+         */
+        getValueToSort: function (valueSelected) {
+            if (valueSelected === sortConstant.requestAsc) {
+                return "countRequest";
+            } else if (valueSelected === sortConstant.pendingRequestAsc) {
+                return "countPendingPropositions";
+            } else if (valueSelected === sortConstant.acceptedRequestAsc) {
+                return "countValidatedRequest";
+            } else if (valueSelected === sortConstant.scheduledMeetingAsc) {
+                return "countPlacedMeetings";
+            } else if (valueSelected === sortConstant.requestDesc) {
+                return "countRequest";
+            } else if (valueSelected === sortConstant.pendingRequestDesc) {
+                return "countPendingPropositions";
+            } else if (valueSelected === sortConstant.acceptedRequestDesc) {
+                return "countValidatedRequest";
+            } else if (valueSelected === sortConstant.scheduledMeetingDesc) {
+                return "countPlacedMeetings";
+            }
+
+            return null;
         }
     }
 };

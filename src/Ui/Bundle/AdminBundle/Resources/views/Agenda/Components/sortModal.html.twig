@@ -1,5 +1,5 @@
 <script type="x/template" id="sort-modal">
-    <modal :show="show" v-on:close-modal="$emit('close-modal')" v-on:refresh-list="refreshList">
+    <modal :show="show" v-on:close-modal="$emit('close-modal')">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'admin.common.close'|trans }}" v-on:click="$emit('close-modal')">
                 <span aria-hidden="true">&times;</span>
