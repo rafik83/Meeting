@@ -23,6 +23,7 @@ class AffectType extends AbstractType
         $builder
             ->add('tip', TipSelectType::class, [
                 'tipViews' => $options['tipViews'],
+                'attr' => ['data-tip-preview' => 1],
             ])
             ->add('types', TypeCheckboxType::class, [
                 'typeViews' => $options['typeViews'],

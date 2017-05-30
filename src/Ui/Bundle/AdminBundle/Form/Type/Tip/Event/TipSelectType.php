@@ -15,9 +15,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TipSelectType extends AbstractType
 {
+    /** @var UrlGeneratorInterface */
+    private $urlGenerator;
+
+    /**
+     * TipSelectType constructor.
+     *
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -31,7 +45,14 @@ class TipSelectType extends AbstractType
             },
             'choices' => function (Options $options) {
                 return $options['tipViews'];
-            }
+            },
+            'choice_attr'  => function(TipTranslationView $tipTranslationView) {
+                return [
+                    'data-preview-url' => $this->urlGenerator->generate('admin_tip_event_preview', [
+                        'tipTranslation' => $tipTranslationView->id,
+                    ]),
+                ];
+            },
         ]);
     }
 
