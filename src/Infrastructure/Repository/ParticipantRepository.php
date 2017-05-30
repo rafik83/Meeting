@@ -340,10 +340,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     WHERE
                         u.user = user AND u.event = :eventId
                         AND (
-                            u.begin >= :begin AND u/begin < :end
+                            u.begin >= :begin AND u.begin < :end
                             OR u.end > :begin AND u.end <= :end
-                            OR :begin >= u.begin AND :begin < u.end
-                            OR :end > u.begin AND :end <= u.end
+                            OR u.begin <= :begin AND u.end >= :end
                         )
                 )";
 
@@ -367,8 +366,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                         AND (
                             slot.begin >= :begin AND slot.begin < :end
                             OR slot.end > :begin AND slot.end <= :end
-                            OR :begin >= slot.begin AND :begin < slot.end
-                            OR :end > slot.begin AND :end <= slot.end
+                            OR slot.begin <= :begin AND slot.end >= :end
                         )
                 )",
                 // Participant have not happening during this period
@@ -383,8 +381,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                         AND (
                             h.begin >= :begin AND h.begin < :end
                             OR h.end > :begin AND h.end <= :end
-                            OR :begin >= h.begin AND :begin < h.end
-                            OR :end > h.begin AND :end <= h.end
+                            OR h.begin <= :begin AND h.end >= :end
                         )
                 )",
                 $unavailabilityConditions
