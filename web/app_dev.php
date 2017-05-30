@@ -27,6 +27,13 @@ Debug::enable();
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
+$kernel->boot();
+
+Request::setTrustedProxies(
+    $kernel->getContainer()->getParameter("trusted_proxies"),
+    Request::HEADER_X_FORWARDED_ALL
+);
+
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

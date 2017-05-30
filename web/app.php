@@ -8,6 +8,12 @@ include_once __DIR__.'/../var/bootstrap.php.cache';
 
 $kernel = new AppKernel('prod', false);
 $kernel->loadClassCache();
+$kernel->boot();
+
+Request::setTrustedProxies(
+    $kernel->getContainer()->getParameter("trusted_proxies"),
+    Request::HEADER_X_FORWARDED_ALL
+);
 
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
