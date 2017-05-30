@@ -11,20 +11,26 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class AffectHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
+
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
     
     /**
      * AffectHandler constructor.
      *
-     * @param TipRepositoryInterface $tipRepository
+     * @param TipRepositoryInterface  $tipRepository
+     * @param TypeRepositoryInterface $typeRepository
      */
-    public function __construct(TipRepositoryInterface $tipRepository)
+    public function __construct(TipRepositoryInterface $tipRepository, TypeRepositoryInterface $typeRepository)
     {
-        $this->tipRepository = $tipRepository;
+        $this->tipRepository  = $tipRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -32,9 +38,10 @@ class AffectHandler
      */
     public function handle(Affect $affect)
     {
-        $tip = $affect->tip;
+        $tip = $this->tipRepository->getById($affect->tip->id);
 
-        foreach ($affect->types as $type) {
+        foreach ($affect->types as $typeView) {
+            $type = $this->typeRepository->getById($typeView->id);
             $tip->setType($type);
         }
 
