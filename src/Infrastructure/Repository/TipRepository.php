@@ -135,7 +135,7 @@ class TipRepository implements TipRepositoryInterface
             ->createQueryBuilder()
             ->select('tip')
             ->from(Tip::class, 'tip', 'tip.id')
-            ->join(Type::class, 'type', 'WITH', 'type.event = :event')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
             ->setParameter('event', $event);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
