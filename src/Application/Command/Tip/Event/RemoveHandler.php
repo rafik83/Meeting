@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
+use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class RemoveHandler
@@ -29,6 +30,12 @@ class RemoveHandler
 
     public function handle(Remove $remove)
     {
+        foreach ($remove->tip->getTypes() as $type) {
+            if ($type->getEvent() !== $remove->event) {
+                throw new TipNotAffectOnEventException();
+            }
+        }
+
         $this->tipRepository->removeTipForEvent($remove->tip);
     }
 }

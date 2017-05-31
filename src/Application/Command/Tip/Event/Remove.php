@@ -10,20 +10,26 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 class Remove
 {
+    /** @var Event */
+    public $event;
+
     /** @var Tip */
     public $tip;
 
     /**
      * Remove constructor.
      *
+     * @param Event $event
      * @param Tip   $tip
      */
-    public function __construct(Tip $tip)
+    public function __construct(Event $event, Tip $tip)
     {
+        $this->event = $event;
         $this->tip   = $tip;
     }
 }

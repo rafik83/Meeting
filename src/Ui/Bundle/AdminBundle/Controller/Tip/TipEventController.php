@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery as EventTipListViewQuery;
 use \Proximum\Vimeet\Application\Query\Tip\TipListViewQuery;
@@ -66,7 +67,7 @@ class TipEventController extends Controller
             $tipListViewQuery = new TipListViewQuery($locale);
             $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
         } catch (NoTipAvailableException $exception) {
-            $this->addFlash('error', $this->get('translator')->trans($exception->getMessage(), [], 'flashes'));
+            $this->addFlash('error', $exception->getMessage());
         }
 
         $typeListViewQuery = new TypeListViewQuery($event, $locale);
@@ -100,9 +101,12 @@ class TipEventController extends Controller
     public function removeAction(Event $event, Tip $tip)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessIfTipIsNotAffectedToEvent($event, $tip);
 
-        $this->get('tactician.commandbus')->handle(new Remove($tip));
+        try {
+            $this->get('tactician.commandbus')->handle(new Remove($event, $tip));
+        } catch (TipNotAffectOnEventException $exception) {
+            $this->addFlash('error', $exception->getMessage());
+        }
         $this->addFlash('success', 'flash.admin.tip.remove.success');
 
         return $this->redirectToRoute('admin_tip_event_list', [
@@ -122,19 +126,5 @@ class TipEventController extends Controller
         $tipTranslationView = $this->get('tactician.commandbus')->handle(new PreviewTipViewQuery($tipTranslation));
 
         return new JsonResponse($tipTranslationView);
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @param Tip $tip
-     */
-    private function denyAccessIfTipIsNotAffectedToEvent(Event $event, Tip $tip)
-    {
-        foreach ($tip->getTypes() as $type) {
-            if ($type->getEvent() !== $event) {
-                throw $this->createAccessDeniedException();
-            }
-        }
     }
 }
