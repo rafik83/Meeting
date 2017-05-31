@@ -64,7 +64,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     | end     | 12/10/2016 13:45 |
     | enabled | true             |
     Then the response status code should be 204
-    
+
   Scenario: I can disable a dispatched mass assignment
     Given I am logged with "test@test.com" on admin
     When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
