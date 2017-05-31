@@ -20,7 +20,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 interface TipRepositoryInterface
 {
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Tip|null
      */

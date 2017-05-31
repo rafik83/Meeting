@@ -158,6 +158,5 @@ class TipRepository implements TipRepositoryInterface
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
-
     }
 }

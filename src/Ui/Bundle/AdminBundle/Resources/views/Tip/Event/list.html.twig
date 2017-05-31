@@ -3,10 +3,7 @@
 {% from 'AdminBundle::macro.html.twig' import delete_button %}
 
 {% block content %}
-
-
     <h1 class="page-header">{{ 'admin.tip.list.title'|trans }}</h1>
-
     <a href="{{ path('admin_tip_event_affect', { 'event': event.id }) }}" class="btn btn-primary">{{ 'admin.tip.event.affect.link'|trans }}</a>
     <table class="table table-hover">
         <thead>
