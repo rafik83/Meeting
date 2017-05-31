@@ -37,14 +37,12 @@
                         </ul>
                     </td>
                     <td>
-                       <li>
-                            {{ delete_button(path('admin_tip_event_remove', {
-                                'event': event.id,
-                                'tip': tip.id,
+                        {{ delete_button(path('admin_tip_event_remove', {
+                            'event': event.id,
+                            'tip': tip.id,
                             }),
                             'admin.tip.event.remove.link'|trans,
-                            {}) }}
-                        </li>
+                        {}) }}
                     </td>
                 </tr>
             {% else %}

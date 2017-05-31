@@ -137,7 +137,7 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip')
+            ->select('tip, type')
             ->from(Tip::class, 'tip', 'tip.id')
             ->join('tip.types', 'type', 'WITH', 'type.event = :event')
             ->setParameter('event', $event);

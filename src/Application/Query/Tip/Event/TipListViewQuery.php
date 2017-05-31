@@ -10,30 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip\Event;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class TipListViewQuery
 {
-    /** @var Event */
-    public $event;
-
-    /** @var int */
-    public $page;
-
-    /** @var int */
-    public $limit;
+    /** @var string */
+    public $locale;
 
     /**
      * TipListViewQuery constructor.
      *
-     * @param Event $event
-     * @param int   $page
-     * @param int   $limit
+     * @param string $locale
      */
-    public function __construct(Event $event, $page = 1, $limit = 20)
+    public function __construct($locale)
     {
-        $this->event = $event;
-        $this->page  = $page;
-        $this->limit = $limit;
+        $this->locale = $locale;
     }
 }

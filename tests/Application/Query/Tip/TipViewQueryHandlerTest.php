@@ -12,7 +12,7 @@ namespace Application\Query\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQueryHandler;
-use Proximum\Vimeet\Application\View\Tip\TipListView;
+use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Application\View\Tip\TipView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -30,7 +30,7 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             new Tip('tip_3', true, false, true, $dateTime),
         ];
 
-        $expectedTipListView = new TipListView();
+        $expectedTipListView = new PaginatedTipView();
         $expectedTipListView->tipListView = [
             new TipView(null, 'tip_1', [
                 'admin.tip.column.visible.catalog',

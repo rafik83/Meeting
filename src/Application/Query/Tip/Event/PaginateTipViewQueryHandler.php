@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip\Event;
 
-use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
-class TipListViewQueryHandler
+class PaginateTipViewQueryHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
@@ -30,20 +29,18 @@ class TipListViewQueryHandler
     }
 
     /**
-     * @param TipListViewQuery $query
+     * @param PaginateTipViewQuery $query
      *
-     * @return TipTranslationView[]
-     *
-     * @throws NoTipAvailableException
+     * @return PaginatedTipView
      */
-    public function handle(TipListViewQuery $query)
+    public function handle(PaginateTipViewQuery $query)
     {
-        $tipTranslationViews = $this->tipRepository->findAll($query->locale);
+        $tips = $this->tipRepository->paginateByEvent($query->event, $query->page, $query->limit);
 
-        if (empty($tipTranslationViews)) {
-            throw new NoTipAvailableException();
-        }
+        $tipListView = new PaginatedTipView();
 
-        return $tipTranslationViews;
+        $tipListView->results = $tips;
+
+        return $tipListView;
     }
 }

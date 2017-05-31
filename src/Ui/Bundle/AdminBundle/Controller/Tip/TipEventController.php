@@ -15,8 +15,8 @@ use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery as EventTipListViewQuery;
-use \Proximum\Vimeet\Application\Query\Tip\TipListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -40,7 +40,7 @@ class TipEventController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $tipListViewQuery = new EventTipListViewQuery($event, $request->query->get('page', 1));
+        $tipListViewQuery = new PaginateTipViewQuery($event, $request->query->get('page', 1));
 
         $tipListView = $this->get('tactician.commandbus')->handle($tipListViewQuery);
 
@@ -104,10 +104,10 @@ class TipEventController extends Controller
 
         try {
             $this->get('tactician.commandbus')->handle(new Remove($event, $tip));
+            $this->addFlash('success', 'flash.admin.tip.remove.success');
         } catch (TipNotAffectOnEventException $exception) {
             $this->addFlash('error', $exception->getMessage());
         }
-        $this->addFlash('success', 'flash.admin.tip.remove.success');
 
         return $this->redirectToRoute('admin_tip_event_list', [
             'event' => $event->getId(),

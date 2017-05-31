@@ -12,11 +12,8 @@ namespace Proximum\Vimeet\Application\View\Tip;
 
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
-class TipListView
+class PaginatedTipView
 {
-    /** @var AbstractTipView[] */
-    public $tipListView;
-    
     /** @var PaginatedResult */
     public $results;
 }
