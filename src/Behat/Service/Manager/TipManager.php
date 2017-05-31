@@ -41,13 +41,27 @@ class TipManager
     }
 
     /**
-     * @param string $tipTitle
+     * @param string|null $title
      *
      * @return Tip
      */
-    public function create($tipTitle = null)
+    public function create($title = null)
     {
-        $tip   = TipFactory::createTip($tipTitle);
+        $tip = TipFactory::createTip($title);
+
+        $this->tipRepository->add($tip);
+
+        return $tip;
+    }
+
+    /**
+     * @param string|null $title
+     *
+     * @return Tip
+     */
+    public function createForEvent($title = null)
+    {
+        $tip   = TipFactory::createTip($title);
         $event = $this->eventManager->create('Event_2');
         $type  = $this->typeManager->create($event);
 
