@@ -41,6 +41,13 @@ app_patterns:
     - APP_DATABASE_USER:           "{{ app.user }}"
     - APP_DATABASE_PASSWORD:       null
 
+  ##########
+  # Docker #
+  ##########
+
+  docker_applications:
+    - manala/openl10n-cli:0
+
   #######
   # Ssh #
   #######
