@@ -6,6 +6,13 @@ COLOR_RESET   = \033[0m
 COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
+DOCKER = DIR=`pwd`; docker run \
+	--rm \
+	--tty \
+	--volume $$DIR:$$DIR \
+	--workdir $$DIR \
+	manala/openl10n-cli
+
 ## Help
 help:
 	printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"
@@ -133,17 +140,18 @@ watch-assets:
 trans-push: trans-openl10n-push
 
 trans-openl10n-push:
-	openl10n push --locale=all
+	-${DOCKER} openl10n push --locale=all
 
 ## Translations pull
 trans-pull: trans-openl10n-pull
 
 trans-openl10n-pull:
-	openl10n pull --locale=all
+	-${DOCKER} openl10n pull --locale=all
 
+## Translations sync
 trans-sync:
-	openl10n push --locale=all
-	openl10n pull --locale=all
+	-${DOCKER} openl10n push --locale=all
+	-${DOCKER} openl10n pull --locale=all
 
 ########
 # Test #
