@@ -33,3 +33,17 @@ Feature: List of tips by event and type
     Then I should be on this page "/fr/event/2/tip/list"
     And I should see "flash.admin.tip.remove.success"
     And I should not see "Awesome tip"
+
+  Scenario: I can see preview of a tip when I affect to an event
+    Given the database is purged
+    And I am logged as admin
+    And the tip "Le saviez vous?" is created
+    When I send a "GET" request to "/fr/tip/1/preview/"
+    Then the response should be in JSON
+    And the JSON should be equal to:
+      """
+      {
+          "title": "title_fr",
+          "content": "content_fr"
+      }
+      """
