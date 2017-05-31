@@ -102,6 +102,8 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\TipManager
         arguments:
             - '@repository.tip.repository'
+            - '@behat_manager.event'
+            - '@behat_manager.type'
 
     #
     # Proxies

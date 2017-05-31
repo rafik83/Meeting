@@ -10,10 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Factory;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class TipFactory
 {
@@ -48,11 +45,6 @@ class TipFactory
         foreach (self::LOCALES as $locale) {
             $tip->setTranslation($locale, 'title_' . $locale, 'content_' . $locale);
         }
-
-        $event = EventFactory::createEvent('Event_1');
-
-        $type = new Type($event);
-        $tip->setType($type);
 
         return $tip;
     }

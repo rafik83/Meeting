@@ -19,12 +19,25 @@ class TipManager
     /** @var TipRepositoryInterface */
     private $tipRepository;
 
+    /** @var EventManager */
+    private $eventManager;
+
+    /** @var TypeManager */
+    private $typeManager;
+
     /**
      * @param TipRepositoryInterface $tipRepository
+     * @param EventManager           $eventManager
+     * @param TypeManager            $typeManager
      */
-    public function __construct(TipRepositoryInterface $tipRepository)
-    {
+    public function __construct(
+        TipRepositoryInterface $tipRepository,
+        EventManager $eventManager,
+        TypeManager $typeManager
+    ) {
         $this->tipRepository = $tipRepository;
+        $this->eventManager  = $eventManager;
+        $this->typeManager   = $typeManager;
     }
 
     /**
@@ -34,7 +47,12 @@ class TipManager
      */
     public function create($tipTitle = null)
     {
-        $tip = TipFactory::createTip($tipTitle);
+        $tip   = TipFactory::createTip($tipTitle);
+        $event = $this->eventManager->create('Event_2');
+        $type  = $this->typeManager->create($event);
+
+        $tip->setType($type);
+
         $this->tipRepository->add($tip);
 
         return $tip;
