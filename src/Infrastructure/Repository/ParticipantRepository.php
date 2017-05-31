@@ -366,7 +366,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             slot.begin >= :begin AND slot.begin < :end
                             OR slot.end > :begin AND slot.end <= :end
                             OR slot.begin <= :begin AND slot.end >= :end
-                            OR :end BETWEEN slot.begin AND slot.end
+                            OR slot.begin <= :end AND slot.end > :end
                         )
                 )",
                 // Participant have not happening during this period
@@ -382,7 +382,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             h.begin >= :begin AND h.begin < :end
                             OR h.end > :begin AND h.end <= :end
                             OR h.begin <= :begin AND h.end >= :end
-                            OR :end BETWEEN h.begin AND h.end
+                            OR h.begin <= :end AND h.end > :end
                         )
                 )",
                 $unavailabilityConditions
