@@ -726,6 +726,7 @@ form.tip_update.children.translations.prototype.children.title.label: Libellé
 form.tip_update.children.translations.prototype.label: Traductions
 form.tip_event_affect.children.name.label: 'Libellé'
 form.tip_event_affect.children.tip.label: 'Messages d''aides'
+form.tip_event_affect.children.tip.placeholder: 'Choisir un message'
 form.tip_event_affect.children.types.label: 'Types de participation'
 form.tip_event_affect.children.preview.label: 'Aperçu du message'
 form.tip_event_affect.children.submit.label: 'Affecter'

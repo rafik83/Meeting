@@ -9,11 +9,11 @@ function TipPreview (element, targetElement)
 {
     this.input         = element;
     this.targetElement = targetElement;
-
-    this.input.addEventListener('change', this.getPreviewData.bind(this));
+    
+    this.input.addEventListener('change', this.displayPreviewData.bind(this));
 }
 
-TipPreview.prototype.getPreviewData = function ()
+TipPreview.prototype.displayPreviewData = function ()
 {
     var selectedIndex = this.input.options.selectedIndex,
         url           = this.input.options[selectedIndex].getAttribute('data-preview-url'),
