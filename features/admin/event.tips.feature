@@ -2,12 +2,34 @@
 Feature: List of tips by event and type
   I see the list of tips affected to event
 
-  Scenario: See the list o tips
+  Scenario: See the list of tips for an event
+    Given the database is purged
+    And the tip "Awesome tip" is created for an event
+    And I am logged as admin
+    And I go to this page "/fr/event/1/tip/list"
+    Then I should see "admin.tip.list.title"
+    And I should see "Awesome tip"
+
+  Scenario: I can affect a tip to an event
     Given the database is purged
     And the event "Meetup Elao" is created
     And the tip "Awesome tip" is created
     And I am logged as admin
-    And I go to this page "/fr/event/2/tip/list"
-    Then I should see "admin.tip.list.title"
-    And I should see "Awesome tip"
+    And I am on this page "/fr/event/1/tip/list"
+    Then I should see "admin.tip.event.affect.link"
+    When I follow "admin.tip.event.affect.link"
+    Then I should be on this page "/fr/event/1/tip/affect"
+    And I should see "admin.tip.event.affect.form.title"
+    When I select "title_fr" from "tip_event_affect[tip]"
+    And I press "tip_event_affect_submit"
+    Then I should be on this page "/fr/event/1/tip/list"
+    And I should see "flash.admin.tip.affect.success"
 
+  Scenario: I can remove a tip from an event
+    Given I am logged as admin
+    And the tip "Awesome tip" is created for an event
+    And I am on this page "/fr/event/2/tip/list"
+    When I press "admin.tip.event.remove.link"
+    Then I should be on this page "/fr/event/2/tip/list"
+    And I should see "flash.admin.tip.remove.success"
+    And I should not see "Awesome tip"
