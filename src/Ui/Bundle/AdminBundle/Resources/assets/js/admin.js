@@ -14,7 +14,8 @@ var $                       = require('jquery'),
     AnchorFocuser           = require('./components/_AnchorFocuser'),
     DateTimePicker          = require('./components/_DateTimePicker'),
     MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
-    ParticipantVisio        = require('./components/_ParticipantVisio');
+    ParticipantVisio        = require('./components/_ParticipantVisio'),
+    TipPreview              = require('./components/_TipPreview');
 
 require('elao-form.js');
 require('select2');
@@ -160,6 +161,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('.form-participant-visio'), function (element) {
         new ParticipantVisio(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-preview-tip]'), function (element) {
+        new TipPreview(element, target.querySelector('#tip_preview'));
     });
 }
 
