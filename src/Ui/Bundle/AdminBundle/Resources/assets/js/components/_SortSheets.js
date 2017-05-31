@@ -1,4 +1,4 @@
-var sortConstant  = {
+var sortConstant = {
     asc: 'asc',
     desc: 'desc',
     alphabeticalAsc: "alphabeticalAsc",
@@ -12,18 +12,26 @@ var sortConstant  = {
     acceptedRequestDesc: "acceptedRequestDesc",
     scheduledMeetingDesc: "scheduledMeetingDesc"
 },
-    ascConstant  = [
+    ascConstant = [
     sortConstant.requestAsc,
     sortConstant.pendingRequestAsc,
     sortConstant.acceptedRequestAsc,
     sortConstant.scheduledMeetingAsc
 ];
 
+/**
+ * @param {string} selectedSort
+ * @constructor
+ */
 function SortSheets (selectedSort)
 {
     this.selectedSort = selectedSort;
 }
 
+/**
+ * @param {array} sheets
+ * @returns {array}
+ */
 SortSheets.prototype.sort = function (sheets) {
 
     var alphabeticalSort = [sortConstant.alphabeticalAsc, sortConstant.alphabeticalDesc];
@@ -38,6 +46,7 @@ SortSheets.prototype.sort = function (sheets) {
 
 /**
  * @param {array} sheets
+ * @returns {array}
  */
 SortSheets.prototype.alphabeticalSort = function(sheets) {
 
@@ -56,6 +65,7 @@ SortSheets.prototype.alphabeticalSort = function(sheets) {
 
 /**
  * @param {array} sheets
+ * @returns {array}
  */
 SortSheets.prototype.numericalSort = function(sheets) {
     var valueToSort = this.getValueToSort();
@@ -80,7 +90,7 @@ SortSheets.prototype.numericalSort = function(sheets) {
 };
 
 /**
- * @param {string} valueSelected
+ * @returns {null|string}
  */
 SortSheets.prototype.getValueToSort = function () {
     if (this.selectedSort === sortConstant.requestAsc) {
