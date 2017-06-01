@@ -7,6 +7,14 @@
     Given the database is purged
     And the following fixtures files are loaded:
       | Admin.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/Tip.yml |
     And I am logged with "test@test.com" on admin
     When I go to this page "/fr/event"
@@ -17,6 +25,7 @@
     And I go to this page "/fr/tip/list"
     And the response should contain "admin.tip.create.link"
     And the response should contain "tip_sample"
+    And the response should contain "ASD Days"
     And the response should contain "Français"
 
   Scenario: I can create a new tip
