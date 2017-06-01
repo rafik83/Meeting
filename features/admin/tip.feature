@@ -14,7 +14,6 @@
     Given I am logged as admin
     And I go to this page "/fr/tip/list"
     Then I should see "admin.tip.list.title"
-    Then I should see "admin.tip.events"
     And I should see "Awesome tip"
     And I should see "Event_2"
     And I should see "Français"
