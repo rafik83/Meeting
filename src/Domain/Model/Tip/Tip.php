@@ -368,37 +368,13 @@ class Tip
     /**
      * @return Event[]
      */
-    private function getEvents()
+    public function getUnduplicatedEvents()
     {
         $events = [];
         foreach ($this->types as $type) {
-            $events[] = $type->getEvent();
+            $events[$type->getEvent()->getId()] = $type->getEvent();
         }
 
         return $events;
-    }
-
-    /**
-     * @return Event[]
-     */
-    public function getUnduplicatedEvents()
-    {
-        return $this->removeDuplicateEvents($this->getEvents());
-    }
-
-    /**
-     * @param Event[] $events
-     *
-     * @return Event[]
-     */
-    private function removeDuplicateEvents(array $events)
-    {
-        $uniqueEvents = [];
-
-        foreach ($events as $event) {
-            $uniqueEvents[$event->getId()] = $event;
-        }
-
-        return $uniqueEvents;
     }
 }
