@@ -5,5 +5,8 @@
 {% endblock %}
 
 {% block content %}
+    {% if tipTranslationViews is defined %}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+    {% endif %}
     {{ include('EventBundle:Sheet/Partial:sheet-content.html.twig') }}
 {% endblock %}

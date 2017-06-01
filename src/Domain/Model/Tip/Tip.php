@@ -13,6 +13,9 @@ class Tip
     const TRANS_VISIBLE_CATALOG = 'admin.tip.column.visible.catalog';
     const TRANS_VISIBLE_MEETING_MANAGEMENT = 'admin.tip.column.visible.meeting_management';
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
+    const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
+    const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
+    const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
 
     /**
      * @var int
@@ -49,6 +52,15 @@ class Tip
      */
     private $onPrintPlanning;
 
+    /** @var bool */
+    private $onSheet;
+
+    /** @var bool */
+    private $onProgram;
+
+    /** @var bool */
+    private $onAgenda;
+
     /**
      * @var \DateTimeInterface
      */
@@ -61,19 +73,33 @@ class Tip
      * @param bool               $onMeetingManagement
      * @param bool               $onCatalog
      * @param bool               $onPrintPlanning
+     * @param bool               $onSheet
+     * @param bool               $onAgenda
+     * @param bool               $onProgram
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning, \DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        $title,
+        $onMeetingManagement,
+        $onCatalog,
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram,
+        \DateTimeInterface $createdAt
+    ) {
         $this->title                = $title;
         $this->onMeetingManagement  = $onMeetingManagement;
         $this->onCatalog            = $onCatalog;
         $this->onPrintPlanning      = $onPrintPlanning;
+        $this->onSheet              = $onSheet;
+        $this->onAgenda             = $onAgenda;
+        $this->onProgram            = $onProgram;
         $this->translations         = new ArrayCollection();
         $this->types                = new ArrayCollection();
         $this->createdAt            = $createdAt;
     }
-    
+
     /**
      * Update Tip
      *
@@ -81,6 +107,9 @@ class Tip
      * @param bool   $onMeetingManagement
      * @param bool   $onCatalog
      * @param bool   $onPrintPlanning
+     * @param bool   $onSheet
+     * @param bool   $onAgenda
+     * @param bool   $onProgram
      *
      * @return Tip
      */
@@ -88,12 +117,18 @@ class Tip
         $title,
         $onMeetingManagement,
         $onCatalog,
-        $onPrintPlanning
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
         $this->onCatalog           = $onCatalog;
         $this->onPrintPlanning     = $onPrintPlanning;
+        $this->onSheet             = $onSheet;
+        $this->onAgenda            = $onAgenda;
+        $this->onProgram           = $onProgram;
 
         return $this;
     }
@@ -256,6 +291,30 @@ class Tip
     }
 
     /**
+     * @return bool
+     */
+    public function isOnSheet()
+    {
+        return $this->onSheet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnProgram()
+    {
+        return $this->onProgram;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnAgenda()
+    {
+        return $this->onAgenda;
+    }
+
+    /**
      * @return \DateTimeInterface
      */
     public function getCreatedAt()
@@ -280,6 +339,18 @@ class Tip
 
         if ($this->isOnPrintPlanning()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_PRINT_PLANNING;
+        }
+
+        if ($this->isOnSheet()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_SHEET;
+        }
+
+        if ($this->isOnAgenda()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_AGENDA;
+        }
+
+        if ($this->isOnProgram()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_PROGRAM;
         }
 
         return $pagesTranslations;

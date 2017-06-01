@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Tip;
 
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
-use Proximum\Vimeet\Application\View\Tip\TipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipViewQueryHandler

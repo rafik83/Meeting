@@ -26,9 +26,9 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
 
         $tips = [
-            new Tip('tip_1', false, true, false, $dateTime),
-            new Tip('tip_2', false, false, true, $dateTime),
-            new Tip('tip_3', true, false, true, $dateTime),
+            new Tip('tip_1', false, true, false, false, false, false, $dateTime),
+            new Tip('tip_2', false, false, true, false, false, false, $dateTime),
+            new Tip('tip_3', true, false, true, false, false, false, $dateTime),
         ];
 
         $results = new PaginatedResult([$tips], 1, 10, 3);

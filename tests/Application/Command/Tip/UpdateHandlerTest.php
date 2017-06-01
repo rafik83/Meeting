@@ -23,7 +23,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip = new Tip('tipTitle', true, false, true, new \DateTime());
+        $tip = new Tip('tipTitle', true, false, true, true, false, true, new \DateTime());
 
         $tip->setTranslation('locale_1', 'title', 'content');
         $command = new Update($tip);
@@ -33,6 +33,26 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($tip->hasTranslation('locale_2'));
 
         $tipRepository->set($tip)->shouldBeCalled();
+
+        $handler = new UpdateHandler($tipRepository->reveal());
+        $handler->handle($command);
+    }
+
+    public function testHandleUpdate()
+    {
+        $dateTime = new \DateTime();
+        $tip = new Tip('tipTitle', true, true, true, true, true, true, $dateTime);
+
+        $tipRepository = $this->prophesize(TipRepositoryInterface::class);
+        $expectedTip = new Tip('newTipTitle', false, true, false, true, false, true, $dateTime);
+        $tipRepository->set($expectedTip)->shouldBeCalled();
+
+        $command                      = new Update($tip);
+        $command->title               = 'newTipTitle';
+        $command->onMeetingManagement = false;
+        $command->onPrintPlanning     = false;
+        $command->onAgenda            = false;
+        $command->translations        = [];
 
         $handler = new UpdateHandler($tipRepository->reveal());
         $handler->handle($command);
