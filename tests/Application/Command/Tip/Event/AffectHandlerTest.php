@@ -12,6 +12,7 @@ namespace Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Tests\Factory\TipFactory;
@@ -23,14 +24,30 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHandle()
-    {
-        $tipRepository  = $this->prophesize(TipRepositoryInterface::class);
-        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+    /** @var AffectHandler */
+    private $handler;
+    
+    /** @var TipRepositoryInterface */
+    private $tipRepository;
+    
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
+    
+    /** @var Tip */
+    private $tip;
 
-        $event = EventFactory::createEvent();
-        $tip   = TipFactory::createTip('awesome tip');
-        $type  = new Type($event);
+    /** @var Type */
+    private $type;
+
+    /** @var Affect */
+    private $command;
+    
+    public function setUp()
+    {
+        $event    = EventFactory::createEvent();
+        $tip      = TipFactory::createTip('awesome tip');
+        $type     = new Type($event);
+        $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
 
         $tipTranslationView = new TipTranslationView(
             $tip->getId(),
@@ -38,58 +55,41 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
             $tip->getTranslationContent('fr'),
             'admin_title'
         );
-        $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
-
-        $command = new Affect($event);
+        
+        $command        = new Affect($event);
         $command->tip   = $tipTranslationView;
         $command->types = [$typeView];
 
+        $this->tipRepository  = $this->prophesize(TipRepositoryInterface::class);
+        $this->typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+        $this->tip            = $tip;
+        $this->type           = $type;
+        $this->command        = $command;
+        $this->handler        = new AffectHandler($this->tipRepository->reveal(), $this->typeRepository->reveal());
+    }
+    public function testHandle()
+    {
+        $this->tipRepository->getByTipTranslationId(null, $this->command->event)->shouldBeCalled()->willReturn($this->tip);
 
-        $handler = new AffectHandler($tipRepository->reveal(), $typeRepository->reveal());
+        $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
-        $tipRepository->getByTipTranslationId(null, $command->event)->shouldBeCalled()->willReturn($tip);
+        $this->tipRepository->setTypes($this->tip)->shouldBeCalled();
 
-        $typeRepository->getById(null)->shouldBeCalled()->willReturn($type);
-
-        $tipRepository->setTypes($tip)->shouldBeCalled();
-
-        $handler->handle($command);
+        $this->handler->handle($this->command);
     }
 
     public function testIsAlreadyAffectedOnEventException()
     {
-        $tipRepository  = $this->prophesize(TipRepositoryInterface::class);
-        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+        $this->tipRepository->getByTipTranslationId(null, $this->command->event)->shouldBeCalled()->willReturn($this->tip);
 
-        $event = EventFactory::createEvent();
-        $tip   = TipFactory::createTip('awesome tip');
-        $type  = new Type($event);
+        $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
-        $tipTranslationView = new TipTranslationView(
-            $tip->getId(),
-            $tip->getTranslationTitle('fr'),
-            $tip->getTranslationContent('fr'),
-            'admin_title'
-        );
-        $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
+        $this->tipRepository->setTypes($this->tip)->shouldBeCalled();
 
-        $command = new Affect($event);
-        $command->tip   = $tipTranslationView;
-        $command->types = [$typeView];
-
-
-        $handler = new AffectHandler($tipRepository->reveal(), $typeRepository->reveal());
-
-        $tipRepository->getByTipTranslationId(null, $command->event)->shouldBeCalled()->willReturn($tip);
-
-        $typeRepository->getById(null)->shouldBeCalled()->willReturn($type);
-
-        $tipRepository->setTypes($tip)->shouldBeCalled();
-
-        $handler->handle($command);
+        $this->handler->handle($this->command);
 
         $this->expectException(TipAlreadyAffectedToEventException::class);
 
-        $handler->handle($command);
+        $this->handler->handle($this->command);
     }
 }
