@@ -54,7 +54,7 @@ class Applyer
         try {
             $composedRule = $this->composer->compose($rules);
         } catch (NoRuleException $exception) {
-            return ;
+            return;
         }
 
         foreach ($templateData->getObjects() as $object) {
@@ -67,7 +67,7 @@ class Applyer
             } else {
                 $tags = $object->getTags();
 
-                foreach($tags as $key => $tag) {
+                foreach ($tags as $key => $tag) {
                     if (isset($tag['tag']) && !in_array($tag['tag'], $composedRule->tags)) {
                         $object->removeTag($key);
                     }
@@ -84,12 +84,12 @@ class Applyer
      */
     public function applyRuleForCardList(CardListView &$cardListView, array $rules)
     {
-        // This try catch should not exist has there should always be a rule in the $rules
-        // But to test it, there it is
         try {
             $composedRule = $this->composer->compose($rules);
         } catch (NoRuleException $exception) {
-            return ;
+            // If no rule, create a composedRule without tags to sanitize all card of the list
+            $composedRule = new ComposedRule();
+            $composedRule->tags = [];
         }
 
         foreach ($cardListView->cardViews as $cardView) {
@@ -107,17 +107,12 @@ class Applyer
      */
     public function applyRuleForParticipantCard(CardView &$cardView, array $rules)
     {
-        // This try catch should not exist has there should always be a rule in the $rules
-        // But to test it, there it is
         try {
             $composedRule = $this->composer->compose($rules);
         } catch (NoRuleException $exception) {
-            // If there is no rules, sanitize the cardView
-            foreach ($this->tagMapping as $tag => $equivalentVariable) {
-                $cardView->$equivalentVariable = '';
-            }
-
-            return ;
+            // If no rule, create a composedRule without tags to sanitize the cardView
+            $composedRule = new ComposedRule();
+            $composedRule->tags = [];
         }
 
         foreach ($this->tagMapping as $tag => $equivalentVariable) {
