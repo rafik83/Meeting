@@ -765,6 +765,7 @@ admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'
 admin.tip.empty: 'Aucun message d''aide'
+admin.tip.events: 'Evénements'
 admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
 admin.tip.update.link: Modifier
