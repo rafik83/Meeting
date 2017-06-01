@@ -230,6 +230,14 @@ class Tip
     /**
      * @param Type $type
      */
+    public function addType(Type $type)
+    {
+        $this->types->add($type);
+    }
+
+    /**
+     * @param Type $type
+     */
     public function removeType(Type $type)
     {
         $this->types->removeElement($type);
