@@ -28,9 +28,9 @@ class PaginateTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime      = new \DateTime();
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip1 = new Tip('tip_1', false, true, false, $dateTime);
-        $tip2 = new Tip('tip_2', false, false, true, $dateTime);
-        $tip3 = new Tip('tip_3', true, false, true, $dateTime);
+        $tip1 = new Tip('tip_1', false, true, false, false, true, false, $dateTime);
+        $tip2 = new Tip('tip_2', false, false, true, false, true, false, $dateTime);
+        $tip3 = new Tip('tip_3', true, false, true, false, true, false, $dateTime);
         $tips = [$tip1, $tip2, $tip3];
 
         foreach ($tips as $tip) {
