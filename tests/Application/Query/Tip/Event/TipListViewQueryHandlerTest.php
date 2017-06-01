@@ -31,7 +31,7 @@ class TipListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $query  = new TipListViewQuery($event, $locale);
         $handler = new TipListViewQueryHandler($tipRepository->reveal());
 
-        $tipRepository->findAll($query->locale)
+        $tipRepository->getTipTranslationViewByLocale($query->locale)
             ->shouldBeCalled()
             ->willReturn($tipList);
 
