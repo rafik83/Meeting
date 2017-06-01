@@ -38,20 +38,6 @@ class TipViewQueryHandler
     {
         $tips = $this->tipRepository->paginate($query->page, $query->limit);
 
-        $tipListView = new PaginatedTipView();
-        
-        foreach($tips as $tip) {
-            $pagesTranslations = $tip->getPagesTranslations();
-
-            $tipListView->tipListView[] = new TipView(
-                $tip->getId(),
-                $tip->getTitle(),
-                $pagesTranslations
-            );
-        }
-        
-        $tipListView->results = $tips;
-        
-        return $tipListView;
+        return new PaginatedTipView($tips);
     }
 }

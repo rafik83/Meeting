@@ -13,6 +13,7 @@ namespace Application\Query\Tip\Event;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -36,12 +37,12 @@ class PaginateTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $tip->setType($type);
         }
 
-        $expectedTipListView = new PaginatedTipView();
-        $expectedTipListView->results = [$tip1, $tip2, $tip3];
+        $results = new PaginatedResult([$tip1, $tip2, $tip3], 1, 10, 3);
+        $expectedTipListView = new PaginatedTipView($results);
 
         $query = new PaginateTipViewQuery($event, 1, 20);
 
-        $tipRepository->paginateByEvent($event, 1, 20)->shouldBeCalled()->willReturn($tips);
+        $tipRepository->paginateByEvent($event, 1, 20)->shouldBeCalled()->willReturn($results);
 
         $handler = new PaginateTipViewQueryHandler($tipRepository->reveal());
         $tipListView = $handler->handle($query);

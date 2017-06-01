@@ -23,7 +23,7 @@ class TipListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event  = EventFactory::createEvent();
         $locale = 'fr';
         $tipList = [
-            new TipTranslationView(1, 'title_fr', 'content_fr'),
+            new TipTranslationView(1, 'title_fr', 'content_fr', 'admin_title'),
         ];
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);

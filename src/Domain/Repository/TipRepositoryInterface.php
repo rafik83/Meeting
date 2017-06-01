@@ -82,7 +82,7 @@ interface TipRepositoryInterface
      * @param int   $page
      * @param int   $limit
      *
-     * @return PaginatedResult[]
+     * @return PaginatedResult
      */
     public function paginateByEvent(Event $event, $page, $limit);
 

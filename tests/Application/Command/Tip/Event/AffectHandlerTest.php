@@ -34,7 +34,8 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
         $tipTranslationView = new TipTranslationView(
             $tip->getId(),
             $tip->getTranslationTitle('fr'),
-            $tip->getTranslationContent('fr')
+            $tip->getTranslationContent('fr'),
+            'admin_title'
         );
         $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
 

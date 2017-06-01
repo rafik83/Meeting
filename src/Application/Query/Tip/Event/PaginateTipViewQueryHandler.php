@@ -37,10 +37,6 @@ class PaginateTipViewQueryHandler
     {
         $tips = $this->tipRepository->paginateByEvent($query->event, $query->page, $query->limit);
 
-        $tipListView = new PaginatedTipView();
-
-        $tipListView->results = $tips;
-
-        return $tipListView;
+        return  new PaginatedTipView($tips);
     }
 }
