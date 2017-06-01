@@ -233,7 +233,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUserAndEventExceptSheet(User $user, Event $event, Sheet $exceptSheet)
+    public function findByUserAndEventExceptSheet(User $user, Event $event, Sheet $exceptedSheet)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('meeting, slot', 'fromParticipants', 'toParticipants')
@@ -244,10 +244,10 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->join('meeting.fromParticipants', 'fromParticipants')
             ->join('meeting.toParticipants', 'toParticipants')
             ->where('
-                (meeting.toSheet != :exceptSheet AND toParticipants.user = :user)
-                OR (meeting.fromSheet != :exceptSheet AND fromParticipants.user = :user)'
+                (meeting.toSheet != :exceptedSheet AND toParticipants.user = :user)
+                OR (meeting.fromSheet != :exceptedSheet AND fromParticipants.user = :user)'
             )
-            ->setParameter('exceptSheet', $exceptSheet)
+            ->setParameter('exceptedSheet', $exceptedSheet)
             ->setParameter('user', $user)
             ->setParameter('event', $event)
             ->andWhere('meeting.state = :state')
