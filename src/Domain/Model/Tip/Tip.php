@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Tip
@@ -21,7 +22,7 @@ class Tip
      * @var int
      */
     private $id;
-    
+
     /**
      * @var string
      */
@@ -36,17 +37,17 @@ class Tip
      * @var ArrayCollection
      */
     private $types;
-    
+
     /**
      * @var bool
      */
     private $onMeetingManagement;
-    
+
     /**
      * @var bool
      */
     private $onCatalog;
-    
+
     /**
      * @var bool
      */
@@ -241,7 +242,7 @@ class Tip
     {
         return $this->id;
     }
-    
+
     /**
      * @return string
      */
@@ -265,7 +266,7 @@ class Tip
     {
         return $this->types->toArray();
     }
-    
+
     /**
      * @return bool
      */
@@ -273,7 +274,7 @@ class Tip
     {
         return $this->onMeetingManagement;
     }
-    
+
     /**
      * @return bool
      */
@@ -281,7 +282,7 @@ class Tip
     {
         return $this->onCatalog;
     }
-    
+
     /**
      * @return bool
      */
@@ -354,5 +355,42 @@ class Tip
         }
 
         return $pagesTranslations;
+    }
+
+    /**
+     * @return Event[]
+     */
+    private function getEvents()
+    {
+        $events = [];
+        foreach ($this->types as $type) {
+            $events[] = $type->getEvent();
+        }
+
+        return $events;
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getUnduplicatedEvents()
+    {
+        return $this->removeDuplicateEvents($this->getEvents());
+    }
+
+    /**
+     * @param Event[] $events
+     *
+     * @return Event[]
+     */
+    private function removeDuplicateEvents(array $events)
+    {
+        $uniqueEvents = [];
+
+        foreach ($events as $event) {
+            $uniqueEvents[$event->getId()] = $event;
+        }
+
+        return $uniqueEvents;
     }
 }
