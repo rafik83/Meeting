@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Exception\Tip;
 
-class TipNotAffectOnEventException extends TipException
+class TipNotAffectedOnEventException extends TipException
 {
     public $message = 'flash.admin.tip.remove.unauthorized';
 }

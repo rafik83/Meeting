@@ -4,7 +4,7 @@ Feature: List of tips by event and type
 
   Scenario: See the list of tips for an event
     Given the database is purged
-    And the tip "Awesome tip" is created for an event
+    When the tip "Awesome tip" is created for an event
     And I am logged as admin
     And I go to this page "/fr/event/1/tip/list"
     Then I should see "admin.tip.list.title"

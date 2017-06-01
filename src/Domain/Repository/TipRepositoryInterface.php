@@ -57,7 +57,7 @@ interface TipRepositoryInterface
     /**
      * @param Tip $tip
      */
-    public function removeTipForEvent(Tip $tip);
+    public function removeTip(Tip $tip);
 
     /**
      * @param Event  $event
@@ -75,7 +75,7 @@ interface TipRepositoryInterface
      *
      * @return Tip|null
      */
-    public function getByIdAndEvent(Event $event, Tip $tip);
+    public function getByEventAndTip(Event $event, Tip $tip);
 
     /**
      * @param Event $event
@@ -91,5 +91,5 @@ interface TipRepositoryInterface
      *
      * @return TipTranslationView[]
      */
-    public function findAll($locale);
+    public function getTipTranslationViewByLocale($locale);
 }

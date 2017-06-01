@@ -13,10 +13,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
-use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -40,10 +40,10 @@ class TipEventController extends Controller
     public function listAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $tipListViewQuery = new PaginateTipViewQuery($event, $request->query->get('page', 1));
-
-        $tipListView = $this->get('tactician.commandbus')->handle($tipListViewQuery);
+        $tipListViewQuery = new PaginatedTipViewQuery($event, $request->query->get('page', 1));
+        $tipListView      = $this->get('tactician.commandbus')->handle($tipListViewQuery);
 
         return $this->render('@Admin/Tip/Event/list.html.twig', [
             'event'       => $event,
@@ -61,8 +61,10 @@ class TipEventController extends Controller
     public function affectAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $locale = $event->getAvailableLocale($request->getLocale());
+        $locale   = $event->getAvailableLocale($request->getLocale());
+        $tipViews = [];
 
         try {
             $tipListViewQuery = new TipListViewQuery($locale);
@@ -76,9 +78,9 @@ class TipEventController extends Controller
         $affect            = new Affect();
 
         $form = $this->createForm(AffectType::class, $affect, [
-                'tipViews'  => $tipViews,
-                'typeViews' => $typeViews,
-            ]);
+            'tipViews'  => $tipViews,
+            'typeViews' => $typeViews,
+        ]);
 
          if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($affect);
@@ -102,13 +104,14 @@ class TipEventController extends Controller
     public function removeAction(Event $event, Tip $tip)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         try {
             $this->get('tactician.commandbus')->handle(new Remove($event, $tip));
             $this->addFlash('success', 'flash.admin.tip.remove.success');
         } catch (TipNotFoundException $exception) {
             $this->addFlash('error', $exception->getMessage());
-        } catch (TipNotAffectOnEventException $exception) {
+        } catch (TipNotAffectedOnEventException $exception) {
             $this->addFlash('error', $exception->getMessage());
         }
 

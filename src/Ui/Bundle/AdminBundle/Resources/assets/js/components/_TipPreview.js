@@ -22,18 +22,18 @@ TipPreview.prototype.displayPreviewData = function ()
         $this         = this,
         previewData   = function (data) {
 
-        var previewTitle   = document.createElement('h5'),
-            previewContent = document.createElement('p');
-            previewTitle.innerHTML   = data.title;
-            previewContent.innerHTML = data.content;
+            var previewTitle   = document.createElement('h5'),
+                previewContent = document.createElement('p');
+                previewTitle.innerHTML   = data.title;
+                previewContent.innerHTML = data.content;
 
-        while ($this.targetElement.firstChild) {
-            $this.targetElement.removeChild($this.targetElement.firstChild);
-        }
+            while ($this.targetElement.firstChild) {
+                $this.targetElement.removeChild($this.targetElement.firstChild);
+            }
 
-        $this.targetElement.appendChild(previewTitle);
-        $this.targetElement.appendChild(previewContent);
-    };
+            $this.targetElement.appendChild(previewTitle);
+            $this.targetElement.appendChild(previewContent);
+        };
 
     axios
         .get(url)

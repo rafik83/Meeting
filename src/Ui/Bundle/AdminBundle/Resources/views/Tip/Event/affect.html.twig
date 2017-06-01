@@ -11,12 +11,12 @@
             {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
             {{ form_errors(form) }}
 
-            {% if form.tipViews is defined %}
-                {{ form_row(form.tipViews) }}
+            {% if form.tip is defined %}
+                {{ form_row(form.tip) }}
             {% endif %}
 
-            {% if form.typeViews is defined %}
-                {{ form_row(form.typeViews) }}
+            {% if form.types is defined %}
+                {{ form_row(form.types) }}
             {% endif %}
 
             {{ form_rest(form) }}

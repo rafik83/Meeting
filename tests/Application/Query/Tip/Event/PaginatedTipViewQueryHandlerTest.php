@@ -10,8 +10,8 @@
 
 namespace Application\Query\Tip\Event;
 
-use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -19,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class PaginateTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PaginatedTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -40,11 +40,11 @@ class PaginateTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $results = new PaginatedResult([$tip1, $tip2, $tip3], 1, 10, 3);
         $expectedTipListView = new PaginatedTipView($results);
 
-        $query = new PaginateTipViewQuery($event, 1, 20);
+        $query = new PaginatedTipViewQuery($event, 1, 20);
 
         $tipRepository->paginateByEvent($event, 1, 20)->shouldBeCalled()->willReturn($results);
 
-        $handler = new PaginateTipViewQueryHandler($tipRepository->reveal());
+        $handler = new PaginatedTipViewQueryHandler($tipRepository->reveal());
         $tipListView = $handler->handle($query);
 
         $this->assertEquals($expectedTipListView, $tipListView);

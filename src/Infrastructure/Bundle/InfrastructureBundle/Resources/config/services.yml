@@ -2626,12 +2626,12 @@ services:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipListViewQuery }
-    query.tip.event.paginate_tip_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQueryHandler
+    query.tip.event.paginated_tip_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQueryHandler
         arguments:
             - '@repository.tip.repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery }
     query.tip.event.tip_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQueryHandler
         arguments:

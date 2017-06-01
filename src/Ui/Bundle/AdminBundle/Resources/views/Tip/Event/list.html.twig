@@ -30,19 +30,18 @@
                     <td>
                         <ul>
                             {% for page in tip.PagesTranslations %}
-                                <li>{{ page|trans }}{{ not loop.last ? ', ' : '' }}</li>
+                                <li>{{ page|trans }}</li>
                             {% else %}
                                 <li>{{ 'admin.tip.event.no_pages'|trans }}</li>
                             {% endfor %}
                         </ul>
                     </td>
                     <td>
-                        {{ delete_button(path('admin_tip_event_remove', {
-                            'event': event.id,
-                            'tip': tip.id,
-                            }),
+                        {{ delete_button(
+                            path('admin_tip_event_remove', {'event': event.id, 'tip': tip.id}),
                             'admin.tip.event.remove.link'|trans,
-                        {}) }}
+                            {'class' : 'btn btn-danger'})
+                        }}
                     </td>
                 </tr>
             {% else %}

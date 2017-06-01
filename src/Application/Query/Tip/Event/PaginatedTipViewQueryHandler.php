@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Tip\Event;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
-class PaginateTipViewQueryHandler
+class PaginatedTipViewQueryHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
@@ -29,11 +29,11 @@ class PaginateTipViewQueryHandler
     }
 
     /**
-     * @param PaginateTipViewQuery $query
+     * @param PaginatedTipViewQuery $query
      *
      * @return PaginatedTipView
      */
-    public function handle(PaginateTipViewQuery $query)
+    public function handle(PaginatedTipViewQuery $query)
     {
         $tips = $this->tipRepository->paginateByEvent($query->event, $query->page, $query->limit);
 

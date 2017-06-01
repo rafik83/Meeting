@@ -79,8 +79,6 @@ class TipRepository implements TipRepositoryInterface
     /** {@inheritdoc} */
     public function set(Tip $tip)
     {
-        $this->entityManager->flush($tip);
-
         foreach ($tip->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
@@ -103,7 +101,7 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function removeTipForEvent(Tip $tip)
+    public function removeTip(Tip $tip)
     {
         foreach ($tip->getTypes() as $type) {
             $tip->removeType($type);
@@ -118,7 +116,7 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content)')
+            ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
             ->from(Tip::class, 'tip')
             ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
             ->join('tip.types', 'type', 'WITH', 'type.event = :event and type = :type')
@@ -132,7 +130,7 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getByIdAndEvent(Event $event, Tip $tip)
+    public function getByEventAndTip(Event $event, Tip $tip)
     {
         $queryBuilder = $this
             ->entityManager
@@ -161,7 +159,7 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function findAll($locale)
+    public function getTipTranslationViewByLocale($locale)
     {
         $queryBuilder = $this
             ->entityManager

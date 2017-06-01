@@ -38,7 +38,7 @@ class TipListViewQueryHandler
      */
     public function handle(TipListViewQuery $query)
     {
-        $tipTranslationViews = $this->tipRepository->findAll($query->locale);
+        $tipTranslationViews = $this->tipRepository->getTipTranslationViewByLocale($query->locale);
 
         if (empty($tipTranslationViews)) {
             throw new NoTipAvailableException();

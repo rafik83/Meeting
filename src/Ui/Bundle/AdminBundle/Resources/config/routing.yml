@@ -1404,6 +1404,7 @@ admin_tip_event_remove:
     methods: [DELETE]
     requirements:
         event: \d+
+        tip: \d+
     defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
 
 admin_tip_event_preview:

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Tip\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PaginateTipViewQuery
+class PaginatedTipViewQuery
 {
     /** @var Event */
     public $event;
@@ -24,7 +24,7 @@ class PaginateTipViewQuery
     public $limit;
 
     /**
-     * PaginateTipViewQuery constructor.
+     * PaginatedTipViewQuery constructor.
      *
      * @param Event $event
      * @param int   $page
