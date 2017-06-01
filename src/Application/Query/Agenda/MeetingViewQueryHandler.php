@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
