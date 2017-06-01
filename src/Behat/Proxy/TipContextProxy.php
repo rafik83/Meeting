@@ -47,5 +47,4 @@ class TipContextProxy implements TipContextProxyInterface
     {
         return $this->tipManager;
     }
-
 }

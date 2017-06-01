@@ -29,7 +29,6 @@ class RemoveHandler
         $this->tipRepository = $tipRepository;
     }
 
-
     /**
      * @param Remove $remove
      *

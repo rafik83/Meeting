@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 class TipTranslationViewQuery
 {
-    /** @var Event $event */
+    /** @var Event */
     public $event;
 
     /** @var Type */
