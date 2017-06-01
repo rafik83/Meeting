@@ -17,6 +17,9 @@ class PreviewTipViewQuery
     /** @var TipTranslation */
     public $tipTranslation;
 
+    /** @var array */
+    public $pages;
+
     /**
      * PreviewTipViewQuery constructor.
      *
@@ -25,5 +28,6 @@ class PreviewTipViewQuery
     public function __construct(TipTranslation $tipTranslation)
     {
         $this->tipTranslation = $tipTranslation;
+        $this->pages = $tipTranslation->getTip()->getPagesTranslations();
     }
 }

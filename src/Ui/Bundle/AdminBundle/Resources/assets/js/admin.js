@@ -164,7 +164,7 @@ function init(target) {
     });
 
     [].forEach.call(target.querySelectorAll('[data-preview-tip]'), function (element) {
-        new TipPreview(element, target.querySelector('#tip_preview'));
+        new TipPreview(element, target.querySelector('#tip_preview'), target.querySelector('#tip_pages'));
     });
 }
 

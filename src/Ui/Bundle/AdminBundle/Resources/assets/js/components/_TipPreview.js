@@ -3,12 +3,14 @@ var axios = require('axios');
 /**
  * @param {element} element
  * @param {element} targetElement
+ * @param {element} secondTargetElement
  * @constructor
  */
-function TipPreview (element, targetElement)
+function TipPreview (element, targetElement, secondTargetElement)
 {
-    this.input         = element;
-    this.targetElement = targetElement;
+    this.input               = element;
+    this.targetElement       = targetElement;
+    this.secondTargetElement = secondTargetElement;
 
     this.input.addEventListener('change', this.displayPreviewData.bind(this));
 }
@@ -23,9 +25,19 @@ TipPreview.prototype.displayPreviewData = function ()
         previewData   = function (data) {
 
             var previewTitle   = document.createElement('h5'),
-                previewContent = document.createElement('p');
-                previewTitle.innerHTML   = data.title;
-                previewContent.innerHTML = data.content;
+                previewContent = document.createElement('p'),
+                previewPages   = document.createElement('ul');
+
+            previewTitle.innerHTML   = data.title;
+            previewContent.innerHTML = data.content;
+
+            var pages = '';
+
+            for (var i = 0; i < data.pages.length; i++) {
+                pages += '<li>' + data.pages[i] + '</li>';
+            }
+
+            previewPages.innerHTML = pages;
 
             while ($this.targetElement.firstChild) {
                 $this.targetElement.removeChild($this.targetElement.firstChild);
@@ -33,6 +45,7 @@ TipPreview.prototype.displayPreviewData = function ()
 
             $this.targetElement.appendChild(previewTitle);
             $this.targetElement.appendChild(previewContent);
+            $this.secondTargetElement.appendChild(previewPages);
         };
 
     axios

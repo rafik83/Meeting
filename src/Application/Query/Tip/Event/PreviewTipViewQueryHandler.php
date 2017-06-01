@@ -10,10 +10,24 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip\Event;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Tip\Event\PreviewTipView;
 
 class PreviewTipViewQueryHandler
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /**
+     * PreviewTipViewQueryHandler constructor.
+     *
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param PreviewTipViewQuery $query
      * 
@@ -23,7 +37,10 @@ class PreviewTipViewQueryHandler
     {
         return new PreviewTipView(
             $query->tipTranslation->getTitle(),
-            $query->tipTranslation->getContent()
+            $query->tipTranslation->getContent(),
+            array_map(function ($pageTranslationKey) {
+                return $this->translator->trans($pageTranslationKey);
+            }, $query->pages)
         );
     }
 }
