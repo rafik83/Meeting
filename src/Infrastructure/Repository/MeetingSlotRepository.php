@@ -189,6 +189,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                     OR slot.begin >= unavailability.begin AND slot.begin < unavailability.end
                     OR slot.end > unavailability.begin AND slot.end <= unavailability.end
                     OR slot.begin <= unavailability.begin AND slot.end >= unavailability.end
+                    OR slot.begin <= unavailability.end AND slot.end >= unavailability.end
                 )
             )');
 
@@ -204,6 +205,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                     OR slot.begin >= happening.begin AND slot.begin < happening.end
                     OR slot.end > happening.begin AND slot.end <= happening.end
                     OR slot.begin <= happening.begin AND slot.end >= happening.end
+                    OR slot.begin <= happening.end AND slot.end >= happening.end
             )');
 
         // No blocking mass unvailabilities during this slot
@@ -218,6 +220,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                     OR slot.begin >= mass.begin AND slot.begin < mass.end
                     OR slot.end > mass.begin AND slot.end <= mass.end
                     OR slot.begin <= mass.begin AND slot.end >= mass.end
+                    OR slot.begin <= mass.end AND slot.end >= mass.end
                 )
             )');
 
@@ -234,6 +237,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                     OR slot.begin >= assignment.begin AND slot.begin < assignment.end
                     OR slot.end > assignment.begin AND slot.end <= assignment.end
                     OR slot.begin <= assignment.begin AND slot.end >= assignment.end
+                    OR slot.begin <= assignment.end AND slot.end >= assignment.end
             )');
 
         $queryBuilder
