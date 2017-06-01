@@ -31,6 +31,15 @@
                                 {{ page|trans }}{{ not loop.last ? ', ' : '' }}
                             {% endfor %}
                         </td>
+                        <td>
+                            <ul>
+                                {% for event in tip.unduplicatedEvents %}
+                                    <li>
+                                        {{ event.title }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
                         <td class="text-right">
                             <div class="btn-group">
                                 <a class="btn btn-default btn-sm" href="{{ path('admin_tip_update', {'tip': tip.id}) }}">
