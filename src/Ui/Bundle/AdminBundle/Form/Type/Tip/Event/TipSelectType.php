@@ -41,7 +41,7 @@ class TipSelectType extends AbstractType
         $resolver->setAllowedTypes('tipViews', 'array');
         $resolver->setDefaults([
             'choice_label' => function (TipTranslationView $tipView) {
-                return $tipView->title;
+                return $tipView->adminTitle;
             },
             'choices' => function (Options $options) {
                 return $options['tipViews'];
