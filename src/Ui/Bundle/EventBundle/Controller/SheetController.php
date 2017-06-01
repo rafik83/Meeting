@@ -122,6 +122,7 @@ class SheetController extends Controller
         }
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );

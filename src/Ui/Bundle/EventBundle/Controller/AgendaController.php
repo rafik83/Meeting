@@ -86,6 +86,7 @@ class AgendaController extends Controller
         ));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $participant->getSheet()->getType(),
             TipTranslationViewQueryHandler::CONTEXT_AGENDA,
             $request->getLocale()
         );

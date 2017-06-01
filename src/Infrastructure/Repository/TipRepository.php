@@ -87,8 +87,6 @@ class TipRepository implements TipRepositoryInterface
     /** {@inheritdoc} */
     public function setTypes(Tip $tip)
     {
-        $this->entityManager->flush($tip);
-
         foreach ($tip->getTypes() as $type) {
             $this->entityManager->flush($type);
         }
