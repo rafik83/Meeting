@@ -889,4 +889,23 @@ class SheetRepository implements SheetRepositoryInterface
 
         return count($queryBuilder->getQuery()->getResult()) > 1;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetByEventAndTitle(Event $event, $title)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet.title = :title')
+            ->setParameter('title', $title)
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

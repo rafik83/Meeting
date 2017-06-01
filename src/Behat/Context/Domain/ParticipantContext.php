@@ -40,4 +40,28 @@ class ParticipantContext implements Context
         $participant = $this->participantContextProxy->getParticipantManager()->create($sheet->getEvent(), $sheet);
         $this->participantContextProxy->getStorage()->set('participant', $participant);
     }
+
+    /**
+     * @Given /^there is a participant for this sheet and this user$/
+     */
+    public function thereIsAParticipantForThisSheetAndThisUser()
+    {
+        $sheet = $this->participantContextProxy->getStorage()->get('sheet');
+        $user = $this->participantContextProxy->getStorage()->get('user');
+
+        if (null === $sheet) {
+            throw new \InvalidArgumentException('Missing Sheet');
+        }
+
+        if (null === $user) {
+            throw new \InvalidArgumentException('Missing User');
+        }
+
+        $participant = $this->participantContextProxy
+            ->getParticipantManager()
+            ->create($sheet->getEvent(), $sheet, $user)
+        ;
+
+        $this->participantContextProxy->getStorage()->set('participant', $participant);
+    }
 }
