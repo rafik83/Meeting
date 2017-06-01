@@ -112,6 +112,11 @@ class Applyer
         try {
             $composedRule = $this->composer->compose($rules);
         } catch (NoRuleException $exception) {
+            // If there is no rules, sanitize the cardView
+            foreach ($this->tagMapping as $tag => $equivalentVariable) {
+                $cardView->$equivalentVariable = '';
+            }
+
             return ;
         }
 

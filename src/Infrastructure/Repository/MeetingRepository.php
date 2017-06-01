@@ -177,8 +177,8 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
             ->where('fromParticipant = :participant OR toParticipant = :participant')
-            ->setParameter('participant', $participant)
             ->andWhere('meeting.state = :state')
+            ->setParameter('participant', $participant)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
@@ -211,7 +211,30 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUserAndEventExceptSheet(Event $event, User $user, Sheet $sheet)
+    public function findByUserAndEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting, slot, fromSheet, toSheet')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.fromParticipants', 'fromParticipants')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('toParticipants.user = :user')
+            ->orWhere('fromParticipants.user = :user')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByUserAndEventExceptSheet(User $user, Event $event, Sheet $exceptSheet)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('meeting, slot', 'fromParticipants', 'toParticipants')
@@ -225,7 +248,7 @@ class MeetingRepository implements MeetingRepositoryInterface
                 (meeting.toSheet != :exceptSheet AND toParticipants.user = :user)
                 OR (meeting.fromSheet != :exceptSheet AND fromParticipants.user = :user)'
             )
-            ->setParameter('exceptSheet', $sheet)
+            ->setParameter('exceptSheet', $exceptSheet)
             ->setParameter('user', $user)
             ->setParameter('event', $event)
             ->andWhere('meeting.state = :state')

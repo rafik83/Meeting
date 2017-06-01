@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
@@ -295,6 +296,25 @@ class Meeting implements MessageSubjectInterface
         }
 
         return $this->fromSheet;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Sheet
+     * @throws NoSheetForUserException
+     */
+    public function getSheetOfUser(User $user)
+    {
+        if ($this->fromSheet->hasUser($user)) {
+            return $this->fromSheet;
+        }
+
+        if ($this->toSheet->hasUser($user)) {
+            return $this->toSheet;
+        }
+
+        throw new NoSheetForUserException();
     }
 
     /**
