@@ -41,6 +41,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 default: true
         title:
             type: string
+            nullable: true
             options:
                 default: ''
     manyToOne:
