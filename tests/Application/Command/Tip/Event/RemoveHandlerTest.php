@@ -13,6 +13,7 @@ namespace Application\Command\Tip\Event;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Command\Tip\Event\RemoveHandler;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -33,6 +34,10 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $remove  = new Remove($event, $tip);
         $handler = new RemoveHandler($tipRepository->reveal());
 
+        $tipRepository->getByIdAndEvent($remove->event, $remove->tip)
+            ->shouldBeCalled()
+            ->willReturn($tip);
+
         $tipRepository->removeTipForEvent($tip)->shouldBeCalled();
 
         $handler->handle($remove);
@@ -45,7 +50,6 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $event = EventFactory::createEvent();
         $event2 = EventFactory::createEvent();
-        $type  = new Type($event);
         $type2 = new Type($event2);
         $tip   = TipFactory::createTip('Awsm tip');
 
@@ -54,7 +58,31 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $remove  = new Remove($event, $tip);
         $handler = new RemoveHandler($tipRepository->reveal());
 
+        $tipRepository->getByIdAndEvent($remove->event, $remove->tip)
+            ->shouldBeCalled()
+            ->willReturn($tip);
+
         $this->expectException(TipNotAffectOnEventException::class);
+
+        $tipRepository->removeTipForEvent($tip)->shouldNotBeCalled();
+
+        $handler->handle($remove);
+    }
+
+    public function testTipNotFoundException()
+    {
+        $tipRepository = $this->prophesize(TipRepositoryInterface::class);
+
+        $event   = EventFactory::createEvent();
+        $tip     = TipFactory::createTip('Awsm tip');
+        $remove  = new Remove($event, $tip);
+        $handler = new RemoveHandler($tipRepository->reveal());
+
+        $tipRepository->getByIdAndEvent($remove->event, $remove->tip)
+            ->shouldBeCalled()
+            ->willReturn(null);
+
+        $this->expectException(TipNotFoundException::class);
 
         $tipRepository->removeTipForEvent($tip)->shouldNotBeCalled();
 

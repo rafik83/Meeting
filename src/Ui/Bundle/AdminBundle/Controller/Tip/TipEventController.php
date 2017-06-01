@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginateTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
@@ -105,6 +106,8 @@ class TipEventController extends Controller
         try {
             $this->get('tactician.commandbus')->handle(new Remove($event, $tip));
             $this->addFlash('success', 'flash.admin.tip.remove.success');
+        } catch (TipNotFoundException $exception) {
+            $this->addFlash('error', $exception->getMessage());
         } catch (TipNotAffectOnEventException $exception) {
             $this->addFlash('error', $exception->getMessage());
         }

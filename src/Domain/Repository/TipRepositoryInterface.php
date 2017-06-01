@@ -71,6 +71,14 @@ interface TipRepositoryInterface
 
     /**
      * @param Event $event
+     * @param Tip   $tip
+     *
+     * @return Tip|null
+     */
+    public function getByIdAndEvent(Event $event, Tip $tip);
+
+    /**
+     * @param Event $event
      * @param int   $page
      * @param int   $limit
      *

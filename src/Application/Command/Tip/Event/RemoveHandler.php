@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectOnEventException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class RemoveHandler
@@ -28,14 +29,27 @@ class RemoveHandler
         $this->tipRepository = $tipRepository;
     }
 
+
+    /**
+     * @param Remove $remove
+     *
+     * @throws TipNotAffectOnEventException
+     * @throws TipNotFoundException
+     */
     public function handle(Remove $remove)
     {
-        foreach ($remove->tip->getTypes() as $type) {
+        $tip = $this->tipRepository->getByIdAndEvent($remove->event, $remove->tip);
+
+        if (null === $tip) {
+            throw new TipNotFoundException();
+        }
+
+        foreach ($tip->getTypes() as $type) {
             if ($type->getEvent() !== $remove->event) {
                 throw new TipNotAffectOnEventException();
             }
         }
 
-        $this->tipRepository->removeTipForEvent($remove->tip);
+        $this->tipRepository->removeTipForEvent($tip);
     }
 }
