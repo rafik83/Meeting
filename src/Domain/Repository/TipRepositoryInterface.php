@@ -20,11 +20,12 @@ use Proximum\Vimeet\Domain\Model\Type;
 interface TipRepositoryInterface
 {
     /**
-     * @param int $id
+     * @param int   $id
+     * @param Event $event
      *
      * @return Tip|null
      */
-    public function getByTipTranslationId($id);
+    public function getByTipTranslationId($id, Event $event);
 
     /**
      * @param int $page

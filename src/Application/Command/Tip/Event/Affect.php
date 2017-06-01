@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,13 +11,27 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\TypeView;
 
 class Affect
 {
+    /** @var Event */
+    public $event;
+
     /** @var TipTranslationView */
     public $tip;
 
     /** @var TypeView[] */
     public $types;
+
+    /**
+     * Affect constructor.
+     *
+     * @param Event $event
+     */
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
 }

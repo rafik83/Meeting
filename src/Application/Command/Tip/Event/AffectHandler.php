@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
+use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -35,10 +36,16 @@ class AffectHandler
 
     /**
      * @param Affect $affect
+     *
+     * @throws TipAlreadyAffectedToEventException
      */
     public function handle(Affect $affect)
     {
-        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id);
+        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id, $affect->event);
+
+        if ($tip->getTypes()) {
+            throw new TipAlreadyAffectedToEventException();
+        }
 
         foreach ($affect->types as $typeView) {
             $type = $this->typeRepository->getById($typeView->id);

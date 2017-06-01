@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
+use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
@@ -75,19 +76,23 @@ class TipEventController extends Controller
 
         $typeListViewQuery = new TypeListViewQuery($event, $locale);
         $typeViews         = $this->get('tactician.commandbus')->handle($typeListViewQuery);
-        $affect            = new Affect();
+        $affect            = new Affect($event);
 
         $form = $this->createForm(AffectType::class, $affect, [
             'tipViews'  => $tipViews,
             'typeViews' => $typeViews,
         ]);
 
-         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($affect);
-            $this->addFlash('success', 'flash.admin.tip.affect.success');
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($affect);
+                $this->addFlash('success', 'flash.admin.tip.affect.success');
+            } catch (TipAlreadyAffectedToEventException $exception) {
+                $this->addFlash('error', $exception->getMessage());
+            }
 
             return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
-         }
+        }
 
         return $this->render('@Admin/Tip/Event/affect.html.twig', [
             'event' => $event,

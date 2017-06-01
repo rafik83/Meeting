@@ -39,16 +39,18 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getByTipTranslationId($id)
+    public function getByTipTranslationId($id, Event $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip')
+            ->select('tip, type')
             ->from(Tip::class, 'tip')
             ->join(TipTranslation::class, 'tipTranslation', 'WITH', 'tip = tipTranslation.tip')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
             ->where('tipTranslation = :id')
-            ->setParameter('id', $id);
+            ->setParameter('id', $id)
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
