@@ -70,6 +70,8 @@ class TipEventController extends Controller
         try {
             $tipListViewQuery = new TipListViewQuery($locale);
             $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
+        } catch (TipNotFoundException $exception) {
+            $this->addFlash('error', $exception->getMessage());
         } catch (NoTipAvailableException $exception) {
             $this->addFlash('error', $exception->getMessage());
         }

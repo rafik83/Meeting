@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -44,6 +45,9 @@ class AffectHandler
         $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id, $affect->event);
 
         if ($tip->getTypes()) {
+        if (null === $tip) {
+            throw new TipNotFoundException();
+        }
             throw new TipAlreadyAffectedToEventException();
         }
 
