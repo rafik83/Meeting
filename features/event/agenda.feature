@@ -60,7 +60,7 @@ Feature: Agenda
     And the agenda is open
     And the meetings are published
     When I am on the homepage of this event
-    And I am logged with this user on this event
+    And I am logged with this user
     And I go to this page "/fr/sheet/1/agenda/participant/1"
     Then I should see "SPOTA1 - SheetA - SheetC"
     And I should see "SPOTA1 - SheetB - SheetC"

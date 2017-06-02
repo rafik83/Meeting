@@ -49,16 +49,11 @@ class LoginContext extends RawMinkContext implements KernelAwareContext
     }
 
     /**
-     * @Given I am logged with this user on this event
+     * @Given I am logged with this user
      */
-    public function iAmLoggedWithThisUserOnThisEvent()
+    public function iAmLoggedWithThisUser()
     {
-        $event = $this->loginContextProxy->getStorage()->get('event');
         $user = $this->loginContextProxy->getStorage()->get('user');
-
-        if (!$event instanceof Event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
 
         if (!$user instanceof User) {
             throw new \InvalidArgumentException('Missing User');
