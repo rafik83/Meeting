@@ -3942,7 +3942,7 @@ services:
     unavailability.time_slot_dispatcher:
         class: Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
             - '@adapter.job_queue_adapter'
