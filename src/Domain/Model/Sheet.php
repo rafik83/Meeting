@@ -147,9 +147,9 @@ class Sheet implements TraceableInterface
     private $attend = true;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $title = '';
+    private $title = null;
 
     /**
      * Sheet constructor.
