@@ -1883,6 +1883,13 @@ services:
         arguments:
             - '@security.authorization_checker'
 
+    adapter.impersonate_url_generator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ImpersonateUrlGeneratorAdapter
+        arguments:
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'
+            - '@router'
+
     #
     # Components
     #
@@ -2718,6 +2725,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
 
@@ -2726,6 +2734,7 @@ services:
         arguments:
             - '@query.sheet.group.admin.group_view_handler'
             - '@repository.sheet.group_repository'
+            - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
 
@@ -2783,6 +2792,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQuery }
+
+    query.user.user_impersonate_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQueryHandler
+        arguments:
+            - '@adapter.impersonate_url_generator_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery }
 
     #
     # Program query
@@ -3926,7 +3942,7 @@ services:
     unavailability.time_slot_dispatcher:
         class: Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
             - '@adapter.job_queue_adapter'

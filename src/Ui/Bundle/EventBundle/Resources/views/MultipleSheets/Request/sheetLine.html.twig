@@ -1,23 +1,21 @@
-<tr>
+<tr class="catalog__sheet">
     <td rowspan="{{ sheetView.numberOfRequest }}">
         {{ sheetView.sheetTitle }}
     </td>
 
     {% for requestView in sheetView.requestViews %}
         <td>
-            <div class="catalog__sheet">
-                <div class="buttons-zone">
-                    {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
-                        'allowedToCreate': false,
-                        'meetingRequest': requestView.request,
-                        'viewed': sheetView.sheet,
-                        'viewer': requestView.sheetMet,
-                        'isMeetingPublished': requestView.planned,
-                        'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
-                        'isMeetingRequestClosed': isMeetingRequestClosed,
-                        'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
-                    }) }}
-                </div>
+            <div class="buttons-zone">
+                {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
+                    'allowedToCreate': false,
+                    'meetingRequest': requestView.request,
+                    'viewed': sheetView.sheet,
+                    'viewer': requestView.sheetMet,
+                    'isMeetingPublished': requestView.planned,
+                    'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                    'isMeetingRequestClosed': isMeetingRequestClosed,
+                    'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
+                }) }}
             </div>
         </td>
         <td class="text-center">
@@ -31,7 +29,7 @@
             {{ requestView.sheetMetTitle }}
         </td>
 
-        <td>
+        <td class="participants-list">
             {% if requestView.participantViews is not empty %}
                 <ul>
                     {% for participantView in requestView.participantViews %}
@@ -44,7 +42,7 @@
         </td>
 
         {% if not loop.last %}
-            </tr><tr>
+            </tr><tr class="catalog__sheet">
         {% endif %}
     {% endfor %}
 </tr>

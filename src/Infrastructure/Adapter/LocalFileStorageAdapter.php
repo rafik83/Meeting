@@ -57,7 +57,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     public function upload($file, $directoryPath = null)
     {
         if (null === $file) {
-            return;
+            return null;
         }
 
         if (!$file instanceof UploadedFile) {

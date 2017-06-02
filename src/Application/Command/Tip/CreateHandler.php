@@ -43,6 +43,9 @@ class CreateHandler
             $command->onMeetingManagement,
             $command->onCatalog,
             $command->onPrintPlanning,
+            $command->onSheet,
+            $command->onAgenda,
+            $command->onProgram,
             $this->dateTime
         );
 

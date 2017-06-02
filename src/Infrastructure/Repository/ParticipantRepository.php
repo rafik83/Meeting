@@ -511,7 +511,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('sheet.event', 'event')
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
-            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.participant = participant AND m.mass = :mass)')
+            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
             ->setParameter('mass', $mass)
         ;
 

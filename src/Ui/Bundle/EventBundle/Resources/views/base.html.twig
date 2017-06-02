@@ -22,8 +22,8 @@
                 {{ render(controller('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser', { 'event': event, 'sheet': sheet })) }}
             {% endif %}
 
-            {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined and sheet is defined %}
-                {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet })) }}
+            {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
+                {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet is defined ? sheet : null })) }}
             {% endif %}
 
             <div class="container-fluid">
