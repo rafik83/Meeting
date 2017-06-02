@@ -935,7 +935,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      *
      * @return Sheet
      */
