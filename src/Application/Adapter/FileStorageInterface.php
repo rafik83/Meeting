@@ -20,7 +20,7 @@ interface FileStorageInterface
      * @param mixed  $file
      * @param string $directoryPath
      *
-     * @return string
+     * @return null|string
      */
     public function upload($file, $directoryPath = null);
 
