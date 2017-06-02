@@ -71,11 +71,7 @@ class TipEventController extends Controller
         try {
             $tipListViewQuery = new TipListViewQuery($locale);
             $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
-        } catch (TipNotFoundException $exception) {
-            $this->addFlash('error', $exception->getMessage());
-        } catch (TipTranslationNotAvailableForEventException $exception) {
-            $this->addFlash('error', $exception->getMessage());
-        } catch (NoTipAvailableException $exception) {
+        }  catch (NoTipAvailableException $exception) {
             $this->addFlash('error', $exception->getMessage());
         }
 
@@ -92,7 +88,11 @@ class TipEventController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($affect);
                 $this->addFlash('success', 'flash.admin.tip.affect.success');
+            } catch (TipNotFoundException $exception) {
+                $this->addFlash('error', $exception->getMessage());
             } catch (TipAlreadyAffectedToEventException $exception) {
+                $this->addFlash('error', $exception->getMessage());
+            } catch (TipTranslationNotAvailableForEventException $exception) {
                 $this->addFlash('error', $exception->getMessage());
             }
 
