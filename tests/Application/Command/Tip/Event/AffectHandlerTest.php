@@ -11,6 +11,7 @@
 namespace Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
+use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -69,7 +70,9 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
     }
     public function testHandle()
     {
-        $this->tipRepository->getByTipTranslationId(null, $this->command->event)->shouldBeCalled()->willReturn($this->tip);
+        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
+
+        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldBeCalled()->willReturn(false);
 
         $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
@@ -80,15 +83,30 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAlreadyAffectedOnEventException()
     {
-        $this->tipRepository->getByTipTranslationId(null, $this->command->event)->shouldBeCalled()->willReturn($this->tip);
+        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
 
-        $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
+        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldBeCalled()->willReturn(true);
 
-        $this->tipRepository->setTypes($this->tip)->shouldBeCalled();
+        $this->typeRepository->getById(null)->shouldNotBeCalled();
 
-        $this->handler->handle($this->command);
+        $this->tipRepository->setTypes($this->tip)->shouldNotBeCalled();
 
         $this->expectException(TipAlreadyAffectedToEventException::class);
+
+        $this->handler->handle($this->command);
+    }
+
+    public function testTipNotFoundException()
+    {
+        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn(null);
+
+        $this->expectException(TipNotFoundException::class);
+
+        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldNotBeCalled();
+
+        $this->typeRepository->getById(null)->shouldNotBeCalled();
+
+        $this->tipRepository->setTypes($this->tip)->shouldNotBeCalled();
 
         $this->handler->handle($this->command);
     }

@@ -39,15 +39,17 @@ class AffectHandler
      * @param Affect $affect
      *
      * @throws TipAlreadyAffectedToEventException
+     * @throws TipNotFoundException
      */
     public function handle(Affect $affect)
     {
-        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id, $affect->event);
+        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id);
 
-        if ($tip->getTypes()) {
         if (null === $tip) {
             throw new TipNotFoundException();
         }
+
+        if ($this->tipRepository->isTipAffectedToEvent($affect->event)) {
             throw new TipAlreadyAffectedToEventException();
         }
 

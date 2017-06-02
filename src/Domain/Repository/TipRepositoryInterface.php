@@ -22,11 +22,10 @@ interface TipRepositoryInterface
 {
     /**
      * @param int   $id
-     * @param Event $event
      *
      * @return Tip|null
      */
-    public function getByTipTranslationId($id, Event $event);
+    public function getByTipTranslationId($id);
 
     /**
      * @param int $page
@@ -101,4 +100,11 @@ interface TipRepositoryInterface
      * @return EventTipTranslationView[]
      */
     public function getTipTranslationViewByLocaleForEvent($locale);
+
+    /**
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function isTipAffectedToEvent(Event $event);
 }

@@ -39,18 +39,16 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getByTipTranslationId($id, Event $event)
+    public function getByTipTranslationId($id)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip, type')
+            ->select('tip')
             ->from(Tip::class, 'tip')
             ->join(TipTranslation::class, 'tipTranslation', 'WITH', 'tip = tipTranslation.tip')
-            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
-            ->where('tipTranslation = :id')
-            ->setParameter('id', $id)
-            ->setParameter('event', $event);
+            ->where('tipTranslation.id = :id')
+            ->setParameter('id', $id);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
@@ -186,5 +184,19 @@ class TipRepository implements TipRepositoryInterface
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /** {@inheritdoc} */
+    public function isTipAffectedToEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, type')
+            ->from(Tip::class, 'tip')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
+            ->setParameter('event', $event);
+
+        return null === $queryBuilder->getQuery()->getOneOrNullResult() ? true : false;
     }
 }
