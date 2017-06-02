@@ -26,19 +26,21 @@ class TipFactory
     /**
      * @param string $tipTitle
      * @param array  $pages
+     * @param array $locales
      *
      * @return Tip
      */
     public static function createTip(
         $tipTitle,
-        $pages = [
+        array $pages = [
             self::ON_MEETING_MANAGEMENT => true,
             self::ON_CATALOG            => true,
             self::ON_PRINT_PLANNING     => true,
             self::ON_AGENDA             => true,
             self::ON_SHEET              => true,
             self::ON_PROGRAM            => true,
-        ]
+        ],
+        array $locales = self::LOCALES
     ) {
         $tip = new Tip(
             $tipTitle,
@@ -51,7 +53,7 @@ class TipFactory
             new \DateTime()
         );
 
-        foreach (self::LOCALES as $locale) {
+        foreach ($locales as $locale) {
             $tip->setTranslation($locale, 'title_' . $locale, 'content_' . $locale);
         }
 

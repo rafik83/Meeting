@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
+use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotAvailableForEventException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -38,8 +39,9 @@ class AffectHandler
     /**
      * @param Affect $affect
      *
-     * @throws TipAlreadyAffectedToEventException
      * @throws TipNotFoundException
+     * @throws TipTranslationNotAvailableForEventException
+     * @throws TipAlreadyAffectedToEventException
      */
     public function handle(Affect $affect)
     {
@@ -47,6 +49,12 @@ class AffectHandler
 
         if (null === $tip) {
             throw new TipNotFoundException();
+        }
+
+        foreach ($affect->event->getLocales() as $locale) {
+            if (!$tip->hasTranslation($locale)) {
+                throw new TipTranslationNotAvailableForEventException();
+            }
         }
 
         if ($this->tipRepository->isTipAffectedToEvent($affect->event)) {

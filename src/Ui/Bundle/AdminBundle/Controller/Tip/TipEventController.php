@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
 use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
+use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotAvailableForEventException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
@@ -71,6 +72,8 @@ class TipEventController extends Controller
             $tipListViewQuery = new TipListViewQuery($locale);
             $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
         } catch (TipNotFoundException $exception) {
+            $this->addFlash('error', $exception->getMessage());
+        } catch (TipTranslationNotAvailableForEventException $exception) {
             $this->addFlash('error', $exception->getMessage());
         } catch (NoTipAvailableException $exception) {
             $this->addFlash('error', $exception->getMessage());
