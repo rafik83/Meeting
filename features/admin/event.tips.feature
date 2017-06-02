@@ -20,7 +20,7 @@ Feature: List of tips by event and type
     When I follow "admin.tip.event.affect.link"
     Then I should be on this page "/fr/event/1/tip/affect"
     And I should see "admin.tip.event.affect.form.title"
-    When I select "title_fr" from "tip_event_affect[tip]"
+    When I select "Awesome tip" from "tip_event_affect[tip]"
     And I press "tip_event_affect_submit"
     Then I should be on this page "/fr/event/1/tip/list"
     And I should see "flash.admin.tip.affect.success"
@@ -44,6 +44,14 @@ Feature: List of tips by event and type
       """
       {
           "title": "title_fr",
-          "content": "content_fr"
+          "content": "content_fr",
+          "pages": [
+              "admin.tip.column.visible.catalog",
+              "admin.tip.column.visible.meeting_management",
+              "admin.tip.column.visible.print_planning",
+              "admin.tip.column.visible.onSheet",
+              "admin.tip.column.visible.onAgenda",
+              "admin.tip.column.visible.onProgram"
+          ]
       }
       """
