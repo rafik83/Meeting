@@ -21,17 +21,27 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-#########
-# Setup #
-#########
+###############
+# Environment #
+###############
 
-## Setup environment & Install application
+## Setup environment & Install & Build application
 setup:
 	vagrant up --no-provision
 	vagrant provision
-	vagrant ssh -- "cd /srv/app && make install"
+	vagrant ssh -- "cd /srv/app && make install build"
 
 setup@test: provision@test install@test
+
+## Update environment
+update: export ANSIBLE_TAGS = manala.update
+update:
+	vagrant provision
+
+## Update ansible
+update-ansible: export ANSIBLE_TAGS = manala.update
+update-ansible:
+	vagrant provision --provision-with ansible
 
 #############
 # Provision #
@@ -53,6 +63,28 @@ provision-php: provision
 ## Provision supervisor
 provision-supervisor: export ANSIBLE_TAGS = manala_supervisor
 provision-supervisor: provision
+
+############
+# Security #
+############
+
+## Run security checks
+security:
+	security-checker security:check
+
+security@test: export SYMFONY_ENV = test
+security@test: security
+
+########
+# Lint #
+########
+
+## Run lint tools
+lint:
+	php-cs-fixer fix --config-file=.php_cs --dry-run --diff
+
+lint@test: export SYMFONY_ENV = test
+lint@test: lint
 
 ###########
 # Install #
