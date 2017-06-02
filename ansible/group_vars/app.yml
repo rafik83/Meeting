@@ -110,6 +110,9 @@ app_patterns:
   # Npm #
   #######
 
+  npm:
+    update: false
+
   npm_packages:
     - package: gulp
       version: 3
