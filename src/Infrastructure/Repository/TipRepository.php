@@ -197,6 +197,6 @@ class TipRepository implements TipRepositoryInterface
             ->join('tip.types', 'type', 'WITH', 'type.event = :event')
             ->setParameter('event', $event);
 
-        return null === $queryBuilder->getQuery()->getOneOrNullResult() ? true : false;
+        return null === $queryBuilder->getQuery()->getOneOrNullResult() ? false : true;
     }
 }
