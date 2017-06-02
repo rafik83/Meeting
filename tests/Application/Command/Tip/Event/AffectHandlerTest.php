@@ -11,7 +11,7 @@
 namespace Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
@@ -55,7 +55,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
             $tip->getTranslationContent('fr'),
             'admin_title'
         );
-        
+
         $command        = new Affect($event);
         $command->tip   = $tipTranslationView;
         $command->types = [$typeView];

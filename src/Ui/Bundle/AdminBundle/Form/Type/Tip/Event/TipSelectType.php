@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;

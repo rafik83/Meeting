@@ -164,7 +164,22 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
+            ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content)')
+            ->from(Tip::class, 'tip')
+            ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.locale = :locale')
+            ->orderBy('tip.title')
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /** {@inheritdoc} */
+    public function getTipTranslationViewByLocaleForEvent($locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('new \Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
             ->from(Tip::class, 'tip')
             ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.locale = :locale')
             ->orderBy('tip.title')

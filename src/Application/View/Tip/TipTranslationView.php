@@ -21,22 +21,17 @@ class TipTranslationView
     /** @var string */
     public $content;
 
-    /** @var string */
-    public $adminTitle;
-
     /**
      * TipTranslationView constructor.
      *
      * @param int    $id
      * @param string $title
      * @param string $content
-     * @param string $adminTitle
      */
-    public function __construct($id, $title, $content, $adminTitle)
+    public function __construct($id, $title, $content)
     {
-        $this->id         = $id;
-        $this->title      = $title;
-        $this->content    = $content;
-        $this->adminTitle = $adminTitle;
+        $this->id      = $id;
+        $this->title   = $title;
+        $this->content = $content;
     }
 }

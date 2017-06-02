@@ -12,7 +12,7 @@ namespace Application\Query\Tip\Event;
 
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQueryHandler;
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -31,7 +31,7 @@ class TipListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $query  = new TipListViewQuery($event, $locale);
         $handler = new TipListViewQueryHandler($tipRepository->reveal());
 
-        $tipRepository->getTipTranslationViewByLocale($query->locale)
+        $tipRepository->getTipTranslationViewByLocaleForEvent($query->locale)
             ->shouldBeCalled()
             ->willReturn($tipList);
 

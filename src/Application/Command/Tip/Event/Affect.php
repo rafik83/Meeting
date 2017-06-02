@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\TypeView;
 

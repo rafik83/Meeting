@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Tip\Event;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
-
 class TipListView
 {
     /** @var TipTranslationView[] */
