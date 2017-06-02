@@ -42,8 +42,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
         title:
             type: string
             nullable: true
-            options:
-                default: ''
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
