@@ -13,12 +13,11 @@ function TipPreview (element, targetElement, secondTargetElement)
     this.secondTargetElement = secondTargetElement;
 
     this.input.addEventListener('change', this.displayPreviewData.bind(this));
+    window.addEventListener('load', this.displayPreviewData.bind(this));
 }
 
 TipPreview.prototype.displayPreviewData = function ()
 {
-    this.input.remove(0);
-
     var selectedIndex = this.input.options.selectedIndex,
         url           = this.input.options[selectedIndex].getAttribute('data-preview-url'),
         $this         = this,

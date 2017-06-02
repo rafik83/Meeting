@@ -53,7 +53,6 @@ class TipSelectType extends AbstractType
                     ]),
                 ];
             },
-            'placeholder' => 'form.tip_event_affect.children.tip.placeholder'
         ]);
     }
 
