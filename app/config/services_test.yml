@@ -112,6 +112,11 @@ services:
     #
     # Proxies
     #
+    behat_proxy.feature_context:
+        class: Proximum\Vimeet\Behat\Proxy\FeatureContextProxy
+        arguments:
+            - '@behat_storage'
+
     behat_proxy.event_context:
         class: Proximum\Vimeet\Behat\Proxy\EventContextProxy
         arguments:
