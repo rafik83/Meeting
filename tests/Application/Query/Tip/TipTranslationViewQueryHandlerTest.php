@@ -23,12 +23,12 @@ class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $dateTime = new \DateTime();
 
-        $tip = new Tip('tip', true, true, true, $dateTime);
+        $tip = new Tip('tip', true, true, true, false, false, false, $dateTime);
         $tip->translations = [
             'fr' => new TipTranslation($tip, $dateTime, 'title', 'fr', 'content'),
         ];
 
-        $tip2 = new Tip('tip2', true, true, true, $dateTime);
+        $tip2 = new Tip('tip2', true, true, true, false, false, false, $dateTime);
         $tip2->translations = [
             'fr' => new TipTranslation($tip2, $dateTime, 'title2', 'fr', 'content2'),
         ];

@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedEx
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -139,11 +141,18 @@ class UnavailabilityController extends Controller
                 new AgendaViewQuery($event, $sheet, $participant, $request->getLocale(), $user)
             );
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_AGENDA,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Unavailability:create.html.twig', [
             'event'               => $event,
             'agenda'              => $agenda,
             'sheet'               => $sheet,
-            'form_unavailability' => $form->createView()
+            'form_unavailability' => $form->createView(),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 

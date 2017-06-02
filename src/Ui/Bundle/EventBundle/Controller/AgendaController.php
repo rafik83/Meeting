@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -83,10 +85,17 @@ class AgendaController extends Controller
             $this->getUser()
         ));
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_AGENDA,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
-            'event'  => $eventDomain->getEvent(),
-            'agenda' => $agenda,
-            'sheet'  => $sheet,
+            'event'               => $eventDomain->getEvent(),
+            'agenda'              => $agenda,
+            'sheet'               => $sheet,
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 }
