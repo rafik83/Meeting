@@ -52,8 +52,6 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $begin       = new \DateTime('2016-10-12 12:00:00');
         $end         = new \DateTime('2016-10-12 15:30:00');
 
-        $sheet->getParticipants($participant)->first();
-
         $agendaParticipantViewQueryHandler = $this->prophesize(AgendaParticipantViewQueryHandler::class);
         $happeningParticipationRepository  = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $unavailabilityRepository          = $this->prophesize(UnavailabilityRepositoryInterface::class);
@@ -66,7 +64,7 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningCategory      = new Happening\Category($event, 'picto', 1, 'black', 'black');
         $unavailabilityCategory = new Category($event, 'picto', 'title', 'black', 'black');
         $mass                   = new Mass($event, $unavailabilityCategory, 'name', $begin, $end, true);
-        $assignement            = new MassAssignment($mass, $participant, $begin, $end);
+        $assignment             = new MassAssignment($mass, $user, $begin, $end);
         $unavailability         = new Unavailability($user, $event, $begin, $end);
 
         $happeningParticipation = new HappeningParticipation(
@@ -76,7 +74,7 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$meeting]);
         $happeningParticipationRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$happeningParticipation]);
-        $massAssignmentRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$assignement]);
+        $massAssignmentRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$assignment]);
         $massUnavailabilityRepository->findBlockingByEvent($event)->shouldBeCalled()->willReturn([$mass]);
         $unavailabilityRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$unavailability]);
 
@@ -89,7 +87,7 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [$unavailability],
             [$mass],
             [$meeting],
-            [$assignement]
+            [$assignment]
         );
 
         $agendaParticipantViewQueryHandler->handle($queryTest)->shouldBeCalled()->willReturn($participant);
