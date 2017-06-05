@@ -21,8 +21,12 @@ use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeeting
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSlotView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -34,34 +38,64 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \DateTimeInterface */
+    private $dateTime;
+    
+    /** @var Event */
+    private $event;
+    
+    /** @var User */
+    private $fromUser;
+    
+    /** @var Sheet */
+    private $fromSheet;
+    
+    /** @var Participant */
+    private $fromParticipant;
+
+    /** @var User */
+    private $toUser;
+
+    /** @var Sheet */
+    private $toSheet;
+
+    /** @var Participant */
+    private $toParticipant;
+    
+    /** @var Request */
+    private $request;
+
+    public function setUp()
+    {
+        $this->dateTime        = new DateTime();
+        $this->event           = EventFactory::createEvent();
+        $this->fromUser        = UserFactory::create();
+        $this->fromSheet       = SheetFactory::create($this->event, $this->fromUser);
+        $this->fromParticipant = ParticipantFactory::create($this->fromSheet, $this->fromUser);
+        $this->toUser          = UserFactory::create();
+        $this->toSheet         = SheetFactory::create($this->event, $this->toUser);
+        $this->toParticipant   = ParticipantFactory::create($this->toSheet, $this->toUser);
+        $this->request         = new Request($this->fromSheet, [], $this->toSheet, [], $this->dateTime, $this->fromUser);
+    }
+
     public function testHandle()
     {
-        $dateTime        = new DateTime();
-        $event           = EventFactory::createEvent();
-        $fromUser        = UserFactory::create();
-        $fromSheet       = SheetFactory::create($event, $fromUser);
-        $fromParticipant = ParticipantFactory::create($fromSheet, $fromUser);
-        $toUser          = UserFactory::create();
-        $toSheet         = SheetFactory::create($event, $toUser);
-        $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $slot1 = SlotFactory::createSlot(67, $this->event);
+        $slot2 = SlotFactory::createSlot(76, $this->event);
 
-        $slot1 = SlotFactory::createSlot(67, $event);
-        $slot2 = SlotFactory::createSlot(76, $event);
-
-        $spot1 = SpotFactory::create($event, 'Spot 1');
-        $spot2 = SpotFactory::create($event, 'Spot 2');
+        $spot1 = SpotFactory::create($this->event, 'Spot 1');
+        $spot2 = SpotFactory::create($this->event, 'Spot 2');
 
         $meeting = new Meeting(
-            $request,
+            $this->request,
             $slot1,
-            $fromSheet,
-            [$fromParticipant],
-            $toSheet,
-            [$toParticipant],
-            $dateTime,
+            $this->fromSheet,
+            [$this->fromParticipant],
+            $this->toSheet,
+            [$this->toParticipant],
+            $this->dateTime,
             $spot1,
-            $event,
+            $this->event,
             false,
             false
         );
@@ -85,15 +119,15 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled()->willReturn([$spot2]);
 
         $expectedMeeting = new Meeting(
-            $request,
+            $this->request,
             $slot2,
-            $fromSheet,
-            [$fromParticipant],
-            $toSheet,
-            [$toParticipant],
-            $dateTime,
+            $this->fromSheet,
+            [$this->fromParticipant],
+            $this->toSheet,
+            [$this->toParticipant],
+            $this->dateTime,
             $spot2,
-            $event,
+            $this->event,
             false,
             false
         );
@@ -112,29 +146,20 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMeetingIsBlockedSlotException()
     {
-        $dateTime        = new DateTime();
-        $event           = EventFactory::createEvent();
-        $fromUser        = UserFactory::create();
-        $fromSheet       = SheetFactory::create($event, $fromUser);
-        $fromParticipant = ParticipantFactory::create($fromSheet, $fromUser);
-        $toUser          = UserFactory::create();
-        $toSheet         = SheetFactory::create($event, $toUser);
-        $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
-        $slot1           = SlotFactory::createSlot(67, $event);
-        $slot2           = SlotFactory::createSlot(76, $event);
-        $spot1           = SpotFactory::create($event, 'Spot 1');
+        $slot1           = SlotFactory::createSlot(67, $this->event);
+        $slot2           = SlotFactory::createSlot(76, $this->event);
+        $spot1           = SpotFactory::create($this->event, 'Spot 1');
 
         $meeting = new Meeting(
-            $request,
+            $this->request,
             $slot1,
-            $fromSheet,
-            [$fromParticipant],
-            $toSheet,
-            [$toParticipant],
-            $dateTime,
+            $this->fromSheet,
+            [$this->fromParticipant],
+            $this->toSheet,
+            [$this->toParticipant],
+            $this->dateTime,
             $spot1,
-            $event,
+            $this->event,
             false,
             true
         );
@@ -158,30 +183,20 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSlotNotAvailableForThisMeetingException()
     {
-        $dateTime        = new DateTime();
-        $event           = EventFactory::createEvent();
-        $fromUser        = UserFactory::create();
-        $fromSheet       = SheetFactory::create($event, $fromUser);
-        $fromParticipant = ParticipantFactory::create($fromSheet, $fromUser);
-        $toUser          = UserFactory::create();
-        $toSheet         = SheetFactory::create($event, $toUser);
-        $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
-
-        $slot1 = SlotFactory::createSlot(67, $event);
-        $slot2 = SlotFactory::createSlot(404, $event);
-        $spot1 = SpotFactory::create($event, 'Spot 1');
+        $slot1 = SlotFactory::createSlot(67, $this->event);
+        $slot2 = SlotFactory::createSlot(404, $this->event);
+        $spot1 = SpotFactory::create($this->event, 'Spot 1');
 
         $meeting = new Meeting(
-            $request,
+            $this->request,
             $slot1,
-            $fromSheet,
-            [$fromParticipant],
-            $toSheet,
-            [$toParticipant],
-            $dateTime,
+            $this->fromSheet,
+            [$this->fromParticipant],
+            $this->toSheet,
+            [$this->toParticipant],
+            $this->dateTime,
             $spot1,
-            $event,
+            $this->event,
             false,
             false
         );
@@ -211,30 +226,20 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testNoSpotsAvailableForThisSlotAndMeetingException()
     {
-        $dateTime        = new DateTime();
-        $event           = EventFactory::createEvent();
-        $fromUser        = UserFactory::create();
-        $fromSheet       = SheetFactory::create($event, $fromUser);
-        $fromParticipant = ParticipantFactory::create($fromSheet, $fromUser);
-        $toUser          = UserFactory::create();
-        $toSheet         = SheetFactory::create($event, $toUser);
-        $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
-
-        $slot1 = SlotFactory::createSlot(67, $event);
-        $slot2 = SlotFactory::createSlot(76, $event);
-        $spot1 = SpotFactory::create($event, 'Spot 1');
+        $slot1 = SlotFactory::createSlot(67, $this->event);
+        $slot2 = SlotFactory::createSlot(76, $this->event);
+        $spot1 = SpotFactory::create($this->event, 'Spot 1');
 
         $meeting = new Meeting(
-            $request,
+            $this->request,
             $slot1,
-            $fromSheet,
-            [$fromParticipant],
-            $toSheet,
-            [$toParticipant],
-            $dateTime,
+            $this->fromSheet,
+            [$this->fromParticipant],
+            $this->toSheet,
+            [$this->toParticipant],
+            $this->dateTime,
             $spot1,
-            $event,
+            $this->event,
             false,
             false
         );
@@ -274,32 +279,22 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testBlockedSpotNotAvailableForThisMeetingAndSlotException()
     {
-        $dateTime        = new DateTime();
-        $event           = EventFactory::createEvent();
-        $fromUser        = UserFactory::create();
-        $fromSheet       = SheetFactory::create($event, $fromUser);
-        $fromParticipant = ParticipantFactory::create($fromSheet, $fromUser);
-        $toUser          = UserFactory::create();
-        $toSheet         = SheetFactory::create($event, $toUser);
-        $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $slot1 = SlotFactory::createSlot(67, $this->event);
+        $slot2 = SlotFactory::createSlot(76, $this->event);
 
-        $slot1 = SlotFactory::createSlot(67, $event);
-        $slot2 = SlotFactory::createSlot(76, $event);
-
-        $spot1 = SpotFactory::create($event, 'Spot 1');
-        $spot2 = SpotFactory::create($event, 'Spot 2');
+        $spot1 = SpotFactory::create($this->event, 'Spot 1');
+        $spot2 = SpotFactory::create($this->event, 'Spot 2');
 
         $meeting = new Meeting(
-            $request,
+            $this->request,
             $slot1,
-            $fromSheet,
-            [$fromParticipant],
-            $toSheet,
-            [$toParticipant],
-            $dateTime,
+            $this->fromSheet,
+            [$this->fromParticipant],
+            $this->toSheet,
+            [$this->toParticipant],
+            $this->dateTime,
             $spot1,
-            $event,
+            $this->event,
             true,
             false
         );
