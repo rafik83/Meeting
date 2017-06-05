@@ -28,9 +28,9 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $dateTime = new \DateTime();
         $event1 = $this->prophesize(Event::class);
-        $event1->getId()->shouldBeCalled()->willReturn(1);
+        $event1->getTitle()->shouldBeCalled()->willReturn("ZZZ");
         $event2 = $this->prophesize(Event::class);
-        $event2->getId()->shouldBeCalled()->willReturn(2);
+        $event2->getTitle()->shouldBeCalled()->willReturn("AAA");
 
         $type1event1 = new Type($event1->reveal());
         $type2event1 = new Type($event1->reveal());
@@ -66,8 +66,10 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new TipViewQueryHandler($tipRepository->reveal());
         $tipListView = $handler->handle($query);
 
+        $secondTipEventsResult = $tipListView->results->results[1]->getUnduplicatedEvents();
         $this->assertCount(1, $tipListView->results->results[0]->getUnduplicatedEvents());
-        $this->assertCount(2, $tipListView->results->results[1]->getUnduplicatedEvents());
+        $this->assertCount(2, $secondTipEventsResult);
+        $this->assertEquals('AAA', reset($secondTipEventsResult)->getTitle());
 
         $this->assertEquals($expectedTipListView, $tipListView);
     }
