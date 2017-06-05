@@ -30,8 +30,8 @@ interface HappeningParticipationRepositoryInterface
     public function remove(HappeningParticipation $happeningParticipation);
 
     /**
-     * @param User $user
-     * @param array       $filters
+     * @param User  $user
+     * @param array $filters
      *
      * @return HappeningParticipation[]
      */

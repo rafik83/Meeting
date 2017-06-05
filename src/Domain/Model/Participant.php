@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-
 /**
  * "Participant".
  */

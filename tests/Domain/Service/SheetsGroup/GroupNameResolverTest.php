@@ -23,10 +23,11 @@ class GroupNameResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolveForGroup()
     {
-        $now   = new \DateTime();
-        $event = EventFactory::createEvent();
-        $user  = UserFactory::create();
-        $group = GroupFactory::createGroup($event, $user, $now, 'ProximumGroup');
+        $now        = new \DateTime();
+        $event      = EventFactory::createEvent();
+        $user       = UserFactory::create();
+        $groupTitle = 'ProximumGroup';
+        $group      = GroupFactory::createGroup($event, $user, $now, $groupTitle);
 
         $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -36,15 +37,16 @@ class GroupNameResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new GroupNameResolver($groupRepository->reveal(), $sheetRepository->reveal());
         $name     = $resolver->resolve($event, $user);
 
-        $this->assertEquals('ProximumGroup', $name);
+        $this->assertEquals($groupTitle, $name);
     }
 
     public function testResolveForSheet()
     {
-        $event = EventFactory::createEvent();
-        $user  = UserFactory::create();
-        $sheet = $this->prophesize(Sheet::class);
-        $sheet->getTitle()->willReturn('Proximum');
+        $event      = EventFactory::createEvent();
+        $user       = UserFactory::create();
+        $sheet      = $this->prophesize(Sheet::class);
+        $sheetTitle = 'Proximum';
+        $sheet->getTitle()->willReturn($sheetTitle);
 
         $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -56,17 +58,18 @@ class GroupNameResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new GroupNameResolver($groupRepository->reveal(), $sheetRepository->reveal());
         $name     = $resolver->resolve($event, $user);
 
-        $this->assertEquals('Proximum', $name);
+        $this->assertEquals($sheetTitle, $name);
     }
 
     public function testResolveWithNoGroupAndNoSheet()
     {
         $this->expectException(SheetNotFoundException::class);
 
-        $event = EventFactory::createEvent();
-        $user  = UserFactory::create();
-        $sheet = $this->prophesize(Sheet::class);
-        $sheet->getTitle()->willReturn('Proximum');
+        $event      = EventFactory::createEvent();
+        $user       = UserFactory::create();
+        $sheet      = $this->prophesize(Sheet::class);
+        $sheetTitle = 'Proximum';
+        $sheet->getTitle()->willReturn($sheetTitle);
 
         $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -77,6 +80,5 @@ class GroupNameResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new GroupNameResolver($groupRepository->reveal(), $sheetRepository->reveal());
         $resolver->resolve($event, $user);
-
     }
 }

@@ -54,7 +54,7 @@ interface GroupRepositoryInterface
      * @param User  $user
      * @param Event $event
      *
-     * @return Group
+     * @return Group|null
      */
     public function getByUserAndEvent(User $user, Event $event);
 }

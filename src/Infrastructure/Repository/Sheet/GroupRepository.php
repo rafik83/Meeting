@@ -110,10 +110,7 @@ class GroupRepository implements GroupRepositoryInterface
     }
 
     /**
-     * @param User  $user
-     * @param Event $event
-     *
-     * @return Group
+     * {@inheritdoc}
      */
     public function getByUserAndEvent(User $user, Event $event)
     {
