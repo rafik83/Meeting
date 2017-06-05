@@ -61,6 +61,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );
@@ -92,6 +93,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot2,
+            $event,
             false,
             false
         );
@@ -132,6 +134,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             true
         );
@@ -178,6 +181,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );
@@ -230,6 +234,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );
@@ -294,6 +299,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             true,
             false
         );

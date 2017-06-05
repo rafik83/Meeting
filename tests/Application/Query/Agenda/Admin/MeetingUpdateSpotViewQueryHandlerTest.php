@@ -56,6 +56,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             true
         );
@@ -97,6 +98,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
      * @param array       $toParticipant
      * @param DateTime    $dateTime
      * @param Spot        $spot
+     * @param Event       $event
      * @param bool        $blockedSpot
      * @param bool        $blockedSlot
      *
@@ -112,6 +114,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         array $toParticipant,
         DateTime $dateTime,
         Spot $spot,
+        Event $event,
         $blockedSpot,
         $blockedSlot
     ) {
@@ -124,6 +127,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $toParticipant,
             $dateTime,
             $spot,
+            $event,
             $blockedSpot,
             $blockedSlot
         );

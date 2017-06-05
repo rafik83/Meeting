@@ -298,7 +298,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet,
             [$toParticipant],
             $beginS,
-            $spot
+            $spot,
+            $this->event
         );
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -342,7 +343,17 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $spot    = SpotFactory::create($this->event);
         $user          = UserFactory::create();
         $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
-        $meeting = new Meeting($request, $slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $meeting = new Meeting(
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $begin,
+            $spot,
+            $this->event
+        );
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
@@ -388,7 +399,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet,
             [$toParticipant],
             $begin,
-            $spot
+            $spot,
+            $this->event
         );
 
         $beginS         = new \DateTime('2016-10-12 08:00:00.000');
@@ -406,7 +418,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet2,
             [$toParticipant2],
             $beginS,
-            $spot2
+            $spot2,
+            $this->event
         );
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -810,7 +823,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet,
             [$toParticipant],
             $begin,
-            $spot
+            $spot,
+            $this->event
         );
 
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
@@ -866,7 +880,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet,
             [$toParticipant],
             $begin,
-            $spot
+            $spot,
+            $this->event
         );
 
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
@@ -920,7 +935,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet,
             [$toParticipant],
             $begin,
-            $spot
+            $spot,
+            $this->event
         );
 
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -975,7 +991,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
             $toSheet,
             [$toParticipant],
             $begin,
-            $spot
+            $spot,
+            $this->event
         );
 
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');

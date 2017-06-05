@@ -36,7 +36,7 @@ class DeleteMeetingHandlerTest extends \PHPUnit_Framework_TestCase
         $slot      = SlotFactory::createSlot(1, $event);
         $spot      = SpotFactory::create($event);
         $request   = new Meeting\Request($fromSheet, [], $toSheet, [], new \DateTime(), $user);
-        $meeting   = new Meeting($request, $slot, $fromSheet, [], $toSheet, [], new \DateTime(), $spot);
+        $meeting   = new Meeting($request, $slot, $fromSheet, [], $toSheet, [], new \DateTime(), $spot, $event);
 
         // Mock
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);

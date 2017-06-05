@@ -71,7 +71,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetMet->reveal(),
             [$participant->reveal(), $participant2->reveal()],
             new \DateTime(),
-            $spot
+            $spot,
+            $event
         );
 
         $participantView1 = new MeetingParticipantView($cardView);
@@ -152,7 +153,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheet->reveal(),
             [],
             new \DateTime(),
-            $spot
+            $spot,
+            $event
         );
 
         $participantView1 = new MeetingParticipantView($cardView);

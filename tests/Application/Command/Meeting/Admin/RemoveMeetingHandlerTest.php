@@ -94,6 +94,6 @@ class RemoveMeetingHandlerTest extends \PHPUnit_Framework_TestCase
         $slot    = new MeetingSlot($event, $dateTime, $dateTime, $blockedSlot);
         $spot    = new Spot('ref', $event, 100, 200, 150, true);
 
-        return new Meeting($request, $slot, $sheet1, [], $sheet2, [], $dateTime, $spot, true, $blockedSlot);
+        return new Meeting($request, $slot, $sheet1, [], $sheet2, [], $dateTime, $spot, $event, true, $blockedSlot);
     }
 }

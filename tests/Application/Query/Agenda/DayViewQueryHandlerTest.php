@@ -282,7 +282,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $request     = new Request($sheet, [], $sheet2, [], new \DateTime(), $user2);
         $slot        = new MeetingSlot($event, $beginHappening1, $endHappening1, false);
         $spot        = new Spot('ref', $event, 2, 3, 4, true);
-        $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $event);
         $meetingView = new MeetingView(
             'userSheetTitle',
             2,

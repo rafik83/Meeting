@@ -56,6 +56,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );
@@ -72,6 +73,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot2,
+            $event,
             true,
             true
         );
@@ -119,6 +121,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             true,
             false
         );
@@ -162,6 +165,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );

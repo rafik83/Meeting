@@ -263,7 +263,15 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $request = new Request($this->sheet, [], $sheet2, [$participant2], new \DateTime(), $this->user);
         $meeting = new Meeting(
-            $request, $slot, $this->sheet, [$this->participant], $sheet2, [$participant2], new \DateTime(), $spot
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $sheet2,
+            [$participant2],
+            new \DateTime(),
+            $spot,
+            $this->event
         );
 
         $reflectionM  = new \ReflectionClass(Meeting::class);
