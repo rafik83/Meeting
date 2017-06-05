@@ -119,12 +119,13 @@ class GroupRepository implements GroupRepositoryInterface
             ->createQueryBuilder()
             ->select('sheetsGroup')
             ->from(Group::class, 'sheetsGroup')
-            ->join('sheetsGroup.sheets', 'sheet', 'WITH', 'sheet.event = :event')
-            ->join('sheets.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->join('sheetsGroup.sheets', 'sheet', 'WITH', 'sheetsGroup.event = :event')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameters([
                 'event' => $event,
                 'user'  => $user,
-            ])->setMaxResults(1);
+            ])
+            ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

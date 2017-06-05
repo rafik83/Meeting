@@ -434,9 +434,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 HappeningParticipation::class,
                 'happeningParticipation',
                 'WITH',
-                'happeningParticipation.user = participant.user AND happeningParticipation.happening = :happening'
+                'happeningParticipation.user = participant.user AND happeningParticipation.happening = :happening AND participant.sheet = :sheet'
             )
-            ->where('participant.sheet = :sheet')
             ->setParameter('sheet', $sheet)
             ->setParameter('happening', $happening);
 

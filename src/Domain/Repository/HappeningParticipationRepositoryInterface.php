@@ -31,18 +31,20 @@ interface HappeningParticipationRepositoryInterface
 
     /**
      * @param User  $user
+     * @param Event $event
      * @param array $filters
      *
      * @return HappeningParticipation[]
      */
-    public function findByUser(User $user, array $filters = []);
+    public function findByUser(User $user, Event $event, array $filters = []);
 
     /**
      * @param Participant[] $participants
+     * @param Event         $event
      *
      * @return HappeningParticipation[]
      */
-    public function findByUsers(array $participants);
+    public function findByUsers(array $participants, Event $event);
 
     /**
      * @param Happening $happening
@@ -95,17 +97,18 @@ interface HappeningParticipationRepositoryInterface
     public function getParticipationsForSheet(Sheet $sheet, $happenings);
 
     /**
-     * @param User $user
-     * @param Happening   $happening
+     * @param User      $user
+     * @param Happening $happening
      */
     public function removeUserForHappening(User $user, Happening $happening);
 
     /**
-     * @param User $user
+     * @param User  $user
+     * @param Event $event
      *
-     * @return null|int
+     * @return int|null
      */
-    public function checkAnyParticipation(User $user);
+    public function checkAnyParticipation(User $user, Event $event);
 
     /**
      * @param HappeningParticipation $happeningParticipation

@@ -179,7 +179,7 @@ class PlanningViewQueryHandler
         }
 
         if (!isset($this->happeningParticipations[$participant->getUser()->getId()])) {
-            $this->happeningParticipations[$participant->getUser()->getId()] = $this->happeningParticipationRepository->findByUser($participant->getUser());
+            $this->happeningParticipations[$participant->getUser()->getId()] = $this->happeningParticipationRepository->findByUser($participant->getUser(), $participant->getSheet()->getEvent());
         }
     }
 
@@ -194,14 +194,14 @@ class PlanningViewQueryHandler
             if (false !== $firstParticipant) {
                 $event = $firstParticipant->getSheet()->getEvent();
                 $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
+
+                $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByParticipants($participants));
+                $this->assignMeetingByParticipant($this->meetingRepository->findByParticipants($participants));
+                $this->assignUnavailabilitiesByUser($this->unavailabilityRepository->findByParticipants($participants));
+                $this->assignHappeningsByUser($this->happeningParticipationRepository->findByUsers($participants, $event));
+                $this->addEmptyForParticipant($participants);
             }
         }
-
-        $this->assignAssignmentByParticipant($this->assignmentRepository->findEnabledByParticipants($participants));
-        $this->assignMeetingByParticipant($this->meetingRepository->findByParticipants($participants));
-        $this->assignUnavailabilitiesByUser($this->unavailabilityRepository->findByParticipants($participants));
-        $this->assignHappeningsByUser($this->happeningParticipationRepository->findByUsers($participants));
-        $this->addEmptyForParticipant($participants);
     }
 
     /**
