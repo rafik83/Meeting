@@ -40,15 +40,17 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event       = EventFactory::createEvent();
+        $user        = $this->prophesize(User::class);
         $sheet       = $this->prophesize(Sheet::class);
         $participant = $this->prophesize(Participant::class);
-        $locale      = 'fr';
-        $beginDay1   = new \DateTime('2016-10-12 10:00');
-        $endDay1     = new \DateTime('2016-10-12 18:00');
-        $beginDay2   = new \DateTime('2016-10-13 10:00');
-        $endDay2     = new \DateTime('2016-10-13 18:00');
-        $day1        = new Day($event, $beginDay1, $endDay1);
-        $day2        = new Day($event, $beginDay2, $endDay2);
+        $participant->getUser()->willReturn($user->reveal());
+        $locale    = 'fr';
+        $beginDay1 = new \DateTime('2016-10-12 10:00');
+        $endDay1   = new \DateTime('2016-10-12 18:00');
+        $beginDay2 = new \DateTime('2016-10-13 10:00');
+        $endDay2   = new \DateTime('2016-10-13 18:00');
+        $day1      = new Day($event, $beginDay1, $endDay1);
+        $day2      = new Day($event, $beginDay2, $endDay2);
 
         $category        = $this->prophesize(Category::class);
         $begin1          = new \DateTime('2016-10-12 11:00');
@@ -60,7 +62,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $mass1           = new Mass($event, $category->reveal(), 'mass1', $begin1, $end1, true, false);
         $mass2           = new Mass($event, $category->reveal(), 'mass2', $begin2, $end2, true, false);
         $mass3           = new Mass($event, $category->reveal(), 'mass3', $begin3, $end3, true, true);
-        $assignment      = new MassAssignment($mass3, $participant->reveal(), $begin3, $end3);
+        $assignment      = new MassAssignment($mass3, $user->reveal(), $begin3, $end3);
         $meeting         = $this->prophesize(Meeting::class);
         $happening       = $this->prophesize(HappeningParticipation::class);
         $unavailability1 = $this->prophesize(Unavailability::class);
@@ -80,7 +82,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByUser($user1->reveal())
+            ->findByUser($user1->reveal(), $event)
             ->shouldBeCalled()
             ->willReturn([$happening->reveal()]);
 
@@ -169,16 +171,19 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandlePreloadForParticipants()
     {
-        $event       = EventFactory::createEvent();
-        $sheet       = $this->prophesize(Sheet::class);
+        $event = EventFactory::createEvent();
+        $sheet = $this->prophesize(Sheet::class);
+        $user1 = $this->prophesize(User::class);
+        $user1->getId()->willReturn(1);
         $participant = $this->prophesize(Participant::class);
-        $locale      = 'fr';
-        $beginDay1   = new \DateTime('2016-10-12 10:00');
-        $endDay1     = new \DateTime('2016-10-12 18:00');
-        $beginDay2   = new \DateTime('2016-10-13 10:00');
-        $endDay2     = new \DateTime('2016-10-13 18:00');
-        $day1        = new Day($event, $beginDay1, $endDay1);
-        $day2        = new Day($event, $beginDay2, $endDay2);
+        $participant->getUser()->willReturn($user1->reveal());
+        $locale    = 'fr';
+        $beginDay1 = new \DateTime('2016-10-12 10:00');
+        $endDay1   = new \DateTime('2016-10-12 18:00');
+        $beginDay2 = new \DateTime('2016-10-13 10:00');
+        $endDay2   = new \DateTime('2016-10-13 18:00');
+        $day1      = new Day($event, $beginDay1, $endDay1);
+        $day2      = new Day($event, $beginDay2, $endDay2);
 
         $category = $this->prophesize(Category::class);
         $begin1   = new \DateTime('2016-10-12 11:00');
@@ -192,7 +197,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $mass2 = new Mass($event, $category->reveal(), 'mass2', $begin2, $end2, true, false);
         $mass3 = new Mass($event, $category->reveal(), 'mass3', $begin3, $end3, true, true);
 
-        $assignment = new MassAssignment($mass3, $participant->reveal(), $begin3, $end3);
+        $assignment = new MassAssignment($mass3, $user1->reveal(), $begin3, $end3);
 
         $meeting = $this->prophesize(Meeting::class);
         $meeting->getAllParticipants()->willReturn([$participant->reveal()]);
@@ -221,7 +226,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByUsers([$participant->reveal()])
+            ->findByUsers([$participant->reveal()], $event)
             ->shouldBeCalled()
             ->willReturn([$happening->reveal()]);
 
@@ -316,13 +321,16 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event       = EventFactory::createEvent();
         $sheet       = $this->prophesize(Sheet::class);
         $participant = $this->prophesize(Participant::class);
-        $locale      = 'fr';
-        $beginDay1   = new \DateTime('2016-10-12 10:00');
-        $endDay1     = new \DateTime('2016-10-12 18:00');
-        $beginDay2   = new \DateTime('2016-10-13 10:00');
-        $endDay2     = new \DateTime('2016-10-13 18:00');
-        $day1        = new Day($event, $beginDay1, $endDay1);
-        $day2        = new Day($event, $beginDay2, $endDay2);
+        $user1       = $this->prophesize(User::class);
+        $user1->getId()->willReturn(1);
+        $participant->getUser()->willReturn($user1->reveal());
+        $locale    = 'fr';
+        $beginDay1 = new \DateTime('2016-10-12 10:00');
+        $endDay1   = new \DateTime('2016-10-12 18:00');
+        $beginDay2 = new \DateTime('2016-10-13 10:00');
+        $endDay2   = new \DateTime('2016-10-13 18:00');
+        $day1      = new Day($event, $beginDay1, $endDay1);
+        $day2      = new Day($event, $beginDay2, $endDay2);
 
         $category = $this->prophesize(Category::class);
         $begin1   = new \DateTime('2016-10-12 11:00');
@@ -336,7 +344,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $mass2 = new Mass($event, $category->reveal(), 'mass2', $begin2, $end2, true, false);
         $mass3 = new Mass($event, $category->reveal(), 'mass3', $begin3, $end3, true, true);
 
-        $assignment = new MassAssignment($mass3, $participant->reveal(), $begin3, $end3);
+        $assignment = new MassAssignment($mass3, $user1->reveal(), $begin3, $end3);
 
         $meeting = $this->prophesize(Meeting::class);
         $meeting->getAllParticipants()->willReturn([$participant->reveal()]);

@@ -347,8 +347,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR :end BETWEEN u.begin AND u.end
                         )
                 )";
-
-            $queryBuilder->setParameter('eventId', $eventId);
         }
 
         $queryBuilder->andWhere(
@@ -357,7 +355,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
-                    JOIN m.slot slot
+                    JOIN m.slot slot WITH slot.event = :eventId
                     LEFT JOIN m.fromParticipants fp
                     LEFT JOIN fp.user fpUser
                     LEFT JOIN m.toParticipants tp
@@ -376,7 +374,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 "NOT EXISTS (
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
-                    JOIN hp.happening h
+                    JOIN hp.happening h WITH h.event = :eventId
+                    JOIN hp.participant p
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
                         AND hp.user = user
@@ -400,6 +399,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         }
 
         $queryBuilder
+            ->setParameter('eventId', $eventId)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end);
 
@@ -512,7 +512,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('sheet.event', 'event')
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
-            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.participant = participant AND m.mass = :mass)')
+            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
             ->setParameter('mass', $mass)
         ;
 

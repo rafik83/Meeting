@@ -54,8 +54,6 @@ class PostBatchAcceptHandler
      */
     public function handle(PostBatchAccept $command)
     {
-        $this->sheetIndexer->updateSheets($command->sheets);
-
         foreach ($command->sheets as $sheet) {
             $this->eventDispatcher->dispatch(
                 Events::SHEET_ACCEPTED,
@@ -66,5 +64,7 @@ class PostBatchAcceptHandler
                 )
             );
         }
+
+        $this->sheetIndexer->updateSheets($command->sheets);
     }
 }

@@ -5,6 +5,9 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             - true
             - true
             - true
+            - false
+            - false
+            - false
             - <dateTime()>
 
 Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
@@ -23,5 +26,8 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             - true
             - true
             - true
+            - false
+            - false
+            - false
             - ['@tip_translation_fr']
             - <dateTime()>

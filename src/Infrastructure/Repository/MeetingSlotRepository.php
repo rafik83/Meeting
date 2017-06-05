@@ -183,6 +183,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->andWhere('NOT EXISTS (
                 SELECT unavailability.id FROM Entity:Unavailability unavailability
                 WHERE unavailability.user IN (:userIds)
+                AND unavailability.event = :event
                 AND (
                     slot.begin = unavailability.begin
                     OR unavailability.end = slot.end
@@ -196,7 +197,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT hp.id FROM Entity:HappeningParticipation hp
-                JOIN hp.happening happening
+                JOIN hp.participant hpParticipant
+                    WITH hpParticipant.user IN (:userIds)
+                JOIN hp.happening happening WITH happening.event = :event
                 WHERE
                     hp.user IN (:userIds)
                     AND slot.begin = happening.begin
@@ -212,6 +215,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                 SELECT mass.id FROM Entity:Unavailability\Mass mass
                 WHERE mass.blocking = true
                 AND mass.dispatch = false
+                AND mass.event = :event
                 AND (
                     slot.begin = mass.begin
                     OR mass.end = slot.end
@@ -225,10 +229,8 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT assignment.id FROM Entity:Unavailability\MassAssignment assignment
-                JOIN assignment.participant assignmentParticipant
-                    WITH assignment.enabled = true AND assignmentParticipant.user IN (:userIds)
                 JOIN assignment.mass massUnavailability
-                    WITH massUnavailability.blocking = true
+                    WITH assignment.user IN (:userIds) AND massUnavailability.event = :event AND assignment.enabled = true AND massUnavailability.blocking = true
                 WHERE
                     slot.begin = assignment.begin
                     OR assignment.end = slot.end

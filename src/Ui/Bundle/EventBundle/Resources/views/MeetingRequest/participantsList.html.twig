@@ -1,0 +1,7 @@
+<ul>
+    {% for participant in participants %}
+        <li>{{ participant }}</li>
+    {% else %}
+        <li> {{ 'multiple_sheets.request.list.no-preference'|trans }} </li>
+    {% endfor %}
+</ul>

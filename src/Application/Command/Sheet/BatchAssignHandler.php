@@ -10,24 +10,26 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAssignHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
     /**
-     * BatchAssignHandler constructor.
-     *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param JobQueueInterface        $jobQueue
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
+    public function __construct(SheetRepositoryInterface $sheetRepository, JobQueueInterface $jobQueue)
     {
         $this->sheetRepository = $sheetRepository;
+        $this->jobQueue = $jobQueue;
     }
 
     /**
@@ -58,6 +60,9 @@ class BatchAssignHandler
         if ($batchAssign->unassigned()) {
             $endMessage = 'unassign.success';
         }
+
+        // reindex sheets
+        $this->jobQueue->indexSheets($batchAssign->ids);
 
         return new BatchResult(count($sheets), $batchAssign->getMessage() . $endMessage);
     }
