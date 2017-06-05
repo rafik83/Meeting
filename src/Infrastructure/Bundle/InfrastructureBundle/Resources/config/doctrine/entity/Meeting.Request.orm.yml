@@ -26,6 +26,10 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
             mappedBy: request
     manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:

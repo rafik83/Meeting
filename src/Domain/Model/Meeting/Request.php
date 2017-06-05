@@ -34,6 +34,11 @@ class Request implements MessageSubjectInterface
     private $id;
 
     /**
+     * @var Event\
+     */
+    private $event;
+
+    /**
      * @var Sheet
      */
     private $from;
@@ -611,7 +616,7 @@ class Request implements MessageSubjectInterface
      */
     public function getEvent()
     {
-        return $this->getFromSheet()->getEvent();
+        return $this->event;
     }
 
     /**
