@@ -92,8 +92,8 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $agendaParticipantViewQueryHandler->handle($queryTest)->shouldBeCalled()->willReturn($participant);
 
-        $request1 = new Request($sheet, [], $sheet, [], $date, $user);
-        $request2 = new Request($sheet2, [], $sheet, [], $date, $user);
+        $request1 = new Request($sheet, [], $sheet, [], $date, $user, $event);
+        $request2 = new Request($sheet2, [], $sheet, [], $date, $user, $event);
         $requestRepository
             ->getUnassignedRequestsBySheetAndEvent($sheet, Request::STATE_APPROVED)
             ->shouldBeCalled()

@@ -72,7 +72,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $user2    = new User('test2@test.fr', 'test2', 'test2', 'en');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $sheet2   = new Sheet($event, $type, [], $user2, $datetime);
-        $request  = new Request($sheet, [], $sheet2, [], $datetime, $user);
+        $request  = new Request($sheet, [], $sheet2, [], $datetime, $user, $event);
 
         return [
             $datetime,

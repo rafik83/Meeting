@@ -75,7 +75,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $this->toUser          = UserFactory::create();
         $this->toSheet         = SheetFactory::create($this->event, $this->toUser);
         $this->toParticipant   = ParticipantFactory::create($this->toSheet, $this->toUser);
-        $this->request         = new Request($this->fromSheet, [], $this->toSheet, [], $this->dateTime, $this->fromUser);
+        $this->request         = new Request($this->fromSheet, [], $this->toSheet, [], $this->dateTime, $this->fromUser, $this->event);
     }
 
     public function testHandle()

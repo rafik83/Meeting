@@ -37,7 +37,8 @@ class MeetingFactory
             $toSheet,
             [],
             $createdAt,
-            $user
+            $user,
+            $event
         );
 
         return $request;

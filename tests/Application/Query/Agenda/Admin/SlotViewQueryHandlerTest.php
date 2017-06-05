@@ -261,7 +261,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $propertySpot->setValue($spot, 10);
         $propertySpot->setAccessible(false);
 
-        $request = new Request($this->sheet, [], $sheet2, [$participant2], new \DateTime(), $this->user);
+        $request = new Request($this->sheet, [], $sheet2, [$participant2], new \DateTime(), $this->user, $this->event);
         $meeting = new Meeting(
             $request,
             $slot,

@@ -41,7 +41,7 @@ class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $toUser          = UserFactory::create();
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = $this->createParticipant(93, $toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
 
         $slot1 = SlotFactory::createSlot(
             9,

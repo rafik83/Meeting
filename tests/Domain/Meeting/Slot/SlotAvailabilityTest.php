@@ -289,7 +289,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $toParticipant = ParticipantFactory::create($toSheet);
         $spot          = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting       = new Meeting(
             $request,
             $meetingSlot,
@@ -342,7 +342,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $slot    = new MeetingSlot($this->event, $begin, $end);
         $spot    = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting = new Meeting(
             $request,
             $slot,
@@ -390,7 +390,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $slot          = new MeetingSlot($this->event, $begin, $end);
         $spot          = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting       = new Meeting(
             $request,
             $slot,
@@ -409,7 +409,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $toSheet2       = SheetFactory::create($this->event);
         $toParticipant2 = ParticipantFactory::create($toSheet);
         $spot2          = SpotFactory::create($this->event, 'ref2');
-        $request2       = new Meeting\Request($this->sheet, [], $toSheet2, [], new \DateTime(), $user);
+        $request2       = new Meeting\Request($this->sheet, [], $toSheet2, [], new \DateTime(), $user, $this->event);
         $meeting2       = new Meeting(
             $request2,
             $meetingSlot,
@@ -814,7 +814,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $slot          = new MeetingSlot($this->event, $begin, $end);
         $spot          = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting       = new Meeting(
             $request,
             $slot,
@@ -871,7 +871,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $slot          = new MeetingSlot($this->event, $begin, $end);
         $spot          = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting       = new Meeting(
             $request,
             $slot,
@@ -926,7 +926,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $slot          = new MeetingSlot($this->event, $begin, $end);
         $spot          = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting       = new Meeting(
             $request,
             $slot,
@@ -982,7 +982,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $slot          = new MeetingSlot($this->event, $begin, $end);
         $spot          = SpotFactory::create($this->event);
         $user          = UserFactory::create();
-        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user, $this->event);
         $meeting       = new Meeting(
             $request,
             $slot,

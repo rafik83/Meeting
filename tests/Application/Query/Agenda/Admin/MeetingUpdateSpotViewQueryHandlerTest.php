@@ -41,7 +41,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $toUser          = UserFactory::create();
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
         $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
         $spot1           = $this->createSpot(100, $event, 'Box001');
         $spot2           = $this->createSpot(101, $event, 'Box002');
