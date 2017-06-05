@@ -1,18 +1,20 @@
-var options = require('../../vueComponents/options'),
+var _ = require('lodash'),
+    Vue = require('vue'),
+    axios = require('axios'),
+
+    options = require('../../vueComponents/options'),
     sheetAgenda = require('./SheetAgenda'),
     filterModal = require('./modal/filterModal'),
     meetingUpdateModal = require('./modal/MeetingUpdateModal'),
     massAssignmentModal = require('./modal/massAssignmentModal'),
     updateParticipantModal = require('./modal/updateParticipantModal'),
     sortModal = require('./modal/sortModal'),
-    _ = require('lodash'),
     eventDispatcher = require('../../vueComponents/EventDispatcher'),
     AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
-    Vue = require('vue'),
-    axios = require('axios'),
-    api = new AgendaApiEndpoints(),
     SheetFilter = require('./../filters/_SheetsFilter'),
-    SortSheets = require('../../components/_SortSheets');
+    SortSheets = require('../../components/_SortSheets'),
+
+    api = new AgendaApiEndpoints();
 
 /**
  * Pass axios to Vue
@@ -51,7 +53,8 @@ module.exports = {
              * Meeting slot to update
              */
             meetingSlotToUpdate: null,
-            meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
+            meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/,
+            selectedSort: null
         }
     },
 
@@ -803,6 +806,7 @@ module.exports = {
          * @param {string} selectedSort
          */
         sortSheets: function (selectedSort) {
+            this.selectedSort = selectedSort;
             var sheetsToSort = this.sheets;
 
             if (this.filteredSheets.length > 0) {
@@ -810,6 +814,19 @@ module.exports = {
             }
 
             this.refreshList(new SortSheets(selectedSort).sort(sheetsToSort));
+        },
+
+        /**
+         * @param {array} selectedFilters
+         */
+        filterSheets: function (selectedFilters) {
+            var filteredSheets = new SheetFilter(selectedFilters).filter(this.sheets);
+
+            if (this.selectedSort !== null) {
+                filteredSheets = new SortSheets(this.selectedSort).sort(filteredSheets);
+            }
+
+            this.refreshList(filteredSheets);
         },
     }
 };
