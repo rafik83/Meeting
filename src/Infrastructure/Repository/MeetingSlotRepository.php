@@ -185,11 +185,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                 WHERE unavailability.user IN (:userIds)
                 AND unavailability.event = :event
                 AND (
-                    slot.begin = unavailability.begin AND unavailability.end = slot.end
-                    OR slot.begin >= unavailability.begin AND slot.begin < unavailability.end
+                    slot.begin >= unavailability.begin AND slot.begin < unavailability.end
                     OR slot.end > unavailability.begin AND slot.end <= unavailability.end
                     OR slot.begin <= unavailability.begin AND slot.end >= unavailability.end
-                    OR slot.begin <= unavailability.end AND slot.end >= unavailability.end
                 )
             )');
 
@@ -201,11 +199,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                     WITH hpParticipant.user IN (:userIds)
                 JOIN hp.happening happening WITH happening.event = :event
                 WHERE
-                    slot.begin = happening.begin AND happening.end = slot.end
-                    OR slot.begin >= happening.begin AND slot.begin < happening.end
+                    slot.begin >= happening.begin AND slot.begin < happening.end
                     OR slot.end > happening.begin AND slot.end <= happening.end
                     OR slot.begin <= happening.begin AND slot.end >= happening.end
-                    OR slot.begin <= happening.end AND slot.end >= happening.end
             )');
 
         // No blocking mass unvailabilities during this slot
@@ -216,11 +212,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                 AND mass.dispatch = false
                 AND mass.event = :event
                 AND (
-                    slot.begin = mass.begin AND mass.end = slot.end
-                    OR slot.begin >= mass.begin AND slot.begin < mass.end
+                    slot.begin >= mass.begin AND slot.begin < mass.end
                     OR slot.end > mass.begin AND slot.end <= mass.end
                     OR slot.begin <= mass.begin AND slot.end >= mass.end
-                    OR slot.begin <= mass.end AND slot.end >= mass.end
                 )
             )');
 
@@ -233,11 +227,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
                 JOIN assignment.mass massUnavailability
                     WITH massUnavailability.event = :event AND massUnavailability.blocking = true
                 WHERE
-                    slot.begin = assignment.begin AND assignment.end = slot.end
-                    OR slot.begin >= assignment.begin AND slot.begin < assignment.end
+                    slot.begin >= assignment.begin AND slot.begin < assignment.end
                     OR slot.end > assignment.begin AND slot.end <= assignment.end
                     OR slot.begin <= assignment.begin AND slot.end >= assignment.end
-                    OR slot.begin <= assignment.end AND slot.end >= assignment.end
             )');
 
         $queryBuilder
