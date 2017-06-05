@@ -125,7 +125,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
                 'WITH',
                 'happening.event = :event AND participation.user IN (:users) AND participation.disabled = false'
             )
-            ->setParameter('sheet', $sheet)
+            ->setParameter('event', $sheet->getEvent())
             ->setParameter('users', $sheetUsers);
 
         return $queryBuilder->getQuery()->getResult();
