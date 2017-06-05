@@ -226,15 +226,14 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(participation.id)')
             ->from(HappeningParticipation::class, 'participation')
-            ->where('participation.disabled = false')
             ->join(
                 'participation.happening',
                 'happening',
                 'WITH',
-                'happening.event = :event AND participation.user IN (:users)'
+                'happening.event = :event AND participation.user IN (:users) AND participation.disabled = false'
             )
-            ->setParameter('sheet', $sheet)
-            ->setParameter('users', $sheetUsers);
+            ->setParameter('users', $sheetUsers)
+            ->setParameter('event', $sheet->getEvent());
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
