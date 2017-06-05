@@ -63,7 +63,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn([$day]);
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $happeningParticipationRepository->findByUser($user, ['disabled' => false])->shouldBeCalled()->willReturn([
+        $happeningParticipationRepository->findByUser($user, $event, ['disabled' => false])->shouldBeCalled()->willReturn([
             $happeningParticipation
         ]);
 
@@ -143,7 +143,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByUser($user2, ['disabled' => false])
+            ->findByUser($user2, $event, ['disabled' => false])
             ->shouldBeCalled()
             ->willReturn([
                 $happeningParticipation
