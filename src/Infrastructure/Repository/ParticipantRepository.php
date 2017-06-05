@@ -357,12 +357,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     FROM Entity:Meeting m
                     JOIN m.slot slot WITH slot.event = :eventId
                     LEFT JOIN m.fromParticipants fp
-                    LEFT JOIN fp.user fpUser
                     LEFT JOIN m.toParticipants tp
-                    LEFT JOIN tp.user tpUser
                     WHERE
                         " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
-                        AND (fpUser = user OR tpUser = user)
+                        AND (fp.user = user OR tp.user = user)
                         AND (
                             slot.begin BETWEEN :begin AND :end
                             OR slot.end BETWEEN :begin AND :end
@@ -375,7 +373,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
                     JOIN hp.happening h WITH h.event = :eventId
-                    JOIN hp.participant p
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
                         AND hp.user = user
