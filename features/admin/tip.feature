@@ -5,17 +5,17 @@
 
   Scenario: I can see the tip menu on admin navbar
     Given the database is purged
-    And the tip "Awesome tip" is created for an event
+    And the tip "Awesome tip" is created for the event "Best of Web"
     And I am logged as admin
     When I go to this page "/fr/event"
     Then I should see "admin.tip.link"
 
   Scenario: I can see the tip list on admin
     Given I am logged as admin
-    And I go to this page "/fr/tip/list"
+    When I go to this page "/fr/tip/list"
     Then I should see "admin.tip.list.title"
     And I should see "Awesome tip"
-    And I should see "Event_2"
+    And I should see "Best of Web"
     And I should see "Français"
 
   Scenario: I can create a new tip

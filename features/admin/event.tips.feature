@@ -4,7 +4,7 @@ Feature: List of tips by event and type
 
   Scenario: See the list of tips for an event
     Given the database is purged
-    When the tip "Awesome tip" is created for an event
+    And the tip "Awesome tip" is created for the event "Best of Web"
     And I am logged as admin
     And I go to this page "/fr/event/1/tip/list"
     Then I should see "admin.tip.list.title"
@@ -27,7 +27,7 @@ Feature: List of tips by event and type
 
   Scenario: I can remove a tip from an event
     Given I am logged as admin
-    And the tip "Awesome tip" is created for an event
+    And the tip "Awesome tip" is created for the event "Best of Web"
     And I am on this page "/fr/event/2/tip/list"
     When I press "admin.tip.event.remove.link"
     Then I should be on this page "/fr/event/2/tip/list"
