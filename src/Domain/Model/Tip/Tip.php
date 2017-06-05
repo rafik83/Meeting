@@ -368,12 +368,12 @@ class Tip
     /**
      * @return Event[]
      */
-    public function getUnduplicatedEvents()
+    public function getUnduplicatedEventsTitle()
     {
         $events = [];
 
         foreach ($this->types as $type) {
-            $events[$type->getEvent()->getTitle()] = $type->getEvent();
+            $events[$type->getEvent()->getTitle()] = $type->getEvent()->getTitle();
         }
         ksort($events);
 

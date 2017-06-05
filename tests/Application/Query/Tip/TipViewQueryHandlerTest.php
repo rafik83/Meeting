@@ -66,10 +66,10 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new TipViewQueryHandler($tipRepository->reveal());
         $tipListView = $handler->handle($query);
 
-        $secondTipEventsResult = $tipListView->results->results[1]->getUnduplicatedEvents();
-        $this->assertCount(1, $tipListView->results->results[0]->getUnduplicatedEvents());
+        $secondTipEventsResult = $tipListView->results->results[1]->getUnduplicatedEventsTitle();
+        $this->assertCount(1, $tipListView->results->results[0]->getUnduplicatedEventsTitle());
         $this->assertCount(2, $secondTipEventsResult);
-        $this->assertEquals('AAA', reset($secondTipEventsResult)->getTitle());
+        $this->assertEquals('AAA', reset($secondTipEventsResult));
 
         $this->assertEquals($expectedTipListView, $tipListView);
     }
