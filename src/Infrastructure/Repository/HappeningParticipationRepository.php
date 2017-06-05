@@ -227,7 +227,12 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('COUNT(participation.id)')
             ->from(HappeningParticipation::class, 'participation')
             ->where('participation.disabled = false')
-            ->join(Participant::class, 'participant', 'WITH', 'participant.user IN (:users) AND participant.sheet = :sheet')
+            ->join(
+                'participation.happening',
+                'happening',
+                'WITH',
+                'happening.event = :event AND participation.user IN (:users)'
+            )
             ->setParameter('sheet', $sheet)
             ->setParameter('users', $sheetUsers);
 
