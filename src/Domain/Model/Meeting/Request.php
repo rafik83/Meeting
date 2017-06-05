@@ -109,6 +109,7 @@ class Request implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
+     * @param Event              $event
      * @param bool               $disabled
      * @param bool               $hasMessage
      */
@@ -119,6 +120,7 @@ class Request implements MessageSubjectInterface
         array $toParticipants,
         DateTimeInterface $createdAt,
         User $creator,
+        Event $event,
         $disabled = false,
         $hasMessage = false
     ) {
@@ -133,6 +135,7 @@ class Request implements MessageSubjectInterface
         $this->disabled         = $disabled;
         $this->meeting          = new ArrayCollection();
         $this->hasMessage       = $hasMessage;
+        $this->event            = $event;
     }
 
     /**
