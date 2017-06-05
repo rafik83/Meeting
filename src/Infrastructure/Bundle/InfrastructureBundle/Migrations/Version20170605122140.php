@@ -26,9 +26,9 @@ class Version20170605122140 extends AbstractMigration
 
         // Add event_id to meeting
         $this->addSql('
-            UPDATE `meeting`, `event`, `sheet`
+            UPDATE `meeting`, `sheet`
             SET `meeting`.`event_id` = `sheet`.`event_id`
-            WHERE `meeting`.`from_sheet_id` = `sheet`.`id` OR `meeting`.`to_sheet_id` = `sheet`.`id`
+            WHERE `meeting`.`from_sheet_id` = `sheet`.`id`
         ');
     }
 

@@ -22,8 +22,6 @@ Proximum\Vimeet\Domain\Model\Meeting:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
-            joinColumn:
-                onDelete: CASCADE
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
             inversedBy: meeting
