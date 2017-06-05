@@ -190,7 +190,7 @@
 
         <sort-modal :sheets="sheets" :show="showSortModal" v-on:sort-sheets="sortSheets" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
 
-        <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
+        <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:filter-sheets="filterSheets" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
 
         <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
 
