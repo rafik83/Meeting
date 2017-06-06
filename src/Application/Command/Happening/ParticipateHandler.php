@@ -118,7 +118,7 @@ class ParticipateHandler
                     $participant->getUser()
                 );
 
-                if ($happeningParticipation !== null && $happeningParticipation->isDisabled()) {
+                if ($happeningParticipation !== null) {
                     $this->happeningParticipationRepository->update(
                         $happeningParticipation->setDisabled(false)
                     );
