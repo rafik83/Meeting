@@ -263,12 +263,12 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasParticipationToActiveSheet(User $user, EventInterface $event)
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event)
     {
         $queryBuilder = $this->sheetsByUserAndEventWhereUserIsParticipantQueryBuilder($user, $event);
 
         return null !== $queryBuilder
-                ->select('COUNT(sheet)')
+                ->select('sheet.id')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getOneOrNullResult();

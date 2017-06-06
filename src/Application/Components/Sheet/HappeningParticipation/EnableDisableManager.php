@@ -57,9 +57,9 @@ class EnableDisableManager
                 ->happeningParticipationRepository
                 ->findByUser($user, $event);
 
-            $hasParticipationToActiveSheet = $this->sheetRepository->hasParticipationToActiveSheet($user, $event);
+            $isParticipantToEnabledSheet = $this->sheetRepository->isParticipantToEnabledSheet($user, $event);
 
-            if (!$hasParticipationToActiveSheet) {
+            if (!$isParticipantToEnabledSheet) {
                 foreach ($happeningParticipations as $participation) {
 
                     /*

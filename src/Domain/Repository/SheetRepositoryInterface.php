@@ -153,7 +153,7 @@ interface SheetRepositoryInterface
      *
      * @return bool
      */
-    public function hasParticipationToActiveSheet(User $user, EventInterface $event);
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event);
 
     /**
      * @param int $sheetId
