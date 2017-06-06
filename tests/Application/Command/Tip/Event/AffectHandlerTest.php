@@ -73,26 +73,9 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
 
-        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldBeCalled()->willReturn(false);
-
         $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
         $this->tipRepository->setTypes($this->tip)->shouldBeCalled();
-
-        $this->handler->handle($this->command);
-    }
-
-    public function testIsAlreadyAffectedOnEventException()
-    {
-        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
-
-        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldBeCalled()->willReturn(true);
-
-        $this->typeRepository->getById(null)->shouldNotBeCalled();
-
-        $this->tipRepository->setTypes($this->tip)->shouldNotBeCalled();
-
-        $this->expectException(TipAlreadyAffectedToEventException::class);
 
         $this->handler->handle($this->command);
     }
@@ -102,36 +85,6 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
         $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn(null);
 
         $this->expectException(TipNotFoundException::class);
-
-        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldNotBeCalled();
-
-        $this->typeRepository->getById(null)->shouldNotBeCalled();
-
-        $this->tipRepository->setTypes($this->tip)->shouldNotBeCalled();
-
-        $this->handler->handle($this->command);
-    }
-
-    public function testTipTranslationNotavailableForEventException()
-    {
-        $this->tip = TipFactory::createTip(
-            'unavailable_tip',
-            [
-                'onMeetingManagement' => true,
-                'onCatalog'           => true,
-                'onPrintPlanning'     => true,
-                'onSheet'             => true,
-                'onAgenda'            => true,
-                'onProgram'           => true,
-            ],
-            ['en', 'it']
-        );
-
-        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
-
-        $this->expectException(TipTranslationNotAvailableForEventException::class);
-
-        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldNotBeCalled();
 
         $this->typeRepository->getById(null)->shouldNotBeCalled();
 

@@ -2283,6 +2283,14 @@ services:
         arguments:
             - '@adapter.validator_adapter'
 
+
+    validator.tip.affect_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Tip\AffectValidator
+        arguments:
+            - '@repository.tip.repository'
+        tags:
+            - { name: validator.constraint_validator }
+
     #
     # Account
     #

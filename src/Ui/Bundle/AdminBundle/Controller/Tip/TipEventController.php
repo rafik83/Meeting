@@ -91,10 +91,6 @@ class TipEventController extends Controller
                 $this->addFlash('success', 'flash.admin.tip.affect.success');
             } catch (TipNotFoundException $exception) {
                 $this->addFlash('error', $exception->getMessage());
-            } catch (TipAlreadyAffectedToEventException $exception) {
-                $this->addFlash('error', $exception->getMessage());
-            } catch (TipTranslationNotAvailableForEventException $exception) {
-                $this->addFlash('error', $exception->getMessage());
             }
 
             return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);

@@ -40,8 +40,6 @@ class AffectHandler
      * @param Affect $affect
      *
      * @throws TipNotFoundException
-     * @throws TipTranslationNotAvailableForEventException
-     * @throws TipAlreadyAffectedToEventException
      */
     public function handle(Affect $affect)
     {
@@ -49,16 +47,6 @@ class AffectHandler
 
         if (null === $tip) {
             throw new TipNotFoundException();
-        }
-
-        foreach ($affect->event->getLocales() as $locale) {
-            if (!$tip->hasTranslation($locale)) {
-                throw new TipTranslationNotAvailableForEventException();
-            }
-        }
-
-        if ($this->tipRepository->isTipAffectedToEvent($tip, $affect->event)) {
-            throw new TipAlreadyAffectedToEventException();
         }
 
         foreach ($affect->types as $typeView) {
