@@ -54,6 +54,6 @@ class AffectHandler
             $tip->setType($type);
         }
 
-        $this->tipRepository->setTypes($tip);
+        $this->tipRepository->set($tip);
     }
 }

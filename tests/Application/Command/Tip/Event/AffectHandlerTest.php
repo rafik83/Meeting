@@ -75,7 +75,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
-        $this->tipRepository->setTypes($this->tip)->shouldBeCalled();
+        $this->tipRepository->set($this->tip)->shouldBeCalled();
 
         $this->handler->handle($this->command);
     }
@@ -88,7 +88,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->typeRepository->getById(null)->shouldNotBeCalled();
 
-        $this->tipRepository->setTypes($this->tip)->shouldNotBeCalled();
+        $this->tipRepository->set($this->tip)->shouldNotBeCalled();
 
         $this->handler->handle($this->command);
     }
