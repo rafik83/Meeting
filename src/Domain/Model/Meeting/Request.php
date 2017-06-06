@@ -34,7 +34,7 @@ class Request implements MessageSubjectInterface
     private $id;
 
     /**
-     * @var Event\
+     * @var Event
      */
     private $event;
 
