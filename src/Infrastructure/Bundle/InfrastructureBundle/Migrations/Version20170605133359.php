@@ -28,6 +28,8 @@ class Version20170605133359 extends AbstractMigration
             SET `meeting_request`.`event_id` = `sheet`.`event_id`
             WHERE `meeting_request`.`from_id` = `sheet`.`id`
         ');
+
+        $this->addSql('ALTER TABLE meeting_request CHANGE event_id event_id INT NOT NULL');
     }
 
     /**
