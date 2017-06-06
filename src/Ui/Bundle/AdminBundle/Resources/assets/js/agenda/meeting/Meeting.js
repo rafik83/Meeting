@@ -205,6 +205,12 @@ module.exports = {
          */
         refreshList: function (filteredSheets) {
             this.hasUsedSheetFilter = true;
+
+            if (this.filteredSheetsBySheetOrParticipant.length > 0) {
+                this.hasUsedSheetOrParticipantFilter    = true;
+                this.filteredSheetsBySheetOrParticipant = filteredSheets;
+            }
+
             this.filteredSheets = filteredSheets;
         },
 
@@ -820,7 +826,13 @@ module.exports = {
          * @param {array} selectedFilters
          */
         filterSheets: function (selectedFilters) {
-            var filteredSheets = new SheetFilter(selectedFilters).filter(this.sheets);
+            var sheetsToFilter = this.sheets;
+
+            if (this.filteredSheetsBySheetOrParticipant.length > 0) {
+                sheetsToFilter = this.filteredSheetsBySheetOrParticipant;
+            }
+
+            var filteredSheets = new SheetFilter(selectedFilters).filter(sheetsToFilter);
 
             if (this.selectedSort !== null) {
                 filteredSheets = new SortSheets(this.selectedSort).sort(filteredSheets);
