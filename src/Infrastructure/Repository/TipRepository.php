@@ -119,7 +119,6 @@ class TipRepository implements TipRepositoryInterface
             ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
             ->join('tip.types', 'type', 'WITH', 'type.event = :event and type = :type')
             ->orderBy('tip.createdAt')
-            ->groupBy('type.event, tip.id')
             ->setParameter('locale', $locale)
             ->setParameter('event', $event)
             ->setParameter('type', $type);
@@ -192,12 +191,13 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip, type')
+            ->select('tip.id')
             ->from(Tip::class, 'tip')
             ->join('tip.types', 'type', 'WITH', 'type.event = :event AND tip = :tip')
             ->setParameter('event', $event)
-            ->setParameter('tip', $tip);
+            ->setParameter('tip', $tip)
+            ->setMaxResults(1);
 
-        return null === $queryBuilder->getQuery()->getOneOrNullResult() ? false : true;
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }
