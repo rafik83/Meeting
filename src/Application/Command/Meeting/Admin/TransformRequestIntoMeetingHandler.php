@@ -116,7 +116,8 @@ class TransformRequestIntoMeetingHandler
             $toSheet,
             $transformRequestIntoMeeting->meetingRequest->getParticipants($toSheet),
             $this->dateTime,
-            $spot
+            $spot,
+            $transformRequestIntoMeeting->event
         );
 
         $this->meetingRepository->add($meeting);

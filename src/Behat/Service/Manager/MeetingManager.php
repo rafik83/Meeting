@@ -66,13 +66,14 @@ class MeetingManager
     }
 
     /**
+     * @param Event       $event
      * @param Request     $meetingRequest
      * @param MeetingSlot $slot
      * @param Spot        $spot
      *
      * @return Meeting
      */
-    public function createMeetingFromRequest(Request $meetingRequest, MeetingSlot $slot, Spot $spot)
+    public function createMeetingFromRequest(Event $event, Request $meetingRequest, MeetingSlot $slot, Spot $spot)
     {
         $meeting = new Meeting(
             $meetingRequest,
@@ -83,6 +84,7 @@ class MeetingManager
             $meetingRequest->getToParticipants()->toArray(),
             new \DateTime(),
             $spot,
+            $event,
             false,
             false
         );
@@ -160,7 +162,7 @@ class MeetingManager
             throw new \Exception('There are no available slot for this meeting');
         }
 
-        return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+        return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
 
     /**
@@ -182,7 +184,7 @@ class MeetingManager
 
         $spot = $this->spotManager->create($event, 'MyRef', 1, 2);
 
-        return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+        return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
 
     /**
@@ -211,7 +213,7 @@ class MeetingManager
             throw new \Exception('Spot not found');
         }
 
-        return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+        return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
 
     /**

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
@@ -20,6 +21,9 @@ class TransformRequestIntoMeeting
 
     /** @var MeetingSlot */
     public $slot;
+
+    /** @var Event */
+    public $event;
 
     /** @var bool */
     public $visio;
@@ -33,6 +37,7 @@ class TransformRequestIntoMeeting
     {
         $this->meetingRequest = $meetingRequest;
         $this->slot           = $slot;
+        $this->event          = $slot->getEvent();
         $this->visio          = $visio;
     }
 }

@@ -279,7 +279,8 @@ class ImportHandler
             $sheetTo,
             $participantsTo,
             $this->dateTime,
-            $spot
+            $spot,
+            $slot->getEvent()
         );
 
         if ($meetingResult->isBlockedSlot) {
