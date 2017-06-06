@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler

@@ -73,6 +73,8 @@ class TipEventController extends Controller
             $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
         }  catch (NoTipAvailableException $exception) {
             $this->addFlash('error', $exception->getMessage());
+            
+            return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
         }
 
         $typeListViewQuery = new TypeListViewQuery($event, $locale);
