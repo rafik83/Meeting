@@ -291,7 +291,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     }
 
     /**
-     * @param HappeningParticipation $happeningParticipation
+     * {@inheritdoc}
      */
     public function update(HappeningParticipation $happeningParticipation)
     {
@@ -310,5 +310,25 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         }, $sheet->getParticipants()->toArray());
 
         return $sheetUsers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByHappeningAndUser(Happening $happening, User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening = :happening AND participation.user = :user')
+            ->setMaxResults(1)
+            ->setParameters([
+                'happening' => $happening,
+                'user'      => $user,
+            ]);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

@@ -112,9 +112,21 @@ class ParticipateHandler
         // Add participants to happening
         foreach ($participate->participants as $participant) {
             if (false === in_array($participant, $previousParticipants)) {
-                $this->happeningParticipationRepository->add(
-                    new HappeningParticipation($participate->happening, $participant->getUser())
+
+                $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser(
+                    $participate->happening,
+                    $participant->getUser()
                 );
+
+                if ($happeningParticipation !== null && $happeningParticipation->isDisabled()) {
+                    $this->happeningParticipationRepository->update(
+                        $happeningParticipation->setDisabled(false)
+                    );
+                } else {
+                    $this->happeningParticipationRepository->add(
+                        new HappeningParticipation($participate->happening, $participant->getUser())
+                    );
+                }
 
                 $this->eventDispatcher->dispatch(
                     Events::HAPPENING_PARTICIPATE,

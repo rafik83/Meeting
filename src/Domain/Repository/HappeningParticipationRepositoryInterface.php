@@ -114,4 +114,12 @@ interface HappeningParticipationRepositoryInterface
      * @param HappeningParticipation $happeningParticipation
      */
     public function update(HappeningParticipation $happeningParticipation);
+
+    /**
+     * @param Happening $happening
+     * @param User $user
+     *
+     * @return HappeningParticipation|null
+     */
+    public function findByHappeningAndUser(Happening $happening, User $user);
 }
