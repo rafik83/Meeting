@@ -41,6 +41,9 @@ default_event:
     path: /
     methods: [GET]
 
+#
+# Trailing slash redirect to home event
+#
 default_redirect:
     path: /{_locale}
     defaults:
