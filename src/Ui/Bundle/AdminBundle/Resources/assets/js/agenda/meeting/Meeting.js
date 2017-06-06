@@ -826,10 +826,11 @@ module.exports = {
          */
         prepareSelectedFilters: function (selectedFilters) {
             selectedFilters.filterBySheetOrParticipantValue = '';
+            var filterSheetOrParticipant = this.filterBySheetOrParticipantValue;
             this.selectedFilters = selectedFilters;
 
-            if (this.hasUsedSheetOrParticipantFilter) {
-                this.selectedFilters.filterBySheetOrParticipantValue = this.filterBySheetOrParticipantValue.trim();
+            if (filterSheetOrParticipant.trim().length > 0) {
+                this.selectedFilters.filterBySheetOrParticipantValue = filterSheetOrParticipant.trim();
             }
         }
     }
