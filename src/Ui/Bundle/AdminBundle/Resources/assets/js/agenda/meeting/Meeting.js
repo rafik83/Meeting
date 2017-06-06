@@ -54,7 +54,8 @@ module.exports = {
              */
             meetingSlotToUpdate: null,
             meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/,
-            selectedSort: null
+            selectedSort: null,
+            selectedFilters: [],
         }
     },
 
@@ -136,22 +137,17 @@ module.exports = {
          * Filter on sheet list by participant name / email or sheet title
          */
         filterBySheetOrParticipant: function () {
-            var delay = (function() {
+            var delay = (function () {
                 var timer = 0;
-                return function(callback, ms) {
-                    clearTimeout (timer);
+                return function (callback, ms) {
+                    clearTimeout(timer);
                     timer = setTimeout(callback, ms);
                 };
             })();
 
-            delay(function() {
-                if (this.filterBySheetOrParticipantValue.length > 0) {
-                    var sheetsToFilter = this.filteredSheets.length > 0 ? this.filteredSheets : this.sheets;
-                    this.filteredSheetsBySheetOrParticipant = new SheetFilter({filterBySheetOrParticipantValue : this.filterBySheetOrParticipantValue}).filter(sheetsToFilter);
-                    this.hasUsedSheetOrParticipantFilter = true;
-                } else {
-                    this.hasUsedSheetOrParticipantFilter = false;
-                }
+            delay(function () {
+                this.hasUsedSheetOrParticipantFilter = (this.filterBySheetOrParticipantValue.trim().length > 0);
+                this.filterSheets(this.selectedFilters);
             }.bind(this), 300);
         },
 
@@ -204,14 +200,12 @@ module.exports = {
          * @param {array} filteredSheets
          */
         refreshList: function (filteredSheets) {
-            this.hasUsedSheetFilter = true;
-
-            if (this.filteredSheetsBySheetOrParticipant.length > 0) {
-                this.hasUsedSheetOrParticipantFilter    = true;
+            if (this.hasUsedSheetOrParticipantFilter) {
                 this.filteredSheetsBySheetOrParticipant = filteredSheets;
+            } else {
+                this.hasUsedSheetFilter = true;
+                this.filteredSheets = filteredSheets;
             }
-
-            this.filteredSheets = filteredSheets;
         },
 
         /**
@@ -813,7 +807,7 @@ module.exports = {
          */
         sortSheets: function (selectedSort) {
             this.selectedSort = selectedSort;
-            var sheetsToSort = this.sheets;
+            var sheetsToSort  = this.sheets;
 
             if (this.filteredSheets.length > 0) {
                 sheetsToSort = this.filteredSheets;
@@ -826,19 +820,26 @@ module.exports = {
          * @param {array} selectedFilters
          */
         filterSheets: function (selectedFilters) {
-            var sheetsToFilter = this.sheets;
+            this.prepareSelectedFilters(selectedFilters);
 
-            if (this.filteredSheetsBySheetOrParticipant.length > 0) {
-                sheetsToFilter = this.filteredSheetsBySheetOrParticipant;
-            }
-
-            var filteredSheets = new SheetFilter(selectedFilters).filter(sheetsToFilter);
-
+            var filteredSheets = new SheetFilter(this.selectedFilters).filter(this.sheets);
             if (this.selectedSort !== null) {
                 filteredSheets = new SortSheets(this.selectedSort).sort(filteredSheets);
             }
 
             this.refreshList(filteredSheets);
         },
+
+        /**
+         * @param {array} selectedFilters
+         */
+        prepareSelectedFilters: function (selectedFilters) {
+            selectedFilters.filterBySheetOrParticipantValue = '';
+            this.selectedFilters = selectedFilters;
+
+            if (this.hasUsedSheetOrParticipantFilter) {
+                this.selectedFilters.filterBySheetOrParticipantValue = this.filterBySheetOrParticipantValue.trim();
+            }
+        }
     }
 };
