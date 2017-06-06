@@ -66,14 +66,13 @@ class TipEventController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $locale   = $event->getAvailableLocale($request->getLocale());
-        $tipViews = [];
 
         try {
             $tipListViewQuery = new TipListViewQuery($locale);
             $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
         }  catch (NoTipAvailableException $exception) {
             $this->addFlash('error', $exception->getMessage());
-            
+
             return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
         }
 
