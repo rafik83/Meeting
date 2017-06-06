@@ -57,7 +57,7 @@ class AffectHandler
             }
         }
 
-        if ($this->tipRepository->isTipAffectedToEvent($affect->event)) {
+        if ($this->tipRepository->isTipAffectedToEvent($tip, $affect->event)) {
             throw new TipAlreadyAffectedToEventException();
         }
 

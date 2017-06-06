@@ -102,9 +102,10 @@ interface TipRepositoryInterface
     public function getTipTranslationViewByLocaleForEvent($locale);
 
     /**
+     * @param Tip   $tip
      * @param Event $event
      *
      * @return bool
      */
-    public function isTipAffectedToEvent(Event $event);
+    public function isTipAffectedToEvent(Tip $tip, Event $event);
 }

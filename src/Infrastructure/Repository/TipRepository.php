@@ -187,15 +187,16 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function isTipAffectedToEvent(Event $event)
+    public function isTipAffectedToEvent(Tip $tip, Event $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('tip, type')
             ->from(Tip::class, 'tip')
-            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
-            ->setParameter('event', $event);
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event AND tip = :tip')
+            ->setParameter('event', $event)
+            ->setParameter('tip', $tip);
 
         return null === $queryBuilder->getQuery()->getOneOrNullResult() ? false : true;
     }

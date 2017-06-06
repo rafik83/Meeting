@@ -73,7 +73,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
 
-        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldBeCalled()->willReturn(false);
+        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldBeCalled()->willReturn(false);
 
         $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
@@ -86,7 +86,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
 
-        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldBeCalled()->willReturn(true);
+        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldBeCalled()->willReturn(true);
 
         $this->typeRepository->getById(null)->shouldNotBeCalled();
 
@@ -103,7 +103,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(TipNotFoundException::class);
 
-        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldNotBeCalled();
+        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldNotBeCalled();
 
         $this->typeRepository->getById(null)->shouldNotBeCalled();
 
@@ -131,7 +131,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(TipTranslationNotAvailableForEventException::class);
 
-        $this->tipRepository->isTipAffectedToEvent($this->command->event)->shouldNotBeCalled();
+        $this->tipRepository->isTipAffectedToEvent($this->tip, $this->command->event)->shouldNotBeCalled();
 
         $this->typeRepository->getById(null)->shouldNotBeCalled();
 
