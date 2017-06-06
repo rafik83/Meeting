@@ -17,6 +17,8 @@ class Version20170522124244 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('DROP INDEX unique_idx_1 ON happening_participation');
+        $this->addSql('ALTER TABLE happening_participation DROP FOREIGN KEY FK_6B31720C9D1C3019');
         $this->addSql('ALTER TABLE happening_participation ADD user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE happening_participation ADD CONSTRAINT FK_6B31720CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_6B31720CA76ED395 ON happening_participation (user_id)');
@@ -25,6 +27,7 @@ class Version20170522124244 extends AbstractMigration
         $this->addSql('UPDATE IGNORE happening_participation hp JOIN participant p ON hp.participant_ID = p.id SET hp.user_id = p.user_id');
 // Remove happening_participation where user_id is null due to duplicate entry
         $this->addSql('DELETE FROM `happening_participation` WHERE `user_id` IS NULL');
+        $this->addSql('CREATE UNIQUE INDEX unique_idx_1 ON happening_participation (happening_id, user_id)');
     }
 
     /**
@@ -34,6 +37,7 @@ class Version20170522124244 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('DROP INDEX unique_idx_1 ON happening_participation');
         $this->addSql('ALTER TABLE happening_participation DROP FOREIGN KEY FK_6B31720CA76ED395');
         $this->addSql('DROP INDEX IDX_6B31720CA76ED395 ON happening_participation');
         $this->addSql('ALTER TABLE happening_participation DROP user_id');
