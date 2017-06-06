@@ -42,6 +42,10 @@ TipPreview.prototype.displayPreviewData = function ()
                 $this.targetElement.removeChild($this.targetElement.firstChild);
             }
 
+            while ($this.secondTargetElement.firstChild) {
+                $this.secondTargetElement.removeChild($this.secondTargetElement.firstChild);
+            }
+
             $this.targetElement.appendChild(previewTitle);
             $this.targetElement.appendChild(previewContent);
             $this.secondTargetElement.appendChild(previewPages);
