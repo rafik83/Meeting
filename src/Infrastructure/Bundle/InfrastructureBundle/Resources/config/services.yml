@@ -1972,6 +1972,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Rule
