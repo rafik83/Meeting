@@ -5,6 +5,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
+/**
+ * Add user_id on happening_participation
+ */
 class Version20170522124244 extends AbstractMigration
 {
     /**
@@ -17,7 +20,11 @@ class Version20170522124244 extends AbstractMigration
         $this->addSql('ALTER TABLE happening_participation ADD user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE happening_participation ADD CONSTRAINT FK_6B31720CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_6B31720CA76ED395 ON happening_participation (user_id)');
-        $this->addSql('UPDATE happening_participation hp JOIN participant p ON hp.participant_ID = p.id SET hp.user_id = p.user_id');
+
+        // IGNORE duplicate entry (happening_id, user_id)
+        $this->addSql('UPDATE IGNORE happening_participation hp JOIN participant p ON hp.participant_ID = p.id SET hp.user_id = p.user_id');
+// Remove happening_participation where user_id is null due to duplicate entry
+        $this->addSql('DELETE FROM `happening_participation` WHERE `user_id` IS NULL');
     }
 
     /**
