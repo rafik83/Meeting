@@ -130,7 +130,8 @@ class MeetingManager
             $toSheet,
             $toParticipants,
             new \DateTime(),
-            $firstFromParticipant->getUser()
+            $firstFromParticipant->getUser(),
+            $event
         );
 
         $this->requestRepository->add($meetingRequest);
