@@ -46,7 +46,6 @@ module.exports = {
             showMassAssignmentModal: false,
             showParticipantModal: false,
             hasUsedSheetFilter: false,
-            hasUsedSheetOrParticipantFilter: false,
             showSortModal: false,
             filterBySheetOrParticipantValue: null,
             /**
@@ -88,10 +87,7 @@ module.exports = {
                 && this.meetingSlotToUpdate === null;
         },
         sheetsIterator: function () {
-
-            if (this.hasUsedSheetOrParticipantFilter) {
-                return this.filteredSheetsBySheetOrParticipant;
-            } else if (this.hasUsedSheetFilter) {
+            if (this.hasUsedSheetFilter) {
                 return this.filteredSheets;
             }
 
@@ -146,7 +142,6 @@ module.exports = {
             })();
 
             delay(function () {
-                this.hasUsedSheetOrParticipantFilter = (this.filterBySheetOrParticipantValue.trim().length > 0);
                 this.filterSheets(this.selectedFilters);
             }.bind(this), 300);
         },
@@ -200,12 +195,8 @@ module.exports = {
          * @param {array} filteredSheets
          */
         refreshList: function (filteredSheets) {
-            if (this.hasUsedSheetOrParticipantFilter) {
-                this.filteredSheetsBySheetOrParticipant = filteredSheets;
-            } else {
-                this.hasUsedSheetFilter = true;
-                this.filteredSheets = filteredSheets;
-            }
+            this.hasUsedSheetFilter = true;
+            this.filteredSheets = filteredSheets;
         },
 
         /**
