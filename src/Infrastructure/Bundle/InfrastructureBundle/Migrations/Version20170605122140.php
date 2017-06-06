@@ -21,8 +21,6 @@ class Version20170605122140 extends AbstractMigration
 
         $this->addSql('ALTER TABLE meeting ADD event_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E13971F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE');
-        $this->addSql('CREATE INDEX IDX_F515E13971F7E88B ON meeting (event_id)');
-        $this->addSql('CREATE INDEX state ON meeting_request (state)');
 
         // Add event_id to meeting
         $this->addSql('
@@ -30,6 +28,9 @@ class Version20170605122140 extends AbstractMigration
             SET `meeting`.`event_id` = `sheet`.`event_id`
             WHERE `meeting`.`from_sheet_id` = `sheet`.`id`
         ');
+
+        $this->addSql('CREATE INDEX IDX_F515E13971F7E88B ON meeting (event_id)');
+        $this->addSql('CREATE INDEX state ON meeting_request (state)');
 
         $this->addSql('ALTER TABLE meeting CHANGE event_id event_id INT NOT NULL');
     }
