@@ -2,7 +2,7 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
     type:  entity
     table: happening_participation
     uniqueConstraints:
-        unique_idx_1:
+        unique_happening_user:
             columns:
                 - happening_id
                 - user_id
