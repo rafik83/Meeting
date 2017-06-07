@@ -47,7 +47,7 @@ module.exports = {
             showParticipantModal: false,
             hasUsedSheetFilter: false,
             showSortModal: false,
-            filterBySheetOrParticipantValue: null,
+            filterBySheetOrParticipantValue: '',
             /**
              * Meeting slot to update
              */
