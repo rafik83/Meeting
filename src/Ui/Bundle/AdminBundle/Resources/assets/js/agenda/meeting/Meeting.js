@@ -186,6 +186,7 @@ module.exports = {
                 child.reset();
                 this.hasUsedSheetFilter = false;
                 this.filteredSheets = [];
+                this.filterBySheetOrParticipantValue = '';
             }
         },
 
