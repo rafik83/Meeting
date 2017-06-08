@@ -411,6 +411,7 @@ class SheetController extends Controller
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
