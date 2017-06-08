@@ -21,19 +21,14 @@ class SMS
     /** @var string body */
     private $message;
 
-    /** @var \DateTimeInterface */
-    private $date;
-
     /**
-     * @param string             $receiver
-     * @param string             $message
-     * @param \DateTimeInterface $date
+     * @param string $receiver
+     * @param string $message
      */
-    public function __construct($receiver, $message, \DateTimeInterface $date)
+    public function __construct($receiver, $message)
     {
         $this->receiver = $receiver;
         $this->message = $message;
-        $this->date = $date;
     }
 
     /**
@@ -50,13 +45,5 @@ class SMS
     public function getMessage()
     {
         return $this->message;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getDate()
-    {
-        return $this->date;
     }
 }
