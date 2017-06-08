@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 class MonologSMSSenderAdapter implements SMSSenderInterface
 {
-    const MESSAGE_LOGGED = 'SMS send to %s with message: %s';
+    const MESSAGE_LOGGED = 'SMS sent to %s with message: %s';
 
     /** @var LoggerInterface */
     private $logger;

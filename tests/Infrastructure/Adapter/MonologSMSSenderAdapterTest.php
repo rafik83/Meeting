@@ -25,7 +25,7 @@ class MonologSMSSenderAdapterTest extends TestCase
 
         $monolog = $this->prophesize(LoggerInterface::class);
         $monolog
-            ->info(sprintf('SMS send to %s with message: %s', '+123456789', 'This is the message'))
+            ->info(sprintf('SMS sent to %s with message: %s', '+123456789', 'This is the message'))
             ->shouldBeCalled()
         ;
 
