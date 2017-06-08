@@ -43,7 +43,7 @@ class UserContextProxy implements UserContextProxyInterface
     /**
      * {@inheritdoc}
      */
-    public function getuserManager()
+    public function getUserManager()
     {
         return $this->userManager;
     }

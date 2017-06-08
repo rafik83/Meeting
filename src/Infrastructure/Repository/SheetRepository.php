@@ -871,4 +871,41 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserParticipantMultipleSheetsInEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user AND sheet.event = :event')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+        ;
+
+        return count($queryBuilder->getQuery()->getResult()) > 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetByEventAndTitle(Event $event, $title)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet.title = :title')
+            ->setParameter('title', $title)
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }
