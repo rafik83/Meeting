@@ -36,8 +36,8 @@ class PreviewTipViewQueryHandler
     public function handle(PreviewTipViewQuery $query)
     {
         return new PreviewTipView(
-            $query->tipTranslation->getTitle(),
-            $query->tipTranslation->getContent(),
+            $query->tip->getTranslationTitle($query->locale),
+            $query->tip->getTranslationContent($query->locale),
             array_map(function ($pageTranslationKey) {
                 return $this->translator->trans($pageTranslationKey);
             }, $query->pages)

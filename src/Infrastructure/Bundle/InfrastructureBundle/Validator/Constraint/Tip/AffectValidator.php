@@ -36,7 +36,7 @@ class AffectValidator extends ConstraintValidator
      */
     public function validate($affect, Constraint $constraint)
     {
-        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id);
+        $tip = $this->tipRepository->getById($affect->tip->id);
 
         foreach ($affect->event->getLocales() as $locale) {
             if (!$tip->hasTranslation($locale)) {

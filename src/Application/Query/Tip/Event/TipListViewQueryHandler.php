@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Tip\Event;
 
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
-use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipListViewQueryHandler
@@ -32,18 +32,24 @@ class TipListViewQueryHandler
     /**
      * @param TipListViewQuery $query
      *
-     * @return TipTranslationView[]
+     * @return TipView[]
      *
      * @throws NoTipAvailableException
      */
     public function handle(TipListViewQuery $query)
     {
-        $tipTranslationViews = $this->tipRepository->getTipTranslationViewByLocaleForEvent($query->locale);
+        $tips = $this->tipRepository->getAll();
 
-        if (empty($tipTranslationViews)) {
+        if (empty($tips)) {
             throw new NoTipAvailableException();
         }
 
-        return $tipTranslationViews;
+        $tipViews = [];
+
+        foreach ($tips as $tip) {
+            $tipViews[] = new TipView($tip->getId(), $tip->getTitle(), $query->locale);
+        }
+
+        return $tipViews;
     }
 }

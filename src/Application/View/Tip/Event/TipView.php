@@ -15,6 +15,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 class TipView extends AbstractTipView
 {
+    /** @var string */
+    public $locale;
+
     /** @var Type[] */
     public $types;
 
@@ -26,14 +29,16 @@ class TipView extends AbstractTipView
      *
      * @param int    $id
      * @param string $title
+     * @param string $locale
      * @param Type[] $types
      * @param array  $pages
      */
-    public function __construct($id, $title, array $types, array $pages)
+    public function __construct($id, $title, $locale, array $types = [], array $pages = [])
     {
         parent::__construct($id ,$title);
 
-        $this->types = $types;
-        $this->pages = $pages;
+        $this->locale = $locale;
+        $this->types  = $types;
+        $this->pages  = $pages;
     }
 }

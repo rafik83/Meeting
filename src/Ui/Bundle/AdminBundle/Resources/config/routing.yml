@@ -1408,8 +1408,8 @@ admin_tip_event_remove:
     defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
 
 admin_tip_event_preview:
-    path: /tip/{tipTranslation}/preview/
+    path: /tip/{tip}/preview/{locale}
     methods: [GET]
     requirements:
-        tipTranslation: \d+
+        tip: \d+
     defaults: { _controller: AdminBundle:Tip/TipEvent:preview }

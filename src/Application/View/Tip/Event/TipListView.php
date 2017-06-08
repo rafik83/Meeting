@@ -12,16 +12,16 @@ namespace Proximum\Vimeet\Application\View\Tip\Event;
 
 class TipListView
 {
-    /** @var TipTranslationView[] */
-    public $tipListView;
+    /** @var TipView[] */
+    public $tipViews;
 
     /**
      * TipListView constructor.
      *
-     * @param TipView[] $tipListView
+     * @param TipView[] $tipViews
      */
-    public function __construct(array $tipListView)
+    public function __construct(array $tipViews)
     {
-        $this->tipListView = $tipListView;
+        $this->tipViews = $tipViews;
     }
 }

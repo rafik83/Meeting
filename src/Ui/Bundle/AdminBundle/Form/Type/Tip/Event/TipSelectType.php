@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event;
 
-use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
@@ -37,19 +37,21 @@ class TipSelectType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+
         $resolver->setRequired(['tipViews']);
         $resolver->setAllowedTypes('tipViews', 'array');
         $resolver->setDefaults([
-            'choice_label' => function (TipTranslationView $tipView) {
-                return $tipView->adminTitle;
+            'choice_label' => function (TipView $tipView) {
+                return $tipView->title;
             },
             'choices' => function (Options $options) {
                 return $options['tipViews'];
             },
-            'choice_attr'  => function(TipTranslationView $tipTranslationView) {
+            'choice_attr' => function(TipView $tipView) {
                 return [
                     'data-preview-url' => $this->urlGenerator->generate('admin_tip_event_preview', [
-                        'tipTranslation' => $tipTranslationView->id,
+                        'locale' => $tipView->locale,
+                        'tip'    => $tipView->id,
                     ]),
                 ];
             },

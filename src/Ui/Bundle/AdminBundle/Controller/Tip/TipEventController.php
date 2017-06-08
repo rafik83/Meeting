@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQuery;
+use Proximum\Vimeet\Application\View\Tip\Event\TipListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
@@ -63,7 +64,7 @@ class TipEventController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $locale   = $event->getAvailableLocale($request->getLocale());
+        $locale = $event->getAvailableLocale($request->getLocale());
 
         try {
             $tipListViewQuery = new TipListViewQuery($locale);
@@ -126,16 +127,17 @@ class TipEventController extends Controller
     }
 
     /**
-     * @param TipTranslation $tipTranslation
+     * @param Tip     $tip
+     * @param string  $locale
      *
      * @return JsonResponse
      */
-    public function previewAction(TipTranslation $tipTranslation)
+    public function previewAction(Tip $tip, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $tipTranslationView = $this->get('tactician.commandbus')->handle(new PreviewTipViewQuery($tipTranslation));
+        $tipView = $this->get('tactician.commandbus')->handle(new PreviewTipViewQuery($tip, $locale));
 
-        return new JsonResponse($tipTranslationView);
+        return new JsonResponse($tipView);
     }
 }
