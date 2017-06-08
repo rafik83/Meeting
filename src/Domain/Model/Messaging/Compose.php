@@ -17,6 +17,9 @@ class Compose
     const TAG_PARTICIPATION_TYPE = '%participationType%';
     const TAG_SHEET_PLANNING     = '%sheetPlanning%';
 
+    // CTA
+    const TAG_CTA_AGENDA_CONFIRMATION = '%agendaConfirmationCTA%';
+
     const LINK_SHEET                = '%sheetLink%';
     const LINK_PACKAGE              = '%packageLink%';
     const LINK_ORDERS               = '%ordersLink%';
@@ -45,6 +48,7 @@ class Compose
             self::TAG_PARTICIPANT,
             self::TAG_PARTICIPATION_TYPE,
             self::TAG_SHEET_PLANNING,
+            self::TAG_CTA_AGENDA_CONFIRMATION,
         ];
     }
 

@@ -30,6 +30,7 @@ use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
@@ -244,7 +245,8 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $result->meetingRequest,
-                ])
+                ]),
+                $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
 
@@ -317,7 +319,8 @@ class MeetingRequestController extends Controller
                     'meetingRequest'               => $meetingRequest,
                     'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
                     'isMeetingRequestUpdateLocked' =>$eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
-                ])
+                ]),
+                $this->getParticipantsHtml($approveRequest->participants, $request->getLocale())
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
             return new JsonResponse($this->createJsonResponseData(
@@ -488,15 +491,17 @@ class MeetingRequestController extends Controller
      * @param bool   $ok
      * @param bool   $close
      * @param string $html
+     * @param string $participantsHtml
      *
      * @return array
      */
-    private function createJsonResponseData($ok, $close, $html)
+    private function createJsonResponseData($ok, $close, $html, $participantsHtml = '')
     {
         return [
-            'status' => $ok === true ? 'ok' : 'error',
-            'close'  => $close,
-            'html'   => $html,
+            'status'           => $ok === true ? 'ok' : 'error',
+            'close'            => $close,
+            'html'             => $html,
+            'participantsHtml' => $participantsHtml,
         ];
     }
 
@@ -707,9 +712,12 @@ class MeetingRequestController extends Controller
                     $this->renderView('EventBundle:MeetingRequest:editRequestSuccess.html.twig', [
                         'isProposition'  => $isProposition,
                         'meetingRequest' => $meetingRequest,
-                    ])
+                    ]),
+                    $this->getParticipantsHtml($command->participants, $request->getLocale())
                 ));
+
             } elseif ($isSubmitted && !$form->isValid()) {
+
                 return new JsonResponse($this->createJsonResponseData(
                     false,
                     false,
@@ -764,6 +772,27 @@ class MeetingRequestController extends Controller
             'action'    => $this->generateUrl('event_meeting_list_request', [
                 'sheet' => $sheet->getId(),
             ]),
+        ]);
+    }
+
+    /**
+     * @param array  $participants
+     * @param string $locale
+     *
+     * @return string
+     */
+    private function getParticipantsHtml(array $participants, $locale)
+    {
+        $participants = array_map(function (Participant $participant) use ($locale) {
+                return $this
+                    ->get('template.participant_info_guesser')
+                    ->guessParticipantCompleteName($participant, $locale);
+            },
+            $participants
+        );
+
+        return $this->renderView('EventBundle:MeetingRequest:participantsList.html.twig', [
+            'participants' => $participants
         ]);
     }
 }

@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
+use Proximum\Vimeet\Application\Adapter\ImpersonateUrlGeneratorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView as AdminGroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView as AdminGroupView;
 
 class AdminGroupViewQueryHandler
 {
@@ -24,14 +25,22 @@ class AdminGroupViewQueryHandler
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var ImpersonateUrlGeneratorInterface */
+    private $impersonateUrlGenerator;
+
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
+     * @param SheetRepositoryInterface         $sheetRepository
+     * @param SheetInfoGuesser                 $sheetInfoGuesser
+     * @param ImpersonateUrlGeneratorInterface $impersonateUrlGenerator
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, SheetInfoGuesser $sheetInfoGuesser)
-    {
-        $this->sheetRepository  = $sheetRepository;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        ImpersonateUrlGeneratorInterface $impersonateUrlGenerator
+    ) {
+        $this->sheetRepository         = $sheetRepository;
+        $this->sheetInfoGuesser        = $sheetInfoGuesser;
+        $this->impersonateUrlGenerator = $impersonateUrlGenerator;
     }
 
     /**
@@ -51,11 +60,20 @@ class AdminGroupViewQueryHandler
             return strcasecmp($one->title, $other->title);
         });
 
+        $impersonateUrl = $this->impersonateUrlGenerator->generate(
+            $groupViewQuery->admin,
+            $groupViewQuery->group->getManager(),
+            $groupViewQuery->group->getEvent(),
+            'event_sheet_group_index',
+            ['sheetGroup' => $groupViewQuery->group->getId()]
+        );
+
         return new AdminGroupView(
             $groupViewQuery->group->getId(),
             $groupViewQuery->group->getTitle(),
             $groupViewQuery->group->getManager()->getEmail(),
             $sheetViews,
+            $impersonateUrl,
             $groupViewQuery->group->getCreatedAt()
         );
     }

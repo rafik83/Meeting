@@ -364,6 +364,7 @@ admin.messaging.message.compose.links.orders: 'Liste des commandes'
 admin.messaging.message.compose.links.package: Forfait
 admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
+admin.messaging.message.compose.tags.cta.agendaConfirmation: 'Lien CTA confirmation agenda'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
@@ -758,6 +759,9 @@ admin.tip.column.title: 'Libellé back office'
 admin.tip.column.translation: Langue(s)
 admin.tip.column.visible.catalog: Catalogue
 admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.onSheet: 'Fiche de présentation'
+admin.tip.column.visible.onProgram: 'Programme'
+admin.tip.column.visible.onAgenda: 'Agenda'
 admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'

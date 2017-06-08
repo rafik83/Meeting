@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -119,6 +121,12 @@ class SheetController extends Controller
             $popinWelcome     = $this->get('tactician.commandbus.query')->handle($welcomeViewQuery);
         }
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_SHEET,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'                   => $eventDomain->getEvent(),
             'sheet'                   => $sheet,
@@ -132,6 +140,7 @@ class SheetController extends Controller
             'participantProductView'  => $participantProductView,
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
+            'tipTranslationViews'     => $tipTranslationViews,
         ]);
     }
 
@@ -400,6 +409,12 @@ class SheetController extends Controller
         );
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_SHEET,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
@@ -421,6 +436,7 @@ class SheetController extends Controller
             'vatMode'                 => $eventDomain->getEvent()->getMode(),
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
+            'tipTranslationViews'     => $tipTranslationViews,
         ]);
     }
 

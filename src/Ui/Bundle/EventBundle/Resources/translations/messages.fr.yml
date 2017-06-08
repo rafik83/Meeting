@@ -360,7 +360,7 @@ sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
 sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nET\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
-sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFirstName% %toLastName% (%toEmail%)'
+sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFullname% (%toEmail%)'
 sheetGroup.quitImpersonation: Quitter
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
@@ -374,3 +374,6 @@ summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
 unavailability.title: Indisponible
+user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'
+user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
+user_event.confirm.agenda.title: 'Confirmation de l''agenda'

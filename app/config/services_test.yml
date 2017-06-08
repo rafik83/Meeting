@@ -109,6 +109,11 @@ services:
         arguments:
              - '@vimeet_infrastructure.repository.event_repository'
 
+    behat_manager.token.user_event_token_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Token\UserEventTokenManager
+        arguments:
+             - '@repository.token.user_event_token_repository'
+
     #
     # Proxies
     #
@@ -189,3 +194,9 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.event.day'
+
+    behat_proxy.token.user_event_token_context:
+        class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.token.user_event_token_manager'

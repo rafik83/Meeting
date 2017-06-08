@@ -22,10 +22,7 @@ Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment:
             targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Mass
             joinColumn:
                 onDelete: CASCADE
-        participant:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
-    uniqueConstraints:
-        date_unique_idx:
-            columns: [participant_id, from_date, to_date]

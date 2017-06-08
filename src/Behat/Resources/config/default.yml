@@ -47,6 +47,8 @@ default:
                     - '@behat_proxy.login_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Event\DayContext:
                     - '@behat_proxy.event.day_context'
+                - Proximum\Vimeet\Behat\Context\Domain\Token\UserEventTokenContext:
+                    - '@behat_proxy.token.user_event_token_context'
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Messaging;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -46,22 +47,28 @@ class SubstitutionsProvider
     /** @var SheetPlanningViewQueryHandler */
     private $sheetPlanningViewQueryHandler;
 
+    /** @var AgendaConfirmationCTASubstitution */
+    private $agendaConfirmationCTASubstitution;
+
     /**
-     * @param EventUrlGeneratorInterface    $eventUrlGenerator             Event URL generator used to substitute event-related link placeholders
-     * @param ParticipantInfoGuesser        $participantInfoGuesser        Service used to retrieve a participant complete name
-     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator Service used to generate tokens for inactive users who must activate their account
-     * @param SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler Service used to generate the sheet planning in html format
+     * @param EventUrlGeneratorInterface        $eventUrlGenerator             Event URL generator used to substitute event-related link placeholders
+     * @param ParticipantInfoGuesser            $participantInfoGuesser        Service used to retrieve a participant complete name
+     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator Service used to generate tokens for inactive users who must activate their account
+     * @param SheetPlanningViewQueryHandler     $sheetPlanningViewQueryHandler Service used to generate the sheet planning in html format
+     * @param AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
      */
     public function __construct(
         EventUrlGeneratorInterface $eventUrlGenerator,
         ParticipantInfoGuesser $participantInfoGuesser,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler
+        SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler,
+        AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
     ) {
-        $this->eventUrlGenerator             = $eventUrlGenerator;
-        $this->participantInfoGuesser        = $participantInfoGuesser;
-        $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
-        $this->sheetPlanningViewQueryHandler = $sheetPlanningViewQueryHandler;
+        $this->eventUrlGenerator                 = $eventUrlGenerator;
+        $this->participantInfoGuesser            = $participantInfoGuesser;
+        $this->activateAccountTokenGenerator     = $activateAccountTokenGenerator;
+        $this->sheetPlanningViewQueryHandler     = $sheetPlanningViewQueryHandler;
+        $this->agendaConfirmationCTASubstitution = $agendaConfirmationCTASubstitution;
     }
 
     /**
@@ -138,6 +145,8 @@ class SubstitutionsProvider
                 return $recipient->getFullname();
             case Compose::TAG_SHEET_PLANNING:
                 return $this->handleSheetPlanning($sheet, $locale, $recipient);
+            case Compose::TAG_CTA_AGENDA_CONFIRMATION:
+                return $this->agendaConfirmationCTASubstitution->getCTA($recipient, $sheet, $locale);
             case Compose::LINK_ACTIVACTE_ACCOUNT:
                 return $this->getActivateAccountUrl($recipient, $sheet, $locale);
             case Compose::LINK_AGENDA:
@@ -174,7 +183,7 @@ class SubstitutionsProvider
     {
         $event = $sheet->getEvent();
 
-        // If recipient is biling contact:
+        // If recipient is billing contact:
         if ($recipient instanceof BillingInfo) {
             return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_login', ['_locale' => $locale]);
         }
