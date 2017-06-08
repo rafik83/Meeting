@@ -127,8 +127,8 @@ class TipEventController extends Controller
     }
 
     /**
-     * @param Tip     $tip
-     * @param string  $locale
+     * @param Tip    $tip
+     * @param string $locale
      *
      * @return JsonResponse
      */

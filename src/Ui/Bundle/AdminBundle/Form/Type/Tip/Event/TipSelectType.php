@@ -37,7 +37,6 @@ class TipSelectType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-
         $resolver->setRequired(['tipViews']);
         $resolver->setAllowedTypes('tipViews', 'array');
         $resolver->setDefaults([
