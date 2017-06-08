@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Planning\SheetPlanningView;
 use Proximum\Vimeet\Domain\Messaging\InvalidMessagePlaceholderException;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
 use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -44,18 +45,23 @@ class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
     /** @var SheetPlanningViewQueryHandler */
     private $sheetPlanningViewQueryHandler;
 
+    /** @var AgendaConfirmationCTASubstitution */
+    private $agendaConfirmationCTASubstitution;
+
     public function setUp()
     {
-        $this->eventUrlGenerator             = $this->prophesize(Event\EventUrlGeneratorInterface::class);
-        $this->participantInfoGuesser        = $this->prophesize(ParticipantInfoGuesser::class);
-        $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $this->sheetPlanningViewQueryHandler = $this->prophesize(SheetPlanningViewQueryHandler::class);
+        $this->eventUrlGenerator                 = $this->prophesize(Event\EventUrlGeneratorInterface::class);
+        $this->participantInfoGuesser            = $this->prophesize(ParticipantInfoGuesser::class);
+        $this->activateAccountTokenGenerator     = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $this->sheetPlanningViewQueryHandler     = $this->prophesize(SheetPlanningViewQueryHandler::class);
+        $this->agendaConfirmationCTASubstitution = $this->prophesize(AgendaConfirmationCTASubstitution::class);
 
         $this->substitutionProvider = new SubstitutionsProvider(
             $this->eventUrlGenerator->reveal(),
             $this->participantInfoGuesser->reveal(),
             $this->activateAccountTokenGenerator->reveal(),
-            $this->sheetPlanningViewQueryHandler->reveal()
+            $this->sheetPlanningViewQueryHandler->reveal(),
+            $this->agendaConfirmationCTASubstitution->reveal()
         );
     }
 
