@@ -148,6 +148,14 @@ interface SheetRepositoryInterface
     public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event);
 
     /**
+     * @param User           $user
+     * @param EventInterface $event
+     *
+     * @return bool
+     */
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event);
+
+    /**
      * @param int $sheetId
      *
      * @return null|Sheet

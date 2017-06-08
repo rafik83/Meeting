@@ -184,7 +184,7 @@ class SlotAvailability
     private function assignHappeningSortByParticipant(array $happenings)
     {
         foreach ($happenings as $happening) {
-            $this->happeningsSortByParticipant[$happening->getParticipant()->getId()][] = $happening;
+            $this->happeningsSortByParticipant[$happening->getUser()->getId()][] = $happening;
         }
     }
 
@@ -543,15 +543,16 @@ class SlotAvailability
      */
     private function hasHappening(MeetingSlot $slot, Participant $participant)
     {
-        if (!isset($this->happeningsSortByParticipant[$participant->getId()])) {
+        if (!isset($this->happeningsSortByParticipant[$participant->getUser()->getId()])) {
             return false;
         }
 
-        foreach ($this->happeningsSortByParticipant[$participant->getId()] as $happening) {
+        /** @var HappeningParticipation $happening */
+        foreach ($this->happeningsSortByParticipant[$participant->getUser()->getId()] as $happening) {
             $happeningBegin = $happening->getHappening()->getBegin();
             $happeningEnd = $happening->getHappening()->getEnd();
 
-            if ($happening->getParticipant() !== $participant) {
+            if ($happening->getUser() !== $participant->getUser()) {
                 continue;
             }
 

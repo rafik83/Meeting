@@ -528,12 +528,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
-    vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
-        class: Proximum\Vimeet\Application\Command\Happening\UnparticipateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Unparticipate }
     vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
@@ -1995,6 +1989,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Rule
@@ -2192,8 +2187,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
-            - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@sheet.sheet_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery }
 

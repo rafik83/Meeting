@@ -69,7 +69,7 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happeningParticipation = new HappeningParticipation(
             new Happening($event, $begin, $end, $happeningCategory),
-            $participant
+            $user
         );
 
         $meetingRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$meeting]);

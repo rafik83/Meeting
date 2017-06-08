@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface HappeningParticipationRepositoryInterface
 {
@@ -29,27 +30,21 @@ interface HappeningParticipationRepositoryInterface
     public function remove(HappeningParticipation $happeningParticipation);
 
     /**
-     * @param Happening   $happening
-     * @param Participant $participant
-     *
-     * @return null|HappeningParticipation
-     */
-    public function findByHappeningAndParticipant(Happening $happening, Participant $participant);
-
-    /**
-     * @param Participant $participant
-     * @param array       $filters
+     * @param User  $user
+     * @param Event $event
+     * @param array $filters
      *
      * @return HappeningParticipation[]
      */
-    public function findByParticipant(Participant $participant, array $filters = []);
+    public function findByUser(User $user, Event $event, array $filters = []);
 
     /**
      * @param Participant[] $participants
+     * @param Event         $event
      *
      * @return HappeningParticipation[]
      */
-    public function findByParticipants(array $participants);
+    public function findByUsers(array $participants, Event $event);
 
     /**
      * @param Happening $happening
@@ -102,20 +97,29 @@ interface HappeningParticipationRepositoryInterface
     public function getParticipationsForSheet(Sheet $sheet, $happenings);
 
     /**
-     * @param Participant $participant
-     * @param Happening   $happening
+     * @param User      $user
+     * @param Happening $happening
      */
-    public function removeParticipantForHappening(Participant $participant, Happening $happening);
+    public function removeUserForHappening(User $user, Happening $happening);
 
     /**
-     * @param Participant $participant
+     * @param User  $user
+     * @param Event $event
      *
-     * @return null|int
+     * @return int|null
      */
-    public function checkAnyParticipation(Participant $participant);
+    public function checkAnyParticipation(User $user, Event $event);
 
     /**
      * @param HappeningParticipation $happeningParticipation
      */
     public function update(HappeningParticipation $happeningParticipation);
+
+    /**
+     * @param Happening $happening
+     * @param User $user
+     *
+     * @return HappeningParticipation|null
+     */
+    public function findByHappeningAndUser(Happening $happening, User $user);
 }

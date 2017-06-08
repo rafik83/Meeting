@@ -227,14 +227,16 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param User           $user
+     * @param EventInterface $event
+     *
+     * @return QueryBuilder
      */
-    public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
+    private function sheetsByUserAndEventWhereUserIsParticipantQueryBuilder(User $user, EventInterface $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join(
                 'sheet.participants',
@@ -245,7 +247,31 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('user', $user)
             ->setParameter('event', $event->getId());
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
+    {
+        $queryBuilder = $this->sheetsByUserAndEventWhereUserIsParticipantQueryBuilder($user, $event);
+
+        return $queryBuilder->select('sheet')->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event)
+    {
+        $queryBuilder = $this->sheetsByUserAndEventWhereUserIsParticipantQueryBuilder($user, $event);
+
+        return null !== $queryBuilder
+                ->select('sheet.id')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
     }
 
     /**
