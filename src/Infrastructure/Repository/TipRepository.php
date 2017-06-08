@@ -46,9 +46,9 @@ class TipRepository implements TipRepositoryInterface
             ->createQueryBuilder()
             ->select('tip')
             ->from(Tip::class, 'tip')
-            ->join(TipTranslation::class, 'tipTranslation', 'WITH', 'tipTranslation.tip = :id')
             ->where('tip.id = :id')
-            ->setParameter('id', $id);
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
