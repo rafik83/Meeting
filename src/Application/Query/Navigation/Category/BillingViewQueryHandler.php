@@ -39,7 +39,7 @@ class BillingViewQueryHandler
      */
     public function handle(BillingViewQuery $billingQuery)
     {
-        if (!$billingQuery->sheet->getPackage()->isPassable()) {
+        if ($billingQuery->sheet->getPackage() === null || !$billingQuery->sheet->getPackage()->isPassable()) {
             return null;
         }
 

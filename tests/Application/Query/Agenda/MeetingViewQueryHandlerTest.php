@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
@@ -28,8 +28,6 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
-use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -40,11 +38,24 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
-        $sheet        = SheetFactory::create($event, $user, null, $type);
-        $sheetMet     = SheetFactory::create($event, null, null, $type);
-        $participant  = ParticipantFactory::create($sheetMet);
-        $participant2 = ParticipantFactory::create($sheetMet);
-        $request      = new Request($sheet, [], $sheetMet, [], new \DateTime(), $user);
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheetMet = $this->prophesize(Sheet::class);
+
+        $sheet->getType()->willReturn($type);
+        $sheetMet->getType()->willReturn($type);
+
+        $sheet->hasUser($user)->shouldBeCalled()->willReturn(true);
+        $sheetMet->hasUser($user)->willReturn(false);
+
+        $sheetMet->getId()->willReturn(2);
+
+        $sheet->getTitle()->willReturn('userSheetTitle');
+        $sheetMet->getTitle()->willReturn('sheetMetTitle');
+
+        $participant  = $this->prophesize(Participant::class);
+        $participant2 = $this->prophesize(Participant::class);
+        $request      = new Request($sheet->reveal(), [], $sheetMet->reveal(), [], new \DateTime(), $user);
         $begin        = new \DateTime('2016-10-12 10:00:00.000');
         $end          = new \DateTime('2016-10-12 12:00:00.000');
         $slot         = new MeetingSlot($event, $begin, $end, false);
@@ -55,10 +66,10 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meeting      = new Meeting(
             $request,
             $slot,
-            $sheet,
+            $sheet->reveal(),
             [],
-            $sheetMet,
-            [$participant, $participant2],
+            $sheetMet->reveal(),
+            [$participant->reveal(), $participant2->reveal()],
             new \DateTime(),
             $spot
         );
@@ -67,41 +78,26 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
 
-        $reflection = new \ReflectionClass(Sheet::class);
-        $property   = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($sheetMet, 2);
-        $property->setAccessible(false);
-
-        $reflectionParticipant = new \ReflectionClass(Participant::class);
-        $propertyParticipant   = $reflectionParticipant->getProperty('id');
-        $propertyParticipant->setAccessible(true);
-        $propertyParticipant->setValue($participant, 1);
-        $propertyParticipant->setValue($participant2, 2);
-        $propertyParticipant->setAccessible(false);
-
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
-        $sheetInfoGuesser   = $this->prophesize(SheetInfoGuesser::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
         $participantHandler
-            ->handle(new MeetingParticipantViewQuery($participant, [$rule], 'fr'))
+            ->handle(new MeetingParticipantViewQuery($participant->reveal(), [$rule], 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantView1);
         $participantHandler
-            ->handle(new MeetingParticipantViewQuery($participant2, [$rule], 'fr'))
+            ->handle(new MeetingParticipantViewQuery($participant2->reveal(), [$rule], 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantView2);
-        $sheetInfoGuesser->guessSheetTitle($sheetMet, 'fr')->shouldBeCalled()->willReturn('sheetMetTitle');
         $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
-            $sheetInfoGuesser->reveal(),
             $ruleRepository->reveal()
         );
 
-        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting, $sheet, $event, 'fr'));
+        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting, $sheet->reveal(), true, $user, $event, 'fr'));
         $expected = new MeetingView(
+            'userSheetTitle',
             2,
             'sheetMetTitle',
             $begin,
@@ -111,6 +107,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'leftColor',
             'rightColor',
             $participants,
+            true,
             true
         );
 
@@ -123,11 +120,23 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
-        $sheet        = SheetFactory::create($event, $user, null, $type);
-        $sheetMet     = SheetFactory::create($event, null, null, $type);
-        $participant  = ParticipantFactory::create($sheetMet);
-        $participant2 = ParticipantFactory::create($sheetMet);
-        $request      = new Request($sheetMet, [], $sheet, [], new \DateTime(), $user);
+        $sheet    = $this->prophesize(Sheet::class);
+        $sheetMet = $this->prophesize(Sheet::class);
+        $sheet->getType()->willReturn($type);
+        $sheetMet->getType()->willReturn($type);
+
+        $sheetMet->hasUser($user)->shouldBeCalled()->willReturn(false);
+        $sheet->hasUser($user)->shouldBeCalled()->willReturn(true);
+
+        $sheetMet->getId()->willReturn(1);
+
+        $sheet->getTitle()->willReturn('userSheetTitle');
+        $sheetMet->getTitle()->willReturn('sheetMetTitle');
+
+        $participant  = $this->prophesize(Participant::class);
+        $participant2 = $this->prophesize(Participant::class);
+
+        $request      = new Request($sheetMet->reveal(), [], $sheet->reveal(), [], new \DateTime(), $user);
         $begin        = new \DateTime('2016-10-12 10:00:00.000');
         $end          = new \DateTime('2016-10-12 12:00:00.000');
         $slot         = new MeetingSlot($event, $begin, $end, false);
@@ -138,9 +147,9 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meeting      = new Meeting(
             $request,
             $slot,
-            $sheetMet,
-            [$participant, $participant2],
-            $sheet,
+            $sheetMet->reveal(),
+            [$participant->reveal(), $participant2->reveal()],
+            $sheet->reveal(),
             [],
             new \DateTime(),
             $spot
@@ -150,24 +159,10 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
 
-        $participantViewQuery1 = new MeetingParticipantViewQuery($participant, [$rule], 'fr');
-        $participantViewQuery2 = new MeetingParticipantViewQuery($participant2, [$rule], 'fr');
-
-        $reflection = new \ReflectionClass(Sheet::class);
-        $property   = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($sheetMet, 1);
-        $property->setAccessible(false);
-
-        $reflectionParticipant = new \ReflectionClass(Participant::class);
-        $propertyParticipant   = $reflectionParticipant->getProperty('id');
-        $propertyParticipant->setAccessible(true);
-        $propertyParticipant->setValue($participant, 1);
-        $propertyParticipant->setValue($participant2, 2);
-        $propertyParticipant->setAccessible(false);
+        $participantViewQuery1 = new MeetingParticipantViewQuery($participant->reveal(), [$rule], 'fr');
+        $participantViewQuery2 = new MeetingParticipantViewQuery($participant2->reveal(), [$rule], 'fr');
 
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
-        $sheetInfoGuesser   = $this->prophesize(SheetInfoGuesser::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
         $participantHandler
             ->handle($participantViewQuery1)
@@ -177,17 +172,16 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->handle($participantViewQuery2)
             ->shouldBeCalled()
             ->willReturn($participantView2);
-        $sheetInfoGuesser->guessSheetTitle($sheetMet, 'fr')->shouldBeCalled()->willReturn('sheetMetTitle');
         $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
-            $sheetInfoGuesser->reveal(),
             $ruleRepository->reveal()
         );
 
-        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting, $sheet, $event, 'fr'));
+        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting, $sheet->reveal(), true, $user, $event, 'fr'));
         $expected = new MeetingView(
+            'userSheetTitle',
             1,
             'sheetMetTitle',
             $begin,
@@ -197,6 +191,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'leftColor',
             'rightColor',
             $participants,
+            true,
             true
         );
 

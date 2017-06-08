@@ -348,4 +348,20 @@ interface SheetRepositoryInterface
      * @return bool
      */
     public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function isUserParticipantMultipleSheetsInEvent(User $user, Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     *
+     * @return Sheet|null
+     */
+    public function getSheetByEventAndTitle(Event $event, $title);
 }

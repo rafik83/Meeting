@@ -374,3 +374,6 @@ summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
 unavailability.title: Indisponible
+user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'
+user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
+user_event.confirm.agenda.title: 'Confirmation de l''agenda'

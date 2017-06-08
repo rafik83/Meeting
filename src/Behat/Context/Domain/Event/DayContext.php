@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Behat\Context\Domain\Event;
+
+use Behat\Behat\Context\Context;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\Event\DayContextProxyInterface;
+
+class DayContext implements Context
+{
+    /** @var DayContextProxyInterface */
+    private $dayContextProxy;
+
+    /**
+     * @param DayContextProxyInterface $dayContextProxy
+     */
+    public function __construct(DayContextProxyInterface $dayContextProxy)
+    {
+        $this->dayContextProxy = $dayContextProxy;
+    }
+
+    /**
+     * @Given /^this event occurs today from "(?P<begin>[^"]+)" to "(?P<end>[^"]+)"$/
+     *
+     * @param string $begin must be a string like "08:00"
+     * @param string $end
+     */
+    public function thisEventOccursTodayFromBeginToEnd($begin, $end)
+    {
+        $event = $this->dayContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $now = new \DateTime();
+        $begin = new \DateTime(sprintf('%s %s:00', $now->format('Y-m-d'), $begin));
+        $end = new \DateTime(sprintf('%s %s:00', $now->format('Y-m-d'), $end));
+
+        $day = $this->dayContextProxy->getDayManager()->create($event, $begin, $end);
+        $this->dayContextProxy->getStorage()->set('day', $day);
+    }
+}

@@ -21,7 +21,8 @@ default:
                 - Fidry\AliceBundleExtension\Context\Doctrine\AliceORMContext:
                     basePath: %paths.base%/src/Behat/Resources/fixtures
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
-                - Proximum\Vimeet\Behat\Context\FeatureContext: ~
+                - Proximum\Vimeet\Behat\Context\FeatureContext:
+                    - '@behat_proxy.feature_context'
                 - Proximum\Vimeet\Behat\Context\Domain\EventContext:
                     - '@behat_proxy.event_context'
                 - Proximum\Vimeet\Behat\Context\Domain\UserContext:
@@ -42,6 +43,12 @@ default:
                     - '@behat_proxy.meeting_context'
                 - Proximum\Vimeet\Behat\Context\Domain\OrderContext:
                     - '@behat_proxy.order_context'
+                - Proximum\Vimeet\Behat\Context\Domain\LoginContext:
+                    - '@behat_proxy.login_context'
+                - Proximum\Vimeet\Behat\Context\Domain\Event\DayContext:
+                    - '@behat_proxy.event.day_context'
+                - Proximum\Vimeet\Behat\Context\Domain\Token\UserEventTokenContext:
+                    - '@behat_proxy.token.user_event_token_context'
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser

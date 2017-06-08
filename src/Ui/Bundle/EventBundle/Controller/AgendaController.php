@@ -55,10 +55,11 @@ class AgendaController extends Controller
     }
 
     /**
-     * @param EventDomain $eventDomain
-     * @param Request     $request
-     * @param Participant $participant
-     * @param Sheet       $sheet
+     * @param EventDomain   $eventDomain
+     * @param Request       $request
+     * @param Participant   $participant
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return Response
      */
@@ -66,7 +67,8 @@ class AgendaController extends Controller
         EventDomain $eventDomain,
         Request $request,
         Participant $participant,
-        Sheet $sheet
+        Sheet $sheet,
+        UserInterface $user
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -82,7 +84,7 @@ class AgendaController extends Controller
             $sheet,
             $participant,
             $request->getLocale(),
-            $this->getUser()
+            $user
         ));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(

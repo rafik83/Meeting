@@ -20,6 +20,7 @@ mail.completeProfile.body: "Vous avez été invité en tant que participant pour
 mail.completeProfile.end: 'Cordialement,'
 mail.completeProfile.link: 'Compléter votre profil participant'
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
+mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
 mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription  \"%event%\" a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe \"%event%\".\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
