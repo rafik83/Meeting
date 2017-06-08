@@ -277,6 +277,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\FileRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.token.user_event_token_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Token\UserEventTokenRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -859,6 +863,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAssign }
     command.operator.create_handler:
@@ -1753,6 +1758,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Sheet\Create }
 
+    command.token.user_event_token.confirm_agenda_handler:
+        class: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgendaHandler
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda }
+
     #
     # Post Batch Action
     #
@@ -1894,6 +1907,18 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter
         arguments:
             - '@security.authorization_checker'
+
+    adapter.templating_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\TemplatingAdapter
+        arguments:
+             - '@twig'
+
+    adapter.impersonate_url_generator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ImpersonateUrlGeneratorAdapter
+        arguments:
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'
+            - '@router'
 
     #
     # Components
@@ -2768,6 +2793,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
 
@@ -2776,6 +2802,7 @@ services:
         arguments:
             - '@query.sheet.group.admin.group_view_handler'
             - '@repository.sheet.group_repository'
+            - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
 
@@ -2833,6 +2860,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQuery }
+
+    query.user.user_impersonate_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQueryHandler
+        arguments:
+            - '@adapter.impersonate_url_generator_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery }
 
     #
     # Program query
@@ -2898,7 +2932,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler
         arguments:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@repository.rule_repository'
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
@@ -2920,6 +2953,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler
         arguments:
             - '@repository.event.day_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@query.agenda.day_view_query_handler'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
@@ -3976,7 +4010,7 @@ services:
     unavailability.time_slot_dispatcher:
         class: Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
             - '@adapter.job_queue_adapter'
@@ -4373,6 +4407,7 @@ services:
             - '@template.participant_info_guesser'
             - '@components.token.user.activate_account_token_generator'
             - '@query.sheet.planning.sheet_planning_view_query_handler'
+            - '@domain.messaging.substitutions.agenda_confirmation_ctasubstitution'
 
     domain.messaging.emailing.substitution_resolver:
         class: Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver
@@ -4719,6 +4754,13 @@ services:
             - ['registerSubstitution', ['%%ordersLink%%', '@domain.messaging.substitutions.orders_link_substitution']]
             - ['registerSubstitution', ['%%invoiceLinks%%', '@domain.messaging.substitutions.invoices_link_substitution']]
 
+    domain.messaging.substitutions.agenda_confirmation_ctasubstitution:
+        class: Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution
+        arguments:
+            - '@adapter.templating_adapter'
+            - '@adapter.event_url_generator'
+            - '@domain.token.user_event_token_generator'
+
     #
     # Group
     #
@@ -4729,3 +4771,16 @@ services:
             - '@command.planning.sheet_info_guesser_cache'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery }
+
+    #
+    # UserEventToken
+    #
+    domain.token.uniqid_generator:
+        class: Proximum\Vimeet\Domain\Token\UniqidGenerator
+
+    domain.token.user_event_token_generator:
+        class: Proximum\Vimeet\Domain\Token\UserEventTokenGenerator
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@domain.token.uniqid_generator'
+            - '@datetime'

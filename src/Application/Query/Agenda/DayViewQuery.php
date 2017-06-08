@@ -51,26 +51,24 @@ class DayViewQuery
      */
     public $masses;
 
-    /**
-     * @var Meeting[]
-     */
+    /** @var Meeting[] */
     public $meetings;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $currentSheet;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
+
+    /** @var bool */
+    public $isUserParticipantMultipleSheet;
 
     /**
      * @param Day                      $day
      * @param Sheet                    $currentSheet
      * @param Event                    $event
      * @param Participant              $participant
+     * @param bool                     $isUserParticipantMultipleSheet
      * @param string                   $locale
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
@@ -82,6 +80,7 @@ class DayViewQuery
         Sheet $currentSheet,
         Event $event,
         Participant $participant,
+        $isUserParticipantMultipleSheet,
         $locale,
         array $happenings = [],
         array $unavailabilities = [],
@@ -92,6 +91,7 @@ class DayViewQuery
         $this->currentSheet     = $currentSheet;
         $this->event            = $event;
         $this->participant      = $participant;
+        $this->isUserParticipantMultipleSheet = $isUserParticipantMultipleSheet;
         $this->locale           = $locale;
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;

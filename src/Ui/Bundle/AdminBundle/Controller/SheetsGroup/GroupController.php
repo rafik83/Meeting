@@ -43,7 +43,9 @@ class GroupController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $groupViews = $this->get('tactician.commandbus')->handle(new GroupListViewQuery($event));
+        $groupViews = $this->get('tactician.commandbus')->handle(
+            new GroupListViewQuery($event, $this->getUser())
+        );
 
         return $this->render('AdminBundle:SheetsGroup:list.html.twig', [
             'event'      => $event,

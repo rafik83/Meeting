@@ -66,8 +66,6 @@ class PostBatchCatalogHandler
     {
         $state = $command->state === BatchCatalogHandler::ADD_CATALOG;
 
-        $this->sheetIndexer->updateSheets($command->sheets);
-
         foreach ($command->sheets as $sheet) {
             // Disable/enable the requests
             $this->enableDisableManager->update(
@@ -88,5 +86,7 @@ class PostBatchCatalogHandler
                 );
             }
         }
+
+        $this->sheetIndexer->updateSheets($command->sheets);
     }
 }
