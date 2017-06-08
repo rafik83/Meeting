@@ -45,12 +45,16 @@ class NavigationController extends Controller
         $route           = $requestStack->getMasterRequest()->get('_route');
         $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
 
+        if (null === $route) {
+            $route = 'event';
+        }
+
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
             new HeaderViewQuery(
                 $eventDomain->getEvent(),
                 $request->getLocale(),
                 $route,
-                $routeParameters,
+                null === $routeParameters ? [] : $routeParameters,
                 $registration,
                 $sheet,
                 $user
