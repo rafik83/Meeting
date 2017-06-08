@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
@@ -45,14 +46,20 @@ class UpdateHandlerTest extends TestCase
     /** @var Group */
     private $group;
 
+    /** @var Event */
+    private $event;
+
+    /** @var \DateTime */
+    private $now;
+
     public function setUp()
     {
-        $event   = EventFactory::createEvent();
+        $this->event   = EventFactory::createEvent();
         $manager = UserFactory::create();
-        $now     = new \DateTime();
+        $this->now     = new \DateTime();
         $title   = 'SheetGroup';
 
-        $this->group = GroupFactory::createGroup($event, $manager, $now, $title);
+        $this->group = GroupFactory::createGroup($this->event, $manager, $this->now, $title);
 
         $this->groupRepository           = $this->prophesize(GroupRepositoryInterface::class);
         $this->eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
@@ -62,20 +69,17 @@ class UpdateHandlerTest extends TestCase
 
     public function testModifyManagerEmailAndTitle()
     {
-        $event = EventFactory::createEvent();
-        $now   = new \DateTime();
-
         $newEmail      = 'elao@proximum.com';
         $update        = new Update($this->group);
         $update->title = 'SheetGroupNewTitle';
         $update->email = $newEmail;
 
         $expectedManager = UserFactory::create($newEmail);
-        $expectedGroup   = GroupFactory::createGroup($event, $expectedManager, $now);
+        $expectedGroup   = GroupFactory::createGroup($this->event, $expectedManager, $this->now);
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
-        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $expectedManager)
+        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($this->event, $expectedManager)
             ->shouldBeCalled();
 
         $this->groupRepository->update($expectedGroup)->shouldBeCalled();
@@ -98,8 +102,6 @@ class UpdateHandlerTest extends TestCase
     {
         $this->expectException(UserNotAllowedToManageGroupException::class);
 
-        $event = EventFactory::createEvent();
-
         $newEmail      = 'elao@proximum.com';
         $update        = new Update($this->group);
         $update->title = 'SheetGroupNewTitle';
@@ -109,7 +111,7 @@ class UpdateHandlerTest extends TestCase
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
-        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $expectedManager)
+        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($this->event, $expectedManager)
             ->shouldBeCalled()
             ->willThrow(\Exception::class);
 
@@ -133,22 +135,15 @@ class UpdateHandlerTest extends TestCase
     {
         $this->expectException(UserNotFoundForGivenEmailException::class);
 
-        $event   = EventFactory::createEvent();
-        $manager = UserFactory::create();
-        $now     = new \DateTime();
-        $title   = 'SheetGroup';
-
-        $group = GroupFactory::createGroup($event, $manager, $now, $title);
-
         $newEmail      = 'elao@proximum.com';
-        $update        = new Update($group);
+        $update        = new Update($this->group);
         $update->title = 'SheetGroupNewTitle';
         $update->email = $newEmail;
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn(null);
 
         $this->userToGroupManagerChecker
-            ->isUserToGroupManagerAllowed($event, Argument::type(User::class))
+            ->isUserToGroupManagerAllowed($this->event, Argument::type(User::class))
             ->shouldNotBeCalled();
 
         $this->groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
