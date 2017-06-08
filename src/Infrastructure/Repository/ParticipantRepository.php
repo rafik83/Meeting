@@ -340,10 +340,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     WHERE
                         u.user = user AND u.event = :eventId
                         AND (
-                            u.begin BETWEEN :begin AND :end
-                            OR u.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN u.begin AND u.end
-                            OR :end BETWEEN u.begin AND u.end
+                            u.begin >= :begin AND u.begin < :end
+                            OR u.end > :begin AND u.end <= :end
+                            OR u.begin <= :begin AND u.end >= :end
                         )
                 )";
         }
@@ -363,10 +362,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                         " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
                         AND (fpUser = user OR tpUser = user)
                         AND (
-                            slot.begin BETWEEN :begin AND :end
-                            OR slot.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN slot.begin AND slot.end
-                            OR :end BETWEEN slot.begin AND slot.end
+                            slot.begin >= :begin AND slot.begin < :end
+                            OR slot.end > :begin AND slot.end <= :end
+                            OR slot.begin <= :begin AND slot.end >= :end
                         )
                 )",
                 // Participant have not happening during this period
@@ -379,10 +377,9 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
                         AND p.user = user
                         AND (
-                            h.begin BETWEEN :begin AND :end
-                            OR h.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN h.begin AND h.end
-                            OR :end BETWEEN h.begin AND h.end
+                            h.begin >= :begin AND h.begin < :end
+                            OR h.end > :begin AND h.end <= :end
+                            OR h.begin <= :begin AND h.end >= :end
                         )
                 )",
                 $unavailabilityConditions
@@ -528,7 +525,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     ) {
         return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
     }
-  
+
     /**
      * {@inheritdoc}
      */
@@ -547,7 +544,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
