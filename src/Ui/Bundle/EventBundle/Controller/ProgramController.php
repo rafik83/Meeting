@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
@@ -58,11 +60,18 @@ class ProgramController extends Controller
 
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            TipTranslationViewQueryHandler::CONTEXT_PROGRAM,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Program:index.html.twig', [
             'event'                  => $event,
             'sheet'                  => $sheet,
             'program'                => $program,
             'isUserAloneParticipant' => $isUserAloneParticipant,
+            'tipTranslationViews'    => $tipTranslationViews,
         ]);
     }
 }

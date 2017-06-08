@@ -29,19 +29,30 @@ class GroupView
     /** @var SheetView[] */
     public $sheetViews;
 
+    /** @var string */
+    public $impersonateLink;
+
     /**
      * @param int                $id
      * @param string             $title
      * @param string             $emailManager
      * @param SheetView[]        $sheetViews
+     * @param string             $impersonateLink
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($id, $title, $emailManager, array $sheetViews, \DateTimeInterface $createdAt)
-    {
-        $this->id           = $id;
-        $this->title        = $title;
-        $this->sheetViews   = $sheetViews;
-        $this->emailManager = $emailManager;
-        $this->createdAt    = $createdAt;
+    public function __construct(
+        $id,
+        $title,
+        $emailManager,
+        array $sheetViews,
+        $impersonateLink,
+        \DateTimeInterface $createdAt
+    ) {
+        $this->id              = $id;
+        $this->title           = $title;
+        $this->sheetViews      = $sheetViews;
+        $this->emailManager    = $emailManager;
+        $this->impersonateLink = $impersonateLink;
+        $this->createdAt       = $createdAt;
     }
 }

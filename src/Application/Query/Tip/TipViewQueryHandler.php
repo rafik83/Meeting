@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Application\View\Tip\TipListView;
 use Proximum\Vimeet\Application\View\Tip\TipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -39,7 +40,8 @@ class TipViewQueryHandler
         $tips = $this->tipRepository->paginate($query->page, $query->limit);
 
         $tipListView = new TipListView();
-        
+
+        /** @var Tip $tip */
         foreach($tips as $tip) {
             $pagesTranslations = $tip->getPagesTranslations();
 

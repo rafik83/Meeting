@@ -15,6 +15,8 @@ use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -275,6 +277,31 @@ class UserRepository implements UserRepositoryInterface
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user AND participant.sheet IN (:sheets)')
             ->addOrderBy('user.account.lastName', 'ASC')
             ->setParameter('sheets', $sheets)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->andWhere(
+                'NOT EXISTS (
+                    SELECT m.id FROM '. MassAssignment::class . ' m
+                    WHERE m.mass = :mass AND m.user = user
+                )'
+            )
+            ->setParameter('mass', $mass)
+            ->setParameter('event', $event)
         ;
 
         return $queryBuilder->getQuery()->getResult();

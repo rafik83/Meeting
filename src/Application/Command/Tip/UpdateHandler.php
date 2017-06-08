@@ -52,7 +52,10 @@ class UpdateHandler
                 $command->title,
                 $command->onMeetingManagement,
                 $command->onCatalog,
-                $command->onPrintPlanning
+                $command->onPrintPlanning,
+                $command->onSheet,
+                $command->onAgenda,
+                $command->onProgram
             )
         );
     }

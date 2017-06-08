@@ -18,7 +18,7 @@ Clone the project in your workspace, and launch setup
 
         $ make setup
 
-You should access the project via http://vimeet.proximum.dev/app_dev.php/admin/fr/event
+You should access the project via http://admin.vimeet.proximum.dev/app_dev.php/fr/event
 
 Load Vimeet fixtures:
 
@@ -159,7 +159,7 @@ Importer un fichier prod.sql placé sur le root du projet :
 ### Jobs Queue
 
 * [Interface supervisord](http://vimeet.proximum.dev:9001/)
-* [Liste des jobs](http://vimeet.proximum.dev/app_dev.php/admin/fr/jobs/)
+* [Liste des jobs](http://admin.vimeet.proximum.dev/app_dev.php/fr/jobs/)
 
 Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
 

@@ -759,6 +759,9 @@ admin.tip.column.title: 'Libellé back office'
 admin.tip.column.translation: Langue(s)
 admin.tip.column.visible.catalog: Catalogue
 admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.onSheet: 'Fiche de présentation'
+admin.tip.column.visible.onProgram: 'Programme'
+admin.tip.column.visible.onAgenda: 'Agenda'
 admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'

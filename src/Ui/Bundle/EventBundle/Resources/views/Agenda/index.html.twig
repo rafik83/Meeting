@@ -3,7 +3,9 @@
 {% block title 'agenda.title'|trans %}
 
 {% block content %}
-
+    {% if tipTranslationViews is defined %}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+    {% endif %}
     <div class="row">
         <div class="col-md-6">
             <div class="mg-tp">
