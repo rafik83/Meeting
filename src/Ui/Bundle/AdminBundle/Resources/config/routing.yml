@@ -1412,4 +1412,5 @@ admin_tip_event_preview:
     methods: [GET]
     requirements:
         tip: \d+
+        locale: \w+
     defaults: { _controller: AdminBundle:Tip/TipEvent:preview }
