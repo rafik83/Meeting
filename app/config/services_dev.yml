@@ -3,3 +3,5 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter
         arguments:
             - '@logger'
+
+    adapter.smssender_alias: '@infrastructure.adapter.monolog_smssender_adapter'

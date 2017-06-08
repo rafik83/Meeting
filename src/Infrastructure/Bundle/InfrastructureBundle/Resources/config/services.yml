@@ -4728,3 +4728,10 @@ services:
             - '@repository.token.user_event_token_repository'
             - '@domain.token.uniqid_generator'
             - '@datetime'
+
+    #
+    # Messaging SMS
+    #
+    adapter.smssender_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter
+    adapter.smssender_alias: '@adapter.smssender_adapter'
