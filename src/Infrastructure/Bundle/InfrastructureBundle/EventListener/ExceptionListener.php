@@ -52,12 +52,20 @@ class ExceptionListener
         $request = $responseForExceptionEvent->getRequest();
         $exception = $responseForExceptionEvent->getException();
 
+        /**
+         * Symfony throw a redirect when User is not logged
+         * and there is AuthenticationException or AccessDeniedException
+         * See Symfony\Component\Security\Http\Firewall\ExceptionListener
+         */
         if (($exception instanceof AuthenticationException || $exception instanceof AccessDeniedException)
             && !$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ) {
             return;
         }
 
+        /**
+         * Try to get the event matching the host.
+         */
         try {
             $event = $this->eventRepository->getEventByDomain($request->getHost());
 
