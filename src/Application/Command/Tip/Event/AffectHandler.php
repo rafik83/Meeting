@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
-use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
-use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotAvailableForEventException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
