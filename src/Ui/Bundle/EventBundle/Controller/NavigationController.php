@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +47,7 @@ class NavigationController extends Controller
         $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
 
         if (null === $route) {
-            $route = 'event';
+            $route = Route::EVENT;
         }
 
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
