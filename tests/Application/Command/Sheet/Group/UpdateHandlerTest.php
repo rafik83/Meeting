@@ -30,44 +30,65 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandlerTest extends TestCase
 {
-    public function testModifyManagerEmailAndTitle()
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
+    /** @var UserToGroupManagerChecker */
+    private $userToGroupManagerChecker;
+
+    /** @var GroupRepositoryInterface */
+    private $groupRepository;
+
+    /** @var Group */
+    private $group;
+
+    public function setUp()
     {
         $event   = EventFactory::createEvent();
         $manager = UserFactory::create();
         $now     = new \DateTime();
         $title   = 'SheetGroup';
 
-        $group = GroupFactory::createGroup($event, $manager, $now, $title);
+        $this->group = GroupFactory::createGroup($event, $manager, $now, $title);
+
+        $this->groupRepository           = $this->prophesize(GroupRepositoryInterface::class);
+        $this->eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
+        $this->userRepository            = $this->prophesize(UserRepositoryInterface::class);
+        $this->userToGroupManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
+    }
+
+    public function testModifyManagerEmailAndTitle()
+    {
+        $event = EventFactory::createEvent();
+        $now   = new \DateTime();
 
         $newEmail      = 'elao@proximum.com';
-        $update        = new Update($group);
+        $update        = new Update($this->group);
         $update->title = 'SheetGroupNewTitle';
         $update->email = $newEmail;
 
         $expectedManager = UserFactory::create($newEmail);
         $expectedGroup   = GroupFactory::createGroup($event, $expectedManager, $now);
 
-        $groupRepository           = $this->prophesize(GroupRepositoryInterface::class);
-        $eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
-        $userRepository            = $this->prophesize(UserRepositoryInterface::class);
-        $userToGroupManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
+        $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
-        $userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
-
-        $userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $expectedManager)
+        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $expectedManager)
             ->shouldBeCalled();
 
-        $groupRepository->update($expectedGroup)->shouldBeCalled();
+        $this->groupRepository->update($expectedGroup)->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            new SheetGroupCreatedEvent($group)
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
+            new SheetGroupCreatedEvent($expectedGroup)
         )->shouldBeCalled();
 
         $handler = new UpdateHandler(
-            $userRepository->reveal(),
-            $groupRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $userToGroupManagerChecker->reveal()
+            $this->userRepository->reveal(),
+            $this->groupRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->userToGroupManagerChecker->reveal()
         );
 
         $handler->handle($update);
@@ -77,41 +98,32 @@ class UpdateHandlerTest extends TestCase
     {
         $this->expectException(UserNotAllowedToManageGroupException::class);
 
-        $event   = EventFactory::createEvent();
-        $manager = UserFactory::create();
-        $now     = new \DateTime();
-        $title   = 'SheetGroup';
-
-        $group = GroupFactory::createGroup($event, $manager, $now, $title);
+        $event = EventFactory::createEvent();
 
         $newEmail      = 'elao@proximum.com';
-        $update        = new Update($group);
+        $update        = new Update($this->group);
         $update->title = 'SheetGroupNewTitle';
         $update->email = $newEmail;
 
         $expectedManager = UserFactory::create($newEmail);
 
-        $groupRepository           = $this->prophesize(GroupRepositoryInterface::class);
-        $eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
-        $userRepository            = $this->prophesize(UserRepositoryInterface::class);
-        $userToGroupManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
+        $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
-        $userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
+        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $expectedManager)
+            ->shouldBeCalled()
+            ->willThrow(\Exception::class);
 
-        $userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $expectedManager)
-            ->shouldBeCalled();
+        $this->groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
 
-        $groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
-
-        $eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
             Argument::type(SheetGroupCreatedEvent::class)
         )->shouldNotBeCalled();
 
         $handler = new UpdateHandler(
-            $userRepository->reveal(),
-            $groupRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $userToGroupManagerChecker->reveal()
+            $this->userRepository->reveal(),
+            $this->groupRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->userToGroupManagerChecker->reveal()
         );
 
         $handler->handle($update);
@@ -133,23 +145,24 @@ class UpdateHandlerTest extends TestCase
         $update->title = 'SheetGroupNewTitle';
         $update->email = $newEmail;
 
-        $groupRepository           = $this->prophesize(GroupRepositoryInterface::class);
-        $eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
-        $userRepository            = $this->prophesize(UserRepositoryInterface::class);
-        $userToGroupManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
+        $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn(null);
 
-        $userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn(null);
-
-        $userToGroupManagerChecker->isUserToGroupManagerAllowed($event, Argument::type(User::class))
+        $this->userToGroupManagerChecker
+            ->isUserToGroupManagerAllowed($event, Argument::type(User::class))
             ->shouldNotBeCalled();
 
-        $groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
+        $this->groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
             Argument::type(SheetGroupCreatedEvent::class)
         )->shouldNotBeCalled();
 
-        $handler = new UpdateHandler($userRepository->reveal(), $groupRepository->reveal(), $eventDispatcher->reveal());
+        $handler = new UpdateHandler(
+            $this->userRepository->reveal(),
+            $this->groupRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->userToGroupManagerChecker->reveal()
+        );
         $handler->handle($update);
     }
 }
