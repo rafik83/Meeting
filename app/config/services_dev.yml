@@ -1,0 +1,5 @@
+services:
+    infrastructure.adapter.monolog_smssender_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter
+        arguments:
+            - '@logger'
