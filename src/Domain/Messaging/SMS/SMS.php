@@ -14,6 +14,7 @@ class SMS
 {
     /**
      * Receiver phone number
+     *
      * @var string
      */
     private $receiver;
