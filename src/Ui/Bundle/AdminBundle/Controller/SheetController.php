@@ -64,22 +64,22 @@ class SheetController extends Controller
         $selectedSheetsPage = $request->query->getInt('page', 1);
 
         // redirect to list with default filters if no parameters
-        if (!$this->isRequestContainFilters($request) && empty($this->get('filter.sheet_filter')->get())) {
+        if (!$this->isRequestContainFilters($request) && empty($this->get('filter.sheet_filter')->get($event))) {
             return $this->redirectToRoute('admin_sheet', array_merge(
                 ['event' => $event->getId(), 'page' => $selectedSheetsPage],
                 SheetFilterType::getDefaultFilters()
             ));
         }
 
-        if (!$this->isRequestContainFilters($request) && $this->get('filter.sheet_filter')->get() !== null) {
+        if (!$this->isRequestContainFilters($request) && $this->get('filter.sheet_filter')->get($event) !== null) {
             return $this->redirectToRoute('admin_sheet', array_merge(
                 ['event' => $event->getId(), 'page' => $selectedSheetsPage],
-                $this->get('filter.sheet_filter')->get()
+                $this->get('filter.sheet_filter')->get($event)
             ));
         }
 
         if ($request->query->get('reset') !== null) {
-            $this->get('filter.sheet_filter')->clear();
+            $this->get('filter.sheet_filter')->clear($event);
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
@@ -98,7 +98,7 @@ class SheetController extends Controller
             $filters = $sheetFilterForm->getData();
 
             // save filter into session
-            $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
+            $this->get('filter.sheet_filter')->add($event, $this->getEnabledFilters(
                 $sheetFilterForm,
                 $request->query->all()
             ));
@@ -163,7 +163,7 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $filters = $this->get('filter.sheet_filter')->get();
+        $filters = $this->get('filter.sheet_filter')->get($event);
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
         $batch              = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()), $filters);
