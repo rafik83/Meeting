@@ -43,16 +43,15 @@ class OrderView
     public $invoiceDate;
 
     /**
-     * @param int    $orderId
-     * @param int    $sheetId
-     * @param string $sheetTitle
-     * @param string $invoiceNumber
-     * @param string $invoiceDate
-     *
-     * @internal param BillingInfoView $billingInfo
-     * @internal param ProductBoughtView[] $productBoughtViews
-     * @internal param PromotionCodeBoughtView[] $promotionCodeBoughtViews
-     * @internal param CustomRowBoughtView[] $customRowsViews
+     * @param int                       $orderId
+     * @param int                       $sheetId
+     * @param string                    $sheetTitle
+     * @param string                    $invoiceNumber
+     * @param string                    $invoiceDate
+     * @param BillingInfoView           $billingInfo
+     * @param ProductBoughtView[]       $productBoughtViews
+     * @param PromotionCodeBoughtView[] $promotionCodeBoughtViews
+     * @param CustomRowBoughtView[]     $customRowsViews
      */
     public function __construct(
         $orderId,
