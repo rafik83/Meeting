@@ -16,9 +16,11 @@ class RemoveSheetFromGroupChecker
 {
     /**
      * @param Sheet $sheet
+     *
+     * @return bool
      */
     public function canRemoveSheetFromGroup(Sheet $sheet)
     {
-
+        return false;
     }
 }

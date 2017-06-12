@@ -901,6 +901,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * Set Group to null
+     */
+    public function unassignFromGroup()
+    {
+        $this->group = null;
+    }
+
+    /**
      * @return bool
      */
     public function hasGroup()

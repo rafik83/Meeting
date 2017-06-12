@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -17,10 +18,12 @@ use Proximum\Vimeet\Domain\Service\SheetsGroup\RemoveSheetFromGroupChecker;
 
 class BatchAssignToGroupHandler
 {
-    const MESSAGE_ASSIGN_SUCCESS              = 'flash.admin.sheet_batch.assignToGroup.success';
-    const MESSAGE_ASSIGN_AND_IGNORED_SHEETS   = 'flash.admin.sheet_batch.assignToGroup.ignoredSheets';
-    const MESSAGE_UNASSIGN_SUCCESS            = 'flash.admin.sheet_batch.unassignFromGroup.success';
-    const MESSAGE_UNASSIGN_AND_IGNORED_SHEETS = 'flash.admin.sheet_batch.unassignFromGroup.ignoredSheets';
+    const MESSAGE_ASSIGN_SUCCESS                    = 'flash.admin.sheet_batch.assignToGroup.success';
+    const MESSAGE_ASSIGN_AND_IGNORED_SHEETS         = 'flash.admin.sheet_batch.assignToGroup.ignoredSheets';
+    const MESSAGE_UNASSIGN_SUCCESS                  = 'flash.admin.sheet_batch.unassignFromGroup.success';
+    const MESSAGE_UNASSIGN_AND_IGNORED_SHEETS       = 'flash.admin.sheet_batch.unassignFromGroup.ignoredSheets';
+    const MESSAGE_UNASSIGN_SHEET_NOT_HAVE_GROUP     = 'flash.admin.sheet_batch.unassignFromGroup.sheetNotHaveGroup';
+    const MESSAGE_UNASSIGN_SHEET_CANNOT_BE_REMOVED  = 'flash.admin.sheet_batch.unassignFromGroup.sheetCannotBeRemoved';
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -31,19 +34,25 @@ class BatchAssignToGroupHandler
     /** @var RemoveSheetFromGroupChecker */
     private $removeSheetFromGroupChecker;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param SheetRepositoryInterface    $sheetRepository
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param RemoveSheetFromGroupChecker $removeSheetFromGroupChecker
+     * @param TranslatorInterface         $translator
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        RemoveSheetFromGroupChecker $removeSheetFromGroupChecker
+        RemoveSheetFromGroupChecker $removeSheetFromGroupChecker,
+        TranslatorInterface $translator
     ) {
         $this->sheetRepository             = $sheetRepository;
         $this->sheetInfoGuesser            = $sheetInfoGuesser;
         $this->removeSheetFromGroupChecker = $removeSheetFromGroupChecker;
+        $this->translator                  = $translator;
     }
 
     /**
@@ -93,18 +102,7 @@ class BatchAssignToGroupHandler
         if (!empty($sheetsAlreadyWithGroup)) {
             $message = self::MESSAGE_ASSIGN_AND_IGNORED_SHEETS;
 
-            $ignoredSheetsMessage = implode(
-                ', ',
-                array_map(
-                    function (Sheet $sheet) use ($locale) {
-                        return $this->sheetInfoGuesser->guessSheetTitle(
-                            $sheet,
-                            $locale
-                        );
-                    },
-                    $sheetsAlreadyWithGroup
-                )
-            );
+            $ignoredSheetsMessage = $this->getSheetsTitleList($sheetsAlreadyWithGroup, $locale);
         }
 
         return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
@@ -118,9 +116,72 @@ class BatchAssignToGroupHandler
      */
     private function unassign(array $sheets, $locale)
     {
-        $message = self::MESSAGE_UNASSIGN_SUCCESS;
+        $ignoredSheetsWithoutGroup             = [];
+        $ignoredSheetsCannotBeRemovedFromGroup = [];
+
+        foreach ($sheets as $key => $sheet) {
+            if (!$sheet->hasGroup()) {
+                $ignoredSheetsWithoutGroup[] = $sheet;
+                unset($sheets[$key]);
+
+                continue;
+            }
+
+            if (!$this->removeSheetFromGroupChecker->canRemoveSheetFromGroup($sheet)) {
+                $ignoredSheetsCannotBeRemovedFromGroup[] = $sheet;
+                unset($sheets[$key]);
+
+                continue;
+            }
+
+            $sheet->unassignFromGroup();
+            $this->sheetRepository->set($sheet);
+        }
+
         $ignoredSheetsMessage = '';
+        $message              = self::MESSAGE_UNASSIGN_SUCCESS;
+
+        if (!empty($ignoredSheetsWithoutGroup) || !empty($ignoredSheetsCannotBeRemovedFromGroup)) {
+            $message = self::MESSAGE_UNASSIGN_AND_IGNORED_SHEETS;
+
+            $ignoredSheetsMessageArray = [];
+
+            if (!empty($ignoredSheetsWithoutGroup)) {
+                $ignoredSheetsMessageArray[] = $this->translator->trans(
+                    self::MESSAGE_UNASSIGN_SHEET_NOT_HAVE_GROUP,
+                    ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsWithoutGroup, $locale)]
+                );
+            }
+
+            if (!empty($ignoredSheetsCannotBeRemovedFromGroup)) {
+                $ignoredSheetsMessageArray[] = $this->translator->trans(
+                    self::MESSAGE_UNASSIGN_SHEET_CANNOT_BE_REMOVED,
+                    ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsCannotBeRemovedFromGroup, $locale)]
+                );
+            }
+
+            $ignoredSheetsMessage = implode(', ', $ignoredSheetsMessageArray);
+        }
 
         return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     * @param string  $locale
+     *
+     * @return string
+     */
+    private function getSheetsTitleList(array $sheets, $locale)
+    {
+        return implode(', ', array_map(
+            function (Sheet $sheet) use ($locale) {
+                return $this->sheetInfoGuesser->guessSheetTitle(
+                    $sheet,
+                    $locale
+                );
+            },
+            $sheets
+        ));
     }
 }

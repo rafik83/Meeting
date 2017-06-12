@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssignToGroup;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssignToGroupHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
@@ -26,6 +27,7 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $removeSheetFromGroupChecker = $this->prophesize(RemoveSheetFromGroupChecker::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
 
         $group = $this->prophesize(Sheet\Group::class);
         $sheet1 = $this->prophesize(Sheet::class);
@@ -56,7 +58,8 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $handler = new BatchAssignToGroupHandler(
             $sheetRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $removeSheetFromGroupChecker->reveal()
+            $removeSheetFromGroupChecker->reveal(),
+            $translator->reveal()
         );
 
         $result = $handler->handle(new BatchAssignToGroup([1, 2], $group->reveal(), 'fr'));
@@ -71,6 +74,7 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $removeSheetFromGroupChecker = $this->prophesize(RemoveSheetFromGroupChecker::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
 
         $group = $this->prophesize(Sheet\Group::class);
         $sheet1 = $this->prophesize(Sheet::class);
@@ -107,7 +111,8 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $handler = new BatchAssignToGroupHandler(
             $sheetRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $removeSheetFromGroupChecker->reveal()
+            $removeSheetFromGroupChecker->reveal(),
+            $translator->reveal()
         );
 
         $result = $handler->handle(new BatchAssignToGroup([1, 2, 3], $group->reveal(), 'fr'));
@@ -126,21 +131,13 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $removeSheetFromGroupChecker = $this->prophesize(RemoveSheetFromGroupChecker::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
 
         $sheet1 = $this->prophesize(Sheet::class);
-        $group1 = $this->prophesize(Sheet\Group::class);
-
         $sheet2 = $this->prophesize(Sheet::class);
-        $group2 = $this->prophesize(Sheet\Group::class);
 
-        $sheet1->getId()->willReturn(1);
-        $sheet1->getGroup()->willReturn($group1);
-
-        $sheet2->getId()->willReturn(2);
-        $sheet2->getGroup()->willReturn($group2);
-
-        $sheet1->setGroup(null)->shouldBeCalled();
-        $sheet2->setGroup(null)->shouldBeCalled();
+        $sheet1->hasGroup()->willReturn(true);
+        $sheet2->hasGroup()->willReturn(true);
 
         $sheetRepository->getSheetsById([1, 2])->shouldBeCalled()->willReturn(
             [
@@ -148,6 +145,9 @@ class BatchAssignToGroupHandlerTest extends TestCase
                 $sheet2->reveal(),
             ]
         );
+
+        $sheet1->unassignFromGroup()->shouldBeCalled();
+        $sheet2->unassignFromGroup()->shouldBeCalled();
 
         $sheetRepository->set($sheet1->reveal())->shouldBeCalled();
         $sheetRepository->set($sheet2->reveal())->shouldBeCalled();
@@ -161,7 +161,8 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $handler = new BatchAssignToGroupHandler(
             $sheetRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $removeSheetFromGroupChecker->reveal()
+            $removeSheetFromGroupChecker->reveal(),
+            $translator->reveal()
         );
 
         $result = $handler->handle(new BatchAssignToGroup([1, 2], null, 'fr'));
@@ -176,28 +177,19 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $removeSheetFromGroupChecker = $this->prophesize(RemoveSheetFromGroupChecker::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
 
-        $group1 = $this->prophesize(Sheet\Group::class);
         $sheet1 = $this->prophesize(Sheet::class);
-
         $sheet2 = $this->prophesize(Sheet::class);
-        $group2 = $this->prophesize(Sheet\Group::class);
-
         $sheet3 = $this->prophesize(Sheet::class);
-        $group3 = $this->prophesize(Sheet\Group::class);
 
-        $sheet1->getId()->willReturn(1);
-        $sheet1->getGroup()->willReturn($group1);
+        $sheet1->hasGroup()->willReturn(true);
+        $sheet2->hasGroup()->willReturn(true);
+        $sheet3->hasGroup()->willReturn(false);
 
-        $sheet2->getId()->willReturn(2);
-        $sheet2->getGroup()->willReturn($group2);
-
-        $sheet3->getId()->willReturn(3);
-        $sheet3->getGroup()->willReturn($group3);
-
-        $sheet1->setGroup(null)->shouldBeCalled();
-        $sheet2->setGroup(null)->shouldNotBeCalled();
-        $sheet3->setGroup(null)->shouldNotBeCalled();
+        $sheet1->unassignFromGroup()->shouldBeCalled();
+        $sheet2->unassignFromGroup()->shouldNotBeCalled();
+        $sheet3->unassignFromGroup()->shouldNotBeCalled();
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn(
             [
@@ -209,28 +201,45 @@ class BatchAssignToGroupHandlerTest extends TestCase
 
         $removeSheetFromGroupChecker->canRemoveSheetFromGroup($sheet1)->shouldBeCalled()->willReturn(true);
         $removeSheetFromGroupChecker->canRemoveSheetFromGroup($sheet2)->shouldBeCalled()->willReturn(false);
-        $removeSheetFromGroupChecker->canRemoveSheetFromGroup($sheet3)->shouldBeCalled()->willReturn(false);
+        $removeSheetFromGroupChecker->canRemoveSheetFromGroup($sheet3)->shouldNotBeCalled();
+
+        $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), 'fr')->shouldNotBeCalled();
+        $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), 'fr')->shouldBeCalled()->willReturn('Sheet2');
+        $sheetInfoGuesser->guessSheetTitle($sheet3->reveal(), 'fr')->shouldBeCalled()->willReturn('Sheet3');
+
+        $translator
+            ->trans(
+                'flash.admin.sheet_batch.unassignFromGroup.sheetNotHaveGroup',
+                ['%sheets%' => 'Sheet3']
+            )
+            ->shouldBeCalled()
+            ->willReturn('sheet Not Have Group : Sheet3');
+
+        $translator
+            ->trans(
+                'flash.admin.sheet_batch.unassignFromGroup.sheetCannotBeRemoved',
+                ['%sheets%' => 'Sheet2']
+            )
+            ->shouldBeCalled()
+            ->willReturn('sheet can not be removed from group : Sheet2');
 
         $sheetRepository->set($sheet1->reveal())->shouldBeCalled();
         $sheetRepository->set($sheet2->reveal())->shouldNotBeCalled();
         $sheetRepository->set($sheet3->reveal())->shouldNotBeCalled();
 
-        $sheetInfoGuesser->guessSheetTitle($sheet3->reveal(), 'fr')->shouldBeCalled()->willReturn(
-            'Flash message with ignored sheets'
-        );
-
         $handler = new BatchAssignToGroupHandler(
             $sheetRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $removeSheetFromGroupChecker->reveal()
+            $removeSheetFromGroupChecker->reveal(),
+            $translator->reveal()
         );
 
         $result = $handler->handle(new BatchAssignToGroup([1, 2, 3], null, 'fr'));
 
         $expected = new BatchResult(
             1,
-            'flash.admin.sheet_batch.unassignToGroup.ignoredSheets',
-            'Flash message with ignored sheets'
+            'flash.admin.sheet_batch.unassignFromGroup.ignoredSheets',
+            'sheet Not Have Group : Sheet3, sheet can not be removed from group : Sheet2'
         );
 
         $this->assertEquals($expected, $result);
