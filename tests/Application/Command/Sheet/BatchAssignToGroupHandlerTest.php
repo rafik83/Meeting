@@ -18,7 +18,7 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\SheetsGroup\RemoveSheetFromGroupChecker;
+use Proximum\Vimeet\Domain\SheetGroup\RemoveSheetFromGroupChecker;
 
 class BatchAssignToGroupHandlerTest extends TestCase
 {

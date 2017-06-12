@@ -3,12 +3,12 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Service\SheetsGroup;
+namespace Proximum\Vimeet\Domain\SheetGroup;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
