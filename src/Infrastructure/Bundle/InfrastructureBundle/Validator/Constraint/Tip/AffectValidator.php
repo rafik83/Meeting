@@ -38,6 +38,13 @@ class AffectValidator extends ConstraintValidator
     {
         $tip = $this->tipRepository->getById($affect->tip->id);
 
+        if (null === $tip) {
+            $this->context
+                ->buildViolation('validators.tip.affect.not_found')
+                ->atPath('tip')
+                ->addViolation();
+        }
+
         foreach ($affect->event->getLocales() as $locale) {
             if (!$tip->hasTranslation($locale)) {
                 $this->context
