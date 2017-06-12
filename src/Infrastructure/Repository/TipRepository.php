@@ -22,10 +22,10 @@ class TipRepository implements TipRepositoryInterface
 {
     /** @var EntityManager */
     private $entityManager;
-    
+
     /** @var Paginator */
     private $paginator;
-    
+
     /**
      * SpotUnavailabilityRepository constructor.
      *
@@ -52,20 +52,22 @@ class TipRepository implements TipRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-    
+
     /** {@inheritdoc} */
     public function paginate($page, $limit = 20)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip')
+            ->select('tip', 'type', 'event')
             ->from(Tip::class, 'tip', 'tip.id')
+            ->leftJoin('tip.types', 'type')
+            ->leftJoin('type.event', 'event')
             ->orderBy('tip.title');
-        
+
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
     }
-    
+
     /** {@inheritdoc} */
     public function add(Tip $tip)
     {

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Tip
@@ -21,7 +22,7 @@ class Tip
      * @var int
      */
     private $id;
-    
+
     /**
      * @var string
      */
@@ -36,17 +37,17 @@ class Tip
      * @var ArrayCollection
      */
     private $types;
-    
+
     /**
      * @var bool
      */
     private $onMeetingManagement;
-    
+
     /**
      * @var bool
      */
     private $onCatalog;
-    
+
     /**
      * @var bool
      */
@@ -229,6 +230,14 @@ class Tip
     /**
      * @param Type $type
      */
+    public function addType(Type $type)
+    {
+        $this->types->add($type);
+    }
+
+    /**
+     * @param Type $type
+     */
     public function removeType(Type $type)
     {
         $this->types->removeElement($type);
@@ -241,7 +250,7 @@ class Tip
     {
         return $this->id;
     }
-    
+
     /**
      * @return string
      */
@@ -265,7 +274,7 @@ class Tip
     {
         return $this->types->toArray();
     }
-    
+
     /**
      * @return bool
      */
@@ -273,7 +282,7 @@ class Tip
     {
         return $this->onMeetingManagement;
     }
-    
+
     /**
      * @return bool
      */
@@ -281,7 +290,7 @@ class Tip
     {
         return $this->onCatalog;
     }
-    
+
     /**
      * @return bool
      */
@@ -354,5 +363,20 @@ class Tip
         }
 
         return $pagesTranslations;
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getUnduplicatedEventsTitle()
+    {
+        $events = [];
+
+        foreach ($this->types as $type) {
+            $events[$type->getEvent()->getTitle()] = $type->getEvent()->getTitle();
+        }
+        ksort($events);
+
+        return $events;
     }
 }
