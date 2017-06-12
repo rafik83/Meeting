@@ -24,8 +24,10 @@ class RemoveSheetFromGroupCheckerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $group = $this->prophesize(Sheet\Group::class);
 
+        $user->getId()->shouldBeCalled()->willReturn(1);
         $sheet->getGroup()->shouldBeCalled()->willReturn($group);
         $group->getManager()->shouldBeCalled()->willReturn($groupManager);
+        $groupManager->getId()->shouldBeCalled()->willReturn(2);
         $sheet->getUsers()->shouldBeCalled()->willReturn([$user, $groupManager]);
 
         $removeSheetFromGroupChecker = new RemoveSheetFromGroupChecker();
@@ -40,8 +42,10 @@ class RemoveSheetFromGroupCheckerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $group = $this->prophesize(Sheet\Group::class);
 
+        $user->getId()->shouldBeCalled()->willReturn(1);
         $sheet->getGroup()->shouldBeCalled()->willReturn($group);
         $group->getManager()->shouldBeCalled()->willReturn($groupManager);
+        $groupManager->getId()->shouldBeCalled()->willReturn(2);
         $sheet->getUsers()->shouldBeCalled()->willReturn([$user]);
 
         $removeSheetFromGroupChecker = new RemoveSheetFromGroupChecker();
