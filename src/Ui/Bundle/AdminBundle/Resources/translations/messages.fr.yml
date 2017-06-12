@@ -759,30 +759,30 @@ admin.tip.column.title: 'Libellé back office'
 admin.tip.column.translation: Langue(s)
 admin.tip.column.visible.catalog: Catalogue
 admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.onAgenda: Agenda
+admin.tip.column.visible.onProgram: Programme
 admin.tip.column.visible.onSheet: 'Fiche de présentation'
-admin.tip.column.visible.onProgram: 'Programme'
-admin.tip.column.visible.onAgenda: 'Agenda'
 admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'
 admin.tip.empty: 'Aucun message d''aide'
-admin.tip.events: 'Evénements'
+admin.tip.event.actions: Actions
+admin.tip.event.affect.form.title: 'Affecter un message d''aide'
+admin.tip.event.affect.link: 'Affecter un message d''aide'
+admin.tip.event.affect.title: 'Gestion des messages d''aide'
+admin.tip.event.empty: 'Aucun message affecté à cet évènement'
+admin.tip.event.no_pages: Aucune
+admin.tip.event.no_types: Aucun
+admin.tip.event.pages: 'Page concernées'
+admin.tip.event.remove.link: Retirer
+admin.tip.event.title: 'Libellé admin'
+admin.tip.event.types: 'Types de participation affectés'
+admin.tip.events: Evénements
 admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
 admin.tip.update.link: Modifier
 admin.tip.update.title: 'Mise à jour du message d''aide'
 admin.tip.visible: 'Liste des pages concernées'
-admin.tip.event.affect.link: 'Affecter un message d''aide'
-admin.tip.event.remove.link: 'Retirer'
-admin.tip.event.empty: 'Aucun message affecté à cet évènement'
-admin.tip.event.title: 'Libellé admin'
-admin.tip.event.types: 'Types de participation affectés'
-admin.tip.event.pages: 'Page concernées'
-admin.tip.event.actions: 'Actions'
-admin.tip.event.no_types: 'Aucun'
-admin.tip.event.no_pages: 'Aucune'
-admin.tip.event.affect.title: 'Gestion des messages d''aide'
-admin.tip.event.affect.form.title: 'Affecter un message d''aide'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'
