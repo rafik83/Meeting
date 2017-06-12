@@ -33,9 +33,11 @@ class UpdateHandler
     public function handle(Update $command)
     {
         foreach ($command->tip->getTranslations() as $translation) {
-            if (!isset($command->translations[$translation->getLocale()])) {
-                $command->tip->removeTranslation($translation->getLocale());
-                $this->tipRepository->removeTranslation($translation);
+            foreach ($command->translations as $commandTranslation) {
+                if (!isset($commandTranslation[$translation->getLocale()])) {
+                    $command->tip->removeTranslation($translation->getLocale());
+                    $this->tipRepository->removeTranslation($translation);
+                }
             }
         }
 
