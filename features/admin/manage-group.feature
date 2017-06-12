@@ -59,7 +59,7 @@ Feature: Manage Group
     Given I am logged as admin
     And the user "user_not_mananing_group@vimeet.com" is created
     And I am on this page "/fr/event/1/sheets-group/list"
-    And I should see "Group title"
+    And I should see "Awsm Group"
     When I follow "admin.sheets_group.update"
     Then I should be on this page "/fr/event/1/sheets-group/1/update"
     And the "update_sheets_group_title" field should contain "Awsm Group"
