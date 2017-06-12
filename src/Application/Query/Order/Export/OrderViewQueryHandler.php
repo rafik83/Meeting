@@ -87,10 +87,27 @@ class OrderViewQueryHandler
             $promotionCodeBoughtViews[] = $this->promotionCodeBoughtViewQueryHandler->handle(new PromotionCodeBoughtViewQuery($promotionCodeBought));
         }
 
+        $invoiceNumber   = '';
+        $invoiceDate     = '';
+
+        if (!empty($query->order->getInvoice())) {
+            $formatter = \IntlDateFormatter::create(
+                $query->locale,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::NONE,
+                $query->order->getSheet()->getEvent()->getTimeZone()
+            );
+
+            $invoiceNumber = $query->order->getInvoice()->getNumber();
+            $invoiceDate   = $formatter->format($query->order->getInvoice()->getCreatedAt());
+        }
+
         return new OrderView(
             $query->order->getId(),
             $sheet->getId(),
             $this->sheetInfoGuesserCache->guessSheetTitle($sheet, $query->locale),
+            $invoiceNumber,
+            $invoiceDate,
             $billingInfoView,
             $productBoughtViews,
             $promotionCodeBoughtViews,

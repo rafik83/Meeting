@@ -26,28 +26,60 @@ use Proximum\Vimeet\Application\View\Order\Export\CustomRowBoughtView;
 use Proximum\Vimeet\Application\View\Order\Export\OrderView;
 use Proximum\Vimeet\Application\View\Order\Export\ProductBoughtView;
 use Proximum\Vimeet\Application\View\Order\Export\PromotionCodeBoughtView;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\InvoiceFactory;
 
 class OrderViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $order = $this->prophesize(Order::class);
-        $sheet = $this->prophesize(Sheet::class);
+        $date    = new \DateTime('2016-10-12');
+        $order   = $this->prophesize(Order::class);
+        $sheet   = $this->prophesize(Sheet::class);
+        $event   = EventFactory::createEvent();
+        $prefix  = new Prefix('prefix title', 'prefix');
+        $invoice = new Invoice(
+            $event,
+            $sheet->reveal(),
+            $prefix,
+            'invoicePrefix',
+            2017,
+            1,
+            false,
+            'vatMode',
+            10,
+            1000,
+            1000,
+            0,
+            'euro',
+            '',
+            $date
+        );
+
         $order->getId()->willReturn(2);
         $order->getSheet()->willReturn($sheet->reveal());
+
         $sheet->getId()->willReturn(3);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
+
         $row1 = $this->prophesize(Order\Row::class);
         $row1->isProduct()->willReturn(true);
+
         $row2 = $this->prophesize(Order\Row::class);
         $row2->isProduct()->willReturn(false);
-        $order->getRows()->willReturn([$row1->reveal(), $row2->reveal()]);
+
         $promotionCode = $this->prophesize(Order\PromotionCode::class);
+
+        $order->getRows()->willReturn([$row1->reveal(), $row2->reveal()]);
+        $order->getInvoice()->shouldBeCalled()->willReturn($invoice);
         $order->getPromotionCodes()->willReturn([$promotionCode->reveal()]);
 
-        $locale      = 'en';
-        $adminLocale = 'fr';
+        $locale                              = 'en';
+        $adminLocale                         = 'fr';
         $sheetInfoGuesserCache               = $this->prophesize(SheetInfoGuesserCache::class);
         $billingInfoViewQueryHandler         = $this->prophesize(BillingInfoViewQueryHandler::class);
         $productBoughtViewQueryHandler       = $this->prophesize(ProductBoughtViewQueryHandler::class);
@@ -55,17 +87,26 @@ class OrderViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $promotionCodeBoughtViewQueryHandler = $this->prophesize(PromotionCodeBoughtViewQueryHandler::class);
 
         $sheetInfoGuesserCache->guessSheetTitle($sheet->reveal(), $locale)->shouldBeCalled()->willReturn('sheet title');
-        $billingInfo = new BillingInfoView('gender', 'lastName', 'firstName', 'position', 'phone', 'mobile', 'email@email.fr');
+        $billingInfo =
+            new BillingInfoView('gender', 'lastName', 'firstName', 'position', 'phone', 'mobile', 'email@email.fr');
 
         $productBought = new ProductBoughtView(1, 2, 3, 6);
-        $productBoughtViewQueryHandler->handle(new ProductBoughtViewQuery($row1->reveal()))->shouldBeCalled()->willReturn($productBought);
+        $productBoughtViewQueryHandler->handle(new ProductBoughtViewQuery($row1->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($productBought);
         $customRowBought = new CustomRowBoughtView(2, 'title', 23, 2, 46);
-        $customRowBoughtViewQueryHandler->handle(new CustomRowBoughtViewQuery($row2->reveal()))->shouldBeCalled()->willReturn($customRowBought);
+        $customRowBoughtViewQueryHandler->handle(new CustomRowBoughtViewQuery($row2->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($customRowBought);
 
         $promotionCodeBought = new PromotionCodeBoughtView(2, 1, 120);
-        $promotionCodeBoughtViewQueryHandler->handle(new PromotionCodeBoughtViewQuery($promotionCode->reveal()))->shouldBeCalled()->willReturn($promotionCodeBought);
+        $promotionCodeBoughtViewQueryHandler->handle(new PromotionCodeBoughtViewQuery($promotionCode->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($promotionCodeBought);
 
-        $billingInfoViewQueryHandler->handle(new BillingInfoViewQuery($sheet->reveal(), $adminLocale))->shouldBeCalled()->willReturn($billingInfo);
+        $billingInfoViewQueryHandler->handle(new BillingInfoViewQuery($sheet->reveal(), $adminLocale))
+            ->shouldBeCalled()
+            ->willReturn($billingInfo);
 
         $handler = new OrderViewQueryHandler(
             $sheetInfoGuesserCache->reveal(),
@@ -74,9 +115,19 @@ class OrderViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $customRowBoughtViewQueryHandler->reveal(),
             $promotionCodeBoughtViewQueryHandler->reveal()
         );
-        $result = $handler->handle(new OrderViewQuery($order->reveal(), $locale, $adminLocale));
+        $result  = $handler->handle(new OrderViewQuery($order->reveal(), $locale, $adminLocale));
 
-        $expected = new OrderView(2, 3, 'sheet title', $billingInfo, [$productBought], [$promotionCodeBought], [$customRowBought]);
+        $expected = new OrderView(
+            2,
+            3,
+            'sheet title',
+            'invoicePrefix2017-0001',
+            '10/12/16',
+            $billingInfo,
+            [$productBought],
+            [$promotionCodeBought],
+            [$customRowBought]
+        );
 
         $this->assertEquals($expected, $result);
     }
