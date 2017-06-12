@@ -136,6 +136,6 @@ class IndicatorView
         $this->availableSlotsCount      = $this->slotsParticipantsCount - $unavailabilitiesCount;
         $this->possibleMeetingsQuantity = max(0, min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount));
         $this->usableSlots              = max(0, min($this->slotCount, $this->availableSlotsCount));
-        $this->maxMeetingAvailable      = $sheetsPlanningQuantity * ( $slotTotal - $massUnavaibilitiesCount);
+        $this->maxMeetingAvailable      = $sheetsPlanningQuantity * ($slotTotal - $massUnavaibilitiesCount);
     }
 }
