@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Tip\Event;
+
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\View\Tip\Event\PreviewTipView;
+
+class PreviewTipViewQueryHandler
+{
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /**
+     * PreviewTipViewQueryHandler constructor.
+     *
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param PreviewTipViewQuery $query
+     * 
+     * @return PreviewTipView
+     */
+    public function handle(PreviewTipViewQuery $query)
+    {
+        return new PreviewTipView(
+            $query->tipTranslation->getTitle(),
+            $query->tipTranslation->getContent(),
+            array_map(function ($pageTranslationKey) {
+                return $this->translator->trans($pageTranslationKey);
+            }, $query->pages)
+        );
+    }
+}

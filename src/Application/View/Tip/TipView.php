@@ -10,14 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Tip;
 
-class TipView
+class TipView extends AbstractTipView
 {
-    /** @var int */
-    public $id;
-    
-    /** @var string */
-    public $title;
-
     /** @var array */
     public $pagesTranslations;
 
@@ -30,8 +24,8 @@ class TipView
      */
     public function __construct($id, $title, array $pagesTranslations)
     {
-        $this->id    = $id;
-        $this->title = $title;
+        parent::__construct($id, $title);
+
         $this->pagesTranslations = $pagesTranslations;
     }
 }

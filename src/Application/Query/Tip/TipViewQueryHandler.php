@@ -10,16 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
-use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Application\View\Tip\TipListView;
-use Proximum\Vimeet\Application\View\Tip\TipView;
+use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipViewQueryHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
-    
+
     /**
      * TipViewQueryHandler constructor.
      *
@@ -29,31 +27,16 @@ class TipViewQueryHandler
     {
         $this->tipRepository = $tipRepository;
     }
-    
+
     /**
      * @param TipViewQuery $query
      *
-     * @return TipListView
+     * @return PaginatedTipView
      */
     public function handle(TipViewQuery $query)
     {
         $tips = $this->tipRepository->paginate($query->page, $query->limit);
 
-        $tipListView = new TipListView();
-
-        /** @var Tip $tip */
-        foreach($tips as $tip) {
-            $pagesTranslations = $tip->getPagesTranslations();
-
-            $tipListView->tipListView[] = new TipView(
-                $tip->getId(),
-                $tip->getTitle(),
-                $pagesTranslations
-            );
-        }
-        
-        $tipListView->results = $tips;
-        
-        return $tipListView;
+        return new PaginatedTipView($tips);
     }
 }

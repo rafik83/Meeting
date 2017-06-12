@@ -10,7 +10,6 @@
 
 namespace Application\Command\Tip;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Command\Tip\Update;
 use Proximum\Vimeet\Application\Command\Tip\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -21,18 +20,23 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $dateTime = new \DateTime();
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip = new Tip('tipTitle', true, false, true, true, false, true, new \DateTime());
-        $tipTranslation1 = new TipTranslation($tip, new \DateTime(), 'title', 'locale_1', 'content');
-        $tip->translations = new ArrayCollection();
+        $tip = new Tip('tipTitle', true, false, true, true, false, true, $dateTime);
+        $tipTranslation = new TipTranslation($tip, $dateTime, 'title_en', 'en', 'content_en');
+        $tip->setTranslation('en', 'title_en', 'content_en');
 
-        $tip->translations->set('locale_1', $tipTranslation1);
         $command = new Update($tip);
+        $command->translations = [
+            'en' => [
+                'title'   => 'title_fr',
+                'content' => 'content_fr',
+                'locale'  => 'fr',
+            ],
+        ];
 
-        $this->assertTrue($tip->translations->containsKey('locale_1'));
-
-        $this->assertFalse($tip->translations->containsKey('locale_2'));
+        $tipRepository->removeTranslation($tipTranslation)->shouldBeCalled();
 
         $tipRepository->set($tip)->shouldBeCalled();
 

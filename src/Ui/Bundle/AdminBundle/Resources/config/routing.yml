@@ -1376,16 +1376,48 @@ admin_sheet_attend:
 admin_tip_list:
     path: /tip/list
     methods: [GET]
-    defaults: { _controller: AdminBundle:Tip:list }
+    defaults: { _controller: AdminBundle:Tip/Tip:list }
 
 admin_tip_create:
     path: /tip/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip:create }
+    defaults: { _controller: AdminBundle:Tip/Tip:create }
 
 admin_tip_update:
     path: /tip/{tip}/update
     requirements:
         tip: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip:update }
+    defaults: { _controller: AdminBundle:Tip/Tip:update }
+
+#
+# Tip on event
+#
+admin_tip_event_list:
+    path: /event/{event}/tip/list
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:list }
+
+admin_tip_event_affect:
+    path: /event/{event}/tip/affect
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:affect }
+
+admin_tip_event_remove:
+    path: /event/{event}/tip/{tip}/remove/
+    methods: [DELETE]
+    requirements:
+        event: \d+
+        tip: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
+
+admin_tip_event_preview:
+    path: /tip/{tipTranslation}/preview/
+    methods: [GET]
+    requirements:
+        tipTranslation: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:preview }

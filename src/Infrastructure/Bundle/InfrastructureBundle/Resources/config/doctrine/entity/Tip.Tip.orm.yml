@@ -41,3 +41,6 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             mappedBy: tip
             indexBy: locale
             cascade: ['persist', 'remove']
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type

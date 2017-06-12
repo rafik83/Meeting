@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
@@ -60,7 +60,12 @@ class TipTranslationViewQueryHandler
             return null;
         }
 
-        $tipTranslationViews = $this->tipRepository->getByContext(self::$contextsMapping[$query->context], $query->locale);
+        $tipTranslationViews = $this->tipRepository->getByContextAndEventAndType(
+            $query->event,
+            $query->type,
+            self::$contextsMapping[$query->context],
+            $query->locale
+        );
 
         $tipTranslationListView = [];
 

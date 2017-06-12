@@ -61,6 +61,7 @@ class ProgramController extends Controller
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
             TipTranslationViewQueryHandler::CONTEXT_PROGRAM,
             $request->getLocale()
         );

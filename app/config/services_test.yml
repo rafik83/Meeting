@@ -99,6 +99,13 @@ services:
         arguments:
             - '@repository.billing_info_repository'
 
+    behat_manager.tip:
+        class: Proximum\Vimeet\Behat\Service\Manager\TipManager
+        arguments:
+            - '@repository.tip.repository'
+            - '@behat_manager.event'
+            - '@behat_manager.type'
+
     behat_manager.event.day:
         class: Proximum\Vimeet\Behat\Service\Manager\Event\DayManager
         arguments:
@@ -183,6 +190,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.order'
+
+    behat_proxy.tip_context:
+        class: Proximum\Vimeet\Behat\Proxy\TipContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.tip'
 
     behat_proxy.login_context:
         class: Proximum\Vimeet\Behat\Proxy\LoginContextProxy
