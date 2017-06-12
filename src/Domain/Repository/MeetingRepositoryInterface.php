@@ -65,11 +65,19 @@ interface MeetingRepositoryInterface
     /**
      * @param Event $event
      * @param User  $user
-     * @param Sheet $sheet
      *
      * @return Meeting[]
      */
-    public function findByUserAndEventExceptSheet(Event $event, User $user, Sheet $sheet);
+    public function findByUserAndEvent(User $user, Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     * @param Sheet $exceptSheet
+     *
+     * @return Meeting[]
+     */
+    public function findByUserAndEventExceptSheet(User $user, Event $event, Sheet $exceptSheet);
 
     /**
      * @param Sheet $sheet

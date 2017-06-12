@@ -81,6 +81,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@behat_manager.participant'
             - '@behat_manager.slot'
             - '@behat_manager.spot'
@@ -98,14 +99,42 @@ services:
         arguments:
             - '@repository.billing_info_repository'
 
+    behat_manager.tip:
+        class: Proximum\Vimeet\Behat\Service\Manager\TipManager
+        arguments:
+            - '@repository.tip.repository'
+            - '@behat_manager.event'
+            - '@behat_manager.type'
+
+    behat_manager.event.day:
+        class: Proximum\Vimeet\Behat\Service\Manager\Event\DayManager
+        arguments:
+             - '@repository.event.day_repository'
+
+    behat_manager.event.access:
+        class: Proximum\Vimeet\Behat\Service\Manager\Event\AccessManager
+        arguments:
+             - '@vimeet_infrastructure.repository.event_repository'
+
+    behat_manager.token.user_event_token_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Token\UserEventTokenManager
+        arguments:
+             - '@repository.token.user_event_token_repository'
+
     #
     # Proxies
     #
+    behat_proxy.feature_context:
+        class: Proximum\Vimeet\Behat\Proxy\FeatureContextProxy
+        arguments:
+            - '@behat_storage'
+
     behat_proxy.event_context:
         class: Proximum\Vimeet\Behat\Proxy\EventContextProxy
         arguments:
             - '@behat_storage'
             - '@behat_manager.event'
+            - '@behat_manager.event.access'
 
     behat_proxy.user_context:
         class: Proximum\Vimeet\Behat\Proxy\UserContextProxy
@@ -161,3 +190,26 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.order'
+
+    behat_proxy.tip_context:
+        class: Proximum\Vimeet\Behat\Proxy\TipContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.tip'
+
+    behat_proxy.login_context:
+        class: Proximum\Vimeet\Behat\Proxy\LoginContextProxy
+        arguments:
+             - '@behat_storage'
+
+    behat_proxy.event.day_context:
+        class: Proximum\Vimeet\Behat\Proxy\Event\DayContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.event.day'
+
+    behat_proxy.token.user_event_token_context:
+        class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.token.user_event_token_manager'

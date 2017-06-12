@@ -1,0 +1,52 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Application\Query\Tip\Event;
+
+use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQueryHandler;
+use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class PaginatedTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $event         = EventFactory::createEvent('Le plus grand cabaret du monde');
+        $type          = new Type($event);
+        $dateTime      = new \DateTime();
+        $tipRepository = $this->prophesize(TipRepositoryInterface::class);
+
+        $tip1 = new Tip('tip_1', false, true, false, false, true, false, $dateTime);
+        $tip2 = new Tip('tip_2', false, false, true, false, true, false, $dateTime);
+        $tip3 = new Tip('tip_3', true, false, true, false, true, false, $dateTime);
+        $tips = [$tip1, $tip2, $tip3];
+
+        foreach ($tips as $tip) {
+            $tip->setType($type);
+        }
+
+        $results = new PaginatedResult([$tip1, $tip2, $tip3], 1, 10, 3);
+        $expectedTipListView = new PaginatedTipView($results);
+
+        $query = new PaginatedTipViewQuery($event, 1, 20);
+
+        $tipRepository->paginateByEvent($event, 1, 20)->shouldBeCalled()->willReturn($results);
+
+        $handler = new PaginatedTipViewQueryHandler($tipRepository->reveal());
+        $tipListView = $handler->handle($query);
+
+        $this->assertEquals($expectedTipListView, $tipListView);
+    }
+}

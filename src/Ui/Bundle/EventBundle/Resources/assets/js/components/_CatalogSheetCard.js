@@ -51,6 +51,13 @@ CatalogSheetCard.prototype.displayErrorLoading = function ()
     $(this.modal).find(".modal-content").html(errorMessage);
 };
 
+CatalogSheetCard.prototype.updateParticipantsHtml = function (participantsHtml)
+{
+    if ('' !== participantsHtml) {
+        $(this.element).find('.participants-list').html(participantsHtml);
+    }
+};
+
 CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
 {
     if (this.modal.querySelector('[data-participants-checkbox]') !== null) {
@@ -84,10 +91,12 @@ CatalogSheetCard.prototype.handleRequestForm = function (form)
                 });
                 $(this.modal).modal('hide');
                 this.identifyButtons();
+                this.updateParticipantsHtml(response.participantsHtml);
             }
         } else {
             if (response.status === 'ok') {
                 $(this.modal).find(".modal-content").html(response.html);
+                this.updateParticipantsHtml(response.participantsHtml);
             }
         }
 

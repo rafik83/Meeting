@@ -15,6 +15,7 @@ use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -340,14 +341,11 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     WHERE
                         u.user = user AND u.event = :eventId
                         AND (
-                            u.begin BETWEEN :begin AND :end
-                            OR u.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN u.begin AND u.end
-                            OR :end BETWEEN u.begin AND u.end
+                            u.begin >= :begin AND u.begin < :end
+                            OR u.end > :begin AND u.end <= :end
+                            OR u.begin <= :begin AND u.end >= :end
                         )
                 )";
-
-            $queryBuilder->setParameter('eventId', $eventId);
         }
 
         $queryBuilder->andWhere(
@@ -356,35 +354,30 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                 "NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
-                    JOIN m.slot slot
+                    JOIN m.slot slot WITH slot.event = :eventId
                     LEFT JOIN m.fromParticipants fp
-                    LEFT JOIN fp.user fpUser
                     LEFT JOIN m.toParticipants tp
-                    LEFT JOIN tp.user tpUser
                     WHERE
                         " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
-                        AND (fpUser = user OR tpUser = user)
+                        AND (fp.user = user OR tp.user = user)
                         AND (
-                            slot.begin BETWEEN :begin AND :end
-                            OR slot.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN slot.begin AND slot.end
-                            OR :end BETWEEN slot.begin AND slot.end
+                            slot.begin >= :begin AND slot.begin < :end
+                            OR slot.end > :begin AND slot.end <= :end
+                            OR slot.begin <= :begin AND slot.end >= :end
                         )
                 )",
                 // Participant have not happening during this period
                 "NOT EXISTS (
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
-                    JOIN hp.happening h
-                    JOIN hp.participant p
+                    JOIN hp.happening h WITH h.event = :eventId
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
-                        AND p.user = user
+                        AND hp.user = user
                         AND (
-                            h.begin BETWEEN :begin AND :end
-                            OR h.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN h.begin AND h.end
-                            OR :end BETWEEN h.begin AND h.end
+                            h.begin >= :begin AND h.begin < :end
+                            OR h.end > :begin AND h.end <= :end
+                            OR h.begin <= :begin AND h.end >= :end
                         )
                 )",
                 $unavailabilityConditions
@@ -400,6 +393,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         }
 
         $queryBuilder
+            ->setParameter('eventId', $eventId)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end);
 
@@ -431,10 +425,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->select('participant')
             ->from(Participant::class, 'participant')
             ->join(
-                'participant.happeningParticipations',
+                HappeningParticipation::class,
                 'happeningParticipation',
                 'WITH',
-                'participant.sheet = :sheet AND happeningParticipation.happening = :happening'
+                'happeningParticipation.user = participant.user AND happeningParticipation.happening = :happening AND participant.sheet = :sheet AND happeningParticipation.disabled = false'
             )
             ->setParameter('sheet', $sheet)
             ->setParameter('happening', $happening);
@@ -512,7 +506,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('sheet.event', 'event')
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
-            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.participant = participant AND m.mass = :mass)')
+            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
             ->setParameter('mass', $mass)
         ;
 
@@ -529,7 +523,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     ) {
         return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
     }
-  
+
     /**
      * {@inheritdoc}
      */
@@ -548,7 +542,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */

@@ -36,4 +36,32 @@ class EventContext implements Context
         $event = $this->eventContextProxy->getEventManager()->create($eventTitle);
         $this->eventContextProxy->getStorage()->set('event', $event);
     }
+
+    /**
+     * @Given the agenda is open
+     */
+    public function theAgendaIsOpen()
+    {
+        $event = $this->eventContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->eventContextProxy->getAccessManager()->openTheAgenda($event);
+    }
+
+    /**
+     * @Given the meetings are published
+     */
+    public function theMeetingsArePublished()
+    {
+        $event = $this->eventContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->eventContextProxy->getAccessManager()->publishMeetings($event);
+    }
 }

@@ -58,7 +58,7 @@ class HappeningParticipationQueryHandler
             if (isset($happenings[$participation->getHappening()->getId()])) {
                 $happenings[$participation->getHappening()->getId()]->setHasParticipation(true);
 
-                if ($participant !== null && $participation->getParticipant() === $participant) {
+                if ($participant !== null && $participation->getUser() === $participant->getUser()) {
                     $happenings[$participation->getHappening()->getId()]->setCurrentUserParticipate(true);
                 }
             }

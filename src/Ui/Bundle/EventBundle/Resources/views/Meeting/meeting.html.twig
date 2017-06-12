@@ -3,19 +3,16 @@
         <a class="content" href="#">
             <span class="prefix"><i class="icon icon-RDV"></i></span>
             <p class="title">
-                <b>{{ meeting.spotRef }}</b> - {{ meeting.sheetMetTitle }}
+                <b>{{ meeting.spotRef }}</b> -
+                {% if meeting.isUserParticipantMultipleSheets %}
+                    <b>{{ meeting.userSheetTitle }}</b> -
+                {% endif %}
+                {{ meeting.sheetMetTitle }}
             </p>
         </a>
     </header>
     <div class="details">
         <div class="row">
-            {#
-                <div class="col-md-4">
-                    {% if meeting.hasPicture %}
-                        <img src="{{ meeting.picture }}"/>
-                    {% endif %}
-                </div>
-            #}
             <div class="col-md-12">
                 <div class="list list--users">
                     {% for participantView in meeting.participants %}
@@ -24,9 +21,6 @@
                 </div>
             </div>
         </div>
-        {#
-            <p>{{ meeting.description }}</p>
-        #}
         <footer>
             <p class="hours">
                 <i class="icon icon-Horaire"></i>

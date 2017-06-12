@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
@@ -43,7 +45,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user);
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr');
+        $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -56,16 +58,22 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
 
+        $viewedSheetListViewQueryHandler
+            ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
+            ->shouldBeCalled();
+
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
+                $user,
                 'fr',
                 false,
                 false,
@@ -82,6 +90,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
             $meetingRequestViewQueryHandler->reveal(),
+            $viewedSheetListViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
             $answeringMeetingRequestAccessChecker->reveal()
@@ -105,7 +114,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user);
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr');
+        $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -118,16 +127,22 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
 
+        $viewedSheetListViewQueryHandler
+            ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
+            ->shouldBeCalled();
+
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
+                $user,
                 'fr',
                 false,
                 false,
@@ -144,6 +159,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
             $meetingRequestViewQueryHandler->reveal(),
+            $viewedSheetListViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
             $answeringMeetingRequestAccessChecker->reveal()

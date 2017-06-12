@@ -212,7 +212,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
-        $boolQuery = new Query\Bool();
+        $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust($matchKeyword);
         $boolQuery->addMust($matchLocale);
 

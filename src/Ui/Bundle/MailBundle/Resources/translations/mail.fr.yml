@@ -20,6 +20,7 @@ mail.completeProfile.body: "Vous avez été invité en tant que participant pour
 mail.completeProfile.end: 'Cordialement,'
 mail.completeProfile.link: 'Compléter votre profil participant'
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
+mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
 mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription  \"%event%\" a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe \"%event%\".\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
@@ -62,6 +63,9 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.sheet.group.created.body: "Bonjour %firstname% %lastname%,\n\nVotre entité multi-fiches a été créée.\n\nVous pouvez y acceder depuis le lien ci-dessous :"
+mail.sheet.group.created.subject: 'Votre entité multi-fiches a été créée'
+mail.sheet.group.show.link: 'Accéder à l''entité multi-fiches'
 mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre participation à l''événement %event% nous vous informons que votre facture est disponible :"
 mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
@@ -79,6 +83,3 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.sheet.group.created.subject: "Votre entité multi-fiches a été créée"
-mail.sheet.group.created.body: "Bonjour %firstname% %lastname%,\n\nVotre entité multi-fiches a été créée.\n\nVous pouvez y acceder depuis le lien ci-dessous :"
-mail.sheet.group.show.link: "Accéder à l'entité multi-fiches"

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
@@ -24,27 +23,19 @@ class MeetingViewQueryHandler
     private $participantHandler;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * @var RuleRepositoryInterface
      */
     private $ruleRepository;
 
     /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
-     * @param SheetInfoGuesser                   $sheetInfoGuesser
      * @param RuleRepositoryInterface            $ruleRepository
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
-        SheetInfoGuesser $sheetInfoGuesser,
         RuleRepositoryInterface $ruleRepository
     ) {
         $this->participantHandler = $participantHandler;
-        $this->sheetInfoGuesser   = $sheetInfoGuesser;
         $this->ruleRepository     = $ruleRepository;
     }
 
@@ -55,8 +46,9 @@ class MeetingViewQueryHandler
      */
     public function handle(MeetingViewQuery $query)
     {
-        $sheetMet     = $query->meeting->getSheetMet($query->currentSheet);
-        $rules        = $this
+        $userSheet = $query->meeting->getSheetOfUser($query->user);
+        $sheetMet = $query->meeting->getSheetMet($userSheet);
+        $rules = $this
             ->ruleRepository
             ->getBySeerTypeAndSeeableType($query->currentSheet->getType(), $sheetMet->getType());
         $participants = [];
@@ -69,9 +61,10 @@ class MeetingViewQueryHandler
 
         $isSheetDetailsSeeAble = !empty($rules);
         
-        $meeting  = new MeetingView(
+        $meeting = new MeetingView(
+            $userSheet->getTitle(),
             $sheetMet->getId(),
-            $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
+            $sheetMet->getTitle(),
             $query->meeting->getSlot()->getBegin(),
             $query->meeting->getSlot()->getEnd(),
             $query->meeting->getSpot()->getReference(),
@@ -79,7 +72,8 @@ class MeetingViewQueryHandler
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
             $participants,
-            $isSheetDetailsSeeAble
+            $isSheetDetailsSeeAble,
+            $query->isUserParticipantMultipleSheets
         );
 
         return $meeting;

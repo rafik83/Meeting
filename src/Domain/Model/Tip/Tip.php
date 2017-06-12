@@ -3,6 +3,8 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Tip
 {
@@ -12,41 +14,58 @@ class Tip
     const TRANS_VISIBLE_CATALOG = 'admin.tip.column.visible.catalog';
     const TRANS_VISIBLE_MEETING_MANAGEMENT = 'admin.tip.column.visible.meeting_management';
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
+    const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
+    const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
+    const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
 
     /**
      * @var int
      */
-    public $id;
-    
+    private $id;
+
     /**
      * @var string
      */
-    public $title;
-    
+    private $title;
+
     /**
      * @var ArrayCollection
      */
-    public $translations;
-    
+    private $translations;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $types;
+
     /**
      * @var bool
      */
-    public $onMeetingManagement;
-    
+    private $onMeetingManagement;
+
     /**
      * @var bool
      */
-    public $onCatalog;
-    
+    private $onCatalog;
+
     /**
      * @var bool
      */
-    public $onPrintPlanning;
+    private $onPrintPlanning;
+
+    /** @var bool */
+    private $onSheet;
+
+    /** @var bool */
+    private $onProgram;
+
+    /** @var bool */
+    private $onAgenda;
 
     /**
      * @var \DateTimeInterface
      */
-    public $createdAt;
+    private $createdAt;
 
     /**
      * Tip constructor.
@@ -55,18 +74,33 @@ class Tip
      * @param bool               $onMeetingManagement
      * @param bool               $onCatalog
      * @param bool               $onPrintPlanning
+     * @param bool               $onSheet
+     * @param bool               $onAgenda
+     * @param bool               $onProgram
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning, \DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        $title,
+        $onMeetingManagement,
+        $onCatalog,
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram,
+        \DateTimeInterface $createdAt
+    ) {
         $this->title                = $title;
         $this->onMeetingManagement  = $onMeetingManagement;
         $this->onCatalog            = $onCatalog;
         $this->onPrintPlanning      = $onPrintPlanning;
+        $this->onSheet              = $onSheet;
+        $this->onAgenda             = $onAgenda;
+        $this->onProgram            = $onProgram;
         $this->translations         = new ArrayCollection();
+        $this->types                = new ArrayCollection();
         $this->createdAt            = $createdAt;
     }
-    
+
     /**
      * Update Tip
      *
@@ -74,6 +108,9 @@ class Tip
      * @param bool   $onMeetingManagement
      * @param bool   $onCatalog
      * @param bool   $onPrintPlanning
+     * @param bool   $onSheet
+     * @param bool   $onAgenda
+     * @param bool   $onProgram
      *
      * @return Tip
      */
@@ -81,12 +118,18 @@ class Tip
         $title,
         $onMeetingManagement,
         $onCatalog,
-        $onPrintPlanning
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
         $this->onCatalog           = $onCatalog;
         $this->onPrintPlanning     = $onPrintPlanning;
+        $this->onSheet             = $onSheet;
+        $this->onAgenda            = $onAgenda;
+        $this->onProgram           = $onProgram;
 
         return $this;
     }
@@ -169,13 +212,45 @@ class Tip
     }
 
     /**
+     * @param string $locale
+     */
+    public function removeTranslation($locale)
+    {
+        $this->translations->remove($locale);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function setType(Type $type)
+    {
+        $this->types->set($type->getId(), $type);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function addType(Type $type)
+    {
+        $this->types->add($type);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function removeType(Type $type)
+    {
+        $this->types->removeElement($type);
+    }
+
+    /**
      * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
      * @return string
      */
@@ -183,7 +258,7 @@ class Tip
     {
         return $this->title;
     }
-    
+
     /**
      * @return TipTranslation[]
      */
@@ -191,7 +266,15 @@ class Tip
     {
         return $this->translations->toArray();
     }
-    
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types->toArray();
+    }
+
     /**
      * @return bool
      */
@@ -199,7 +282,7 @@ class Tip
     {
         return $this->onMeetingManagement;
     }
-    
+
     /**
      * @return bool
      */
@@ -207,13 +290,37 @@ class Tip
     {
         return $this->onCatalog;
     }
-    
+
     /**
      * @return bool
      */
     public function isOnPrintPlanning()
     {
         return $this->onPrintPlanning;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnSheet()
+    {
+        return $this->onSheet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnProgram()
+    {
+        return $this->onProgram;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnAgenda()
+    {
+        return $this->onAgenda;
     }
 
     /**
@@ -243,6 +350,33 @@ class Tip
             $pagesTranslations[] = self::TRANS_VISIBLE_PRINT_PLANNING;
         }
 
+        if ($this->isOnSheet()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_SHEET;
+        }
+
+        if ($this->isOnAgenda()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_AGENDA;
+        }
+
+        if ($this->isOnProgram()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_PROGRAM;
+        }
+
         return $pagesTranslations;
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getUnduplicatedEventsTitle()
+    {
+        $events = [];
+
+        foreach ($this->types as $type) {
+            $events[$type->getEvent()->getTitle()] = $type->getEvent()->getTitle();
+        }
+        ksort($events);
+
+        return $events;
     }
 }

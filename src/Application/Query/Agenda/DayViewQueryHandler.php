@@ -107,6 +107,8 @@ class DayViewQueryHandler
                         new MeetingViewQuery(
                             $meeting,
                             $query->currentSheet,
+                            $query->isUserParticipantMultipleSheet,
+                            $query->participant->getUser(),
                             $query->event,
                             $query->locale
                         )

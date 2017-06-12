@@ -67,6 +67,12 @@ services:
             - '@adapter.session'
         tags:
             - { name: security.voter }
+    security_voter.catalog_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.catalog_access_checker'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -450,6 +456,16 @@ services:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
 
+    domain.service.sheets_group.group_name_resolver:
+        class: Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    impersonating_user_checker:
+        class: Proximum\Vimeet\Application\Components\User\ImpersonatingUserChecker
+        arguments:
+            - '@adapter.authorization_checker'
 
     #
     # Validators

@@ -148,6 +148,14 @@ interface SheetRepositoryInterface
     public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event);
 
     /**
+     * @param User           $user
+     * @param EventInterface $event
+     *
+     * @return bool
+     */
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event);
+
+    /**
      * @param int $sheetId
      *
      * @return null|Sheet
@@ -340,4 +348,20 @@ interface SheetRepositoryInterface
      * @return bool
      */
     public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function isUserParticipantMultipleSheetsInEvent(User $user, Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     *
+     * @return Sheet|null
+     */
+    public function getSheetByEventAndTitle(Event $event, $title);
 }

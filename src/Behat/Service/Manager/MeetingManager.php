@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class MeetingManager
 {
@@ -37,9 +38,13 @@ class MeetingManager
     /** @var SpotManager */
     private $spotManager;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     /**
      * @param MeetingRepositoryInterface $meetingRepository
      * @param RequestRepositoryInterface $requestRepository
+     * @param SheetRepositoryInterface   $sheetRepository
      * @param ParticipantManager         $participantManager
      * @param SlotManager                $slotManager
      * @param SpotManager                $spotManager
@@ -47,6 +52,7 @@ class MeetingManager
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         RequestRepositoryInterface $requestRepository,
+        SheetRepositoryInterface $sheetRepository,
         ParticipantManager $participantManager,
         SlotManager $slotManager,
         SpotManager $spotManager
@@ -56,6 +62,7 @@ class MeetingManager
         $this->participantManager = $participantManager;
         $this->slotManager        = $slotManager;
         $this->spotManager        = $spotManager;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -205,5 +212,49 @@ class MeetingManager
         }
 
         return $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $sheetTitle
+     * @param string $otherSheetTitle
+     * @param string $spotReference
+     *
+     * @return Meeting
+     * @throws \Exception
+     */
+    public function createMeetingForSheetsAndSpot(Event $event, $sheetTitle, $otherSheetTitle, $spotReference)
+    {
+        $sheet = $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
+        $otherSheet = $this->sheetRepository->getSheetByEventAndTitle($event, $otherSheetTitle);
+
+        if ($sheet === null || $otherSheet === null) {
+            throw new \InvalidArgumentException('Missing sheet');
+        }
+
+        $meetingRequest = $this->createMeetingRequest(
+            $event,
+            $sheet,
+            [$sheet->getFirstParticipant()],
+            $otherSheet,
+            [$otherSheet->getFirstParticipant()]
+        );
+
+        $spot = $this->spotManager->getByReference($event, $spotReference);
+
+        if (null === $spot) {
+            throw new \Exception('Spot not found');
+        }
+
+        $slots = $this->slotManager->findByEvent($event);
+        $slot  = reset($slots);
+
+        if (false === $slot) {
+            throw new \Exception('There are no available slot for this meeting');
+        }
+
+        $meeting = $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+
+        return $meeting;
     }
 }

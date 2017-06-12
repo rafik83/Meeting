@@ -109,10 +109,10 @@ class SlotAvailability
     private $unavailabilitySortByUser = [];
 
     /**
-     * Array of mass assignment [participantId][1 => assignment, 2 => assignment]
+     * Array of mass assignment [UserId][1 => assignment, 2 => assignment]
      * @var array
      */
-    private $massAssignmentSortByParticipant = [];
+    private $massAssignmentSortByUser = [];
 
     /**
      * SlotAvailability constructor.
@@ -163,7 +163,7 @@ class SlotAvailability
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
         $this->assignUnavailabilitySortByUser($unavailability);
-        $this->assignMassAssignmentSortByParticipant($massAssignments);
+        $this->assignMassAssignmentSortByUser($massAssignments);
     }
 
     /**
@@ -184,7 +184,7 @@ class SlotAvailability
     private function assignHappeningSortByParticipant(array $happenings)
     {
         foreach ($happenings as $happening) {
-            $this->happeningsSortByParticipant[$happening->getParticipant()->getId()][] = $happening;
+            $this->happeningsSortByParticipant[$happening->getUser()->getId()][] = $happening;
         }
     }
 
@@ -201,10 +201,10 @@ class SlotAvailability
     /**
      * @param MassAssignment[] $massAssignments
      */
-    private function assignMassAssignmentSortByParticipant(array $massAssignments)
+    private function assignMassAssignmentSortByUser(array $massAssignments)
     {
         foreach ($massAssignments as $assignment) {
-            $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()][] = $assignment;
+            $this->massAssignmentSortByUser[$assignment->getUser()->getId()][] = $assignment;
         }
     }
 
@@ -303,7 +303,7 @@ class SlotAvailability
         if ($this->massAssignment === null) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
 
-            $this->assignMassAssignmentSortByParticipant($this->massAssignment);
+            $this->assignMassAssignmentSortByUser($this->massAssignment);
         }
     }
 
@@ -386,12 +386,15 @@ class SlotAvailability
     private function getDispatch(Participant $participant, Mass $mass)
     {
         if ($this->massAssignment !== null) {
-            if (!isset($this->massAssignmentSortByParticipant[$participant->getId()])) {
+            if (!isset($this->massAssignmentSortByUser[$participant->getUser()->getId()])) {
                 return null;
             }
 
-            foreach ($this->massAssignmentSortByParticipant[$participant->getId()] as $massAssignment) {
-                if ($massAssignment->getMass() === $mass && $massAssignment->getParticipant() === $participant) {
+            /** @var MassAssignment $massAssignment */
+            foreach ($this->massAssignmentSortByUser[$participant->getUser()->getId()] as $massAssignment) {
+                if ($massAssignment->getMass() === $mass
+                    && $massAssignment->getUser()->getId() === $participant->getUser()->getId()
+                ) {
                     return $massAssignment;
                 }
             }
@@ -540,15 +543,16 @@ class SlotAvailability
      */
     private function hasHappening(MeetingSlot $slot, Participant $participant)
     {
-        if (!isset($this->happeningsSortByParticipant[$participant->getId()])) {
+        if (!isset($this->happeningsSortByParticipant[$participant->getUser()->getId()])) {
             return false;
         }
 
-        foreach ($this->happeningsSortByParticipant[$participant->getId()] as $happening) {
+        /** @var HappeningParticipation $happening */
+        foreach ($this->happeningsSortByParticipant[$participant->getUser()->getId()] as $happening) {
             $happeningBegin = $happening->getHappening()->getBegin();
             $happeningEnd = $happening->getHappening()->getEnd();
 
-            if ($happening->getParticipant() !== $participant) {
+            if ($happening->getUser() !== $participant->getUser()) {
                 continue;
             }
 

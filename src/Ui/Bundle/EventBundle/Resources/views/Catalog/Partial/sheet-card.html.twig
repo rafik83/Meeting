@@ -1,9 +1,15 @@
+{% set sheetToDisplayLink = path('event_catalog_complete_sheet', { sheet: viewer.id, sheetToDisplay: catalogSheetPreviewView.id }) %}
 <div class="col-md-4">
     <div class="catalog__item">
         <div class="content__sheet-card">
             {% if catalogSheetPreviewView.hasMessage and catalogSheetPreviewView.meetingRequest is not null %}
-                <a href="{{ path('event_catalog_meeting_request_discussion', { 'sheet': viewer.id, 'meetingRequest': catalogSheetPreviewView.meetingRequest.id }) }}" data-toggle="modal" data-target="#request-modal" class="pull-right no-underline ft-size-18">
+                <a href="{{ path('event_catalog_meeting_request_discussion', { 'sheet': viewer.id, 'meetingRequest': catalogSheetPreviewView.meetingRequest.id }) }}" data-toggle="modal" data-target="#request-modal" class="pull-right no-underline ft-size-18 mg-left-8">
                     <i class="icon-Message_1 ft-bold"></i>
+                </a>
+            {% endif %}
+            {% if catalogSheetPreviewView.isSeenByCurrentUser %}
+                <a href="{{ sheetToDisplayLink }}" class="pull-right no-underline ft-size-18 mg-left-8">
+                    <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
             {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog }, false) }}
@@ -11,7 +17,7 @@
         <footer>
             <div class="actions">
                 <a id="complete-sheet-link-{{ catalogSheetPreviewView.id }}"
-                   href="{{ path('event_catalog_complete_sheet', { sheet: viewer.id, sheetToDisplay: catalogSheetPreviewView.id }) }}"
+                   href="{{ sheetToDisplayLink }}"
                    target="_blank">
                     <i class="icon-Document_1"></i>
                     <span>{{ 'catalog.complete_sheet'|trans }}</span>
