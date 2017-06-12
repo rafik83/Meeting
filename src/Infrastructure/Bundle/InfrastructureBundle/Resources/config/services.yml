@@ -4734,4 +4734,6 @@ services:
     #
     adapter.smssender_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter
+        arguments:
+            - '@ovh'
     adapter.smssender_alias: '@adapter.smssender_adapter'

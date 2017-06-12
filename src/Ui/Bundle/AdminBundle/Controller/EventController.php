@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedExcepti
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvalidNumeroInvoiceException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvoiceNotFoundException;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
 use Proximum\Vimeet\Application\Query\Event\EventListQuery;
@@ -370,13 +371,23 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('adapter.smssender_alias')->send(
-                new SMS($form->get('phoneNumber')->getData(), str_pad(mt_rand(0, 9999), 4, 0, STR_PAD_LEFT))
-            );
+            try {
+                $this->get('adapter.smssender_alias')->send(
+                    new SMS($form->get('phoneNumber')->getData(), str_pad(mt_rand(0, 9999), 4, 0, STR_PAD_LEFT))
+                );
 
-            $this->addFlash('success', sprintf('Message envoyé à %s', $form->get('phoneNumber')->getData()));
+                $this->addFlash('success', sprintf('Message envoyé à %s', $form->get('phoneNumber')->getData()));
 
-            return $this->redirectToRoute('admin_send_sms');
+                return $this->redirectToRoute('admin_send_sms');
+            } catch (FailToSendSMSException $exception) {
+                $this->addFlash(
+                    'error',
+                    sprintf(
+                        'Le message n\'a pas pu être envoyé pour la raison suivante: %s',
+                        $exception->getMessage()
+                    )
+                );
+            }
         }
 
         return $this->render('AdminBundle:Event:sms.html.twig', [
