@@ -71,6 +71,7 @@ Feature: Manage Group
     Then I should be on this page "/fr/event/1/sheets-group/list"
     And I should see "flash.admin.group.update.success"
     And I should see "Group title two"
+    And I should not see "Awsm Group"
     And the "sheet.group.created" mail should be sent to "user_not_mananing_group@vimeet.com" from "no-reply@super-event.vimeet.proximum.dev"
     And the "sheet.group.created" mail should be sent in bcc to "team-project@example.net" from "no-reply@super-event.vimeet.proximum.dev"
 
