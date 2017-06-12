@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
-use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class TemplateObjectViewQueryHandler
 {
@@ -28,25 +28,25 @@ class TemplateObjectViewQueryHandler
     private $templateProductGuesser;
 
     /**
-     * @var IncludedProductGuesser
+     * @var TemplateObject\BuyableIncludedProductGuesser
      */
-    private $includedProductGuesser;
+    private $buyableIncludedProductGuesser;
 
     /**
      * TemplateObjectViewQueryHandler constructor.
      *
-     * @param TemplateDataFactory    $templateDataFactory
-     * @param TemplateProductGuesser $templateProductGuesser
-     * @param IncludedProductGuesser $includedProductGuesser
+     * @param TemplateDataFactory                          $templateDataFactory
+     * @param TemplateProductGuesser                       $templateProductGuesser
+     * @param TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         TemplateProductGuesser $templateProductGuesser,
-        IncludedProductGuesser $includedProductGuesser
+        TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
     ) {
-        $this->templateDataFactory    = $templateDataFactory;
-        $this->templateProductGuesser = $templateProductGuesser;
-        $this->includedProductGuesser = $includedProductGuesser;
+        $this->templateDataFactory           = $templateDataFactory;
+        $this->templateProductGuesser        = $templateProductGuesser;
+        $this->buyableIncludedProductGuesser = $buyableIncludedProductGuesser;
     }
 
     /**
@@ -56,11 +56,10 @@ class TemplateObjectViewQueryHandler
      */
     public function handle(TemplateObjectViewQuery $query)
     {
-        $templateData       = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);
-        $object             = $templateData->getObject($query->key);
+        $templateData = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);
+        $object       = $templateData->getObject($query->key);
 
-        $products           = $this->templateProductGuesser->getProducts($object, $query->sheet->getPackage());
-        $includedProductIds = $this->includedProductGuesser->getIncludedProductIds($query->sheet);
+        $products = $this->templateProductGuesser->getProducts($object, $query->sheet->getPackage());
 
         // populate object variables needed in form builder
         $object->setBuyableProducts($products);
@@ -70,10 +69,14 @@ class TemplateObjectViewQueryHandler
             ->getObject($query->key)
             ->getLabel($query->locale, $query->sheet->getEvent()->getFallback());
 
+        $hasBuyableIncludedProduct = $object->getBuyableProducts() !== null
+            ? $this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($object)
+            : false;
+
         return new TemplateObjectView(
             $object,
             $label,
-            $includedProductIds
+            $hasBuyableIncludedProduct
         );
     }
 }

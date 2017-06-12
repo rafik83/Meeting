@@ -29,7 +29,7 @@ class TemplateObjectViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $templateDataFactory    = $this->prophesize(TemplateDataFactory::class);
         $templateProductGuesser = $this->prophesize(TemplateProductGuesser::class);
-        $includedProductGuesser = $this->prophesize(IncludedProductGuesser::class);
+        $buyableIncludedProductGuesser = $this->prophesize(TemplateObject\BuyableIncludedProductGuesser::class);
 
         $key             = 'azerzesq';
         $sheet           = SheetFactory::create();
@@ -49,18 +49,22 @@ class TemplateObjectViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->getProducts($templateObject, $sheet->getType()->getPackage())
             ->willReturn($buyableProducts);
 
-        $includedProductGuesser->getIncludedProductIds($sheet)->shouldBeCalled()->willReturn([1]);
+        $buyableIncludedProductGuesser
+            ->hasBuyableIncludedProduct($templateObject)
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
 
         $expectedResult = new TemplateObjectView(
             $templateObject,
             'testLabel',
-            [1]
+            false
         );
 
         $result = (new TemplateObjectViewQueryHandler(
             $templateDataFactory->reveal(),
             $templateProductGuesser->reveal(),
-            $includedProductGuesser->reveal()
+            $buyableIncludedProductGuesser->reveal()
         ))->handle(new TemplateObjectViewQuery($sheet, null, $key));
 
         $this->assertEquals($expectedResult, $result);

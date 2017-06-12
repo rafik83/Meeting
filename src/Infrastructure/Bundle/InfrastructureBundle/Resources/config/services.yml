@@ -2257,6 +2257,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageValidator
         arguments:
             -  '@package.product.template_product_guesser'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
     validator.template_object.media_collection_validator:
@@ -2550,7 +2551,7 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@package.product.template_product_guesser'
-            - '@package.product.included_product_guesser'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery }
 
@@ -3915,6 +3916,15 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.sheet.completeness_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
+
+    #
+    # Template Object
+    #
+    sheet.template_object.buyable_included_product_guesser:
+        class: Proximum\Vimeet\Domain\Template\TemplateObject\BuyableIncludedProductGuesser
+        arguments:
+            - '@package.product.included_product_guesser'
 
     printer.sheet_pdf_printer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter
