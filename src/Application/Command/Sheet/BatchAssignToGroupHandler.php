@@ -13,11 +13,14 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\RemoveSheetFromGroupChecker;
 
 class BatchAssignToGroupHandler
 {
-    const MESSAGE_ASSIGN_SUCCESS            = 'flash.admin.sheet_batch.assignToGroup.success';
-    const MESSAGE_ASSIGN_AND_IGNORED_SHEETS = 'flash.admin.sheet_batch.assignToGroup.ignoredSheets';
+    const MESSAGE_ASSIGN_SUCCESS              = 'flash.admin.sheet_batch.assignToGroup.success';
+    const MESSAGE_ASSIGN_AND_IGNORED_SHEETS   = 'flash.admin.sheet_batch.assignToGroup.ignoredSheets';
+    const MESSAGE_UNASSIGN_SUCCESS            = 'flash.admin.sheet_batch.unassignFromGroup.success';
+    const MESSAGE_UNASSIGN_AND_IGNORED_SHEETS = 'flash.admin.sheet_batch.unassignFromGroup.ignoredSheets';
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -25,14 +28,22 @@ class BatchAssignToGroupHandler
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var RemoveSheetFromGroupChecker */
+    private $removeSheetFromGroupChecker;
+
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
+     * @param SheetRepositoryInterface    $sheetRepository
+     * @param SheetInfoGuesser            $sheetInfoGuesser
+     * @param RemoveSheetFromGroupChecker $removeSheetFromGroupChecker
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, SheetInfoGuesser $sheetInfoGuesser)
-    {
-        $this->sheetRepository  = $sheetRepository;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        RemoveSheetFromGroupChecker $removeSheetFromGroupChecker
+    ) {
+        $this->sheetRepository             = $sheetRepository;
+        $this->sheetInfoGuesser            = $sheetInfoGuesser;
+        $this->removeSheetFromGroupChecker = $removeSheetFromGroupChecker;
     }
 
     /**
@@ -48,6 +59,8 @@ class BatchAssignToGroupHandler
         if (null !== $batchAssignToGroup->group) {
             return $this->assign($sheets, $batchAssignToGroup->group, $locale);
         }
+
+        return $this->unassign($sheets, $locale);
     }
 
     /**
@@ -93,6 +106,20 @@ class BatchAssignToGroupHandler
                 )
             );
         }
+
+        return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     * @param string  $locale
+     *
+     * @return BatchResult
+     */
+    private function unassign(array $sheets, $locale)
+    {
+        $message = self::MESSAGE_UNASSIGN_SUCCESS;
+        $ignoredSheetsMessage = '';
 
         return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
     }
