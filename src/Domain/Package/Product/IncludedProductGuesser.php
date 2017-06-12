@@ -9,7 +9,7 @@ class IncludedProductGuesser extends AbstractIncludedProductGuesser
     /**
      * @param Sheet $sheet
      *
-     * @return array
+     * @return int[]
      */
     public function getIncludedProductIds(Sheet $sheet)
     {

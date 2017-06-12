@@ -270,8 +270,8 @@ class SheetController extends Controller
             'locale'   => $locale,
             'currency' => $eventDomain->getEvent()->getCurrency(),
             'vatMode'  => $eventDomain->getEvent()->getMode(),
-            'templateObjectView'   => $templateObjectView,
-            'label' => $templateObjectView->label
+            'label'    => $templateObjectView->label,
+            'templateObjectView' => $templateObjectView
         ]);
     }
 
