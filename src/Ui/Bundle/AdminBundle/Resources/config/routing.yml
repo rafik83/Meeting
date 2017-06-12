@@ -1351,6 +1351,14 @@ admin_sheets_group_create:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:SheetsGroup/Group:create }
 
+admin_sheets_group_update:
+    path: /event/{event}/sheets-group/{sheetGroup}/update
+    requirements:
+        event: \d+
+        sheetGroup: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:update }
+
 #
 # Sheet attendance
 #

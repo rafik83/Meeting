@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group;
 
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
+use Proximum\Vimeet\Application\Command\Sheet\Group\Update;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractGroupType
 {
@@ -23,6 +25,16 @@ class UpdateType extends AbstractGroupType
         parent::buildForm($builder, $options);
 
         $builder->add('email', EmailType::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(['data_class' => Update::class]);
     }
 
     /**

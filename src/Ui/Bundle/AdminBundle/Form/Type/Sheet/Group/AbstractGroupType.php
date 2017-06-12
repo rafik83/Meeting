@@ -26,7 +26,7 @@ class AbstractGroupType extends AbstractType
     {
         $builder->add('title', TextType::class);
 
-        if (isset($options['sheetViews'])) {
+        if (!empty($options['sheetViews'])) {
             $builder->add('sheetViews', SheetCheckboxType::class,
                 [
                     'sheetViews' => $options['sheetViews'],
@@ -44,8 +44,7 @@ class AbstractGroupType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheetViews']);
+        $resolver->setDefault('sheetViews', []);
         $resolver->setAllowedTypes('sheetViews', 'array');
-        $resolver->setDefaults(['data_class' => Create::class]);
     }
 }

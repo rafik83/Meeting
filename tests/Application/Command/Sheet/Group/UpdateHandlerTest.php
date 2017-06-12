@@ -75,14 +75,14 @@ class UpdateHandlerTest extends TestCase
         $update->email = $newEmail;
 
         $expectedManager = UserFactory::create($newEmail);
-        $expectedGroup   = GroupFactory::createGroup($this->event, $expectedManager, $this->now);
+        $expectedGroup   = GroupFactory::createGroup($this->event, $expectedManager, $this->now,'SheetGroupNewTitle');
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
         $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($this->event, $expectedManager)
             ->shouldBeCalled();
 
-        $this->groupRepository->update($expectedGroup)->shouldBeCalled();
+        $this->groupRepository->set($expectedGroup)->shouldBeCalled();
 
         $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
             new SheetGroupCreatedEvent($expectedGroup)
@@ -111,11 +111,12 @@ class UpdateHandlerTest extends TestCase
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
-        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($this->event, $expectedManager)
+        $this->userToGroupManagerChecker
+            ->isUserToGroupManagerAllowed($this->event, $expectedManager)
             ->shouldBeCalled()
-            ->willThrow(\Exception::class);
+            ->willThrow(UserNotAllowedToManageGroupException::class);
 
-        $this->groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
+        $this->groupRepository->set(Argument::type(Group::class))->shouldNotBeCalled();
 
         $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
             Argument::type(SheetGroupCreatedEvent::class)
@@ -146,7 +147,7 @@ class UpdateHandlerTest extends TestCase
             ->isUserToGroupManagerAllowed($this->event, Argument::type(User::class))
             ->shouldNotBeCalled();
 
-        $this->groupRepository->update(Argument::type(Group::class))->shouldNotBeCalled();
+        $this->groupRepository->set(Argument::type(Group::class))->shouldNotBeCalled();
 
         $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
             Argument::type(SheetGroupCreatedEvent::class)

@@ -10,7 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
+
 class Update
 {
+    /** @var Group */
+    public $group;
 
+    /** @var string */
+    public $email;
+
+    /** @var string */
+    public $title;
+
+    /**
+     * Update constructor.
+     *
+     * @param Group $group
+     */
+    public function __construct(Group $group)
+    {
+        $this->group = $group;
+        $this->email = $group->getManager()->getEmail();
+        $this->title = $group->getTitle();
+    }
 }

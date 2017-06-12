@@ -101,4 +101,26 @@ class Group
     {
         return $this->sheets->toArray();
     }
+
+    /**
+     * @param $title
+     *
+     * @return Group
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @param User $manager
+     *
+     * @return Group
+     */
+    public function setManager(User $manager)
+    {
+        $this->manager = $manager;
+    }
 }
