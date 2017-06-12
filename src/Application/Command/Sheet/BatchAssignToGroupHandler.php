@@ -79,7 +79,7 @@ class BatchAssignToGroupHandler
      *
      * @return BatchResult
      */
-    private function assign(array $sheets, Sheet\Group $group, $locale)
+    private function assign(array &$sheets, Sheet\Group $group, $locale)
     {
         $sheetsAlreadyWithGroup = [];
 
@@ -114,7 +114,7 @@ class BatchAssignToGroupHandler
      *
      * @return BatchResult
      */
-    private function unassign(array $sheets, $locale)
+    private function unassign(array &$sheets, $locale)
     {
         $ignoredSheetsWithoutGroup             = [];
         $ignoredSheetsCannotBeRemovedFromGroup = [];
@@ -139,31 +139,49 @@ class BatchAssignToGroupHandler
         }
 
         $ignoredSheetsMessage = '';
-        $message              = self::MESSAGE_UNASSIGN_SUCCESS;
+        $message = self::MESSAGE_UNASSIGN_SUCCESS;
 
         if (!empty($ignoredSheetsWithoutGroup) || !empty($ignoredSheetsCannotBeRemovedFromGroup)) {
             $message = self::MESSAGE_UNASSIGN_AND_IGNORED_SHEETS;
-
-            $ignoredSheetsMessageArray = [];
-
-            if (!empty($ignoredSheetsWithoutGroup)) {
-                $ignoredSheetsMessageArray[] = $this->translator->trans(
-                    self::MESSAGE_UNASSIGN_SHEET_NOT_HAVE_GROUP,
-                    ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsWithoutGroup, $locale)]
-                );
-            }
-
-            if (!empty($ignoredSheetsCannotBeRemovedFromGroup)) {
-                $ignoredSheetsMessageArray[] = $this->translator->trans(
-                    self::MESSAGE_UNASSIGN_SHEET_CANNOT_BE_REMOVED,
-                    ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsCannotBeRemovedFromGroup, $locale)]
-                );
-            }
-
-            $ignoredSheetsMessage = implode(', ', $ignoredSheetsMessageArray);
+            $ignoredSheetsMessage = $this->getIgnoredUnassignedSheetsMessage(
+                $ignoredSheetsWithoutGroup,
+                $ignoredSheetsCannotBeRemovedFromGroup,
+                $locale
+            );
         }
 
         return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
+    }
+
+    /**
+     * @param Sheet[] $ignoredSheetsWithoutGroup
+     * @param Sheet[] $ignoredSheetsCannotBeRemovedFromGroup
+     * @param string  $locale
+     *
+     * @return string
+     */
+    private function getIgnoredUnassignedSheetsMessage(
+        array &$ignoredSheetsWithoutGroup,
+        array &$ignoredSheetsCannotBeRemovedFromGroup,
+        $locale
+    ) {
+        $ignoredSheetsMessageArray = [];
+
+        if (!empty($ignoredSheetsWithoutGroup)) {
+            $ignoredSheetsMessageArray[] = $this->translator->trans(
+                self::MESSAGE_UNASSIGN_SHEET_NOT_HAVE_GROUP,
+                ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsWithoutGroup, $locale)]
+            );
+        }
+
+        if (!empty($ignoredSheetsCannotBeRemovedFromGroup)) {
+            $ignoredSheetsMessageArray[] = $this->translator->trans(
+                self::MESSAGE_UNASSIGN_SHEET_CANNOT_BE_REMOVED,
+                ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsCannotBeRemovedFromGroup, $locale)]
+            );
+        }
+
+        return implode(', ', $ignoredSheetsMessageArray);
     }
 
     /**
@@ -172,14 +190,11 @@ class BatchAssignToGroupHandler
      *
      * @return string
      */
-    private function getSheetsTitleList(array $sheets, $locale)
+    private function getSheetsTitleList(array &$sheets, $locale)
     {
         return implode(', ', array_map(
             function (Sheet $sheet) use ($locale) {
-                return $this->sheetInfoGuesser->guessSheetTitle(
-                    $sheet,
-                    $locale
-                );
+                return $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale);
             },
             $sheets
         ));
