@@ -58,7 +58,7 @@ parameters:
 
     admin_menu_color: "#222"
 
-    ovh_endpoint_name:      ~
-    ovh_application_key:    ~
-    ovh_application_secret: ~
-    ovh_consumer_key:       ~
+    ovh_endpoint_name:      ""
+    ovh_application_key:    ""
+    ovh_application_secret: ""
+    ovh_consumer_key:       ""
