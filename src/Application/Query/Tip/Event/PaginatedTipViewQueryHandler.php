@@ -1,0 +1,42 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Tip\Event;
+
+use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
+use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+
+class PaginatedTipViewQueryHandler
+{
+    /** @var TipRepositoryInterface */
+    private $tipRepository;
+
+    /**
+     * TipListViewQueryHandler constructor.
+     *
+     * @param TipRepositoryInterface $tipRepository
+     */
+    public function __construct(TipRepositoryInterface $tipRepository)
+    {
+        $this->tipRepository = $tipRepository;
+    }
+
+    /**
+     * @param PaginatedTipViewQuery $query
+     *
+     * @return PaginatedTipView
+     */
+    public function handle(PaginatedTipViewQuery $query)
+    {
+        $tips = $this->tipRepository->paginateByEvent($query->event, $query->page, $query->limit);
+
+        return  new PaginatedTipView($tips);
+    }
+}

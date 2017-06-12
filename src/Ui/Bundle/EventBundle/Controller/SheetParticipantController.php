@@ -155,6 +155,7 @@ class SheetParticipantController extends Controller
         );
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
@@ -279,6 +280,7 @@ class SheetParticipantController extends Controller
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );

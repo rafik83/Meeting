@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Tip
 {
@@ -19,32 +20,37 @@ class Tip
     /**
      * @var int
      */
-    public $id;
+    private $id;
     
     /**
      * @var string
      */
-    public $title;
-    
+    private $title;
+
     /**
      * @var ArrayCollection
      */
-    public $translations;
+    private $translations;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $types;
     
     /**
      * @var bool
      */
-    public $onMeetingManagement;
+    private $onMeetingManagement;
     
     /**
      * @var bool
      */
-    public $onCatalog;
+    private $onCatalog;
     
     /**
      * @var bool
      */
-    public $onPrintPlanning;
+    private $onPrintPlanning;
 
     /** @var bool */
     private $onSheet;
@@ -58,7 +64,7 @@ class Tip
     /**
      * @var \DateTimeInterface
      */
-    public $createdAt;
+    private $createdAt;
 
     /**
      * Tip constructor.
@@ -90,6 +96,7 @@ class Tip
         $this->onAgenda             = $onAgenda;
         $this->onProgram            = $onProgram;
         $this->translations         = new ArrayCollection();
+        $this->types                = new ArrayCollection();
         $this->createdAt            = $createdAt;
     }
 
@@ -204,6 +211,30 @@ class Tip
     }
 
     /**
+     * @param string $locale
+     */
+    public function removeTranslation($locale)
+    {
+        $this->translations->remove($locale);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function setType(Type $type)
+    {
+        $this->types->set($type->getId(), $type);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function removeType(Type $type)
+    {
+        $this->types->removeElement($type);
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -218,13 +249,21 @@ class Tip
     {
         return $this->title;
     }
-    
+
     /**
      * @return TipTranslation[]
      */
     public function getTranslations()
     {
         return $this->translations->toArray();
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types->toArray();
     }
     
     /**

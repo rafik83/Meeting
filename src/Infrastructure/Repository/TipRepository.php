@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipRepository implements TipRepositoryInterface
@@ -34,6 +36,21 @@ class TipRepository implements TipRepositoryInterface
     {
         $this->entityManager = $entityManager;
         $this->paginator     = $paginator;
+    }
+
+    /** {@inheritdoc} */
+    public function getByTipTranslationId($id)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip')
+            ->from(Tip::class, 'tip')
+            ->join(TipTranslation::class, 'tipTranslation', 'WITH', 'tip = tipTranslation.tip')
+            ->where('tipTranslation.id = :id')
+            ->setParameter('id', $id);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
     
     /** {@inheritdoc} */
@@ -63,10 +80,6 @@ class TipRepository implements TipRepositoryInterface
     public function set(Tip $tip)
     {
         $this->entityManager->flush($tip);
-
-        foreach ($tip->getTranslations() as $translation) {
-            $this->entityManager->flush($translation);
-        }
     }
 
     /** {@inheritdoc} */
@@ -76,17 +89,105 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getByContext($context, $locale)
+    public function removeTip(Tip $tip)
+    {
+        foreach ($tip->getTypes() as $type) {
+            $tip->removeType($type);
+        }
+
+        $this->entityManager->flush($tip);
+    }
+
+    /** {@inheritdoc} */
+    public function getByContextAndEventAndType(Event $event, Type $type, $context, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('new \Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
+            ->from(Tip::class, 'tip')
+            ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event and type = :type')
+            ->orderBy('tip.createdAt')
+            ->setParameter('locale', $locale)
+            ->setParameter('event', $event)
+            ->setParameter('type', $type);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /** {@inheritdoc} */
+    public function getByEventAndTip(Event $event, Tip $tip)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, type')
+            ->from(Tip::class, 'tip')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event AND tip = :tip')
+            ->setParameter('event', $event)
+            ->setParameter('tip', $tip);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /** {@inheritdoc} */
+    public function paginateByEvent(Event $event, $page, $limit)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, type')
+            ->from(Tip::class, 'tip', 'tip.id')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
+            ->setParameter('event', $event);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
+    }
+
+    /** {@inheritdoc} */
+    public function getTipTranslationViewByLocale($locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content)')
             ->from(Tip::class, 'tip')
-            ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
-            ->orderBy('tip.createdAt')
+            ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.locale = :locale')
+            ->orderBy('tip.title')
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /** {@inheritdoc} */
+    public function getTipTranslationViewByLocaleForEvent($locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('new \Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
+            ->from(Tip::class, 'tip')
+            ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.locale = :locale')
+            ->orderBy('tip.title')
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /** {@inheritdoc} */
+    public function isTipAffectedToEvent(Tip $tip, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip.id')
+            ->from(Tip::class, 'tip')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event AND tip = :tip')
+            ->setParameter('event', $event)
+            ->setParameter('tip', $tip)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

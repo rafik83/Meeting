@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Tip\Event;
+
+use Proximum\Vimeet\Application\View\Tip\AbstractTipView;
+use Proximum\Vimeet\Domain\Model\Type;
+
+class TipView extends AbstractTipView
+{
+    /** @var Type[] */
+    public $types;
+
+    /** @var array */
+    public $pages;
+
+    /**
+     * TipView constructor.
+     *
+     * @param int    $id
+     * @param string $title
+     * @param Type[] $types
+     * @param array  $pages
+     */
+    public function __construct($id, $title, array $types, array $pages)
+    {
+        parent::__construct($id ,$title);
+
+        $this->types = $types;
+        $this->pages = $pages;
+    }
+}
