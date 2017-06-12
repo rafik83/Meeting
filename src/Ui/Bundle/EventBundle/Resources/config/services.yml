@@ -159,6 +159,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
             - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: 'form.type' }
     form_type_library.telephone_type:

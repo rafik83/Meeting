@@ -2256,14 +2256,15 @@ services:
     validator.template_object.image_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageValidator
         arguments:
-            -  '@package.product.template_product_guesser'
+            - '@package.product.template_product_guesser'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
     validator.template_object.media_collection_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\MediaCollectionValidator
         arguments:
-            -  '@package.product.template_product_guesser'
+            - '@package.product.template_product_guesser'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
     validator.email_validator:
