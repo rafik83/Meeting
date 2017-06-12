@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
+use Proximum\Vimeet\Application\View\Agenda\AgendaSheetIndicatorView;
 use Proximum\Vimeet\Application\View\Agenda\AgendaSheetView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
@@ -25,6 +26,8 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
+use Proximum\Vimeet\Domain\Planner\IndicatorView;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -60,6 +63,7 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository                 = $this->prophesize(RequestRepositoryInterface::class);
         $requestViewQueryHandler           = $this->prophesize(RequestViewQueryHandler::class);
         $massAssignmentRepository          = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $indicatorCalculator               = $this->prophesize(IndicatorCalculator::class);
 
         $happeningCategory      = new Happening\Category($event, 'picto', 1, 'black', 'black');
         $unavailabilityCategory = new Category($event, 'picto', 'title', 'black', 'black');
@@ -122,7 +126,15 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($requestView2);
 
-        $expectedAgendaSheetView = new AgendaSheetView([$participant], [$requestView2, $requestView1]);
+        $expectedAgendaSheetView = new AgendaSheetView(
+            [$participant],
+            [$requestView2, $requestView1],
+            new AgendaSheetIndicatorView(10, 1)
+        );
+
+        $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(
+            new IndicatorView(12, 1, 0, 1, 10, 0, 2)
+        );
 
         $handler = new AgendaSheetViewQueryHandler(
             $agendaParticipantViewQueryHandler->reveal(),
@@ -132,7 +144,8 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal(),
             $requestRepository->reveal(),
             $requestViewQueryHandler->reveal(),
-            $massAssignmentRepository->reveal()
+            $massAssignmentRepository->reveal(),
+            $indicatorCalculator->reveal()
         );
 
         $this->assertEquals($expectedAgendaSheetView, $handler->handle(new AgendaSheetViewQuery($sheet, $locale)));
