@@ -14,7 +14,7 @@ Feature: Manage Group
     And I should see "awsm@example.com"
 
   Scenario: I can create a group
-    As an admin I need to be able to create a group from an user email
+  As an admin I need to be able to create a group from an user email
     Given I am logged as admin
     And the event "Multisheet event" is created
     And the user "multisheet@example.com" is created
@@ -64,7 +64,7 @@ Feature: Manage Group
     And the "update_sheets_group.title" field should contain "GroupTitle"
     And the "update_sheets_group.email" field should contain " multisheet@example.com"
     When I fill in the following:
-      | update_sheets_group.title | Group title Two            |
+      | update_sheets_group.title | Group title Two          |
       | update_sheets_group.email | multisheet-2@example.com |
     And I press "update_sheets_group_submit"
     Then I should be on this page "/fr/event/1/sheets-group/list"
@@ -79,7 +79,7 @@ Feature: Manage Group
     When I follow "admin.sheets_group.update"
     Then I should be on this page "/fr/event/1/sheets-group/1/update"
     When I fill in the following:
-      | update_sheets_group.email | inexistant_user@example.com |
+      | update_sheets_group.email | unknown_user@example.com |
     And I press "update_sheets_group_submit"
     Then I should see "validators.group.email_not_found"
 
@@ -88,9 +88,8 @@ Feature: Manage Group
     And the user "othergroupmanager@example.com" is created
     And there is a group "Other Group" managed by this user
     And I am on this page "/fr/event/1/sheets-group/list"
-    When I follow "admin.sheets_group.update"
-    Then I should be on this page "/fr/event/1/sheets-group/1/update"
-    When I fill in the following:
+    When I go to "/fr/event/1/sheets-group/1/update"
+    And I fill in the following:
       | update_sheets_group.email | othergroupmanager@example.com |
     And I press "update_sheets_group_submit"
     Then I should see "validators.group.user_not_allowed_to_manage"
