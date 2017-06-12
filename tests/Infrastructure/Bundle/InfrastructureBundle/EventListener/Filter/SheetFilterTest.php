@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class SheetFilterTest extends \PHPUnit_Framework_TestCase
+class SheetFilterTest extends TestCase
 {
     public function testGet()
     {
