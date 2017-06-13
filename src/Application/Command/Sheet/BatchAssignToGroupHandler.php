@@ -168,16 +168,20 @@ class BatchAssignToGroupHandler
         $ignoredSheetsMessageArray = [];
 
         if (!empty($ignoredSheetsWithoutGroup)) {
-            $ignoredSheetsMessageArray[] = $this->translator->trans(
+            $ignoredSheetsMessageArray[] = $this->translator->transChoice(
                 self::MESSAGE_UNASSIGN_SHEET_NOT_HAVE_GROUP,
-                ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsWithoutGroup, $locale)]
+                count($ignoredSheetsWithoutGroup),
+                ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsWithoutGroup, $locale)],
+                'flashes'
             );
         }
 
         if (!empty($ignoredSheetsCannotBeRemovedFromGroup)) {
-            $ignoredSheetsMessageArray[] = $this->translator->trans(
+            $ignoredSheetsMessageArray[] = $this->translator->transChoice(
                 self::MESSAGE_UNASSIGN_SHEET_CANNOT_BE_REMOVED,
-                ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsCannotBeRemovedFromGroup, $locale)]
+                count($ignoredSheetsCannotBeRemovedFromGroup),
+                ['%sheets%' => $this->getSheetsTitleList($ignoredSheetsCannotBeRemovedFromGroup, $locale)],
+                'flashes'
             );
         }
 

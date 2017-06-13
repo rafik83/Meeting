@@ -208,17 +208,21 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $sheetInfoGuesser->guessSheetTitle($sheet3->reveal(), 'fr')->shouldBeCalled()->willReturn('Sheet3');
 
         $translator
-            ->trans(
+            ->transChoice(
                 'flash.admin.sheet_batch.unassignFromGroup.sheetNotHaveGroup',
-                ['%sheets%' => 'Sheet3']
+                1,
+                ['%sheets%' => 'Sheet3'],
+                'flashes'
             )
             ->shouldBeCalled()
             ->willReturn('sheet Not Have Group : Sheet3');
 
         $translator
-            ->trans(
+            ->transChoice(
                 'flash.admin.sheet_batch.unassignFromGroup.sheetCannotBeRemoved',
-                ['%sheets%' => 'Sheet2']
+                1,
+                ['%sheets%' => 'Sheet2'],
+                'flashes'
             )
             ->shouldBeCalled()
             ->willReturn('sheet can not be removed from group : Sheet2');

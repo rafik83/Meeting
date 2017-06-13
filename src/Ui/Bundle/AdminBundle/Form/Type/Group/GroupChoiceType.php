@@ -56,7 +56,7 @@ class GroupChoiceType extends AbstractType
                 }
 
                 if (SheetGroupConstant::UNASSIGNED_GROUP === $group) {
-                    return 'admin.sheet.sheetGroup.unAssignedGroup';
+                    return 'form.sheet.sheetGroup.unAssignedGroup';
                 }
 
                 return null;
