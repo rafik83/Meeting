@@ -65,7 +65,7 @@ class BatchAssignToGroupHandler
         $locale = $batchAssignToGroup->locale;
         $sheets = $this->sheetRepository->getSheetsById($batchAssignToGroup->ids);
 
-        if (null !== $batchAssignToGroup->group) {
+        if ($batchAssignToGroup->group instanceof Sheet\Group) {
             return $this->assign($sheets, $batchAssignToGroup->group, $locale);
         }
 

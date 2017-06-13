@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchHandler
 {
@@ -176,7 +177,11 @@ class BatchHandler
 
         if ($batch->assignToGroup && $batch->group !== null) {
             return $this->batchAssignToGroupHandler->handle(
-                new BatchAssignToGroup($batch->ids, $batch->group, $batch->locale)
+                new BatchAssignToGroup(
+                    $batch->ids,
+                    $batch->group instanceof Group ? $batch->group : null,
+                    $batch->locale
+                )
             );
         }
 
