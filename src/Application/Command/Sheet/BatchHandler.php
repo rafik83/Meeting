@@ -134,7 +134,7 @@ class BatchHandler
         }
 
         if ($batch->enable || $batch->disable) {
-            $state = (true === $batch->enable) ? true : false;
+            $state = true === $batch->enable;
 
             return $this->batchEnableDisableHandler->handle(
                 new BatchEnableDisable($batch->ids, $state, $batch->admin)
@@ -142,7 +142,7 @@ class BatchHandler
         }
 
         if ($batch->addCatalog || $batch->removeCatalog) {
-            $state = (true === $batch->addCatalog) ? true : false;
+            $state = true === $batch->addCatalog;
 
             return $this->batchCatalogHandler->handle(
                 new BatchCatalog($batch->ids, $state, $batch->admin)
@@ -150,7 +150,7 @@ class BatchHandler
         }
 
         if ($batch->addCatalog || $batch->removeCatalog) {
-            $state = (true === $batch->addCatalog) ? true : false;
+            $state = true === $batch->addCatalog;
 
             return $this->batchCatalogHandler->handle(
                 new BatchCatalog($batch->ids, $state, $batch->admin)
