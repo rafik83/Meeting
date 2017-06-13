@@ -23,14 +23,15 @@ class EventParticipantSchedulesNormalizerView
     /**
      * @var Admin
      */
-    public $user;
+    public $admin;
 
     /**
      * @param Event $event
+     * @param Admin $admin
      */
-    public function __construct(Event $event, Admin $user)
+    public function __construct(Event $event, Admin $admin)
     {
         $this->event = $event;
-        $this->user  = $user;
+        $this->admin = $admin;
     }
 }

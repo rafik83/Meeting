@@ -12,19 +12,17 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_PARTICIPANT_ID      = 'participantId';
+    const COL_USER_ID             = 'userId';
     const COL_TITLE               = 'title'; // Gender
     const COL_FIRSTNAME           = 'firstName';
     const COL_LASTNAME            = 'lastName';
@@ -45,14 +43,9 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     private $participantRepository;
 
     /**
-     * @var ParticipantInfoGuesser
+     * @var GroupNameResolver
      */
-    private $participantInfoGuesser;
-
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
+    private $groupNameResolver;
 
     /**
      * @var ParticipantPlanningFormatter
@@ -62,22 +55,19 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     /**
      * @param TranslatorInterface            $translator
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param ParticipantInfoGuesser         $participantInfoGuesser
-     * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param GroupNameResolver              $groupNameResolver
      * @param ParticipantPlanningFormatter   $participantPlanningFormatter
      */
     public function __construct(
         TranslatorInterface $translator,
         ParticipantRepositoryInterface $participantRepository,
-        ParticipantInfoGuesser $participantInfoGuesser,
-        SheetInfoGuesser $sheetInfoGuesser,
+        GroupNameResolver $groupNameResolver,
         ParticipantPlanningFormatter $participantPlanningFormatter
     ) {
         parent::__construct($translator);
 
         $this->participantRepository        = $participantRepository;
-        $this->participantInfoGuesser       = $participantInfoGuesser;
-        $this->sheetInfoGuesser             = $sheetInfoGuesser;
+        $this->groupNameResolver            = $groupNameResolver;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
     }
 
@@ -95,7 +85,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($object->event);
 
         foreach ($this->participantRepository->getParticipantsByEvent($object->event, $locale) as $participant) {
-            $rawParticipants[] = $this->getParticipantRawData($participant, $object->user, $locale);
+            $rawParticipants[] = $this->getParticipantRawData($participant, $object->admin);
         }
 
         $charset                = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
@@ -118,20 +108,19 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
     /**
      * @param Participant $participant
-     * @param Admin       $user
-     * @param string      $locale
+     * @param Admin       $admin
      *
      * @return array Raw data about participant's schedule
      */
-    private function getParticipantRawData(Participant $participant, Admin $user, $locale)
+    private function getParticipantRawData(Participant $participant, Admin $admin)
     {
         $sheet             = $participant->getSheet();
+        $user              = $participant->getUser();
         $event             = $sheet->getEvent();
-        $participantLocale = $event->getAvailableLocale($participant->getUser()->getLocale());
-        $adminLocale       = $event->getAvailableLocale($user->getLocale());
-        $participantInfo   = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
+        $participantLocale = $event->getAvailableLocale($user->getLocale());
+        $adminLocale       = $event->getAvailableLocale($admin->getLocale());
 
-        $gender = isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $participantInfo[Tag::PARTICIPANT_GENDER] : null;
+        $gender = $user->getGender();
 
         if (null !== $gender && !empty($gender)) {
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
@@ -143,19 +132,19 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         );
 
         return [
-            self::COL_PARTICIPANT_ID      => sprintf("%s-%s", $sheet->getId(), $participant->getId()),
-            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $adminLocale),
+            self::COL_USER_ID             => sprintf("%s-%s", $sheet->getId(), $user->getId()),
+            self::COL_COMPANY             => $this->groupNameResolver->resolve($event, $user),
             self::COL_DESCRIPTION         => null,
             self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($adminLocale),
             self::COL_TITLE               => $gender,
-            self::COL_FIRSTNAME           => isset($participantInfo[Tag::PARTICIPANT_FIRSTNAME]) ? $participantInfo[Tag::PARTICIPANT_FIRSTNAME] : null,
-            self::COL_LASTNAME            => isset($participantInfo[Tag::PARTICIPANT_LASTNAME]) ? $participantInfo[Tag::PARTICIPANT_LASTNAME] : null,
-            self::COL_POSITION            => isset($participantInfo[Tag::PARTICIPANT_POSITION]) ? $participantInfo[Tag::PARTICIPANT_POSITION] : null,
+            self::COL_FIRSTNAME           => $user->getFirstName(),
+            self::COL_LASTNAME            => $user->getLastName(),
+            self::COL_POSITION            => $user->getPosition(),
             self::COL_PHONE_PREFIX        => null,
-            self::COL_PHONE_NUMBER        => isset($participantInfo[Tag::PARTICIPANT_PHONE]) ? $participantInfo[Tag::PARTICIPANT_PHONE] : null,
-            self::COL_EMAIL               => $participant->getUser()->getEmail(),
+            self::COL_PHONE_NUMBER        => $user->getPhone(),
+            self::COL_EMAIL               => $user->getEmail(),
             self::COL_MOBILE_PHONE_PREFIX => null,
-            self::COL_MOBILE_PHONE        => isset($participantInfo[Tag::PARTICIPANT_MOBILE]) ? $participantInfo[Tag::PARTICIPANT_MOBILE] : null,
+            self::COL_MOBILE_PHONE        => $user->getMobile(),
             self::COL_SCHEDULE            => $planning,
         ];
     }
