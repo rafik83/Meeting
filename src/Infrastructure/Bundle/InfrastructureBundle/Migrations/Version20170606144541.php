@@ -26,8 +26,5 @@ class Version20170606144541 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('ALTER TABLE happening_participation ADD participant_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE happening_participation ADD CONSTRAINT FK_6B31720C9D1C3019 FOREIGN KEY (participant_id) REFERENCES participant (id) ON DELETE CASCADE');
     }
 }
