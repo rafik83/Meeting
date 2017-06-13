@@ -629,7 +629,7 @@ class Order
     {
         return new self(
             $sheet,
-            [],
+            '[]',
             $dateTime
         );
     }
