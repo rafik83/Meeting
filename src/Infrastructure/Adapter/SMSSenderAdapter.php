@@ -11,26 +11,33 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use Ovh\Api;
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\NoServiceAvailableException;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\NoSenderAvailableException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 
 class SMSSenderAdapter implements SMSSenderInterface
 {
-    const SMS_SENDER = 'PROXIMUM';
-
     /** @var Api */
     private $api;
 
+    /** @var string */
+    private $ovhServiceName;
+
+    /** @var string */
+    private $ovhSenderName;
+
     /**
-     * @param Api $api
+     * @param Api    $api
+     * @param string $ovhServiceName
+     * @param string $ovhSenderName
      */
-    public function __construct(Api $api)
+    public function __construct(Api $api, $ovhServiceName, $ovhSenderName)
     {
         $this->api = $api;
+        $this->ovhServiceName = $ovhServiceName;
+        $this->ovhSenderName = $ovhSenderName;
     }
 
     /**
@@ -40,16 +47,13 @@ class SMSSenderAdapter implements SMSSenderInterface
      */
     public function send(SMS $sms)
     {
-        $service = $this->getService();
-        $sender  = $this->getSenderName($service);
-
         try {
             $response = $this->api->post(
-                sprintf('/sms/%s/jobs', $service),
+                sprintf('/sms/%s/jobs', $this->ovhServiceName),
                 [
                     'message'   => $sms->getMessage(),
                     'receivers' => [$sms->getReceiver()],
-                    'sender'    => $sender,
+                    'sender'    => $this->ovhSenderName,
                 ]
             );
 
@@ -63,43 +67,8 @@ class SMSSenderAdapter implements SMSSenderInterface
             }
         } catch (ClientException $exception) {
             throw new FailToSendSMSException($exception->getMessage());
+        } catch (ServerException $exception) {
+            throw new FailToSendSMSException($exception->getMessage());
         }
-    }
-
-    /**
-     * @return string
-     *
-     * @throws NoServiceAvailableException
-     */
-    private function getService()
-    {
-        $services = $this->api->get('/sms');
-
-        $service = reset($services);
-
-        if ($service === false) {
-            throw new NoServiceAvailableException('No service available to send SMS');
-        }
-
-        return $service;
-    }
-
-    /**
-     * @param string $service
-     *
-     * @return string
-     *
-     * @throws NoSenderAvailableException
-     */
-    private function getSenderName($service)
-    {
-        $senders = $this->api->get(sprintf('/sms/%s/senders', $service));
-        $sender  = reset($senders);
-
-        if ($sender === false|| !in_array(self::SMS_SENDER, $senders)) {
-            throw new NoSenderAvailableException('No sender available to send SMS');
-        }
-
-        return self::SMS_SENDER;
     }
 }

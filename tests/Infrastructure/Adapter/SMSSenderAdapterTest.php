@@ -11,44 +11,17 @@
 namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
 
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use Ovh\Api;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\NoSenderAvailableException;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\NoServiceAvailableException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter;
 
 class SMSSenderAdapterTest extends TestCase
 {
-    public function testSendNoService()
-    {
-        $this->expectException(NoServiceAvailableException::class);
-
-        $sms = new SMS('+33102030405', 'message content');
-
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->get('/sms')->shouldBeCalled()->willReturn([]);
-
-        $adapter = new SMSSenderAdapter($ovh->reveal());
-        $adapter->send($sms);
-    }
-
-    public function testSendNoSender()
-    {
-        $this->expectException(NoSenderAvailableException::class);
-
-        $sms = new SMS('+33102030405', 'message content');
-
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->get('/sms')->shouldBeCalled()->willReturn(['serviceName']);
-        $ovh->get('/sms/serviceName/senders')->shouldBeCalled()->willReturn([]);
-
-        $adapter = new SMSSenderAdapter($ovh->reveal());
-        $adapter->send($sms);
-    }
+    const SENDER  = 'senderName';
+    const SERVICE = 'serviceName';
 
     public function testSendClientException()
     {
@@ -58,20 +31,43 @@ class SMSSenderAdapterTest extends TestCase
 
         // Mock
         $ovh = $this->prophesize(Api::class);
-        $ovh->get('/sms')->shouldBeCalled()->willReturn(['serviceName']);
-        $ovh->get('/sms/serviceName/senders')->shouldBeCalled()->willReturn(['PROXIMUM']);
         $ovh->post(
                 '/sms/serviceName/jobs',
                 [
                     'message'   => 'message content',
                     'receivers' => ['+33102030405'],
-                    'sender'    => 'PROXIMUM',
+                    'sender'    => 'senderName',
                 ]
             )
             ->shouldBeCalled()
             ->willThrow(ClientException::class);
 
-        $adapter = new SMSSenderAdapter($ovh->reveal());
+        // Adapter
+        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
+        $adapter->send($sms);
+    }
+
+    public function testSendServerException()
+    {
+        $this->expectException(FailToSendSMSException::class);
+
+        $sms = new SMS('+33102030405', 'message content');
+
+        // Mock
+        $ovh = $this->prophesize(Api::class);
+        $ovh->post(
+            '/sms/serviceName/jobs',
+            [
+                'message'   => 'message content',
+                'receivers' => ['+33102030405'],
+                'sender'    => 'senderName',
+            ]
+        )
+            ->shouldBeCalled()
+            ->willThrow(ServerException::class);
+
+        // Adapter
+        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
         $adapter->send($sms);
     }
 
@@ -83,20 +79,19 @@ class SMSSenderAdapterTest extends TestCase
 
         // Mock
         $ovh = $this->prophesize(Api::class);
-        $ovh->get('/sms')->shouldBeCalled()->willReturn(['serviceName']);
-        $ovh->get('/sms/serviceName/senders')->shouldBeCalled()->willReturn(['PROXIMUM']);
         $ovh->post(
                 '/sms/serviceName/jobs',
                 [
                     'message'   => 'message content',
                     'receivers' => ['+33102030405'],
-                    'sender'    => 'PROXIMUM',
+                    'sender'    => 'senderName',
                 ]
             )
             ->shouldBeCalled()
             ->willReturn(['invalidReceivers' => ['+33102030405']]);
 
-        $adapter = new SMSSenderAdapter($ovh->reveal());
+        // Adapter
+        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
         $adapter->send($sms);
     }
 
@@ -106,20 +101,19 @@ class SMSSenderAdapterTest extends TestCase
 
         // Mock
         $ovh = $this->prophesize(Api::class);
-        $ovh->get('/sms')->shouldBeCalled()->willReturn(['serviceName']);
-        $ovh->get('/sms/serviceName/senders')->shouldBeCalled()->willReturn(['PROXIMUM']);
         $ovh->post(
             '/sms/serviceName/jobs',
             [
                 'message'   => 'message content',
                 'receivers' => ['+33102030405'],
-                'sender'    => 'PROXIMUM',
+                'sender'    => 'senderName',
             ]
         )
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $adapter = new SMSSenderAdapter($ovh->reveal());
+        // Adapter
+        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
         $adapter->send($sms);
     }
 }
