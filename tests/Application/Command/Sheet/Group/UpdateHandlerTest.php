@@ -15,7 +15,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Update;
 use Proximum\Vimeet\Application\Command\Sheet\Group\UpdateHandler;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetGroupUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -84,8 +84,8 @@ class UpdateHandlerTest extends TestCase
 
         $this->groupRepository->set($expectedGroup)->shouldBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            new SheetGroupCreatedEvent($expectedGroup)
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_UPDATED,
+            new SheetGroupUpdatedEvent($expectedGroup, true)
         )->shouldBeCalled();
 
         $handler = new UpdateHandler(
@@ -118,8 +118,8 @@ class UpdateHandlerTest extends TestCase
 
         $this->groupRepository->set(Argument::type(Group::class))->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            Argument::type(SheetGroupCreatedEvent::class)
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_UPDATED,
+            Argument::type(SheetGroupUpdatedEvent::class)
         )->shouldNotBeCalled();
 
         $handler = new UpdateHandler(
@@ -149,8 +149,8 @@ class UpdateHandlerTest extends TestCase
 
         $this->groupRepository->set(Argument::type(Group::class))->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            Argument::type(SheetGroupCreatedEvent::class)
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_UPDATED,
+            Argument::type(SheetGroupUpdatedEvent::class)
         )->shouldNotBeCalled();
 
         $handler = new UpdateHandler(

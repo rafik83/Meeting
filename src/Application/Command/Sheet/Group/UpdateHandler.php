@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetGroupUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailException;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
@@ -61,6 +61,8 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        $isManagerChanged = false;
+
         if ($update->email !== $update->group->getManager()->getEmail()) {
             $manager = $this->userRepository->findByEmail($update->email);
 
@@ -74,6 +76,7 @@ class UpdateHandler
                     $manager
                 );
                 $update->group->setManager($manager);
+                $isManagerChanged = true;
             } catch (\Exception $exception) {
                 throw new UserNotAllowedToManageGroupException($update->email);
             }
@@ -83,8 +86,8 @@ class UpdateHandler
 
         $this->groupRepository->set($update->group);
 
-        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_CREATED,
-            new SheetGroupCreatedEvent($update->group)
+        $this->eventDispatcher->dispatch(Events::SHEET_GROUP_UPDATED,
+            new SheetGroupUpdatedEvent($update->group, $isManagerChanged)
         );
     }
 }

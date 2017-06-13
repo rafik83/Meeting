@@ -24,7 +24,8 @@ class UpdateType extends AbstractGroupType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('email', EmailType::class);
+        $builder->add('email', EmailType::class)
+            ->remove('sheetViews');
     }
 
     /**

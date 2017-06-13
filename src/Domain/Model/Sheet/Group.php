@@ -103,7 +103,7 @@ class Group
     }
 
     /**
-     * @param $title
+     * @param string $title
      *
      * @return Group
      */
