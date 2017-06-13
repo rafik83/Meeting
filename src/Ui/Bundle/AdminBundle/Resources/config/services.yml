@@ -219,9 +219,8 @@ services:
     form_type_sheet.message_campaign_filters_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\TargetFilterType
         parent: form_type_sheet.abstract_filter_type
-        arguments:
-            - '@vimeet_infrastructure.repository.category_repository'
-            - '@infrastructure.service.boolean_filters_builder'
+        tags:
+            - { name: form.type }
 
     form_type_sheet.messaging_message_entity_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\MessageEntityType
@@ -247,9 +246,6 @@ services:
     form_type_sheet.sheet_filter_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType
         parent: form_type_sheet.abstract_filter_type
-        arguments:
-            - '@vimeet_infrastructure.repository.category_repository'
-            - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }
     form_type.admin.tip_type:
