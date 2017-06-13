@@ -636,6 +636,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Tip\UpdateHandler
         arguments:
             - '@repository.tip.repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Update }
     command.tip.event.affect_handler:
