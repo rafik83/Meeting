@@ -55,7 +55,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
         $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
-        $happeningParticipation = new HappeningParticipation($happening, $participant);
+        $happeningParticipation = new HappeningParticipation($happening, $user);
 
         $unavailability = new Unavailability($user, $event, $begin, $end);
 
@@ -67,7 +67,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user, $event)->shouldBeCalled()->willReturn(true);
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $happeningParticipationRepository->findByParticipant($participant, ['disabled' => false])->shouldBeCalled()->willReturn([
+        $happeningParticipationRepository->findByUser($user, $event, ['disabled' => false])->shouldBeCalled()->willReturn([
             $happeningParticipation
         ]);
 
@@ -138,7 +138,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
         $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
-        $happeningParticipation = new HappeningParticipation($happening, $participant2);
+        $happeningParticipation = new HappeningParticipation($happening, $user2);
 
         $unavailability = new Unavailability($user2, $event, $begin, $end);
 
@@ -151,7 +151,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByParticipant($participant2, ['disabled' => false])
+            ->findByUser($user2, $event, ['disabled' => false])
             ->shouldBeCalled()
             ->willReturn([
                 $happeningParticipation

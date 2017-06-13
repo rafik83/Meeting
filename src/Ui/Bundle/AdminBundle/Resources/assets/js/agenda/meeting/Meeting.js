@@ -1,20 +1,20 @@
-var options = require('../../vueComponents/options');
-var sheetAgenda = require('./SheetAgenda');
-var filterModal = require('./modal/filterModal');
-var meetingUpdateModal = require('./modal/MeetingUpdateModal');
-var massAssignmentModal = require('./modal/massAssignmentModal');
-var updateParticipantModal = require('./modal/updateParticipantModal');
-var sortModal = require('./modal/sortModal');
-var _ = require('lodash');
-var eventDispatcher = require('../../vueComponents/EventDispatcher');
+var _ = require('lodash'),
+    Vue = require('vue'),
+    axios = require('axios'),
 
-var AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
-var Vue = require('vue');
-var axios = require('axios');
+    options = require('../../vueComponents/options'),
+    sheetAgenda = require('./SheetAgenda'),
+    filterModal = require('./modal/filterModal'),
+    meetingUpdateModal = require('./modal/MeetingUpdateModal'),
+    massAssignmentModal = require('./modal/massAssignmentModal'),
+    updateParticipantModal = require('./modal/updateParticipantModal'),
+    sortModal = require('./modal/sortModal'),
+    eventDispatcher = require('../../vueComponents/EventDispatcher'),
+    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
+    SheetFilter = require('./../filters/_SheetsFilter'),
+    SortSheets = require('../../components/_SortSheets'),
 
-var api = new AgendaApiEndpoints();
-
-var SheetFilter = require('./../filters/_SheetsFilter');
+    api = new AgendaApiEndpoints();
 
 /**
  * Pass axios to Vue
@@ -46,14 +46,15 @@ module.exports = {
             showMassAssignmentModal: false,
             showParticipantModal: false,
             hasUsedSheetFilter: false,
-            hasUsedSheetOrParticipantFilter: false,
             showSortModal: false,
-            filterBySheetOrParticipantValue: null,
+            filterBySheetOrParticipantValue: '',
             /**
              * Meeting slot to update
              */
             meetingSlotToUpdate: null,
-            meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/
+            meetingRequestToTransformIntoMeeting: null /** @param {Object} Meeting request **/,
+            selectedSort: null,
+            selectedFilters: [],
         }
     },
 
@@ -86,10 +87,7 @@ module.exports = {
                 && this.meetingSlotToUpdate === null;
         },
         sheetsIterator: function () {
-
-            if (this.hasUsedSheetOrParticipantFilter) {
-                return this.filteredSheetsBySheetOrParticipant;
-            } else if (this.hasUsedSheetFilter) {
+            if (this.hasUsedSheetFilter) {
                 return this.filteredSheets;
             }
 
@@ -135,22 +133,16 @@ module.exports = {
          * Filter on sheet list by participant name / email or sheet title
          */
         filterBySheetOrParticipant: function () {
-            var delay = (function() {
+            var delay = (function () {
                 var timer = 0;
-                return function(callback, ms) {
-                    clearTimeout (timer);
+                return function (callback, ms) {
+                    clearTimeout(timer);
                     timer = setTimeout(callback, ms);
                 };
             })();
 
-            delay(function() {
-                if (this.filterBySheetOrParticipantValue.length > 0) {
-                    var sheetsToFilter = this.filteredSheets.length > 0 ? this.filteredSheets : this.sheets;
-                    this.filteredSheetsBySheetOrParticipant = new SheetFilter({filterBySheetOrParticipantValue : this.filterBySheetOrParticipantValue}).filter(sheetsToFilter);
-                    this.hasUsedSheetOrParticipantFilter = true;
-                } else {
-                    this.hasUsedSheetOrParticipantFilter = false;
-                }
+            delay(function () {
+                this.filterSheets(this.selectedFilters);
             }.bind(this), 300);
         },
 
@@ -194,6 +186,7 @@ module.exports = {
                 child.reset();
                 this.hasUsedSheetFilter = false;
                 this.filteredSheets = [];
+                this.filterBySheetOrParticipantValue = '';
             }
         },
 
@@ -799,6 +792,47 @@ module.exports = {
                         alert(error.message);
                     }
                 }.bind(this));
+        },
+
+        /**
+         * @param {string} selectedSort
+         */
+        sortSheets: function (selectedSort) {
+            this.selectedSort = selectedSort;
+            var sheetsToSort  = this.sheets;
+
+            if (this.filteredSheets.length > 0) {
+                sheetsToSort = this.filteredSheets;
+            }
+
+            this.refreshList(new SortSheets(selectedSort).sort(sheetsToSort));
+        },
+
+        /**
+         * @param {array} selectedFilters
+         */
+        filterSheets: function (selectedFilters) {
+            this.prepareSelectedFilters(selectedFilters);
+
+            var filteredSheets = new SheetFilter(this.selectedFilters).filter(this.sheets);
+            if (this.selectedSort !== null) {
+                filteredSheets = new SortSheets(this.selectedSort).sort(filteredSheets);
+            }
+
+            this.refreshList(filteredSheets);
+        },
+
+        /**
+         * @param {array} selectedFilters
+         */
+        prepareSelectedFilters: function (selectedFilters) {
+            selectedFilters.filterBySheetOrParticipantValue = '';
+            var filterSheetOrParticipant = this.filterBySheetOrParticipantValue;
+            this.selectedFilters = selectedFilters;
+
+            if (filterSheetOrParticipant.trim().length > 0) {
+                this.selectedFilters.filterBySheetOrParticipantValue = filterSheetOrParticipant.trim();
+            }
         }
     }
 };

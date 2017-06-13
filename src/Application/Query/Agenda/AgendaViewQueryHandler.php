@@ -122,7 +122,7 @@ class AgendaViewQueryHandler
 
             $happeningParticipations = $this
                 ->happeningParticipationRepository
-                ->findByParticipant($participant, ['disabled' => false]);
+                ->findByUser($participant->getUser(), $query->event, ['disabled' => false]);
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
                 $meetings = $this->meetingRepository->findByUserAndEvent($participant->getUser(), $query->event);

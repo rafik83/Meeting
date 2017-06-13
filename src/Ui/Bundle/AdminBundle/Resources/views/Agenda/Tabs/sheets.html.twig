@@ -58,7 +58,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue">
+                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue" autofocus>
                             </td>
                         </tr>
                         </thead>
@@ -188,9 +188,9 @@
         </div>
         <mass-assignment-modal :show="showMassAssignmentModal" v-on:mass-assignment-updated="handleUpdateMassAssignment" v-on:close-modal="showMassAssignmentModal = false" ref="massAssignmentModal"></mass-assignment-modal>
 
-        <sort-modal :sheets="sheets" :show="showSortModal" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
+        <sort-modal :sheets="sheets" :show="showSortModal" v-on:sort-sheets="sortSheets" v-on:refresh-list="refreshList" v-on:close-modal="showSortModal = false" ref="sortModal"></sort-modal>
 
-        <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
+        <filter-modal v-bind:sheets="sheets" v-show="showFilterModal" v-on:filter-sheets="filterSheets" v-on:refresh-list="refreshList" v-on:close-modal="showFilterModal = false" ref="sheetFilterModal"></filter-modal>
 
         <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
 

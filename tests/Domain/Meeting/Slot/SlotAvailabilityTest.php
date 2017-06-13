@@ -70,6 +70,9 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     /** @var Participant */
     private $participant;
 
+    /** @var User */
+    private $user;
+
     /**
      * Set up the prophecy
      */
@@ -82,7 +85,8 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->massAssignmentRepository         = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $this->event                            = EventFactory::createEvent();
         $this->sheet                            = SheetFactory::create($this->event);
-        $this->participant                      = ParticipantFactory::create($this->sheet);
+        $this->user                             = UserFactory::create();
+        $this->participant                      = ParticipantFactory::create($this->sheet, $this->user);
     }
 
     /**
@@ -127,7 +131,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $beginH                 = new \DateTime('2016-10-12 08:00:00.000');
         $endH                   = new \DateTime('2016-10-12 08:30:00.000');
         $happening              = new Happening($this->event, $beginH, $endH, $category);
-        $happeningParticipation = new HappeningParticipation($happening, $this->participant);
+        $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -166,7 +170,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
         $happening              = new Happening($this->event, $beginH, $endH, $category);
-        $happeningParticipation = new HappeningParticipation($happening, $this->participant);
+        $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -186,8 +190,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $end   = new \DateTime('2016-10-12 10:00:00.000');
         $slot  = new MeetingSlot($this->event, $begin, $end);
 
-
-        $result = $slotAvailability->isAvailable($slot, $this->participant);
+        $result = $slotAvailability->getSlotAvailability($slot, $this->participant);
 
         // Expected
         $expected = new SlotAvailabilityView(SlotAvailability::HAPPENING_UNAVAILABILITY);
@@ -205,7 +208,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $beginH                 = new \DateTime('2016-10-12 08:30:00.000');
         $endH                   = new \DateTime('2016-10-12 09:30:00.000');
         $happening              = new Happening($this->event, $beginH, $endH, $category);
-        $happeningParticipation = new HappeningParticipation($happening, $this->participant);
+        $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -244,7 +247,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $beginH                 = new \DateTime('2016-10-12 09:30:00.000');
         $endH                   = new \DateTime('2016-10-12 09:45:00.000');
         $happening              = new Happening($this->event, $beginH, $endH, $category);
-        $happeningParticipation = new HappeningParticipation($happening, $this->participant);
+        $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -870,7 +873,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
         $happening              = new Happening($this->event, $beginH, $endH, $category);
-        $happeningParticipation = new HappeningParticipation($happening, $this->participant);
+        $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
@@ -993,7 +996,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
         $happening              = new Happening($this->event, $beginH, $endH, $category);
-        $happeningParticipation = new HappeningParticipation($happening, $this->participant);
+        $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);

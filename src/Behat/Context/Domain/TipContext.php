@@ -38,13 +38,14 @@ class TipContext implements Context
     }
 
     /**
-     * @Given /^the tip "(?P<tipTitle>[^"]+)" is created for an event$/
+     * @Given /^the tip "(?P<tipTitle>[^"]+)" is created for the event "(?P<eventTitle>[^"]+)"$/
      *
      * @param string $title
+     * @param string $eventTitle
      */
-    public function createTipForEvent($title)
+    public function createTipForEvent($title, $eventTitle)
     {
-        $tip = $this->tipContextProxy->getTipManager()->createForEvent($title);
+        $tip = $this->tipContextProxy->getTipManager()->createForEvent($title, $eventTitle);
         $this->tipContextProxy->getStorage()->set('tip', $tip);
     }
 }

@@ -17,7 +17,7 @@ class TipViewQueryHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
-    
+
     /**
      * TipViewQueryHandler constructor.
      *
@@ -27,7 +27,7 @@ class TipViewQueryHandler
     {
         $this->tipRepository = $tipRepository;
     }
-    
+
     /**
      * @param TipViewQuery $query
      *
