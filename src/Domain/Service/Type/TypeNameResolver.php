@@ -44,7 +44,6 @@ class TypeNameResolver
         $this->groupNameResolver = $groupNameResolver;
     }
 
-
     /**
      * If a Sheet is not in a Group we return the Type name
      * If a Sheet is in a Group, we return the Type name of the lowest Type position
@@ -82,6 +81,4 @@ class TypeNameResolver
 
         return $sheet->getType()->getTitle($locale);
     }
-
-
 }
