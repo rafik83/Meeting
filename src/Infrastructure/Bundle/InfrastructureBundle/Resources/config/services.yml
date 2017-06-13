@@ -4008,12 +4008,13 @@ services:
             - { name: serializer.normalizer }
 
     serializer.normalizer.event_participant_schedules:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantSchedulesNormalizer
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventUserSchedulesNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.sheets_group.type_name_resolver'
             - '@planning.formatter.participant_planning_formatter'
         tags:
             - { name: serializer.normalizer }

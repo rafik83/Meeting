@@ -10,28 +10,18 @@
 
 namespace Proximum\Vimeet\Domain\View\Normalizer;
 
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class EventParticipantSchedulesNormalizerView
+class EventUserSchedulesNormalizerView
 {
-    /**
-     * @var Event
-     */
+    /*** @var Event */
     public $event;
 
     /**
-     * @var Admin
-     */
-    public $admin;
-
-    /**
      * @param Event $event
-     * @param Admin $admin
      */
-    public function __construct(Event $event, Admin $admin)
+    public function __construct(Event $event)
     {
         $this->event = $event;
-        $this->admin = $admin;
     }
 }

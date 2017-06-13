@@ -13,16 +13,17 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
-use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
+use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\View\Normalizer\EventUserSchedulesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
+class EventUserSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_USER_ID             = 'userId';
+    const COL_USER_ID             = 'participantId';
     const COL_TITLE               = 'title'; // Gender
     const COL_FIRSTNAME           = 'firstName';
     const COL_LASTNAME            = 'lastName';
@@ -37,65 +38,65 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     const COL_MOBILE_PHONE        = 'mobilePhone';
     const COL_SCHEDULE            = 'planning';
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
-    private $participantRepository;
+    /** @var UserRepositoryInterface */
+    private $userRepository;
 
-    /**
-     * @var GroupNameResolver
-     */
+    /** @var GroupNameResolver */
     private $groupNameResolver;
 
-    /**
-     * @var ParticipantPlanningFormatter
-     */
+    /** @var TypeNameResolver */
+    private $typeNameResolver;
+
+    /** @var ParticipantPlanningFormatter */
     private $participantPlanningFormatter;
 
     /**
-     * @param TranslatorInterface            $translator
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param GroupNameResolver              $groupNameResolver
-     * @param ParticipantPlanningFormatter   $participantPlanningFormatter
+     * @param TranslatorInterface          $translator
+     * @param UserRepositoryInterface      $userRepository
+     * @param GroupNameResolver            $groupNameResolver
+     * @param TypeNameResolver             $typeNameResolver
+     * @param ParticipantPlanningFormatter $participantPlanningFormatter
      */
     public function __construct(
         TranslatorInterface $translator,
-        ParticipantRepositoryInterface $participantRepository,
+        UserRepositoryInterface $userRepository,
         GroupNameResolver $groupNameResolver,
+        TypeNameResolver $typeNameResolver,
         ParticipantPlanningFormatter $participantPlanningFormatter
     ) {
         parent::__construct($translator);
 
-        $this->participantRepository        = $participantRepository;
+        $this->userRepository               = $userRepository;
         $this->groupNameResolver            = $groupNameResolver;
+        $this->typeNameResolver             = $typeNameResolver;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
     }
 
     /**
-     * Normalizes participants' schedules for a given event for serialization.
+     * Normalizes users' schedules for a given event for serialization.
      *
      * {@inheritdoc}
      *
-     * @param EventParticipantSchedulesNormalizerView $object
+     * @param EventUserSchedulesNormalizerView $object
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        $rawParticipants = [];
-        $locale          = $context['locale'];
+        $rawUsers = [];
+
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($object->event);
 
-        foreach ($this->participantRepository->getParticipantsByEvent($object->event, $locale) as $participant) {
-            $rawParticipants[] = $this->getParticipantRawData($participant, $object->admin);
+        foreach ($this->userRepository->findByEvent($object->event) as $user) {
+            $rawUsers[] = $this->getUserRawData($user, $object->event);
         }
 
-        $charset                = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
-        $normalizedParticipants = [];
+        $charset         = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
+        $normalizedUsers = [];
 
-        foreach ($rawParticipants as $rawParticipant) {
-            $normalizedParticipants[] = $this->normalizeParticipantRawData($rawParticipant, $charset);
+        foreach ($rawUsers as $rawUser) {
+            $normalizedUsers[] = $this->normalizeUserRawData($rawUser, $charset);
         }
 
-        return $normalizedParticipants;
+        return $normalizedUsers;
     }
 
     /**
@@ -103,39 +104,29 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      */
     public function supportsNormalization($data, $format = null)
     {
-        return 'csv' === $format && $data instanceof EventParticipantSchedulesNormalizerView;
+        return 'csv' === $format && $data instanceof EventUserSchedulesNormalizerView;
     }
 
     /**
-     * @param Participant $participant
-     * @param Admin       $admin
+     * @param User  $user
+     * @param Event $event
      *
-     * @return array Raw data about participant's schedule
+     * @return array Raw data about user's schedule
      */
-    private function getParticipantRawData(Participant $participant, Admin $admin)
+    private function getUserRawData(User $user, Event $event)
     {
-        $sheet             = $participant->getSheet();
-        $user              = $participant->getUser();
-        $event             = $sheet->getEvent();
-        $participantLocale = $event->getAvailableLocale($user->getLocale());
-        $adminLocale       = $event->getAvailableLocale($admin->getLocale());
+        $userLocale = $event->getAvailableLocale($user->getLocale());
+        $gender     = $user->getGender();
 
-        $gender = $user->getGender();
-
-        if (null !== $gender && !empty($gender)) {
+        if (!empty($gender)) {
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
-        $planning = $this->participantPlanningFormatter->formatPlanningFromParticipantWithUnallocated(
-            $participant,
-            $participantLocale
-        );
-
         return [
-            self::COL_USER_ID             => sprintf("%s-%s", $sheet->getId(), $user->getId()),
+            self::COL_USER_ID             => $user->getId(),
             self::COL_COMPANY             => $this->groupNameResolver->resolve($event, $user),
             self::COL_DESCRIPTION         => null,
-            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($adminLocale),
+            self::COL_PARTICIPATION_TYPE  => $this->typeNameResolver->resolve($event, $user, $userLocale),
             self::COL_TITLE               => $gender,
             self::COL_FIRSTNAME           => $user->getFirstName(),
             self::COL_LASTNAME            => $user->getLastName(),
@@ -145,7 +136,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             self::COL_EMAIL               => $user->getEmail(),
             self::COL_MOBILE_PHONE_PREFIX => null,
             self::COL_MOBILE_PHONE        => $user->getMobile(),
-            self::COL_SCHEDULE            => $planning,
+            self::COL_SCHEDULE            => null,
         ];
     }
 
@@ -158,7 +149,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      *
      * @return array
      */
-    private function normalizeParticipantRawData($rawData, $charset = Charset::WINDOWS_1252)
+    private function normalizeUserRawData($rawData, $charset = Charset::WINDOWS_1252)
     {
         $normalizedData = [];
 

@@ -12,9 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
+use Proximum\Vimeet\Domain\View\Normalizer\EventUserSchedulesNormalizerView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -35,20 +34,18 @@ class ExportParticipantController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function exportParticipantSchedulesAction(Request $request, Event $event)
+    public function exportParticipantSchedulesAction(Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $charset    = Charset::WINDOWS_1252;
         $serializer = $this->get('serializer');
-        $exportContent = $serializer->serialize(new EventParticipantSchedulesNormalizerView($event, $this->getUser()), 'csv', [
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
+        $exportContent = $serializer->serialize(new EventUserSchedulesNormalizerView($event), 'csv', [
             'charset' => $charset,
         ]);
 
