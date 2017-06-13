@@ -90,7 +90,7 @@ class OrderViewQueryHandler
         $invoiceNumber   = '';
         $invoiceDate     = '';
 
-        if (!empty($query->order->getInvoice())) {
+        if ($query->order->hasInvoice()) {
             $formatter = \IntlDateFormatter::create(
                 $query->locale,
                 \IntlDateFormatter::SHORT,

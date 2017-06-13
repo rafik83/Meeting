@@ -76,6 +76,7 @@ class OrderViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $order->getRows()->willReturn([$row1->reveal(), $row2->reveal()]);
         $order->getInvoice()->shouldBeCalled()->willReturn($invoice);
+        $order->hasInvoice()->shouldBeCalled()->willReturn(true);
         $order->getPromotionCodes()->willReturn([$promotionCode->reveal()]);
 
         $locale                              = 'en';
