@@ -19,7 +19,6 @@ class Version20170605133359 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE meeting_request ADD event_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE meeting_request ADD CONSTRAINT FK_A345C71271F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE');
 
         // Add event_id to meeting_request
         $this->addSql('
@@ -31,6 +30,7 @@ class Version20170605133359 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_A345C71271F7E88B ON meeting_request (event_id)');
 
         $this->addSql('ALTER TABLE meeting_request CHANGE event_id event_id INT NOT NULL');
+        $this->addSql('ALTER TABLE meeting_request ADD CONSTRAINT FK_A345C71271F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE');
     }
 
     /**
