@@ -11,15 +11,9 @@
 namespace Proximum\Vimeet\Application\Event\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
-use Symfony\Component\EventDispatcher;
 
-class SheetGroupUpdatedEvent extends EventDispatcher\Event
+class SheetGroupUpdatedEvent extends AbstractGroupEvent
 {
-    /**
-     * @var Group
-     */
-    private $group;
-
     /**
      * @var bool
      */
@@ -33,16 +27,9 @@ class SheetGroupUpdatedEvent extends EventDispatcher\Event
      */
     public function __construct(Group $group, $isManagerChanged)
     {
-        $this->group            = $group;
-        $this->isManagerChanged = $isManagerChanged;
-    }
+        parent::__construct($group);
 
-    /**
-     * @return Group
-     */
-    public function getGroup()
-    {
-        return $this->group;
+        $this->isManagerChanged = $isManagerChanged;
     }
 
     /**

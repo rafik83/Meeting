@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPass
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
+use Proximum\Vimeet\Application\Event\Sheet\AbstractGroupEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
@@ -362,20 +363,7 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetGroupCreated(SheetGroupCreatedEvent $event)
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery(null, $event->getGroup()->getManager())
-        );
-
-        $mail = new SheetGroupCreatedMail(
-            $this->sender->generate($event->getGroup()->getEvent()),
-            $event->getGroup()->getManager()->getEmail(),
-            $event->getGroup()->getEvent()->getAvailableLocale(
-                $event->getGroup()->getManager()->getLocale()
-            ),
-            $event->getGroup()->getEvent(),
-            $participantMailView,
-            $event->getGroup()
-        );
+        $mail = $this->getSheetGroupMail($event);
 
         $this->mailer->send($mail);
     }
@@ -388,21 +376,8 @@ class MailEventSubscriber implements EventSubscriberInterface
         if (!$event->isManagerChanged()) {
             return;
         }
-        
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery(null, $event->getGroup()->getManager())
-        );
 
-        $mail = new SheetGroupCreatedMail(
-            $this->sender->generate($event->getGroup()->getEvent()),
-            $event->getGroup()->getManager()->getEmail(),
-            $event->getGroup()->getEvent()->getAvailableLocale(
-                $event->getGroup()->getManager()->getLocale()
-            ),
-            $event->getGroup()->getEvent(),
-            $participantMailView,
-            $event->getGroup()
-        );
+        $mail = $this->getSheetGroupMail($event);
 
         $this->mailer->send($mail);
     }
@@ -429,5 +404,30 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated',
             Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated'
         ];
+    }
+
+    /**
+     * @param AbstractGroupEvent $event
+     *
+     * @return SheetGroupCreatedMail
+     */
+    private function getSheetGroupMail(AbstractGroupEvent $event)
+    {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getGroup()->getManager())
+        );
+
+        $mail = new SheetGroupCreatedMail(
+            $this->sender->generate($event->getGroup()->getEvent()),
+            $event->getGroup()->getManager()->getEmail(),
+            $event->getGroup()->getEvent()->getAvailableLocale(
+                $event->getGroup()->getManager()->getLocale()
+            ),
+            $event->getGroup()->getEvent(),
+            $participantMailView,
+            $event->getGroup()
+        );
+
+        return $mail;
     }
 }
