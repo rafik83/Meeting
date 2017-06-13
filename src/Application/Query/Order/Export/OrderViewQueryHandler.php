@@ -91,15 +91,20 @@ class OrderViewQueryHandler
         $invoiceDate     = '';
 
         if ($query->order->hasInvoice()) {
-            $formatter = \IntlDateFormatter::create(
-                $query->locale,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::NONE,
-                $query->order->getSheet()->getEvent()->getTimeZone()
-            );
+
+            $eventId = $query->order->getSheet()->getEvent()->getId();
+
+            if (!isset($formatter[$eventId])) {
+                $formatter[$eventId] = \IntlDateFormatter::create(
+                    $query->locale,
+                    \IntlDateFormatter::SHORT,
+                    \IntlDateFormatter::NONE,
+                    $query->order->getSheet()->getEvent()->getTimeZone()
+                );
+            }
 
             $invoiceNumber = $query->order->getInvoice()->getNumber();
-            $invoiceDate   = $formatter->format($query->order->getInvoice()->getCreatedAt());
+            $invoiceDate   = $formatter[$eventId]->format($query->order->getInvoice()->getCreatedAt());
         }
 
         return new OrderView(

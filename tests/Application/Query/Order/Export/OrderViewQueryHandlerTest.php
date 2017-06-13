@@ -88,8 +88,15 @@ class OrderViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $promotionCodeBoughtViewQueryHandler = $this->prophesize(PromotionCodeBoughtViewQueryHandler::class);
 
         $sheetInfoGuesserCache->guessSheetTitle($sheet->reveal(), $locale)->shouldBeCalled()->willReturn('sheet title');
-        $billingInfo =
-            new BillingInfoView('gender', 'lastName', 'firstName', 'position', 'phone', 'mobile', 'email@email.fr');
+        $billingInfo = new BillingInfoView(
+            'gender',
+            'lastName',
+            'firstName',
+            'position',
+            'phone',
+            'mobile',
+            'email@email.fr'
+        );
 
         $productBought = new ProductBoughtView(1, 2, 3, 6);
         $productBoughtViewQueryHandler->handle(new ProductBoughtViewQuery($row1->reveal()))
