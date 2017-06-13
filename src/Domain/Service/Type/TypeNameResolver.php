@@ -10,75 +10,41 @@
 
 namespace Proximum\Vimeet\Domain\Service\Type;
 
+use InvalidArgumentException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeNameResolver
 {
-    /** @var GroupRepositoryInterface */
-    private $groupRepository;
-
-    /** @var SheetRepositoryInterface */
-    private $sheetRepository;
-
-    /** @var GroupNameResolver */
-    private $groupNameResolver;
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
 
     /**
      * TypeNameResolver constructor.
      *
-     * @param GroupRepositoryInterface $groupRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param GroupNameResolver        $groupNameResolver
+     * @param TypeRepositoryInterface $typeRepository
      */
-    public function __construct(
-        GroupRepositoryInterface $groupRepository,
-        SheetRepositoryInterface $sheetRepository,
-        GroupNameResolver $groupNameResolver
-    ) {
-        $this->groupRepository  = $groupRepository;
-        $this->sheetRepository  = $sheetRepository;
-        $this->groupNameResolver = $groupNameResolver;
+    public function __construct(TypeRepositoryInterface $typeRepository)
+    {
+        $this->typeRepository = $typeRepository;
     }
 
     /**
-     * If a Sheet is not in a Group we return the Type name
-     * If a Sheet is in a Group, we return the Type name of the lowest Type position
-     *
-     * @param Event  $event
      * @param User   $user
+     * @param Event  $event
      * @param string $locale
      *
      * @return string
      */
-    public function resolve(Event $event, User $user, $locale)
+    public function resolve(User $user, Event $event, $locale)
     {
-        $group      = $this->groupRepository->getByEvent($event);
-        $userSheets = $this->sheetRepository->getByUser($user);
+        $type = $this->typeRepository->getFirstPositionTypeByEventAndUser($event, $user);
 
-        if (null !== $group && $this->sheetRepository->hasSheetWithGroupByUserByEvent($user, $event)) {
-            $types = [];
-
-            foreach ($userSheets as $userSheet) {
-                $type     = $userSheet->getType();
-                $position = $type->getPosition();
-
-                if ($position !== null) {
-                    $types[$position] = [$type->getTitle($locale)];
-                }
-            }
-
-            sort($types);
-
-            return current(reset($types));
-
+        if ($type === null) {
+            throw new InvalidArgumentException('Type cannot be null');
         }
 
-        $sheet = $this->sheetRepository->getSheetByEventAndTitle($event, $this->groupNameResolver->resolve($event, $user));
-
-        return $sheet->getType()->getTitle($locale);
+        return $type->getTitle($locale);
     }
 }
