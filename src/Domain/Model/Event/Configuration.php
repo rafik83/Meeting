@@ -103,6 +103,13 @@ class Configuration
     private $schedulePublishDate;
 
     /**
+     * "la date d'activation des notifications SMS"
+     *
+     * @var null|\DateTimeInterface
+     */
+    private $smsActivationDate;
+
+    /**
      * @var bool
      */
     private $meetingRequestUpdateLocked;
@@ -170,7 +177,7 @@ class Configuration
     {
         return $this->allowDeposit;
     }
-    
+
     /**
      * @return \DateTimeInterface
      */
@@ -334,6 +341,7 @@ class Configuration
      * @param \DateTimeInterface|null $schedulePublishDate
      * @param \DateTimeInterface|null $closeMeetingRequestDate
      * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
+     * @param \DateTimeInterface|null $smsActivationDate
      *
      * @return Configuration
      */
@@ -342,13 +350,15 @@ class Configuration
         \DateTimeInterface $happeningsOpenDate = null,
         \DateTimeInterface $schedulePublishDate = null,
         \DateTimeInterface $closeMeetingRequestDate = null,
-        \DateTimeInterface $closeAnsweringMeetingRequestDate = null
+        \DateTimeInterface $closeAnsweringMeetingRequestDate = null,
+        \DateTimeInterface $smsActivationDate = null
     ) {
         $this->catalogOnlineDate                = $catalogOnlineDate;
         $this->happeningsOpenDate               = $happeningsOpenDate;
         $this->schedulePublishDate              = $schedulePublishDate;
         $this->closeMeetingRequestDate          = $closeMeetingRequestDate;
         $this->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
+        $this->smsActivationDate                = $smsActivationDate;
 
         return $this;
     }
@@ -445,5 +455,13 @@ class Configuration
     public function isAllowedToPayRemaining()
     {
         return in_array(Mode::PAYMENT_PAYPAL, $this->paymentModes);
+    }
+
+    /**
+     * @return null|\DateTimeInterface
+     */
+    public function getSmsActivationDate()
+    {
+        return $this->smsActivationDate;
     }
 }
