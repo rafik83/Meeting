@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class TemplateObjectViewQueryHandler
 {
