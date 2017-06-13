@@ -2552,7 +2552,6 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@package.product.template_product_guesser'
-            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery }
 

@@ -22,32 +22,16 @@ class TemplateObjectView
     public $templateObject;
 
     /**
-     * @var bool
-     */
-    public $hasBuyableIncludedProduct;
-
-    /**
      * TemplateObjectView constructor.
      *
      * @param TemplateObject $templateObject
      * @param string         $label
-     * @param bool           $hasBuyableIncludedProduct
      */
     public function __construct(
         TemplateObject $templateObject,
-        $label,
-        $hasBuyableIncludedProduct
+        $label
     ) {
         $this->label                     = $label;
-        $this->hasBuyableIncludedProduct = $hasBuyableIncludedProduct;
         $this->templateObject            = $templateObject;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasBuyableIncludedProduct()
-    {
-        return $this->hasBuyableIncludedProduct;
     }
 }

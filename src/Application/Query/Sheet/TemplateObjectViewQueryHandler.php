@@ -28,25 +28,17 @@ class TemplateObjectViewQueryHandler
     private $templateProductGuesser;
 
     /**
-     * @var TemplateObject\BuyableIncludedProductGuesser
-     */
-    private $buyableIncludedProductGuesser;
-
-    /**
      * TemplateObjectViewQueryHandler constructor.
      *
      * @param TemplateDataFactory                          $templateDataFactory
      * @param TemplateProductGuesser                       $templateProductGuesser
-     * @param TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
-        TemplateProductGuesser $templateProductGuesser,
-        TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
+        TemplateProductGuesser $templateProductGuesser
     ) {
         $this->templateDataFactory           = $templateDataFactory;
         $this->templateProductGuesser        = $templateProductGuesser;
-        $this->buyableIncludedProductGuesser = $buyableIncludedProductGuesser;
     }
 
     /**
@@ -69,14 +61,9 @@ class TemplateObjectViewQueryHandler
             ->getObject($query->key)
             ->getLabel($query->locale, $query->sheet->getEvent()->getFallback());
 
-        $hasBuyableIncludedProduct = $object->getBuyableProducts() !== null
-            ? $this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($object)
-            : false;
-
         return new TemplateObjectView(
             $object,
-            $label,
-            $hasBuyableIncludedProduct
+            $label
         );
     }
 }
