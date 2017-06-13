@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 
 class Update
 {
