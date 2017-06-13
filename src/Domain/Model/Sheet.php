@@ -520,8 +520,9 @@ class Sheet implements TraceableInterface
      */
     public function hasUser(User $user)
     {
-        return $this->owner === $user || $this->participants->exists(function ($index, Participant $participant) use ($user) {
-            return $participant->getUser() === $user;
+        return $this->owner->getId() === $user->getId() || $this->participants->exists(function ($index, Participant $participant) use ($user) {
+            // To avoid __isInitialized__: false
+            return $participant->getUser()->getId() === $user->getId();
         });
     }
 
