@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Event\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Group;
-
 class SheetGroupCreatedEvent extends AbstractGroupEvent
 {
 }
