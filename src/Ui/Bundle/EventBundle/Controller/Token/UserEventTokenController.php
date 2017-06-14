@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Token;
 
 use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenAlreadyConfirmedException;
+use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenUnexpectedTypeException;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -35,7 +34,7 @@ class UserEventTokenController extends Controller
         UserEventToken $userEventToken,
         UserInterface $user = null
     ) {
-        if ($userEventToken->getEvent() !== $eventDomain->getEvent()) {
+        if ($userEventToken->getEvent() !== $eventDomain->getEvent() || !$userEventToken->isAgendaConfirmation()) {
             throw $this->createNotFoundException('Token invalid');
         }
 
@@ -50,6 +49,8 @@ class UserEventTokenController extends Controller
             $this->get('tactician.commandbus')->handle($confirmAgenda);
         } catch (UserEventTokenAlreadyConfirmedException $userEventTokenAlreadyConfirmed) {
             $alreadyConfirmed = true;
+        } catch (UserEventTokenUnexpectedTypeException $userEventTokenUnexpectedTypeException) {
+            throw $this->createNotFoundException('Token type unexpected. Expected an agenda confirmation token');
         }
 
         return $this->render('EventBundle:Token\UserEventToken:agenda_confirmation.html.twig', [
