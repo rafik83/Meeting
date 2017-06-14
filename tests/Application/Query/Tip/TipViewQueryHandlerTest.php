@@ -8,18 +8,16 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Tip;
+namespace Proximum\Vimeet\Tests\Application\Query\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
-use Proximum\Vimeet\Application\View\Tip\TipView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {

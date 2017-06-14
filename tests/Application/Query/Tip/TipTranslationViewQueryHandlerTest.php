@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Tip;
+namespace Proximum\Vimeet\Tests\Application\Query\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
