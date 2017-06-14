@@ -121,4 +121,13 @@ class UserEventPhone
     {
         return $this->validatedAt;
     }
+
+    /**
+     * @param DateTimeInterface $dateTime
+     */
+    public function validate(\DateTimeInterface $dateTime)
+    {
+        $this->validatedAt = $dateTime;
+        $this->validated = true;
+    }
 }
