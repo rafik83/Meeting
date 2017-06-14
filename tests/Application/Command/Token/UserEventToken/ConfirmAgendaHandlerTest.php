@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenUnexpect
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 
-class confirmAgendaHandlerTest extends TestCase
+class ConfirmAgendaHandlerTest extends TestCase
 {
     public function testHandle()
     {
