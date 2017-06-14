@@ -87,11 +87,11 @@ class OrderViewQueryHandler
             $promotionCodeBoughtViews[] = $this->promotionCodeBoughtViewQueryHandler->handle(new PromotionCodeBoughtViewQuery($promotionCodeBought));
         }
 
-        $invoiceNumber   = '';
-        $invoiceDate     = '';
+        $invoiceNumber = '';
+        $invoiceDate   = '';
+        $formatter     = [];
 
         if ($query->order->hasInvoice()) {
-
             $eventId = $query->order->getSheet()->getEvent()->getId();
 
             if (!isset($formatter[$eventId])) {
