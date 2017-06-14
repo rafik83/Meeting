@@ -481,7 +481,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant, sheet, type, typeTranslation')
             ->from(Participant::class, 'participant')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.enable = true AND sheet.event = :event')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.event = :event')
             ->join('sheet.type', 'type')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('sheetIds', $sheetIds)
