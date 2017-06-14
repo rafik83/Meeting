@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
-
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
