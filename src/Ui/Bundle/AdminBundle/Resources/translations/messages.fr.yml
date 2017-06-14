@@ -697,6 +697,7 @@ admin.sheets_group.column.sheet_list: 'Liste des fiches'
 admin.sheets_group.column.title: Titre
 admin.sheets_group.create: 'Nouvelle entité multi-fiches'
 admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
+admin.sheets_group.update.title: 'Modification d''une entité muti-fiches'
 admin.sheets_group.index: Multi-fiches
 admin.sheets_group.no_result: 'Aucuns résultats'
 admin.sheets_group.title: Multi-fiches
