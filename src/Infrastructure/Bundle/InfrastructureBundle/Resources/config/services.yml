@@ -2648,6 +2648,15 @@ services:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
+
+    query.tip.tip_translation_view_by_user_query_handler:
+        class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler
+        arguments:
+            - '@query.tip.tip_translation_view_query_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery }
+
     query.tip.tip_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipListViewQueryHandler
         arguments:

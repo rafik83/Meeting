@@ -1,0 +1,65 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Tip;
+
+
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+
+class TipTranslationViewByUserQueryHandler
+{
+    /** @var TipTranslationViewQueryHandler */
+    private $tipTranslationViewQueryHandler;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /**
+     * @param TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
+     * @param SheetRepositoryInterface       $sheetRepository
+     */
+    public function __construct(
+        TipTranslationViewQueryHandler $tipTranslationViewQueryHandler,
+        SheetRepositoryInterface $sheetRepository
+    ) {
+        $this->tipTranslationViewQueryHandler = $tipTranslationViewQueryHandler;
+        $this->sheetRepository = $sheetRepository;
+    }
+
+    /**
+     * @param TipTranslationViewByUserQuery $tipTranslationViewByUserQuery
+     *
+     * @return TipTranslationView[]
+     * @throws SheetNotFoundException
+     */
+    public function handle(TipTranslationViewByUserQuery $tipTranslationViewByUserQuery)
+    {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent(
+            $tipTranslationViewByUserQuery->user,
+            $tipTranslationViewByUserQuery->event
+        );
+
+        $sheet = reset($sheets);
+
+        if (false === $sheet) {
+            throw new SheetNotFoundException('No sheet found for the user in the event');
+        }
+
+        return $this->tipTranslationViewQueryHandler->handle(
+            new TipTranslationViewQuery(
+                $sheet->getType(),
+                $tipTranslationViewByUserQuery->context,
+                $tipTranslationViewByUserQuery->locale
+            )
+        );
+    }
+}
