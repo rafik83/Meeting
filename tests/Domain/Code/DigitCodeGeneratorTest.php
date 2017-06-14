@@ -23,8 +23,8 @@ class DigitCodeGeneratorTest extends TestCase
             $code = $generator->generateCode(4);
             $code9chars = $generator->generateCode(9);
 
-            $this->assertEquals(4, mb_strlen($code));
-            $this->assertEquals(9, mb_strlen($code9chars));
+            $this->assertEquals(4, strlen($code));
+            $this->assertEquals(9, strlen($code9chars));
             $this->assertNotContains($code, [
                 '0000',
                 '1111',

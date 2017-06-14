@@ -26,21 +26,14 @@ class DigitCodeGenerator
         $code = '';
 
         for ($i = 0; $i < $length; $i++) {
-            $code .= mt_rand(0, 9);
+            $code .= (string) mt_rand(0, 9);
         }
 
-        $exclude = [
-            str_repeat('0', $length),
-            str_repeat('1', $length),
-            str_repeat('2', $length),
-            str_repeat('3', $length),
-            str_repeat('4', $length),
-            str_repeat('5', $length),
-            str_repeat('6', $length),
-            str_repeat('7', $length),
-            str_repeat('8', $length),
-            str_repeat('9', $length),
-        ];
+        $exclude = [];
+
+        for ($digit = 0; $digit <= 9; $digit++) {
+            $exclude[] = str_repeat((string) $digit, $length);
+        }
 
         return in_array($code, $exclude) ? $this->generateCode($length) : $code;
     }
