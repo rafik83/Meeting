@@ -34,6 +34,12 @@ class ValidateCodeHandler
         $this->dateTime = $dateTime;
     }
 
+    /**
+     * @param ValidateCode $command
+     *
+     * @throws CodeAlreadyValidatedException
+     * @throws CodeNotValidException
+     */
     public function handle(ValidateCode $command)
     {
         if ($command->userEventPhone->isValidated()) {
