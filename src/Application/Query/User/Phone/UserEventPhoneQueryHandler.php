@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\User\Phone;
 
-use Proximum\Vimeet\Application\Exception\User\Phone\UserEventPhoneNotFound;
+use Proximum\Vimeet\Application\Exception\User\Phone\UserEventPhoneNotFoundException;
 use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 
@@ -39,7 +39,7 @@ class UserEventPhoneQueryHandler
         $userEventPhone = $this->userEventPhoneRepository->find($query->user, $query->event);
 
         if ($userEventPhone === null) {
-            throw new UserEventPhoneNotFound(
+            throw new UserEventPhoneNotFoundException(
                 sprintf(
                     'UserEventPhone not found for User %s and Event %s',
                     $query->user->getId(),

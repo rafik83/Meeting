@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\User\Phone;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Exception\User\Phone\UserEventPhoneNotFound;
+use Proximum\Vimeet\Application\Exception\User\Phone\UserEventPhoneNotFoundException;
 use Proximum\Vimeet\Application\Query\User\Phone\UserEventPhoneQuery;
 use Proximum\Vimeet\Application\Query\User\Phone\UserEventPhoneQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -22,7 +22,7 @@ class UserEventPhoneQueryTest extends TestCase
 {
     public function testNotFound()
     {
-        $this->expectException(UserEventPhoneNotFound::class);
+        $this->expectException(UserEventPhoneNotFoundException::class);
 
         $user = $this->prophesize(User::class);
         $user->getId()->willReturn(1);
