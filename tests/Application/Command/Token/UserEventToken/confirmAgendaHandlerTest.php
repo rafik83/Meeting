@@ -21,6 +21,7 @@ class confirmAgendaHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $dateTime = new \DateTime();
         $userEventToken = $this->prophesize(UserEventToken::class);
+        $userEventToken->isConfirmed()->shouldBeCalled();
         $userEventToken->confirm($dateTime)->shouldBeCalled();
 
         $userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
