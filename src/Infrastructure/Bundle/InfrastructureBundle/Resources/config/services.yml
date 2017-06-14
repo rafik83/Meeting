@@ -281,6 +281,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Token\UserEventTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.user.user_event_phone_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\User\UserEventPhoneRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
