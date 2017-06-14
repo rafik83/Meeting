@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Application\View\Sheet;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -31,7 +39,7 @@ class TemplateObjectView
         TemplateObject $templateObject,
         $label
     ) {
-        $this->label                     = $label;
-        $this->templateObject            = $templateObject;
+        $this->label          = $label;
+        $this->templateObject = $templateObject;
     }
 }

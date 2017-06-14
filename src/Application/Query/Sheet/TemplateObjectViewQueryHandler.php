@@ -29,15 +29,15 @@ class TemplateObjectViewQueryHandler
     /**
      * TemplateObjectViewQueryHandler constructor.
      *
-     * @param TemplateDataFactory                          $templateDataFactory
-     * @param TemplateProductGuesser                       $templateProductGuesser
+     * @param TemplateDataFactory    $templateDataFactory
+     * @param TemplateProductGuesser $templateProductGuesser
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         TemplateProductGuesser $templateProductGuesser
     ) {
-        $this->templateDataFactory           = $templateDataFactory;
-        $this->templateProductGuesser        = $templateProductGuesser;
+        $this->templateDataFactory    = $templateDataFactory;
+        $this->templateProductGuesser = $templateProductGuesser;
     }
 
     /**
