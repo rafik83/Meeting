@@ -1,0 +1,36 @@
+Proximum\Vimeet\Domain\Model\User\UserEventPhone:
+    type:  entity
+    table: user_event_phone
+    uniqueConstraints:
+        unique_user_event:
+            columns:
+                - user_id
+                - event_id
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        phone:
+            type: string
+        code:
+            type: string
+        createdAt:
+            type: datetime
+        validatedAt:
+            type: datetime
+            nullable: true
+        validated:
+            type: boolean
+            options:
+                default: false
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
