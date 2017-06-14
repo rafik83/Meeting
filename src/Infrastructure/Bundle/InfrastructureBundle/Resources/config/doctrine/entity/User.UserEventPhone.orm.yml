@@ -29,8 +29,10 @@ Proximum\Vimeet\Domain\Model\User\UserEventPhone:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
+                nullable: false
                 onDelete: CASCADE
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
+                nullable: false
                 onDelete: CASCADE
