@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 
 class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
@@ -47,5 +48,13 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(UserEventPhone $userEventPhone)
+    {
+        $this->entityManager->flush($userEventPhone);
     }
 }
