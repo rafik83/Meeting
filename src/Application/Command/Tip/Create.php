@@ -32,6 +32,9 @@ class Create
 
     /** @var bool */
     public $onAgenda;
+
+    /** @var bool */
+    public $onConfirmationPhone;
     
     /** @var array */
     public $translations;

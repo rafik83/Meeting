@@ -20,6 +20,7 @@ class TipFactory
     const ON_SHEET              = 'onSheet';
     const ON_AGENDA             = 'onAgenda';
     const ON_PROGRAM            = 'onProgram';
+    const ON_CONFIRMATION_PHONE = 'onConfirmationPhone';
 
     const LOCALES = ['fr', 'en'];
 
@@ -39,6 +40,7 @@ class TipFactory
             self::ON_AGENDA             => true,
             self::ON_SHEET              => true,
             self::ON_PROGRAM            => true,
+            self::ON_CONFIRMATION_PHONE => true,
         ],
         array $locales = self::LOCALES
     ) {
@@ -50,6 +52,7 @@ class TipFactory
             $pages[self::ON_SHEET],
             $pages[self::ON_AGENDA],
             $pages[self::ON_PROGRAM],
+            $pages[self::ON_CONFIRMATION_PHONE],
             new \DateTime()
         );
 

@@ -23,7 +23,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip = new Tip('tipTitle', true, false, true, true, false, true, $dateTime);
+        $tip = new Tip('tipTitle', true, false, true, true, false, true, false, $dateTime);
         $tipTranslation = new TipTranslation($tip, $dateTime, 'title_en', 'en', 'content_en');
         $tip->setTranslation('en', 'title_en', 'content_en');
 
@@ -47,10 +47,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleUpdate()
     {
         $dateTime = new \DateTime();
-        $tip = new Tip('tipTitle', true, true, true, true, true, true, $dateTime);
+        $tip = new Tip('tipTitle', true, true, true, true, true, true, true, $dateTime);
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
-        $expectedTip = new Tip('newTipTitle', false, true, false, true, false, true, $dateTime);
+        $expectedTip = new Tip('newTipTitle', false, true, false, true, false, true, true, $dateTime);
         $tipRepository->set($expectedTip)->shouldBeCalled();
 
         $command                      = new Update($tip);

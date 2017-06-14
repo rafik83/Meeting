@@ -39,9 +39,9 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $type1event2 = new Type($event2->reveal());
         $type2event2 = new Type($event2->reveal());
 
-        $tip1 = new Tip('tip_1', false, true, false, false, false, false, $dateTime);
-        $tip2 = new Tip('tip_2', false, true, false, false, false, false, $dateTime);
-        $tip3 = new Tip('tip_3', false, true, false, false, false, false, $dateTime);
+        $tip1 = new Tip('tip_1', false, true, false, false, false, false, false, $dateTime);
+        $tip2 = new Tip('tip_2', false, true, false, false, false, false, false, $dateTime);
+        $tip3 = new Tip('tip_3', false, true, false, false, false, false, false, $dateTime);
 
         $tip1->addType($type1event1);
         $tip1->addType($type2event1);

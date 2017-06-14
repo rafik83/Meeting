@@ -17,40 +17,27 @@ class Tip
     const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
     const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
     const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
+    const TRANS_VISIBLE_CONFIRMATION_PHONE = 'admin.tip.column.visible.onConfirmationPhone';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $translations;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $types;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $onMeetingManagement;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $onCatalog;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $onPrintPlanning;
 
     /** @var bool */
@@ -62,9 +49,10 @@ class Tip
     /** @var bool */
     private $onAgenda;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var bool */
+    private $onConfirmationPhone;
+
+    /** @var \DateTimeInterface */
     private $createdAt;
 
     /**
@@ -77,6 +65,7 @@ class Tip
      * @param bool               $onSheet
      * @param bool               $onAgenda
      * @param bool               $onProgram
+     * @param bool               $onConfirmationPhone
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
@@ -87,18 +76,20 @@ class Tip
         $onSheet,
         $onAgenda,
         $onProgram,
+        $onConfirmationPhone,
         \DateTimeInterface $createdAt
     ) {
-        $this->title                = $title;
-        $this->onMeetingManagement  = $onMeetingManagement;
-        $this->onCatalog            = $onCatalog;
-        $this->onPrintPlanning      = $onPrintPlanning;
-        $this->onSheet              = $onSheet;
-        $this->onAgenda             = $onAgenda;
-        $this->onProgram            = $onProgram;
-        $this->translations         = new ArrayCollection();
-        $this->types                = new ArrayCollection();
-        $this->createdAt            = $createdAt;
+        $this->title               = $title;
+        $this->onMeetingManagement = $onMeetingManagement;
+        $this->onCatalog           = $onCatalog;
+        $this->onPrintPlanning     = $onPrintPlanning;
+        $this->onSheet             = $onSheet;
+        $this->onAgenda            = $onAgenda;
+        $this->onProgram           = $onProgram;
+        $this->onConfirmationPhone = $onConfirmationPhone;
+        $this->translations        = new ArrayCollection();
+        $this->types               = new ArrayCollection();
+        $this->createdAt           = $createdAt;
     }
 
     /**
@@ -111,6 +102,7 @@ class Tip
      * @param bool   $onSheet
      * @param bool   $onAgenda
      * @param bool   $onProgram
+     * @param bool   $onConfirmationPhone
      *
      * @return Tip
      */
@@ -121,7 +113,8 @@ class Tip
         $onPrintPlanning,
         $onSheet,
         $onAgenda,
-        $onProgram
+        $onProgram,
+        $onConfirmationPhone
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
@@ -130,6 +123,7 @@ class Tip
         $this->onSheet             = $onSheet;
         $this->onAgenda            = $onAgenda;
         $this->onProgram           = $onProgram;
+        $this->onConfirmationPhone = $onConfirmationPhone;
 
         return $this;
     }
@@ -324,6 +318,14 @@ class Tip
     }
 
     /**
+     * @return bool
+     */
+    public function isOnConfirmationPhone()
+    {
+        return $this->onConfirmationPhone;
+    }
+
+    /**
      * @return \DateTimeInterface
      */
     public function getCreatedAt()
@@ -360,6 +362,10 @@ class Tip
 
         if ($this->isOnProgram()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_PROGRAM;
+        }
+
+        if ($this->isOnConfirmationPhone()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_CONFIRMATION_PHONE;
         }
 
         return $pagesTranslations;

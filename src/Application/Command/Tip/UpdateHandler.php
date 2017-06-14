@@ -57,7 +57,8 @@ class UpdateHandler
                 $command->onPrintPlanning,
                 $command->onSheet,
                 $command->onAgenda,
-                $command->onProgram
+                $command->onProgram,
+                $command->onConfirmationPhone
             )
         );
     }
