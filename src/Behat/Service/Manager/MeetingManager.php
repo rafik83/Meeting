@@ -256,7 +256,7 @@ class MeetingManager
             throw new \Exception('There are no available slot for this meeting');
         }
 
-        $meeting = $this->createMeetingFromRequest($meetingRequest, $slot, $spot);
+        $meeting = $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
 
         return $meeting;
     }
