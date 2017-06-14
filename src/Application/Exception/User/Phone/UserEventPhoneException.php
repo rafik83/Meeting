@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\User\Phone;
 
-class UserEventPhoneException extends \Exception
+class UserEventPhoneException extends \DomainException
 {
 }
