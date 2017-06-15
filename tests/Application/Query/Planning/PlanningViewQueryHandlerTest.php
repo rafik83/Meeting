@@ -158,6 +158,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayView($beginDay1, $endDay1, [], [], [], [], []),
                 new DayView($beginDay2, $endDay2, [], [], [], [], []),
             ],
+            'Europe/Paris',
             true
         );
 
@@ -305,6 +306,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayView($beginDay1, $endDay1, [], [], [], [], []),
                 new DayView($beginDay2, $endDay2, [], [], [], [], []),
             ],
+            'Europe/Paris',
             true
         );
 
@@ -439,7 +441,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $result = $handler->handle($query);
 
         // Expected
-        $expected = new PlanningView([$dayView1, $dayView2], false);
+        $expected = new PlanningView([$dayView1, $dayView2], 'Europe/Paris', false);
 
         // Assert
         $this->assertEquals($expected, $result);

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\Day\AbstractTimeEntityView;
@@ -23,7 +24,6 @@ use Proximum\Vimeet\Application\View\Planning\PlanningView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
 class ParticipantPlanningFormatter
 {
@@ -33,28 +33,22 @@ class ParticipantPlanningFormatter
     const TRANSLATE_UNAVAILABILITY         = 'planning.participant.unavailability';
     const TRANSLATE_TIME_ENTITY            = 'planning.participant.time';
 
-    /**
-     * @var TranslatorAdapter
-     */
+    /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @var UnallocatedFormatter
-     */
+    /** @var UnallocatedFormatter */
     private $unallocatedFormatter;
 
-    /**
-     * @var PlanningViewQueryHandler
-     */
+    /** @var PlanningViewQueryHandler */
     private $planningViewQueryHandler;
 
     /**
-     * @param TranslatorAdapter        $translator
+     * @param TranslatorInterface      $translator
      * @param UnallocatedFormatter     $unallocatedFormatter
      * @param PlanningViewQueryHandler $planningViewQueryHandler
      */
     public function __construct(
-        TranslatorAdapter $translator,
+        TranslatorInterface $translator,
         UnallocatedFormatter $unallocatedFormatter,
         PlanningViewQueryHandler $planningViewQueryHandler
     ) {
@@ -139,7 +133,7 @@ class ParticipantPlanningFormatter
      */
     public function formatPlanningFromPlanningView(PlanningView $planning, $userLocale)
     {
-        return $this->format($planning->days, $userLocale, $planning->isUserMultipleSheet);
+        return $this->format($planning->days, $userLocale, $planning->eventTimeZone, $planning->isUserMultipleSheet);
     }
 
     /**
@@ -158,7 +152,12 @@ class ParticipantPlanningFormatter
         PlanningView $planningView,
         $userLocale
     ) {
-        $planning    = $this->format($planningView->days, $userLocale, $planningView->isUserMultipleSheet);
+        $planning = $this->format(
+            $planningView->days,
+            $userLocale,
+            $planningView->eventTimeZone,
+            $planningView->isUserMultipleSheet
+        );
         $unallocated = $this->unallocatedFormatter->formatForUser(
             $event,
             $user,
@@ -176,14 +175,20 @@ class ParticipantPlanningFormatter
     /**
      * @param DayView[] $days
      * @param string    $participantLocale
+     * @param string    $timeZone
      * @param bool      $isUserMultipleSheets
      *
      * @return string
      */
-    private function format(array $days, $participantLocale, $isUserMultipleSheets = false)
+    private function format(array $days, $participantLocale, $timeZone, $isUserMultipleSheets = false)
     {
         $formatted    = '';
-        $dayFormatter = new \IntlDateFormatter($participantLocale, \IntlDateFormatter::FULL, \IntlDateFormatter::NONE);
+        $dayFormatter = new \IntlDateFormatter(
+            $participantLocale,
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            $timeZone
+        );
 
         foreach ($days as $day) {
             // Sort the time entities of the day by time asc
@@ -196,7 +201,7 @@ class ParticipantPlanningFormatter
 
             // Display the happening, mass, unavailability, meeting
             $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine(
-                $this->formatTimeEntities($timeEntities, $participantLocale, $isUserMultipleSheets)))
+                $this->formatTimeEntities($timeEntities, $participantLocale, $timeZone, $isUserMultipleSheets)))
             ;
         }
 
@@ -206,14 +211,20 @@ class ParticipantPlanningFormatter
     /**
      * @param AbstractTimeEntityView[] $timeEntities
      * @param string                   $userLocale
+     * @param string                   $timeZone
      * @param bool                     $isUserMultipleSheets
      *
      * @return string
      */
-    private function formatTimeEntities(array $timeEntities, $userLocale, $isUserMultipleSheets)
+    private function formatTimeEntities(array $timeEntities, $userLocale, $timeZone, $isUserMultipleSheets)
     {
         $formattedTimes = [];
-        $timeFormatter  = new \IntlDateFormatter($userLocale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
+        $timeFormatter  = new \IntlDateFormatter(
+            $userLocale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $timeZone
+        );
 
         foreach ($timeEntities as $timeEntity) {
             // Display the time of begin and end of the time entity

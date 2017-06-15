@@ -142,7 +142,7 @@ class PlanningViewQueryHandler
 
         $isUserMultipleSheet = $this->sheetRepository->isUserParticipantMultipleSheetsInEvent($query->user, $query->event);
 
-        return new PlanningView($days, $isUserMultipleSheet);
+        return new PlanningView($days, $query->event->getTimeZone(), $isUserMultipleSheet);
     }
 
     /**
