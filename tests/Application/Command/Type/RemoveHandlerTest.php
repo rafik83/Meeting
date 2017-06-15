@@ -37,7 +37,6 @@ class RemoveHandlerTest extends TestCase
 
         $handler = new RemoveHandler($typeRepository->reveal(), $sheetRepository->reveal(), $ruleRepository->reveal());
         $handler->handle($command);
-
     }
 
     public function testHandle()
@@ -55,7 +54,5 @@ class RemoveHandlerTest extends TestCase
 
         $handler = new RemoveHandler($typeRepository->reveal(), $sheetRepository->reveal(), $ruleRepository->reveal());
         $handler->handle($command);
-
     }
-
 }
