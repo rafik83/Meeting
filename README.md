@@ -189,10 +189,12 @@ Pour mettre à jour la version de Symfony, suivre ces étapes:
 
 3. Appliquer le `.patch` via git ou votre IDE (pour PHPStorm: VCS / Apply patch et sélectionner le patch téléchargé)
 
-4. Fixer les deprecated
+4. Fixer les deprecated. Vous pouvez vous aider du profiler, de Insight ainsi que du changelog de la version installée
 
 5. Lancer les tests pour vérifier que l'application est compatible
 
     ```
     ⇒ make test
     ```
+
+Il peut être intéressant également des tester certaines fonctionnalités qui ne sont pas testées via Behat ou PHPUnit, telles que les exports via jobQueue, les pages en vueJs, ou encore les envois d'emailing et de SMS.
