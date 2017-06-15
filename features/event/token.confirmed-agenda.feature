@@ -1,8 +1,8 @@
 @event @agenda @token
   Feature: Confirmed action via token
-    As a user I can confirmed action via token
+    As a user I can confirm action via token
 
-  Scenario: I can confirmed my agenda
+  Scenario: I can confirm my agenda
     Given the database is purged
     And the event "Concert des tokens userevent" is created
     And the user "concert-tokens-userevent@example.net" is created
