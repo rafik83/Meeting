@@ -12,9 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Command\OMZ\Export;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class ExportParticipantController extends Controller
 {
@@ -45,14 +45,6 @@ class ExportParticipantController extends Controller
         $export = new Export($event);
         $exportContent = $this->get('command.omz.export_handler')->handle($export);
 
-        $response    = new Response($exportContent);
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_participant_schedules_".date("Y_m_d_His").".csv"
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
-
-        return $response;
+        return new CsvFileResponse($exportContent, "export_participant_schedules_".date("Y_m_d_His").".csv");
     }
 }
