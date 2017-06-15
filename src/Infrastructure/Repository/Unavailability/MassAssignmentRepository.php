@@ -156,6 +156,14 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
      */
     public function findEnabledByParticipant(Participant $participant)
     {
+        return $this->findEnabledByUserAndEvent($participant->getUser(), $participant->getSheet()->getEvent());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByUserAndEvent(User $user, Event $event)
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -163,8 +171,8 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.user', 'user', 'WITH', 'user = :user')
             ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
-            ->setParameter('user', $participant->getUser())
-            ->setParameter('event', $participant->getSheet()->getEvent())
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -187,37 +195,7 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             $event = $firstParticipant->getSheet()->getEvent();
         }
 
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('assignment, mass, user')
-            ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.user', 'user', 'WITH', 'user IN (:users)')
-            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
-            ->setParameter('event', $event)
-            ->setParameter('users', $users);
-        ;
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findEnabledByUser(User $user)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('assignment, mass, user')
-            ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.user', 'user', 'WITH', 'user = :user')
-            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
-            ->setParameter('user', $user)
-            ->setParameter('event', $user)
-        ;
-
-        return $queryBuilder->getQuery()->getResult();
+        return $this->findEnabledByEventAndUsers($event, $users);
     }
 
     /**

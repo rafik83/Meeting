@@ -132,7 +132,12 @@ class ExportPlanningHandler
         $this->orderParticipant($event, $exportPlanning->orderBy, $participants);
 
         $plannings = [];
-        $this->participantPlanningDisplayer->preloadForParticipants($participants);
+        $this->participantPlanningDisplayer->preloadForUsersAndEvent(
+            array_map(function (Participant $participant) {
+                return $participant->getUser();
+            }, $participants),
+            $event
+        );
 
         $tipTranslationViews = [];
 
@@ -148,7 +153,7 @@ class ExportPlanningHandler
             $plannings[] = new PlanningPrint(
                 $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback()), // Sheet title
                 $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $event->getFallback()), // Participant name
-                $this->participantPlanningDisplayer->display($participant, $participant->getLocale()), // Planning
+                $this->participantPlanningDisplayer->display($event, $participant->getUser(), $participant->getLocale()), // Planning
                 $participant->getLocale(), // participant locale
                 $event->getConfiguration()->getLeftColor(), // Left Color
                 $event->getConfiguration()->getRightColor(), // Right Color

@@ -4378,8 +4378,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MassViewQueryHandler
     query.planning.day.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     query.planning.day.unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler
     query.planning.day_view_query_handler:
@@ -4406,14 +4404,15 @@ services:
             - '@repository.unavailability.mass_assignment_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@query.planning.day_view_query_handler'
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
     ###### Formatter
     planning.formatter.unallocated_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.sheet_repository'
     planning.formatter.participant_planning_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter
         arguments:

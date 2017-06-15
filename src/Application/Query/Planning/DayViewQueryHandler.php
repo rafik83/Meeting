@@ -117,7 +117,7 @@ class DayViewQueryHandler
                 $meetings[] = $this->meetingHandler->handle(
                     new MeetingViewQuery(
                         $meeting,
-                        $query->sheet
+                        $query->user
                     )
                 );
             }

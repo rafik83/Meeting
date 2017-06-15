@@ -1019,6 +1019,7 @@ notification.meeting_request.refused.withoutMessage: 'Demande refusée par %shee
 notification.participant.added.action: 'Participant ajouté'
 notification.participant.removed.action: 'Participant retiré'
 planning.participant.meeting: '%spotRef% - %sheetMet%'
+planning.participant.meeting_multiple_sheet: '%spotRef% - %userSheet% - %sheetMet%'
 planning.participant.time: '%beginHour% - %endHour% : '
 planning.participant.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
 planning.participant.unavailability: Indisponible

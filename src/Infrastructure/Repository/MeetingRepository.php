@@ -211,22 +211,19 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUsers(array $users)
+    public function findByEventAndUsers(Event $event, array $users)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('meeting, fromSheet, toSheet, spot, slot')
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting, slot, fromSheet, toSheet')
             ->from(Meeting::class, 'meeting')
-            ->join('meeting.fromSheet', 'fromSheet')
-            ->join('meeting.toSheet', 'toSheet')
-            ->join('meeting.spot', 'spot')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->join('meeting.slot', 'slot')
-            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
-            ->leftJoin('meeting.toParticipants', 'toParticipant')
-            ->join('fromParticipant.user', 'userFrom', 'WITH', 'fromParticipant.user IN (:users)')
-            ->join('toParticipant.user', 'userTo', 'WITH', 'toParticipant.user IN (:users)')
+            ->join('meeting.fromParticipants', 'fromParticipants')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('toParticipants.user IN (:users) OR fromParticipants.user IN (:users)')
             ->setParameter('users', $users)
+            ->setParameter('event', $event)
             ->andWhere('meeting.state = :state')
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 

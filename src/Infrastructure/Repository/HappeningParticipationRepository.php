@@ -94,7 +94,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
                 'participation.happening',
                 'happening',
                 'WITH',
-                'happening.event = :event AND participation.user IN (:users)  AND participation.disabled = false'
+                'happening.event = :event AND participation.user IN (:users) AND participation.disabled = false'
             )
             ->setParameter('users', $users)
             ->setParameter('event', $event)

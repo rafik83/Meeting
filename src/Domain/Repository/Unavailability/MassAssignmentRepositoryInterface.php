@@ -68,13 +68,21 @@ interface MassAssignmentRepositoryInterface
     /**
      * @deprecated
      *
-     * @see findEnabledByUser
+     * @see findEnabledByUserAndEvent
      *
      * @param Participant $participant
      *
      * @return MassAssignment[]
      */
     public function findEnabledByParticipant(Participant $participant);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return MassAssignment[]
+     */
+    public function findEnabledByUserAndEvent(User $user, Event $event);
 
     /**
      * @deprecated
@@ -88,19 +96,10 @@ interface MassAssignmentRepositoryInterface
     public function findEnabledByParticipants(array $participants);
 
     /**
-     * @param User $user
-     *
-     * @return MassAssignment[]
-     */
-    public function findEnabledByUser(User $user);
-
-    /**
      * @param Event  $event
      * @param User[] $users
      *
      * @return MassAssignment[]
      */
     public function findEnabledByEventAndUsers(Event $event, array $users);
-
-
 }

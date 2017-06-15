@@ -122,10 +122,11 @@ class EventUserSchedulesNormalizer extends AbstractNormalizer implements Normali
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
-       // $planning = $this->participantPlanningFormatter->formatPlanningFromParticipantWithUnallocated(
-       //     $user,
-       //     $userLocale
-       // );
+       $planning = $this->participantPlanningFormatter->formatPlanningFromUserAndEventWithUnallocated(
+           $user,
+           $event,
+           $userLocale
+       );
 
         return [
             self::COL_USER_ID             => $user->getId(),
@@ -141,7 +142,7 @@ class EventUserSchedulesNormalizer extends AbstractNormalizer implements Normali
             self::COL_EMAIL               => $user->getEmail(),
             self::COL_MOBILE_PHONE_PREFIX => null,
             self::COL_MOBILE_PHONE        => $user->getMobile(),
-            self::COL_SCHEDULE            => null,
+            self::COL_SCHEDULE            => $planning,
         ];
     }
 
