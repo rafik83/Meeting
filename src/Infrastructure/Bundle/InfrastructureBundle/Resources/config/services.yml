@@ -4783,3 +4783,9 @@ services:
             - '@repository.token.user_event_token_repository'
             - '@domain.token.uniqid_generator'
             - '@datetime'
+
+    #
+    # Code service
+    #
+    domain.code.digit_code_generator:
+        class: Proximum\Vimeet\Domain\Code\DigitCodeGenerator
