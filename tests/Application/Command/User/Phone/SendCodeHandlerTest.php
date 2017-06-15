@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
+use Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer;
 
 class SendCodeHandlerTest extends TestCase
 {
@@ -36,6 +37,9 @@ class SendCodeHandlerTest extends TestCase
         $SMSSender = $this->prophesize(SMSSenderInterface::class);
         $translator = $this->prophesize(TranslatorInterface::class);
         $digitCodeGenerator = $this->prophesize(DigitCodeGenerator::class);
+        $phoneSanitizer = $this->prophesize(PhoneSanitizer::class);
+
+        $phoneSanitizer->handle($phone)->shouldBeCalled()->willReturn($phone);
 
         $userEventPhoneRepository
             ->remove($user->reveal(), $event->reveal())
@@ -68,6 +72,7 @@ class SendCodeHandlerTest extends TestCase
             $userEventPhoneRepository->reveal(),
             $digitCodeGenerator->reveal(),
             $SMSSender->reveal(),
+            $phoneSanitizer->reveal(),
             $translator->reveal(),
             $dateTime
         );

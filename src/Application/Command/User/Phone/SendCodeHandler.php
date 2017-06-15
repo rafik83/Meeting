@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
+use Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer;
 
 class SendCodeHandler
 {
@@ -30,6 +31,9 @@ class SendCodeHandler
 
     /** @var DigitCodeGenerator */
     private $digitCodeGenerator;
+
+    /** @var PhoneSanitizer */
+    private $phoneSanitizer;
 
     /** @var SMSSenderInterface */
     private $SMSSender;
@@ -44,6 +48,7 @@ class SendCodeHandler
      * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
      * @param DigitCodeGenerator                $digitCodeGenerator
      * @param SMSSenderInterface                $SMSSender
+     * @param PhoneSanitizer                    $phoneSanitizer
      * @param TranslatorInterface               $translator
      * @param DateTimeInterface                 $dateTime
      */
@@ -51,13 +56,15 @@ class SendCodeHandler
         UserEventPhoneRepositoryInterface $userEventPhoneRepository,
         DigitCodeGenerator $digitCodeGenerator,
         SMSSenderInterface $SMSSender,
+        PhoneSanitizer $phoneSanitizer,
         TranslatorInterface $translator,
         DateTimeInterface $dateTime
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
         $this->digitCodeGenerator = $digitCodeGenerator;
-        $this->translator = $translator;
         $this->SMSSender = $SMSSender;
+        $this->phoneSanitizer = $phoneSanitizer;
+        $this->translator = $translator;
         $this->dateTime = $dateTime;
     }
 
@@ -71,10 +78,12 @@ class SendCodeHandler
     {
         $code = $this->digitCodeGenerator->generateCode(ConfirmationCode::CODE_LENGTH);
 
-        $this->sendSms($sendCode->phone, $code, $sendCode->locale);
+        $phone = $this->phoneSanitizer->handle($sendCode->phone);
+
+        $this->sendSms($phone, $code, $sendCode->locale);
 
         // SMS is successfully sent, persist the code
-        $this->saveCode($sendCode->user, $sendCode->event, $sendCode->phone, $code);
+        $this->saveCode($sendCode->user, $sendCode->event, $phone, $code);
     }
 
     /**
