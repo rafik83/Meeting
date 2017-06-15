@@ -27,28 +27,29 @@ class SubmitValidationHandlerTest extends TestCase
     public function testHandle()
     {
         $event = EventFactory::createEvent();
-
+        $dateTime = new \DateTime('2017-08-08 08:08:08.000');
         $typeNotAccepted = new Type($event);
         $typeNotAccepted->getValidationCriteria()->setSheetAccepted(false);
         $user          = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet         = new Sheet($event, $typeNotAccepted, [], $user, new \DateTime());
-        $expectedSheet = new Sheet($event, $typeNotAccepted, [], $user, new \DateTime());
+        $sheet         = new Sheet($event, $typeNotAccepted, [], $user, $dateTime);
+        $expectedSheet = new Sheet($event, $typeNotAccepted, [], $user, $dateTime);
 
         $command = new SubmitValidation($sheet, $user);
 
         $sheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
         $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
-        $command->sheet->submitToValidation();
+        $expectedSheet->setValidationState(Sheet::STATE_VALIDATION_PENDING);
         $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
-        $expectedSheet->setValidationState(Sheet::STATE_VALIDATION_PENDING);
-
-        $delayedEventDispatcher->dispatch(
-            Events::SHEET_VALIDATION_PENDING,
-            new SheetSubmittedEvent(
-                $expectedSheet,
-                $user))->shouldBeCalled();
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::SHEET_VALIDATION_PENDING,
+                new SheetSubmittedEvent(
+                    $expectedSheet,
+                    $user
+                )
+            )->shouldBeCalled();
 
         $handler = new SubmitValidationHandler($sheetRepository->reveal(), $delayedEventDispatcher->reveal());
         $handler->handle($command);
