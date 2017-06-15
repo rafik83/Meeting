@@ -22,18 +22,29 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UnallocatedFormatterTest extends TestCase
 {
+    /** @var ObjectProphecy */
+    private $sheetRepository;
+
+    /** @var ObjectProphecy */
+    private $requestRepository;
+
+    /** @var ObjectProphecy */
+    private $translator;
+
+    public function setUp()
+    {
+        $this->translator = $this->prophesize(TranslatorInterface::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+    }
+
     public function testFormatNoRequest()
     {
         // Context
         $sheet = $this->prophesize(Sheet::class);
         $locale = 'fr';
 
-        // Mock
-        $translator = $this->prophesize(TranslatorInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
-        $requestRepository
+        $this->requestRepository
             ->getUnassignedRequestsBySheetAndEvent($sheet->reveal(), Request::STATE_APPROVED)
             ->shouldBeCalled()
             ->willReturn([])
@@ -41,9 +52,9 @@ class UnallocatedFormatterTest extends TestCase
 
         // Formatter
         $formatter = new UnallocatedFormatter(
-            $translator->reveal(),
-            $requestRepository->reveal(),
-            $sheetRepository->reveal()
+            $this->translator->reveal(),
+            $this->requestRepository->reveal(),
+            $this->sheetRepository->reveal()
         );
         $result = $formatter->format($sheet->reveal(), $locale);
 
@@ -74,11 +85,7 @@ class UnallocatedFormatterTest extends TestCase
         $request3->getSheetMet($sheet->reveal())->shouldBeCalled()->willReturn($sheet3->reveal());
 
         // Mock
-        $translator = $this->prophesize(TranslatorInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
-        $translator
+        $this->translator
             ->trans(
                 UnallocatedFormatter::TRANSLATE_UNALLOCATED,
                 [],
@@ -87,7 +94,7 @@ class UnallocatedFormatterTest extends TestCase
             )->shouldBeCalled()
             ->willReturn('Meetings unallocated: ');
 
-        $requestRepository
+        $this->requestRepository
             ->getUnassignedRequestsBySheetAndEvent($sheet->reveal(), Request::STATE_APPROVED)
             ->shouldBeCalled()
             ->willReturn([$request1->reveal(), $request2->reveal(), $request3->reveal()])
@@ -95,9 +102,9 @@ class UnallocatedFormatterTest extends TestCase
 
         // Formatter
         $formatter = new UnallocatedFormatter(
-            $translator->reveal(),
-            $requestRepository->reveal(),
-            $sheetRepository->reveal()
+            $this->translator->reveal(),
+            $this->requestRepository->reveal(),
+            $this->sheetRepository->reveal()
         );
         $result = $formatter->format($sheet->reveal(), $locale);
 
@@ -115,16 +122,12 @@ class UnallocatedFormatterTest extends TestCase
         $locale = 'fr';
 
         // Mock
-        $translator = $this->prophesize(TranslatorInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
-        $requestRepository
+        $this->requestRepository
             ->getUnallocatedRequestForSheets([$sheet->reveal()])
             ->shouldBeCalled()
             ->willReturn([])
         ;
-        $sheetRepository
+        $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
             ->willReturn([$sheet->reveal()])
@@ -132,9 +135,9 @@ class UnallocatedFormatterTest extends TestCase
 
         // Formatter
         $formatter = new UnallocatedFormatter(
-            $translator->reveal(),
-            $requestRepository->reveal(),
-            $sheetRepository->reveal()
+            $this->translator->reveal(),
+            $this->requestRepository->reveal(),
+            $this->sheetRepository->reveal()
         );
         $result = $formatter->formatForUser($event->reveal(), $user->reveal(), $locale);
 
@@ -173,21 +176,17 @@ class UnallocatedFormatterTest extends TestCase
         $request3->getSheetMet($sheetB->reveal())->shouldBeCalled()->willReturn($sheet3->reveal());
 
         // Mock
-        $translator = $this->prophesize(TranslatorInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
-        $requestRepository
+        $this->requestRepository
             ->getUnallocatedRequestForSheets([$sheetA->reveal(), $sheetB->reveal()])
             ->shouldBeCalled()
             ->willReturn([$request1->reveal(), $request2->reveal(), $request3->reveal()])
         ;
-        $sheetRepository
+        $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
             ->willReturn([$sheetA->reveal(), $sheetB->reveal()])
         ;
-        $translator
+        $this->translator
             ->trans(
                 UnallocatedFormatter::TRANSLATE_UNALLOCATED,
                 [],
@@ -198,9 +197,9 @@ class UnallocatedFormatterTest extends TestCase
 
         // Formatter
         $formatter = new UnallocatedFormatter(
-            $translator->reveal(),
-            $requestRepository->reveal(),
-            $sheetRepository->reveal()
+            $this->translator->reveal(),
+            $this->requestRepository->reveal(),
+            $this->sheetRepository->reveal()
         );
         $result = $formatter->formatForUser($event->reveal(), $user->reveal(), $locale, true);
 
