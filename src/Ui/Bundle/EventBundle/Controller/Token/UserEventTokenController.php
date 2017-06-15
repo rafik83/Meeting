@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Token;
 
 use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda;
+use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenAlreadyConfirmedException;
 use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenUnexpectedTypeException;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\SendCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,13 +41,24 @@ class UserEventTokenController extends Controller
         UserEventToken $userEventToken,
         UserInterface $user = null
     ) {
-        if ($userEventToken->getEvent() !== $eventDomain->getEvent() || !$userEventToken->isAgendaConfirmation()) {
+        $event = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+
+        if ($userEventToken->getEvent() !== $event || !$userEventToken->isAgendaConfirmation()) {
             throw $this->createNotFoundException('Token invalid');
         }
 
         if ($user instanceof User && $user !== $userEventToken->getUser()) {
             $this->get('adapter.authentication_manager')->disconnect();
         }
+
+        $user = $userEventToken->getUser();
+        $sendCode = new SendCode($user, $event, $user->getPhone(), $locale);
+
+        $sendCodeForm = $this->createForm(SendCodeType::class, $sendCode, [
+            'country' => $event->getCountry(),
+            'submit' => true,
+        ]);
 
         $alreadyConfirmed = false;
 
@@ -60,17 +73,24 @@ class UserEventTokenController extends Controller
 
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle(
             new TipTranslationViewByUserQuery(
-                $eventDomain->getEvent(),
+                $event,
                 $userEventToken->getUser(),
                 TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
-                $request->getLocale()
+                $locale
             )
         );
+
+
+
+        if ($sendCodeForm->handleRequest($request)->isSubmitted() && $sendCodeForm->isValid()) {
+
+        }
 
         return $this->render('EventBundle:Token\UserEventToken:agenda_confirmation.html.twig', [
             'event' => $eventDomain->getEvent(),
             'already_confirmed' => $alreadyConfirmed,
             'tipTranslationViews' => $tipTranslationViews,
+            'sendCodeForm' => $sendCodeForm->createView(),
         ]);
     }
 }

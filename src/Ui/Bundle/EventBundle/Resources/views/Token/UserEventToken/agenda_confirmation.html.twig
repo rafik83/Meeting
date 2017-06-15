@@ -22,6 +22,11 @@
                     <h1>{{ tipTranslationView.title }}</h1>
 
                     {{ tipTranslationView.content|html }}
+
+                    {% if sendCodeForm is not null %}
+                        {% form_theme sendCodeForm '@Ui/default.html.twig' %}
+                        {{ form(sendCodeForm) }}
+                    {% endif %}
                 </div>
             {% endfor %}
         </section>

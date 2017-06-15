@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\User\Phone\SendCode:
+    properties:
+        phone:
+            - NotBlank: ~
+            - Length:
+                min: 10
+                minMessage: validators.userPhone.sendCode.phone.min
+        accepted:
+            - IsTrue:
+                message: validators.userPhone.sendCode.phone.mustAccept
