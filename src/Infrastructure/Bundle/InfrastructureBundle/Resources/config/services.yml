@@ -4811,7 +4811,7 @@ services:
     adapter.smssender_alias: '@adapter.smssender_adapter'
 
     #
-    #
+    # User Phone
     #
     domain.user.phone.phone_sanitizer:
         class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer
