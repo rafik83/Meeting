@@ -228,7 +228,7 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getUnvalidatedSheetsById(array $ids);
-  
+
     /**
      * @param array $ids
      *

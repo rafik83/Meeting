@@ -36,10 +36,18 @@ class OrderView
     /** @var PromotionCodeBoughtView[] */
     public $promotionCodeBoughtViews;
 
+    /** @var string */
+    public $invoiceNumber;
+
+    /** @var string */
+    public $invoiceDate;
+
     /**
      * @param int                       $orderId
      * @param int                       $sheetId
      * @param string                    $sheetTitle
+     * @param string                    $invoiceNumber
+     * @param string                    $invoiceDate
      * @param BillingInfoView           $billingInfo
      * @param ProductBoughtView[]       $productBoughtViews
      * @param PromotionCodeBoughtView[] $promotionCodeBoughtViews
@@ -49,6 +57,8 @@ class OrderView
         $orderId,
         $sheetId,
         $sheetTitle,
+        $invoiceNumber,
+        $invoiceDate,
         BillingInfoView $billingInfo,
         array $productBoughtViews,
         array $promotionCodeBoughtViews,
@@ -57,6 +67,8 @@ class OrderView
         $this->orderId                  = $orderId;
         $this->sheetId                  = $sheetId;
         $this->sheetTitle               = $sheetTitle;
+        $this->invoiceNumber            = $invoiceNumber;
+        $this->invoiceDate              = $invoiceDate;
         $this->billingInfo              = $billingInfo;
         $this->productBoughtViews       = $productBoughtViews;
         $this->promotionCodeBoughtViews = $promotionCodeBoughtViews;

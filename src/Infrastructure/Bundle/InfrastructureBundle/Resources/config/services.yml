@@ -4809,9 +4809,12 @@ services:
             - '%ovh_service_name%'
             - '%ovh_sender_name%'
     adapter.smssender_alias: '@adapter.smssender_adapter'
+<<<<<<< HEAD
 
     #
     #
     #
     domain.user.phone.phone_sanitizer:
         class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer
+=======
+>>>>>>> origin/feature/1099-model

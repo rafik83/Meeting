@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SheetTest extends \PHPUnit_Framework_TestCase
+class SheetTest extends TestCase
 {
     public function testHasUser()
     {
@@ -29,6 +30,14 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
         $user2 = new User('user2@test.com', '', '', 'fr');
         $user3 = new User('user3@test.com', '', '', 'fr');
+
+        $reflection = new \ReflectionClass(User::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($user1, 1);
+        $property->setValue($user2, 2);
+        $property->setValue($user3, 3);
+        $property->setAccessible(false);
 
         $sheet->addParticipant(new Participant($sheet, $user1, [], true, true));
         $sheet->addParticipant(new Participant($sheet, $user2, [], false, true));

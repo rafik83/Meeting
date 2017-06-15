@@ -36,6 +36,8 @@ class OrderRowNormalizer implements NormalizerInterface
             SharedColumnsTranslationView::COLUMN_ORDER_ID                => $object->orderId,
             SharedColumnsTranslationView::COLUMN_SHEET_ID                => $object->sheetId,
             SharedColumnsTranslationView::COLUMN_SHEET_TITLE             => $this->convertCharset($object->sheetTitle),
+            SharedColumnsTranslationView::COLUMN_INVOICE_NUMBER          => $object->invoiceNumber,
+            SharedColumnsTranslationView::COLUMN_INVOICE_DATE            => $object->invoiceDate,
             SharedColumnsTranslationView::COLUMN_BILLING_INFO_GENDER     => $object->billingInfo->gender,
             SharedColumnsTranslationView::COLUMN_BILLING_INFO_LAST_NAME  => $this->convertCharset($object->billingInfo->lastName),
             SharedColumnsTranslationView::COLUMN_BILLING_INFO_FIRST_NAME => $this->convertCharset($object->billingInfo->firstName),

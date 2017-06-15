@@ -111,7 +111,7 @@ sonata_intl:
 # Elastica
 fos_elastica:
     clients:
-        default: { host: "%elastic_host%", port: "%elastic_port%" }
+        default: { host: "%elastic_host%", port: "%elastic_port%", retryOnConflict: 2 }
     indexes:
         app:
             index_name: "app_%kernel.environment%"
