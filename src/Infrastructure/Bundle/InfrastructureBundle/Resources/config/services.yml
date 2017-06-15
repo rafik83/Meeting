@@ -4007,17 +4007,9 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    serializer.normalizer.event_participant_schedules:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventUserSchedulesNormalizer
+    serializer.normalizer.omz_user:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer
         parent: 'serializer.abstract_normalizer'
-        arguments:
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@domain.service.sheets_group.group_name_resolver'
-            - '@domain.service.sheets_group.type_name_resolver'
-            - '@planning.formatter.participant_planning_formatter'
-        tags:
-            - { name: serializer.normalizer }
 
     serializer.normalizer.event_meetings:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\EventMeetingsNormalizer
@@ -4487,6 +4479,21 @@ services:
             - '%mailer_sender%'
             - '%infrastructure.export_order_path%'
             - '@datetime'
+
+    #
+    # Export OMZ
+    #
+    command.omz.export_handler:
+        class: Proximum\Vimeet\Application\Command\OMZ\ExportHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@planning.formatter.participant_planning_formatter'
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\Export }
 
     # Invoice
     #

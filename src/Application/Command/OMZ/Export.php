@@ -1,23 +1,25 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\View\Normalizer;
+namespace Proximum\Vimeet\Application\Command\OMZ;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class EventUserSchedulesNormalizerView
+class Export
 {
-    /*** @var Event */
+    /** @var Event */
     public $event;
 
     /**
+     * Export constructor.
+     *
      * @param Event $event
      */
     public function __construct(Event $event)

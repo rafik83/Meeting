@@ -10,9 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
-use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\Command\OMZ\Export;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\View\Normalizer\EventUserSchedulesNormalizerView;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -43,11 +42,8 @@ class ExportParticipantController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $charset    = Charset::WINDOWS_1252;
-        $serializer = $this->get('serializer');
-        $exportContent = $serializer->serialize(new EventUserSchedulesNormalizerView($event), 'csv', [
-            'charset' => $charset,
-        ]);
+        $export = new Export($event);
+        $exportContent = $this->get('command.omz.export_handler')->handle($export);
 
         $response    = new Response($exportContent);
         $disposition = $response->headers->makeDisposition(
