@@ -37,6 +37,8 @@ class SharedColumnsTranslationViewQueryHandler
             $this->translator->trans('order.column.order_id', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.sheet_id', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.sheet_title', [], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.invoice_number', [], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.invoice_date', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.billing_info_gender', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.billing_info_last_name', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.billing_info_first_name', [], 'export', $query->adminLocale),
