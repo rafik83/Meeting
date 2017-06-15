@@ -46,6 +46,7 @@ class CreateHandler
             $command->onSheet,
             $command->onAgenda,
             $command->onProgram,
+            $command->onConfirmationPhone,
             $this->dateTime
         );
 

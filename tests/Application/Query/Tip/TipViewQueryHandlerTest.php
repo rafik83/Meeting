@@ -8,18 +8,16 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Tip;
+namespace Proximum\Vimeet\Tests\Application\Query\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
-use Proximum\Vimeet\Application\View\Tip\TipView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,9 +37,9 @@ class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $type1event2 = new Type($event2->reveal());
         $type2event2 = new Type($event2->reveal());
 
-        $tip1 = new Tip('tip_1', false, true, false, false, false, false, $dateTime);
-        $tip2 = new Tip('tip_2', false, true, false, false, false, false, $dateTime);
-        $tip3 = new Tip('tip_3', false, true, false, false, false, false, $dateTime);
+        $tip1 = new Tip('tip_1', false, true, false, false, false, false, false, $dateTime);
+        $tip2 = new Tip('tip_2', false, true, false, false, false, false, false, $dateTime);
+        $tip3 = new Tip('tip_3', false, true, false, false, false, false, false, $dateTime);
 
         $tip1->addType($type1event1);
         $tip1->addType($type2event1);

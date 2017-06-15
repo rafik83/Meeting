@@ -28,7 +28,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->onMeetingManagement = true;
         $command->onPrintPlanning = true;
         $command->title = 'tipTitle';
-        $tip = new Tip('tipTitle', true, true, true, false, false, false, $dateTime);
+        $tip = new Tip('tipTitle', true, true, true, false, false, false, false, $dateTime);
         $command->translations = [
             'locale_1' => [
                 'locale' => 'locale_1',

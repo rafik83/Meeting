@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Token\UserEventToken;
 
+use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenAlreadyConfirmedException;
+use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenUnexpectedTypeException;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 
 class ConfirmAgendaHandler
@@ -34,9 +36,20 @@ class ConfirmAgendaHandler
 
     /**
      * @param ConfirmAgenda $command
+     *
+     * @throws UserEventTokenAlreadyConfirmedException
+     * @throws UserEventTokenUnexpectedTypeException
      */
     public function handle(ConfirmAgenda $command)
     {
+        if ($command->userEventToken->isConfirmed()) {
+            throw new UserEventTokenAlreadyConfirmedException();
+        }
+
+        if (!$command->userEventToken->isAgendaConfirmation()) {
+            throw new UserEventTokenUnexpectedTypeException();
+        }
+
         $command->userEventToken->confirm($this->dateTime);
 
         $this->userEventTokenRepository->set($command->userEventToken);

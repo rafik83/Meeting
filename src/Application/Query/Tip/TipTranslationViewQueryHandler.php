@@ -21,6 +21,7 @@ class TipTranslationViewQueryHandler
     const CONTEXT_SHEET              = 'onSheet';
     const CONTEXT_AGENDA             = 'onAgenda';
     const CONTEXT_PROGRAM            = 'onProgram';
+    const CONTEXT_CONFIRMATION_PHONE = 'onConfirmationPhone';
 
     /**
      * keys are context, value are table fields
@@ -34,6 +35,7 @@ class TipTranslationViewQueryHandler
         self::CONTEXT_SHEET              => 'onSheet',
         self::CONTEXT_AGENDA             => 'onAgenda',
         self::CONTEXT_PROGRAM            => 'onProgram',
+        self::CONTEXT_CONFIRMATION_PHONE => 'onConfirmationPhone',
     ];
 
     /** @var TipRepositoryInterface */

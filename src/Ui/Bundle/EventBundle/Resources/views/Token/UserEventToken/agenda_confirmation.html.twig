@@ -9,13 +9,21 @@
                 <h1>{{ 'user_event.confirm.agenda.title'|trans }}</h1>
             </header>
 
-            <div class="main__content styled-form">
+            <div class="important success">
                 {% if already_confirmed %}
                     {{ 'user_event.confirm.agenda.already_confirmed'|trans }}
                 {% else %}
                     {{ 'user_event.confirm.agenda.success'|trans }}
                 {% endif %}
             </div>
+
+            {% for tipTranslationView in tipTranslationViews %}
+                <div class="main__content styled-form mg-tp">
+                    <h1>{{ tipTranslationView.title }}</h1>
+
+                    {{ tipTranslationView.content|html }}
+                </div>
+            {% endfor %}
         </section>
     </div>
 {% endblock %}
