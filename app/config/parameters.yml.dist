@@ -57,3 +57,10 @@ parameters:
     sentry_dsn: ~
 
     admin_menu_color: "#222"
+
+    ovh_endpoint_name:      'thisEndPointIsNotSecretYouShouldChangeIt'
+    ovh_application_key:    'thisApplicationKeyIsNotSecretYouShouldChangeIt'
+    ovh_application_secret: 'thisApplicationSecretIsNotSecretYouShouldChangeIt'
+    ovh_consumer_key:       'thisConsumerKeyIsNotSecretYouShouldChangeIt'
+    ovh_service_name:       'thisServiceNameIsNotSecretYouShouldChangeIt'
+    ovh_sender_name:        'thisSenderNameIsNotSecretYouShouldChangeIt'
