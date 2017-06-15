@@ -20,6 +20,9 @@ class ValidateCode
     /** @var string */
     public $code;
 
+    /**
+     * @param UserEventPhone $userEventPhone
+     */
     public function __construct(UserEventPhone $userEventPhone)
     {
         $this->userEventPhone = $userEventPhone;
