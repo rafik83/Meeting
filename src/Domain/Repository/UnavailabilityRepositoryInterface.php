@@ -48,6 +48,10 @@ interface UnavailabilityRepositoryInterface
     public function countByParticipant(Participant $participant);
 
     /**
+     * @deprecated
+     *
+     * @see findByUserAndEvent
+     *
      * @param Participant $participant
      *
      * @return Unavailability[]
@@ -68,6 +72,14 @@ interface UnavailabilityRepositoryInterface
      * @return Unavailability[]
      */
     public function findByParticipants(array $participants);
+
+    /**
+     * @param Event $event
+     * @param User  $users
+     *
+     * @return Unavailability[]
+     */
+    public function findByEventAndUsers(Event $event, array $users);
 
     /**
      * @param Sheet $sheet

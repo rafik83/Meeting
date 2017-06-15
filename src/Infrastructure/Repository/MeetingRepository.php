@@ -211,6 +211,31 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByUsers(array $users)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting, fromSheet, toSheet, spot, slot')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet')
+            ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.spot', 'spot')
+            ->join('meeting.slot', 'slot')
+            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
+            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->join('fromParticipant.user', 'userFrom', 'WITH', 'fromParticipant.user IN (:users)')
+            ->join('toParticipant.user', 'userTo', 'WITH', 'toParticipant.user IN (:users)')
+            ->setParameter('users', $users)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByUserAndEvent(User $user, Event $event)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()

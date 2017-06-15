@@ -63,6 +63,13 @@ interface MeetingRepositoryInterface
     public function findByParticipants(array $participants);
 
     /**
+     * @param User[] $users
+     *
+     * @return Meeting[]
+     */
+    public function findByUsers(array $users);
+
+    /**
      * @param Event $event
      * @param User  $user
      *
