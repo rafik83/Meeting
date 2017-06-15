@@ -139,7 +139,7 @@ class ParticipantPlanningFormatter
      */
     public function formatPlanningFromPlanningView(PlanningView $planning, $userLocale)
     {
-        return $this->format($planning->days, $userLocale);
+        return $this->format($planning->days, $userLocale, $planning->isUserMultipleSheet);
     }
 
     /**
@@ -257,7 +257,7 @@ class ParticipantPlanningFormatter
      */
     private function formatMeeting(MeetingView $meetingView, $userLocale, $isUserMultipleSheets)
     {
-        if ($isUserMultipleSheets) {
+        if (true === $isUserMultipleSheets) {
             return $this->translator->trans(
                 self::TRANSLATE_MEETING_MULTIPLE_SHEET,
                 [
