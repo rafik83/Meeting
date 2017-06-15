@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository\User;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
@@ -19,16 +19,25 @@ use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var EntityManager
      */
     private $entityManager;
 
     /**
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManager $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(UserEventPhone $userEventPhone)
+    {
+        $this->entityManager->persist($userEventPhone);
+        $this->entityManager->flush($userEventPhone);
     }
 
     /**
