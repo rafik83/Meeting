@@ -3,9 +3,6 @@
 {% block content %}
     {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
         <div class="text-right">
-            <a href="{{ path('admin_send_sms') }}" class="btn btn-default">
-                Envoyer un SMS
-            </a>
             <a href="{{ path('admin_event_create') }}" class="btn btn-primary">
                 {{ 'admin.event.create.title'|trans }}
             </a>
