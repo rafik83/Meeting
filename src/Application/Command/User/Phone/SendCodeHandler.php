@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 use Proximum\Vimeet\Domain\Participant\ParticipantInfoSetter;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
 use Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer;
 
@@ -49,6 +50,9 @@ class SendCodeHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
     /** @var DateTimeInterface */
     private $dateTime;
 
@@ -60,6 +64,7 @@ class SendCodeHandler
      * @param TranslatorInterface               $translator
      * @param ParticipantInfoSetter             $participantInfoSetter
      * @param ParticipantRepositoryInterface    $participantRepository
+     * @param UserRepositoryInterface           $userRepository
      * @param DateTimeInterface                 $dateTime
      */
     public function __construct(
@@ -70,6 +75,7 @@ class SendCodeHandler
         TranslatorInterface $translator,
         ParticipantInfoSetter $participantInfoSetter,
         ParticipantRepositoryInterface $participantRepository,
+        UserRepositoryInterface $userRepository,
         DateTimeInterface $dateTime
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
@@ -79,6 +85,7 @@ class SendCodeHandler
         $this->translator = $translator;
         $this->participantInfoSetter = $participantInfoSetter;
         $this->participantRepository = $participantRepository;
+        $this->userRepository = $userRepository;
         $this->dateTime = $dateTime;
     }
 
@@ -157,11 +164,30 @@ class SendCodeHandler
      */
     private function saveUserPhone(User $user, Event $event, $phone, $locale)
     {
-        // Set the phone to user sheet(s) profile
+        $this->setPhoneToUserSheetsParticipation($user, $event, $phone, $locale);
+        $this->setPhoneToUserAccount($user, $phone);
+    }
+
+    /**
+     * @param User   $user
+     * @param Event  $event
+     * @param string $phone
+     * @param string $locale
+     */
+    private function setPhoneToUserSheetsParticipation(User $user, Event $event, $phone, $locale)
+    {
         foreach ($this->participantRepository->getAllParticipantForUser($event, $user) as $participant) {
             $this->participantInfoSetter->setPhone($participant, $phone, $locale);
         }
+    }
 
-        // Set the phone to user account
+    /**
+     * @param User   $user
+     * @param string $phone
+     */
+    private function setPhoneToUserAccount(User $user, $phone)
+    {
+        $user->getAccount()->setPhone($phone);
+        $this->userRepository->set($user);
     }
 }

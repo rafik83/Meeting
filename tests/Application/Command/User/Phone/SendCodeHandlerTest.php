@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\ParticipantInfoSetter;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
 use Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer;
 
@@ -31,9 +32,14 @@ class SendCodeHandlerTest extends TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
+
+        $userAccount = $this->prophesize(User\Account::class);
         $user = $this->prophesize(User::class);
+        $user->getAccount()->willReturn($userAccount);
+
         $event = $this->prophesize(Event::class);
         $participant = $this->prophesize(Participant::class);
+
         $phone = '+33611223344';
         $code = '1234';
 
@@ -44,6 +50,7 @@ class SendCodeHandlerTest extends TestCase
         $phoneSanitizer = $this->prophesize(PhoneSanitizer::class);
         $participantInfoSetter = $this->prophesize(ParticipantInfoSetter::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
 
         $phoneSanitizer->handle($phone)->shouldBeCalled()->willReturn($phone);
 
@@ -82,6 +89,9 @@ class SendCodeHandlerTest extends TestCase
 
         $participantInfoSetter->setPhone($participant->reveal(), $phone, 'fr')->shouldBeCalled();
 
+        $userAccount->setPhone($phone)->shouldBeCalled();
+        $userRepository->set($user)->shouldBeCalled();
+
         $sendCodeHandler = new SendCodeHandler(
             $userEventPhoneRepository->reveal(),
             $digitCodeGenerator->reveal(),
@@ -90,6 +100,7 @@ class SendCodeHandlerTest extends TestCase
             $translator->reveal(),
             $participantInfoSetter->reveal(),
             $participantRepository->reveal(),
+            $userRepository->reveal(),
             $dateTime
         );
 
