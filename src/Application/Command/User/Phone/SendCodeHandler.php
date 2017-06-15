@@ -141,8 +141,8 @@ class SendCodeHandler
     }
 
     /**
-     * @param User  $user
-     * @param Event $event
+     * @param User   $user
+     * @param Event  $event
      * @param string $phone
      * @param string $code
      */
