@@ -18,7 +18,10 @@ use Proximum\Vimeet\Application\Command\User\Phone\SendCodeHandler;
 use Proximum\Vimeet\Domain\Code\DigitCodeGenerator;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\ParticipantInfoSetter;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
 use Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer;
@@ -30,6 +33,7 @@ class SendCodeHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
+        $participant = $this->prophesize(Participant::class);
         $phone = '+33611223344';
         $code = '1234';
 
@@ -38,6 +42,8 @@ class SendCodeHandlerTest extends TestCase
         $translator = $this->prophesize(TranslatorInterface::class);
         $digitCodeGenerator = $this->prophesize(DigitCodeGenerator::class);
         $phoneSanitizer = $this->prophesize(PhoneSanitizer::class);
+        $participantInfoSetter = $this->prophesize(ParticipantInfoSetter::class);
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
         $phoneSanitizer->handle($phone)->shouldBeCalled()->willReturn($phone);
 
@@ -68,12 +74,22 @@ class SendCodeHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $participantRepository
+            ->getAllParticipantForUser($event->reveal(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant])
+        ;
+
+        $participantInfoSetter->setPhone($participant->reveal(), $phone, 'fr')->shouldBeCalled();
+
         $sendCodeHandler = new SendCodeHandler(
             $userEventPhoneRepository->reveal(),
             $digitCodeGenerator->reveal(),
             $SMSSender->reveal(),
             $phoneSanitizer->reveal(),
             $translator->reveal(),
+            $participantInfoSetter->reveal(),
+            $participantRepository->reveal(),
             $dateTime
         );
 

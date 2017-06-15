@@ -20,6 +20,8 @@ use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
+use Proximum\Vimeet\Domain\Participant\ParticipantInfoSetter;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
 use Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer;
@@ -41,6 +43,12 @@ class SendCodeHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var ParticipantInfoSetter */
+    private $participantInfoSetter;
+
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
     /** @var DateTimeInterface */
     private $dateTime;
 
@@ -50,6 +58,8 @@ class SendCodeHandler
      * @param SMSSenderInterface                $SMSSender
      * @param PhoneSanitizer                    $phoneSanitizer
      * @param TranslatorInterface               $translator
+     * @param ParticipantInfoSetter             $participantInfoSetter
+     * @param ParticipantRepositoryInterface    $participantRepository
      * @param DateTimeInterface                 $dateTime
      */
     public function __construct(
@@ -58,6 +68,8 @@ class SendCodeHandler
         SMSSenderInterface $SMSSender,
         PhoneSanitizer $phoneSanitizer,
         TranslatorInterface $translator,
+        ParticipantInfoSetter $participantInfoSetter,
+        ParticipantRepositoryInterface $participantRepository,
         DateTimeInterface $dateTime
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
@@ -65,6 +77,8 @@ class SendCodeHandler
         $this->SMSSender = $SMSSender;
         $this->phoneSanitizer = $phoneSanitizer;
         $this->translator = $translator;
+        $this->participantInfoSetter = $participantInfoSetter;
+        $this->participantRepository = $participantRepository;
         $this->dateTime = $dateTime;
     }
 
@@ -83,7 +97,7 @@ class SendCodeHandler
         $this->sendSms($phone, $code, $sendCode->locale);
 
         // SMS is successfully sent, persist the code
-        $this->saveCode($sendCode->user, $sendCode->event, $phone, $code);
+        $this->save($sendCode->user, $sendCode->event, $phone, $code, $sendCode->locale);
     }
 
     /**
@@ -111,6 +125,19 @@ class SendCodeHandler
      * @param Event  $event
      * @param string $phone
      * @param string $code
+     * @param string $locale
+     */
+    private function save(User $user, Event $event, $phone, $code, $locale)
+    {
+        $this->saveCode($user, $event, $phone, $code);
+        $this->saveUserPhone($user, $event, $phone, $locale);
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     * @param string $phone
+     * @param string $code
      */
     private function saveCode(User $user, Event $event, $phone, $code)
     {
@@ -120,8 +147,21 @@ class SendCodeHandler
         $this->userEventPhoneRepository->add(
             new UserEventPhone($user, $event, $code, $phone, $this->dateTime)
         );
+    }
 
+    /**
+     * @param User   $user
+     * @param Event  $event
+     * @param string $phone
+     * @param string $locale
+     */
+    private function saveUserPhone(User $user, Event $event, $phone, $locale)
+    {
         // Set the phone to user sheet(s) profile
+        foreach ($this->participantRepository->getAllParticipantForUser($event, $user) as $participant) {
+            $this->participantInfoSetter->setPhone($participant, $phone, $locale);
+        }
+
         // Set the phone to user account
     }
 }
