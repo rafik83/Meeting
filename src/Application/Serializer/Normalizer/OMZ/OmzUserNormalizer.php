@@ -49,11 +49,13 @@ class OmzUserNormalizer extends AbstractNormalizer implements NormalizerInterfac
     public function normalize($object, $format = null, array $context = array())
     {
         $normalizedUserRawData = [];
-        $charset        = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
+        $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
 
         foreach ($object->userViews as $userView) {
-            $userRawData             = $this->getOmzUserViewRawData($userView);
-            $normalizedUserRawData[] = $this->normalizeUserRawData($userRawData, $charset);
+            $normalizedUserRawData[] = $this->normalizeUserRawData(
+                $this->getOmzUserViewRawData($userView),
+                $charset
+            );
         }
 
         return $normalizedUserRawData;
