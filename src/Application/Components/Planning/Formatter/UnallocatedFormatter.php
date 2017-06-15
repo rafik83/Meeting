@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -17,14 +18,13 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
 class UnallocatedFormatter
 {
     const TRANSLATE_UNALLOCATED = 'planning.participant.unallocated_meetings';
     const TRANSLATION_DOMAIN    = 'messages';
 
-    /** @var TranslatorAdapter */
+    /** @var TranslatorInterface */
     private $translator;
 
     /** @var RequestRepositoryInterface */
@@ -34,12 +34,12 @@ class UnallocatedFormatter
     private $sheetRepository;
 
     /**
-     * @param TranslatorAdapter          $translator
+     * @param TranslatorInterface          $translator
      * @param RequestRepositoryInterface $requestRepository
      * @param SheetRepositoryInterface   $sheetRepository
      */
     public function __construct(
-        TranslatorAdapter $translator,
+        TranslatorInterface $translator,
         RequestRepositoryInterface $requestRepository,
         SheetRepositoryInterface $sheetRepository
     ) {
@@ -101,8 +101,7 @@ class UnallocatedFormatter
         $formatted .= implode(
             ', ',
             array_map(function (Request $request) use ($user, $isUserMultipleSheets) {
-                $unallocatedText = '';
-                $userSheet = $request->getSheetOfUser($user);
+                $userSheet       = $request->getSheetOfUser($user);
                 $unallocatedText = $request->getSheetMet($userSheet)->getTitle();
 
                 if ($isUserMultipleSheets) {
