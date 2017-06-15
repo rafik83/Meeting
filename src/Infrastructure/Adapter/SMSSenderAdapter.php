@@ -42,10 +42,7 @@ class SMSSenderAdapter implements SMSSenderInterface
     }
 
     /**
-     * @param SMS $sms
-     *
-     * @throws FailToSendSMSException
-     * @throws InvalidReceiverException
+     * {@inheritdoc}
      */
     public function send(SMS $sms)
     {

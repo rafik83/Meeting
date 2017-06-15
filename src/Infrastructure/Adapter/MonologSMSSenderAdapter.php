@@ -30,7 +30,7 @@ class MonologSMSSenderAdapter implements SMSSenderInterface
     }
 
     /**
-     * @param SMS $sms
+     * {@inheritdoc}
      */
     public function send(SMS $sms)
     {

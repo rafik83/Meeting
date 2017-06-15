@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\Command\User\Phone;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
@@ -55,7 +54,7 @@ class SendCodeHandlerTest extends TestCase
         ;
 
         $translator
-            ->trans(ConfirmationCode::MESSAGE_TRANSLATION_KEY, ['%code%' => $phone], 'messages', 'fr')
+            ->trans(ConfirmationCode::MESSAGE_TRANSLATION_KEY, ['%code%' => $code], 'messages', 'fr')
             ->shouldBeCalled()
             ->willReturn('Your code confirmation is 1234')
         ;
