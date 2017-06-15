@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
-
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidationHandler;
