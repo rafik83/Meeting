@@ -24,10 +24,12 @@ use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedExcepti
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvalidNumeroInvoiceException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvoiceNotFoundException;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
 use Proximum\Vimeet\Application\Query\Event\EventListQuery;
 use Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery;
+use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Order\Finder;
@@ -36,6 +38,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SMSType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
@@ -351,6 +354,44 @@ class EventController extends Controller
         return $this->render('AdminBundle:Event:dates.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function sendSMSAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
+        $form = $this->createForm(SMSType::class, [], [
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('adapter.smssender_alias')->send(
+                    new SMS($form->get('phoneNumber')->getData(), str_pad(mt_rand(0, 9999), 4, 0, STR_PAD_LEFT))
+                );
+
+                $this->addFlash('success', sprintf('Message envoyé à %s', $form->get('phoneNumber')->getData()));
+
+                return $this->redirectToRoute('admin_send_sms');
+            } catch (FailToSendSMSException $exception) {
+                $this->addFlash(
+                    'error',
+                    sprintf(
+                        'Le message n\'a pas pu être envoyé pour la raison suivante: %s',
+                        $exception->getMessage()
+                    )
+                );
+            }
+        }
+
+        return $this->render('AdminBundle:Event:sms.html.twig', [
+            'form'  => $form->createView(),
         ]);
     }
 }

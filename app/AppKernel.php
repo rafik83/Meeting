@@ -37,6 +37,9 @@ class AppKernel extends Kernel
             // Sentry
             new Sentry\SentryBundle\SentryBundle(),
 
+            // OVH
+            new CoopTilleuls\OvhBundle\CoopTilleulsOvhBundle(),
+
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
             new Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle(),

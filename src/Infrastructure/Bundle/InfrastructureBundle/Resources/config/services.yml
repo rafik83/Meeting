@@ -4798,3 +4798,14 @@ services:
     #
     domain.code.digit_code_generator:
         class: Proximum\Vimeet\Domain\Code\DigitCodeGenerator
+
+    #
+    # Messaging SMS
+    #
+    adapter.smssender_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter
+        arguments:
+            - '@ovh'
+            - '%ovh_service_name%'
+            - '%ovh_sender_name%'
+    adapter.smssender_alias: '@adapter.smssender_adapter'

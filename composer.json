@@ -51,7 +51,8 @@
         "sendgrid/sendgrid": "^5.1",
         "egulias/email-validator": "1.*",
         "jms/job-queue-bundle": "^1.4.0",
-        "sentry/sentry-symfony": "^0.7.1"
+        "sentry/sentry-symfony": "^0.7.1",
+        "tilleuls/ovh-bundle": "^1.0.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
