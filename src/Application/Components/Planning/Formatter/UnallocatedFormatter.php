@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;

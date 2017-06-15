@@ -51,7 +51,7 @@ interface HappeningParticipationRepositoryInterface
      *
      * @see findByEventAndUsers
      *
-     * @param array $participants
+     * @param Participant[] $participants
      * @param Event $event
      *
      * @return HappeningParticipation[]
