@@ -176,10 +176,6 @@ admin_event_search_facets:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:SearchFacet:update }
 
-admin_send_sms:
-    path: /sms
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:sendSMS }
 #
 # Content
 #
