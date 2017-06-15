@@ -32,12 +32,13 @@ class UserEventTokenManager
      * @param Event  $event
      * @param User   $user
      * @param string $type
+     * @param string $token
      *
      * @return UserEventToken
      */
-    public function create(Event $event, User $user, $type)
+    public function create(Event $event, User $user, $type, $token)
     {
-        $token = new UserEventToken($event, $user, $type, 'token', new \DateTime());
+        $token = new UserEventToken($event, $user, $type, $token, new \DateTime());
 
         $this->userEventTokenRepository->add($token);
 
