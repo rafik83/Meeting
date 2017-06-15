@@ -16,10 +16,12 @@ use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCodeHandler;
+use Proximum\Vimeet\Domain\Code\DigitCodeGenerator;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Phone\ConfirmationCode;
 
 class SendCodeHandlerTest extends TestCase
 {
@@ -34,21 +36,43 @@ class SendCodeHandlerTest extends TestCase
         $userEventPhoneRepository = $this->prophesize(UserEventPhoneRepositoryInterface::class);
         $SMSSender = $this->prophesize(SMSSenderInterface::class);
         $translator = $this->prophesize(TranslatorInterface::class);
+        $digitCodeGenerator = $this->prophesize(DigitCodeGenerator::class);
+
+        $userEventPhoneRepository
+            ->remove($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+        ;
 
         $userEventPhoneRepository
             ->add(new User\UserEventPhone($user->reveal(), $event->reveal(), $code, $phone, $dateTime))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+        ;
 
-        $translator->trans(Argument::any())->shouldBeCalled()->willReturn('SMS custom message');
-        $SMSSender->send(new SMS($phone, 'SMS custom message'))->shouldBeCalled();
+        $digitCodeGenerator
+            ->generateCode(ConfirmationCode::CODE_LENGTH)
+            ->shouldBeCalled()
+            ->willReturn($code)
+        ;
+
+        $translator
+            ->trans(ConfirmationCode::MESSAGE_TRANSLATION_KEY, ['%code%' => $phone], 'messages', 'fr')
+            ->shouldBeCalled()
+            ->willReturn('Your code confirmation is 1234')
+        ;
+
+        $SMSSender
+            ->send(new SMS($phone, 'Your code confirmation is 1234'))
+            ->shouldBeCalled()
+        ;
 
         $sendCodeHandler = new SendCodeHandler(
             $userEventPhoneRepository->reveal(),
+            $digitCodeGenerator->reveal(),
             $SMSSender->reveal(),
             $translator->reveal(),
             $dateTime
         );
 
-        $sendCodeHandler->handle(new SendCode($user->reveal(), $event->reveal(), $phone));
+        $sendCodeHandler->handle(new SendCode($user->reveal(), $event->reveal(), $phone, 'fr'));
     }
 }

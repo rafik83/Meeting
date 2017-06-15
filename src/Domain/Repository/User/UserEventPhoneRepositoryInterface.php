@@ -33,4 +33,10 @@ interface UserEventPhoneRepositoryInterface
      * @param UserEventPhone $userEventPhone
      */
     public function set(UserEventPhone $userEventPhone);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     */
+    public function remove(User $user, Event $event);
 }
