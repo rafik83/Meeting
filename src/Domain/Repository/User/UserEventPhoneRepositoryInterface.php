@@ -23,4 +23,9 @@ interface UserEventPhoneRepositoryInterface
      * @return UserEventPhone|null
      */
     public function find(User $user, Event $event);
+
+    /**
+     * @param UserEventPhone $userEventPhone
+     */
+    public function set(UserEventPhone $userEventPhone);
 }
