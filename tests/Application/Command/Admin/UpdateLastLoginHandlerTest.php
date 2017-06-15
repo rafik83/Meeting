@@ -3,29 +3,30 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) 2017 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin;
 use Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
-class UpdateLastLoginHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateLastLoginHandlerTest extends TestCase
 {
     public function testHandleWithAdminNull()
     {
-        $date  = new \DateTime();
-        $email = null;
+        $date = new \DateTime('2017-08-08 08:08:08.000');
+        $email = 'test@email.com';
 
         $command = new UpdateLastLogin($email, $date);
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
-        $adminRepository->findByEmail(email)->shouldBeCalled()->willReturn(null);
+        $adminRepository->findByEmail($email)->shouldBeCalled()->willReturn(null);
         $adminRepository->set()->shouldNotBeCalled();
 
         $handler = new UpdateLastLoginHandler($adminRepository->reveal());
@@ -34,10 +35,10 @@ class UpdateLastLoginHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithAdminNotNull()
     {
-        $dateTime = new \DateTime();
+        $dateTime = new \DateTime('2017-01-01 10:10:10.000');
 
         $email = 'toto@toto.fr';
-        $date  = new \DateTime();
+        $date = new \DateTime('2017-08-08 08:08:08.000');
 
         $command = new UpdateLastLogin($email, $date);
 
@@ -70,7 +71,5 @@ class UpdateLastLoginHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateLastLoginHandler($adminRepository->reveal());
         $handler->handle($command);
-
     }
-
 }
