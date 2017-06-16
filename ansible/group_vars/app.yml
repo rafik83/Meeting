@@ -32,6 +32,13 @@ app_patterns:
     - APP_DATABASE_USER:           "{{ app.user }}"
     - APP_DATABASE_PASSWORD:       null
 
+  ##########
+  # Docker #
+  ##########
+
+  docker_applications:
+    - manala/openl10n-cli:1.0.0
+
   #######
   # Ssh #
   #######
@@ -116,8 +123,7 @@ app_patterns:
     # App
     - imagick
 
-  php_applications:
-    - openl10n@0.2.0
+  php_applications: []
 
   php_configs:
     - file: app_opcache.ini
