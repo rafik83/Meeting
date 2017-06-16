@@ -25,14 +25,24 @@ class AgendaSheetView
     public $requests;
 
     /**
+     * @var AgendaSheetIndicatorView
+     */
+    public $indicators;
+
+    /**
      * AgendaSheetView constructor.
      *
-     * @param AgendaParticipantView[] $participants
-     * @param RequestView[]           $requests
+     * @param AgendaParticipantView[]  $participants
+     * @param RequestView[]            $requests
+     * @param AgendaSheetIndicatorView $indicators
      */
-    public function __construct(array $participants, array $requests)
-    {
+    public function __construct(
+        array $participants,
+        array $requests,
+        AgendaSheetIndicatorView $indicators
+    ) {
         $this->participants = $participants;
         $this->requests     = $requests;
+        $this->indicators   = $indicators;
     }
 }
