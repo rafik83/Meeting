@@ -75,9 +75,7 @@ class DayViewQueryHandler
         $meetings         = [];
 
         foreach ($query->happenings as $happening) {
-            if ($happening->getHappening()->getBegin() >= $query->day->getStartTime()
-                && $happening->getHappening()->getEnd() <= $query->day->getEndTime()
-            ) {
+            if ($query->day->contain($happening->getHappening())) {
                 $happeningViews[] = $this->happeningHandler->handle(
                     new HappeningParticipationViewQuery(
                         $happening,
@@ -88,9 +86,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->unavailabilities as $unavailability) {
-            if ($unavailability->getBegin() >= $query->day->getStartTime()
-                && $unavailability->getEnd() <= $query->day->getEndTime()
-            ) {
+            if ($query->day->contain($unavailability)) {
                 $unavailabilities[] = $this->unavailabilityHandler->handle(
                     new UnavailabilityViewQuery($unavailability)
                 );
@@ -98,9 +94,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->masses as $mass) {
-            if ($mass->getBegin() >= $query->day->getStartTime()
-                && $mass->getEnd() <= $query->day->getEndTime()
-            ) {
+            if ($query->day->contain($mass)) {
                 $masses[] = $this->massHandler->handle(
                     new MassViewQuery(
                         $mass,
@@ -111,9 +105,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->meetings as $meeting) {
-            if ($meeting->getSlot()->getBegin() >= $query->day->getStartTime()
-                && $meeting->getSlot()->getEnd() <= $query->day->getEndTime()
-            ) {
+            if ($query->day->contain($meeting->getSlot())) {
                 $meetings[] = $this->meetingHandler->handle(
                     new MeetingViewQuery(
                         $meeting,
@@ -124,9 +116,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->assignments as $assignment) {
-            if ($assignment->getBegin() >= $query->day->getStartTime()
-                && $assignment->getEnd() <= $query->day->getEndTime()
-            ) {
+            if ($query->day->contain($assignment)) {
                 $assignments[] = $this->assignmentHandler->handle(
                     new AssignmentViewQuery(
                         $assignment,

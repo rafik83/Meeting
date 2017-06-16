@@ -80,7 +80,6 @@ class DayViewQueryHandlerTest extends TestCase
         $meeting1->getSlot()->willReturn($slot1);
         $meeting2->getSlot()->willReturn($slot2);
 
-
         $mass1   = $this->prophesize(Unavailability\Mass::class);
         $mass2   = $this->prophesize(Unavailability\Mass::class);
         $mass1->getBegin()->willReturn(new \DateTime('2016-10-12 13:00'));
@@ -90,7 +89,7 @@ class DayViewQueryHandlerTest extends TestCase
 
         $happenings       = [$participation->reveal()];
         $assignments      = [$assignment->reveal()];
-        $unavailabilities = [$unavailability1->reveal(), $unavailability2];
+        $unavailabilities = [$unavailability1->reveal(), $unavailability2->reveal()];
         $masses           = [$mass1->reveal(), $mass2->reveal()];
         $meetings         = [$meeting1->reveal(), $meeting2->reveal()];
 
