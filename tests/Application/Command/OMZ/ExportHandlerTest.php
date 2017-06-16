@@ -20,11 +20,13 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -37,11 +39,13 @@ class ExportHandlerTest extends TestCase
     {
         $event  = EventFactory::createEvent();
         $user   = UserFactory::create('normalizer@elao.com');
+        $sheet  = SheetFactory::create($event);
         $locale = 'fr';
 
         // Mock
         $translator                   = $this->prophesize(TranslatorInterface::class);
         $userRepository               = $this->prophesize(UserRepositoryInterface::class);
+        $sheetRepository              = $this->prophesize(SheetRepositoryInterface::class);
         $groupNameResolver            = $this->prophesize(GroupNameResolver::class);
         $typeNameResolver             = $this->prophesize(TypeNameResolver::class);
         $serializer                   = $this->prophesize(SerializerAdapterInterface::class);
@@ -71,6 +75,7 @@ class ExportHandlerTest extends TestCase
         $command = new Export($event);
         $handler = new ExportHandler(
             $userRepository->reveal(),
+            $sheetRepository->reveal(),
             $groupNameResolver->reveal(),
             $typeNameResolver->reveal(),
             $participantPlanningFormatter->reveal(),
@@ -86,8 +91,10 @@ class ExportHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($expectedPlanning);
 
-        $groupNameResolver->resolve($event, $user)->shouldBeCalled()->willReturn('group name');
-        $typeNameResolver->resolve($user, $event, 'fr')->shouldBeCalled()->willReturn('type name');
+        $sheetRepository->getSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$sheet]);
+
+        $groupNameResolver->resolve($event, $user, [$sheet])->shouldBeCalled()->willReturn('group name');
+        $typeNameResolver->resolveWithPreloadedSheets([$sheet], 'fr')->shouldBeCalled()->willReturn('type name');
 
         $serializer->serialize($omzUserListView, 'csv', ["charset" => "Windows-1252"])
             ->shouldBeCalled()

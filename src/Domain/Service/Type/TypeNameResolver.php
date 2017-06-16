@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Service\Type;
 
 use InvalidArgumentException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -46,5 +47,28 @@ class TypeNameResolver
         }
 
         return $type->getTitle($locale);
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     * @param string  $locale
+     *
+     * @return string
+     */
+    public function resolveWithPreloadedSheets(array $sheets, $locale)
+    {
+        $types = [];
+
+        foreach ($sheets as $sheet) {
+            $type = $sheet->getType();
+            $position = $type->getPosition();
+
+            if ($position !== null) {
+                $types[$position] = $type->getTitle($locale);
+            }
+        }
+        sort($types);
+
+        return reset($types);
     }
 }

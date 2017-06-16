@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlannin
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
@@ -24,6 +26,9 @@ class ExportHandler
 {
     /** @var UserRepositoryInterface */
     private $userRepository;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
 
     /** @var GroupNameResolver */
     private $groupNameResolver;
@@ -44,6 +49,7 @@ class ExportHandler
      * ExportHandler constructor.
      *
      * @param UserRepositoryInterface      $userRepository
+     * @param SheetRepositoryInterface     $sheetRepository
      * @param GroupNameResolver            $groupNameResolver
      * @param TypeNameResolver             $typeNameResolver
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
@@ -52,6 +58,7 @@ class ExportHandler
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
+        SheetRepositoryInterface $sheetRepository,
         GroupNameResolver $groupNameResolver,
         TypeNameResolver $typeNameResolver,
         ParticipantPlanningFormatter $participantPlanningFormatter,
@@ -59,6 +66,7 @@ class ExportHandler
         TranslatorInterface $translator
     ) {
         $this->userRepository               = $userRepository;
+        $this->sheetRepository              = $sheetRepository;
         $this->groupNameResolver            = $groupNameResolver;
         $this->typeNameResolver             = $typeNameResolver;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
@@ -81,6 +89,7 @@ class ExportHandler
         foreach ($this->userRepository->findByEvent($event) as $user) {
             $userLocale = $event->getAvailableLocale($user->getLocale());
             $gender     = $user->getGender();
+            $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
             if (!empty($gender)) {
                 $gender = $this->translator->trans(sprintf('gender.%s', $gender));
@@ -94,9 +103,9 @@ class ExportHandler
 
             $usersViews[] = new OmzUserView(
                 $user->getId(),
-                $this->groupNameResolver->resolve($event, $user),
+                $this->groupNameResolver->resolve($event, $user, $userSheets),
                 null,
-                $this->typeNameResolver->resolve($user, $event, $event->getFallback()),
+                $this->typeNameResolver->resolveWithPreloadedSheets($userSheets, $event->getFallback()),
                 $gender,
                 $user->getFirstName(),
                 $user->getLastName(),
