@@ -297,7 +297,8 @@ class PlanningViewQueryHandlerTest extends TestCase
             $userRepository->reveal(),
             $sheetRepository->reveal()
         );
-        $handler->preloadForEventAndUsers($event, [$user->reveal(), $user1->reveal()]);
+        $users = [$user->reveal(), $user1->reveal()];
+        $handler->preloadForEventAndUsers($event, $users);
         $result = $handler->handle(new PlanningViewQuery($event, $user->reveal(), $locale));
 
         // Expected
