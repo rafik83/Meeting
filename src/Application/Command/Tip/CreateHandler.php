@@ -50,7 +50,7 @@ class CreateHandler
         );
 
         foreach ($command->translations as $translation) {
-            $tip->translate($translation['locale'], $translation['title'], $translation['content']);
+            $tip->translate($translation['locale'], $translation['title'], $translation['content'], $this->dateTime);
         }
         $this->tipRepository->add($tip);
     }

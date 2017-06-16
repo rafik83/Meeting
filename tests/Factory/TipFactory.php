@@ -42,6 +42,8 @@ class TipFactory
         ],
         array $locales = self::LOCALES
     ) {
+        $dateTime = new \DateTime();
+
         $tip = new Tip(
             $tipTitle,
             $pages[self::ON_MEETING_MANAGEMENT],
@@ -50,11 +52,11 @@ class TipFactory
             $pages[self::ON_SHEET],
             $pages[self::ON_AGENDA],
             $pages[self::ON_PROGRAM],
-            new \DateTime()
+            $dateTime
         );
 
         foreach ($locales as $locale) {
-            $tip->setTranslation($locale, 'title_' . $locale, 'content_' . $locale);
+            $tip->setTranslation($locale, 'title_' . $locale, 'content_' . $locale, $dateTime);
         }
 
         return $tip;

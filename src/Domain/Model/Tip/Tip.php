@@ -135,18 +135,19 @@ class Tip
     }
 
     /**
-     * @param string $locale
-     * @param string $title
-     * @param string $content
+     * @param string             $locale
+     * @param string             $title
+     * @param string             $content
+     * @param \DateTimeInterface $dateTime
      *
-     * @return Tip   $this
+     * @return Tip $this
      */
-    public function translate($locale, $title, $content)
+    public function translate($locale, $title, $content, \DateTimeInterface $dateTime)
     {
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($locale, $title, $content);
         } else {
-            $this->setTranslation($locale, $title, $content);
+            $this->setTranslation($locale, $title, $content, $dateTime);
         }
 
         return $this;
@@ -173,17 +174,18 @@ class Tip
     }
 
     /**
-     * @param string $locale
-     * @param string $title
-     * @param string $content
+     * @param string             $locale
+     * @param string             $title
+     * @param string             $content
+     * @param \DateTimeInterface $dateTime
      */
-    public function setTranslation($locale, $title, $content)
+    public function setTranslation($locale, $title, $content, \DateTimeInterface $dateTime)
     {
         $this->translations->set(
             $locale,
             new TipTranslation(
                 $this,
-                new \DateTime(),
+                $dateTime,
                 $title,
                 $locale,
                 $content
