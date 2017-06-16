@@ -58,6 +58,21 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findValidated(User $user, Event $event)
+    {
+        return $this
+            ->getQueryBuilderByUserAndEvent($user, $event)
+            ->select('user_event_phone')
+            ->andWhere('user_event_phone.validated = true')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(UserEventPhone $userEventPhone)
     {
         $this->entityManager->flush($userEventPhone);

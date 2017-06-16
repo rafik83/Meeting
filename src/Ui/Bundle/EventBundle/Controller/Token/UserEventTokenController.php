@@ -53,12 +53,41 @@ class UserEventTokenController extends Controller
         }
 
         $user = $userEventToken->getUser();
-        $sendCode = new SendCode($user, $event, $user->getPhone(), $locale);
+        $tipTranslationViews = [];
+        $sendCodeForm = null;
 
-        $sendCodeForm = $this->createForm(SendCodeType::class, $sendCode, [
-            'country' => $event->getCountry(),
-            'submit' => true,
-        ]);
+        $userEventPhoneValidated = $this->get('repository.user.user_event_phone_repository')->findValidated(
+            $user,
+            $event
+        );
+
+        if (null === $userEventPhoneValidated) {
+            $tipTranslationViews = $this->get('tactician.commandbus.query')->handle(
+                new TipTranslationViewByUserQuery(
+                    $event,
+                    $userEventToken->getUser(),
+                    TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
+                    $locale
+                )
+            );
+
+            if (!empty($tipTranslationViews)) {
+                $sendCode = new SendCode($user, $event, $user->getPhone(), $locale);
+                $sendCodeForm = $this->createForm(SendCodeType::class, $sendCode, [
+                    'country' => $event->getCountry(),
+                    'submit' => true,
+                ]);
+
+                if ($sendCodeForm->handleRequest($request)->isSubmitted() && $sendCodeForm->isValid()) {
+                    $this->get('tactician.commandbus')->handle($sendCode);
+
+                    return $this->redirectToRoute(
+                        'event_user_event_token_confirm_agenda',
+                        ['token' => $userEventToken->getToken()]
+                    );
+                }
+            }
+        }
 
         $alreadyConfirmed = false;
 
@@ -71,26 +100,11 @@ class UserEventTokenController extends Controller
             throw $this->createNotFoundException('Token type unexpected. Expected an agenda confirmation token');
         }
 
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle(
-            new TipTranslationViewByUserQuery(
-                $event,
-                $userEventToken->getUser(),
-                TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
-                $locale
-            )
-        );
-
-
-
-        if ($sendCodeForm->handleRequest($request)->isSubmitted() && $sendCodeForm->isValid()) {
-
-        }
-
         return $this->render('EventBundle:Token\UserEventToken:agenda_confirmation.html.twig', [
             'event' => $eventDomain->getEvent(),
             'already_confirmed' => $alreadyConfirmed,
             'tipTranslationViews' => $tipTranslationViews,
-            'sendCodeForm' => $sendCodeForm->createView(),
+            'sendCodeForm' => null === $sendCodeForm ? null : $sendCodeForm->createView(),
         ]);
     }
 }

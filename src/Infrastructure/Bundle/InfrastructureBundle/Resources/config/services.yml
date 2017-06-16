@@ -1764,6 +1764,21 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda }
 
+    application.command.user.phone.send_code_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\SendCodeHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@domain.code.digit_code_generator'
+            - '@adapter.smssender_alias'
+            - '@domain.user.phone.phone_sanitizer'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@template.participant.participant_info_setter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\SendCode }
+
     #
     # Post Batch Action
     #
@@ -2275,6 +2290,12 @@ services:
         class: Proximum\Vimeet\Domain\Sheet\SheetInfoSetter
         arguments:
             - '@template.template_data_factory'
+
+    template.participant.participant_info_setter:
+        class: Proximum\Vimeet\Domain\Participant\ParticipantInfoSetter
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.participant_repository'
 
     #
     # Spot component
