@@ -16,13 +16,20 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\OMZ\Export;
 use Proximum\Vimeet\Application\Command\OMZ\ExportHandler;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Translation\Translator;
 
 class ExportHandlerTest extends TestCase
 {
@@ -89,5 +96,46 @@ class ExportHandlerTest extends TestCase
         $resultNormalizedDatas = $handler->handle($command);
 
         $this->assertEquals($expectedNormalizedDatas, $resultNormalizedDatas);
+    }
+
+    public function testNormalize()
+    {
+        $translator = new Translator('fr');
+        $applicationTranslator = new TranslatorAdapter($translator);
+        $serializer = new Serializer(
+            [
+                new OmzUserNormalizer($applicationTranslator),
+                new ObjectNormalizer(),
+            ],
+            [
+                new CsvEncoder(),
+            ]
+        );
+
+        $omzUserView = new OmzUserView(
+            1,
+            'group name',
+            null,
+            'type name',
+            'woman',
+            'first name',
+            'last name',
+            'position',
+            null,
+            'phone',
+            "normalizer@elao.com",
+            null,
+            'mobile',
+            "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\n\n\n\n\nunallocated: sheet met 1"
+        );
+        $omzUserListView = new OmzUserListView([$omzUserView]);
+
+        $result = $serializer->serialize($omzUserListView, 'csv', [
+            'charset' => Charset::WINDOWS_1252,
+        ]);
+
+        $expected = "participantId,companyName,description,type,title,firstName,lastName,position,phonePrefix,phoneNumber,email,mobilePhonePrefix,mobilePhone,planning\n1,\"group name\",,\"type name\",woman,\"first name\",\"last name\",position,,phone,normalizer@elao.com,,mobile,\"**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\n\n\n\n\nunallocated: sheet met 1\"\n";
+
+        $this->assertEquals($expected, $result);
     }
 }
