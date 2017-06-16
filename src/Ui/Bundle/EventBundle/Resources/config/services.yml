@@ -458,6 +458,9 @@ services:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
 
+    domain.sheet_group.remove_sheet_from_group_checker:
+        class: Proximum\Vimeet\Domain\SheetGroup\RemoveSheetFromGroupChecker
+
     domain.service.sheets_group.group_name_resolver:
         class: Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver
         arguments:

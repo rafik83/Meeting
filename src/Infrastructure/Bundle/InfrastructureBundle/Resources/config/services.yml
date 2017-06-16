@@ -922,6 +922,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@domain.sheet_group.remove_sheet_from_group_checker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     command.sheet.batch_accept_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler

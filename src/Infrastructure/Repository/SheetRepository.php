@@ -310,22 +310,6 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsWithoutGroupInGivenSheets(array $sheets)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->where('sheet.id IN (:sheets) AND sheet.group IS NULL')
-            ->setParameter('sheets', $sheets);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSheetsByEventAndIds(Event $event, array $ids)
     {
         $queryBuilder = $this

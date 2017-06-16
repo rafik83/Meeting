@@ -671,6 +671,7 @@ form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
 form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
 form.sheet.messaging_campaign.message.submit.label: Terminer
 form.sheet.messaging_campaign.recipients.submit.label: Valider
+form.sheet.sheetGroup.unAssignedGroup: 'Non assigné'
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.priority.label: Priorité
