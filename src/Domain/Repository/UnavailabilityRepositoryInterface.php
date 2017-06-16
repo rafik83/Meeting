@@ -48,7 +48,7 @@ interface UnavailabilityRepositoryInterface
     public function countByParticipant(Participant $participant);
 
     /**
-     * @deprecated
+     * @deprecated Prefer use of findByUserAndEvent instead
      *
      * @see findByUserAndEvent
      *

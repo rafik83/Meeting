@@ -66,7 +66,7 @@ interface MassAssignmentRepositoryInterface
     public function findByParticipant(Participant $participant);
 
     /**
-     * @deprecated
+     * @deprecated Prefer use findEnabledByUserAndEvent instead
      *
      * @see findEnabledByUserAndEvent
      *
