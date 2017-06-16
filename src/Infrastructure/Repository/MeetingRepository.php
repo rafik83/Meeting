@@ -216,7 +216,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('meeting, slot, fromSheet, toSheet')
             ->from(Meeting::class, 'meeting')
-            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event AND meeting.state = :state')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->join('meeting.slot', 'slot')
             ->join('meeting.fromParticipants', 'fromParticipants')
@@ -224,7 +224,6 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->where('toParticipants.user IN (:users) OR fromParticipants.user IN (:users)')
             ->setParameter('users', $users)
             ->setParameter('event', $event)
-            ->andWhere('meeting.state = :state')
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();

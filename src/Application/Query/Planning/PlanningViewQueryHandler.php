@@ -118,7 +118,7 @@ class PlanningViewQueryHandler
         }
 
         if (empty($this->eventDays)) {
-            return new PlanningView([]);
+            return new PlanningView([], $query->event->getTimeZone());
         }
 
         $this->loadData($query->event, $query->user);
@@ -176,7 +176,7 @@ class PlanningViewQueryHandler
      * @param Event  $event
      * @param User[] $users
      */
-    public function preloadForEventAndUsers(Event $event, array $users)
+    public function preloadForEventAndUsers(Event $event, array &$users)
     {
         if (!empty($users)) {
             $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);

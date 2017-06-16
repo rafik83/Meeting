@@ -96,7 +96,7 @@ class ExportHandler
                 $user->getId(),
                 $this->groupNameResolver->resolve($event, $user),
                 null,
-                $this->typeNameResolver->resolve($user, $event, $userLocale),
+                $this->typeNameResolver->resolve($user, $event, $event->getFallback()),
                 $gender,
                 $user->getFirstName(),
                 $user->getLastName(),

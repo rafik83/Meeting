@@ -167,10 +167,9 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, user')
+            ->select('assignment, mass')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.user', 'user', 'WITH', 'user = :user')
-            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->join('assignment.mass', 'mass', 'WITH', 'assignment.user = :user AND mass.event = :event AND assignment.enabled = true')
             ->setParameter('user', $user)
             ->setParameter('event', $event)
         ;
@@ -208,8 +207,8 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->createQueryBuilder()
             ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.user', 'user', 'WITH', 'user IN (:users)')
-            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->join('assignment.user', 'user', 'WITH', 'user IN (:users) AND assignment.enabled = true')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
             ->setParameter('event', $event)
             ->setParameter('users', $users);
         ;

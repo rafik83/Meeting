@@ -283,7 +283,7 @@ class ParticipantPlanningFormatter
 
         return $this->translator->trans(
             self::TRANSLATE_MEETING,
-            ['%sheetMet%' => $meetingView->sheetMetTitle, '%spotRef%'  => $meetingView->spotRef,],
+            ['%sheetMet%' => $meetingView->sheetMetTitle, '%spotRef%'  => $meetingView->spotRef],
             self::TRANSLATION_DOMAIN,
             $userLocale
         );

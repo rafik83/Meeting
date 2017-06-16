@@ -359,10 +359,10 @@ class TypeRepository implements TypeRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Type', 'type')
+            ->from(Type::class, 'type')
             ->where('type.event = :event')
             ->setParameter('event', $event)
-            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.type = type')
             ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user)
             ->orderBy('type.position')
