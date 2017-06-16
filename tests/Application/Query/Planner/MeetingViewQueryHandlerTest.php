@@ -71,10 +71,10 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $creator  = UserFactory::create();
-        $request1 = new Request($sheet1, [$participant1, $participant2], $sheet2, [$participant3], new \DateTime(), $creator);
-        $request2 = new Request($sheet3, [], $sheet1, [$participant1], new \DateTime(), $creator);
-        $request3 = new Request($sheet2, [], $sheet3, [], new \DateTime(), $creator);
-        $request4 = new Request($sheet4, [], $sheet3, [], new \DateTime(), $creator); // Sheet not in catalog, should be escaped
+        $request1 = new Request($sheet1, [$participant1, $participant2], $sheet2, [$participant3], new \DateTime(), $creator, $event);
+        $request2 = new Request($sheet3, [], $sheet1, [$participant1], new \DateTime(), $creator, $event);
+        $request3 = new Request($sheet2, [], $sheet3, [], new \DateTime(), $creator, $event);
+        $request4 = new Request($sheet4, [], $sheet3, [], new \DateTime(), $creator, $event); // Sheet not in catalog, should be escaped
 
         // Reflection
         $reflectionSheet = new \ReflectionClass(Sheet::class);

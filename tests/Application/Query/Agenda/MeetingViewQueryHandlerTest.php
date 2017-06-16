@@ -55,7 +55,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participant  = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
-        $request      = new Request($sheet->reveal(), [], $sheetMet->reveal(), [], new \DateTime(), $user);
+        $request      = new Request($sheet->reveal(), [], $sheetMet->reveal(), [], new \DateTime(), $user, $event);
         $begin        = new \DateTime('2016-10-12 10:00:00.000');
         $end          = new \DateTime('2016-10-12 12:00:00.000');
         $slot         = new MeetingSlot($event, $begin, $end, false);
@@ -71,7 +71,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetMet->reveal(),
             [$participant->reveal(), $participant2->reveal()],
             new \DateTime(),
-            $spot
+            $spot,
+            $event
         );
 
         $participantView1 = new MeetingParticipantView($cardView);
@@ -136,7 +137,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participant  = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
 
-        $request      = new Request($sheetMet->reveal(), [], $sheet->reveal(), [], new \DateTime(), $user);
+        $request      = new Request($sheetMet->reveal(), [], $sheet->reveal(), [], new \DateTime(), $user, $event);
         $begin        = new \DateTime('2016-10-12 10:00:00.000');
         $end          = new \DateTime('2016-10-12 12:00:00.000');
         $slot         = new MeetingSlot($event, $begin, $end, false);
@@ -152,7 +153,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheet->reveal(),
             [],
             new \DateTime(),
-            $spot
+            $spot,
+            $event
         );
 
         $participantView1 = new MeetingParticipantView($cardView);
