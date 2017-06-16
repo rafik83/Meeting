@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer\OMZ;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Serializer\Normalizer\AbstractNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
@@ -34,11 +35,21 @@ class OmzUserNormalizer extends AbstractNormalizer implements NormalizerInterfac
     const COL_SCHEDULE            = 'planning';
 
     /**
+     * OmzUserNormalizer constructor.
+     *
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        parent::__construct($translator);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null)
     {
-        return 'csv' === $format && $data instanceof OmzUserListView;
+        return $data instanceof OmzUserListView && 'csv' === $format;
     }
 
     /**

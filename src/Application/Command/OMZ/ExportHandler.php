@@ -73,8 +73,8 @@ class ExportHandler
      */
     public function handle(Export $export)
     {
-        $usersView = [];
-        $event = $export->event;
+        $usersViews = [];
+        $event      = $export->event;
 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($event);
 
@@ -92,7 +92,7 @@ class ExportHandler
                 $userLocale
             );
 
-            $usersView[] = new OmzUserView(
+            $usersViews[] = new OmzUserView(
                 $user->getId(),
                 $this->groupNameResolver->resolve($event, $user),
                 null,
@@ -110,7 +110,7 @@ class ExportHandler
             );
         }
 
-       return $this->serializer->serialize(new OmzUserListView($usersView), 'csv', [
+       return $this->serializer->serialize(new OmzUserListView($usersViews), 'csv', [
            'charset' => Charset::WINDOWS_1252,
        ]);
     }
