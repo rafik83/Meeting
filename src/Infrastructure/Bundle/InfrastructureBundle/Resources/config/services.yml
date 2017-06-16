@@ -1013,6 +1013,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 
+    proximum.vimeet.application.command.sheet.group.update_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Group\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@user_to_group_manager_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Update }
+
     command.group.user_search_handler:
             class: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUserHandler
             arguments:
