@@ -43,9 +43,9 @@ class ExportHandlerTest extends TestCase
         $expectedPlanning = "normalizer@elao.com";
         $omzUserView = new OmzUserView(
             null,
+            'group name',
             null,
-            null,
-            null,
+            'type name',
             null,
             null,
             null,
@@ -78,6 +78,9 @@ class ExportHandlerTest extends TestCase
         $participantPlanningFormatter->formatPlanningFromUserAndEventWithUnallocated($user, $event, $locale)
             ->shouldBeCalled()
             ->willReturn($expectedPlanning);
+
+        $groupNameResolver->resolve($event, $user)->shouldBeCalled()->willReturn('group name');
+        $typeNameResolver->resolve($user, $event, 'fr')->shouldBeCalled()->willReturn('type name');
 
         $serializer->serialize($omzUserListView, 'csv', ["charset" => "Windows-1252"])
             ->shouldBeCalled()
