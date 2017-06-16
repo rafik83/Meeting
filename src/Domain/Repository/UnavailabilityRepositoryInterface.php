@@ -75,7 +75,7 @@ interface UnavailabilityRepositoryInterface
 
     /**
      * @param Event $event
-     * @param User  $users
+     * @param User[]  $users
      *
      * @return Unavailability[]
      */

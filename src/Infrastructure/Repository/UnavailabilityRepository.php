@@ -132,7 +132,6 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-
     /**
      * {@inheritdoc}
      */
