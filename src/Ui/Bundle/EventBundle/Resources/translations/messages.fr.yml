@@ -377,3 +377,4 @@ unavailability.title: Indisponible
 user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'
 user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
 user_event.confirm.agenda.title: 'Confirmation de l''agenda'
+user.phone.confirmationCode.message: 'Saisir le code suivant pour confirmer : %code%'
