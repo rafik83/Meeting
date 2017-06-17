@@ -33,10 +33,11 @@ class ConfirmAgendaHandlerTest extends TestCase
 
         $command = new ConfirmAgenda($userEventToken->reveal());
         $handler = new ConfirmAgendaHandler($userEventTokenRepository->reveal(), $dateTime);
-        $handler->handle($command);
+        $result = $handler->handle($command);
+        $this->assertEquals('confirmed', $result);
     }
 
-    public function testHandleUserEventTokenAlreadyConfirmedException()
+    public function testHandleUserEventTokenAlreadyConfirmed()
     {
         $dateTime = new \DateTime();
         $userEventToken = $this->prophesize(UserEventToken::class);
@@ -46,11 +47,10 @@ class ConfirmAgendaHandlerTest extends TestCase
         $userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
         $userEventTokenRepository->set($userEventToken->reveal())->shouldNotBeCalled();
 
-        $this->expectException(UserEventTokenAlreadyConfirmedException::class);
-
         $command = new ConfirmAgenda($userEventToken->reveal());
         $handler = new ConfirmAgendaHandler($userEventTokenRepository->reveal(), $dateTime);
-        $handler->handle($command);
+        $result = $handler->handle($command);
+        $this->assertEquals('already_confirmed', $result);
     }
 
     public function testHandleUserEventTokenUnexpectedTypeException()
