@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Token;
 use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda;
 use Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgendaHandler;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Exception\Token\UserEventToken\UserEventTokenUnexpectedTypeException;
@@ -21,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\SendCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -88,12 +90,16 @@ class UserEventTokenController extends Controller
                 ]);
 
                 if ($sendCodeForm->handleRequest($request)->isSubmitted() && $sendCodeForm->isValid()) {
-                    $this->get('tactician.commandbus')->handle($sendCode);
+                    try {
+                        $this->get('tactician.commandbus')->handle($sendCode);
 
-                    return $this->redirectToRoute(
-                        'event_user_event_token_confirm_agenda',
-                        ['token' => $userEventToken->getToken()]
-                    );
+                        return $this->redirectToRoute(
+                            'event_user_event_token_confirm_agenda',
+                            ['token' => $userEventToken->getToken()]
+                        );
+                    } catch (InvalidReceiverException $invalidReceiverException) {
+                        $sendCodeForm->get('phone')->addError(new FormError('validators.send_code.error.invalidReceiver'));
+                    }
                 }
             }
         }
