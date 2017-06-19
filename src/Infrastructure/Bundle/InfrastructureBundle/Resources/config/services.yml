@@ -1791,6 +1791,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\SendCode }
 
+    command.user.phone.validate_code_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\ValidateCodeHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\ValidateCode }
+
     #
     # Post Batch Action
     #

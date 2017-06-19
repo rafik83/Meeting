@@ -81,6 +81,10 @@ event.sheet.export.fields.sheet_turnover: 'Chiffre d''affaires'
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
+event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un code à 4 chiffres afin de valider votre numéro de téléphone'
+event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
+event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
+event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
