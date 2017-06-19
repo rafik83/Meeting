@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class MeetingSlot
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
+
+class MeetingSlot implements TimeRangeInterface
 {
     /**
      * @var int
@@ -122,7 +124,7 @@ class MeetingSlot
     }
 
     /**
-     * @return \DateInterval
+     * @return string
      */
     public function duration()
     {

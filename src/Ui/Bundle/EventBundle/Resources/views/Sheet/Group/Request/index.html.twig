@@ -1,48 +1,24 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block title %}
-    {{ 'group.request.title'|trans({'%groupTitle%': sheetListView.groupTitle }) }} - {{ event.title }}
+    {{ 'group.request.title'|trans({'%groupTitle%': sheetGroup.title }) }} - {{ event.title }}
 {% endblock %}
 
 {% block content %}
     <section class="main">
         <header>
             <h1>
-                {{ 'group.request.title'|trans({'%groupTitle%': sheetListView.groupTitle }) }}
+                <a href="{{ path('event_sheet_group_index', {'sheetGroup': sheetGroup.id}) }}">{{ sheetGroup.title }}</a>
+                /
+                {{ 'group.request.title'|trans }}
             </h1>
         </header>
+
         <div class="main__container">
-            <div class="pull-right">
-                <a href="{{ path('event_sheet_group_index', {'sheetGroup': sheetListView.groupId}) }}" class="btn btn-default">
-                    {{ 'group.request.list.link.home'|trans }}
-                </a>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="col-md-3">{{ 'group.request.list.table.header.otherSheet'|trans }}</th>
-                        <th class="col-md-2">{{ 'group.request.list.table.header.status'|trans }}</th>
-                        <th class="col-md-3">{{ 'group.request.list.table.header.sheetConcerned'|trans }}</th>
-                        <th class="col-md-2">{{ 'group.request.list.table.header.participants'|trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for sheetView in sheetListView.sheetViews if sheetListView.sheetViews is not empty %}
-                        {{ include('EventBundle:Sheet/Group/Request:sheetLine.html.twig', {
-                            'sheetView': sheetView,
-                            'isMeetingRequestUpdateLocked': sheetListView.isMeetingRequestUpdateLocked,
-                            'isMeetingRequestClosed': sheetListView.isMeetingRequestClosed,
-                            'isAnsweringMeetingRequestClosed': sheetListView.isAnsweringMeetingRequestClosed,
-                        }) }}
-                    {% else %}
-                        <tr>
-                            <td colspan="4" class="text-center">{{ 'group.request.list.table.no-result'|trans }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': sheetListView}) }}
+            {{ include('EventBundle:MultipleSheets/Request:filterForm.html.twig', {'resetLink': path('event_sheet_group_requests_list', {'sheetGroup': sheetGroup.id})}) }}
+        </div>
+        <div class="main__container">
+            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig') }}
         </div>
     </section>
-    {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}

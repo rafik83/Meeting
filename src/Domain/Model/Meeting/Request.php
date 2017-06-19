@@ -34,6 +34,11 @@ class Request implements MessageSubjectInterface
     private $id;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * @var Sheet
      */
     private $from;
@@ -89,6 +94,13 @@ class Request implements MessageSubjectInterface
     private $disabled;
 
     /**
+     * Aggregate to know if a request has messages
+     *
+     * @var bool
+     */
+    private $hasMessage;
+
+    /**
      * Request constructor.
      *
      * @param Sheet              $from
@@ -97,7 +109,9 @@ class Request implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
+     * @param Event              $event
      * @param bool               $disabled
+     * @param bool               $hasMessage
      */
     public function __construct(
         Sheet $from,
@@ -106,7 +120,9 @@ class Request implements MessageSubjectInterface
         array $toParticipants,
         DateTimeInterface $createdAt,
         User $creator,
-        $disabled = false
+        Event $event,
+        $disabled = false,
+        $hasMessage = false
     ) {
         $this->from             = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
@@ -118,6 +134,8 @@ class Request implements MessageSubjectInterface
         $this->creator          = $creator;
         $this->disabled         = $disabled;
         $this->meeting          = new ArrayCollection();
+        $this->hasMessage       = $hasMessage;
+        $this->event            = $event;
     }
 
     /**
@@ -601,7 +619,7 @@ class Request implements MessageSubjectInterface
      */
     public function getEvent()
     {
-        return $this->getFromSheet()->getEvent();
+        return $this->event;
     }
 
     /**
@@ -644,5 +662,29 @@ class Request implements MessageSubjectInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param bool $hasMessage
+     */
+    public function setHasMessage($hasMessage)
+    {
+        $this->hasMessage = $hasMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMessage()
+    {
+        return $this->hasMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOneOfSheetsNotAttend()
+    {
+        return false === $this->getFromSheet()->attend() || false === $this->getToSheet()->attend();
     }
 }

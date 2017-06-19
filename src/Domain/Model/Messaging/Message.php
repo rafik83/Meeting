@@ -46,16 +46,39 @@ class Message
     private static $template = 'MailBundle:Mail:Messaging/emailing.html.twig';
 
     /**
+     * Flag to send email to as well
+     *
+     * @var bool
+     */
+    private $sendToEmailTeam = false;
+
+    /**
+     * Flag to send email to billing info as well
+     *
+     * @var bool
+     */
+    private $sendEmailToBillingInfo = false;
+
+    /**
      * @param Event              $event
      * @param \DateTimeInterface $createdAt
      * @param string             $name
+     * @param bool               $sendToEmailTeam
+     * @param bool               $sendEmailToBillingInfo
      */
-    public function __construct(Event $event, \DateTimeInterface $createdAt, $name)
-    {
-        $this->event        = $event;
-        $this->name         = $name;
-        $this->createdAt    = $createdAt;
-        $this->translations = new ArrayCollection();
+    public function __construct(
+        Event $event,
+        \DateTimeInterface $createdAt,
+        $name,
+        $sendToEmailTeam = false,
+        $sendEmailToBillingInfo = false
+    ) {
+        $this->event                  = $event;
+        $this->name                   = $name;
+        $this->createdAt              = $createdAt;
+        $this->translations           = new ArrayCollection();
+        $this->sendToEmailTeam        = $sendToEmailTeam;
+        $this->sendEmailToBillingInfo = $sendEmailToBillingInfo;
     }
 
     /**
@@ -199,5 +222,21 @@ class Message
     public function getTemplate()
     {
         return self::$template;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendToEmailTeam()
+    {
+        return $this->sendToEmailTeam;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendEmailToBillingInfo()
+    {
+        return $this->sendEmailToBillingInfo;
     }
 }

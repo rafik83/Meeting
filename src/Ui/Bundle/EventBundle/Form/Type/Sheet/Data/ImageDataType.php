@@ -39,20 +39,28 @@ class ImageDataType extends AbstractType
     private $buyableObjectResolver;
 
     /**
+     * @var TemplateObject\BuyableIncludedProductGuesser
+     */
+    private $buyableIncludedProductGuesser;
+
+    /**
      * ImageDataType constructor.
      *
-     * @param IdToProductTransformer $idToProductTransformer
-     * @param TemplateProductGuesser $templateProductGuesser
-     * @param BuyableObjectResolver  $buyableObjectResolver
+     * @param IdToProductTransformer                       $idToProductTransformer
+     * @param TemplateProductGuesser                       $templateProductGuesser
+     * @param BuyableObjectResolver                        $buyableObjectResolver
+     * @param TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
     public function __construct(
         IdToProductTransformer $idToProductTransformer,
         TemplateProductGuesser $templateProductGuesser,
-        BuyableObjectResolver $buyableObjectResolver
+        BuyableObjectResolver $buyableObjectResolver,
+        TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
     ) {
         $this->idToProductTransformer = $idToProductTransformer;
         $this->templateProductGuesser = $templateProductGuesser;
         $this->buyableObjectResolver  = $buyableObjectResolver;
+        $this->buyableIncludedProductGuesser = $buyableIncludedProductGuesser;
     }
 
     /**
@@ -75,7 +83,9 @@ class ImageDataType extends AbstractType
             ],
         ]);
 
-        if ($this->templateProductGuesser->hasPayableOption($image)) {
+        if ($this->templateProductGuesser->hasPayableOption($image)
+            && !$this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($image)
+        ) {
             $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($image);
 
             $builder

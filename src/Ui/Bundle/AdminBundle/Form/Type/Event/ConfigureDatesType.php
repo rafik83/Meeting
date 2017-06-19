@@ -45,6 +45,10 @@ class ConfigureDatesType extends AbstractType
                 'view_timezone' => $options['event']->getTimezone(),
                 'required'      => false,
             ])
+            ->add('smsActivationDate', DateTimePickerType::class, [
+                'view_timezone' => $options['event']->getTimezone(),
+                'required'      => false,
+            ])
         ;
     }
 

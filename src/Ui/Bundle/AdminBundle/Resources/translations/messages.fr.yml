@@ -36,6 +36,7 @@ admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
 admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
+admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'Au moins 1 participant est totalement indisponible avec au moins une demande de rendez-vous attribuée'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
 admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
 admin.agenda.filters.hasScheduledMeeting.no: Non
@@ -97,6 +98,7 @@ admin.agenda.request.updateParticipant.title.label: 'Modifier les participants d
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
 admin.agenda.requestsList.title: 'RDV validés'
 admin.agenda.requestsList.zeroResult: 'Pas de résultat'
+admin.agenda.sheet.attend: 'Modifier la venue de la fiche'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.sort.accepted_request.label: 'Nombre d''acceptées'
@@ -303,14 +305,20 @@ admin.meeting.action.remove.link: Supprimer
 admin.meeting.export.fields.day: Jour
 admin.meeting.export.fields.from_sheet_id: 'ID demandeur'
 admin.meeting.export.fields.from_sheet_name: 'Nom fiche demandeur'
+admin.meeting.export.fields.from_sheet_participant_fullname: 'Prénom Nom utilisateurs demandeurs'
 admin.meeting.export.fields.from_sheet_participants: 'Participants demandeur'
+admin.meeting.export.fields.from_sheet_title: 'Titre fiche demandeur'
+admin.meeting.export.fields.from_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.export.fields.hour_begin: 'Heure début'
 admin.meeting.export.fields.hour_end: 'Heure fin'
 admin.meeting.export.fields.meeting_id: 'ID RDV'
 admin.meeting.export.fields.spot: Lieu
 admin.meeting.export.fields.to_sheet_id: 'ID demandé'
 admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
+admin.meeting.export.fields.to_sheet_participant_fullname: 'Prénom Nom utilisateurs demandés'
 admin.meeting.export.fields.to_sheet_participants: 'Participants demandé'
+admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandé'
+admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
@@ -356,6 +364,7 @@ admin.messaging.message.compose.links.orders: 'Liste des commandes'
 admin.messaging.message.compose.links.package: Forfait
 admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
+admin.messaging.message.compose.tags.cta.agendaConfirmation: 'Lien CTA confirmation agenda'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
@@ -546,6 +555,7 @@ admin.schedule.days.link: Définir
 admin.schedule.days.startTime: 'Heure de début'
 admin.schedule.days.title: 'Jours de l''événement'
 admin.schedule.link: Agenda
+admin.schedule.slot.disabled: 'Il y a des RDV sur ce créneau'
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
 admin.schedule.slot.remove: Supprimer
@@ -565,6 +575,14 @@ admin.sheet.assign.spot.exception: 'Une erreur est survenu'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
 admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
+admin.sheet.assignToGroup: 'Assigner à une entité'
+admin.sheet.attend.danger.numberOfMeetings: 'Attention, l''annulation de la venue de cette fiche supprimera %numberOfMeetings% rendez-vous'
+admin.sheet.attend.info.numberOfMeetings: 'Pas de rendez-vous sont positionnés sur cette fiche'
+admin.sheet.attend.title: 'Modifier la venue de la fiche %sheetTitle%'
+admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
+admin.sheet.batch.cancelSelection.label: 'Annuler la sélection complète'
+admin.sheet.batch.selection.label: 'Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées.'
+admin.sheet.batch.selectionAll.label: 'Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres.'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.link: Changer
 admin.sheet.change.type.title: 'Changer le type de participation'
@@ -572,10 +590,10 @@ admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
-admin.sheet.dashboard.totalOrders: 'Total des commandes'
-admin.sheet.dashboard.totalPaid: 'Total soldé'
+admin.sheet.dashboard.totalOrders: 'Total des commandes (HT)'
+admin.sheet.dashboard.totalPaid: 'Total soldé (TTC)'
 admin.sheet.dashboard.totalParticipants: 'Total participants'
-admin.sheet.dashboard.totalRemainingToPay: 'Total restant'
+admin.sheet.dashboard.totalRemainingToPay: 'Total restant (TTC)'
 admin.sheet.dashboard.totalSheet: 'Total fiches'
 admin.sheet.dashboard.totalSheetType: 'Total fiches par type'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
@@ -667,11 +685,22 @@ admin.sheet.trace.disable: 'Désactivée le %at%'
 admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.sheet.trace.enable: 'Activée le %at%'
 admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
+admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gestionnaire d''entité'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
+admin.sheets_group.column.created_at: 'Date de création'
+admin.sheets_group.column.email_manager: 'Email du gestionnaire'
+admin.sheets_group.column.sheet_list: 'Liste des fiches'
+admin.sheets_group.column.title: Titre
+admin.sheets_group.create: 'Nouvelle entité multi-fiches'
+admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
+admin.sheets_group.update.title: 'Modification d''une entité muti-fiches'
+admin.sheets_group.index: Multi-fiches
+admin.sheets_group.no_result: 'Aucuns résultats'
+admin.sheets_group.title: Multi-fiches
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
@@ -700,21 +729,6 @@ admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
-admin.tip.empty: 'Aucun message d''aide'
-admin.tip.link: 'Messages d''aide'
-admin.tip.list.title: 'Messages d''aide'
-admin.tip.create.link: 'Nouveau'
-admin.tip.create.title: 'Nouveau message d''aide'
-admin.tip.update.title: 'Mise à jour du message d''aide'
-admin.tip.column.title: 'Libellé back office'
-admin.tip.column.translation: 'Langue(s)'
-admin.tip.column.locale: 'Langue'
-admin.tip.column.content: 'Contenu'
-admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
-admin.tip.column.visible.catalog: 'Catalogue'
-admin.tip.column.visible.print_planning: 'Impression planning'
-admin.tip.visible: 'Liste des pages concernées'
-admin.tip.update.link: 'Modifier'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'
@@ -740,6 +754,36 @@ admin.template.sheet.table.column.eventType: Événement/Type(s)
 admin.template.sheet.table.column.title: Titre
 admin.template.sheet.titleBase: 'Templates globaux'
 admin.template.sheet.titleEvent: 'Templates assignés'
+admin.tip.column.content: Contenu
+admin.tip.column.locale: Langue
+admin.tip.column.title: 'Libellé back office'
+admin.tip.column.translation: Langue(s)
+admin.tip.column.visible.catalog: Catalogue
+admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.onAgenda: Agenda
+admin.tip.column.visible.onProgram: Programme
+admin.tip.column.visible.onSheet: 'Fiche de présentation'
+admin.tip.column.visible.print_planning: 'Impression planning'
+admin.tip.create.link: Nouveau
+admin.tip.create.title: 'Nouveau message d''aide'
+admin.tip.empty: 'Aucun message d''aide'
+admin.tip.event.actions: Actions
+admin.tip.event.affect.form.title: 'Affecter un message d''aide'
+admin.tip.event.affect.link: 'Affecter un message d''aide'
+admin.tip.event.affect.title: 'Gestion des messages d''aide'
+admin.tip.event.empty: 'Aucun message affecté à cet évènement'
+admin.tip.event.no_pages: Aucune
+admin.tip.event.no_types: Aucun
+admin.tip.event.pages: 'Page concernées'
+admin.tip.event.remove.link: Retirer
+admin.tip.event.title: 'Libellé admin'
+admin.tip.event.types: 'Types de participation affectés'
+admin.tip.events: Evénements
+admin.tip.link: 'Messages d''aide'
+admin.tip.list.title: 'Messages d''aide'
+admin.tip.update.link: Modifier
+admin.tip.update.title: 'Mise à jour du message d''aide'
+admin.tip.visible: 'Liste des pages concernées'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'
@@ -900,6 +944,8 @@ event.schedule.columns.happening.title: Sous-événements
 event.schedule.columns.meeting.title: Rendez-vous
 event.schedule.columns.unavailability.title: Indisponibilités
 event.sheet.add_participant.title: 'Ajouter un participant'
+event.sheet.attend.cancel: 'A annulé sa venue'
+event.sheet.attend.present: Présent
 event.sheet.billing.title: Facturation
 event.sheet.block.add_participant.title: 'Remplir ce participant'
 event.sheet.block.buy_participant.option: Option
@@ -994,3 +1040,5 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
+admin.sheets_group.update.link: 'Modifier'
+admin.sheets_group.update: 'Modification de l''entité'

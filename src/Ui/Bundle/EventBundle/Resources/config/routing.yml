@@ -12,6 +12,11 @@ event_select_sheet:
     methods:  [GET]
     defaults: { _controller: EventBundle:MultipleSheets/Home:selectSheet }
 
+event_multiplesheets_request_list:
+    path: /multiplesheets/request/list
+    methods:  [GET]
+    defaults: { _controller: EventBundle:MultipleSheets/Request:list }
+
 #
 # Register
 #
@@ -289,6 +294,27 @@ event_sheet_group_unswitch:
     methods:  [GET]
     defaults: { _controller: EventBundle:Security:unswitchSheetGroupManager }
 
+event_sheet_group_participants_list:
+    path: /sheets-group/{sheetGroup}/participants/list
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Group/Participant:list }
+
+event_sheet_group_participant_update:
+    path: /sheets-group/{sheetGroup}/participants/update
+    requirements:
+        sheetGroup: \d+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Group/ParticipantUpdate:update }
+
+event_sheet_group_create_sheet:
+    path: /sheets-group/{sheetGroup}/sheet/create
+    requirements:
+        sheetGroup: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Group/Sheet:create }
+
 #
 # Sheets group meeting request management
 #
@@ -395,6 +421,14 @@ event_catalog_sheet_meeting_request:
         toSheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
+
+event_catalog_meeting_request_discussion:
+    path: /sheet/{sheet}/catalog/meeting-request/{meetingRequest}/discussion
+    requirements:
+        sheet: \d+
+        meetingRequest: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:MeetingRequest/Message:displayDiscussion }
 
 #
 # Meeting Request
@@ -645,3 +679,13 @@ event_unavailability_remove:
         unavailability: \d+
     methods: [DELETE]
     defaults: { _controller: EventBundle:Unavailability:remove }
+
+#
+# UserEventToken
+#
+event_user_event_token_confirm_agenda:
+    path: /confirm/agenda/{token}
+    requirements:
+        token: \w+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Token\UserEventToken:confirmAgenda }

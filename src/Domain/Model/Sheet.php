@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
  * "Fiche de participation".
@@ -139,6 +140,18 @@ class Sheet implements TraceableInterface
     private $group;
 
     /**
+     * The attendance of the sheet for the event (présence / Annule sa venue)
+     *
+     * @var bool
+     */
+    private $attend = true;
+
+    /**
+     * @var string|null
+     */
+    private $title = null;
+
+    /**
      * Sheet constructor.
      *
      * @param Event             $event
@@ -224,7 +237,7 @@ class Sheet implements TraceableInterface
      */
     public function getTraceableName()
     {
-        return 'sheet';
+        return TraceableName::SHEET_TRACEABLE_NAME;
     }
 
     /**
@@ -507,8 +520,9 @@ class Sheet implements TraceableInterface
      */
     public function hasUser(User $user)
     {
-        return $this->owner === $user || $this->participants->exists(function ($index, Participant $participant) use ($user) {
-            return $participant->getUser() === $user;
+        return $this->owner->getId() === $user->getId() || $this->participants->exists(function ($index, Participant $participant) use ($user) {
+            // To avoid __isInitialized__: false
+            return $participant->getUser()->getId() === $user->getId();
         });
     }
 
@@ -704,6 +718,18 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * Un-assign follower for the sheet
+     *
+     * @return Sheet
+     */
+    public function unAssign()
+    {
+        $this->follower = null;
+
+        return $this;
+    }
+
+    /**
      * Get participants users + the owner
      *
      * @return User[]
@@ -861,5 +887,71 @@ class Sheet implements TraceableInterface
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return $this
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Set Group to null
+     */
+    public function unassignFromGroup()
+    {
+        $this->group = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGroup()
+    {
+        return null !== $this->getGroup();
+    }
+
+    /**
+     * Cancel/Confirm the attendance of the sheet for the vent
+     *
+     * @param bool $attendance
+     */
+    public function setAttendance($attendance)
+    {
+        $this->attend = $attendance;
+    }
+
+    /**
+     * @return bool
+     */
+    public function attend()
+    {
+        return $this->attend;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string|null $title
+     *
+     * @return Sheet
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }

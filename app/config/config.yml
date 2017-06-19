@@ -111,7 +111,7 @@ sonata_intl:
 # Elastica
 fos_elastica:
     clients:
-        default: { host: "%elastic_host%", port: "%elastic_port%" }
+        default: { host: "%elastic_host%", port: "%elastic_port%", retryOnConflict: 2 }
     indexes:
         app:
             index_name: "app_%kernel.environment%"
@@ -229,6 +229,10 @@ fos_elastica:
                         hasScheduledMeeting:
                             type: boolean
                         hasInvoice:
+                            type: boolean
+                        attend:
+                            type: boolean
+                        hasGroup:
                             type: boolean
                         organizationCategory:
                             type: string
@@ -400,3 +404,9 @@ payum:
 sentry:
     dsn: "%sentry_dsn%"
     environment: "%kernel.environment%"
+
+coop_tilleuls_ovh:
+    endpoint_name:      "%ovh_endpoint_name%"
+    application_key:    "%ovh_application_key%"
+    application_secret: "%ovh_application_secret%"
+    consumer_key:       "%ovh_consumer_key%"

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -53,10 +55,11 @@ class AgendaController extends Controller
     }
 
     /**
-     * @param EventDomain $eventDomain
-     * @param Request     $request
-     * @param Participant $participant
-     * @param Sheet       $sheet
+     * @param EventDomain   $eventDomain
+     * @param Request       $request
+     * @param Participant   $participant
+     * @param Sheet         $sheet
+     * @param UserInterface $user
      *
      * @return Response
      */
@@ -64,7 +67,8 @@ class AgendaController extends Controller
         EventDomain $eventDomain,
         Request $request,
         Participant $participant,
-        Sheet $sheet
+        Sheet $sheet,
+        UserInterface $user
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -80,13 +84,21 @@ class AgendaController extends Controller
             $sheet,
             $participant,
             $request->getLocale(),
-            $this->getUser()
+            $user
         ));
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $participant->getSheet()->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_AGENDA,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
-            'event'  => $eventDomain->getEvent(),
-            'agenda' => $agenda,
-            'sheet'  => $sheet,
+            'event'               => $eventDomain->getEvent(),
+            'agenda'              => $agenda,
+            'sheet'               => $sheet,
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 }

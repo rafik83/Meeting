@@ -417,6 +417,14 @@ admin_agenda_meeting_request_transform_into_meeting_handler:
     methods: [POST]
     defaults: { _controller: AdminBundle:Agenda/Meeting:handleTransformRequestIntoMeeting }
 
+admin_agenda_sheet_redirect_to_update_attendance:
+    path: /event/{event}/agenda/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:redirectToCancelAttendance }
+
 #
 # Meeting
 #
@@ -531,13 +539,6 @@ admin_meeting_request_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:list }
-
-admin_transform_requests_to_meetings:
-    path: /event/{event}/meeting-request/transform-requests-to-meetings
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:MeetingRequest:transformRequestsToMeetings }
 
 admin_meeting_request_details:
     path: /event/{event}/meeting-request/{meetingRequest}/details
@@ -1326,21 +1327,98 @@ admin_order_export_file:
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
 
 #
+# Group (Entités multi-fiches)
+#
+admin_sheets_group_list:
+    path: /event/{event}/sheets-group/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:list }
+
+admin_sheets_group_pre_create:
+    path: /event/{event}/sheets-group/pre-create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:preCreate }
+
+admin_sheets_group_create:
+    path: /event/{event}/sheets-group/{user}/create
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:create }
+
+admin_sheets_group_update:
+    path: /event/{event}/sheets-group/{sheetGroup}/update
+    requirements:
+        event: \d+
+        sheetGroup: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SheetsGroup/Group:update }
+
+#
+# Sheet attendance
+#
+admin_sheet_attend:
+    path: /event/{event}/sheet/{sheet}/attend/form
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet/Attendance:cancelAttendance }
+
+#
 # Tip
 #
 admin_tip_list:
     path: /tip/list
     methods: [GET]
-    defaults: { _controller: AdminBundle:Tip:list }
+    defaults: { _controller: AdminBundle:Tip/Tip:list }
 
 admin_tip_create:
     path: /tip/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip:create }
+    defaults: { _controller: AdminBundle:Tip/Tip:create }
 
 admin_tip_update:
     path: /tip/{tip}/update
     requirements:
         tip: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip:update }
+    defaults: { _controller: AdminBundle:Tip/Tip:update }
+
+#
+# Tip on event
+#
+admin_tip_event_list:
+    path: /event/{event}/tip/list
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:list }
+
+admin_tip_event_affect:
+    path: /event/{event}/tip/affect
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:affect }
+
+admin_tip_event_remove:
+    path: /event/{event}/tip/{tip}/remove/
+    methods: [DELETE]
+    requirements:
+        event: \d+
+        tip: \d+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
+
+admin_tip_event_preview:
+    path: /tip/{tip}/preview/{locale}
+    methods: [GET]
+    requirements:
+        tip: \d+
+        locale: \w+
+    defaults: { _controller: AdminBundle:Tip/TipEvent:preview }

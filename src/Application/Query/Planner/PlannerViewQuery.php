@@ -38,7 +38,7 @@ class PlannerViewQuery
     public function __construct(
         Event $event,
         $locale,
-        $exportSolutionType = ExportSolutionType::SOLUTION_OPTIMIZE_MOVING
+        $exportSolutionType = ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED
     ) {
         $this->event              = $event;
         $this->locale             = $event->getAvailableLocale($locale);

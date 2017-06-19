@@ -12,10 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -44,19 +47,12 @@ class UnavailabilityController extends Controller
     public function createAction(Request $request, EventDomain $eventDomain, Participant $participant, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
+        $this->checkSheetHasParticipant($sheet, $participant);
 
         $event = $eventDomain->getEvent();
         $user  = $this->getUser();
-
-        if (!$sheet->hasParticipant($participant)) {
-            throw $this->createNotFoundException(sprintf(
-                'The given participant %s is not on the sheet %s',
-                $participant->getId(),
-                $sheet->getId()
-            ));
-        }
 
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
 
@@ -145,10 +141,19 @@ class UnavailabilityController extends Controller
                 new AgendaViewQuery($event, $sheet, $participant, $request->getLocale(), $user)
             );
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_AGENDA,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Unavailability:create.html.twig', [
             'event'               => $event,
             'agenda'              => $agenda,
-            'form_unavailability' => $form->createView()
+            'sheet'               => $sheet,
+            'form_unavailability' => $form->createView(),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 
@@ -168,14 +173,15 @@ class UnavailabilityController extends Controller
     ) {
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_REMOVE, $sheet);
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+        $this->checkSheetHasParticipant($sheet, $participant);
 
-        if (!$sheet->hasParticipant($participant)) {
-            throw $this->createNotFoundException('The participant given is not on the sheet');
+        try {
+            $this->get('tactician.commandbus')->handle(new Remove($unavailability));
+        } catch (CanNotDeleteUnavailabilityException $exception) {
+            $this->addFlash('error', 'flash.unavailability.remove.cancelAttendance.error');
         }
-
-        $this->get('tactician.commandbus')->handle(new Remove($unavailability));
 
         return $this->redirectToRoute(
             'event_agenda_participant',
@@ -212,5 +218,22 @@ class UnavailabilityController extends Controller
         return new FormError(
             $this->get('translator')->trans('validators.unavailability.participantsNotSelected', [], 'validators')
         );
+    }
+
+    /**
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     */
+    private function checkSheetHasParticipant(Sheet $sheet, Participant $participant)
+    {
+        if (!$sheet->hasParticipant($participant)) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The given participant %s is not on the sheet %s',
+                    $participant->getId(),
+                    $sheet->getId()
+                )
+            );
+        }
     }
 }

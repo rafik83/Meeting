@@ -18,7 +18,7 @@
   .agenda-horizontal {
     white-space: nowrap;
     overflow: scroll;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 105px);
 
     .agenda-panel {
       margin: 0 5px 0 5px;
@@ -95,6 +95,10 @@
 
     &.meeting-to-be-moved {
       background: greenyellow;
+    }
+
+    &.meeting-on-other-sheet {
+      background: orange;
     }
 
     .slot-label {
@@ -199,6 +203,11 @@
     .request-to-be-placed {
       background: greenyellow;
     }
+  }
+
+  .sheet-cancelled-attendance {
+    background: #999999;
+    color: #ffffff;
   }
 }
 

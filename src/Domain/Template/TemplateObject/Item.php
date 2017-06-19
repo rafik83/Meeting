@@ -72,6 +72,24 @@ class Item
     }
 
     /**
+     * Get title for the given locale
+     *
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getTitleLocalize($locale)
+    {
+        if ($this->collection->isTranslatable() || is_array($this->title)) {
+            return isset($this->title[$locale])
+                ? $this->title[$locale]
+                : null;
+        }
+
+        return $this->title;
+    }
+
+    /**
      * @return array|string
      */
     public function getRawTitle()

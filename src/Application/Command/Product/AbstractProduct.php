@@ -55,7 +55,7 @@ abstract class AbstractProduct
     public $buyableUntil;
 
     /**
-     * @var UploadedFile
+     * @var null|UploadedFile
      */
     public $file;
 

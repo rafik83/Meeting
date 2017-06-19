@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface UserRepositoryInterface
@@ -55,4 +57,40 @@ interface UserRepositoryInterface
      * @return PaginatedResult
      */
     public function paginate($page, $limit, Event $event, array $filter, $locale);
+
+    /**
+     * @param int[] $ids
+     *
+     * @return User[]
+     */
+    public function getByIdsIndexedById(array $ids);
+
+    /**
+     * @param Sheet[] $sheets
+     *
+     * @return User[]
+     */
+    public function getUsersParticipantOfSheets(array $sheets);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findByEventAndInCatalog(Event $event);
+
+    /**
+     * @param Event $event
+     * @param Mass  $mass
+     *
+     * @return User[]
+     */
+    public function findByEventWithoutDispatch(Event $event, Mass $mass);
 }

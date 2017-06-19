@@ -12,35 +12,37 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class AgendaParticipantViewQueryHandler
 {
-    /**
-     * @var DayRepositoryInterface
-     */
+    /** @var DayRepositoryInterface */
     private $dayRepository;
 
-    /**
-     * @var AgendaDayViewQueryHandler
-     */
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
+    /** @var AgendaDayViewQueryHandler */
     private $agendaDayViewQueryHandler;
-    /**
-     * @var ParticipantInfoGuesser
-     */
+
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
     /**
-     * @param DayRepositoryInterface    $dayRepository
-     * @param AgendaDayViewQueryHandler $agendaDayViewQueryHandler
-     * @param ParticipantInfoGuesser    $participantInfoGuesser
+     * @param DayRepositoryInterface     $dayRepository
+     * @param MeetingRepositoryInterface $meetingRepository
+     * @param AgendaDayViewQueryHandler  $agendaDayViewQueryHandler
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
+        MeetingRepositoryInterface $meetingRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->dayRepository             = $dayRepository;
+        $this->meetingRepository         = $meetingRepository;
         $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
         $this->participantInfoGuesser    = $participantInfoGuesser;
     }
@@ -53,6 +55,10 @@ class AgendaParticipantViewQueryHandler
     public function handle(AgendaParticipantViewQuery $query)
     {
         $eventDays = $this->dayRepository->findByEvent($query->event);
+
+        $meetingsOtherSheets = $this
+            ->meetingRepository
+            ->findByUserAndEventExceptSheet($query->participant->getUser(), $query->event, $query->sheet);
 
         $dayViews = [];
 
@@ -68,16 +74,20 @@ class AgendaParticipantViewQueryHandler
                     $query->unavailabilites,
                     $query->masses,
                     $query->meetings,
-                    $query->massAssignments
+                    $query->massAssignments,
+                    $meetingsOtherSheets
                 )
             );
         }
 
-        $fullname = $this->participantInfoGuesser->guessParticipantCompleteName($query->participant, $query->locale);
+        $completeName = $this->participantInfoGuesser->guessParticipantCompleteName(
+            $query->participant,
+            $query->locale
+        );
 
         return new AgendaParticipantView(
             $query->participant->getId(),
-            $fullname,
+            $completeName,
             $query->participant->getUser()->getEmail(),
             $dayViews
         );

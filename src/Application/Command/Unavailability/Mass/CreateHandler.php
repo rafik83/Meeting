@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 
@@ -20,12 +21,17 @@ class CreateHandler
      */
     private $massRepository;
 
+    /** @var JobQueueInterface */
+    private $jobQueueAdapter;
+
     /**
      * @param MassRepositoryInterface $massRepository
+     * @param JobQueueInterface       $jobQueueAdapter
      */
-    public function __construct(MassRepositoryInterface $massRepository)
+    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter)
     {
-        $this->massRepository = $massRepository;
+        $this->massRepository  = $massRepository;
+        $this->jobQueueAdapter = $jobQueueAdapter;
     }
 
     /**
@@ -49,5 +55,9 @@ class CreateHandler
         }
 
         $this->massRepository->create($mass);
+
+        if ($create->blocking === true) {
+            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($create->event);
+        }
     }
 }

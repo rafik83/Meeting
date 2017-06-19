@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * "Participant".
  */
@@ -53,11 +51,6 @@ class Participant implements MailRecipientInterface
     private $registrationComplete = false;
 
     /**
-     * @var ArrayCollection
-     */
-    private $happeningParticipations;
-
-    /**
      * @var bool
      */
     private $imported = false;
@@ -65,7 +58,20 @@ class Participant implements MailRecipientInterface
     /**
      * @var bool
      */
-    private $visio = false; 
+    private $visio = false;
+
+    /**
+     * The participant is assigned to accepted request
+     * @var bool
+     */
+    private $hasRequestAssigned = false;
+
+    /**
+     * The participant is unavailable or participate to happenings during all the slots of the event
+     *
+     * @var bool
+     */
+    private $isFullyUnavailable = false;
 
     /**
      * @param Sheet $sheet
@@ -79,7 +85,6 @@ class Participant implements MailRecipientInterface
         $this->user                    = $user;
         $this->data                    = $data;
         $this->active                  = $active;
-        $this->happeningParticipations = new ArrayCollection();
     }
 
     /**
@@ -220,14 +225,6 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getHappeningParticipations()
-    {
-        return $this->happeningParticipations;
-    }
-
-    /**
      * @return bool
      */
     public function isImported()
@@ -277,5 +274,37 @@ class Participant implements MailRecipientInterface
     public function getEmail()
     {
         return $this->user->getEmail();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRequestAssigned()
+    {
+        return $this->hasRequestAssigned;
+    }
+
+    /**
+     * @param bool $hasRequestAssigned
+     */
+    public function setHasRequestAssigned($hasRequestAssigned)
+    {
+        $this->hasRequestAssigned = $hasRequestAssigned;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFullyUnavailable()
+    {
+        return $this->isFullyUnavailable;
+    }
+
+    /**
+     * @param bool $isFullyUnavailable
+     */
+    public function setFullyUnavailable($isFullyUnavailable)
+    {
+        $this->isFullyUnavailable = $isFullyUnavailable;
     }
 }

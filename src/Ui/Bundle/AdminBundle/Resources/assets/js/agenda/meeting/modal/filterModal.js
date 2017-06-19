@@ -1,6 +1,5 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
-    options         = require('../../../vueComponents/options'),
-    SheetFilter     = require('./../../filters/_SheetsFilter');
+    options         = require('../../../vueComponents/options');
 
 module.exports = {
     template: '#filter-modal',
@@ -20,7 +19,8 @@ module.exports = {
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
                 hasAvailableSlots: false,
-                hasValidatedRequestNotScheduled: false
+                hasValidatedRequestNotScheduled: false,
+                hasParticipantUnavailableWithMeetingRequest: false
             },
             filters: {
                 selectedTypes: [],
@@ -30,7 +30,8 @@ module.exports = {
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
                 hasAvailableSlots: null,
-                hasValidatedRequestNotScheduled: null
+                hasValidatedRequestNotScheduled: null,
+                hasParticipantUnavailableWithMeetingRequest: false
             }
         }
     },
@@ -40,8 +41,7 @@ module.exports = {
         },
         save: function () {
             this.setUsedFilter();
-            this.filteredSheets = new SheetFilter(this.filters).filter(this.sheets);
-            this.$emit('refresh-list', this.filteredSheets);
+            this.$emit('filter-sheets', this.filters);
             this.$emit('close-modal');
         },
         reset: function () {
@@ -53,7 +53,8 @@ module.exports = {
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
                 hasAvailableSlots: null,
-                hasValidatedRequestNotScheduled: null
+                hasValidatedRequestNotScheduled: null,
+                hasParticipantUnavailableWithMeetingRequest: false
             };
             this.formFilters =  {
                 selectedTypes: [],
@@ -63,7 +64,8 @@ module.exports = {
                 hasSentMeetingRequest: null,
                 hasScheduledMeetings: null,
                 hasAvailableSlots: null,
-                hasValidatedRequestNotScheduled: null
+                hasValidatedRequestNotScheduled: null,
+                hasParticipantUnavailableWithMeetingRequest: false
             }
         },
         setUsedFilter: function() {

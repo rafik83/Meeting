@@ -272,6 +272,21 @@ services:
             - '%infrastructure.preferred_locales%'
         tags:
             - { name: form.type }
+
+    form_type_group.group_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group\GroupChoiceType
+        arguments:
+            - '@repository.sheet.group_repository'
+        tags:
+            - { name: form.type }
+
+    form_type.tip_event.tip_select_type:
+            class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\TipSelectType
+            arguments:
+                - '@router'
+            tags:
+                - { name: form.type }
+
     #
     # Helper
     #

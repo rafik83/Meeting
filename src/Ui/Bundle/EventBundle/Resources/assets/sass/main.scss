@@ -99,8 +99,20 @@
   margin-left: 20px;
 }
 
+.mg-left-8 {
+  margin-left: 8px;
+}
+
 .clearboth {
     clear: both;
+}
+
+.ft-size-18 {
+  font-size: 18px !important;
+}
+
+.ft-bold {
+  font-weight: bold !important;
 }
 
 .notification-not-read {
@@ -197,6 +209,10 @@
 
   &.success { background: $bg-success-color; }
   &.fail { background: $bg-fail-color; }
+  &.warning {
+    background: $bg-warning-color;
+    color: #333;
+  }
 }
 
 .white {
@@ -205,6 +221,10 @@
 
 .underline {
   text-decoration: underline;
+}
+
+.no-underline {
+  text-decoration: none !important;
 }
 
 .product-limite {
@@ -228,4 +248,20 @@
 
 .see-more-align {
   margin-bottom: 30px;
+}
+
+.user-availability-icon {
+  width: 3px;
+}
+
+.user-availability-icon-caption {
+  margin-right: 15px !important;
+}
+
+.user-available {
+  color: limegreen;
+}
+
+.user-not-available {
+  color: black;
 }

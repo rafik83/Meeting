@@ -131,7 +131,7 @@ class SheetDetailsViewFactory
             // Approved propositions
             $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
             // Pending propositions
-            $this->requestRepository->countPendingPropositionReceivedBySheet($sheet),
+            $this->requestRepository->countPendingPropositionReceivedBySheet($sheet, false),
             // Refused propositions
             $this->requestRepository->countRefusedPropositionReceivedBySheet($sheet),
             // Comments

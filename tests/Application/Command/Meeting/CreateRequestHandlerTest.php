@@ -46,12 +46,12 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime     = new DateTime;
 
         // Command
-        $createRequest = new CreateRequest($sheetFrom, $sheetTo, $user1);
+        $createRequest = new CreateRequest($event, $sheetFrom, $sheetTo, $user1);
         $createRequest->description = 'test';
         $createRequest->participants = [$participant1, $participant2];
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $dateTime, $user1);
+        $expectedRequest = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $dateTime, $user1, $event, false, true);
         $expectedMessage = new Message($expectedRequest, $sheetFrom, 'test', $dateTime);
 
         // Deps

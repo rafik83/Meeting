@@ -67,6 +67,12 @@ services:
             - '@adapter.session'
         tags:
             - { name: security.voter }
+    security_voter.catalog_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.catalog_access_checker'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -107,13 +113,6 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: form.type }
-    vimeet_app.form_type_participant.meeting_participant_choice_type:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\MeetingParticipantChoiceType
-        arguments:
-            - '@template.participant_info_guesser'
-            - '@vimeet_infrastructure.repository.participant_repository'
-        tags:
-            - { name: form.type }
     vimeet_app.form_type_participant.participant_entity_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantEntityType
         arguments:
@@ -127,12 +126,6 @@ services:
             - '@markdown'
         tags:
             - { name: 'form.type' }
-    vimeet_app.form_type_meeting.meeting_request_update_to_type:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType
-        arguments:
-            - '@template.participant_info_guesser'
-        tags:
-            - { name: form.type }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
         arguments:
@@ -157,6 +150,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
             - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: 'form.type' }
     form_type_sheet_data.media_collection_data_type:
@@ -165,6 +159,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
             - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: 'form.type' }
     form_type_library.telephone_type:
@@ -236,6 +231,23 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType
         arguments:
             - '@template.template_data_factory'
+        tags:
+            - { name: form.type }
+
+    form_type.group.sheet_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\SheetChoiceType
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@vimeet_infrastructure.application.components.sorted_sheet'
+        tags:
+            - { name: form.type }
+    form_type.multiple_sheet.request.filter_request_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request\FilterRequestType
+        arguments:
+             - '@vimeet_infrastructure.repository.sheet_repository'
+             - '@translator'
+             - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: form.type }
 
@@ -335,14 +347,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    event_listener.sheet_invoiced_event_listener:
-        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SheetInvoicedEventSubscriber
+    event_listener_aggregate.aggregate_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Aggregate\AggregateEventSubscriber
         arguments:
-            - '@components.invoice.invoice_url_view_query_handler'
-            - '@repository.billing_info_repository'
-            - '@adapter.mailer_adapter'
-            - '@event_sender'
-            - '@adapter.event_url_generator'
+            - '@domain.unavailability.participant_unavailable_aggregator'
+            - '@domain.request.participant_assigned_aggregator'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -405,6 +414,11 @@ services:
             - { name: security.voter }
         public: false
 
+    security_happening.participation_voter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter
+        tags:
+            - { name: security.voter }
+
     security.app.user_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
         arguments:
@@ -438,6 +452,25 @@ services:
             - '%domain%'
             - '%mailer_sender%'
 
+    user_to_group_manager_checker:
+        class: Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    domain.sheet_group.remove_sheet_from_group_checker:
+        class: Proximum\Vimeet\Domain\SheetGroup\RemoveSheetFromGroupChecker
+
+    domain.service.sheets_group.group_name_resolver:
+        class: Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    impersonating_user_checker:
+        class: Proximum\Vimeet\Application\Components\User\ImpersonatingUserChecker
+        arguments:
+            - '@adapter.authorization_checker'
 
     #
     # Validators

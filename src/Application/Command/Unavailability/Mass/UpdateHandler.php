@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 
 class UpdateHandler
@@ -19,12 +20,17 @@ class UpdateHandler
      */
     private $massRepository;
 
+    /** @var JobQueueInterface */
+    private $jobQueueAdapter;
+
     /**
      * @param MassRepositoryInterface $massRepository
+     * @param JobQueueInterface       $jobQueueAdapter
      */
-    public function __construct(MassRepositoryInterface $massRepository)
+    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter)
     {
         $this->massRepository = $massRepository;
+        $this->jobQueueAdapter = $jobQueueAdapter;
     }
 
     /**
@@ -32,6 +38,10 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        $oldBegin    = $update->mass->getBegin();
+        $oldEnd      = $update->mass->getEnd();
+        $oldBlocking = $update->mass->isBlocking();
+
         $update->mass->update(
             $update->category,
             $update->name,
@@ -47,5 +57,12 @@ class UpdateHandler
         }
 
         $this->massRepository->update($update->mass);
+
+        if ($oldBegin->format('Y/m/d H:i') !== $update->begin->format('Y/m/d H:i')
+            || $oldEnd->format('Y/m/d H:i') !== $update->end->format('Y/m/d H:i')
+            || $oldBlocking !== $update->blocking
+        ) {
+            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
+        }
     }
 }

@@ -10,15 +10,16 @@ _errors:
     resource: "@TwigBundle/Resources/config/routing/errors.xml"
     prefix:   /_error
 
+admin_login_user:
+    path:     /{_locale}/login/{admin}
+    host:     '%admin_domain%'
+    methods:  [GET]
+    defaults: { _controller: AdminBundle:Security:loginUser }
+
 event_login_user:
     path:     /{_locale}/login/{user}
     methods:  [GET]
     defaults: { _controller: EventBundle:Security:loginUser }
-
-admin_login_user:
-    path:     /admin/{_locale}/login/{admin}
-    methods:  [GET]
-    defaults: { _controller: AdminBundle:Security:loginUser }
 
 _main:
     resource: routing.yml

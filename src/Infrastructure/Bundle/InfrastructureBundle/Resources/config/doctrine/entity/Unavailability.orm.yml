@@ -15,7 +15,13 @@ Proximum\Vimeet\Domain\Model\Unavailability:
             type: string
             nullable: true
     manyToOne:
-        participant:
-            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
                 onDelete: CASCADE

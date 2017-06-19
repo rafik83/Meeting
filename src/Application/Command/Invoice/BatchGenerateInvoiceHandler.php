@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvoicedEvent;
 use Proximum\Vimeet\Application\View\Sheet\SheetInvoicedView;
@@ -39,21 +40,29 @@ class BatchGenerateInvoiceHandler
     private $datetime;
 
     /**
+     * @var JobQueueInterface
+     */
+    private $jobQueue;
+
+    /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param CreateHandler            $createHandler
      * @param EventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface       $datetime
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         CreateHandler $createHandler,
         EventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->createHandler   = $createHandler;
         $this->eventDispatcher = $eventDispatcher;
         $this->datetime        = $datetime;
+        $this->jobQueue        = $jobQueue;
     }
 
     /**
@@ -90,6 +99,9 @@ class BatchGenerateInvoiceHandler
         }
 
         if (!empty($sheetInvoicedViews)) {
+            // send emailing
+            $this->jobQueue->sendEmailing($batchGenerateInvoice->event, $batchGenerateInvoice->sheetIds, Events::SHEET_INVOICED, true);
+
             $this->eventDispatcher->dispatch(
                 Events::SHEET_INVOICED,
                 new SheetInvoicedEvent(

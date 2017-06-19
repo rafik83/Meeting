@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\ParticipantView;
@@ -38,6 +39,13 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Participant[]
+     */
+    public function findByEventAndInCatalog(Event $event);
 
     /**
      * @param Event  $event
@@ -95,7 +103,7 @@ interface ParticipantRepositoryInterface
      * @param Event $event
      * @param User  $user
      *
-     * @return array
+     * @return Participant[]
      */
     public function getAllParticipantForUser(Event $event, User $user);
 
@@ -120,14 +128,6 @@ interface ParticipantRepositoryInterface
      * @return array
      */
     public function getInactiveParticipantForSheet(Sheet $sheet);
-
-    /**
-     * @param Sheet   $sheet
-     * @param Meeting $meeting
-     *
-     * @return Participant[]
-     */
-    public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
 
     /**
      * @param Event $event
@@ -162,14 +162,6 @@ interface ParticipantRepositoryInterface
         Happening $exceptedHappening = null,
         $exceptAllUnavailabilities = false
     );
-
-    /**
-     * @param array   $participants
-     * @param Meeting $meeting
-     *
-     * @return Participant[]
-     */
-    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting);
 
     /**
      * @param array     $participants
@@ -235,4 +227,11 @@ interface ParticipantRepositoryInterface
      * @return int
      */
     public function countParticipantBySheet(Sheet $sheet);
+
+    /**
+     * @param Group $group
+     *
+     * @return Participant[]
+     */
+    public function findByGroup(Group $group);
 }

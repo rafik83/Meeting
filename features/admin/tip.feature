@@ -5,23 +5,22 @@
 
   Scenario: I can see the tip menu on admin navbar
     Given the database is purged
-    And the following fixtures files are loaded:
-      | Admin.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/Tip.yml |
-    And I am logged with "test@test.com" on admin
-    When I go to this page "/admin/fr/event"
+    And the tip "Awesome tip" is created for the event "Best of Web"
+    And I am logged as admin
+    When I go to this page "/fr/event"
     Then I should see "admin.tip.link"
 
   Scenario: I can see the tip list on admin
-    Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/tip/list"
-    And the response should contain "admin.tip.create.link"
-    And the response should contain "tip_sample"
-    And the response should contain "Français"
+    Given I am logged as admin
+    When I go to this page "/fr/tip/list"
+    Then I should see "admin.tip.list.title"
+    And I should see "Awesome tip"
+    And I should see "Best of Web"
+    And I should see "Français"
 
   Scenario: I can create a new tip
-    Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/tip/create"
+    Given I am logged as admin
+    And I go to this page "/fr/tip/create"
     And I should see "form.tip_create.children.title.label"
     And I should see "form.tip_create.children.onCatalog.label"
     And I should see "form.tip_create.children.translations.prototype.children.title.label"
@@ -43,8 +42,8 @@
     And I should see "flash.admin.tip.create.success"
 
   Scenario: I can update an existent tip
-    Given I am logged with "test@test.com" on admin
-    And I go to this page "/admin/fr/tip/1/update"
+    Given I am logged as admin
+    And I go to this page "/fr/tip/1/update"
     And I should see "form.tip_update.children.title.label"
     And I should see "form.tip_update.children.onCatalog.label"
     And I should see "form.tip_update.children.translations.prototype.children.title.label"

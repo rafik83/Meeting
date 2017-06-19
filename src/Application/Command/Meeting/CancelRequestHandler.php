@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToCancelMeetingRequestException;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -73,5 +74,15 @@ class CancelRequestHandler
             Events::MEETING_REQUEST_CANCELED,
             new CancelRequestEvent($request)
         );
+
+        if (!empty($request->getFromParticipantsArray()) || !empty($request->getToParticipantsArray())) {
+            $participants = array_merge($request->getFromParticipantsArray(), $request->getToParticipantsArray());
+
+            foreach ($participants as $participant) {
+                $this->eventDispatcher->dispatch(
+                    Events::REQUEST_UN_PARTICIPATE, new UnParticipateToRequestEvent($participant)
+                );
+            }
+        }
     }
 }

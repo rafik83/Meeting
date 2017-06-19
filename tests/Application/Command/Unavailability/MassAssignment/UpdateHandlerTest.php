@@ -12,6 +12,8 @@ namespace Application\Command\Unavailability\MassAssignment;
 
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Mass\Assignment\AssignmentUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -23,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
@@ -66,13 +69,30 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
         $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
-        $participant     = new Participant($this->sheet, $this->user, [], true);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant2 = $this->prophesize(Participant::class);
+        $user = $this->prophesize(User::class);
+        $participant1->getUser()->willReturn($user->reveal());
+        $participant2->getUser()->willReturn($user->reveal());
 
-        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+        $massAssignment = new MassAssignment($this->mass, $user->reveal(), $assignmentBegin, $assignmentEnd);
 
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository->getAllParticipantForUser($this->mass->getEvent(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant1->reveal(), $participant2->reveal()]);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant1->reveal())
+        )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant2->reveal())
+        )->shouldBeCalled();
 
         $massAssignmentRepository->set($massAssignment)->shouldBeCalled();
 
@@ -81,7 +101,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -91,22 +112,33 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
         $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
-        $participant     = new Participant($this->sheet, $this->user, [], true);
+        $participant = $this->prophesize(Participant::class);
+        $user = $this->prophesize(User::class);
+        $participant->getUser()->willReturn($user->reveal());
 
         $newBegin = new \DateTime('2016-01-01 13:00:00');
         $newEnd   = new \DateTime('2016-01-01 13:30:00');
 
-        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+        $massAssignment = new MassAssignment($this->mass, $user->reveal(), $assignmentBegin, $assignmentEnd);
 
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository->getAllParticipantForUser($this->mass->getEvent(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant->reveal()]);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant->reveal())
+        )->shouldBeCalled();
 
         $participantRepository->getAvailableParticipants(
-            [$participant],
+            [$participant->reveal()],
             $newBegin,
             $newEnd
-        )->shouldBeCalled()->willReturn([1,2,3,4]);
+        )->shouldBeCalled()->willReturn([$participant->reveal()]);
 
         $massAssignmentRepository->set($massAssignment)->shouldBeCalled();
 
@@ -117,7 +149,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -129,22 +162,33 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
         $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
-        $participant     = new Participant($this->sheet, $this->user, [], true);
+        $participant = $this->prophesize(Participant::class);
+        $user = $this->prophesize(User::class);
+        $participant->getUser()->willReturn($user->reveal());
 
         $newBegin = new \DateTime('2016-01-01 11:00:00');
         $newEnd   = new \DateTime('2016-01-01 15:30:00');
 
-        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+        $massAssignment = new MassAssignment($this->mass, $user->reveal(), $assignmentBegin, $assignmentEnd);
 
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository->getAllParticipantForUser($this->mass->getEvent(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant->reveal()]);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant->reveal())
+        )->shouldNotBeCalled();
 
         $participantRepository->getAvailableParticipants(
-            [$participant],
+            [$participant->reveal()],
             $newBegin,
             $newEnd
-        )->shouldBeCalled()->willReturn([1,2,3,4]); // hasMeetingOrHappening
+        )->shouldBeCalled()->willReturn([$participant]); // hasMeetingOrHappening
 
         $command          = new Update($massAssignment);
         $command->enabled = true;
@@ -153,7 +197,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -165,22 +210,33 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $assignmentBegin = new \DateTime('2016-01-01 12:15:00');
         $assignmentEnd   = new \DateTime('2016-01-01 12:45:00');
-        $participant     = new Participant($this->sheet, $this->user, [], true);
+        $participant = $this->prophesize(Participant::class);
+        $user = $this->prophesize(User::class);
+        $participant->getUser()->willReturn($user->reveal());
 
         $newBegin = new \DateTime('2016-01-01 11:00:00');
         $newEnd   = new \DateTime('2016-01-01 15:30:00');
 
-        $massAssignment = new MassAssignment($this->mass, $participant, $assignmentBegin, $assignmentEnd);
+        $massAssignment = new MassAssignment($this->mass, $user->reveal(), $assignmentBegin, $assignmentEnd);
 
         // Mock
         $massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
         $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
+        $eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository->getAllParticipantForUser($this->mass->getEvent(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant->reveal()]);
+
+        $eventDispatcher->dispatch(
+            Events::MASS_ASSIGNMENT_UPDATED,
+            new AssignmentUpdatedEvent($participant->reveal())
+        )->shouldNotBeCalled();
 
         $participantRepository->getAvailableParticipants(
-            [$participant],
+            [$participant->reveal()],
             $newBegin,
             $newEnd
-        )->shouldBeCalled();
+        )->shouldBeCalled()->willReturn([]);
 
         $command          = new Update($massAssignment);
         $command->enabled = true;
@@ -189,7 +245,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UpdateHandler(
             $massAssignmentRepository->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);

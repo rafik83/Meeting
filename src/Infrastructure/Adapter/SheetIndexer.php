@@ -34,6 +34,8 @@ class SheetIndexer implements SheetIndexerInterface
      */
     public function updateSheets(array $sheets)
     {
-        $this->persister->replaceMany($sheets);
+        if (!empty($sheets)) {
+            $this->persister->replaceMany($sheets);
+        }
     }
 }

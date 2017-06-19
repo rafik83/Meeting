@@ -124,6 +124,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetIds(Event $event, array $filters, $locale)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $query   = new Query($builder->getQuery());
+        $query->setFields(['id']);
+
+        return array_map(function (Result $sheet) {
+            return $sheet->id[0];
+        }, $this->searchable->search($query, ['limit' => 100000])->getResults());
+    }
 
     /**
      * {@inheritdoc}
@@ -198,7 +212,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
-        $boolQuery = new Query\Bool();
+        $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust($matchKeyword);
         $boolQuery->addMust($matchLocale);
 
@@ -343,7 +357,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     private function findCityQuery(Event $event, $filter)
     {
-        $matchCity = new Query\Bool();
+        $matchCity = new Query\BoolQuery();
         $matchCity->addMust(new Query\Match('event', $event->getId()));
         $matchCity->addMust(new Query\Match('city_autocomplete', $filter));
 
@@ -377,7 +391,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchCountry = new Query\Match('country.label_autocomplete', $filter);
         $matchLocale  = new Query\Match('country.locale', $locale);
 
-        $boolQuery = new Query\Bool();
+        $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
 

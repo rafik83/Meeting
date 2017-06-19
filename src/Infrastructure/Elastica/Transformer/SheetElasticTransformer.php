@@ -216,7 +216,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasMeetingRequest'            => $this->meetingRequestRepository->hasRequestSentBySheet($sheet),
                 'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
                 'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
-                'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet)
+                'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
+                'attend' => $sheet->attend(),
+                'hasGroup' => $sheet->hasGroup()
             ],
             $contentByLocale
         ));

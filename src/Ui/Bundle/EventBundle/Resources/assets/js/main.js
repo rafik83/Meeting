@@ -14,6 +14,7 @@ var $                     = require('jquery'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
     Agenda                = require('./components/agenda/_Agenda'),
     ShowMore              = require('./components/_ShowMore'),
+    ShowMoreParticipants  = require('./components/_ShowMoreParticipants'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
     Happening             = require('./components/_Happening'),
@@ -38,7 +39,8 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true',
+            minimumResultsForSearch: 5
         });
     });
 
@@ -161,6 +163,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) {
         new QuantitySelector(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.sheet-participants-list-users'), function (element) {
+        new ShowMoreParticipants(element);
     });
 
     [].forEach.call(target.querySelectorAll('.object--nomenclature, .object--collection.style--style-2, .object--collection.style--style-3'), function (element) {

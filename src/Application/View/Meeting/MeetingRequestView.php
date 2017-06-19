@@ -72,6 +72,12 @@ class MeetingRequestView
     /** @var bool */
     public $isAnsweringMeetingRequestClosed;
 
+    /** @var bool */
+    public $hasMessage;
+
+    /** @var bool */
+    public $isSeenByCurrentUser;
+
     /**
      * MeetingRequestView constructor.
      *
@@ -87,6 +93,8 @@ class MeetingRequestView
      * @param bool               $isSheetSeeable
      * @param bool               $isMeetingRequestClosed
      * @param bool               $isAnsweringMeetingRequestClosed
+     * @param bool               $hasMessage
+     * @param bool               $isSeenByCurrentUser
      */
     public function __construct(
         Sheet $sheet,
@@ -100,7 +108,9 @@ class MeetingRequestView
         $isMeetingRequestUpdateLocked = false,
         $isSheetSeeable = false,
         $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false
+        $isAnsweringMeetingRequestClosed = false,
+        $hasMessage = false,
+        $isSeenByCurrentUser = false
     ) {
         $this->sheet                           = $sheet;
         $this->sheetName                       = $sheetName;
@@ -114,6 +124,8 @@ class MeetingRequestView
         $this->isSheetSeeable                  = $isSheetSeeable;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
+        $this->hasMessage                      = $hasMessage;
+        $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
     }
 
     /**

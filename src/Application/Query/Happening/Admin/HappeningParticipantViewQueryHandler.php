@@ -10,17 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantView;
 use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 
 class HappeningParticipantViewQueryHandler
 {
@@ -30,38 +30,37 @@ class HappeningParticipantViewQueryHandler
     private $happeningRepository;
 
     /**
-     * @var ParticipantInfoGuesser
-     */
-    private $participantInfoGuesser;
-
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * @var QuestionRepositoryInterface
      */
     private $questionRepository;
+
+    /**
+     * @var GroupNameResolver
+     */
+    private $groupNameResolver;
+    /**
+     * @var SheetGuesser
+     */
+    private $sheetGuesser;
 
     /**
      * HappeningParticipantViewQueryHandler constructor.
      *
      * @param HappeningRepositoryInterface $happeningRepository
      * @param QuestionRepositoryInterface  $questionRepository
-     * @param ParticipantInfoGuesser       $participantInfoGuesser
-     * @param SheetInfoGuesser             $sheetInfoGuesser
+     * @param GroupNameResolver            $groupNameResolver
+     * @param SheetGuesser                 $sheetGuesser
      */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         QuestionRepositoryInterface $questionRepository,
-        ParticipantInfoGuesser $participantInfoGuesser,
-        SheetInfoGuesser $sheetInfoGuesser
+        GroupNameResolver $groupNameResolver,
+        SheetGuesser $sheetGuesser
     ) {
-        $this->happeningRepository    = $happeningRepository;
-        $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->questionRepository     = $questionRepository;
+        $this->happeningRepository = $happeningRepository;
+        $this->questionRepository  = $questionRepository;
+        $this->groupNameResolver   = $groupNameResolver;
+        $this->sheetGuesser        = $sheetGuesser;
     }
 
     /**
@@ -84,7 +83,8 @@ class HappeningParticipantViewQueryHandler
                 if (!$participation->isDisabled()) {
                     $happeningParticipantViews[] = $this->buildView(
                         $happening,
-                        $participation->getParticipant(),
+                        $participation->getUser(),
+                        $query->event,
                         $query->locale
                     );
                 }
@@ -99,23 +99,34 @@ class HappeningParticipantViewQueryHandler
     }
 
     /**
-     * @param Happening   $happening
-     * @param Participant $participant
-     * @param string      $locale
+     * @param Happening $happening
+     * @param User      $user
+     * @param Event     $event
+     * @param string    $locale
      *
      * @return HappeningParticipantView
      */
-    public function buildView(Happening $happening, Participant $participant, $locale)
+    public function buildView(Happening $happening, User $user, Event $event, $locale)
     {
-        $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
+        $question = null;
 
-        $firstname = $infos[Tag::PARTICIPANT_FIRSTNAME];
-        $lastname  = $infos[Tag::PARTICIPANT_LASTNAME];
-        $position  = $infos[Tag::PARTICIPANT_POSITION];
-        $sheetName = $this->sheetInfoGuesser->guessSheetTitle($participant->getSheet(), $locale);
+        try {
+            $sheetName = $this->groupNameResolver->resolve($event, $user);
+        } catch (\Exception $exception) {
+            $sheetName = '';
+        }
 
-        $question = $this->questionRepository->findByHappeningAndSheet($happening, $participant->getSheet());
-        $timezone = $participant->getSheet()->getEvent()->getTimeZone();
+        try {
+            $sheet = $this->sheetGuesser->getUserSheet($user, $event, $locale);
+        } catch (\Exception $exception) {
+            $sheet = null;
+        }
+
+        if ($sheet !== null) {
+            $question = $this->questionRepository->findByHappeningAndSheet($happening, $sheet);
+        }
+
+        $timezone = $event->getTimeZone();
 
         $happeningParticipantView = new HappeningParticipantView(
             $happening->getId(),
@@ -123,13 +134,13 @@ class HappeningParticipantViewQueryHandler
             HappeningDateHelper::getHour($happening->getEnd(), $locale, $timezone),
             HappeningDateHelper::getDay($happening->getBegin(), $locale, $timezone),
             $happening->getTitle($locale),
-            $participant->getSheet()->getId(),
-            $participant->getId(),
+            $sheet !== null ? $sheet->getId() : '',
+            $user->getId(),
             null !== $question ? $question->getContent() : '',
-            $participant->getUser()->getEmail(),
-            $firstname,
-            $lastname,
-            $position,
+            $user->getEmail(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getPosition(),
             $sheetName
         );
 

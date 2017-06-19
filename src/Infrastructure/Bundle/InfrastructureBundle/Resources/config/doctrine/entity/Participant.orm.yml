@@ -22,6 +22,14 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: boolean
             options:
                 default: false
+        hasRequestAssigned:
+            type: boolean
+            options:
+                default: false
+        isFullyUnavailable:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
@@ -32,7 +40,6 @@ Proximum\Vimeet\Domain\Model\Participant:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
-    oneToMany:
-        happeningParticipations:
-            targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
-            mappedBy: participant
+    uniqueConstraints:
+        unique_user_sheet_idx:
+            columns: [sheet_id, user_id]

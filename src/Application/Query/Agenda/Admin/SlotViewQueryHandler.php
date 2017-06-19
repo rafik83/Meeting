@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\EmptySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\HappeningUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassAssignmentUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassUnavailabilitySlotView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingOnOtherSheetView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\UnavailabilitySlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
@@ -69,13 +70,20 @@ class SlotViewQueryHandler
             $query->meetings,
             $query->unavailabilities,
             $query->masses,
-            $query->massAssignments
+            $query->massAssignments,
+            $query->meetingOtherSheets
         );
 
         $slotViews = [];
 
         foreach ($slots as $slot) {
-            $slotAvailabilityView = $this->slotAvailability->isAvailable($slot, $query->participant);
+            if (false === $query->sheet->attend()) {
+                $slotViews[] = new UnavailabilitySlotView($slot, SlotAvailability::UNAVAILABILITY);
+
+                continue;
+            }
+
+            $slotAvailabilityView = $this->slotAvailability->getSlotAvailability($slot, $query->participant);
 
             if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
                 $slotViews[] = new HappeningUnavailabilitySlotView($slot, $slotAvailabilityView->type);
@@ -104,6 +112,17 @@ class SlotViewQueryHandler
                 continue;
             }
 
+            if ($slotAvailabilityView->type === SlotAvailability::MEETING_ON_OTHER_SHEET) {
+                $slotViews[] = new MeetingOnOtherSheetView(
+                    $slot,
+                    $slotAvailabilityView->type,
+                    $this->sheetInfoGuesser->guessSheetTitle($slotAvailabilityView->otherSheet),
+                    $slotAvailabilityView->otherSheet->getId()
+                );
+
+                continue;
+            }
+
             if ($slotAvailabilityView->type === SlotAvailability::UNAVAILABILITY) {
                 $slotViews[] = new UnavailabilitySlotView($slot, $slotAvailabilityView->type);
 
@@ -120,6 +139,13 @@ class SlotViewQueryHandler
                 } else {
                     $slotViews[] = new MassUnavailabilitySlotView($slot, $slotAvailabilityView->type);
                 }
+
+                continue;
+            }
+
+            if ($slot->isLocked()) {
+                // Locked Slot is considered as a mass unvailability
+                $slotViews[] = new MassUnavailabilitySlotView($slot, SlotAvailability::MASS_UNAVAILABILITY);
 
                 continue;
             }

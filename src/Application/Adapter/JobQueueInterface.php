@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface JobQueueInterface
 {
@@ -24,6 +25,14 @@ interface JobQueueInterface
      * @param Campaign $campaign
      */
     public function sendCampaign(Campaign $campaign);
+
+    /**
+     * @param Event  $event
+     * @param Int[]  $sheetIds
+     * @param string $emailName
+     * @param bool   $sendEmailToTeam
+     */
+    public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false);
 
     /**
      * @param Type[] $types
@@ -34,11 +43,12 @@ interface JobQueueInterface
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
 
     /**
+     * @param Event $event
      * @param int[] $sheetIds
      * @param Admin $admin
      */
-    public function generateInvoice(array $sheetIds, Admin $admin);
-  
+    public function generateInvoice(Event $event, array $sheetIds, Admin $admin);
+
     /**
      * @param Event  $event
      * @param Admin  $admin
@@ -82,4 +92,26 @@ interface JobQueueInterface
      * @param Event $event
      */
     public function indexInCatalogSheetsByEvent(Event $event);
+
+    /**
+     * @param Int[] $sheetIds
+     */
+    public function indexSheets(array $sheetIds);
+
+    /**
+     * @param Event $event
+     * @param bool  $onlyInCatalog
+     */
+    public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false);
+
+    /**
+     * @param Event  $event
+     * @param User[] $users
+     */
+    public function aggregateUsersFullUnavailability(Event $event, array $users);
+
+    /**
+     * @param Event $event
+     */
+    public function aggregateParticipantAssignedToRequest(Event $event);
 }

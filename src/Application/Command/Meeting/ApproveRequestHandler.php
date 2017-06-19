@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -90,10 +91,12 @@ class ApproveRequestHandler
         foreach ($approveRequest->participants as $participant) {
             if (!$approveRequest->request->hasToParticipant($participant)) {
                 $approveRequest->request->addToParticipant($participant);
+
+                $this->eventDispatcher->dispatch(
+                    Events::REQUEST_PARTICIPATE, new ParticipateToRequestEvent($participant)
+                );
             }
         }
-
-        $this->requestRepository->set($approveRequest->request->approve($this->datetime));
 
         // Add message
         if ($approveRequest->description) {
@@ -103,7 +106,10 @@ class ApproveRequestHandler
                 $approveRequest->description,
                 $this->datetime
             ));
+            $approveRequest->request->setHasMessage(true);
         }
+
+        $this->requestRepository->set($approveRequest->request->approve($this->datetime));
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_REQUEST_APPROVED,

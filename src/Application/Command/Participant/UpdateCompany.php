@@ -26,7 +26,7 @@ class UpdateCompany extends AbstractUpdate
      * @param TemplateData     $templateData
      * @param Sheet            $sheet
      * @param Participant|null $participant
-     * @param array            $locale
+     * @param string           $locale
      * @param array            $data
      * @param User             $user
      */

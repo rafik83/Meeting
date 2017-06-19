@@ -179,6 +179,8 @@ form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Submit
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Submit
+form.planner_export.children.lockMeetingRequest.option.no: 'No'
+form.planner_export.children.lockMeetingRequest.option.yes: 'Yes'
 form.planning.add_with_participant: 'Add a meeting package with this participant'
 form.position_meeting.children.fromParticipants.label: Participants
 form.position_meeting.children.toParticipants.label: Participants
@@ -201,6 +203,8 @@ form.product_update_option.children.submit.label: Save
 form.product_update_option.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_participant.children.submit.label: Save
 form.product_update_participant.children.unitPrice.label: 'Unit price (excl. tax)'
+form.product_update_plan.children.availabilityCurrent.label: 'Current stock'
+form.product_update_plan.children.availabilityMax.label: 'Maximum stock'
 form.product_update_plan.children.features.label_add: 'Add included benefit'
 form.product_update_plan.children.features.label_delete: 'Delete option'
 form.product_update_plan.children.productIncluded.label_add: 'Add a product included in this formula'
@@ -274,6 +278,7 @@ form.update_admin.children.submit.label: Send
 form.update_block.children.data.label: 'Edit the information'
 form.update_block.children.submit.label: Send
 form.update_operator.children.submit.label: Send
+form.update_speaker.children.logo.label: 'Company logo'
 form.update_speaker.children.photo.label: 'Speaker picture'
 form.update_speaker.children.submit.label: Save
 form.update_transaction.children.mode.label: 'Mode of payment'

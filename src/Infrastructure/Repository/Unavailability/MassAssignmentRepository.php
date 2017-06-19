@@ -54,9 +54,9 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->select('assignment')
             ->from(MassAssignment::class, 'assignment')
             ->where('assignment.mass = :mass')
-            ->andWhere('assignment.participant = :participant')
+            ->andWhere('assignment.user = :user')
             ->setParameter('mass', $mass)
-            ->setParameter('participant', $participant)
+            ->setParameter('user', $participant->getUser())
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
@@ -70,10 +70,10 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, participant')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
-            ->join('assignment.participant', 'participant')
+            ->join('assignment.user', 'user')
             ->setParameter('event', $event)
         ;
 
@@ -88,10 +88,10 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, participant')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
             ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
-            ->join('assignment.participant', 'participant')
+            ->join('assignment.user', 'user')
             ->where('assignment.enabled = true')
             ->setParameter('event', $event)
         ;
@@ -112,14 +112,19 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
      */
     public function findBySheet(Sheet $sheet)
     {
+        $sheetUsers = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $sheet->getParticipants()->toArray());
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, participant')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
-            ->join('assignment.mass', 'mass')
-            ->setParameter('sheet', $sheet)
+            ->join('assignment.user', 'user', 'WITH', 'user IN (:sheetUsers)')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
+            ->setParameter('event', $sheet->getEvent())
+            ->setParameter('sheetUsers', $sheetUsers)
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -133,11 +138,13 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.participant', 'participant', 'WITH', 'participant.id = :participant')
+            ->join('assignment.user', 'user', 'WITH', 'user = :user')
             ->join('assignment.mass', 'mass')
-            ->setParameter('participant', $participant->getId());
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
+            ->setParameter('event', $participant->getSheet()->getEvent())
+            ->setParameter('user', $participant->getUser());
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -151,11 +158,12 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.participant', 'participant', 'WITH', 'participant.id = :participant')
-            ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
-            ->setParameter('participant', $participant->getId());
+            ->join('assignment.user', 'user', 'WITH', 'user = :user')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->setParameter('user', $participant->getUser())
+            ->setParameter('event', $participant->getSheet()->getEvent())
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -166,14 +174,27 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
      */
     public function findEnabledByParticipants(array $participants)
     {
+        $event = null;
+
+        $users = array_map(function (Participant $participant) {
+            return $participant->getUser();
+        }, $participants);
+
+        $firstParticipant = reset($participants);
+
+        if ($firstParticipant instanceof Participant) {
+            $event = $firstParticipant->getSheet()->getEvent();
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass')
+            ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
-            ->join('assignment.mass', 'mass', 'WITH', 'assignment.enabled = true')
-            ->setParameter('participants', $participants);
+            ->join('assignment.user', 'user', 'WITH', 'user IN (:users)')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->setParameter('event', $event)
+            ->setParameter('users', $users);
         ;
 
         return $queryBuilder->getQuery()->getResult();

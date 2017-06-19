@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -31,6 +33,36 @@ interface SheetRepositoryInterface
      * @param Sheet $sheet
      */
     public function set(Sheet $sheet);
+
+    /**
+     * @param int[] $ids
+     * @param bool  $state
+     */
+    public function updateInCatalogBySheetsId(array $ids, $state);
+
+    /**
+     * @param int[] $ids
+     * @param bool  $state
+     */
+    public function updateEnableStateBySheetsId(array $ids, $state);
+
+    /**
+     * @param int[]  $ids
+     * @param string $state
+     */
+    public function updateStateBySheetsId(array $ids, $state);
+
+    /**
+     * @param int[] $ids
+     * @param Admin $admin
+     */
+    public function batchAssignBySheetsId(array $ids, Admin $admin);
+
+    /**
+     * @param int[]  $ids
+     * @param string $state
+     */
+    public function updateValidationState(array $ids, $state);
 
     /**
      * @param Event $event
@@ -116,6 +148,14 @@ interface SheetRepositoryInterface
     public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event);
 
     /**
+     * @param User           $user
+     * @param EventInterface $event
+     *
+     * @return bool
+     */
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event);
+
+    /**
      * @param int $sheetId
      *
      * @return null|Sheet
@@ -138,12 +178,42 @@ interface SheetRepositoryInterface
     public function getSheetsByEventAndIds(Event $event, array $ids);
 
     /**
-     * @param Event   $event
-     * @param Sheet[] $sheets
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
      *
      * @return Sheet[]
      */
-    public function getSheetsMetBySheets(Event $event, array $sheets);
+    public function getSheetsMetBySheets(
+        Event $event,
+        array $sheets,
+        $state = null,
+        $type = null,
+        User $user = null
+    );
+
+    /**
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param int         $page
+     * @param int         $limit
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
+     *
+     * @return PaginatedResult
+     */
+    public function getSheetsMetBySheetsPaginated(
+        Event $event,
+        array $sheets,
+        $page,
+        $limit,
+        $state = null,
+        $type = null,
+        User $user = null
+    );
 
     /**
      * @param array $ids
@@ -151,7 +221,7 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getUnvalidatedSheetsById(array $ids);
-  
+
     /**
      * @param array $ids
      *
@@ -258,4 +328,33 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByTypes(array $types);
+
+    /**
+     * @param Int[] $ids
+     */
+    public function batchUnAssignBySheetsId(array $ids);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function isUserParticipantMultipleSheetsInEvent(User $user, Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     *
+     * @return Sheet|null
+     */
+    public function getSheetByEventAndTitle(Event $event, $title);
 }

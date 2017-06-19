@@ -26,6 +26,7 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
         $schedulePublishDate              = new \DateTime('2016-06-30 12:00:00');
         $closeMeetingRequestDate          = new \DateTime('2016-07-08 12:00:00');
         $closeAnsweringMeetingRequestDate = new \DateTime('2016-07-09 12:00:00');
+        $smsActivationDate                = new \DateTime('2016-06-09 12:00:00');
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setDates(
@@ -33,7 +34,8 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
             $happeningsOpenDate,
             $schedulePublishDate,
             $closeMeetingRequestDate,
-            $closeAnsweringMeetingRequestDate
+            $closeAnsweringMeetingRequestDate,
+            $smsActivationDate
         );
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
@@ -45,6 +47,7 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
         $command->schedulePublishDate              = $schedulePublishDate;
         $command->closeMeetingRequestDate          = $closeMeetingRequestDate;
         $command->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
+        $command->smsActivationDate                = $smsActivationDate;
 
         $handler = new ConfigureDatesHandler($eventRepository->reveal());
         $handler->handle($command);
@@ -64,7 +67,8 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             $schedulePublishDate,
             null,
-            $closeAnsweringMeetingRequestDate
+            $closeAnsweringMeetingRequestDate,
+            null
         );
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
@@ -76,6 +80,7 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
         $command->schedulePublishDate              = $schedulePublishDate;
         $command->closeMeetingRequestDate          = null;
         $command->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
+        $command->smsActivationDate                = null;
 
         $handler = new ConfigureDatesHandler($eventRepository->reveal());
         $handler->handle($command);

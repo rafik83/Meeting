@@ -37,7 +37,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom = new Sheet($event, $type, [], $user2, $dateTime);
 
         // Request to cancel
-        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event);
         $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
 
         // Dependencies
@@ -71,7 +71,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom = new Sheet($event, $type, [], $user2, $dateTime);
 
         // Request to cancel
-        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event);
         $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
 
         // Dependencies
@@ -103,7 +103,7 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom = new Sheet($event, $type, [], $user2, $dateTime);
 
         // Request to cancel
-        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event);
         $request->approve($dateTime);
         $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
 

@@ -65,9 +65,6 @@ class RefuseRequestHandler
      */
     public function handle(RefuseRequest $refuseRequest)
     {
-        // Refuse request
-        $this->requestRepository->set($refuseRequest->request->refuse($this->createdAt));
-
         // Add message
         if ($refuseRequest->message) {
             $this->messageRepository->add(new Message(
@@ -76,7 +73,11 @@ class RefuseRequestHandler
                 $refuseRequest->message,
                 $this->createdAt
             ));
+            $refuseRequest->request->setHasMessage(true);
         }
+
+        // Refuse request
+        $this->requestRepository->set($refuseRequest->request->refuse($this->createdAt));
 
         // Dispatch event
         $this->eventDispatcher->dispatch(

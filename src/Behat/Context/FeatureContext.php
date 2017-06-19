@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Behat\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,7 +29,11 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 {
     private $kernel;
 
+    /** @var string */
     private $baseUrl;
+
+    /** @var FeatureContextProxyInterface */
+    private $featureContextProxy;
 
     /**
      * Initializes context.
@@ -35,9 +41,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      * Every scenario gets its own context instance.
      * You can also pass arbitrary arguments to the
      * context constructor through behat.yml.
+     *
+     * @param FeatureContextProxyInterface $featureContextProxy
      */
-    public function __construct()
+    public function __construct(FeatureContextProxyInterface $featureContextProxy)
     {
+        $this->featureContextProxy = $featureContextProxy;
     }
 
     /**
@@ -542,7 +551,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function iAmLoggedAsAdminWithGivenEmail($email)
     {
-        $this->setBaseUrl('http://vimeet.proximum.dev');
+        $this->setBaseUrl('http://admin.vimeet.proximum.dev');
         $driver = $this->getSession()->getDriver();
         if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
@@ -587,7 +596,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             'Lastname',
             'ROLE_SUPER_ADMIN',
             new \DateTime()
-        );
+        ); // password: vimeet_admin
         $adminRepository->add($admin);
 
         return $this->iAmLoggedAsAdminWithGivenEmail($email);
@@ -601,8 +610,19 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function goToThisPage($page)
     {
-        parent::visit($this->baseUrl . $page);
+        $this->visit($this->baseUrl . $page);
         $this->assertResponseStatus(200);
+    }
+
+    /**
+     * Page returns 404
+     *
+     * @Then /^this page "(?P<page>[^"]+)" returns 404$/
+     */
+    public function pageReturns404($page)
+    {
+        $this->visit($this->baseUrl . $page);
+        $this->assertResponseStatus(404);
     }
 
     /**
@@ -612,7 +632,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function shouldBeOnThisPage($page)
     {
-        parent::assertPageAddress($this->baseUrl . $page);
+        $this->assertPageAddress($this->baseUrl . $page);
         $this->assertResponseStatus(200);
     }
 
@@ -643,5 +663,23 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     private function setBaseUrl($url)
     {
         $this->baseUrl = $url . '/app_test.php';
+    }
+
+    /**
+     * This step help to debug tests
+     *
+     * @Given I am on the homepage of this event
+     */
+    public function iAmOnHomePageOfThisEvent()
+    {
+        /** @var Event|null $event */
+        $event = $this->featureContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->setBaseUrl(sprintf('http://%s', $event->getDomain()));
+        $this->goToThisPage('/');
     }
 }

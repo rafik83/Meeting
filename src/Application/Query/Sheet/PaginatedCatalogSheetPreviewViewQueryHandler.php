@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -26,6 +28,11 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      * @var SheetRepositoryInterface
      */
     private $sheetRepository;
+
+    /**
+     * @var ViewedSheetListViewQueryHandler
+     */
+    private $viewedSheetListViewQueryHandler;
 
     /**
      * @var SheetSearchAdapterInterface
@@ -52,6 +59,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler       $viewedSheetListViewQueryHandler
      * @param TemplateDataFactory                  $templateDataFactory
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
@@ -60,6 +68,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
+        ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
@@ -67,6 +76,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->sheetRepository                      = $sheetRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
+        $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
         $this->templateDataFactory                  = $templateDataFactory;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
@@ -91,12 +101,15 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
+        $seenSheetIndexed         = $this->viewedSheetListViewQueryHandler->handle(
+            new ViewedSheetListViewQuery($query->user, $paginatedResult->results)
+        );
 
         $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         $paginatedResult->results = array_map(
-            function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed) {
+            function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed, $seenSheetIndexed) {
                 return $this
                     ->sheetPreviewViewQueryHandler
                     ->handle(
@@ -106,7 +119,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $query->locale,
                             $query->viewer,
                             $isMeetingRequestClosed,
-                            $isAnsweringMeetingRequestClosed
+                            $isAnsweringMeetingRequestClosed,
+                            isset($seenSheetIndexed[$sheet->getId()])
                         )
                     );
             },

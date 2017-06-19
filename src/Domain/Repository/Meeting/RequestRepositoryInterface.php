@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository\Meeting;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -124,13 +125,42 @@ interface RequestRepositoryInterface
     public function getRequestBetweenSheets(Sheet $one, Sheet $another);
 
     /**
-     * @param Event   $event
-     * @param Sheet[] $sheets
-     * @param Sheet[] $sheetsMet
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param Sheet[]     $sheetsMet
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
      *
      * @return Request[]
      */
-    public function getRequestsOfSheetsWithSheets(Event $event, array $sheets, array $sheetsMet);
+    public function getRequestsOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    );
+
+    /**
+     * @param Event       $event
+     * @param Sheet[]     $sheets
+     * @param Sheet[]     $sheetsMet
+     * @param string|null $state
+     * @param string|null $type
+     * @param User|null   $user
+     *
+     * @return int
+     */
+    public function countRequestOfSheetsWithSheets(
+        Event $event,
+        array $sheets,
+        array $sheetsMet,
+        $state = null,
+        $type = null,
+        User $user = null
+    );
 
     /**
      * @param Event $event
@@ -185,10 +215,11 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     * @param bool  $attending
      *
      * @return int
      */
-    public function countPendingPropositionReceivedBySheet(Sheet $sheet);
+    public function countPendingPropositionReceivedBySheet(Sheet $sheet, $attending = true);
 
     /**
      * @param Sheet $sheet
@@ -237,4 +268,18 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function findAccepted(Sheet $sheet);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function participantIsAssignedToAccepted(Participant $participant);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasAssignedRequestByParticipant(Participant $participant);
 }

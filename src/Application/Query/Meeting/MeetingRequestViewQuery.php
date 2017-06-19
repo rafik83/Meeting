@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class MeetingRequestViewQuery
 {
@@ -24,6 +25,11 @@ class MeetingRequestViewQuery
      * @var Sheet
      */
     public $sheet;
+
+    /**
+     * @var User
+     */
+    public $user;
 
     /**
      * @var string
@@ -46,32 +52,41 @@ class MeetingRequestViewQuery
     /** @var bool */
     public $isAnsweringMeetingRequestClosed;
 
+    /** @var bool */
+    public $isSeenByUser;
+
     /**
      * MeetingRequestViewQuery constructor.
      *
      * @param MeetingRequest $meetingRequest
      * @param Sheet          $sheet
+     * @param User           $user
      * @param string         $locale
      * @param bool           $isMeetingPublished
      * @param bool           $isMeetingRequestUpdateLocked
      * @param bool           $isMeetingRequestClosed
      * @param bool           $isAnsweringMeetingRequestClosed
+     * @param bool           $isSeenByUser
      */
     public function __construct(
         MeetingRequest $meetingRequest,
         Sheet $sheet,
+        User $user,
         $locale,
         $isMeetingPublished,
         $isMeetingRequestUpdateLocked,
         $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false
+        $isAnsweringMeetingRequestClosed = false,
+        $isSeenByUser = false
     ) {
         $this->meetingRequest                  = $meetingRequest;
         $this->locale                          = $locale;
         $this->sheet                           = $sheet;
+        $this->user                            = $user;
         $this->isMeetingPublished              = $isMeetingPublished;
         $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
+        $this->isSeenByUser                    = $isSeenByUser;
     }
 }

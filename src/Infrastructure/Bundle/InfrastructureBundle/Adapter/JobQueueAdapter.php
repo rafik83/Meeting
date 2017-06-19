@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
-use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -20,32 +19,23 @@ use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand;
 
-class JobQueueAdapter implements JobQueueInterface
+class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterface
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * JobQueueAdapter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -83,9 +73,10 @@ class JobQueueAdapter implements JobQueueInterface
     /**
      * {@inheritdoc}
      */
-    public function generateInvoice(array $sheetIds, Admin $admin)
+    public function generateInvoice(Event $event, array $sheetIds, Admin $admin)
     {
         $job = new Job(GenerateInvoiceCommand::NAME, [
+            'eventId'  => $event->getId(),
             'adminId'  => $admin->getId(),
             'sheetIds' => implode(',', $sheetIds),
         ]);
@@ -128,7 +119,7 @@ class JobQueueAdapter implements JobQueueInterface
             $file->getId(),
             $event->getId(),
             $admin->getEmail(),
-            $locale
+            $locale,
         ]);
 
         $this->setJob($job);
@@ -171,11 +162,71 @@ class JobQueueAdapter implements JobQueueInterface
     }
 
     /**
-     * @param Job $job
+     * {@inheritdoc}
      */
-    private function setJob(Job $job)
+    public function indexSheets(array $sheetIds)
     {
-        $this->entityManager->persist($job);
-        $this->entityManager->flush($job);
+        $job = new Job(
+            IndexSheetsCommand::NAME,
+            [implode(',', $sheetIds)],
+            true,
+            Job::DEFAULT_QUEUE,
+            Job::PRIORITY_HIGH
+        );
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false)
+    {
+        $job = new Job(UsersFullUnavailabilityByEventAggregateCommand::NAME, [
+            $event->getId(),
+            $onlyInCatalog
+        ]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateUsersFullUnavailability(Event $event, array $users)
+    {
+        if (!empty($users)) {
+            $job = new Job(UsersFullUnavailabilityAggregateCommand::NAME, [
+                $event->getId(),
+                implode(',', array_map(function (User $user) {
+                    return $user->getId();
+                }, $users))
+            ]);
+            $this->setJob($job);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateParticipantAssignedToRequest(Event $event)
+    {
+        $job = new Job(ParticipantAssignedToRequestAggregateCommand::NAME, [$event->getId()]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false)
+    {
+        $job = new Job(
+            SendEmailingCommand::NAME,
+            [
+                $event->getId(),
+                $emailName,
+                implode(',', $sheetIds),
+                $sendEmailToTeam ? SendEmailingCommand::BOOL_YES : SendEmailingCommand::BOOL_NO,
+            ]
+        );
+        $this->setJob($job);
     }
 }

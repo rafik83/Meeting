@@ -14,16 +14,16 @@ Feature: Handle Update Product
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | Admins.yml                                                               |
     Given I am logged with "test2@test.com" on admin
-    And I go to this page "/admin/fr/event"
-    When I go to this page "/admin/fr/event/1/product/4/update/planning"
+    And I go to this page "/fr/event"
+    When I go to this page "/fr/event/1/product/4/update/planning"
     Then I should see "form.product_update_planning.children.name.label"
     And I fill in the following:
       | form.product_update_planning.children.name.label    | PlanningTitleModify |
     And I press "product_update_planning_submit"
-    Then I should be on this page "/admin/fr/event/1/product"
+    Then I should be on this page "/fr/event/1/product"
     And I should see "admin.product.update.success"
 
   Scenario: I see my updated product
     Given I am logged with "test2@test.com" on admin
-    When I go to this page "/admin/fr/event/1/product/4/update/planning"
+    When I go to this page "/fr/event/1/product/4/update/planning"
     Then the "form.product_update_planning.children.name.label" field should contain "PlanningTitleModify"

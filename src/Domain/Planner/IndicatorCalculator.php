@@ -95,7 +95,12 @@ class IndicatorCalculator
 
         $meetingRequestsCount = $this
             ->requestRepository
-            ->countSheetState($sheet, ['state' => Request::STATE_APPROVED, 'disabled' => false]);
+            ->countSheetState($sheet, [
+                'state'           => Request::STATE_APPROVED,
+                'disabled'        => false,
+                'isFromAttending' => true,
+                'isToAttending'   => true,
+            ]);
 
         if ($this->slotsUsable === null) {
             $slotUsables = [];
@@ -109,12 +114,18 @@ class IndicatorCalculator
             $this->slotsUsable = $slotUsables;
         }
 
+        $massUnavaibilitiesCount = 0;
+
         foreach ($sheet->getParticipants()->toArray() as $participant) {
             foreach ($this->slotsUsable as $slotUsable) {
                 $slotAvailability = $this->slotAvailability->getSlotAvailability($slotUsable, $participant);
 
                 if (!$slotAvailability->isAvailable() && !$slotAvailability->isMeeting()) {
                     $unavailabilities[] = $slotUsable;
+                }
+
+                if ($slotAvailability->isMassUnavaibility()) {
+                    $massUnavaibilitiesCount ++;
                 }
             }
         }
@@ -127,7 +138,8 @@ class IndicatorCalculator
             $unavailabilitiesCount,
             $planningQuantity,
             $meetingRequestsCount,
-            $pendingPropositionCount
+            $pendingPropositionCount,
+            $massUnavaibilitiesCount
         );
     }
 }

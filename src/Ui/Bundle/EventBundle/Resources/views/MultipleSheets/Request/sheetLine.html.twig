@@ -1,0 +1,48 @@
+<tr class="catalog__sheet">
+    <td rowspan="{{ sheetView.numberOfRequest }}">
+        {{ sheetView.sheetTitle }}
+    </td>
+
+    {% for requestView in sheetView.requestViews %}
+        <td>
+            <div class="buttons-zone">
+                {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
+                    'allowedToCreate': false,
+                    'meetingRequest': requestView.request,
+                    'viewed': sheetView.sheet,
+                    'viewer': requestView.sheetMet,
+                    'isMeetingPublished': requestView.planned,
+                    'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                    'isMeetingRequestClosed': isMeetingRequestClosed,
+                    'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
+                }) }}
+            </div>
+        </td>
+        <td class="text-center">
+            {% if requestView.isProposition %}
+                <i class="icon-Suivant"></i>
+            {% else %}
+                <i class="icon-Retour"></i>
+            {% endif %}
+        </td>
+        <td>
+            {{ requestView.sheetMetTitle }}
+        </td>
+
+        <td class="participants-list">
+            {% if requestView.participantViews is not empty %}
+                <ul>
+                    {% for participantView in requestView.participantViews %}
+                        <li>{{ participantView.completeName }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ 'multiple_sheets.request.list.no-preference'|trans }}
+            {% endif %}
+        </td>
+
+        {% if not loop.last %}
+            </tr><tr class="catalog__sheet">
+        {% endif %}
+    {% endfor %}
+</tr>

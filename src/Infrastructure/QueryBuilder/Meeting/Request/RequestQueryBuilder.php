@@ -132,4 +132,24 @@ class RequestQueryBuilder extends QueryBuilder
 
         return $this;
     }
+
+    /**
+     * @return RequestQueryBuilder
+     */
+    public function isToAttending()
+    {
+         $this->join('request.to', 'to', 'WITH', 'to.attend = true');
+
+         return $this;
+    }
+
+    /**
+     * @return RequestQueryBuilder
+     */
+    public function isFromAttending()
+    {
+        $this->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
+
+        return $this;
+    }
 }

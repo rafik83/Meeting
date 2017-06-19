@@ -31,13 +31,46 @@ class SheetContext implements Context
      */
     public function thereIsASheet()
     {
+        $this->thereIsASheetWithTheTitle(null);
+    }
+
+    /**
+     * @Given /^there is a sheet with the title "(?P<title>[^"]+)"$/
+     *
+     * @param string|null $title
+     */
+    public function thereIsASheetWithTheTitle($title)
+    {
         $event = $this->sheetContextProxy->getStorage()->get('event');
 
         if (null === $event) {
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $sheet = $this->sheetContextProxy->getSheetManager()->create($event);
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @Given /^there is a sheet in this group with the title "(?P<title>[^"]+)"$/
+     *
+     * @param string|null $title
+     */
+    public function thereIsASheetInThisGroup($title)
+    {
+        $event = $this->sheetContextProxy->getStorage()->get('event');
+        $group = $this->sheetContextProxy->getStorage()->get('group');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        if (null === $group) {
+            throw new \InvalidArgumentException('Missing Group');
+        }
+
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title, $group);
+
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 }

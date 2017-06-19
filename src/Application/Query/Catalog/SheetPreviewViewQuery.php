@@ -41,6 +41,9 @@ class SheetPreviewViewQuery
     /** @var bool */
     public $isAnsweringMeetingRequestClosed;
 
+    /** @var bool */
+    public $isSeenByCurrentUser;
+
     /**
      * @param Event  $event
      * @param Sheet  $sheet
@@ -48,6 +51,7 @@ class SheetPreviewViewQuery
      * @param Sheet  $viewer
      * @param bool   $isMeetingRequestClosed
      * @param bool   $isAnsweringMeetingRequestClosed
+     * @param bool   $isSeenByCurrentUser
      */
     public function __construct(
         Event $event,
@@ -55,7 +59,8 @@ class SheetPreviewViewQuery
         $locale,
         Sheet $viewer,
         $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false
+        $isAnsweringMeetingRequestClosed = false,
+        $isSeenByCurrentUser = false
     ) {
         $this->event                           = $event;
         $this->sheet                           = $sheet;
@@ -63,5 +68,6 @@ class SheetPreviewViewQuery
         $this->viewer                          = $viewer;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
+        $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
     }
 }

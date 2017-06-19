@@ -88,4 +88,27 @@ class MeetingContext implements Context
         );
         $this->meetingContextProxy->getStorage()->set('meeting', $meeting);
     }
+
+    /**
+     * @Given /^there is a meeting between "(?P<sheetTitle>[^"]+)" and "(?P<otherSheetTitle>[^"]+)" on spot "(?P<spotReference>[^"]+)"$/
+     *
+     * @param string $sheetTitle
+     * @param string $otherSheetTitle
+     * @param string $spotReference
+     */
+    public function thereIsAMeetingBetweenSheetAndSheetOnSpot($sheetTitle, $otherSheetTitle, $spotReference)
+    {
+        /** @var Participant|null $participant */
+        $event = $this->meetingContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing event');
+        }
+
+        $meeting = $this->meetingContextProxy
+            ->getMeetingManager()
+            ->createMeetingForSheetsAndSpot($event, $sheetTitle, $otherSheetTitle, $spotReference);
+
+        $this->meetingContextProxy->getStorage()->set('meeting', $meeting);
+    }
 }

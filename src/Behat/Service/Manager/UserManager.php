@@ -28,13 +28,16 @@ class UserManager
     }
 
     /**
-     * @param null $email
+     * @param string|null $email
      *
      * @return User
      */
     public function create($email = null)
     {
-        $email = sprintf('%s@example.net', uniqid());
+        if ($email === null) {
+            $email = sprintf('%s@example.net', uniqid());
+        }
+
         $user  = UserFactory::create($email);
 
         $this->userRepository->add($user);

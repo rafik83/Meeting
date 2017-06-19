@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
@@ -18,6 +18,9 @@ class TipTranslationViewQueryHandler
     const CONTEXT_CATALOG            = 'event_catalog_index';
     const CONTEXT_MEETING_MANAGEMENT = 'event_meeting_list_request';
     const CONTEXT_PRINT_PLANNING     = 'print_planning';
+    const CONTEXT_SHEET              = 'onSheet';
+    const CONTEXT_AGENDA             = 'onAgenda';
+    const CONTEXT_PROGRAM            = 'onProgram';
 
     /**
      * keys are context, value are table fields
@@ -28,6 +31,9 @@ class TipTranslationViewQueryHandler
         self::CONTEXT_CATALOG            => 'onCatalog',
         self::CONTEXT_MEETING_MANAGEMENT => 'onMeetingManagement',
         self::CONTEXT_PRINT_PLANNING     => 'onPrintPlanning',
+        self::CONTEXT_SHEET              => 'onSheet',
+        self::CONTEXT_AGENDA             => 'onAgenda',
+        self::CONTEXT_PROGRAM            => 'onProgram',
     ];
 
     /** @var TipRepositoryInterface */
@@ -54,7 +60,12 @@ class TipTranslationViewQueryHandler
             return null;
         }
 
-        $tipTranslationViews = $this->tipRepository->getByContext(self::$contextsMapping[$query->context], $query->locale);
+        $tipTranslationViews = $this->tipRepository->getByContextAndEventAndType(
+            $query->event,
+            $query->type,
+            self::$contextsMapping[$query->context],
+            $query->locale
+        );
 
         $tipTranslationListView = [];
 

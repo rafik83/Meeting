@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Order\AddRowToProduct:
+    properties:
+        label:
+            - NotBlank: ~
+        price:
+            - NotNull: ~
+            - Type:
+                type: float
+        quantity:
+            - NotNull: ~
+            - Type:
+                type: integer

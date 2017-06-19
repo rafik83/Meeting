@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
@@ -26,12 +27,13 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class SlotAvailability
 {
-    const HAPPENING_UNAVAILABILITY       = 'happening_unavailability';
-    const UNAVAILABILITY                 = 'unavailability';
-    const MEETING_UNAVAILABILITY         = 'meeting_unavailability';
-    const MASS_UNAVAILABILITY            = 'mass_unavailability';
-    const SLOT_AVAILABLE                 = 'slot_available';
-    const MASS_ASSIGNMENT_UNAVAILABILITY = 'mass_assignment_unavailability';
+    const HAPPENING_UNAVAILABILITY          = 'happening_unavailability';
+    const UNAVAILABILITY                    = 'unavailability';
+    const MEETING_UNAVAILABILITY            = 'meeting_unavailability';
+    const MASS_UNAVAILABILITY               = 'mass_unavailability';
+    const SLOT_AVAILABLE                    = 'slot_available';
+    const MASS_ASSIGNMENT_UNAVAILABILITY    = 'mass_assignment_unavailability';
+    const MEETING_ON_OTHER_SHEET            = 'meeting_on_other_sheet';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -84,6 +86,11 @@ class SlotAvailability
     private $massAssignment = null;
 
     /**
+     * @var Meeting[]
+     */
+    private $meetingOtherSheets = null;
+
+    /**
      * Array of happeningParticipation [participantId][1 => happeningParticipation, 2 => happeningParticipation]
      * @var array
      */
@@ -96,16 +103,16 @@ class SlotAvailability
     private $meetingsSortByParticipant = [];
 
     /**
-     * Array of unavailability [participantId][1 => unavailability, 2 => unavailability]
+     * Array of unavailability [userId][1 => unavailability, 2 => unavailability]
      * @var array
      */
-    private $unavailabilitySortByParticipant = [];
+    private $unavailabilitySortByUser = [];
 
     /**
-     * Array of mass assignment [participantId][1 => assignment, 2 => assignment]
+     * Array of mass assignment [UserId][1 => assignment, 2 => assignment]
      * @var array
      */
-    private $massAssignmentSortByParticipant = [];
+    private $massAssignmentSortByUser = [];
 
     /**
      * SlotAvailability constructor.
@@ -136,23 +143,27 @@ class SlotAvailability
      * @param Unavailability[]         $unavailability
      * @param Mass[]                   $massUnavailability
      * @param MassAssignment[]         $massAssignments
+     * @param Meeting[]                $meetingOtherSheets
      */
     public function preload(
         array $happenings = [],
         array $meetings = [],
         array $unavailability = [],
         array $massUnavailability = [],
-        array $massAssignments = []
-    ) {
+        array $massAssignments = [],
+        array $meetingOtherSheets = []
+    )
+    {
         $this->happenings         = $happenings;
         $this->meetings           = $meetings;
         $this->unavailability     = $unavailability;
         $this->massUnavailability = $massUnavailability;
+        $this->meetingOtherSheets = $meetingOtherSheets;
 
         $this->assignMeetingSortByParticipant($meetings);
         $this->assignHappeningSortByParticipant($happenings);
-        $this->assignUnavailabilitySortByParticipant($unavailability);
-        $this->assingMassAssignmentSortByParticipant($massAssignments);
+        $this->assignUnavailabilitySortByUser($unavailability);
+        $this->assignMassAssignmentSortByUser($massAssignments);
     }
 
     /**
@@ -173,27 +184,27 @@ class SlotAvailability
     private function assignHappeningSortByParticipant(array $happenings)
     {
         foreach ($happenings as $happening) {
-            $this->happeningsSortByParticipant[$happening->getParticipant()->getId()][] = $happening;
+            $this->happeningsSortByParticipant[$happening->getUser()->getId()][] = $happening;
         }
     }
 
     /**
      * @param Unavailability[] $unavailabilities
      */
-    private function assignUnavailabilitySortByParticipant(array $unavailabilities)
+    private function assignUnavailabilitySortByUser(array $unavailabilities)
     {
         foreach ($unavailabilities as $unavailability) {
-            $this->unavailabilitySortByParticipant[$unavailability->getParticipant()->getId()][] = $unavailability;
+            $this->unavailabilitySortByUser[$unavailability->getUser()->getId()][] = $unavailability;
         }
     }
 
     /**
      * @param MassAssignment[] $massAssignments
      */
-    private function assingMassAssignmentSortByParticipant(array $massAssignments)
+    private function assignMassAssignmentSortByUser(array $massAssignments)
     {
         foreach ($massAssignments as $assignment) {
-            $this->massAssignmentSortByParticipant[$assignment->getParticipant()->getId()][] = $assignment;
+            $this->massAssignmentSortByUser[$assignment->getUser()->getId()][] = $assignment;
         }
     }
 
@@ -223,6 +234,10 @@ class SlotAvailability
             return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
         }
 
+        if (($otherSheet = $this->getMeetingOnOtherSheet($slot, $participant)) !== null) {
+            return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, null, null, $otherSheet);
+        }
+
         if ($this->hasUnavailability($slot, $participant)) {
             return new SlotAvailabilityView(self::UNAVAILABILITY);
         }
@@ -248,6 +263,8 @@ class SlotAvailability
      * @param Participant $participant
      *
      * @return SlotAvailabilityView
+     *
+     * @deprecated use getSlotAvailability()
      */
     public function isAvailable(MeetingSlot $slot, Participant $participant)
     {
@@ -276,7 +293,7 @@ class SlotAvailability
         if ($this->unavailability === null) {
             $this->unavailability = $this->unavailabilityRepository->getByEvent($event);
 
-            $this->assignUnavailabilitySortByParticipant($this->unavailability);
+            $this->assignUnavailabilitySortByUser($this->unavailability);
         }
 
         if ($this->massUnavailability === null) {
@@ -286,7 +303,7 @@ class SlotAvailability
         if ($this->massAssignment === null) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
 
-            $this->assingMassAssignmentSortByParticipant($this->massAssignment);
+            $this->assignMassAssignmentSortByUser($this->massAssignment);
         }
     }
 
@@ -298,15 +315,12 @@ class SlotAvailability
      */
     private function hasUnavailability(MeetingSlot $slot, Participant $participant)
     {
-        if (!isset($this->unavailabilitySortByParticipant[$participant->getId()])) {
+        if (!isset($this->unavailabilitySortByUser[$participant->getUser()->getId()])) {
             return false;
         }
 
-        foreach ($this->unavailabilitySortByParticipant[$participant->getId()] as $unavailability) {
-            if ($unavailability->getParticipant() !== $participant) {
-                continue;
-            }
-
+        /** @var Unavailability $unavailability */
+        foreach ($this->unavailabilitySortByUser[$participant->getUser()->getId()] as $unavailability) {
             if ($slot->getBegin() >= $unavailability->getBegin() && $slot->getBegin() < $unavailability->getEnd()) {
                 return true;
             }
@@ -372,12 +386,15 @@ class SlotAvailability
     private function getDispatch(Participant $participant, Mass $mass)
     {
         if ($this->massAssignment !== null) {
-            if (!isset($this->massAssignmentSortByParticipant[$participant->getId()])) {
+            if (!isset($this->massAssignmentSortByUser[$participant->getUser()->getId()])) {
                 return null;
             }
 
-            foreach ($this->massAssignmentSortByParticipant[$participant->getId()] as $massAssignment) {
-                if ($massAssignment->getMass() === $mass && $massAssignment->getParticipant() === $participant) {
+            /** @var MassAssignment $massAssignment */
+            foreach ($this->massAssignmentSortByUser[$participant->getUser()->getId()] as $massAssignment) {
+                if ($massAssignment->getMass() === $mass
+                    && $massAssignment->getUser()->getId() === $participant->getUser()->getId()
+                ) {
                     return $massAssignment;
                 }
             }
@@ -437,9 +454,9 @@ class SlotAvailability
         return false;
     }
 
-    const ASSIGNMENT_DISABLED  = 'disabled';
-    const ASSIGNMENT_FOUND     = 'found';
-    const ASSIGNMENT_NOT_FOUND = 'not_found';
+    const ASSIGNMENT_DISABLED   = 'disabled';
+    const ASSIGNMENT_FOUND      = 'found';
+    const ASSIGNMENT_NOT_FOUND  = 'not_found';
 
     /**
      * @param MassAssignment $massAssignment
@@ -497,19 +514,45 @@ class SlotAvailability
      * @param MeetingSlot $slot
      * @param Participant $participant
      *
+     * @return null|Sheet
+     */
+    private function getMeetingOnOtherSheet(MeetingSlot $slot, Participant $participant)
+    {
+        if (empty($this->meetingOtherSheets)) {
+            return null;
+        }
+
+        foreach ($this->meetingOtherSheets as $meetingOtherSheet) {
+            if ($meetingOtherSheet->getSlot()->getId() === $slot->getId()) {
+                $otherSheet = $meetingOtherSheet->getSheetByUser($participant->getUser());
+
+                if ($otherSheet !== null) {
+                    return $otherSheet;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param Participant $participant
+     *
      * @return bool
      */
     private function hasHappening(MeetingSlot $slot, Participant $participant)
     {
-        if (!isset($this->happeningsSortByParticipant[$participant->getId()])) {
+        if (!isset($this->happeningsSortByParticipant[$participant->getUser()->getId()])) {
             return false;
         }
 
-        foreach ($this->happeningsSortByParticipant[$participant->getId()] as $happening) {
+        /** @var HappeningParticipation $happening */
+        foreach ($this->happeningsSortByParticipant[$participant->getUser()->getId()] as $happening) {
             $happeningBegin = $happening->getHappening()->getBegin();
-            $happeningEnd   = $happening->getHappening()->getEnd();
+            $happeningEnd = $happening->getHappening()->getEnd();
 
-            if ($happening->getParticipant() !== $participant) {
+            if ($happening->getUser() !== $participant->getUser()) {
                 continue;
             }
 

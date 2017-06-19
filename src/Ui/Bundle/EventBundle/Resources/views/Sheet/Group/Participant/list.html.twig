@@ -1,0 +1,70 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ groupView.title }} - {{ event.title }}
+{% endblock %}
+
+{% block content %}
+    <section class="main mg-top">
+        <header>
+            <h1>
+                <a href="{{ path('event_sheet_group_index', {'sheetGroup': groupView.id}) }}">{{ groupView.title }}</a>
+                /
+                {{ 'group.participants.title'|trans }}
+            </h1>
+        </header>
+        <div class="main__container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th rowspan="2">
+                        {{ 'sheet.title'|trans }}
+                    </th>
+                    <th rowspan="2">
+                        {{ 'group.participants_list.participant'|trans }}
+                    </th>
+                    <th colspan="{{ groupView.days|length }}" class="text-center" nowrap>
+                        <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-available"></div>
+                        {{ 'group.participants_list.caption.available.label'|trans }}
+                        <div class="glyphicon glyphicon-stop user-availability-icon user-availability-icon-caption user-not-available mg-left"></div>
+                        {{ 'group.participants_list.caption.unavailable.label'|trans }}
+                    </th>
+                </tr>
+                <tr>
+                    {% for day in groupView.days %}
+                        <th class="col-md-1 text-center">
+                            {{ 'group.participants_list.day.label'|trans }} {{ loop.index }}
+                        </th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for sheetView in groupView.sheetViews %}
+                    <tr>
+                        <td rowspan="{{ sheetView.participantViews|length }}">
+                            <a href="{{ path('event_sheet_group_switch_to', {sheetGroup: groupView.id, sheet: sheetView.id}) }}">
+                                {{ sheetView.title }}
+                            </a>
+                        </td>
+                        {% for participantView in sheetView.participantViews %}
+                            <td>
+                                {{ participantView.fullName }}
+                            </td>
+                            {% for dayViewNumber, dayView in participantView.dayViews %}
+                                <td class="text-nowrap text-center">
+                                    {% for slotView in dayView.slotViews %}
+                                        <div data-toggle="tooltip" title="{{ 'group.participants_list.slot.tooltip'|trans }} {{ slotView.beginEndHour }}" class="glyphicon glyphicon-stop user-availability-icon {{ slotView.isAnAvailableSlot ? "user-available" : "user-not-available" }}"></div>
+                                    {% endfor %}
+                                </td>
+                            {% endfor %}
+                            {% if not loop.last %}
+                                </tr><tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

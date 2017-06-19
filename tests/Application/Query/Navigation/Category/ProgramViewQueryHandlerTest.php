@@ -52,8 +52,8 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Expected
         $linkViews = [
-            new LinkView('title one'),
             new LinkView('title two'),
+            new LinkView('title one'),
         ];
 
         $categoryViewExpected = new CategoryView('navigation.category.program', 'icon-Calendrier', $linkViews);

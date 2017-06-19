@@ -51,8 +51,8 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participants[] = $this->createParticipantMock($sheetTo, $user3, 3);
         $participants[] = $this->createParticipantMock($sheetTo, $user4, 4);
 
-        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1);
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1);
+        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1, $event);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event, false, true);
         $expectedRequest->approve($dateTime);
 
         $approveRequest = new ApproveRequest($user3, $request, $sheetTo);
@@ -62,7 +62,7 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
-        $message = new Message($expectedRequest, $sheetTo, 'content', $dateTime);
+        $message = new Message($request, $sheetTo, 'content', $dateTime);
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($message)->shouldBeCalled();
 
@@ -106,8 +106,8 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participants[] = $this->createParticipantMock($sheetTo, $user3, 3);
         $participants[] = $this->createParticipantMock($sheetTo, $user4, 4);
 
-        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1);
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1);
+        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1, $event);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event);
         $expectedRequest->approve($dateTime);
 
         $approveRequest = new ApproveRequest($user3, $request, $sheetTo);

@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class SheetVoter extends Voter
 {
     const EDIT = 'edit';
+    const UNAVAILABILITY_ADD = 'unavailability-add';
+    const UNAVAILABILITY_REMOVE = 'unavailability-remove';
 
     /**
      * {@inheritdoc}
@@ -25,7 +27,7 @@ class SheetVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::EDIT])) {
+        if (!in_array($attribute, [self::EDIT, self::UNAVAILABILITY_ADD, self::UNAVAILABILITY_REMOVE])) {
             return false;
         }
 
@@ -53,6 +55,10 @@ class SheetVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
                 return $this->canEdit($subject, $user);
+            case self::UNAVAILABILITY_ADD:
+                return $this->canAddUnavailability($subject, $user);
+            case self::UNAVAILABILITY_REMOVE:
+                return $this->canRemoveUnavailability($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -78,5 +84,38 @@ class SheetVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     *
+     * @return bool
+     */
+    private function canAddUnavailability(Sheet $sheet, User $user)
+    {
+        return $this->canUpdateUnavailability($sheet, $user);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     *
+     * @return bool
+     */
+    private function canRemoveUnavailability(Sheet $sheet, User $user)
+    {
+        return $this->canUpdateUnavailability($sheet, $user);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     *
+     * @return bool
+     */
+    private function canUpdateUnavailability(Sheet $sheet, User $user)
+    {
+        return $this->canEdit($sheet, $user) && $sheet->attend();
     }
 }

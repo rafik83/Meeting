@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface MeetingRepositoryInterface
 {
@@ -62,6 +63,23 @@ interface MeetingRepositoryInterface
     public function findByParticipants(array $participants);
 
     /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return Meeting[]
+     */
+    public function findByUserAndEvent(User $user, Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     * @param Sheet $exceptSheet
+     *
+     * @return Meeting[]
+     */
+    public function findByUserAndEventExceptSheet(User $user, Event $event, Sheet $exceptSheet);
+
+    /**
      * @param Sheet $sheet
      *
      * @return Meeting[]
@@ -72,6 +90,11 @@ interface MeetingRepositoryInterface
      * @param Event $event
      */
     public function deleteAll(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function removeMeetingOfSheet(Sheet $sheet);
 
     /**
      * @param Sheet $sheet
@@ -95,6 +118,13 @@ interface MeetingRepositoryInterface
     public function countMeetingsOfSheet(Sheet $sheet);
 
     /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function countMeetingsOfSheetByIds(array $ids);
+
+    /**
      * @param Event $event
      *
      * @return int[]
@@ -107,6 +137,13 @@ interface MeetingRepositoryInterface
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return bool
+     */
+    public function hasScheduledMeetingByParticipant(Participant $participant);
 
     /**
      * @param Meeting $meeting
@@ -141,7 +178,7 @@ interface MeetingRepositoryInterface
      * @return bool
      */
     public function hasScheduledMeeting(Sheet $sheet);
-    
+
     /**
      * @param Event $event
      *

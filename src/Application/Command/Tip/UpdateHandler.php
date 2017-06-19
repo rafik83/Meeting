@@ -17,14 +17,19 @@ class UpdateHandler
     /** @var TipRepositoryInterface */
     private $tipRepository;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * UpdateHandler constructor.
      *
      * @param TipRepositoryInterface $tipRepository
+     * @param \DateTimeInterface     $dateTime
      */
-    public function __construct(TipRepositoryInterface $tipRepository)
+    public function __construct(TipRepositoryInterface $tipRepository, \DateTimeInterface $dateTime)
     {
         $this->tipRepository = $tipRepository;
+        $this->dateTime = $dateTime;
     }
     
     /**
@@ -33,9 +38,11 @@ class UpdateHandler
     public function handle(Update $command)
     {
         foreach ($command->tip->getTranslations() as $translation) {
-            if (!isset($command->translations[$translation->getLocale()])) {
-                $command->tip->translations->remove($translation->getLocale());
-                $this->tipRepository->removeTranslation($translation);
+            foreach ($command->translations as $commandTranslation) {
+                if (!isset($commandTranslation[$translation->getLocale()])) {
+                    $command->tip->removeTranslation($translation->getLocale());
+                    $this->tipRepository->removeTranslation($translation);
+                }
             }
         }
 
@@ -43,7 +50,8 @@ class UpdateHandler
             $command->tip->translate(
                 $translation['locale'],
                 $translation['title'],
-                $translation['content']
+                $translation['content'],
+                $this->dateTime
             );
         }
 
@@ -52,7 +60,10 @@ class UpdateHandler
                 $command->title,
                 $command->onMeetingManagement,
                 $command->onCatalog,
-                $command->onPrintPlanning
+                $command->onPrintPlanning,
+                $command->onSheet,
+                $command->onAgenda,
+                $command->onProgram
             )
         );
     }

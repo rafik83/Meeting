@@ -74,7 +74,10 @@ class CreateRequestHandler
             $createRequest->to,
             [],
             $this->dateTime,
-            $createRequest->creator
+            $createRequest->creator,
+            $createRequest->event,
+            false,
+            $createRequest->description !== null
         );
 
         $this->requestRepository->add($request);

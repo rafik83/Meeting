@@ -122,6 +122,15 @@ form.create_partner.children.lastname.label: Nom
 form.create_partner.children.password.label: 'Mot de passe'
 form.create_partner.children.submit.label: Créer
 form.create_partner.children.types.label: 'Types disponibles pour ce collaborateur'
+form.create_sheets_group.children.email_manager.label: 'Email du manager'
+form.create_sheets_group.children.name_manager.label: 'Nom du manager'
+form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
+form.create_sheets_group.children.sheetViews.prototype.label: Fiches
+form.create_sheets_group.children.submit.label: Créer
+form.create_sheets_group.children.title.label: 'Titre de l''entité'
+form.update_sheets_group.children.email.label: 'Email du manager'
+form.update_sheets_group.children.title.label: 'Titre de l''entité'
+form.update_sheets_group.children.submit.label: 'Enregistrer'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
@@ -154,6 +163,7 @@ form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloq
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
+form.event_configure_date.children.smsActivationDate.label: 'Date d''activation des notifications SMS'
 form.event_configure_date.children.submit.label: Enregistrer
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
@@ -536,6 +546,9 @@ form.promotion_code_create.children.stock.label: Stock
 form.promotion_code_create.children.submit.label: Enregistrer
 form.promotion_code_create.children.title.label: Titre
 form.promotion_code_create.children.validUntil.label: 'Valide jusqu''au'
+form.promotion_code_promotion.children.type.free: offert
+form.promotion_code_promotion.children.type.percentOff: '% de réduction'
+form.promotion_code_promotion.children.type.valueOff: réduction
 form.promotion_code_translation.children.description.label: Description
 form.promotion_code_translation.children.label.label: Libellé
 form.promotion_code_update.children.code.label: Code
@@ -577,14 +590,23 @@ form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
+form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
+form.search_user_sheets_group.children.submit.label: Suivant
 form.select_recipients.children.recipients.label: Destinataires
+form.sheet_attendance_choice.children.attend.choice.attend: Présent
+form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
+form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'
+form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
+form.sheet_attendance_choice.children.submit.label: 'Confirmer la modification'
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
+form.sheet_batch.children.assignToGroup.label: Assigner
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
+form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -594,6 +616,7 @@ form.sheet_comment.children.filter.label: Filtrer
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
+form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_filter.children.cart.no.label: Sans
 form.sheet_filter.children.cart.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cart.yes.label: Avec
@@ -608,6 +631,7 @@ form.sheet_filter.children.enabledState.label: 'Statut de la fiche'
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.hasCart.label: Panier
+form.sheet_filter.children.hasGroup.label: 'Appartenant à une entité'
 form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
 form.sheet_filter.children.hasInvoice.label: 'A au moins une facture'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
@@ -651,6 +675,7 @@ form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
 form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
 form.sheet.messaging_campaign.message.submit.label: Terminer
 form.sheet.messaging_campaign.recipients.submit.label: Valider
+form.sheet.sheetGroup.unAssignedGroup: 'Non assigné'
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.priority.label: Priorité
@@ -681,29 +706,41 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
-form.tip_create.children.title.label: 'Libellé back office'
+form.tip_create.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
 form.tip_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_create.children.onProgram.label: 'Visible sur le programme'
+form.tip_create.children.onSheet.label: 'Visible sur la fiche de présentation'
 form.tip_create.children.submit.label: 'Créer le message d''aide'
+form.tip_create.children.title.label: 'Libellé back office'
+form.tip_create.children.translations.label: Traductions
 form.tip_create.children.translations.label_add: 'Ajouter une traduction'
 form.tip_create.children.translations.label_delete: 'Retirer la traduction'
-form.tip_create.children.translations.label: 'Traductions'
-form.tip_create.children.translations.prototype.label: 'Traductions'
-form.tip_create.children.translations.prototype.children.title.label: 'Libellé'
-form.tip_create.children.translations.prototype.children.locale.label: 'Langue'
-form.tip_create.children.translations.prototype.children.content.label: 'Contenu'
-form.tip_update.children.title.label: 'Libellé back office'
+form.tip_create.children.translations.prototype.children.content.label: Contenu
+form.tip_create.children.translations.prototype.children.locale.label: Langue
+form.tip_create.children.translations.prototype.children.title.label: Libellé
+form.tip_create.children.translations.prototype.label: Traductions
+form.tip_event_affect.children.name.label: Libellé
+form.tip_event_affect.children.pages.label: 'Pages concernées'
+form.tip_event_affect.children.preview.label: 'Aperçu du message'
+form.tip_event_affect.children.submit.label: Affecter
+form.tip_event_affect.children.tip.label: 'Message d''aide'
+form.tip_event_affect.children.types.label: 'Types de participation'
+form.tip_update.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
 form.tip_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
-form.tip_update.children.translations.prototype.label: 'Traductions'
-form.tip_update.children.translations.prototype.children.title.label: 'Libellé'
-form.tip_update.children.translations.prototype.children.locale.label: 'Langue'
-form.tip_update.children.translations.prototype.children.content.label: 'Contenu'
-form.tip_update.children.translations.label_delete: 'Supprimer la traduction'
-form.tip_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_update.children.onProgram.label: 'Visible sur le programme'
+form.tip_update.children.onSheet.label: 'Visible sur la fiche de présentation'
 form.tip_update.children.submit.label: 'Mettre à jour'
+form.tip_update.children.title.label: 'Libellé back office'
+form.tip_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_update.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_update.children.translations.prototype.children.content.label: Contenu
+form.tip_update.children.translations.prototype.children.locale.label: Langue
+form.tip_update.children.translations.prototype.children.title.label: Libellé
+form.tip_update.children.translations.prototype.label: Traductions
 form.transaction_find.children.beginDate.label: 'Date de début'
 form.transaction_find.children.date.placeholder: JJ/MM/AAAA
 form.transaction_find.children.endDate.label: 'Date de fin'
