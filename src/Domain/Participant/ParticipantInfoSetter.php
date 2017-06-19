@@ -42,10 +42,10 @@ class ParticipantInfoSetter
      * @param string      $phone
      * @param string      $locale
      */
-    public function setPhone(Participant $participant, $phone, $locale)
+    public function setMobile(Participant $participant, $phone, $locale)
     {
         $templateData = $this->templateDataFactory->createProfileTemplate($participant, $locale);
-        $this->replaceValueByTag($participant, $templateData, Tag::PARTICIPANT_PHONE, $phone);
+        $this->replaceValueByTag($participant, $templateData, Tag::PARTICIPANT_MOBILE, $phone);
         $this->participantRepository->set($participant);
     }
 

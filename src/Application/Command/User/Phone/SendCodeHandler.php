@@ -177,7 +177,7 @@ class SendCodeHandler
     private function setPhoneToUserSheetsParticipation(User $user, Event $event, $phone, $locale)
     {
         foreach ($this->participantRepository->getAllParticipantForUser($event, $user) as $participant) {
-            $this->participantInfoSetter->setPhone($participant, $phone, $locale);
+            $this->participantInfoSetter->setMobile($participant, $phone, $locale);
         }
     }
 
@@ -187,7 +187,7 @@ class SendCodeHandler
      */
     private function setPhoneToUserAccount(User $user, $phone)
     {
-        $user->getAccount()->setPhone($phone);
+        $user->getAccount()->setMobile($phone);
         $this->userRepository->set($user);
     }
 }

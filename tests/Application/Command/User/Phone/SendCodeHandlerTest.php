@@ -87,9 +87,9 @@ class SendCodeHandlerTest extends TestCase
             ->willReturn([$participant])
         ;
 
-        $participantInfoSetter->setPhone($participant->reveal(), $phone, 'fr')->shouldBeCalled();
+        $participantInfoSetter->setMobile($participant->reveal(), $phone, 'fr')->shouldBeCalled();
 
-        $userAccount->setPhone($phone)->shouldBeCalled();
+        $userAccount->setMobile($phone)->shouldBeCalled();
         $userRepository->set($user)->shouldBeCalled();
 
         $sendCodeHandler = new SendCodeHandler(

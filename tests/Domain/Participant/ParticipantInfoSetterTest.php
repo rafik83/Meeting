@@ -21,12 +21,12 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Telephone;
 
 class ParticipantInfoSetterTest extends TestCase
 {
-    public function testSetPhone()
+    public function testSetMobile()
     {
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
         $phoneObject = new Telephone(
-            'phone', 'telephone', ['tags' => ['participant_phone', 'participant_data']], 'fr', 'fr'
+            'phone', 'telephone', ['tags' => ['participant_mobile', 'participant_data']], 'fr', 'fr'
         );
         $phoneObject->setTelephone('+33 666 999 000');
         $block->addChild(1, "3ad4b72f", $phoneObject);
@@ -46,10 +46,10 @@ class ParticipantInfoSetterTest extends TestCase
         $participant->setData($templateData->getData())->shouldBeCalled();
 
         $participantRepository->set($participant->reveal())->shouldBeCalled();
-        $participantInfoSetter->setPhone($participant->reveal(), '+3311223344', 'fr');
+        $participantInfoSetter->setMobile($participant->reveal(), '+3311223344', 'fr');
     }
 
-    public function testNotFoundPhoneTaggedObject()
+    public function testNotFoundMobileTaggedObject()
     {
         $templateData = new TemplateData('root', [], 'fr', 'fr');
 
@@ -66,6 +66,6 @@ class ParticipantInfoSetterTest extends TestCase
         $participant->setData($templateData->getData())->shouldNotBeCalled();
 
         $participantRepository->set($participant->reveal())->shouldBeCalled();
-        $participantInfoSetter->setPhone($participant->reveal(), '+3311223344', 'fr');
+        $participantInfoSetter->setMobile($participant->reveal(), '+3311223344', 'fr');
     }
 }
