@@ -687,5 +687,5 @@ event_user_event_token_confirm_agenda:
     path: /confirm/agenda/{token}
     requirements:
         token: \w+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: EventBundle:Token\UserEventToken:confirmAgenda }

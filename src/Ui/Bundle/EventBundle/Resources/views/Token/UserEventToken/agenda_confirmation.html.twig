@@ -17,13 +17,20 @@
                 {% endif %}
             </div>
 
-            {% for tipTranslationView in tipTranslationViews %}
+            {% if tipTranslationViews is not empty %}
                 <div class="main__content styled-form mg-tp">
-                    <h1>{{ tipTranslationView.title }}</h1>
+                    {% for tipTranslationView in tipTranslationViews %}
+                        <h1>{{ tipTranslationView.title }}</h1>
 
-                    {{ tipTranslationView.content|html }}
+                        {{ tipTranslationView.content|html }}
+                    {% endfor %}
+
+                    {% if sendCodeForm is not null %}
+                        {% form_theme sendCodeForm '@Ui/default.html.twig' %}
+                        {{ form(sendCodeForm) }}
+                    {% endif %}
                 </div>
-            {% endfor %}
+            {% endif %}
         </section>
     </div>
 {% endblock %}

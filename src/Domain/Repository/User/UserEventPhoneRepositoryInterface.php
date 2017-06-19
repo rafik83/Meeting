@@ -17,6 +17,11 @@ use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 interface UserEventPhoneRepositoryInterface
 {
     /**
+     * @param UserEventPhone $userEventPhone
+     */
+    public function add(UserEventPhone $userEventPhone);
+
+    /**
      * @param User  $user
      * @param Event $event
      *
@@ -25,7 +30,21 @@ interface UserEventPhoneRepositoryInterface
     public function find(User $user, Event $event);
 
     /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return UserEventPhone|null
+     */
+    public function findValidated(User $user, Event $event);
+
+    /**
      * @param UserEventPhone $userEventPhone
      */
     public function set(UserEventPhone $userEventPhone);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     */
+    public function remove(User $user, Event $event);
 }

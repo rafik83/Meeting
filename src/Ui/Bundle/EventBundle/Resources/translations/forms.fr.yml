@@ -102,6 +102,9 @@ form.search.organizationCategory.label: Structure
 form.search.position.label: Fonctions
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.type.label: Participants
+form.send_code.children.accepted.label: 'J''accepte de recevoir des notifications pendant l''événement'
+form.send_code.children.phone.label: 'Mon numéro de téléphone mobile'
+form.send_code.children.submit.label: 'Enregistrer'
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Texte
