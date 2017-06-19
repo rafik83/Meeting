@@ -499,3 +499,14 @@ services:
             - '@security.authorization_checker'
         tags:
             - { name: validator.constraint_validator }
+
+
+    #
+    # Handlers
+    #
+    handler.user.phone.send_code_form_handler:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeFormHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@form.factory'
+            - '@tactician.commandbus.query'
