@@ -38,7 +38,7 @@ class TypeNameResolver
      *
      * @return string
      */
-    public function resolve(User $user, Event $event, $locale)
+    public function resolve(User $user, Event $event, string $locale) : string
     {
         $type = $this->typeRepository->getFirstPositionTypeByEventAndUser($event, $user);
 
@@ -55,7 +55,7 @@ class TypeNameResolver
      *
      * @return string
      */
-    public function resolveWithPreloadedSheets(array $sheets, $locale)
+    public function resolveWithPreloadedSheets(array $sheets, string $locale) : string
     {
         $types = [];
 
@@ -67,8 +67,15 @@ class TypeNameResolver
                 $types[$position] = $type->getTitle($locale);
             }
         }
-        sort($types);
 
-        return reset($types);
+        ksort($types);
+
+        $type = reset($types);
+
+        if (false === $type) {
+            throw new InvalidArgumentException('Type cannot be null');
+        }
+
+        return $type;
     }
 }
