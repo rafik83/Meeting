@@ -31,14 +31,13 @@ class UserEventPhoneQueryHandler
      * @param UserEventPhoneQuery $query
      *
      * @return UserEventPhone
-     *
-     * @throws UserEventPhoneNotFound
+     * @throws UserEventPhoneNotFoundException
      */
     public function handle(UserEventPhoneQuery $query)
     {
         $userEventPhone = $this->userEventPhoneRepository->find($query->user, $query->event);
 
-        if ($userEventPhone === null) {
+        if (null === $userEventPhone) {
             throw new UserEventPhoneNotFoundException(
                 sprintf(
                     'UserEventPhone not found for User %s and Event %s',

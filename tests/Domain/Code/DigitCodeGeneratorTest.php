@@ -25,7 +25,6 @@ class DigitCodeGeneratorTest extends TestCase
 
             $this->assertEquals(4, strlen($code4chars));
             $this->assertEquals(9, strlen($code9chars));
-
         }
     }
 
