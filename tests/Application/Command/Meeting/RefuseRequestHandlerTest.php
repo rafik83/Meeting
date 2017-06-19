@@ -39,12 +39,12 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo   = new Sheet($event, $type, [], $user3, $dateTime);
 
         // Request to refuse
-        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event);
         $refuseRequest = new RefuseRequest($request, $user, $dateTime);
         $refuseRequest->message = 'this is a test';
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, false, true);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event, false, true);
         $expectedRequest->refuse($dateTime);
         $expectedMessage = new Message($request, $sheetTo, 'this is a test', $dateTime);
         $exectedEvent    = new RefusedRequestEvent($user, $request, $dateTime, 'this is a test');
@@ -84,11 +84,11 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo   = new Sheet($event, $type, [], $user3, $dateTime);
 
         // Request to refuse
-        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event);
         $refuseRequest = new RefuseRequest($request, $user, $dateTime);
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, false, false);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user, $event, false, false);
         $expectedRequest->refuse($dateTime);
         $expectedMessage = new Message($request, $sheetTo, 'this is a test', $dateTime);
         $exectedEvent    = new RefusedRequestEvent($user, $request, $dateTime, 'this is a test');

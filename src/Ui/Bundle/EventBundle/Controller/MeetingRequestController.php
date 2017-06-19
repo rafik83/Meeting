@@ -227,7 +227,7 @@ class MeetingRequestController extends Controller
 
         $this->authorizeToCreateRequest($request, $eventDomain->getEvent(), $sheet, $toSheet);
 
-        $createRequest = new CreateRequest($sheet, $toSheet, $user);
+        $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user);
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', [
                 'sheet' => $sheet->getId(), 'toSheet' => $toSheet->getId()

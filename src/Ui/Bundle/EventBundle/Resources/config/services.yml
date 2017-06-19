@@ -150,6 +150,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
             - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: 'form.type' }
     form_type_sheet_data.media_collection_data_type:
@@ -158,6 +159,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
             - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: 'form.type' }
     form_type_library.telephone_type:
@@ -455,6 +457,9 @@ services:
         arguments:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    domain.sheet_group.remove_sheet_from_group_checker:
+        class: Proximum\Vimeet\Domain\SheetGroup\RemoveSheetFromGroupChecker
 
     domain.service.sheets_group.group_name_resolver:
         class: Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver

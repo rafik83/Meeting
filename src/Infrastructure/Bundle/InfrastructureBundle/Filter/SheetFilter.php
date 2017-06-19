@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class SheetFilter
@@ -32,19 +33,22 @@ class SheetFilter
     }
 
     /**
+     * @param Event $event
+     *
      * @return array|null
      */
-    public function get()
+    public function get(Event $event)
     {
-        return $this->session->get(self::SHEET_FILTER);
+        return $this->session->get($this->getKey($event));
     }
 
     /**
+     * @param Event $event
      * @param array $filters
      */
-    public function add(array $filters)
+    public function add(Event $event, array $filters)
     {
-        $this->session->set(self::SHEET_FILTER,
+        $this->session->set($this->getKey($event),
             array_filter($filters, function ($filter) {
                 return $filter !== null;
             })
@@ -53,9 +57,21 @@ class SheetFilter
 
     /**
      *  Clear sheet filters
+     *
+     * @param Event $event
      */
-    public function clear()
+    public function clear(Event $event)
     {
-        $this->session->remove(self::SHEET_FILTER);
+        $this->session->remove($this->getKey($event));
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return string
+     */
+    private function getKey(Event $event)
+    {
+        return sprintf('%s_%s', self::SHEET_FILTER, $event->getId());
     }
 }

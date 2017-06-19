@@ -91,12 +91,27 @@ class IndicatorView
     public $pendingPropositionCount;
 
     /**
+     * "Nombre maximum de rendez-vous autorisé (pack de rdv)"
+     *
+     * @var int
+     */
+    public $maxMeetingAvailable;
+
+    /**
+     * "Nombre de slot en indispo de masse"
+     *
+     * @var int
+     */
+    public $massUnavaibilitiesCount;
+
+    /**
      * @param int $slotTotal
      * @param int $participantsCount
      * @param int $unavailabilitiesCount
      * @param int $sheetsPlanningQuantity
      * @param int $meetingRequestsCount
      * @param int $pendingPropositionCount
+     * @param int $massUnavaibilitiesCount
      */
     public function __construct(
         $slotTotal,
@@ -104,7 +119,8 @@ class IndicatorView
         $unavailabilitiesCount,
         $sheetsPlanningQuantity,
         $meetingRequestsCount,
-        $pendingPropositionCount
+        $pendingPropositionCount,
+        $massUnavaibilitiesCount
     ) {
         $this->slotTotal               = $slotTotal;
         $this->participantsCount       = $participantsCount;
@@ -112,6 +128,7 @@ class IndicatorView
         $this->sheetsPlanningQuantity  = $sheetsPlanningQuantity;
         $this->meetingRequestsCount    = $meetingRequestsCount;
         $this->pendingPropositionCount = $pendingPropositionCount;
+        $this->massUnavaibilitiesCount = $massUnavaibilitiesCount;
 
         $this->slotCount                = $slotTotal * $sheetsPlanningQuantity;
         $this->slotsParticipantsCount   = $slotTotal * $participantsCount;
@@ -119,5 +136,6 @@ class IndicatorView
         $this->availableSlotsCount      = $this->slotsParticipantsCount - $unavailabilitiesCount;
         $this->possibleMeetingsQuantity = max(0, min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount));
         $this->usableSlots              = max(0, min($this->slotCount, $this->availableSlotsCount));
+        $this->maxMeetingAvailable      = $sheetsPlanningQuantity * ($slotTotal - $massUnavaibilitiesCount);
     }
 }

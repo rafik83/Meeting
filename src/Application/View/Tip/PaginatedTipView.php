@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 class PaginatedTipView
 {
-    /** @var PaginatedResult[] */
+    /** @var PaginatedResult */
     public $results;
 
     /**

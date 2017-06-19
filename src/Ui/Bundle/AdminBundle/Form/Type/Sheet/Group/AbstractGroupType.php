@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group;
 
-use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,13 +25,13 @@ class AbstractGroupType extends AbstractType
     {
         $builder->add('title', TextType::class);
 
-        if (isset($options['sheetViews'])) {
+        if (!empty($options['sheetViews'])) {
             $builder->add('sheetViews', SheetCheckboxType::class,
                 [
                     'sheetViews' => $options['sheetViews'],
-                    'required' => false,
-                    'expanded' => true,
-                    'multiple' => true,
+                    'required'   => false,
+                    'expanded'   => true,
+                    'multiple'   => true,
                 ]);
         }
 
@@ -44,8 +43,7 @@ class AbstractGroupType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheetViews']);
+        $resolver->setDefault('sheetViews', []);
         $resolver->setAllowedTypes('sheetViews', 'array');
-        $resolver->setDefaults(['data_class' => Create::class]);
     }
 }

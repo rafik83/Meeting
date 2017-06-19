@@ -24,13 +24,22 @@ class MediaCollectionValidator extends TemplateObjectValidator
     private $templateProductGuesser;
 
     /**
+     * @var TemplateObject\BuyableIncludedProductGuesser
+     */
+    private $buyableIncludedProductGuesser;
+
+    /**
      * ImageValidator constructor.
      *
-     * @param TemplateProductGuesser $templateProductGuesser
+     * @param TemplateProductGuesser                       $templateProductGuesser
+     * @param TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
-    public function __construct(TemplateProductGuesser $templateProductGuesser)
-    {
-        $this->templateProductGuesser = $templateProductGuesser;
+    public function __construct(
+        TemplateProductGuesser $templateProductGuesser,
+        TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
+    ) {
+        $this->templateProductGuesser        = $templateProductGuesser;
+        $this->buyableIncludedProductGuesser = $buyableIncludedProductGuesser;
     }
 
     /**
@@ -66,7 +75,10 @@ class MediaCollectionValidator extends TemplateObjectValidator
      */
     protected function checkHasPayableOption(TemplateObject\MediaCollection $object)
     {
-        if (count($object->getNotEmptyMedias()) > 0 && $this->templateProductGuesser->hasPayableOption($object)) {
+        if (count($object->getNotEmptyMedias()) > 0
+            && $this->templateProductGuesser->hasPayableOption($object)
+            && !$this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($object)
+        ) {
             $this->context
                 ->getValidator()
                 ->inContext($this->context)

@@ -10,13 +10,14 @@
 
 namespace Application\Command\Tip;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Tip\Update;
 use Proximum\Vimeet\Application\Command\Tip\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -25,7 +26,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tip = new Tip('tipTitle', true, false, true, true, false, true, false, $dateTime);
         $tipTranslation = new TipTranslation($tip, $dateTime, 'title_en', 'en', 'content_en');
-        $tip->setTranslation('en', 'title_en', 'content_en');
+        $tip->setTranslation('en', 'title_en', 'content_en', $dateTime);
 
         $command = new Update($tip);
         $command->translations = [
@@ -40,7 +41,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $tipRepository->set($tip)->shouldBeCalled();
 
-        $handler = new UpdateHandler($tipRepository->reveal());
+        $handler = new UpdateHandler($tipRepository->reveal(), $dateTime);
         $handler->handle($command);
     }
 
@@ -60,7 +61,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->onAgenda            = false;
         $command->translations        = [];
 
-        $handler = new UpdateHandler($tipRepository->reveal());
+        $handler = new UpdateHandler($tipRepository->reveal(), $dateTime);
         $handler->handle($command);
     }
 }

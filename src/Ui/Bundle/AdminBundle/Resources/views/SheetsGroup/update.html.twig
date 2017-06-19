@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.sheets_group.update.title'|trans %}
+
+{% block form_title 'admin.sheets_group.update'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.email) }}
+    {{ form_row(form.title) }}
+{% endblock %}
+
+{% block goback_link path('admin_sheets_group_list', {event: event.id}) %}

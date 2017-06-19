@@ -38,7 +38,7 @@ Feature: List of tips by event and type
     Given the database is purged
     And I am logged as admin
     And the tip "Le saviez vous?" is created
-    When I send a "GET" request to "/fr/tip/1/preview/"
+    When I send a "GET" request to "/fr/tip/1/preview/fr"
     Then the response should be in JSON
     And the JSON should be equal to:
       """

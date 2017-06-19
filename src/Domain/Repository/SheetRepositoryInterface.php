@@ -170,13 +170,6 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
-     * @param Sheet[] $sheets
-     *
-     * @return Sheet[]
-     */
-    public function getSheetsWithoutGroupInGivenSheets(array $sheets);
-
-    /**
      * @param Event $event
      * @param array $ids
      *

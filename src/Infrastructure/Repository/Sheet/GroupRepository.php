@@ -110,6 +110,14 @@ class GroupRepository implements GroupRepositoryInterface
     }
 
     /**
+     * @param Group $group
+     */
+    public function set(Group $group)
+    {
+        $this->entityManager->flush($group);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getByUserAndEvent(User $user, Event $event)

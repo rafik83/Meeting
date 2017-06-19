@@ -48,7 +48,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
+        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1, $event);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetFrom);
@@ -56,7 +56,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, false, true);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true);
         $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
 
         //Mock
@@ -104,7 +104,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
+        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1, $event);
         $request->approve($datetime);
 
         //Command
@@ -113,7 +113,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, false, true);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
 
@@ -164,7 +164,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
@@ -172,7 +172,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, false, true);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true);
         $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
 
         //Mock
@@ -221,7 +221,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         //Actual
-        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
         $request->approve($datetime);
 
         //Command
@@ -230,7 +230,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, false, true);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
 
@@ -280,7 +280,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         //Actual
-        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
         $request->approve($datetime);
 
         //Command
@@ -288,7 +288,7 @@ class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $command->participants = [$participant1, $participant3];
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, false, false);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, false);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
 

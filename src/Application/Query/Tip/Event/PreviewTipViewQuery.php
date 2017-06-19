@@ -10,24 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip\Event;
 
-use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 class PreviewTipViewQuery
 {
-    /** @var TipTranslation */
-    public $tipTranslation;
+    /** @var Tip */
+    public $tip;
 
     /** @var array */
     public $pages;
 
+    /** @var string */
+    public $locale;
+
     /**
      * PreviewTipViewQuery constructor.
      *
-     * @param TipTranslation $tipTranslation
+     * @param Tip    $tip
+     * @param string $locale
      */
-    public function __construct(TipTranslation $tipTranslation)
+    public function __construct(Tip $tip, $locale)
     {
-        $this->tipTranslation = $tipTranslation;
-        $this->pages = $tipTranslation->getTip()->getPagesTranslations();
+        $this->tip    = $tip;
+        $this->pages  = $tip->getPagesTranslations();
+        $this->locale = $locale;
     }
 }

@@ -279,10 +279,10 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $user2       = UserFactory::create('test2@test.fr');
         $sheet2      = SheetFactory::create($event, $user2);
-        $request     = new Request($sheet, [], $sheet2, [], new \DateTime(), $user2);
+        $request     = new Request($sheet, [], $sheet2, [], new \DateTime(), $user2, $event);
         $slot        = new MeetingSlot($event, $beginHappening1, $endHappening1, false);
         $spot        = new Spot('ref', $event, 2, 3, 4, true);
-        $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $event);
         $meetingView = new MeetingView(
             'userSheetTitle',
             2,
