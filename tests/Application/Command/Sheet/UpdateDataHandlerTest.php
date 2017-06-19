@@ -8,9 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Sheet\RemoveData;
+use Proximum\Vimeet\Application\Command\Sheet\RemoveDataHandler;
+use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
@@ -36,7 +40,7 @@ class UpdateDataHandlerTest extends TestCase
         $user           = new User('test@test.com', 'salt', 'password', 'fr');
         $templateData   = new TemplateData('image', ['image' => 'image.jpg', 'product' => 6], 'fr', 'fr');
         $sheet          = new Sheet($event, $type, $templateData->normalize(), $user, $dateTime);
-        $templateObject = new TemplateObject('', $type, [], 'fr', 'fr');
+        $templateObject = new TemplateObject('', '', [], 'fr', 'fr');
 
         // Expected
 
@@ -49,20 +53,20 @@ class UpdateDataHandlerTest extends TestCase
 
         // Mock
 
-        $SheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
-        $BuyableObjectResolver  = $this->prophesize(BuyableObjectResolver::class);
-        $RemoveDataHandler      = $this->prophesize(RemoveDataHandler::class);
-        $DelayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
+        $buyableObjectResolver  = $this->prophesize(BuyableObjectResolver::class);
+        $removeDataHandler      = $this->prophesize(RemoveDataHandler::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         // Preditions / scenario
 
-        $RemoveDataHandler->handle()->shouldNotBeCalled();
+        $removeDataHandler->handle()->shouldNotBeCalled();
 
-        $BuyableObjectResolver->updateCart($sheet, $templateObject)->shouldBeCalled();
+        $buyableObjectResolver->updateCart($sheet, $templateObject)->shouldBeCalled();
 
-        $SheetRepository->set($expectedSheet)->shouldBeCalled();
+        $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
-        $DelayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $expectedEvent)->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $expectedEvent)->shouldBeCalled();
 
         // Command
 
@@ -71,10 +75,10 @@ class UpdateDataHandlerTest extends TestCase
         // Handler
 
         $handler = new UpdateDataHandler(
-            $SheetRepository->reveal(),
-            $BuyableObjectResolver->reveal(),
-            $RemoveDataHandler->reveal(),
-            $DelayedEventDispatcher->reveal()
+            $sheetRepository->reveal(),
+            $buyableObjectResolver->reveal(),
+            $removeDataHandler->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -111,20 +115,20 @@ class UpdateDataHandlerTest extends TestCase
 
         // Mock
 
-        $SheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
-        $BuyableObjectResolver  = $this->prophesize(BuyableObjectResolver::class);
-        $RemoveDataHandler      = $this->prophesize(RemoveDataHandler::class);
-        $DelayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
+        $buyableObjectResolver  = $this->prophesize(BuyableObjectResolver::class);
+        $removeDataHandler      = $this->prophesize(RemoveDataHandler::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
-        // Preditions / scenario
+        // Predictions / scenario
 
-        $RemoveDataHandler->handle()->shouldNotBeCalled();
+        $removeDataHandler->handle()->shouldNotBeCalled();
 
-        $BuyableObjectResolver->updateCart($sheet, $templateObject)->shouldBeCalled();
+        $buyableObjectResolver->updateCart($sheet, $templateObject)->shouldBeCalled();
 
-        $SheetRepository->set($expectedSheet)->shouldBeCalled();
+        $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
-        $DelayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $expectedEvent)->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $expectedEvent)->shouldBeCalled();
 
         // Command
 
@@ -133,10 +137,10 @@ class UpdateDataHandlerTest extends TestCase
         // Handler
 
         $handler = new UpdateDataHandler(
-            $SheetRepository->reveal(),
-            $BuyableObjectResolver->reveal(),
-            $RemoveDataHandler->reveal(),
-            $DelayedEventDispatcher->reveal()
+            $sheetRepository->reveal(),
+            $buyableObjectResolver->reveal(),
+            $removeDataHandler->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -167,20 +171,20 @@ class UpdateDataHandlerTest extends TestCase
 
         // Mock
 
-        $SheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
-        $BuyableObjectResolver  = $this->prophesize(BuyableObjectResolver::class);
-        $RemoveDataHandler      = $this->prophesize(RemoveDataHandler::class);
-        $DelayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository        = $this->prophesize(SheetRepositoryInterface::class);
+        $buyableObjectResolver  = $this->prophesize(BuyableObjectResolver::class);
+        $removeDataHandler      = $this->prophesize(RemoveDataHandler::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         // Preditions / scenario
 
-        $RemoveDataHandler->handle($expectedRemoveCommand)->shouldBeCalled();
+        $removeDataHandler->handle($expectedRemoveCommand)->shouldBeCalled();
 
-        $BuyableObjectResolver->updateCart($sheet, $templateObject)->shouldBeCalled();
+        $buyableObjectResolver->updateCart($sheet, $templateObject)->shouldBeCalled();
 
-        $SheetRepository->set($expectedSheet)->shouldBeCalled();
+        $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
-        $DelayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $expectedEvent)->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $expectedEvent)->shouldBeCalled();
 
         // Command
 
@@ -189,10 +193,10 @@ class UpdateDataHandlerTest extends TestCase
         // Handler
 
         $handler = new UpdateDataHandler(
-            $SheetRepository->reveal(),
-            $BuyableObjectResolver->reveal(),
-            $RemoveDataHandler->reveal(),
-            $DelayedEventDispatcher->reveal()
+            $sheetRepository->reveal(),
+            $buyableObjectResolver->reveal(),
+            $removeDataHandler->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $handler->handle($command);
