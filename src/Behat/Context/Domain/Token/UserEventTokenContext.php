@@ -58,14 +58,10 @@ class UserEventTokenContext implements Context
             throw new \InvalidArgumentException('The given type is not a valid UserEventToken type');
         }
 
-        $event = $this->userEventTokenContextProxy
+        $userEventToken = $this->userEventTokenContextProxy
             ->getUserEventTokenManager()
-            ->create(
-                $event,
-                $user,
-                $type,
-                $token
-            );
-        $this->userEventTokenContextProxy->getStorage()->set('event', $event);
+            ->create($event, $user, $type, $token)
+        ;
+        $this->userEventTokenContextProxy->getStorage()->set('userEventToken', $userEventToken);
     }
 }
