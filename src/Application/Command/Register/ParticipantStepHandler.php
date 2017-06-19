@@ -88,6 +88,7 @@ class ParticipantStepHandler
         $sheetData       = $participantStep->sheet->getRegistrationData();
         $participantData = $participantStep->participant->getData();
         $templateData    = $participantStep->templateData;
+        $participantStep->sheet->setTitle($participantStep->sheet->getOwner()->getFullname());
 
         foreach ($participantStep->data as $key => $value) {
             $templateObject = $templateData
