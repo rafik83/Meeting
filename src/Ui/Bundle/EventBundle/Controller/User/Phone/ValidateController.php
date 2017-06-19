@@ -102,7 +102,13 @@ class ValidateController extends Controller
             ->find($userEventToken->getUser(), $userEventToken->getEvent())
         ;
 
-        if (null === $userEventPhone || !$userEventPhone->isValidated()) {
+        if (null === $userEventPhone) {
+            throw $this->createNotFoundException(
+                sprintf('The user event phone does not exist for this user %s', $userEventToken->getUser()->getId())
+            );
+        }
+
+        if (!$userEventPhone->isValidated()) {
             throw $this->createNotFoundException('The user event phone is not validated');
         }
 
