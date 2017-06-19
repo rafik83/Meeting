@@ -8,8 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchValidationValidateHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchValidationValidateHandlerTest extends TestCase
 {
     public function testHandle()
     {

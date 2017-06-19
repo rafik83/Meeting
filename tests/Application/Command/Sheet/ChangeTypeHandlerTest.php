@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
@@ -29,7 +30,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
+class ChangeTypeHandlerTest extends TestCase
 {
     public function testHandleTypesWithDifferentPackages()
     {
