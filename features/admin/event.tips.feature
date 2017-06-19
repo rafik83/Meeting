@@ -43,7 +43,7 @@ Feature: List of tips by event and type
     And the JSON should be equal to:
       """
       {
-          "title": "title_fr",
+          "title": "Le saviez vous? (fr)",
           "content": "content_fr",
           "pages": [
               "admin.tip.column.visible.catalog",
