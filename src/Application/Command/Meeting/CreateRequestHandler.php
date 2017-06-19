@@ -75,6 +75,7 @@ class CreateRequestHandler
             [],
             $this->dateTime,
             $createRequest->creator,
+            $createRequest->event,
             false,
             $createRequest->description !== null
         );

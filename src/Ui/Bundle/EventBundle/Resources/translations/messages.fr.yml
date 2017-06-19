@@ -341,6 +341,7 @@ sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
+sheet.object.product.included: Inclus
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
 sheet.participant.remove: 'Supprimer de la fiche'

@@ -7,6 +7,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - ['@participant_asddays_2']
             - <dateTimeBetween('-3 days', 'now')>
             - '@user_test'
+            - '@event_asddays_2016'
         state: 'approved'
     meeting_request_02:
         __construct:
@@ -16,6 +17,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - ['@participant_asddays_3']
             - <dateTimeBetween('-3 days', 'now')>
             - '@user_test'
+            - '@event_asddays_2016'
         state: 'approved'
 
 Proximum\Vimeet\Domain\Model\Meeting:
@@ -29,6 +31,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
         toParticipants: ['@participant_asddays_2']
         createdAt: <(new DateTime('2016-10-12 09:00:00'))>
         spot: '@asddays_spot_1'
+        event: '@event_asddays_2016'
     asddays_meeting_02:
         __construct: false
         request: '@meeting_request_02'
@@ -39,6 +42,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
         toParticipants: ['@participant_asddays_3']
         createdAt: <(new DateTime('2016-10-12 11:00:00'))>
         spot: '@asddays_spot_1'
+        event: '@event_asddays_2016'
 
 Proximum\Vimeet\Domain\Model\Unavailability:
     unavailability_01:

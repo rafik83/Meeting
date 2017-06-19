@@ -90,10 +90,10 @@ class RemoveMeetingHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2   = SheetFactory::create($event);
         $this->participant = $this->prophesize(Participant::class);
 
-        $request = new Meeting\Request($sheet1, [$this->participant->reveal()], $sheet2, [], $dateTime, $user);
+        $request = new Meeting\Request($sheet1, [$this->participant->reveal()], $sheet2, [], $dateTime, $user, $event);
         $slot    = new MeetingSlot($event, $dateTime, $dateTime, $blockedSlot);
         $spot    = new Spot('ref', $event, 100, 200, 150, true);
 
-        return new Meeting($request, $slot, $sheet1, [], $sheet2, [], $dateTime, $spot, true, $blockedSlot);
+        return new Meeting($request, $slot, $sheet1, [], $sheet2, [], $dateTime, $spot, $event, true, $blockedSlot);
     }
 }

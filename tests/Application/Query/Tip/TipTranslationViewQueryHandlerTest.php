@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Tip;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TipTranslationViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -27,10 +28,10 @@ class TipTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet    = SheetFactory::create($event);
 
         $tip = new Tip('tip', true, true, true, false, false, false, false, $dateTime);
-        $tip->setTranslation('fr', 'title', 'content');
+        $tip->setTranslation('fr', 'title', 'content', $dateTime);
 
         $tip2 = new Tip('tip2', true, true, true, false, false, false, false, $dateTime);
-        $tip2->setTranslation('fr', 'title2', 'content2');
+        $tip2->setTranslation('fr', 'title2', 'content2', $dateTime);
 
         $tipView1 = new TipTranslationView(1, 'title', 'content');
         $tipView2 = new TipTranslationView(2, 'title1', 'content2');

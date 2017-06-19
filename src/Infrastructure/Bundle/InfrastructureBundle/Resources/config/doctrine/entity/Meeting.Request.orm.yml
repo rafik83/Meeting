@@ -26,6 +26,8 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
             mappedBy: request
     manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:

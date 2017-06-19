@@ -41,7 +41,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $toUser          = UserFactory::create();
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
         $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
 
         $spot1 = SpotFactory::create($event, 'Spot 1');
@@ -56,6 +56,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );
@@ -72,6 +73,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot2,
+            $event,
             true,
             true
         );
@@ -104,7 +106,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $toUser          = UserFactory::create();
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
         $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
 
         $spot1 = SpotFactory::create($event, 'Spot 1');
@@ -119,6 +121,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             true,
             false
         );
@@ -147,7 +150,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $toUser          = UserFactory::create();
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
-        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser);
+        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
         $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
 
         $spot1 = SpotFactory::create($event, 'Spot 1');
@@ -162,6 +165,7 @@ class UpdateSpotHandlerTest extends \PHPUnit_Framework_TestCase
             [$toParticipant],
             $dateTime,
             $spot1,
+            $event,
             false,
             false
         );

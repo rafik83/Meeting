@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
+use Proximum\Vimeet\Domain\Template\TemplateObject\BuyableIncludedProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 use Symfony\Component\Form\AbstractType;
@@ -38,20 +39,28 @@ class MediaCollectionDataType extends AbstractType
     private $buyableObjectResolver;
 
     /**
+     * @var BuyableIncludedProductGuesser
+     */
+    private $buyableIncludedProductGuesser;
+
+    /**
      * ImageDataType constructor.
      *
-     * @param IdToProductTransformer $idToProductTransformer
-     * @param TemplateProductGuesser $templateProductGuesser
-     * @param BuyableObjectResolver  $buyableObjectResolver
+     * @param IdToProductTransformer        $idToProductTransformer
+     * @param TemplateProductGuesser        $templateProductGuesser
+     * @param BuyableObjectResolver         $buyableObjectResolver
+     * @param BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
     public function __construct(
         IdToProductTransformer $idToProductTransformer,
         TemplateProductGuesser $templateProductGuesser,
-        BuyableObjectResolver $buyableObjectResolver
+        BuyableObjectResolver $buyableObjectResolver,
+        BuyableIncludedProductGuesser $buyableIncludedProductGuesser
     ) {
         $this->idToProductTransformer = $idToProductTransformer;
         $this->templateProductGuesser = $templateProductGuesser;
         $this->buyableObjectResolver  = $buyableObjectResolver;
+        $this->buyableIncludedProductGuesser = $buyableIncludedProductGuesser;
     }
 
     /**
@@ -77,7 +86,9 @@ class MediaCollectionDataType extends AbstractType
                 'max'           => $options['data']->getMax(),
             ]);
 
-        if ($this->templateProductGuesser->hasPayableOption($media)) {
+        if ($this->templateProductGuesser->hasPayableOption($media)
+            && !$this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($media)
+        ) {
             $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($media);
 
             $builder

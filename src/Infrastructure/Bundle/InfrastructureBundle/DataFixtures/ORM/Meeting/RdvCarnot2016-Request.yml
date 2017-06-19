@@ -126,6 +126,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - ['@participant_random_2']
             - <dateTimeBetween('-3 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'approved'
     meeting_request1:
         __construct:
@@ -135,6 +136,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'sent'
     meeting_request2:
         __construct:
@@ -144,6 +146,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - ['@participant_random_1']
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'approved'
     meeting_request3:
         __construct:
@@ -153,6 +156,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'refused'
     meeting_request4:
         __construct:
@@ -162,6 +166,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'sent'
     meeting_request5:
         __construct:
@@ -171,6 +176,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'sent'
     meeting_request6:
         __construct:
@@ -180,6 +186,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
+            - '@event_rdv_carnot_2016'
         state: 'approved'
     meeting_proposition1:
         __construct:
@@ -189,6 +196,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
+            - '@event_rdv_carnot_2016'
         state: 'sent'
     meeting_proposition2:
         __construct:
@@ -198,6 +206,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
+            - '@event_rdv_carnot_2016'
         state: 'approved'
     meeting_proposition3:
         __construct:
@@ -207,6 +216,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
+            - '@event_rdv_carnot_2016'
         state: 'refused'
     meeting_proposition4:
         __construct:
@@ -216,6 +226,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
+            - '@event_rdv_carnot_2016'
         state: <randomElement(['sent', 'approved', 'refused'])>
     meeting_proposition5:
         __construct:
@@ -225,6 +236,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
+            - '@event_rdv_carnot_2016'
         state: <randomElement(['sent', 'approved', 'refused'])>
     meeting_proposition6:
         __construct:
@@ -234,4 +246,5 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
+            - '@event_rdv_carnot_2016'
         state: <randomElement(['sent', 'approved', 'refused'])>

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Factory;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -36,7 +37,8 @@ class MeetingFactory
             $toSheet,
             [],
             $createdAt,
-            $user
+            $user,
+            $event
         );
 
         return $request;
@@ -45,6 +47,7 @@ class MeetingFactory
     /**
      * @param Sheet|null $fromSheet
      * @param Sheet|null $toSheet
+     * @param Event|null $event
      * @param array      $fromParticipant
      * @param array      $toParticipant
      *
@@ -53,6 +56,7 @@ class MeetingFactory
     public static function createMeeting(
         Sheet $fromSheet = null,
         Sheet $toSheet = null,
+        Event $event = null,
         array $fromParticipant = [],
         array $toParticipant = []
     ) {
@@ -60,6 +64,7 @@ class MeetingFactory
         $slot      = SlotFactory::createSlot();
         $createdAt = new \DateTime();
         $spot      = SpotFactory::create();
+        $event = ($event === null ? EventFactory::createEvent() : $event);
 
         $meeting = new Meeting(
             $request,
@@ -70,6 +75,7 @@ class MeetingFactory
             $toParticipant,
             $createdAt,
             $spot,
+            $event,
             false,
             false
         );
