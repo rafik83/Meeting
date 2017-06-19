@@ -88,6 +88,7 @@ class ParticipateHandler
     {
         // Create a new sheet for this event
         $sheet = new Sheet($participate->event, $participate->type, [], $participate->user, $this->dateTime);
+        $sheet->setTitle($participate->user->getFullname());
 
         $this->typeResolver->resolve($participate->user, $participate->event, $participate->type);
 

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
@@ -35,18 +36,26 @@ class UpdateProfileHandler
     private $eventDispatcher;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
      * @param DelayedEventDispatcher         $eventDispatcher
+     * @param SheetInfoGuesser               $sheetInfoGuesser
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        SheetInfoGuesser $sheetInfoGuesser
     ) {
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer   = $accountSynchronizer;
         $this->eventDispatcher       = $eventDispatcher;
+        $this->sheetInfoGuesser      = $sheetInfoGuesser;
     }
 
     /**
@@ -57,6 +66,7 @@ class UpdateProfileHandler
         $participant     = $updateProfile->participant;
         $participantData = $updateProfile->participant->getData();
         $templateData    = $updateProfile->templateData;
+        $sheet           = $updateProfile->participant->getSheet();
 
         foreach ($updateProfile->data as $key => $value) {
             if ($templateData->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
@@ -74,6 +84,8 @@ class UpdateProfileHandler
         if ($participant->getUser() === $updateProfile->user) {
             $this->accountSynchronizer->set($templateData, $updateProfile->participant->getUser());
         }
+
+        $sheet->setTitle($this->sheetInfoGuesser->guessSheetTitle($sheet, $updateProfile->locale));
 
         // Send Sheet Update Event to recalculate completeness of the sheet
         $sheetUpdatedEvent = new SheetUpdatedEvent($participant->getSheet());
