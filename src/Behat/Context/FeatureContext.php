@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Behat\Context;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
@@ -50,9 +52,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @param \Symfony\Component\HttpKernel\KernelInterface $kernel
+     * @param KernelInterface $kernel
      */
-    public function setKernel(\Symfony\Component\HttpKernel\KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }
@@ -522,7 +524,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->setBaseUrl($eventUrl);
         $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
+        if (!$driver instanceof BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
         }
 
@@ -553,7 +555,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->setBaseUrl('http://admin.vimeet.proximum.dev');
         $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
+        if (!$driver instanceof BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
         }
 
@@ -681,5 +683,24 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $this->setBaseUrl(sprintf('http://%s', $event->getDomain()));
         $this->goToThisPage('/');
+    }
+
+    /**
+     * @Then a SMS should be sent to :phone
+     *
+     * @param string $phone
+     */
+    public function aSmsShouldBeSentTo($phone)
+    {
+        $smsSent = $this->kernel->getContainer()->get('behat_storage');
+        //->get('sms_sent');
+
+        if (null === $smsSent) {
+            throw new \LogicException('Missing SMS');
+        }
+
+        if (false === strstr(sprintf("SMS sent to %s with message", $phone), $smsSent)) {
+            throw new \LogicException('SMS content not found');
+        }
     }
 }

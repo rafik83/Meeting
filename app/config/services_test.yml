@@ -219,3 +219,14 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.token.user_event_token_manager'
+
+    #
+    # Adapter
+    #
+    adapter.smssender_alias:
+        class: Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter
+        arguments:
+            - '@behat_storage'
+
+    # Override the SMS Sender service
+    #adapter.smssender_alias: '@behat_adapter.storage_sms_sender'
