@@ -3,9 +3,9 @@ general:
     only:
         - master
         - preprod
-        - /feature/*
-        - /issue/*
-        - /hotfix/*
+        - feature/*
+        - issue/*
+        - hotfix/*
 machine:
     timezone: Europe/Paris
     php:
