@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -48,7 +49,7 @@ class UnavailabilityController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
+        $this->denyAccessUnlessGranted(HappeningAccessVoter::PERMISSION, $eventDomain->getEvent());
         $this->checkSheetHasParticipant($sheet, $participant);
 
         $event = $eventDomain->getEvent();
@@ -174,7 +175,7 @@ class UnavailabilityController extends Controller
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_REMOVE, $sheet);
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+        $this->denyAccessUnlessGranted(HappeningAccessVoter::PERMISSION, $event);
         $this->checkSheetHasParticipant($sheet, $participant);
 
         try {
