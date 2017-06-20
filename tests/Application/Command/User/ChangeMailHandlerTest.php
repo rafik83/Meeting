@@ -124,14 +124,16 @@ class ChangeMailHandlerTest extends TestCase
         $this->expectException(EmailAlreadyExistsException::class);
         $date  = new DateTime();
         $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
+        $userExpected  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
         $event = EventFactory::createEvent();
 
         // Mock
         $tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn('toto@toto.fr');
         $changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn($userExpected);
 
         // Base
         $changeMail = new ChangeMail($user, $event);
