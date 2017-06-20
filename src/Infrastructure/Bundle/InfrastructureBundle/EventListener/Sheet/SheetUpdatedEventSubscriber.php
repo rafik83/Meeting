@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\CompletenessCalculator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -24,11 +26,20 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
     private $completenessCalculator;
 
     /**
-     * @param CompletenessCalculator $completenessCalculator
+     * @var SheetRepositoryInterface
      */
-    public function __construct(CompletenessCalculator $completenessCalculator)
-    {
+    private $sheetRepository;
+
+    /**
+     * @param CompletenessCalculator   $completenessCalculator
+     * @param SheetRepositoryInterface $sheetRepository
+     */
+    public function __construct(
+        CompletenessCalculator $completenessCalculator,
+        SheetRepositoryInterface $sheetRepository
+    ) {
         $this->completenessCalculator = $completenessCalculator;
+        $this->sheetRepository        = $sheetRepository;
     }
 
     /**
@@ -48,6 +59,19 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetTitleCheckEvent $sheetTitleCheckEvent
+     */
+    public function onSheetTitleCheck(SheetTitleCheckEvent $sheetTitleCheckEvent)
+    {
+        if (empty($sheetTitleCheckEvent->getSheet()->getTitle())) {
+            $sheet = $sheetTitleCheckEvent->getSheet();
+            $sheet->setTitle($sheet->getOwner()->getFullname());
+
+            $this->sheetRepository->set($sheet);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -55,6 +79,7 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
         return [
             Events::SHEET_UPDATED      => 'onSheetUpdated',
             Events::SHEET_CHANGED_TYPE => 'onChangeType',
+            Events::SHEET_TITLE_CHECK  => 'onSheetTitleCheck',
         ];
     }
 }
