@@ -3229,6 +3229,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.happenings_access_checker'
+            - '@domain.key_dates.checker.agenda_access_checker'
     query.navigation.package_submenu_button_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler
         arguments:
@@ -3936,6 +3937,10 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
         arguments:
             - '@datetime'
+
+    domain.key_dates.checker.agenda_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker
+        arguments: ['@datetime']
 
     #
     # Nomenclature
