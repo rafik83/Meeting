@@ -42,8 +42,7 @@ class GroupController extends Controller
      */
     public function listAction(Event $event)
     {
-        // Only admin & organizers are allowed to manage sheetsGroup
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $groupViews = $this->get('tactician.commandbus')->handle(
@@ -66,7 +65,7 @@ class GroupController extends Controller
      */
     public function preCreateAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $searchUser = new SearchUser($event);
@@ -105,7 +104,7 @@ class GroupController extends Controller
      */
     public function createAction(Request $request, Event $event, User $user)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         try {
@@ -145,7 +144,7 @@ class GroupController extends Controller
      */
     public function updateAction(Request $request, Event $event, Group $group)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $command = new Update($group);
