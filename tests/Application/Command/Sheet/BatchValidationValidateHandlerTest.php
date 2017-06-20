@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidate;
+use Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
