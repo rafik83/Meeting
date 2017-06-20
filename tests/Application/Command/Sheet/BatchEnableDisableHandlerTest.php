@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable;
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
