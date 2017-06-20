@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
@@ -31,15 +32,23 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
     private $sheetRepository;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
      * @param CompletenessCalculator   $completenessCalculator
+     * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param SheetRepositoryInterface $sheetRepository
      */
     public function __construct(
         CompletenessCalculator $completenessCalculator,
+        SheetInfoGuesser $sheetInfoGuesser,
         SheetRepositoryInterface $sheetRepository
     ) {
         $this->completenessCalculator = $completenessCalculator;
         $this->sheetRepository        = $sheetRepository;
+        $this->sheetInfoGuesser       = $sheetInfoGuesser;
     }
 
     /**
@@ -63,9 +72,12 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetTitleCheck(SheetTitleCheckEvent $sheetTitleCheckEvent)
     {
-        if (empty($sheetTitleCheckEvent->getSheet()->getTitle())) {
+        $sheet             = $sheetTitleCheckEvent->getSheet();
+        $guessedSheetTitle = $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheet->getEvent()->getFallback());
+
+        if ($guessedSheetTitle !== $sheet->getTitle()) {
             $sheet = $sheetTitleCheckEvent->getSheet();
-            $sheet->setTitle($sheet->getOwner()->getFullname());
+            $sheet->setTitle($guessedSheetTitle);
 
             $this->sheetRepository->set($sheet);
         }
