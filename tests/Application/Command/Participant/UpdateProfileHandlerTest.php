@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -207,7 +207,6 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
-        $sheetInfoGuesser      = $this->prophesize(SheetInfoGuesser::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -231,11 +230,16 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             }
         ))->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, Argument::that(
+            function(SheetTitleCheckEvent $sheetTitleCheckEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
+
         $handler = new UpdateProfileHandler(
             $participantRepository->reveal(),
             $accountSynchronizer->reveal(),
-            $eventDispatcher->reveal(),
-            $sheetInfoGuesser->reveal()
+            $eventDispatcher->reveal()
         );
 
         $templateData  = new TemplateData('root', [], 'fr', 'fr');
@@ -488,7 +492,6 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
-        $sheetInfoGuesser      = $this->prophesize(SheetInfoGuesser::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -512,11 +515,16 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             }
         ))->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, Argument::that(
+            function(SheetTitleCheckEvent $sheetTitleCheckEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
+
         $handler = new UpdateProfileHandler(
             $participantRepository->reveal(),
             $accountSynchronizer->reveal(),
-            $eventDispatcher->reveal(),
-            $sheetInfoGuesser->reveal()
+            $eventDispatcher->reveal()
         );
 
         $templateData  = new TemplateData('root', [], 'fr', 'fr');
