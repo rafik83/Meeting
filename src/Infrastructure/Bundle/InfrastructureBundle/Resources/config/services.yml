@@ -3944,7 +3944,8 @@ services:
 
     domain.key_dates.checker.agenda_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker
-        arguments: ['@datetime']
+        arguments:
+             - '@datetime'
 
     #
     # Nomenclature
