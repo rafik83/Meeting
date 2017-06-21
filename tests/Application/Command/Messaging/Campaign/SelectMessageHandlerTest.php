@@ -30,7 +30,8 @@ class SelectMessageHandlerTest extends TestCase
 
         $campaign  = new Campaign($event, 'amazing campaign', [], $createdAt);
 
-        $expectedCampaign = new Campaign($event, '', [], $createdAt);
+        $expectedCampaign = new Campaign($event, 'amazing campaign', [], $createdAt);
+        $expectedCampaign->setMessage($message);
 
         // Mock
 
@@ -38,22 +39,17 @@ class SelectMessageHandlerTest extends TestCase
 
         // Scenario
 
-        $campaignRepository->set($message)->shouldBeCalled();
+        $campaignRepository->set($expectedCampaign)->shouldBeCalled();
 
         // Command
 
         $command = new SelectMessage($campaign);
+        $command->message = $message;
 
         // Handler
 
-        $handler = new SelectMessageHandler($campaignRepository);
+        $handler = new SelectMessageHandler($campaignRepository->reveal());
 
         $handler->handle($command);
-
-
-
-
-        //set -> should be called or should not be called pour prophesize
     }
-
 }
