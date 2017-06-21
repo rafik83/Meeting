@@ -143,6 +143,13 @@ class Configuration
     private $closeAnsweringMeetingRequestDate;
 
     /**
+     * Date d'ouverture de l'agenda
+     *
+     * @var \DateTimeInterface|null
+     */
+    private $agendaOnlineDate;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
@@ -342,6 +349,7 @@ class Configuration
      * @param \DateTimeInterface|null $closeMeetingRequestDate
      * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
      * @param \DateTimeInterface|null $smsActivationDate
+     * @param \DateTimeInterface|null $agendaOnlineDate
      *
      * @return Configuration
      */
@@ -351,7 +359,8 @@ class Configuration
         \DateTimeInterface $schedulePublishDate = null,
         \DateTimeInterface $closeMeetingRequestDate = null,
         \DateTimeInterface $closeAnsweringMeetingRequestDate = null,
-        \DateTimeInterface $smsActivationDate = null
+        \DateTimeInterface $smsActivationDate = null,
+        \DateTimeInterface $agendaOnlineDate = null
     ) {
         $this->catalogOnlineDate                = $catalogOnlineDate;
         $this->happeningsOpenDate               = $happeningsOpenDate;
@@ -359,6 +368,7 @@ class Configuration
         $this->closeMeetingRequestDate          = $closeMeetingRequestDate;
         $this->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
         $this->smsActivationDate                = $smsActivationDate;
+        $this->agendaOnlineDate                 = $agendaOnlineDate;
 
         return $this;
     }
@@ -463,5 +473,13 @@ class Configuration
     public function getSmsActivationDate()
     {
         return $this->smsActivationDate;
+    }
+
+    /**
+     * @return null|\DateTimeInterface
+     */
+    public function getAgendaOnlineDate()
+    {
+        return $this->agendaOnlineDate;
     }
 }

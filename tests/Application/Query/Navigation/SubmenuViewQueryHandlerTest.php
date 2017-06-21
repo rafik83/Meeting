@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -158,8 +159,10 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $navigationBuilder      = $this->prophesize(NavigationBuilderInterface::class);
         $happeningAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
+        $agendaAccessChecker = $this->prophesize(AgendaAccessChecker::class);
 
         $happeningAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $agendaAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
         $navigationBuilder
             ->getRoute('event_agenda', ['sheet' => 1])
@@ -173,7 +176,8 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new AgendaSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $happeningAccessChecker->reveal()
+            $happeningAccessChecker->reveal(),
+            $agendaAccessChecker->reveal()
         );
 
         $menuButtonViews = $handler->handle($query);

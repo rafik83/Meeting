@@ -73,6 +73,12 @@ services:
             - '@domain.key_dates.checker.catalog_access_checker'
         tags:
             - { name: security.voter }
+    security_voter.agenda_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.agenda_access_checker'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
