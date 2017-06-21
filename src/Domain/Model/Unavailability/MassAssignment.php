@@ -11,11 +11,12 @@
 namespace Proximum\Vimeet\Domain\Model\Unavailability;
 
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 /**
  * Assignement of a time slot from a dispatched mass unavailability to a user.
  */
-class MassAssignment
+class MassAssignment implements TimeRangeInterface
 {
     /**
      * @var int

@@ -353,6 +353,27 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getFirstPositionTypeByEventAndUser(Event $event, User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from(Type::class, 'type')
+            ->where('type.event = :event')
+            ->setParameter('event', $event)
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.type = type')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('type.position')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSeeableTypeIdsByUser(User $user)
     {
         return $this->seeableTypeByRules($this->rulesBySheets($this->sheetByUser($user)));
