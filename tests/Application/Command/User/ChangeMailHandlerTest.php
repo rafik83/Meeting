@@ -26,8 +26,30 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+
 class ChangeMailHandlerTest extends TestCase
 {
+    /** @varObjectProphecy */
+    private $tokenGenerator;
+
+    /** @varObjectProphecy */
+    private $userRepository;
+
+    /** @varObjectProphecy */
+    private $changeMailTokenRepository;
+
+    /** @varObjectProphecy */
+    private $eventDispatcher;
+
+    public function setUp()
+    {
+        $this->tokenGenerator            = $this->prophesize(ChangeMailTokenGenerator::class);
+        $this->userRepository            = $this->prophesize(UserRepositoryInterface::class);
+        $this->changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
+        $this->eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
+
+    }
+
     public function testHandle()
     {
         $date  = new DateTime();
@@ -39,18 +61,14 @@ class ChangeMailHandlerTest extends TestCase
         $expectedEvent = new ChangeMailAddressEvent($user, $event, $expectedChangeMailToken);
 
         // Mock
-        $tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
-        $tokenGenerator->generate($user, 'toto@toto.fr')->shouldBeCalled()->willReturn($expectedChangeMailToken);
+        $this->tokenGenerator->generate($user, 'toto@toto.fr')->shouldBeCalled()->willReturn($expectedChangeMailToken);
 
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn(null);
+        $this->userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn(null);
 
-        $changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
-        $changeMailTokenRepository->deleteAllForUser($user)->shouldBeCalled();
-        $changeMailTokenRepository->create($expectedChangeMailToken)->shouldBeCalled();
+        $this->changeMailTokenRepository->deleteAllForUser($user)->shouldBeCalled();
+        $this->changeMailTokenRepository->create($expectedChangeMailToken)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch('change_mail', $expectedEvent)->shouldBeCalled();
+        $this->eventDispatcher->dispatch('change_mail', $expectedEvent)->shouldBeCalled();
 
         // Base
         $changeMail = new ChangeMail($user, $event);
@@ -58,10 +76,10 @@ class ChangeMailHandlerTest extends TestCase
 
         // Handler
         $handler = new ChangeMailHandler(
-            $userRepository->reveal(),
-            $changeMailTokenRepository->reveal(),
-            $tokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $this->userRepository->reveal(),
+            $this->changeMailTokenRepository->reveal(),
+            $this->tokenGenerator->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($changeMail);
     }
@@ -73,22 +91,16 @@ class ChangeMailHandlerTest extends TestCase
         $user  = new User(null, '__SALT__', '__TEST__', 'fr');
         $event = EventFactory::createEvent();
 
-        // Mock
-        $tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-
         // Base
         $changeMail = new ChangeMail($user, $event);
         $changeMail->mail = null;
 
         // Handler
         $handler = new ChangeMailHandler(
-            $userRepository->reveal(),
-            $changeMailTokenRepository->reveal(),
-            $tokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $this->userRepository->reveal(),
+            $this->changeMailTokenRepository->reveal(),
+            $this->tokenGenerator->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($changeMail);
     }
@@ -99,22 +111,16 @@ class ChangeMailHandlerTest extends TestCase
         $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
         $event = EventFactory::createEvent();
 
-        // Mock
-        $tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-
         // Base
         $changeMail = new ChangeMail($user, $event);
         $changeMail->mail = 'test@test.fr';
 
         // Handler
         $handler = new ChangeMailHandler(
-            $userRepository->reveal(),
-            $changeMailTokenRepository->reveal(),
-            $tokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $this->userRepository->reveal(),
+            $this->changeMailTokenRepository->reveal(),
+            $this->tokenGenerator->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($changeMail);
     }
@@ -127,13 +133,7 @@ class ChangeMailHandlerTest extends TestCase
         $userExpected  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
         $event = EventFactory::createEvent();
 
-        // Mock
-        $tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
-        $changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn($userExpected);
+        $this->userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn($userExpected);
 
         // Base
         $changeMail = new ChangeMail($user, $event);
@@ -141,10 +141,10 @@ class ChangeMailHandlerTest extends TestCase
 
         // Handler
         $handler = new ChangeMailHandler(
-            $userRepository->reveal(),
-            $changeMailTokenRepository->reveal(),
-            $tokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $this->userRepository->reveal(),
+            $this->changeMailTokenRepository->reveal(),
+            $this->tokenGenerator->reveal(),
+            $this->eventDispatcher->reveal()
         );
         $handler->handle($changeMail);
     }
