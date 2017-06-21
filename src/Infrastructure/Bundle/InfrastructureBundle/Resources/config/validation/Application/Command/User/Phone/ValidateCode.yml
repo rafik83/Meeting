@@ -5,5 +5,4 @@ Proximum\Vimeet\Application\Command\User\Phone\ValidateCode:
             - Length:
                 min: 4
                 max: 4
-                minMessage: validators.userPhone.validateCode.code.min
-                maxMessage: validators.userPhone.validateCode.code.max
+                exactMessage: validators.userPhone.validateCode.code.exact
