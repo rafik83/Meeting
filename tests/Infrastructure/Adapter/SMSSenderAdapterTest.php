@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\ServerException;
 use Ovh\Api;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter;
 
@@ -73,7 +74,7 @@ class SMSSenderAdapterTest extends TestCase
 
     public function testSendInvalidReceiver()
     {
-        $this->expectException(FailToSendSMSException::class);
+        $this->expectException(InvalidReceiverException::class);
 
         $sms = new SMS('+33102030405', 'message content');
 

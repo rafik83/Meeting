@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Spot\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\SpotViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\SpotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Spot\Agenda\SpotView;
 use Proximum\Vimeet\Domain\Model\Spot;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SpotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

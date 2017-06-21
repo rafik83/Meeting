@@ -28,11 +28,20 @@ class UserEventTokenContext implements Context
     }
 
     /**
-     * @Given /^there is a token of type "(?P<type>[^"]+)" for this user on this event$/
+     * @Given /^there is a confirmation agenda token "(?P<token>[^"]+)" for this user on this event$/
      *
-     * @param string $type
+     * @param string $token
      */
-    public function createUserEventToken($type)
+    public function createAgendaConfirmationUserEventToken($token)
+    {
+        $this->createUserEventToken(UserEventTokenType::AGENDA_CONFIRMATION, $token);
+    }
+
+    /**
+     * @param string $type
+     * @param string $token
+     */
+    private function createUserEventToken($type, $token)
     {
         $event = $this->userEventTokenContextProxy->getStorage()->get('event');
         $user  = $this->userEventTokenContextProxy->getStorage()->get('user');
@@ -49,13 +58,10 @@ class UserEventTokenContext implements Context
             throw new \InvalidArgumentException('The given type is not a valid UserEventToken type');
         }
 
-        $event = $this->userEventTokenContextProxy
+        $userEventToken = $this->userEventTokenContextProxy
             ->getUserEventTokenManager()
-            ->create(
-                $event,
-                $user,
-                $type
-            );
-        $this->userEventTokenContextProxy->getStorage()->set('event', $event);
+            ->create($event, $user, $type, $token)
+        ;
+        $this->userEventTokenContextProxy->getStorage()->set('userEventToken', $userEventToken);
     }
 }

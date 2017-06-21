@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\ServerException;
 use Ovh\Api;
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 
 class SMSSenderAdapter implements SMSSenderInterface
@@ -41,9 +42,7 @@ class SMSSenderAdapter implements SMSSenderInterface
     }
 
     /**
-     * @param SMS $sms
-     *
-     * @throws FailToSendSMSException
+     * {@inheritdoc}
      */
     public function send(SMS $sms)
     {
@@ -58,7 +57,7 @@ class SMSSenderAdapter implements SMSSenderInterface
             );
 
             if (!empty($response['invalidReceivers'])) {
-                throw new FailToSendSMSException(
+                throw new InvalidReceiverException(
                     sprintf(
                         'The SMS could not be sent to this user %s as it is not a valid international phone number',
                         implode(', ', $response['invalidReceivers'])

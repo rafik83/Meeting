@@ -281,6 +281,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Token\UserEventTokenRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.user.user_event_phone_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\User\UserEventPhoneRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1772,6 +1776,29 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda }
 
+    application.command.user.phone.send_code_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\SendCodeHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@domain.code.digit_code_generator'
+            - '@adapter.smssender_alias'
+            - '@domain.user.phone.phone_sanitizer'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@template.participant.participant_info_setter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\SendCode }
+
+    command.user.phone.validate_code_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\ValidateCodeHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\ValidateCode }
+
     #
     # Post Batch Action
     #
@@ -2284,6 +2311,12 @@ services:
         arguments:
             - '@template.template_data_factory'
 
+    template.participant.participant_info_setter:
+        class: Proximum\Vimeet\Domain\Participant\ParticipantInfoSetter
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.participant_repository'
+
     #
     # Spot component
     #
@@ -2669,6 +2702,15 @@ services:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
+
+    query.tip.tip_translation_view_by_user_query_handler:
+        class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler
+        arguments:
+            - '@query.tip.tip_translation_view_query_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery }
+
     query.tip.tip_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipListViewQueryHandler
         arguments:
@@ -4828,6 +4870,12 @@ services:
             - '@datetime'
 
     #
+    # Code service
+    #
+    domain.code.digit_code_generator:
+        class: Proximum\Vimeet\Domain\Code\DigitCodeGenerator
+
+    #
     # Messaging SMS
     #
     adapter.smssender_adapter:
@@ -4837,3 +4885,9 @@ services:
             - '%ovh_service_name%'
             - '%ovh_sender_name%'
     adapter.smssender_alias: '@adapter.smssender_adapter'
+
+    #
+    # User Phone
+    #
+    domain.user.phone.phone_sanitizer:
+        class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer

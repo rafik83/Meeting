@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Token;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class UserEventToken
 {
@@ -127,5 +128,13 @@ class UserEventToken
     {
         $this->confirmed   = true;
         $this->confirmedAt = $confirmedAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAgendaConfirmation()
+    {
+        return UserEventTokenType::AGENDA_CONFIRMATION === $this->type;
     }
 }

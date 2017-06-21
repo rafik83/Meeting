@@ -42,6 +42,9 @@ class TipType extends AbstractType
             ->add('onAgenda', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('onConfirmationPhone', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type'    => TipTranslationType::class,
                 'allow_add'     => true,

@@ -37,6 +37,9 @@ class Update
 
     /** @var bool */
     public $onAgenda;
+
+    /** @var bool */
+    public $onConfirmationPhone;
     
     /** @var array */
     public $translations;
@@ -56,6 +59,7 @@ class Update
         $this->onSheet             = $tip->isOnSheet();
         $this->onAgenda            = $tip->isOnAgenda();
         $this->onProgram           = $tip->isOnProgram();
+        $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
 
         foreach ($this->tip->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
