@@ -78,7 +78,7 @@ class ChangeMailHandler
             throw new SameEmailException();
         }
 
-        if ($this->userRepository->findByEmail($changeMail->mail)) {
+        if (null !== $this->userRepository->findByEmail($changeMail->mail)) {
             throw new EmailAlreadyExistsException();
         }
 
