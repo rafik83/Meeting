@@ -37,7 +37,7 @@ class Sheet implements TraceableInterface
      * "Etat de validation des agendas des utilisateurs de la fiche"
      */
     const AGENDA_ALL_CONFIRMED    = 'all_agenda_confirmed';
-    const AGENDA_PARTLY_CONFIRMED = 'agenda_party_confirmed';
+    const AGENDA_PARTLY_CONFIRMED = 'agenda_partly_confirmed';
     const AGENDA_NONE_CONFIRMED   = 'no_agenda_confirmed';
     const AGENDA_NOT_CONCERNED    = 'agenda_not_concerned';
 
