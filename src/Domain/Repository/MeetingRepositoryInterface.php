@@ -147,6 +147,14 @@ interface MeetingRepositoryInterface
     public function countByParticipant(Participant $participant);
 
     /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasMeetingForUserAndEvent(User $user, Event $event): bool;
+
+    /**
      * @param Participant $participant
      *
      * @return bool

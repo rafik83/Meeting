@@ -969,6 +969,8 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * Status of the agenda confirmation
+     *
      * @return string
      */
     public function getAgendaConfirmedStatus(): string
