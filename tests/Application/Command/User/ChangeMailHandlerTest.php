@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailHandler;
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Application\Exception\Field\EmptyFieldException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -29,17 +31,26 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ChangeMailHandlerTest extends TestCase
 {
-    /** @varObjectProphecy */
+    /** @var ObjectProphecy */
     private $tokenGenerator;
 
-    /** @varObjectProphecy */
+    /** @var ObjectProphecy */
     private $userRepository;
 
-    /** @varObjectProphecy */
+    /** @var ObjectProphecy */
     private $changeMailTokenRepository;
 
-    /** @varObjectProphecy */
+    /** @var ObjectProphecy */
     private $eventDispatcher;
+
+    /** @var \DateTime  */
+    private $date;
+
+    /** @var User */
+    private $user;
+
+    /** @var  Event */
+    private $event;
 
     public function setUp()
     {
@@ -47,31 +58,30 @@ class ChangeMailHandlerTest extends TestCase
         $this->userRepository            = $this->prophesize(UserRepositoryInterface::class);
         $this->changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
         $this->eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
+        $this->date                      = $date  = new DateTime();
+        $this->user                      = $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
+        $this->event                     = $event = EventFactory::createEvent();
 
     }
 
     public function testHandle()
     {
-        $date  = new DateTime();
-        $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $event = EventFactory::createEvent();
-
         // Expected
-        $expectedChangeMailToken = new ChangeMailToken($user, 'toto@toto.fr', '1234567890', $date);
-        $expectedEvent = new ChangeMailAddressEvent($user, $event, $expectedChangeMailToken);
+        $expectedChangeMailToken = new ChangeMailToken($this->user, 'toto@toto.fr', '1234567890', $this->date);
+        $expectedEvent = new ChangeMailAddressEvent($this->user, $this->event, $expectedChangeMailToken);
 
         // Mock
-        $this->tokenGenerator->generate($user, 'toto@toto.fr')->shouldBeCalled()->willReturn($expectedChangeMailToken);
+        $this->tokenGenerator->generate($this->user, 'toto@toto.fr')->shouldBeCalled()->willReturn($expectedChangeMailToken);
 
         $this->userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn(null);
 
-        $this->changeMailTokenRepository->deleteAllForUser($user)->shouldBeCalled();
+        $this->changeMailTokenRepository->deleteAllForUser($this->user)->shouldBeCalled();
         $this->changeMailTokenRepository->create($expectedChangeMailToken)->shouldBeCalled();
 
         $this->eventDispatcher->dispatch('change_mail', $expectedEvent)->shouldBeCalled();
 
         // Base
-        $changeMail = new ChangeMail($user, $event);
+        $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = 'toto@toto.fr';
 
         // Handler
@@ -87,12 +97,9 @@ class ChangeMailHandlerTest extends TestCase
     public function testHandleWithNoEmail()
     {
         $this->expectException(EmptyFieldException::class);
-        $date  = new DateTime();
-        $user  = new User(null, '__SALT__', '__TEST__', 'fr');
-        $event = EventFactory::createEvent();
 
         // Base
-        $changeMail = new ChangeMail($user, $event);
+        $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = null;
 
         // Handler
@@ -108,11 +115,9 @@ class ChangeMailHandlerTest extends TestCase
     public function testHandleWithSameEmail()
     {
         $this->expectException(SameEmailException::class);
-        $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $event = EventFactory::createEvent();
 
         // Base
-        $changeMail = new ChangeMail($user, $event);
+        $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = 'test@test.fr';
 
         // Handler
@@ -128,15 +133,12 @@ class ChangeMailHandlerTest extends TestCase
     public function testHandleWithEmailAlreadyExist()
     {
         $this->expectException(EmailAlreadyExistsException::class);
-        $date  = new DateTime();
-        $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
         $userExpected  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $event = EventFactory::createEvent();
 
         $this->userRepository->findByEmail('toto@toto.fr')->shouldBeCalled()->willReturn($userExpected);
 
         // Base
-        $changeMail = new ChangeMail($user, $event);
+        $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = 'toto@toto.fr';
 
         // Handler
