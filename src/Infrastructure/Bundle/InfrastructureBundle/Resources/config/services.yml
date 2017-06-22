@@ -1772,6 +1772,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgendaHandler
         arguments:
             - '@repository.token.user_event_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda }
@@ -1798,6 +1799,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\ValidateCode }
+
+    command.sheet.agenda.update_agenda_confirmed_status_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Agenda\UpdateAgendaConfirmedStatusHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.agenda.confirmation_calculator'
 
     #
     # Post Batch Action
@@ -4901,3 +4908,13 @@ services:
     #
     domain.user.phone.phone_sanitizer:
         class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer
+
+    #
+    # Agenda confirmation calculator
+    #
+    domain.sheet.agenda.confirmation_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Agenda\ConfirmationCalculator
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'

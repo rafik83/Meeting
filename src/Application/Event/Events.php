@@ -75,4 +75,5 @@ final class Events
     const REQUEST_PARTICIPATE                  = 'request.participate';
     const REQUEST_UN_PARTICIPATE               = 'request.un_participate';
     const MASS_ASSIGNMENT_UPDATED              = 'mass.assignment.updated';
+    const USER_AGENDA_CONFIRMED                = 'user.agenda.confirmed';
 }
