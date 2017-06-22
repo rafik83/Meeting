@@ -42,7 +42,7 @@ class HappeningDateHelperTest extends \PHPUnit_Framework_TestCase
     public function provideTestGetDay()
     {
         return [
-            ['22/06/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'fr', 'Europe/Paris'],
+            ['22/06/2017', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'fr', 'Europe/Paris'],
             ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/Paris'],
             ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
             ['1/5/17', new \DateTime('2017-01-05 9:10:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
