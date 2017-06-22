@@ -179,6 +179,10 @@ class SheetSearchQueryBuilder
         if (isset($filters['hasPendingMeetingPropositions']) && true === $filters['hasPendingMeetingPropositions']) {
             $this->filterByHasPendingMeetingProposition();
         }
+
+        if (isset($filters['agendaConfirmedStatus']) && in_array($filters['agendaConfirmedStatus'], Sheet::AGENDA_CONFIRMED_STATUS)) {
+            $this->filterByAgendaConfirmedStatus($filters['agendaConfirmedStatus']);
+        }
     }
 
     /**
@@ -831,5 +835,16 @@ class SheetSearchQueryBuilder
         $matchHasOrder->setTerm('hasOrder', $hasOrder);
 
         $this->query->addMust($matchHasOrder);
+    }
+
+    /**
+     * @param string $agendaConfirmedStatus
+     */
+    private function filterByAgendaConfirmedStatus(string $agendaConfirmedStatus)
+    {
+        $matchAgendaConfirmedStatus = new Term();
+        $matchAgendaConfirmedStatus->setTerm('agendaConfirmedStatus', $agendaConfirmedStatus);
+
+        $this->query->addMust($matchAgendaConfirmedStatus);
     }
 }

@@ -41,6 +41,13 @@ class Sheet implements TraceableInterface
     const AGENDA_NONE_CONFIRMED   = 'no_agenda_confirmed';
     const AGENDA_NOT_CONCERNED    = 'agenda_not_concerned';
 
+    const AGENDA_CONFIRMED_STATUS = [
+        self::AGENDA_ALL_CONFIRMED,
+        self::AGENDA_PARTLY_CONFIRMED,
+        self::AGENDA_NONE_CONFIRMED,
+        self::AGENDA_NOT_CONCERNED,
+    ];
+
     /**
      * @var int
      */
@@ -159,9 +166,7 @@ class Sheet implements TraceableInterface
      */
     private $title = null;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
     /**
