@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 
-class HappeningDateHelperTest extends \PHPUnit_Framework_TestCase
+class HappeningDateHelperTest extends TestCase
 {
     public function provideTestGetHour()
     {
@@ -46,7 +47,6 @@ class HappeningDateHelperTest extends \PHPUnit_Framework_TestCase
             ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/Paris'],
             ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
             ['1/5/17', new \DateTime('2017-01-05 9:10:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
-            ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), null, 'Europe/Paris'],
         ];
     }
 
@@ -56,10 +56,10 @@ class HappeningDateHelperTest extends \PHPUnit_Framework_TestCase
      *
      * @param $expected
      * @param $datetime
-     * @param $local
+     * @param string $local
      * @param $timezone
      */
-    public function testGetDay($expected, $datetime, $local, $timezone)
+    public function testGetDay($expected, $datetime, string $local, $timezone)
     {
         $actual= HappeningDateHelper::getDay($datetime, $local, $timezone);
         $this->assertEquals($expected, $actual);
