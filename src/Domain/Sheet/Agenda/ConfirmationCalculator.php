@@ -90,7 +90,7 @@ class ConfirmationCalculator
                 ->hasParticipationForUserAndEvent($user, $event)
             ;
 
-            if (true == $hasHappeningParticipation) {
+            if (true === $hasHappeningParticipation) {
                 $concerned++;
 
                 if ($token->isConfirmed()) {
