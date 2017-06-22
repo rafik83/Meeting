@@ -177,6 +177,11 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
+            ->add('agendaConfirmedStatus', AgendaConfirmedStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.agendaConfirmedStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
         ;
 
         /** @var Event $event */
