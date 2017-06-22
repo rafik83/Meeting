@@ -19,9 +19,9 @@ class AmountFormatterTest extends TestCase
     {
         return [
             [1259, 12.59],
-            [10,0.1],
-            [1200,12],
-            [100,1],
+            [10, 0.1],
+            [1200, 12],
+            [100, 1],
         ];
     }
 
@@ -62,9 +62,9 @@ class AmountFormatterTest extends TestCase
     public function provideCalculateRateAmount()
     {
         return [
-            [4,200,2],
-            [12,400,3],
-            [600,5000,12],
+            [4, 200, 2],
+            [12, 400, 3],
+            [600, 5000, 12],
         ];
     }
 
