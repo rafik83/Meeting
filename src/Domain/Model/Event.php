@@ -162,6 +162,11 @@ class Event implements EventInterface, TraceableInterface
     private $invoicePrefix;
 
     /**
+     * @var bool
+     */
+    private $catalogPublic = false;
+
+    /**
      * @param string      $title
      * @param string      $fallback
      * @param array       $locales

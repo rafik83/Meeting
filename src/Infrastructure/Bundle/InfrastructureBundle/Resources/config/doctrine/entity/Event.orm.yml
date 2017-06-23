@@ -54,6 +54,8 @@ Proximum\Vimeet\Domain\Model\Event:
         emailTeam:
             type: string
             nullable: true
+        catalogPublic:
+            type: boolean
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address
