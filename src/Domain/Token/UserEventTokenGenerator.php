@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Token;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\EventToken\AgendaConfirmationTokenCreated;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
@@ -26,18 +29,24 @@ class UserEventTokenGenerator
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /**
-     * @param UserEventTokenRepositoryInterface $userEventTokenRepository
-     * @param UniqidGenerator                   $uniqidGenerator
-     * @param \DateTimeInterface                $dateTime
+     * @param UserEventTokenRepositoryInterface  $userEventTokenRepository
+     * @param UniqidGenerator                    $uniqidGenerator
+     * @param DelayedEventDispatcherInterface    $delayedEventDispatcher
+     * @param \DateTimeInterface                 $dateTime
      */
     public function __construct(
         UserEventTokenRepositoryInterface $userEventTokenRepository,
         UniqidGenerator $uniqidGenerator,
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->userEventTokenRepository = $userEventTokenRepository;
         $this->uniqidGenerator = $uniqidGenerator;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->dateTime = $dateTime;
     }
 
@@ -63,6 +72,21 @@ class UserEventTokenGenerator
 
         $this->userEventTokenRepository->add($userEventToken);
 
+        $this->dispatchEventOfCreation($userEventToken);
+
         return $userEventToken;
+    }
+
+    /**
+     * @param UserEventToken $userEventToken
+     */
+    private function dispatchEventOfCreation(UserEventToken $userEventToken)
+    {
+        if ($userEventToken->isAgendaConfirmation()) {
+            $this->delayedEventDispatcher->dispatch(
+                Events::USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED,
+                new AgendaConfirmationTokenCreated($userEventToken->getEvent(), $userEventToken->getUser())
+            );
+        }
     }
 }

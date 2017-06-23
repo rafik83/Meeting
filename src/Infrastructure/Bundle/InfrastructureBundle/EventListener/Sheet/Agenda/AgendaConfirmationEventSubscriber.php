@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Agenda\UpdateAgendaConfirmedStatus
 use Proximum\Vimeet\Application\Command\Sheet\Agenda\UpdateAgendaConfirmedStatusHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\Agenda\AgendaConfirmationEvent;
+use Proximum\Vimeet\Application\Event\User\EventToken\AgendaConfirmationTokenCreated;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AgendaConfirmationEventSubscriber implements EventSubscriberInterface
@@ -40,12 +41,26 @@ class AgendaConfirmationEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param AgendaConfirmationTokenCreated $agendaConfirmationTokenCreated
+     */
+    public function onAgendaConfirmationTokenCreated(AgendaConfirmationTokenCreated $agendaConfirmationTokenCreated)
+    {
+        $this->updateAgendaConfirmedStatusHandler->handle(
+            new UpdateAgendaConfirmedStatus(
+                $agendaConfirmationTokenCreated->getEvent(),
+                $agendaConfirmationTokenCreated->getUser()
+            )
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
             Events::USER_AGENDA_CONFIRMED => 'onAgendaConfirmation',
+            Events::USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED => 'onAgendaConfirmationTokenCreated',
         ];
     }
 }
