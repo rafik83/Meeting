@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\SearchFacet:
+Proximum\Vimeet\Domain\Model\Catalog\AbstractSearchFacet:
     type:  entity
     table: search_facet
     id:
@@ -19,7 +19,7 @@ Proximum\Vimeet\Domain\Model\SearchFacet:
                 nullable: false
     oneToMany:
         translations:
-            targetEntity: Proximum\Vimeet\Domain\Model\SearchFacetTranslation
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\SearchFacetTranslation
             mappedBy: searchFacet
             indexBy: locale
             cascade: ["persist"]

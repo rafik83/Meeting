@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

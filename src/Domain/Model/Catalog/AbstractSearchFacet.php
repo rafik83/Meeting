@@ -1,18 +1,19 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Catalog;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 
-class SearchFacet
+abstract class AbstractSearchFacet
 {
     const TYPE_TYPE                  = 'type';
     const TYPE_POSITION              = 'position';
@@ -157,7 +158,7 @@ class SearchFacet
      * @param string $label
      * @param string $placeholder
      *
-     * @return SearchFacet
+     * @return AbstractSearchFacet
      */
     public function translate($locale, $label, $placeholder)
     {

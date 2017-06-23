@@ -8,7 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Catalog;
+
+use Proximum\Vimeet\Domain\Model\TypeTranslation;
 
 class SearchFacetTranslation
 {
@@ -18,7 +20,7 @@ class SearchFacetTranslation
     private $id;
 
     /**
-     * @var SearchFacet
+     * @var AbstractSearchFacet
      */
     private $searchFacet;
 
@@ -40,12 +42,12 @@ class SearchFacetTranslation
     /**
      * SearchFacetTranslation constructor.
      *
-     * @param SearchFacet $searchFacet
+     * @param AbstractSearchFacet $searchFacet
      * @param string      $label
      * @param string      $placeholder
      * @param string      $locale
      */
-    public function __construct(SearchFacet $searchFacet, $label, $placeholder, $locale)
+    public function __construct(AbstractSearchFacet $searchFacet, $label, $placeholder, $locale)
     {
         $this->searchFacet = $searchFacet;
         $this->label       = $label;
@@ -54,7 +56,7 @@ class SearchFacetTranslation
     }
 
     /**
-     * @return SearchFacet
+     * @return AbstractSearchFacet
      */
     public function getSearchFacet()
     {
@@ -62,7 +64,7 @@ class SearchFacetTranslation
     }
 
     /**
-     * @param SearchFacet $searchFacet
+     * @param AbstractSearchFacet $searchFacet
      */
     public function setSearchFacet($searchFacet)
     {

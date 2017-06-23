@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\SearchFacetTranslation;
+use Proximum\Vimeet\Domain\Model\Catalog\SearchFacetTranslation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
