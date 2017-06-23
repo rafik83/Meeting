@@ -59,5 +59,10 @@ class ParticipationCountTest extends TestCase
 
         $repository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $repository->countParticipationByHappening($happening)->shouldNotBeCalled();
+
+        $service = new ParticipationCount($repository->reveal());
+
+        $this->assertEquals(INF, $service->getRemaining($happening));
+        $this->assertEquals(false, $service->isFull($happening));
     }
 }
