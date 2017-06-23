@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Domain\Token;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\EventToken\AgendaConfirmationTokenCreated;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -23,6 +22,7 @@ use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Token\UniqidGenerator;
 use Proximum\Vimeet\Domain\Token\UserEventTokenGenerator;
 use Proximum\Vimeet\Domain\Token\UserEventTokenType;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UserEventTokenGeneratorTest extends TestCase
 {
@@ -36,7 +36,7 @@ class UserEventTokenGeneratorTest extends TestCase
     private $userEventTokenRepository;
 
     /** @var ObjectProphecy */
-    private $delayedEventDispatcher;
+    private $eventDispatcher;
 
     /** @var ObjectProphecy */
     private $event;
@@ -51,7 +51,7 @@ class UserEventTokenGeneratorTest extends TestCase
         $this->dateTime = new \DateTime();
         $this->userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
         $this->uniqidGenerator = $this->prophesize(UniqidGenerator::class);
-        $this->delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
     }
 
     public function testGetUserEventTokenForConfirmAgendaExistingToken()
@@ -72,13 +72,13 @@ class UserEventTokenGeneratorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($userEventToken);
         $this->uniqidGenerator->generate()->shouldNotBeCalled();
-        $this->delayedEventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
         // Generator
         $generator = new UserEventTokenGenerator(
             $this->userEventTokenRepository->reveal(),
             $this->uniqidGenerator->reveal(),
-            $this->delayedEventDispatcher->reveal(),
+            $this->eventDispatcher->reveal(),
             $this->dateTime
         );
         $result = $generator->getUserEventTokenForConfirmAgenda($this->event->reveal(), $this->user->reveal(), $type);
@@ -111,7 +111,7 @@ class UserEventTokenGeneratorTest extends TestCase
         ;
         $this->userEventTokenRepository->add($expectedUserEventToken)->shouldBeCalled();
         $this->uniqidGenerator->generate()->shouldBeCalled()->willReturn($uniqid);
-        $this->delayedEventDispatcher
+        $this->eventDispatcher
             ->dispatch(
                 Events::USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED,
                 new AgendaConfirmationTokenCreated($this->event->reveal(), $this->user->reveal())
@@ -121,7 +121,7 @@ class UserEventTokenGeneratorTest extends TestCase
         $generator = new UserEventTokenGenerator(
             $this->userEventTokenRepository->reveal(),
             $this->uniqidGenerator->reveal(),
-            $this->delayedEventDispatcher->reveal(),
+            $this->eventDispatcher->reveal(),
             $this->dateTime
         );
         $result = $generator->getUserEventTokenForConfirmAgenda($this->event->reveal(), $this->user->reveal(), $type);

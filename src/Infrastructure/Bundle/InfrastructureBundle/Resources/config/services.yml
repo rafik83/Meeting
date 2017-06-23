@@ -4884,6 +4884,7 @@ services:
         arguments:
             - '@repository.token.user_event_token_repository'
             - '@domain.token.uniqid_generator'
+            - '@event_dispatcher'
             - '@datetime'
 
     #
