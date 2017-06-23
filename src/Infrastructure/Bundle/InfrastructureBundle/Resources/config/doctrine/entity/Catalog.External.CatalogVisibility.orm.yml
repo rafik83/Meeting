@@ -11,17 +11,29 @@ Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
-    oneToMany:
+    manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
-            mappedBy: types
-            joinColumn:
-                onDelete: SET NULL
+            joinTable:
+              name: catalog_visibility_types
+              joinColumns:
+                type_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                catalog_id:
+                  referencedColumnName: id
+              onDelete: SET NULL
         categories:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
-            mappedBy: categories
-            joinColumn:
-                onDelete: SET NULL
+            joinTable:
+              name: catalog_visibility_categories
+              joinColumns:
+                category_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                catalog_id:
+                  referencedColumnName: id
+              onDelete: SET NULL
     uniqueConstraints:
         catalog_visibility_event:
             columns: [id, event_id]
