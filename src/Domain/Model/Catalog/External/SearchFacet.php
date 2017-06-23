@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class SearchFacet extends AbstractSearchFacet
 {
-
     /**
      * SearchFacet constructor.
      *
