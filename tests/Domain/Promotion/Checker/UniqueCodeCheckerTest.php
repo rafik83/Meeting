@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Promotion\Request;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
@@ -20,14 +21,26 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UniqueCodeCheckerTest extends TestCase
 {
+    /** @var  Event */
+    private $event;
+
+    /** @var  PromotionCode */
+    private $promotionCodeRepository;
+
+    public function setUp()
+    {
+        $this->event                   = EventFactory::createEvent();
+        $this->promotionCodeRepository = $this->prophesize(PromotionCodeRepository::class);
+    }
+
     public static function createPromotion()
     {
-        $event = EventFactory::createEvent();
-        $title = 'Title';
-        $code = 'PROMOCODE';
-        $product = new Product($event, 'test', 'test', 'test', 1.3, 2, 4, 6, true, new \DateTime(), false );
+        $event   = EventFactory::createEvent();
+        $title   = 'Title';
+        $code    = 'PROMOCODE';
+        $product = new Product($event, 'test', 'test', 'test', 1.3, 2, 4, 6, true, new \DateTime(), false);
 
-        return new Promotion(new PromotionCode($event, $title, $code), $product,'test', 1.4);
+        return new Promotion(new PromotionCode($event, $title, $code), $product, 'test', 1.4);
     }
 
     public static function provideHasUniqueCode()
@@ -39,22 +52,20 @@ class UniqueCodeCheckerTest extends TestCase
     }
 
     /**
-     *@dataProvider provideHasUniqueCode
+     * @dataProvider provideHasUniqueCode
      *
      * @param $expected
      * @param $promotions
      */
     public function testHasUniqueCode($expected, $promotions)
     {
-        $event = EventFactory::createEvent();
-        $title = 'Title';
-        $code = 'PROMOCODE';
-        $promoCode= new PromotionCode($event, $title, $code);
+        $title     = 'Title';
+        $code      = 'PROMOCODE';
+        $promoCode = new PromotionCode($this->event, $title, $code);
 
-        $promotionCodeRepository = $this->prophesize(PromotionCodeRepository::class);
-        $promotionCodeRepository->findDuplicate($promoCode)->shouldBeCalled()->willReturn($promotions);
+        $this->promotionCodeRepository->findDuplicate($promoCode)->shouldBeCalled()->willReturn($promotions);
 
-        $checker = new UniqueCodeChecker($promotionCodeRepository->reveal());
+        $checker = new UniqueCodeChecker($this->promotionCodeRepository->reveal());
 
         $this->assertEquals($expected, $checker->hasUniqueCode($promoCode));
     }
@@ -76,13 +87,10 @@ class UniqueCodeCheckerTest extends TestCase
      */
     public function testExist(bool $expected, array $promotionCodes)
     {
-        $event = EventFactory::createEvent();
+        $this->promotionCodeRepository->findByEventAndCode($this->event, 'code')->shouldBeCalled()->willReturn($promotionCodes);
 
-        $promotionCodeRepository = $this->prophesize(PromotionCodeRepository::class);
-        $promotionCodeRepository->findByEventAndCode($event, 'code')->shouldBeCalled()->willReturn($promotionCodes);
+        $checker = new UniqueCodeChecker($this->promotionCodeRepository->reveal());
 
-        $checker = new UniqueCodeChecker($promotionCodeRepository->reveal());
-
-        $this->assertEquals($expected, $checker->exists($event, 'code'));
+        $this->assertEquals($expected, $checker->exists($this->event, 'code'));
     }
 }
