@@ -19,13 +19,13 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UniqueCodeGeneratorTest extends TestCase
 {
-    /** @var  Event */
+    /** @var Event */
     private $event;
 
-    /** @var  CodeGeneratorInterface */
+    /** @var CodeGeneratorInterface */
     private $generator;
 
-    /** @var  UniqueCodeChecker */
+    /** @var UniqueCodeChecker */
     private $checker;
 
     public function setUp()
