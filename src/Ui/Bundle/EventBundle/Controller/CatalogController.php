@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -201,6 +202,25 @@ class CatalogController extends Controller
             'searchForm'          => $searchForm->createView(),
             'tipTranslationViews' => $tipTranslationViews,
         ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     */
+    public function listLogoutAction(Request $request, EventDomain $eventDomain)
+    {
+        $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+            new PaginatedSheetLogoutViewQuery(
+                $eventDomain->getEvent(),
+                [],
+                1,
+                50,
+                $request->getLocale()
+            )
+        );
+
+        dump($paginatedResult); die;
     }
 
     /**

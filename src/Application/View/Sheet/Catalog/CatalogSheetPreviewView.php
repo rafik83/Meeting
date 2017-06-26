@@ -8,61 +8,24 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Sheet;
+namespace Proximum\Vimeet\Application\View\Sheet\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 
-class CatalogSheetPreviewView
+class CatalogSheetPreviewView extends AbstractSheetPreviewView
 {
-    /**
-     * @var int
-     */
-    public $id;
-
-    /**
-     * "Titre de fiche"
-     *
-     * @var string
-     */
-    public $title;
-
-    /**
-     * "Type de participation"
-     *
-     * @var string
-     */
-    public $type;
-
-    /**
-     * @var PreviewView[]
-     */
-    public $preview;
-
-    /**
-     * @var Meeting\Request|null
-     */
+    /** @var Meeting\Request|null */
     public $meetingRequest;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isItMySheet;
 
-    /**
-     * @var Sheet
-     */
-    public $sheet;
-
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isMeetingPublished;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isMeetingRequestUpdateLocked;
 
     /** @var bool */
@@ -93,9 +56,10 @@ class CatalogSheetPreviewView
      * @param bool            $isSeenByCurrentUser
      */
     public function __construct(
-        $id,
+        int $id,
         Sheet $sheet,
-        $title, $type,
+        string $title,
+        string $type,
         array $preview,
         Meeting\Request $meetingRequest = null,
         $isItMySheet,
@@ -106,11 +70,8 @@ class CatalogSheetPreviewView
         $hasMessage = false,
         $isSeenByCurrentUser = false
     ) {
-        $this->id                              = $id;
-        $this->sheet                           = $sheet;
-        $this->title                           = $title;
-        $this->type                            = $type;
-        $this->preview                         = $preview;
+        parent::__construct($id,$title, $type, $preview, $sheet);
+
         $this->meetingRequest                  = $meetingRequest;
         $this->isItMySheet                     = $isItMySheet;
         $this->isMeetingPublished              = $isMeetingPublished;

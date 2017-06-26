@@ -2603,6 +2603,14 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
+
+    query.catalog.sheet_preview_logout_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQueryHandler
+        arguments:
+            - '@sheet.preview'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQuery }
+
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
@@ -2615,6 +2623,15 @@ services:
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+
+    query.sheet.catalog.paginated_sheet_logout_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@query.catalog.sheet_preview_logout_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQuery }
+
     query.invoice.invoice_data_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler
         arguments:

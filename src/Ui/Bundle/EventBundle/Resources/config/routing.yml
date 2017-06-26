@@ -392,6 +392,11 @@ event_catalog_index:
     methods:  [GET]
     defaults: { _controller: EventBundle:Catalog:index }
 
+event_catalog_logout_list:
+    path: /list
+    methods: [GET]
+    defaults: { _controller: EventBundle:Catalog:listLogout }
+
 event_catalog_search_localization:
     path: /sheet/{sheet}/catalog/search-localization
     requirements:
