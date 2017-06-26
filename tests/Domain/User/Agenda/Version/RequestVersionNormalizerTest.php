@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Components\User\Agenda\Version;
+namespace Proximum\Vimeet\Tests\Domain\User\Agenda\Version;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Components\User\Agenda\Version\RequestVersionNormalizer;
+use Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;

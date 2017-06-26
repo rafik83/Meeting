@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\User\Agenda\Version;
+namespace Proximum\Vimeet\Domain\User\Agenda\Version;
 
 class VersionNormalizer
 {
