@@ -15,6 +15,35 @@ use Proximum\Vimeet\Domain\Money\AmountFormatter;
 
 class AmountFormatterTest extends TestCase
 {
+    /**
+     * @dataProvider provideDecimalToCentsAmount
+     */
+    public function testDecimalToCentsAmount($expected, $amount)
+    {
+        $actual = AmountFormatter::decimalToCentsAmount($amount);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @dataProvider provideCentsToDecimalAmount
+     *
+     */
+    public function testCentsToDecimalAmount($expected, $amount)
+    {
+        $actual = AmountFormatter::centsToDecimalAmount($amount);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @dataProvider provideCalculateRateAmount
+     *
+     */
+    public function testCalculateRateAmount($expected, $amount, $rate)
+    {
+        $actual = AmountFormatter::calculateRateAmount($amount, $rate);
+        $this->assertEquals($expected, $actual);
+    }
+
     public function provideDecimalToCentsAmount()
     {
         return [
@@ -23,18 +52,6 @@ class AmountFormatterTest extends TestCase
             [1200, 12],
             [100, 1],
         ];
-    }
-
-    /**
-     * @dataProvider provideDecimalToCentsAmount
-     *
-     * @param $expected
-     * @param $amount
-     */
-    public function testDecimalToCentsAmount($expected, $amount)
-    {
-        $actual = AmountFormatter::decimalToCentsAmount($amount);
-        $this->assertEquals($expected, $actual);
     }
 
     public function provideCentsToDecimalAmount()
@@ -47,18 +64,6 @@ class AmountFormatterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideCentsToDecimalAmount
-     *
-     * @param $expected
-     * @param $amount
-     */
-    public function testCentsToDecimalAmount($expected, $amount)
-    {
-        $actual = AmountFormatter::centsToDecimalAmount($amount);
-        $this->assertEquals($expected, $actual);
-    }
-
     public function provideCalculateRateAmount()
     {
         return [
@@ -66,18 +71,5 @@ class AmountFormatterTest extends TestCase
             [12, 400, 3],
             [600, 5000, 12],
         ];
-    }
-
-    /**
-     * @dataProvider provideCalculateRateAmount
-     *
-     * @param $expected
-     * @param $amount
-     * @param $rate
-     */
-    public function testCalculateRateAmount($expected, $amount, $rate)
-    {
-        $actual = AmountFormatter::calculateRateAmount($amount, $rate);
-        $this->assertEquals($expected, $actual);
     }
 }
