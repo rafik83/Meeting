@@ -210,7 +210,7 @@ class CatalogController extends Controller
      *
      * @return Response
      */
-    public function listLogoutAction(Request $request, EventDomain $eventDomain): Response
+    public function indexExternalAction(Request $request, EventDomain $eventDomain): Response
     {
         $page = $request->query->getInt('page', 1);
 
@@ -246,10 +246,9 @@ class CatalogController extends Controller
             if ($page > 1) {
                 return new JsonResponse(
                     [
-                        'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
+                        'html' => $this->renderView('@Event/Catalog/External/list.html.twig', [
                             'paginatedResult' => $paginatedResult,
                             'page'            => $page,
-                            'isCatalog'       => true,
                         ]),
                         'seeMoreButton' => $seeMoreButtonStatus,
                     ]
