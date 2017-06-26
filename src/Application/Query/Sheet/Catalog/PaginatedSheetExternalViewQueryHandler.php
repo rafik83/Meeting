@@ -33,20 +33,20 @@ class PaginatedSheetExternalViewQueryHandler
     /**
      * @var SheetPreviewExternalViewQueryHandler
      */
-    private $sheetPreviewLogoutViewQueryHandler;
+    private $sheetPreviewExternalViewQueryHandler;
 
     /**
      * PaginatedSheetExternalViewQueryHandler constructor.
      *
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
-     * @param SheetPreviewExternalViewQueryHandler $sheetPreviewLogoutViewQueryHandler
+     * @param SheetPreviewExternalViewQueryHandler $sheetPreviewExternalViewQueryHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        SheetPreviewExternalViewQueryHandler $sheetPreviewLogoutViewQueryHandler
+        SheetPreviewExternalViewQueryHandler $sheetPreviewExternalViewQueryHandler
     ) {
         $this->sheetSearchAdapter                 = $sheetSearchAdapter;
-        $this->sheetPreviewLogoutViewQueryHandler = $sheetPreviewLogoutViewQueryHandler;
+        $this->sheetPreviewExternalViewQueryHandler = $sheetPreviewExternalViewQueryHandler;
     }
 
     /**
@@ -83,7 +83,7 @@ class PaginatedSheetExternalViewQueryHandler
     private function getSheetPreview(PaginatedSheetExternalViewQuery $query): \Closure
     {
         return function (Sheet $sheet) use ($query) {
-            return $this->sheetPreviewLogoutViewQueryHandler->handle(
+            return $this->sheetPreviewExternalViewQueryHandler->handle(
                 new SheetPreviewExternalViewQuery($sheet, $query->locale, $query->event)
             );
         };
