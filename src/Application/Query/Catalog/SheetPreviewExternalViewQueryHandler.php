@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewLogoutView;
 
-class SheetPreviewLogoutViewQueryHandler
+class SheetPreviewExternalViewQueryHandler
 {
     /**
      * @var Preview
@@ -21,7 +21,7 @@ class SheetPreviewLogoutViewQueryHandler
     private $preview;
 
     /**
-     * SheetPreviewLogoutViewQueryHandler constructor.
+     * SheetPreviewExternalViewQueryHandler constructor.
      *
      * @param Preview $preview
      */
@@ -31,11 +31,11 @@ class SheetPreviewLogoutViewQueryHandler
     }
 
     /**
-     * @param SheetPreviewLogoutViewQuery $query
+     * @param SheetPreviewExternalViewQuery $query
      *
      * @return CatalogSheetPreviewLogoutView
      */
-    public function handle(SheetPreviewLogoutViewQuery $query)
+    public function handle(SheetPreviewExternalViewQuery $query)
     {
         return new CatalogSheetPreviewLogoutView(
             $query->sheet->getId(),

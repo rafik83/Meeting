@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetPreviewLogoutViewQuery
+class SheetPreviewExternalViewQuery
 {
     /**
      * @var Sheet
@@ -31,7 +31,7 @@ class SheetPreviewLogoutViewQuery
     public $event;
 
     /**
-     * SheetPreviewLogoutViewQuery constructor.
+     * SheetPreviewExternalViewQuery constructor.
      *
      * @param Sheet  $sheet
      * @param string $locale

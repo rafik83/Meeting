@@ -11,42 +11,42 @@
 namespace Proximum\Vimeet\Application\Query\Sheet\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PaginatedSheetLogoutViewQueryHandler
+class PaginatedSheetExternalViewQueryHandler
 {
     /**
      * @var SheetSearchAdapterInterface
      */
     private $sheetSearchAdapter;
     /**
-     * @var SheetPreviewLogoutViewQueryHandler
+     * @var SheetPreviewExternalViewQueryHandler
      */
     private $sheetPreviewLogoutViewQueryHandler;
 
     /**
-     * PaginatedSheetLogoutViewQueryHandler constructor.
+     * PaginatedSheetExternalViewQueryHandler constructor.
      *
-     * @param SheetSearchAdapterInterface        $sheetSearchAdapter
-     * @param SheetPreviewLogoutViewQueryHandler $sheetPreviewLogoutViewQueryHandler
+     * @param SheetSearchAdapterInterface          $sheetSearchAdapter
+     * @param SheetPreviewExternalViewQueryHandler $sheetPreviewLogoutViewQueryHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        SheetPreviewLogoutViewQueryHandler $sheetPreviewLogoutViewQueryHandler
+        SheetPreviewExternalViewQueryHandler $sheetPreviewLogoutViewQueryHandler
     ) {
         $this->sheetSearchAdapter                 = $sheetSearchAdapter;
         $this->sheetPreviewLogoutViewQueryHandler = $sheetPreviewLogoutViewQueryHandler;
     }
 
     /**
-     * @param PaginatedSheetLogoutViewQuery $query
+     * @param PaginatedSheetExternalViewQuery $query
      *
      * @return PaginatedResult
      */
-    public function handle(PaginatedSheetLogoutViewQuery $query)
+    public function handle(PaginatedSheetExternalViewQuery $query)
     {
         $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
@@ -68,15 +68,15 @@ class PaginatedSheetLogoutViewQueryHandler
     }
 
     /**
-     * @param PaginatedSheetLogoutViewQuery $query
+     * @param PaginatedSheetExternalViewQuery $query
      *
      * @return \Closure
      */
-    private function getSheetPreview(PaginatedSheetLogoutViewQuery $query): \Closure
+    private function getSheetPreview(PaginatedSheetExternalViewQuery $query): \Closure
     {
         return function (Sheet $sheet) use ($query) {
             return $this->sheetPreviewLogoutViewQueryHandler->handle(
-                new SheetPreviewLogoutViewQuery($sheet, $query->locale, $query->event)
+                new SheetPreviewExternalViewQuery($sheet, $query->locale, $query->event)
             );
         };
     }

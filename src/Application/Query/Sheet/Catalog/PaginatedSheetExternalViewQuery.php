@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PaginatedSheetLogoutViewQuery
+class PaginatedSheetExternalViewQuery
 {
     /**
      * @var Event
@@ -40,7 +40,7 @@ class PaginatedSheetLogoutViewQuery
     public $locale;
 
     /**
-     * PaginatedSheetLogoutViewQuery constructor.
+     * PaginatedSheetExternalViewQuery constructor.
      *
      * @param Event  $event
      * @param array  $filters

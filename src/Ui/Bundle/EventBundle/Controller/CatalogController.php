@@ -19,7 +19,7 @@ use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -215,7 +215,7 @@ class CatalogController extends Controller
         $page = $request->query->getInt('page', 1);
 
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
-            new PaginatedSheetLogoutViewQuery(
+            new PaginatedSheetExternalViewQuery(
                 $eventDomain->getEvent(),
                 [],
                 1,

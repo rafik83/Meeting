@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQueryHandler;
-use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewLogoutView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class PaginatedSheetLogoutViewQueryHandlerTest extends TestCase
+class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
 {
     /**
      * @dataProvider handleProvider
@@ -40,7 +40,7 @@ class PaginatedSheetLogoutViewQueryHandlerTest extends TestCase
 
         // Mock
         $sheetSearchAdapter                 = $this->prophesize(SheetSearchAdapterInterface::class);
-        $sheetPreviewLogoutViewQueryHandler = $this->prophesize(SheetPreviewLogoutViewQueryHandler::class);
+        $sheetPreviewLogoutViewQueryHandler = $this->prophesize(SheetPreviewExternalViewQueryHandler::class);
 
         $sheetSearchAdapter->find($event, [], null, $page, $limit, $locale, true, [])
             ->shouldBeCalled()
@@ -51,19 +51,19 @@ class PaginatedSheetLogoutViewQueryHandlerTest extends TestCase
         $sheet1Preview = new CatalogSheetPreviewLogoutView(1, 'Elao', 'Fournisseur', [], $sheet1);
 
         $sheetPreviewLogoutViewQueryHandler->handle(
-            new SheetPreviewLogoutViewQuery($sheet1, $locale, $event)
+            new SheetPreviewExternalViewQuery($sheet1, $locale, $event)
         )->shouldBeCalled()
             ->willReturn($sheet1Preview);
 
         $sheet2Preview = new CatalogSheetPreviewLogoutView(2, 'Vimeet', 'Investisseur', [], $sheet2);
 
         $sheetPreviewLogoutViewQueryHandler->handle(
-            new SheetPreviewLogoutViewQuery($sheet2, $locale, $event)
+            new SheetPreviewExternalViewQuery($sheet2, $locale, $event)
         )->shouldBeCalled()
             ->willReturn($sheet2Preview);
 
-        $query   = new PaginatedSheetLogoutViewQuery($event, [], $page, $limit, $locale);
-        $handler = new PaginatedSheetLogoutViewQueryHandler(
+        $query   = new PaginatedSheetExternalViewQuery($event, [], $page, $limit, $locale);
+        $handler = new PaginatedSheetExternalViewQueryHandler(
             $sheetSearchAdapter->reveal(),
             $sheetPreviewLogoutViewQueryHandler->reveal()
         );

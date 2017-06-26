@@ -2604,12 +2604,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
 
-    query.catalog.sheet_preview_logout_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQueryHandler
+    query.catalog.sheet_preview_external_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandler
         arguments:
             - '@sheet.preview'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewLogoutViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery }
 
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
@@ -2624,13 +2624,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
-    query.sheet.catalog.paginated_sheet_logout_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQueryHandler
+    query.sheet.catalog.paginated_sheet_external_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQueryHandler
         arguments:
             - '@adapter.sheet_search_adapter'
-            - '@query.catalog.sheet_preview_logout_view_query_handler'
+            - '@query.catalog.sheet_preview_external_view_query_handler'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetLogoutViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
 
     query.invoice.invoice_data_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler
