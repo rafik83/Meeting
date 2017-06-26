@@ -207,9 +207,13 @@ class CatalogController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     *
+     * @return Response
      */
-    public function listLogoutAction(Request $request, EventDomain $eventDomain)
+    public function listLogoutAction(Request $request, EventDomain $eventDomain): Response
     {
+        $page = $request->query->getInt('page', 1);
+
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
             new PaginatedSheetLogoutViewQuery(
                 $eventDomain->getEvent(),
@@ -220,7 +224,48 @@ class CatalogController extends Controller
             )
         );
 
-        dump($paginatedResult); die;
+        $typeViews = $this->get('tactician.commandbus.query')->handle(
+            new TypeViewQuery($eventDomain->getEvent(), [], $request->getLocale())
+        );
+
+        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
+            new OrganizationCategoryViewQuery($eventDomain->getEvent(), $request->getLocale())
+        );
+
+        $positionViews = $this->get('tactician.commandbus.query')->handle(
+            new PositionViewQuery($eventDomain->getEvent(), $request->getLocale())
+        );
+
+        $filters = $this->getDefaultFilters($typeViews);
+
+        $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
+
+        if ($request->isXmlHttpRequest()) {
+            $template = 'EventBundle:Catalog:External/catalog.html.twig';
+
+            if ($page > 1) {
+                return new JsonResponse(
+                    [
+                        'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
+                            'paginatedResult' => $paginatedResult,
+                            'page'            => $page,
+                            'isCatalog'       => true,
+                        ]),
+                        'seeMoreButton' => $seeMoreButtonStatus,
+                    ]
+                );
+            }
+        } else {
+            $template = 'EventBundle:Catalog:External/index.html.twig';
+        }
+
+        return $this->render($template, [
+            'event'           => $eventDomain->getEvent(),
+            'page'            => 1,
+            'paginatedResult' => $paginatedResult,
+            'seeMoreButton'   => $seeMoreButtonStatus,
+            'typeViews'       => $typeViews,
+        ]);
     }
 
     /**

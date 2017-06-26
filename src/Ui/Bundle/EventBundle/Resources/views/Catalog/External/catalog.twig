@@ -1,0 +1,12 @@
+<div class="catalog__list catalog__list--block">
+    {{ include('@Event/Catalog/External/list.html.twig', {
+        paginatedResult: paginatedResult,
+        page: page,
+    }, false) }}
+</div>
+
+{% if seeMoreButton %}
+    <div class="col-md-12 text-center see-more-align" >
+        <div class="btn btn-primary see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>
+    </div>
+{% endif %}

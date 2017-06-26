@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Catalog;
 
-use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
-
 class CatalogSheetPreviewLogoutView extends AbstractSheetPreviewView
 {
 

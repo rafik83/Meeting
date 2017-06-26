@@ -1,0 +1,19 @@
+{% set resultsCount = paginatedResult.results|length %}
+
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'navigation.category.catalog'|trans %}
+
+{% block body_attributes 'class="grey"' %}
+
+{% block content %}
+    <div class="catalog catalog--advanced">
+        {{ include('@Event/Catalog/External/catalog.twig', {
+            typeViews: typeViews,
+            paginatedResult: paginatedResult,
+            seeMoreButton: seeMoreButton,
+            page: page,
+            tipTranslationViews: null
+        }, false) }}
+    </div>
+{% endblock %}
