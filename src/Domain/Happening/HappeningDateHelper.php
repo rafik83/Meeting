@@ -40,7 +40,7 @@ class HappeningDateHelper
      *
      * @return string
      */
-    public static function getDay(\DateTimeInterface $datetime, string $locale, $timeZone)
+    public static function getDay(\DateTimeInterface $datetime, string $locale, string $timeZone)
     {
         $dateFormatter = \IntlDateFormatter::create(
             $locale,

@@ -15,53 +15,49 @@ use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 
 class HappeningDateHelperTest extends TestCase
 {
-    public function provideTestGetHour()
-    {
-        return [
-            ['12:51', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'fr', 'Europe/Paris'],
-            ['12:51 PM', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/Paris'],
-            ['11:51 AM', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
-            ['9:10 AM', new \DateTime('2017-01-05 9:10:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
-            ['12:51', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), null, 'Europe/Paris'],
-        ];
-    }
-
     /**
      * @dataProvider provideTestGetHour
      *
-     * @param $expected
-     * @param $datetime
-     * @param $local
-     * @param $timezone
      */
-    public function testGetHour($expected, $datetime, $local, $timezone)
+    public function testGetHour($expected, $datetime, $locale, $timezone)
     {
-        $actual = HappeningDateHelper::getHour($datetime, $local, $timezone);
+        $actual = HappeningDateHelper::getHour($datetime, $locale, $timezone);
         $this->assertEquals($expected, $actual);
+    }
+    
+    /**
+     * @dataProvider provideTestGetDay
+     */
+    public function testGetDay($expected, $datetime, $locale, $timezone)
+    {
+        $actual = HappeningDateHelper::getDay($datetime, $locale, $timezone);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function provideTestGetHour()
+    {
+        $datetime = new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC'));
+        $datetime2 = new \DateTime('2017-06-22 8:10:45', new \DateTimeZone('UTC'));
+
+        return [
+            ['12:51', $datetime, 'fr', 'Europe/Paris'],
+            ['12:51 PM', $datetime, 'en', 'Europe/Paris'],
+            ['11:51 AM', $datetime, 'en', 'Europe/London'],
+            ['9:10 AM', $datetime2, 'en', 'Europe/London'],
+            ['12:51', $datetime, null, 'Europe/Paris'],
+        ];
     }
 
     public function provideTestGetDay()
     {
+        $datetime = new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC'));
+        $datetime2 = new \DateTime('2017-01-05 10:51:45', new \DateTimeZone('UTC'));
+
         return [
-            ['22/06/2017', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'fr', 'Europe/Paris'],
-            ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/Paris'],
-            ['6/22/17', new \DateTime('2017-06-22 10:51:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
-            ['1/5/17', new \DateTime('2017-01-05 9:10:45', new \DateTimeZone('UTC')), 'en', 'Europe/London'],
+            ['22/06/2017', $datetime, 'fr', 'Europe/Paris'],
+            ['6/22/17', $datetime, 'en', 'Europe/Paris'],
+            ['6/22/17', $datetime, 'en', 'Europe/London'],
+            ['1/5/17', $datetime2, 'en', 'Europe/London'],
         ];
-    }
-
-
-    /**
-     * @dataProvider provideTestGetDay
-     *
-     * @param $expected
-     * @param $datetime
-     * @param string $local
-     * @param $timezone
-     */
-    public function testGetDay($expected, $datetime, string $local, $timezone)
-    {
-        $actual= HappeningDateHelper::getDay($datetime, $local, $timezone);
-        $this->assertEquals($expected, $actual);
     }
 }
