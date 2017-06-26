@@ -26,7 +26,6 @@ class AmountFormatterTest extends TestCase
 
     /**
      * @dataProvider provideCentsToDecimalAmount
-     *
      */
     public function testCentsToDecimalAmount($expected, $amount)
     {
@@ -36,7 +35,6 @@ class AmountFormatterTest extends TestCase
 
     /**
      * @dataProvider provideCalculateRateAmount
-     *
      */
     public function testCalculateRateAmount($expected, $amount, $rate)
     {
