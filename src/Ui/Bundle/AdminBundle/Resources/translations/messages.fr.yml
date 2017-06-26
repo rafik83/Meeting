@@ -156,6 +156,7 @@ admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
+admin.event.external_catalog_configure: 'Catalogue public'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'

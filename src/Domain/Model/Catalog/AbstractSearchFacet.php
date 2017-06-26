@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model\Catalog;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 
-abstract class AbstractSearchFacet
+class AbstractSearchFacet
 {
     const TYPE_TYPE                  = 'type';
     const TYPE_POSITION              = 'position';
@@ -25,27 +25,27 @@ abstract class AbstractSearchFacet
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Event
      */
-    private $event;
+    protected $event;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var bool
      */
-    private $enabled;
+    protected $enabled;
 
     /**
      * @var ArrayCollection
      */
-    private $translations;
+    protected $translations;
 
     /**
      * SearchFacet constructor.
@@ -62,7 +62,7 @@ abstract class AbstractSearchFacet
         $this->translations = new ArrayCollection();
 
         foreach ($event->getLocales() as $locale) {
-            $this->translations[$locale] = new SearchFacetTranslation($this, '', '', $locale);
+            $this->translations[$locale] = new AbstractSearchFacetTranslation($this, '', '', $locale);
         }
     }
 
@@ -123,7 +123,7 @@ abstract class AbstractSearchFacet
     }
 
     /**
-     * @return SearchFacetTranslation[]
+     * @return AbstractSearchFacetTranslation[]
      */
     public function getTranslations()
     {
@@ -131,7 +131,7 @@ abstract class AbstractSearchFacet
     }
 
     /**
-     * @param SearchFacetTranslation[] $translations
+     * @param AbstractSearchFacetTranslation[] $translations
      */
     public function setTranslations(array $translations)
     {

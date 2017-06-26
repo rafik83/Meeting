@@ -12,35 +12,35 @@ namespace Proximum\Vimeet\Domain\Model\Catalog;
 
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 
-class SearchFacetTranslation
+class AbstractSearchFacetTranslation
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var AbstractSearchFacet
      */
-    private $searchFacet;
+    protected $searchFacet;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string
      */
-    private $placeholder;
+    protected $placeholder;
 
     /**
      * @var string
      */
-    private $locale;
+    protected $locale;
 
     /**
-     * SearchFacetTranslation constructor.
+     * AbstractSearchFacetTranslation constructor.
      *
      * @param AbstractSearchFacet $searchFacet
      * @param string      $label

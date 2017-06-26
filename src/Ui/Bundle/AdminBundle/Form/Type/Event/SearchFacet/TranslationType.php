@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\Catalog\SearchFacetTranslation;
+use Proximum\Vimeet\Domain\Model\Catalog\AbstractSearchFacetTranslation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -53,7 +53,7 @@ class TranslationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => SearchFacetTranslation::class,
+            'data_class' => AbstractSearchFacetTranslation::class,
         ]);
     }
 }
