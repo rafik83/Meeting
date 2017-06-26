@@ -36,7 +36,7 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
     public function testHandle(Event $event, string $locale, Sheet $sheet1, Sheet $sheet2)
     {
         $page  = 1;
-        $limit = 50;
+        $limit = 48;
 
         // Mock
         $sheetSearchAdapter                 = $this->prophesize(SheetSearchAdapterInterface::class);

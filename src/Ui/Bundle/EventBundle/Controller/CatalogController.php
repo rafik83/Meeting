@@ -215,7 +215,7 @@ class CatalogController extends Controller
                 $event,
                 [],
                 1,
-                50,
+                48,
                 $request->getLocale()
             )
         );
