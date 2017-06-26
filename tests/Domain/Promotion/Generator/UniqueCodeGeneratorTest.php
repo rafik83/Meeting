@@ -33,7 +33,6 @@ class UniqueCodeGeneratorTest extends TestCase
         $this->event = EventFactory::createEvent();
         $this->generator = $this->prophesize(CodeGeneratorInterface::class);
         $this->checker = $this->prophesize(UniqueCodeChecker::class);
-
     }
 
     public function testGenerate()
