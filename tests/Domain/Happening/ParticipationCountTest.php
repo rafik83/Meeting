@@ -26,13 +26,19 @@ class ParticipationCountTest extends TestCase
     private $event;
 
     /**
+     * @var Happening
+     */
+    private $happening;
+
+    /**
      * @var ObjectProphecy
      */
     private $happeningParticipationRepository;
 
     public function setUp()
     {
-        $this->event                            = EventFactory::class;
+        $this->event                            = $event = EventFactory::createEvent();
+        $this->happening                        = $happening = new Happening($this->event, new \DateTime(),  new \DateTime(), new Happening\Category($this->event, '', 0, '', ''));
         $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
     }
 
@@ -56,27 +62,25 @@ class ParticipationCountTest extends TestCase
      */
     public function testGetRemaining(int $expected, int $limit, int $count, bool $isFull)
     {
-        $happening = new Happening($this->event, new \DateTime(),  new \DateTime(), new Happening\Category($this->event, '', 0, '', ''));
-        $happening->setLimitParticipant($limit);
+        $this->happening->setLimitParticipant($limit);
 
-        $this->happeningParticipationRepository->countParticipationByHappening($happening)->shouldBeCalled()->willReturn($count);
+        $this->happeningParticipationRepository->countParticipationByHappening($this->happening)->shouldBeCalled()->willReturn($count);
 
         $service = new ParticipationCount($this->happeningParticipationRepository->reveal());
 
-        $this->assertEquals($expected, $service->getRemaining($happening));
-        $this->assertEquals($isFull, $service->isFull($happening));
+        $this->assertEquals($expected, $service->getRemaining($this->happening));
+        $this->assertEquals($isFull, $service->isFull($this->happening));
     }
 
     public function testGetRemainingIfHappeningIsNull()
     {
-        $happening = new Happening($this->event, new \DateTime(),  new \DateTime(), new Happening\Category($this->event, '', 0, '', ''));
-        $happening->setLimitParticipant(null);
+        $this->happening->setLimitParticipant(null);
 
-        $this->happeningParticipationRepository->countParticipationByHappening($happening)->shouldNotBeCalled();
+        $this->happeningParticipationRepository->countParticipationByHappening($this->happening)->shouldNotBeCalled();
 
         $service = new ParticipationCount($this->happeningParticipationRepository->reveal());
 
-        $this->assertEquals(INF, $service->getRemaining($happening));
-        $this->assertEquals(false, $service->isFull($happening));
+        $this->assertEquals(INF, $service->getRemaining($this->happening));
+        $this->assertEquals(false, $service->isFull($this->happening));
     }
 }
