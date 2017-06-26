@@ -43,19 +43,8 @@ class UniqueCodeCheckerTest extends TestCase
         return new Promotion(new PromotionCode($event, $title, $code), $product, 'test', 1.4);
     }
 
-    public static function provideHasUniqueCode()
-    {
-        return [
-            [true, []],
-            [false, [self::createPromotion()]],
-        ];
-    }
-
     /**
      * @dataProvider provideHasUniqueCode
-     *
-     * @param $expected
-     * @param $promotions
      */
     public function testHasUniqueCode($expected, $promotions)
     {
@@ -70,20 +59,8 @@ class UniqueCodeCheckerTest extends TestCase
         $this->assertEquals($expected, $checker->hasUniqueCode($promoCode));
     }
 
-    public function provideExist()
-    {
-        return [
-            [false, []],
-            [true, [new PromotionCode(EventFactory::createEvent(), '', '')]],
-            [true, [new PromotionCode(EventFactory::createEvent(), '', ''), new PromotionCode(EventFactory::createEvent(), '', '')]],
-        ];
-    }
-
     /**
      * @dataProvider  provideExist
-     *
-     * @param bool  $expected
-     * @param array $promotionCodes
      */
     public function testExist(bool $expected, array $promotionCodes)
     {
@@ -92,5 +69,24 @@ class UniqueCodeCheckerTest extends TestCase
         $checker = new UniqueCodeChecker($this->promotionCodeRepository->reveal());
 
         $this->assertEquals($expected, $checker->exists($this->event, 'code'));
+    }
+
+    public static function provideHasUniqueCode()
+    {
+        return [
+            [true, []],
+            [false, [self::createPromotion()]],
+        ];
+    }
+
+    public function provideExist()
+    {
+        $promotionCode = new PromotionCode(EventFactory::createEvent(), '', '');
+
+        return [
+            [false, []],
+            [true, [ $promotionCode ]],
+            [true, [$promotionCode, $promotionCode]],
+        ];
     }
 }
