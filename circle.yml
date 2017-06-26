@@ -37,3 +37,6 @@ test:
         - bin/phpunit
         - bin/console cache:clear --env=test
         - bin/behat --format progress --no-interaction
+notify:
+    webhooks:
+        - url: https://webhooks.gitter.im/e/9e2f71cf79968c2d8303
