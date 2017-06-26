@@ -42,7 +42,7 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
         $sheetSearchAdapter                 = $this->prophesize(SheetSearchAdapterInterface::class);
         $sheetPreviewLogoutViewQueryHandler = $this->prophesize(SheetPreviewExternalViewQueryHandler::class);
 
-        $sheetSearchAdapter->find($event, [], null, $page, $limit, $locale, true, [])
+        $sheetSearchAdapter->find($event, PaginatedSheetExternalViewQueryHandler::defaultFilters, Sheet\Constant::ORDER_BY_ALPHABETICAL, $page, $limit, $locale, true, [])
             ->shouldBeCalled()
             ->willReturn(
                 new PaginatedResult([$sheet1, $sheet2], $page, $limit, 2)
