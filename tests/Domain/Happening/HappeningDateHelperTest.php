@@ -17,7 +17,6 @@ class HappeningDateHelperTest extends TestCase
 {
     /**
      * @dataProvider provideTestGetHour
-     *
      */
     public function testGetHour($expected, $datetime, $locale, $timezone)
     {
