@@ -17,7 +17,9 @@ Proximum\Vimeet\Domain\Model\User\Agenda\Version:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+                nullable: false
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
+                nullable: false
