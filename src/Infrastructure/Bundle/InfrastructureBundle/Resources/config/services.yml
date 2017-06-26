@@ -4901,3 +4901,18 @@ services:
     #
     domain.user.phone.phone_sanitizer:
         class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer
+
+    #
+    # User Agenda Version
+    #
+    components.user.agenda.version.request_version_normalizer:
+        class: Proximum\Vimeet\Application\Components\User\Agenda\Version\RequestVersionNormalizer
+    components.user.agenda.version.version_normalizer:
+        class: Proximum\Vimeet\Application\Components\User\Agenda\Version\VersionNormalizer
+        arguments:
+            - '@components.user.agenda.version.request_version_normalizer'
+    components.user.agenda.version.generator:
+        class: Proximum\Vimeet\Application\Components\User\Agenda\Version\Generator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@components.user.agenda.version.version_normalizer'
