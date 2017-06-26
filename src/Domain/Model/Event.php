@@ -718,6 +718,6 @@ class Event implements EventInterface, TraceableInterface
      */
     public function isCatalogPublic()
     {
-        return true === $this->isCatalogPublic();
+        return true === $this->catalogPublic;
     }
 }
