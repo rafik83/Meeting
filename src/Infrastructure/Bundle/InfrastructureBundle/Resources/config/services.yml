@@ -4909,14 +4909,21 @@ services:
     #
     # User Agenda Version
     #
-    components.user.agenda.version.request_version_normalizer:
-        class: Proximum\Vimeet\Application\Components\User\Agenda\Version\RequestVersionNormalizer
-    components.user.agenda.version.version_normalizer:
-        class: Proximum\Vimeet\Application\Components\User\Agenda\Version\VersionNormalizer
+    domain.user.agenda.version.request_version_normalizer:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer
+    domain.user.agenda.version.version_normalizer:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\VersionNormalizer
         arguments:
-            - '@components.user.agenda.version.request_version_normalizer'
-    components.user.agenda.version.generator:
-        class: Proximum\Vimeet\Application\Components\User\Agenda\Version\Generator
+            - '@domain.user.agenda.version.request_version_normalizer'
+    domain.user.agenda.version.generator:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\Generator
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@components.user.agenda.version.version_normalizer'
+            - '@domain.user.agenda.version.version_normalizer'
+    domain.user.agenda.version.diff_verbalizer:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'

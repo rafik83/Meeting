@@ -17,6 +17,11 @@ use Proximum\Vimeet\Domain\Model\User\Agenda\Version;
 interface VersionRepositoryInterface
 {
     /**
+     * @param Version $version
+     */
+    public function add(Version $version);
+
+    /**
      * @param Event $event
      * @param User  $user
      *

@@ -33,6 +33,15 @@ class VersionRepository implements VersionRepositoryInterface
     }
 
     /**
+     * @param Version $version
+     */
+    public function add(Version $version)
+    {
+        $this->entityManager->persist($version);
+        $this->entityManager->flush($version);
+    }
+
+    /**
      * @param User  $user
      * @param Event $event
      *
