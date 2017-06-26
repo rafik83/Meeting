@@ -92,12 +92,14 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
      */
     protected function doRedirect(GetResponseEvent $getResponseEvent, Request $request, Event $event, $locale, $route)
     {
+        // check if catalog opened
         if (in_array($route, self::ROUTES)) {
             if (!$this->catalogAccessChecker->allowedToAccess($event)) {
                 throw new NotFoundHttpException();
             }
         }
 
+        // redirect for catalog external routes
         if (in_array($route, self::EXTERNAL_ROUTES)) {
             if ($this->tokenStorage->getToken()->getUser() instanceof User
                 && $this->catalogAccessChecker->allowedToAccess($event)

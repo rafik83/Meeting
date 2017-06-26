@@ -271,12 +271,6 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
-
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
@@ -303,12 +297,6 @@ class CatalogController extends Controller
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
-
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
 
         $keywordView = $this->get('tactician.commandbus.query')->handle(
             new KeywordViewQuery(
@@ -344,10 +332,6 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $event = $eventDomain->getEvent();
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createAccessDeniedException();
-        }
 
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');

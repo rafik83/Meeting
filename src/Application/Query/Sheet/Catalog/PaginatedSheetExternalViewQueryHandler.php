@@ -19,8 +19,10 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 class PaginatedSheetExternalViewQueryHandler
 {
     const DEFAULT_FILTERS = [
-        'validationState' => Sheet::STATE_VALIDATION_VALIDATED,
-        'state'           => Sheet::STATE_ACCEPTED,
+        'state' => [
+            Sheet::STATE_ACCEPTED,
+            Sheet::STATE_VALIDATED,
+        ],
     ];
 
     /**
