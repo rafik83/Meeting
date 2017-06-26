@@ -28,11 +28,15 @@ class UniqueCodeGeneratorTest extends TestCase
     /** @var UniqueCodeChecker */
     private $checker;
 
+    /** @var UniqueCodeGenerator  */
+    private $uniqueCodeGenerator;
+
     public function setUp()
     {
-        $this->event = EventFactory::createEvent();
-        $this->generator = $this->prophesize(CodeGeneratorInterface::class);
-        $this->checker = $this->prophesize(UniqueCodeChecker::class);
+        $this->event               = EventFactory::createEvent();
+        $this->generator           = $this->prophesize(CodeGeneratorInterface::class);
+        $this->checker             = $this->prophesize(UniqueCodeChecker::class);
+        $this->uniqueCodeGenerator =$uniqueCodeGenerator = new UniqueCodeGenerator($this->generator->reveal(), $this->checker->reveal());
     }
 
     public function testGenerate()
@@ -40,9 +44,7 @@ class UniqueCodeGeneratorTest extends TestCase
         $this->generator->generate($this->event)->shouldBeCalled()->willReturn('code');
         $this->checker->exists($this->event, 'code')->shouldBeCalled()->willReturn(false);
 
-        $uniqueCodeGenerator = new UniqueCodeGenerator($this->generator->reveal(), $this->checker->reveal());
-
-        $this->assertEquals('code', $uniqueCodeGenerator->generate($this->event));
+        $this->assertEquals('code', $this->uniqueCodeGenerator->generate($this->event));
     }
 
     public function testGenerateLoop()
@@ -52,8 +54,6 @@ class UniqueCodeGeneratorTest extends TestCase
         $this->checker->exists($this->event, 'code2')->shouldBeCalled()->willReturn(true);
         $this->checker->exists($this->event, 'code3')->shouldBeCalled()->willReturn(false);
 
-        $uniqueCodeGenerator = new UniqueCodeGenerator($this->generator->reveal(), $this->checker->reveal());
-
-        $this->assertEquals('code3', $uniqueCodeGenerator->generate($this->event));
+        $this->assertEquals('code3', $this->uniqueCodeGenerator->generate($this->event));
     }
 }
