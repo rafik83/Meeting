@@ -180,7 +180,9 @@ class SheetSearchQueryBuilder
             $this->filterByHasPendingMeetingProposition();
         }
 
-        if (isset($filters['agendaConfirmedStatus']) && in_array($filters['agendaConfirmedStatus'], Sheet::AGENDA_CONFIRMED_STATUS)) {
+        if (isset($filters['agendaConfirmedStatus'])
+            && in_array($filters['agendaConfirmedStatus'], Sheet::AGENDA_CONFIRMED_STATUS)
+        ) {
             $this->filterByAgendaConfirmedStatus($filters['agendaConfirmedStatus']);
         }
     }
