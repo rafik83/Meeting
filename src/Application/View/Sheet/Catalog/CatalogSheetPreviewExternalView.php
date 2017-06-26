@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Catalog;
 
-class CatalogSheetPreviewLogoutView extends AbstractSheetPreviewView
+class CatalogSheetPreviewExternalView extends AbstractSheetPreviewView
 {
 
 }

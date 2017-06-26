@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQueryHandler;
-use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewLogoutView;
+use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewExternalView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -48,14 +48,14 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
                 new PaginatedResult([$sheet1, $sheet2], $page, $limit, 2)
             );
 
-        $sheet1Preview = new CatalogSheetPreviewLogoutView(1, 'Elao', 'Fournisseur', [], $sheet1);
+        $sheet1Preview = new CatalogSheetPreviewExternalView(1, 'Elao', 'Fournisseur', [], $sheet1);
 
         $sheetPreviewLogoutViewQueryHandler->handle(
             new SheetPreviewExternalViewQuery($sheet1, $locale, $event)
         )->shouldBeCalled()
             ->willReturn($sheet1Preview);
 
-        $sheet2Preview = new CatalogSheetPreviewLogoutView(2, 'Vimeet', 'Investisseur', [], $sheet2);
+        $sheet2Preview = new CatalogSheetPreviewExternalView(2, 'Vimeet', 'Investisseur', [], $sheet2);
 
         $sheetPreviewLogoutViewQueryHandler->handle(
             new SheetPreviewExternalViewQuery($sheet2, $locale, $event)

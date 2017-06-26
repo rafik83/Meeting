@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandler;
-use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewLogoutView;
+use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewExternalView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -42,7 +42,7 @@ class SheetPreviewExternalViewQueryHandlerTest extends TestCase
         $handler = new SheetPreviewExternalViewQueryHandler($preview->reveal());
 
         // Expected
-        $expectedPreviewExternalView = new CatalogSheetPreviewLogoutView(1, 'Proximum', 'Fournisseur', [], $sheet);
+        $expectedPreviewExternalView = new CatalogSheetPreviewExternalView(1, 'Proximum', 'Fournisseur', [], $sheet);
 
         $sheetPreviewExternalView = $handler->handle($query);
         $this->assertEquals($expectedPreviewExternalView, $sheetPreviewExternalView);
