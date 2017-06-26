@@ -11,13 +11,31 @@
 namespace Proximum\Vimeet\Tests\Domain\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ParticipationCountTest extends TestCase
 {
+    /**
+     * @var Event
+     */
+    private $event;
+
+    /**
+     * @var ObjectProphecy
+     */
+    private $happeningParticipationRepository;
+
+    public function setUp()
+    {
+        $this->event                            = EventFactory::class;
+        $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
+    }
+
     public static function provideGetRemaining()
     {
         return [
@@ -38,14 +56,12 @@ class ParticipationCountTest extends TestCase
      */
     public function testGetRemaining(int $expected, int $limit, int $count, bool $isFull)
     {
-        $event = EventFactory::createEvent();
-        $happening = new Happening($event, new \DateTime(),  new \DateTime(), new Happening\Category($event, '', 0, '', ''));
+        $happening = new Happening($this->event, new \DateTime(),  new \DateTime(), new Happening\Category($this->event, '', 0, '', ''));
         $happening->setLimitParticipant($limit);
 
-        $repository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $repository->countParticipationByHappening($happening)->shouldBeCalled()->willReturn($count);
+        $this->happeningParticipationRepository->countParticipationByHappening($happening)->shouldBeCalled()->willReturn($count);
 
-        $service = new ParticipationCount($repository->reveal());
+        $service = new ParticipationCount($this->happeningParticipationRepository->reveal());
 
         $this->assertEquals($expected, $service->getRemaining($happening));
         $this->assertEquals($isFull, $service->isFull($happening));
@@ -53,14 +69,12 @@ class ParticipationCountTest extends TestCase
 
     public function testGetRemainingIfHappeningIsNull()
     {
-        $event = EventFactory::createEvent();
-        $happening = new Happening($event, new \DateTime(),  new \DateTime(), new Happening\Category($event, '', 0, '', ''));
+        $happening = new Happening($this->event, new \DateTime(),  new \DateTime(), new Happening\Category($this->event, '', 0, '', ''));
         $happening->setLimitParticipant(null);
 
-        $repository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $repository->countParticipationByHappening($happening)->shouldNotBeCalled();
+        $this->happeningParticipationRepository->countParticipationByHappening($happening)->shouldNotBeCalled();
 
-        $service = new ParticipationCount($repository->reveal());
+        $service = new ParticipationCount($this->happeningParticipationRepository->reveal());
 
         $this->assertEquals(INF, $service->getRemaining($happening));
         $this->assertEquals(false, $service->isFull($happening));
