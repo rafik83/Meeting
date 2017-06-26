@@ -78,11 +78,6 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $event = $eventDomain->getEvent();
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createNotFoundException();
-        }
-
         $locale = $request->getLocale();
 
         if (!$sheet->isInCatalog()) {
@@ -212,11 +207,12 @@ class CatalogController extends Controller
      */
     public function indexExternalAction(Request $request, EventDomain $eventDomain): Response
     {
+        $event = $eventDomain->getEvent();
         $page = $request->query->getInt('page', 1);
 
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
             new PaginatedSheetExternalViewQuery(
-                $eventDomain->getEvent(),
+                $event,
                 [],
                 1,
                 50,
@@ -225,18 +221,8 @@ class CatalogController extends Controller
         );
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($eventDomain->getEvent(), [], $request->getLocale())
+            new TypeViewQuery($event, [], $request->getLocale())
         );
-
-        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
-            new OrganizationCategoryViewQuery($eventDomain->getEvent(), $request->getLocale())
-        );
-
-        $positionViews = $this->get('tactician.commandbus.query')->handle(
-            new PositionViewQuery($eventDomain->getEvent(), $request->getLocale())
-        );
-
-        $filters = $this->getDefaultFilters($typeViews);
 
         $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
 
@@ -259,7 +245,7 @@ class CatalogController extends Controller
         }
 
         return $this->render($template, [
-            'event'           => $eventDomain->getEvent(),
+            'event'           => $event,
             'page'            => 1,
             'paginatedResult' => $paginatedResult,
             'seeMoreButton'   => $seeMoreButtonStatus,
