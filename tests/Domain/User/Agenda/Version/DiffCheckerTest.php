@@ -135,4 +135,69 @@ class DiffCheckerTest extends TestCase
 
         $this->assertFalse($result);
     }
+
+    /**
+     * @dataProvider checkTwoVersionProvider
+     */
+    public function testCheckTwoVersion($version, $index, $request, $expected)
+    {
+        $diffChecker = new DiffChecker();
+        $result = $diffChecker->checkTwoVersion($version, $index, $request);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testCheckTwoVersionInvalid()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $version = ['wrong'];
+
+        $currentVersion = [
+            1 => [
+                'request' => 1,
+                'slot'    => 11,
+                'spot'    => 9,
+            ],
+            2 => [
+                'request' => 2,
+                'slot'    => 89,
+                'spot'    => 12,
+            ],
+            3 => [
+                'request' => 3,
+                'slot'    => 1123,
+                'spot'    => 667,
+            ],
+        ];
+
+        $diffChecker = new DiffChecker();
+        $diffChecker->checkTwoVersion($version, 1, $currentVersion[1]);
+    }
+
+    public function checkTwoVersionProvider()
+    {
+        $version = [
+            1 => [
+                'request' => 1,
+                'slot'    => 11,
+                'spot'    => 9,
+            ],
+            2 => [
+                'request' => 2,
+                'slot'    => 89,
+                'spot'    => 12,
+            ],
+            3 => [
+                'request' => 3,
+                'slot'    => 1123,
+                'spot'    => 667,
+            ],
+        ];
+
+        return [
+            [$version, 1, ['request' => 1, 'slot' => 11, 'spot' => 10], true],
+            [$version, 2, ['request' => 2, 'slot' => 90, 'spot' => 12], true],
+            [$version, 3, ['request' => 3, 'slot' => 1123, 'spot' => 667], false]
+        ];
+    }
 }
