@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add catalogPublic : Bool field to Event table
+ * Add external_catalog_enabled : Bool field to Event table
  */
 class Version20170623083210 extends AbstractMigration
 {
@@ -15,10 +15,9 @@ class Version20170623083210 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE event ADD catalog_public TINYINT(1) NOT NULL DEFAULT FALSE ');
+        $this->addSql('ALTER TABLE event ADD external_catalog_enabled TINYINT(1) NOT NULL DEFAULT FALSE ');
     }
 
     /**
@@ -26,9 +25,8 @@ class Version20170623083210 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE event DROP catalog_public');
+        $this->addSql('ALTER TABLE event DROP external_catalog_enabled');
     }
 }

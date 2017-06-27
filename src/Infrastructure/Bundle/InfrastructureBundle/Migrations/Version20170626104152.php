@@ -6,7 +6,8 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Create table catalog_visibility, catalog_visibility_types, catalog_visibility_categories
+ * external_search_facet, external_search_facet_translation
  */
 class Version20170626104152 extends AbstractMigration
 {
@@ -15,10 +16,9 @@ class Version20170626104152 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE catalog_visibility (id INT AUTO_INCREMENT NOT NULL, event_id INT DEFAULT NULL, INDEX IDX_E4A4B1DB71F7E88B (event_id), UNIQUE INDEX catalog_visibility_event (id, event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE catalog_visibility (id INT AUTO_INCREMENT NOT NULL, event_id INT DEFAULT NULL, INDEX IDX_E4A4B1DB71F7E88B (event_id), UNIQUE INDEX catalog_visibility_event (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE catalog_visibility_types (catalog_visibility_id INT NOT NULL, type_id INT NOT NULL, INDEX IDX_EAB45ECACBF8E70D (catalog_visibility_id), INDEX IDX_EAB45ECAC54C8C93 (type_id), PRIMARY KEY(catalog_visibility_id, type_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE catalog_visibility_categories (catalog_visibility_id INT NOT NULL, category_id INT NOT NULL, INDEX IDX_AA20C193CBF8E70D (catalog_visibility_id), INDEX IDX_AA20C19312469DE2 (category_id), PRIMARY KEY(catalog_visibility_id, category_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE external_search_facet (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, enabled TINYINT(1) NOT NULL, type VARCHAR(255) NOT NULL, INDEX IDX_AC855A1371F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -37,7 +37,6 @@ class Version20170626104152 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE catalog_visibility_types DROP FOREIGN KEY FK_EAB45ECACBF8E70D');

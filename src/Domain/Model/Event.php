@@ -164,7 +164,7 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @var bool
      */
-    private $catalogPublic = false;
+    private $externalCatalogEnabled = false;
 
     /**
      * @param string      $title
@@ -716,8 +716,8 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return bool
      */
-    public function isCatalogPublic()
+    public function isExternalCatalogEnabled()
     {
-        return true === $this->catalogPublic;
+        return true === $this->externalCatalogEnabled;
     }
 }
