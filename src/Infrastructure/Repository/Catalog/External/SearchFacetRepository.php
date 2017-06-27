@@ -33,9 +33,8 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(SearchFacet $searchFacet)
+    public function set(SearchFacet $searchFacet)
     {
-        $this->entityManager->persist($searchFacet);
         $this->entityManager->flush($searchFacet);
 
         foreach ($searchFacet->getTranslations() as $translation) {
@@ -46,15 +45,16 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function set(SearchFacet $searchFacet)
+    public function add(SearchFacet $searchFacet)
     {
+        $this->entityManager->persist($searchFacet);
         $this->entityManager->flush($searchFacet);
 
         foreach ($searchFacet->getTranslations() as $translation) {
             $this->entityManager->flush($translation);
         }
     }
-
+    
     /**
      * {@inheritdoc}
      */
