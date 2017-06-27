@@ -35,7 +35,8 @@ class CatalogController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $searchFacets = $this->get('vimeet_infrastructure.repository.search_facet')
+        $searchFacets = $this
+            ->get('vimeet_infrastructure.repository.catalog.external.search_facet')
             ->getByEvent($event);
 
         $types = SearchFacet::getAllTypes();

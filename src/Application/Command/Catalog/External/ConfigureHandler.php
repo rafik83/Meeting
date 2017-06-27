@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
+use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 
 class ConfigureHandler
@@ -18,14 +19,21 @@ class ConfigureHandler
     /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
 
+    /** @var SearchFacetRepositoryInterface */
+    private $searchFacetRepository;
+
     /**
      * ConfigureHandler constructor.
      *
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
+     * @param SearchFacetRepositoryInterface       $searchFacetRepository
      */
-    public function __construct(CatalogVisibilityRepositoryInterface $catalogVisibilityRepository)
-    {
+    public function __construct(
+        CatalogVisibilityRepositoryInterface $catalogVisibilityRepository,
+        SearchFacetRepositoryInterface $searchFacetRepository
+    ) {
         $this->catalogVisibilityRepository = $catalogVisibilityRepository;
+        $this->searchFacetRepository       = $searchFacetRepository;
     }
 
     /**
@@ -38,6 +46,18 @@ class ConfigureHandler
             $command->types,
             $command->categories
         );
+
+        foreach ($command->searchFacets as $searchFacet) {
+            foreach ($searchFacet->getTranslations() as $locale => $translation) {
+                $searchFacet->translate($locale, $translation->getLabel(), $translation->getPlaceholder());
+            }
+
+            if (null === $searchFacet->getId()) {
+                $this->searchFacetRepository->add($searchFacet);
+            } else {
+                $this->searchFacetRepository->set($searchFacet);
+            }
+        }
 
         $this->catalogVisibilityRepository->add($catalogVisibility);
     }

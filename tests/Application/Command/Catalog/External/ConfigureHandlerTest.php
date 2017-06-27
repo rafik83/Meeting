@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Repository\CatalogVisibilityRepository;
@@ -27,41 +28,51 @@ class ConfigureHandlerTest extends TestCase
     /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
 
+    /** @var SearchFacetRepositoryInterface */
+    private $searchFacetRepository;
+
     /** @var TypeRepositoryInterface */
     private $typeRepository;
 
     /** @var Event */
     private $event;
 
-    /** @var Configure */
-    private $command;
-
     public function setUp()
     {
         $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepository::class);
         $this->typeRepository = $this->prophesize((TypeRepositoryInterface::class));
+        $this->searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
         $this->event = EventFactory::createEvent();
-        $this->command = new Configure($this->event);
     }
 
     public function testHandle()
     {
-        $this->command->types = [
+        $searchFacets = [
+
+        ];
+
+        $command = new Configure($this->event, $searchFacets);
+
+        $command->types = [
             new Type($this->event),
             new Type($this->event),
         ];
 
-        $this->command->categories = [
+        $command->categories = [
             new Category($this->event),
             new Category($this->event),
         ];
 
         $this
             ->catalogVisibilityRepository
-            ->add(new CatalogVisibility($this->event, $this->command->types, $this->command->categories))
+            ->add(new CatalogVisibility($this->event, $command->types, $command->categories))
             ->shouldBeCalled();
 
-        $handler = new ConfigureHandler($this->catalogVisibilityRepository->reveal());
-        $handler->handle($this->command);
+        $handler = new ConfigureHandler(
+            $this->catalogVisibilityRepository->reveal(),
+            $this->searchFacetRepository->reveal()
+        );
+
+        $handler->handle($command);
     }
 }
