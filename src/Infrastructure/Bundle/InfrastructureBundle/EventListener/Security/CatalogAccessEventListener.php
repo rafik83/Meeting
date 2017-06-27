@@ -102,6 +102,10 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
                     $this->createRedirectResponse($request, $event, 'event_catalog_redirect', $locale)
                 );
             }
+
+            if (!$this->catalogAccessChecker->allowedToAccessExternal($event)) {
+                throw new NotFoundHttpException();
+            }
         }
     }
 }
