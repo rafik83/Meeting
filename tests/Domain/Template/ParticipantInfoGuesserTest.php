@@ -245,7 +245,6 @@ class ParticipantInfoGuesserTest extends TestCase
 
         $expected = 'foobar_participant_firstname foobar_participant_lastname';
 
-
         $this->assertEquals($expected, $guesser->guessParticipantCompleteName($this->participant, $this->locale));
     }
 
