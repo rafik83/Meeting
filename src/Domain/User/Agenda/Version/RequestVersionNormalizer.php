@@ -23,31 +23,18 @@ class RequestVersionNormalizer
      */
     public function normalize(Request $request): array
     {
-        if ($request->hasMeeting()) {
-            $meeting = $request->getMeeting();
-
-            $fromParticipants = [];
-            $toParticipants   = [];
-
-            foreach ($meeting->getFromParticipants()->toArray() as $fromParticipant) {
-                $fromParticipants[$fromParticipant->getId()] = $fromParticipant->getId();
-            }
-
-            foreach ($meeting->getToParticipants()->toArray() as $toParticipant) {
-                $toParticipants[$toParticipant->getId()] = $toParticipant->getId();
-            }
-
-            return [
-                'request'          => $request->getId(),
-                'fromSheet'        => $request->getFromSheet()->getId(),
-                'toSheet'          => $request->getToSheet()->getId(),
-                'slot'             => $meeting->getSlot()->getId(),
-                'spot'             => $meeting->getSpot()->getId(),
-                'fromParticipants' => $fromParticipants,
-                'toParticipants'   => $toParticipants,
-            ];
+        if (!$request->hasMeeting()) {
+            throw new \InvalidArgumentException('The given request does not have a meeting');
         }
 
-        throw new \InvalidArgumentException('The given request does not have a meeting');
+        $meeting = $request->getMeeting();
+
+        return [
+            'request'   => $request->getId(),
+            'fromSheet' => $request->getFromSheet()->getId(),
+            'toSheet'   => $request->getToSheet()->getId(),
+            'slot'      => $meeting->getSlot()->getId(),
+            'spot'      => $meeting->getSpot()->getId(),
+        ];
     }
 }

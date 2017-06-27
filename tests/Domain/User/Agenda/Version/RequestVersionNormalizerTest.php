@@ -10,13 +10,11 @@
 
 namespace Proximum\Vimeet\Tests\Domain\User\Agenda\Version;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
@@ -40,9 +38,6 @@ class RequestVersionNormalizerTest extends TestCase
         $toSheet = $this->prophesize(Sheet::class);
         $spot = $this->prophesize(Spot::class);
         $slot = $this->prophesize(MeetingSlot::class);
-        $fp1 = $this->prophesize(Participant::class);
-        $fp2 = $this->prophesize(Participant::class);
-        $tp1 = $this->prophesize(Participant::class);
         $request->getId()->willReturn(1337);
         $request->hasMeeting()->willReturn(true);
         $request->getFromSheet()->willReturn($fromSheet->reveal());
@@ -52,11 +47,6 @@ class RequestVersionNormalizerTest extends TestCase
         $toSheet->getId()->willReturn(321);
         $spot->getId()->willReturn(9);
         $slot->getId()->willReturn(11);
-        $fp1->getId()->willReturn(1);
-        $fp2->getId()->willReturn(2);
-        $tp1->getId()->willReturn(3);
-        $meeting->getFromParticipants()->willReturn(new ArrayCollection([$fp1->reveal(), $fp2->reveal()]));
-        $meeting->getToParticipants()->willReturn(new ArrayCollection([$tp1->reveal()]));
         $meeting->getSlot()->willReturn($slot->reveal());
         $meeting->getSpot()->willReturn($spot->reveal());
 
@@ -64,18 +54,11 @@ class RequestVersionNormalizerTest extends TestCase
         $result = $requestVersionNormalizer->normalize($request->reveal());
 
         $expected = [
-            'request'          => 1337,
-            'fromSheet'        => 123,
-            'toSheet'          => 321,
-            'slot'             => 11,
-            'spot'             => 9,
-            'fromParticipants' => [
-                1 => 1,
-                2 => 2,
-            ],
-            'toParticipants'   => [
-                3 => 3,
-            ],
+            'request'   => 1337,
+            'fromSheet' => 123,
+            'toSheet'   => 321,
+            'slot'      => 11,
+            'spot'      => 9,
         ];
 
         $this->assertEquals($expected, $result);
