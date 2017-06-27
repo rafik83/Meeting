@@ -390,15 +390,11 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
+            ->join('request.meeting', 'meeting')
+            ->leftJoin('meeting.fromParticipants', 'fp')
+            ->leftJoin('meeting.toParticipants', 'tp')
             ->where('request.event = :event')
-            ->andWhere('EXISTS(
-                SELECT m.id
-                FROM Entity:Meeting m
-                LEFT JOIN m.fromParticipants fp
-                LEFT JOIN m.toParticipants tp
-                WHERE m.request = request
-                AND (fp.user = :user OR tp.user = :user)
-            )')
+            ->andWhere('(fp.user = :user OR tp.user = :user)')
             ->setParameter('event', $event)
             ->setParameter('user', $user);
 
