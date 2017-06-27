@@ -14,6 +14,7 @@ use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
+use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType;
@@ -60,13 +61,14 @@ class SearchFacetExternalFactory
      * @param array  $filters
      *
      * @return FormInterface
+     * @throws CatalogVisibilityNotFoundException
      */
     public function create(Event $event, string $locale, array $filters = []): FormInterface
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
         if ($catalogVisibility === null) {
-            // TODO: throw exception
+            throw new CatalogVisibilityNotFoundException();
         }
 
         $typeViews = $this->commandBus->handle(

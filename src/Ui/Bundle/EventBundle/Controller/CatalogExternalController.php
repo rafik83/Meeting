@@ -13,11 +13,13 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
+use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CatalogExternalController
@@ -41,8 +43,12 @@ class CatalogExternalController extends Controller
         $page    = $request->query->getInt('page', 1);
         $filters = [];
 
-        $searchForm = $this->get('form_factory.search_facet_external_factory')
-            ->create($event, $locale, $filters);
+        try {
+            $searchForm = $this->get('form_factory.search_facet_external_factory')
+                ->create($event, $locale, $filters);
+        } catch (CatalogVisibilityNotFoundException $exception) {
+            throw new NotFoundHttpException();
+        }
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = $searchForm->getData();
