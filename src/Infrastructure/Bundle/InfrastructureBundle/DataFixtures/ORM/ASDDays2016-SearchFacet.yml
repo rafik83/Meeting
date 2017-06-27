@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet:
+Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet:
     search_facet_category:
         __construct:
             - '@event_asddays_2016'
