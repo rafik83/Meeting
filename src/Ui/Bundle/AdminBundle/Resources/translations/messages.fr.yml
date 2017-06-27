@@ -1039,6 +1039,10 @@ planning.participant.unallocated_meetings: 'Liste des rendez-vous validés non o
 planning.participant.unavailability: Indisponible
 register.email_already_exists: 'Un compte associé à cette adresse mail existe déjà'
 reset_password.title: 'Demande de nouveau mot de passe'
+user.agenda.version.agendaModified: 'Votre planning a été modifié:'
+user.agenda.version.meetingAdded: 'Vous avez un nouveau rendez-vous avec %sheetTitle% le %day% à %hour% en %spotRef%.'
+user.agenda.version.meetingDeleted: 'Le rendez-vous avec %sheetTitle% a été supprimé.'
+user.agenda.version.meetingMoved: 'Le rendez-vous avec %sheetTitle% a été déplacé au %day% à %hour% en %spotRef%.'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'

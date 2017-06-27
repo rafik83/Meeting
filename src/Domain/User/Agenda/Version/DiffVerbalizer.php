@@ -31,6 +31,7 @@ class DiffVerbalizer
     const TRANSLATION_MEETING_ADDED   = 'user.agenda.version.meetingAdded';
     const TRANSLATION_MEETING_DELETED = 'user.agenda.version.meetingDeleted';
     const TRANSLATION_MEETING_MOVED   = 'user.agenda.version.meetingMoved';
+    const TRANSLATION_DOMAIN          = 'messages';
 
     /** @var Sheet[] */
     private $sheets;
@@ -135,7 +136,7 @@ class DiffVerbalizer
                 $diffs[] = $this->translator->trans(
                     self::TRANSLATION_MEETING_DELETED,
                     ['%sheetTitle%' => $this->sheets[$deletedRequestView->sheetId]->getTitle()],
-                    'sms',
+                    self::TRANSLATION_DOMAIN,
                     $locale
                 );
             }
@@ -162,7 +163,7 @@ class DiffVerbalizer
                         '%hour%' => $this->formatHour($this->slots[$addedRequestView->slotId]->getBegin()),
                         '%spotRef%' => $this->spots[$addedRequestView->spotId]->getReference(),
                     ],
-                    'sms',
+                    self::TRANSLATION_DOMAIN,
                     $locale
                 );
             }
@@ -189,7 +190,7 @@ class DiffVerbalizer
                         '%hour%' => $this->formatHour($this->slots[$changedMeeting->slotId]->getBegin()),
                         '%spotRef%' => $this->spots[$changedMeeting->spotId]->getReference(),
                     ],
-                    'sms',
+                    self::TRANSLATION_DOMAIN,
                     $locale
                 );
             }
@@ -225,10 +226,11 @@ class DiffVerbalizer
             $slots[$changedView->slotId] = $changedView->slotId;
         }
 
-        $this->sheets = $this->sheetRepository->findByIds($sheets);
-        $this->slots = $this->meetingSlotRepository->findByIds($slots);
-        $this->spots = $this->spotRepository->getSpotsByIds($spots);
+        $this->sheets = !empty($sheets) ? $this->sheetRepository->findByIds($sheets) : [];
+        $this->slots = !empty($slots) ? $this->meetingSlotRepository->findByIds($slots) : [];
+        $this->spots = !empty($spots) ? $this->spotRepository->getSpotsByIds($spots) : [];
     }
+
     /**
      * @param Sheet[] $userSheets
      * @param array   $deletedRequests
