@@ -2788,7 +2788,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserListViewQuery }
 
     query.catalog.search_facet_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
 

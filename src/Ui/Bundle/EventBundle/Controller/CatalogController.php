@@ -30,6 +30,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -41,6 +42,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class CatalogController
+ *
+ * Routes are being protected by security access checker
+ *
+ * @see CatalogAccessEventListener
+ */
 class CatalogController extends Controller
 {
     /**
@@ -214,8 +222,8 @@ class CatalogController extends Controller
             new PaginatedSheetExternalViewQuery(
                 $event,
                 [],
-                1,
-                5,
+                $page,
+                50,
                 $request->getLocale()
             )
         );
