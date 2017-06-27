@@ -58,8 +58,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
     public function __construct(
         int $id,
         Sheet $sheet,
-        string $title,
-        string $type,
+        $title,
+        $type,
         array $preview,
         Meeting\Request $meetingRequest = null,
         $isItMySheet,

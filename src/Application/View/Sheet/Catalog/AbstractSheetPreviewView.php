@@ -53,7 +53,7 @@ abstract class AbstractSheetPreviewView
      * @param PreviewView[] $preview
      * @param Sheet         $sheet
      */
-    public function __construct(int $id, string $title, string $type, array $preview, Sheet $sheet)
+    public function __construct(int $id, $title, $type, array $preview, Sheet $sheet)
     {
         $this->id      = $id;
         $this->title   = $title;
