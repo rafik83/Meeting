@@ -31,7 +31,7 @@ class RequestController extends Controller
      *
      * @return Response
      */
-    public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user)
+    public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
         $event = $eventDomain->getEvent();
 
