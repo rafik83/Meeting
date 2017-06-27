@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
+use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,18 +31,35 @@ class CatalogController extends Controller
      */
     public function configureAction(Request $request, Event $event, UserInterface $user)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $configure = new Configure($event);
+        $searchFacets = $this->get('vimeet_infrastructure.repository.search_facet')
+            ->getByEvent($event);
+
+        $types = SearchFacet::getAllTypes();
+
+        if (empty($searchFacets)) {
+            foreach ($types as $type) {
+                $searchFacets[] = new SearchFacet($event, $type);
+            }
+        }
+
+        $configure = new Configure($event, $searchFacets);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
             'user' => $user,
             'event' => $event,
             'locale' => $locale,
+            'types' => $types,
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
 
+            $this->get('catalog.external.configure_handler')->handle($configure);
+
+            return $this->redirectToRoute('admin_event_read', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Catalog/External:configure.html.twig', [

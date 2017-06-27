@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -28,14 +29,19 @@ class Configure
     /** @var bool */
     public $catalogPublic;
 
+    /** @var SearchFacet[] */
+    public $searchFacets;
+
     /**
      * Configure constructor.
      *
-     * @param Event $event
+     * @param Event         $event
+     * @param SearchFacet[] $searchFacets
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, array $searchFacets)
     {
         $this->event = $event;
+        $this->searchFacets = $searchFacets;
         $this->catalogPublic = $event->isCatalogPublic();
     }
 }

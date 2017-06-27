@@ -31,6 +31,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\SearchFacetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.catalog.external.search_facet:
+        class: Proximum\Vimeet\Infrastructure\Repository\Catalog\External\SearchFacetRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
@@ -3842,6 +3846,8 @@ services:
             - '@repository.nomenclature_repository'
     catalog.external.configure_handler:
         class: Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler
+        arguments:
+            - '@repository.catalog_visibility_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
 

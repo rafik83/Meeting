@@ -103,6 +103,18 @@ form.configure.children.catalogPublic.label: 'Activer le catalogue public'
 form.configure.children.types.label: 'Types visibles'
 form.configure.children.submit.label: 'Enregistrer'
 form.configure.children.categories.label: 'Catégories visibles'
+form.configure.children.searchFacets.category.help: ''
+form.configure.children.searchFacets.category.label: Catégorie
+form.configure.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
+form.configure.children.searchFacets.keywords.label: 'Mots clés'
+form.configure.children.searchFacets.localization.help: 'Champs tagués ville, pays et code postal (à 2 chiffres uniquement pour la France)'
+form.configure.children.searchFacets.localization.label: Localisation
+form.configure.children.searchFacets.organizationCategory.help: 'Tag catégorie de la société'
+form.configure.children.searchFacets.organizationCategory.label: Structure
+form.configure.children.searchFacets.position.help: 'Nomenclature sur champ tagué fonction du participant'
+form.configure.children.searchFacets.position.label: Fonction
+form.configure.children.searchFacets.type.help: ''
+form.configure.children.searchFacets.type.label: Type
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
