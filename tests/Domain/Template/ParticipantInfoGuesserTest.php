@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TaggedInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class ParticipantInfoGuesserTest extends TestCase
 {
@@ -33,7 +34,7 @@ class ParticipantInfoGuesserTest extends TestCase
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var  User */
+    /** @var User */
     private $user;
 
     /** @var Event */
@@ -42,26 +43,26 @@ class ParticipantInfoGuesserTest extends TestCase
     /** @var Type */
     private $type;
 
-    /** @var  RegistrationTemplate */
+    /** @var RegistrationTemplate */
     private $registrationTemplate;
 
-    /** @var  Sheet */
+    /** @var Sheet */
     private $sheet;
 
-    /** @var  Participant */
+    /** @var Participant */
     private $participant;
 
-    /** @var  TemplateData */
+    /** @var TemplateData */
     private $templateData;
 
-    /** @var  ObjectProphecy */
+    /** @var ObjectProphecy */
     private $locale;
 
     public function setUp()
     {
         $this->taggedInfoGuesser    = $this->prophesize(TaggedInfoGuesser::class);
         $this->templateDataFactory  = $this->prophesize(TemplateDataFactory::class);
-        $this->user                 = new User('test1@test.com', '__SALT__', 'password', 'fr');
+        $this->user                 = UserFactory::create();
         $this->event                = EventFactory::createEvent();
         $this->type                 = new Type($this->event);
         $this->registrationTemplate = new RegistrationTemplate('Registration template', [], ['fr'], 'fr', new \DateTime('2017-12-01'));
@@ -81,7 +82,8 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->participant->getData(),
             Tag::PARTICIPANT_LASTNAME,
             $this->locale
-        )->shouldBeCalled()->willReturn('Moreau');
+        )->shouldBeCalled()
+         ->willReturn('Moreau');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
@@ -97,7 +99,8 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->participant->getData(),
             Tag::PARTICIPANT_FIRSTNAME,
             $this->locale
-        )->shouldBeCalled()->willReturn('Ludovic');
+        )->shouldBeCalled()
+         ->willReturn('Ludovic');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
@@ -109,13 +112,15 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->type->setRegistrationTemplate($this->registrationTemplate);
         $tags = Tag::getParticipantTags();
         $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()->willReturn($this->templateData);
+                                  ->shouldBeCalled()
+                                  ->willReturn($this->templateData);
 
         foreach ($tags as $tag) {
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $this->templateData,
                 $tag
-            )->shouldBeCalled()->willReturn('foobar_' . $tag);
+            )->shouldBeCalled()
+             ->willReturn('foobar_' . $tag);
         }
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
@@ -147,7 +152,8 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $this->templateData,
                 $tag
-            )->shouldBeCalled()->willReturn('foobar_' . $tag);
+            )->shouldBeCalled()
+             ->willReturn('foobar_' . $tag);
         }
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
@@ -179,7 +185,8 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->participant->getData(),
             Tag::PARTICIPANT_PHONE,
             $this->locale
-        )->shouldBeCalled()->willReturn('0643456786');
+        )->shouldBeCalled()
+         ->willReturn('0643456786');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
@@ -191,7 +198,8 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
         $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()->willReturn($this->templateData);
+                                  ->shouldBeCalled()
+                                  ->willReturn($this->templateData);
 
         $mailBuildedInfo = [];
         foreach ($this->templateData->getAllTaggedDatas() as $tag => $values) {
@@ -208,7 +216,8 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
         $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()->willReturn($this->templateData);
+                                  ->shouldBeCalled()
+                                  ->willReturn($this->templateData);
 
         $expected = $this->templateData->getTaggedContentValue(Tag::PARTICIPANT_POSITION);
 
@@ -222,7 +231,8 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->type->setRegistrationTemplate($this->registrationTemplate);
         $tags = Tag::getParticipantTags();
         $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()->willReturn($this->templateData);
+                                  ->shouldBeCalled()
+                                  ->willReturn($this->templateData);
 
         foreach ($tags as $tag) {
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
