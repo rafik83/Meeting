@@ -10,6 +10,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -20,6 +21,10 @@ use Symfony\Component\Templating\EngineInterface;
 
 class ExceptionListener
 {
+    const INTERNAL_SERVER_ERROR_CODE = 500;
+    const NOT_FOUND_CODE             = 404;
+    const FORBIDDEN_CODE             = 403;
+
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -39,8 +44,8 @@ class ExceptionListener
         EngineInterface $templating,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
-        $this->eventRepository = $eventRepository;
-        $this->templating = $templating;
+        $this->eventRepository             = $eventRepository;
+        $this->templating                  = $templating;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
@@ -49,7 +54,7 @@ class ExceptionListener
      */
     public function onKernelException(GetResponseForExceptionEvent $responseForExceptionEvent)
     {
-        $request = $responseForExceptionEvent->getRequest();
+        $request   = $responseForExceptionEvent->getRequest();
         $exception = $responseForExceptionEvent->getException();
 
         /**
@@ -68,29 +73,13 @@ class ExceptionListener
          */
         try {
             $event = $this->eventRepository->getEventByDomain($request->getHost());
-
-            if (null === $event) {
-                return;
-            }
         } catch (\Exception $exception) {
             return;
         }
 
         $statusCode = $this->resolveHttpStatusCode($exception);
 
-        $response = new Response(
-            $this->templating->render(
-                'EventBundle:Exception:error.html.twig',
-                [
-                    'event'       => $event,
-                    'status_code' => $statusCode,
-                    'status_text' => $exception->getMessage(),
-                ]
-            ),
-            $statusCode
-        );
-
-        $responseForExceptionEvent->setResponse($response);
+        $responseForExceptionEvent->setResponse($this->buildResponseFromHttpStatusCode($statusCode, $event));
         $responseForExceptionEvent->stopPropagation();
     }
 
@@ -107,10 +96,49 @@ class ExceptionListener
             $statusCode = $exception->getStatusCode();
         }
 
-        if (!in_array($statusCode, [403, 404, 500])) {
-            $statusCode = 500;
+        if (!in_array($statusCode, [self::FORBIDDEN_CODE, self::NOT_FOUND_CODE])) {
+            $statusCode = self::INTERNAL_SERVER_ERROR_CODE;
         }
 
         return $statusCode;
+    }
+
+    /**
+     * @param int        $statusCode
+     * @param null|Event $event
+     *
+     * @return Response
+     */
+    private function buildResponseFromHttpStatusCode($statusCode, $event)
+    {
+        $content = 'error.' . $statusCode . '.content';
+        $route404_403 = 'TwigBundle:Exception:error404-403.html.twig';
+
+        if (null !== $event) {
+            $route404_403 = 'EventBundle:Exception:error404-403.html.twig';
+        }
+
+        if (self::INTERNAL_SERVER_ERROR_CODE === $statusCode) {
+            return new Response(
+                $this->templating->render(
+                    'TwigBundle:Exception:error500.html.twig',
+                    [
+                        'content' => $content,
+                    ]
+                ),
+                $statusCode
+            );
+        }
+
+        return new Response(
+            $this->templating->render(
+                $route404_403,
+                [
+                    'event'   => $event,
+                    'content' => $content,
+                ]
+            ),
+            $statusCode
+        );
     }
 }
