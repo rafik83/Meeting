@@ -4920,6 +4920,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@domain.user.agenda.version.version_normalizer'
+    domain.user.agenda.version.diff_checker:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\DiffChecker
     domain.user.agenda.version.diff_verbalizer:
         class: Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer
         arguments:
