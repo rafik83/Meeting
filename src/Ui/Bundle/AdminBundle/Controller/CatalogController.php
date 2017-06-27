@@ -60,6 +60,8 @@ class CatalogController extends Controller
 
             $this->get('catalog.external.configure_handler')->handle($configure);
 
+            $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
+
             return $this->redirectToRoute('admin_event_read', ['event' => $event->getId()]);
         }
 

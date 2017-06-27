@@ -30,7 +30,7 @@ class SearchFacet extends AbstractSearchFacet
             $this->translations[$locale] = new SearchFacetTranslation($this, '', '', $locale);
         }
     }
-    
+
     /**
      * @return SearchFacetTranslation[]
      */
