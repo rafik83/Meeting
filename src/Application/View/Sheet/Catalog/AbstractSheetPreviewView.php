@@ -48,8 +48,8 @@ abstract class AbstractSheetPreviewView
      * AbstractSheetPreviewView constructor.
      *
      * @param int           $id
-     * @param string        $title
-     * @param string        $type
+     * @param string|null   $title
+     * @param string|null   $type
      * @param PreviewView[] $preview
      * @param Sheet         $sheet
      */
