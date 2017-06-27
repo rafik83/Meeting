@@ -44,6 +44,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ path('admin_event_external_catalog_configure', { 'event': event.id }) }}">
+                    {{ 'admin.event.external_catalog_configure'|trans }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
                     {{ 'admin.event.see_on_front.link'|trans }}
                 </a>

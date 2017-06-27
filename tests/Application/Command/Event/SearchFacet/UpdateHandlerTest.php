@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event\SearchFacet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {

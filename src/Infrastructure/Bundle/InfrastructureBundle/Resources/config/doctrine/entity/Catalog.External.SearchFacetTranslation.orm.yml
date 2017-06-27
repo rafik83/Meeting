@@ -1,6 +1,6 @@
-Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
+Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacetTranslation:
     type:  entity
-    table: search_facet_translation
+    table: external_search_facet_translation
     id:
         id:
             type: integer
@@ -17,7 +17,7 @@ Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
             type: string
     manyToOne:
         searchFacet:
-            targetEntity: Proximum\Vimeet\Domain\Model\SearchFacet
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet
             inversedBy: translations
             joinColumn:
                 onDelete: CASCADE

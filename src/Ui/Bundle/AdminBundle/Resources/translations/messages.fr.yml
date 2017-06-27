@@ -135,6 +135,7 @@ admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de 
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
+admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
 admin.event.fallback: 'Par défaut'
@@ -156,6 +157,7 @@ admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
+admin.event.external_catalog_configure: 'Catalogue public'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'

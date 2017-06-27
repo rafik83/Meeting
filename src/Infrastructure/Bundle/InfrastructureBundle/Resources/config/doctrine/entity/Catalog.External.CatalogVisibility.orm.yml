@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility:
+    type:  entity
+    table: catalog_visibility
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinTable:
+              name: catalog_visibility_types
+              onDelete: SET NULL
+        categories:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+            joinTable:
+              name: catalog_visibility_categories
+              onDelete: SET NULL
+    uniqueConstraints:
+        catalog_visibility_event:
+            columns: [id, event_id]

@@ -1,18 +1,19 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Catalog;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 
-class SearchFacet
+class AbstractSearchFacet
 {
     const TYPE_TYPE                  = 'type';
     const TYPE_POSITION              = 'position';
@@ -24,27 +25,27 @@ class SearchFacet
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Event
      */
-    private $event;
+    protected $event;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var bool
      */
-    private $enabled;
+    protected $enabled;
 
     /**
      * @var ArrayCollection
      */
-    private $translations;
+    protected $translations;
 
     /**
      * SearchFacet constructor.
@@ -61,7 +62,7 @@ class SearchFacet
         $this->translations = new ArrayCollection();
 
         foreach ($event->getLocales() as $locale) {
-            $this->translations[$locale] = new SearchFacetTranslation($this, '', '', $locale);
+            $this->translations[$locale] = new AbstractSearchFacetTranslation($this, '', '', $locale);
         }
     }
 
@@ -122,7 +123,7 @@ class SearchFacet
     }
 
     /**
-     * @return SearchFacetTranslation[]
+     * @return AbstractSearchFacetTranslation[]
      */
     public function getTranslations()
     {
@@ -130,7 +131,7 @@ class SearchFacet
     }
 
     /**
-     * @param SearchFacetTranslation[] $translations
+     * @param AbstractSearchFacetTranslation[] $translations
      */
     public function setTranslations(array $translations)
     {
@@ -157,7 +158,7 @@ class SearchFacet
      * @param string $label
      * @param string $placeholder
      *
-     * @return SearchFacet
+     * @return AbstractSearchFacet
      */
     public function translate($locale, $label, $placeholder)
     {

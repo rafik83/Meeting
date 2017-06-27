@@ -1,29 +1,29 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Repository;
+namespace Proximum\Vimeet\Domain\Repository\Catalog\External;
 
+use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 
 interface SearchFacetRepositoryInterface
 {
     /**
      * @param SearchFacet $searchFacet
      */
-    public function set(SearchFacet $searchFacet);
+    public function add(SearchFacet $searchFacet);
 
     /**
      * @param SearchFacet $searchFacet
      */
-    public function add(SearchFacet $searchFacet);
+    public function set(SearchFacet $searchFacet);
 
     /**
      * @param Event $event

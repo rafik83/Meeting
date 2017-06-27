@@ -10,15 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SearchFacetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SearchFacetViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
