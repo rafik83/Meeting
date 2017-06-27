@@ -16,33 +16,35 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class CatalogController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event $event
+     * @param Request       $request
+     * @param Event         $event
+     * @param UserInterface $user
      *
      * @return Response
      *
      */
-    public function configureAction(Request $request, Event $event)
+    public function configureAction(Request $request, Event $event, UserInterface $user)
     {
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $configure = new Configure($event, true);
+        $configure = new Configure($event);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
-            'user' => $this->getUser(),
-            'event'     => $event,
-            'locale'    => $locale,
+            'user' => $user,
+            'event' => $event,
+            'locale' => $locale,
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
-            
+
         }
 
-        return $this->render('@Admin/Catalog/External/configure.html.twig', [
+        return $this->render('AdminBundle:Catalog/External:configure.html.twig', [
             'event' => $event,
             'form' => $configureForm->createView(),
         ]);

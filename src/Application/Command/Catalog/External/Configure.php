@@ -10,19 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\CategoryView;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Configure
 {
     /** @var Event */
     public $event;
 
-    /** @var TypeView[] */
+    /** @var Type[] */
     public $types;
 
-    /** @var CategoryView[] */
+    /** @var Category[] */
     public $categories;
 
     /** @var bool */
@@ -32,11 +32,10 @@ class Configure
      * Configure constructor.
      *
      * @param Event $event
-     * @param bool $catalogPublic
      */
-    public function __construct(Event $event, bool $catalogPublic = false)
+    public function __construct(Event $event)
     {
         $this->event = $event;
-        $this->catalogPublic = $catalogPublic;
+        $this->catalogPublic = $event->isCatalogPublic();
     }
 }
