@@ -3995,7 +3995,6 @@ services:
     domain.key_dates.checker.catalog_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments:
-            - '@repository.catalog_visibility_repository'
             - '@datetime'
 
     domain.key_dates.checker.event_open_access_checker:
