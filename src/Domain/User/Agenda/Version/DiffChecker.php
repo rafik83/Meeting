@@ -34,13 +34,29 @@ class DiffChecker
 
         // If the spot or the slot has changed, there is a diff
         foreach ($currentVersion as $requestId => $request) {
-            if ($lastVersion[$requestId]['slot'] !== $request['slot']
-                || $lastVersion[$requestId]['spot'] !== $request['spot']
-            ) {
+            if ($this->checkTwoVersion($lastVersion, $requestId, $request)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param array $versionToCheck
+     * @param int   $requestId
+     * @param array $request
+     *
+     * @return bool
+     */
+    public function checkTwoVersion(array &$versionToCheck, int $requestId, array $request): bool
+    {
+        if (!isset($versionToCheck[$requestId])) {
+            throw new \InvalidArgumentException('the given version is not compatible');
+        }
+
+        return $versionToCheck[$requestId]['slot'] !== $request['slot']
+            || $versionToCheck[$requestId]['spot'] !== $request['spot']
+        ;
     }
 }

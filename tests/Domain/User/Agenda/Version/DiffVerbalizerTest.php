@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\User\Agenda\Version;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -22,10 +23,14 @@ use Proximum\Vimeet\Domain\Model\User\Agenda\Version;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Agenda\Version\DiffChecker;
 use Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer;
 
 class DiffVerbalizerTest extends TestCase
 {
+    /** @var ObjectProphecy */
+    private $diffChecker;
+
     /** @var ObjectProphecy */
     private $translator;
 
@@ -40,6 +45,7 @@ class DiffVerbalizerTest extends TestCase
 
     public function setUp()
     {
+        $this->diffChecker = $this->prophesize(DiffChecker::class);
         $this->translator = $this->prophesize(TranslatorInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
@@ -54,6 +60,7 @@ class DiffVerbalizerTest extends TestCase
         $currentVersion = [];
 
         $diffVerbalizer = new DiffVerbalizer(
+            $this->diffChecker->reveal(),
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
@@ -121,8 +128,10 @@ class DiffVerbalizerTest extends TestCase
 
         $this->meetingSlotRepository->findByIds([])->shouldNotBeCalled();
         $this->spotRepository->getSpotsByIds([])->shouldNotBeCalled();
+        $this->diffChecker->checkTwoVersion(Argument::any())->shouldNotBeCalled();
 
         $diffVerbalizer = new DiffVerbalizer(
+            $this->diffChecker->reveal(),
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
@@ -178,6 +187,7 @@ class DiffVerbalizerTest extends TestCase
         $spot->getReference()->willReturn('Spot Ref');
         $slot->getBegin()->willReturn(new \DateTime('2017-10-10 10:00:00.000', new \DateTimeZone('UTC')));
 
+        // Mock
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
@@ -203,8 +213,17 @@ class DiffVerbalizerTest extends TestCase
 
         $this->meetingSlotRepository->findByIds([12 => 12])->shouldBeCalled()->willReturn([12 => $slot->reveal()]);
         $this->spotRepository->getSpotsByIds([14 => 14])->shouldBeCalled()->willReturn([14 => $spot->reveal()]);
+        $this->diffChecker
+            ->checkTwoVersion(
+                [ 1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 2 => ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                1,
+                ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8]
+            )->shouldBeCalled()
+            ->willReturn(false)
+        ;
 
         $diffVerbalizer = new DiffVerbalizer(
+            $this->diffChecker->reveal(),
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
@@ -321,7 +340,26 @@ class DiffVerbalizerTest extends TestCase
             ->willReturn([8 => $spot1->reveal(), 14 => $spot2->reveal()])
         ;
 
+        $this->diffChecker
+            ->checkTwoVersion(
+                [1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 2 => ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                1,
+                ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 10, "spot" => 8]
+            )->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this->diffChecker
+            ->checkTwoVersion(
+                [ 1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 2 => ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                2,
+                ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 16]
+            )->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $diffVerbalizer = new DiffVerbalizer(
+            $this->diffChecker->reveal(),
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
@@ -449,7 +487,17 @@ class DiffVerbalizerTest extends TestCase
             ->willReturn([8 => $spot1->reveal(), 14 => $spot2->reveal()])
         ;
 
+        $this->diffChecker
+            ->checkTwoVersion(
+                [1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 4 => ["request" => 4, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                1,
+                ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 10, "spot" => 8]
+            )->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $diffVerbalizer = new DiffVerbalizer(
+            $this->diffChecker->reveal(),
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),

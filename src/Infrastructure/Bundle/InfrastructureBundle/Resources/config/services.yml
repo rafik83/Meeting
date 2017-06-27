@@ -4925,6 +4925,7 @@ services:
     domain.user.agenda.version.diff_verbalizer:
         class: Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer
         arguments:
+            - '@domain.user.agenda.version.diff_checker'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'

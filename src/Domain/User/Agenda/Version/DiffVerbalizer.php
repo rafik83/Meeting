@@ -60,18 +60,24 @@ class DiffVerbalizer
     /** @var \IntlDateFormatter */
     private $hourFormatter = null;
 
+    /** @var DiffChecker */
+    private $diffChecker;
+
     /**
+     * @param DiffChecker                    $diffChecker
      * @param TranslatorInterface            $translator
      * @param SheetRepositoryInterface       $sheetRepository
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      * @param SpotRepositoryInterface        $spotRepository
      */
     public function __construct(
+        DiffChecker $diffChecker,
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         SpotRepositoryInterface $spotRepository
     ) {
+        $this->diffChecker = $diffChecker;
         $this->translator = $translator;
         $this->sheetRepository = $sheetRepository;
         $this->meetingSlotRepository = $meetingSlotRepository;
@@ -275,19 +281,17 @@ class DiffVerbalizer
 
     /**
      * @param array $userSheets
-     * @param array $toCheckChanges
+     * @param array $intersectVersion
      * @param array $currentVersion
      *
      * @return array
      */
-    private function getChangedMeeting(array $userSheets, array $toCheckChanges, array $currentVersion): array
+    private function getChangedMeeting(array &$userSheets, array &$intersectVersion, array &$currentVersion): array
     {
         $changedViews = [];
 
-        foreach ($toCheckChanges as $key => $request) {
-            if ($request['slot'] !== $currentVersion[$key]['slot']
-                || $request['spot'] !== $currentVersion[$key]['spot']
-            ) {
+        foreach ($intersectVersion as $key => $request) {
+            if ($this->diffChecker->checkTwoVersion($currentVersion, $key, $request)) {
                 $changedViews[] = new MeetingMovedView(
                     $this->getSheetMet($userSheets, $request),
                     $currentVersion[$key]['slot'],
