@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
+use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -31,27 +32,20 @@ class ConfigureHandlerTest extends TestCase
     /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
 
-    /** @var TypeRepositoryInterface */
-    private $typeRepository;
-
     /** @var Event */
     private $event;
 
     public function setUp()
     {
         $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepository::class);
-        $this->typeRepository = $this->prophesize((TypeRepositoryInterface::class));
         $this->searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
         $this->event = EventFactory::createEvent();
     }
 
     public function testHandle()
     {
-        $searchFacets = [
-
-        ];
-
-        $command = new Configure($this->event, $searchFacets);
+        $searchFacet = new SearchFacet($this->event, 'type', true);
+        $command     = new Configure($this->event, [$searchFacet]);
 
         $command->types = [
             new Type($this->event),
@@ -62,6 +56,8 @@ class ConfigureHandlerTest extends TestCase
             new Category($this->event),
             new Category($this->event),
         ];
+
+        $this->searchFacetRepository->add($searchFacet)->shouldBeCalled();
 
         $this
             ->catalogVisibilityRepository
