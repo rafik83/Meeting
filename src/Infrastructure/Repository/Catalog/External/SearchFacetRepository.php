@@ -54,7 +54,7 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
             $this->entityManager->flush($translation);
         }
     }
-    
+
     /**
      * {@inheritdoc}
      */
