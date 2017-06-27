@@ -1,3 +1,5 @@
+{{ include('EventBundle:Catalog/External:search.html.twig', { searchForm: searchForm }, false) }}
+
 <div class="catalog__list catalog__list--block">
     {{ include('@Event/Catalog/External/list.html.twig', {
         paginatedResult: paginatedResult,

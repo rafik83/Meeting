@@ -218,6 +218,13 @@ services:
         tags:
             - { name: form.type }
 
+    form_type.catalog_search_external_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType
+        arguments:
+            - '@query.catalog.search_facet_view_query_handler'
+        tags:
+            - { name: form.type }
+
     form_type.happening_participate_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType
         arguments:
@@ -256,6 +263,16 @@ services:
              - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: form.type }
+
+    #
+    # Form Factory
+    #
+    form_factory.search_facet_external_factory:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory\SearchFacetExternalFactory
+        arguments:
+            - '@tactician.commandbus.query'
+            - '@repository.catalog_visibility_repository'
+            - '@form.factory'
 
     #
     # Event Listener

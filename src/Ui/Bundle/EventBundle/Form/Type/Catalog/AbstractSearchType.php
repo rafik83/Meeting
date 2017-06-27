@@ -62,16 +62,6 @@ abstract class AbstractSearchType extends AbstractType
             new SearchFacetViewQuery($options['event'], $options['locale'])
         );
 
-        $builder
-            ->add(self::ORDER_BY, ChoiceType::class, [
-                'label'    => 'form.search.orderBy.label',
-                'expanded' => true,
-                'choices'  => [
-                    'form.search.orderBy.relevance'          => Constant::ORDER_BY_RELEVANCE,
-                    'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
-                    'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
-                ],
-            ]);
 
         // show type facette only if there is more than one filter
         if (count($typeViews) > 1 && ($typeSearchFacet = $searchFacetsView->hasType()) !== false) {
@@ -93,16 +83,6 @@ abstract class AbstractSearchType extends AbstractType
                     ]
                 );
         }
-
-        $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
-            'label'    => 'form.search.objective.label',
-            'expanded' => true,
-            'multiple' => true,
-            'choices'  => [
-                'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
-                'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
-            ],
-        ]);
 
         if (($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) !== false) {
             $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [

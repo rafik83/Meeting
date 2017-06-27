@@ -208,60 +208,6 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
-    public function indexExternalAction(Request $request, EventDomain $eventDomain): Response
-    {
-        $event = $eventDomain->getEvent();
-        $page = $request->query->getInt('page', 1);
-
-        $paginatedResult = $this->get('tactician.commandbus.query')->handle(
-            new PaginatedSheetExternalViewQuery(
-                $event,
-                [],
-                $page,
-                50,
-                $request->getLocale()
-            )
-        );
-
-        $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, [], $request->getLocale())
-        );
-
-        $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
-
-        if ($request->isXmlHttpRequest()) {
-            $template = 'EventBundle:Catalog:External/catalog.html.twig';
-
-            if ($page > 1) {
-                return new JsonResponse(
-                    [
-                        'html' => $this->renderView('@Event/Catalog/External/list.html.twig', [
-                            'paginatedResult' => $paginatedResult,
-                            'page'            => $page,
-                        ]),
-                        'seeMoreButton' => $seeMoreButtonStatus,
-                    ]
-                );
-            }
-        } else {
-            $template = 'EventBundle:Catalog:External/index.html.twig';
-        }
-
-        return $this->render($template, [
-            'event'           => $event,
-            'page'            => 1,
-            'paginatedResult' => $paginatedResult,
-            'seeMoreButton'   => $seeMoreButtonStatus,
-            'typeViews'       => $typeViews,
-        ]);
-    }
-
-    /**
      * Get localization asynchronously
      *
      * @param Request     $request

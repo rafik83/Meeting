@@ -32,6 +32,17 @@ class SearchType extends AbstractSearchType
     {
         parent::buildForm($builder, $options);
 
+        $builder
+            ->add(self::ORDER_BY, ChoiceType::class, [
+                'label'    => 'form.search.orderBy.label',
+                'expanded' => true,
+                'choices'  => [
+                    'form.search.orderBy.relevance'          => Constant::ORDER_BY_RELEVANCE,
+                    'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
+                    'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
+                ],
+            ]);
+
         $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
             'label'    => 'form.search.objective.label',
             'expanded' => true,
