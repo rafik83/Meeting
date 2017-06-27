@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
 use Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\PromotionFactory;
 
 class UniqueCodeCheckerTest extends TestCase
 {
@@ -31,16 +32,6 @@ class UniqueCodeCheckerTest extends TestCase
     {
         $this->event                   = EventFactory::createEvent();
         $this->promotionCodeRepository = $this->prophesize(PromotionCodeRepository::class);
-    }
-
-    public static function createPromotion()
-    {
-        $event   = EventFactory::createEvent();
-        $title   = 'Title';
-        $code    = 'PROMOCODE';
-        $product = new Product($event, 'test', 'test', 'test', 1.3, 2, 4, 6, true, new \DateTime(), false);
-
-        return new Promotion(new PromotionCode($event, $title, $code), $product, 'test', 1.4);
     }
 
     /**
@@ -60,7 +51,7 @@ class UniqueCodeCheckerTest extends TestCase
     }
 
     /**
-     * @dataProvider  provideExist
+     * @dataProvider provideExist
      */
     public function testExist(bool $expected, array $promotionCodes)
     {
@@ -77,7 +68,7 @@ class UniqueCodeCheckerTest extends TestCase
     {
         return [
             [true, []],
-            [false, [self::createPromotion()]],
+            [false, [PromotionFactory::createPromotion()]],
         ];
     }
 
@@ -88,7 +79,7 @@ class UniqueCodeCheckerTest extends TestCase
         return [
             [false, []],
             [true, [ $promotionCode ]],
-            [true, [$promotionCode, $promotionCode]],
+            [true, [ $promotionCode, $promotionCode]],
         ];
     }
 }
