@@ -46,11 +46,6 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
     private $tokenStorage;
 
     /**
-     * @var RouterInterface
-     */
-    private $router;
-
-    /**
      * CatalogAccessEventListener constructor.
      *
      * @param CatalogAccessChecker     $catalogAccessChecker
@@ -68,7 +63,6 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
 
         $this->catalogAccessChecker = $catalogAccessChecker;
         $this->tokenStorage         = $tokenStorage;
-        $this->router               = $router;
     }
 
     /**
