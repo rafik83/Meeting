@@ -243,9 +243,7 @@ class DiffVerbalizer
 
         if (!empty($deletedRequests)) {
             foreach ($deletedRequests as $key => $request) {
-                $deletedViews[] = new MeetingDeletedView(
-                    isset($userSheets[$request['fromSheet']]) ? $request['toSheet'] : $request['fromSheet']
-                );
+                $deletedViews[] = new MeetingDeletedView($this->getSheetMet($userSheets, $request));
             }
         }
 
@@ -265,7 +263,7 @@ class DiffVerbalizer
         if (!empty($addedRequest)) {
             foreach ($addedRequest as $key => $request) {
                 $addedViews[] = new MeetingAddedView(
-                    isset($userSheets[$request['fromSheet']]) ? $request['toSheet'] : $request['fromSheet'],
+                    $this->getSheetMet($userSheets, $request),
                     $request['slot'],
                     $request['spot']
                 );
@@ -291,7 +289,7 @@ class DiffVerbalizer
                 || $request['spot'] !== $currentVersion[$key]['spot']
             ) {
                 $changedViews[] = new MeetingMovedView(
-                    isset($userSheets[$request['fromSheet']]) ? $request['toSheet'] : $request['fromSheet'],
+                    $this->getSheetMet($userSheets, $request),
                     $currentVersion[$key]['slot'],
                     $currentVersion[$key]['spot']
                 );
@@ -299,6 +297,17 @@ class DiffVerbalizer
         }
 
         return $changedViews;
+    }
+
+    /**
+     * @param Sheet[] $userSheets
+     * @param array   $request
+     *
+     * @return int
+     */
+    private function getSheetMet(array &$userSheets, array &$request): int
+    {
+        return isset($userSheets[$request['fromSheet']]) ? $request['toSheet'] : $request['fromSheet'];
     }
 
     /**
