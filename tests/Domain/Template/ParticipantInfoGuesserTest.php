@@ -59,16 +59,16 @@ class ParticipantInfoGuesserTest extends TestCase
 
     public function setUp()
     {
-        $this->taggedInfoGuesser = $this->prophesize(TaggedInfoGuesser::class);
+        $this->taggedInfoGuesser    = $this->prophesize(TaggedInfoGuesser::class);
         $this->templateDataFactory  = $this->prophesize(TemplateDataFactory::class);
-        $this->user  = new User('test1@test.com', '__SALT__', 'password', 'fr');
-        $this->event = EventFactory::createEvent();
-        $this->type = new Type($this->event);
+        $this->user                 = new User('test1@test.com', '__SALT__', 'password', 'fr');
+        $this->event                = EventFactory::createEvent();
+        $this->type                 = new Type($this->event);
         $this->registrationTemplate = new RegistrationTemplate('Registration template', [], ['fr'], 'fr', new \DateTime('2017-12-01'));
-        $this->sheet = new Sheet($this->event, $this->type, [], $this->user, new \DateTime());
-        $this->participant = new Participant($this->sheet, $this->user, [], true);
-        $this->templateData = new TemplateData($this->type,[],'fr','fr');
-        $this->locale = 'fr';
+        $this->sheet                = new Sheet($this->event, $this->type, [], $this->user, new \DateTime());
+        $this->participant          = new Participant($this->sheet, $this->user, [], true);
+        $this->templateData         = new TemplateData($this->type, [], 'fr', 'fr');
+        $this->locale               = 'fr';
 
     }
 
@@ -197,7 +197,7 @@ class ParticipantInfoGuesserTest extends TestCase
         foreach ($this->templateData->getAllTaggedDatas() as $tag => $values) {
             $mailBuildedInfo[$tag] = (!empty($values)) ? reset($values) : '';
         }
-        
+
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
         $this->assertEquals($mailBuildedInfo, $guesser->guessParticipantInfoForMail($this->participant, $this->locale));
@@ -215,6 +215,28 @@ class ParticipantInfoGuesserTest extends TestCase
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
         $this->assertEquals($expected, $guesser->guessParticipantPosition($this->participant, $this->locale));
-
     }
+
+    public function testGuessParticipantCompleteName()
+    {
+        $this->type->setRegistrationTemplate($this->registrationTemplate);
+        $tags = Tag::getParticipantTags();
+        $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
+                                  ->shouldBeCalled()->willReturn($this->templateData);
+
+        foreach ($tags as $tag) {
+            $this->taggedInfoGuesser->guessFirstFromTemplateData(
+                $this->templateData,
+                $tag
+            )->shouldBeCalled()->willReturn('foobar_' . $tag);
+        }
+
+        $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
+
+        $expected = 'foobar_participant_firstname foobar_participant_lastname';
+
+
+        $this->assertEquals($expected, $guesser->guessParticipantCompleteName($this->participant, $this->locale));
+    }
+
 }
