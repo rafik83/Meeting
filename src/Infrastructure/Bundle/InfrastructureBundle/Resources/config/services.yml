@@ -3865,6 +3865,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler
         arguments:
             - '@repository.catalog_visibility_repository'
+            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
 

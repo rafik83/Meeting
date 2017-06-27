@@ -35,7 +35,8 @@ class CatalogController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $searchFacets = $this->get('vimeet_infrastructure.repository.search_facet')
+        $searchFacets = $this
+            ->get('vimeet_infrastructure.repository.catalog.external.search_facet')
             ->getByEvent($event);
 
         $types = SearchFacet::getAllTypes();
@@ -58,6 +59,8 @@ class CatalogController extends Controller
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
 
             $this->get('catalog.external.configure_handler')->handle($configure);
+
+            $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
 
             return $this->redirectToRoute('admin_event_read', ['event' => $event->getId()]);
         }

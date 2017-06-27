@@ -42,6 +42,6 @@ class Configure
     {
         $this->event = $event;
         $this->searchFacets = $searchFacets;
-        $this->catalogPublic = $event->isCatalogPublic();
+        $this->catalogPublic = $event->isExternalCatalogEnabled();
     }
 }

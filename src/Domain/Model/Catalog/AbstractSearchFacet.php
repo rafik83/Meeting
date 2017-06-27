@@ -48,7 +48,7 @@ class AbstractSearchFacet
     protected $translations;
 
     /**
-     * SearchFacet constructor.
+     * AbstractSearchFacet constructor.
      *
      * @param Event  $event
      * @param string $type

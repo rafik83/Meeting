@@ -54,7 +54,7 @@ Proximum\Vimeet\Domain\Model\Event:
         emailTeam:
             type: string
             nullable: true
-        catalogPublic:
+        externalCatalogEnabled:
             type: boolean
             options:
                 default: false

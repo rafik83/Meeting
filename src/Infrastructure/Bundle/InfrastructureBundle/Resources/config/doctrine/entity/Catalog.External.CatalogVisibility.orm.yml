@@ -24,4 +24,4 @@ Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility:
               onDelete: SET NULL
     uniqueConstraints:
         catalog_visibility_event:
-            columns: [id, event_id]
+            columns: [event_id]

@@ -65,8 +65,7 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
             ->createQueryBuilder()
             ->select('searchFacet', 'translations')
             ->from(SearchFacet::class, 'searchFacet')
-            ->where('searchFacet.event = :event')
-            ->join('searchFacet.translations', 'translations')
+            ->join('searchFacet.translations', 'translations', 'WITH', 'searchFacet.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
