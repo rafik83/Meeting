@@ -85,11 +85,12 @@ class CatalogExternalController extends Controller
         }
 
         return $this->render($template, [
-            'event'           => $event,
-            'page'            => 1,
-            'paginatedResult' => $paginatedResult,
-            'seeMoreButton'   => $seeMoreButtonStatus,
-            'searchForm'      => $searchForm->createView(),
+            'event'             => $event,
+            'page'              => 1,
+            'paginatedResult'   => $paginatedResult,
+            'seeMoreButton'     => $seeMoreButtonStatus,
+            'searchForm'        => $searchForm->createView(),
+            'catalogOnlineDate' => $event->getConfiguration()->getCatalogOnlineDate()->format('d/m/Y'),
         ]);
     }
 
