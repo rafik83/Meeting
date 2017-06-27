@@ -53,7 +53,7 @@ class CatalogExternalController extends Controller
                 $event,
                 $filters,
                 $page,
-                50,
+                48,
                 $request->getLocale()
             )
         );

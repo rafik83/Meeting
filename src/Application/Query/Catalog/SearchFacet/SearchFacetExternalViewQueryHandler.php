@@ -11,9 +11,26 @@
 namespace Proximum\Vimeet\Application\Query\Catalog\SearchFacet;
 
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
+use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
+use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 
 class SearchFacetExternalViewQueryHandler implements SearchFacetQueryHandlerInterface
 {
+    /**
+     * @var SearchFacetRepositoryInterface
+     */
+    private $externalSearchFacetRepository;
+
+    /**
+     * SearchFacetExternalViewQueryHandler constructor.
+     *
+     * @param SearchFacetRepositoryInterface $externalSearchFacetRepository
+     */
+    public function __construct(SearchFacetRepositoryInterface $externalSearchFacetRepository)
+    {
+        $this->externalSearchFacetRepository = $externalSearchFacetRepository;
+    }
+    
     /**
      * @param mixed $query
      *
@@ -21,6 +38,19 @@ class SearchFacetExternalViewQueryHandler implements SearchFacetQueryHandlerInte
      */
     public function handle($query): SearchFacetsView
     {
+        $searchFacets = $this->externalSearchFacetRepository->getByEvent($query->event);
 
+        $searchFacetViews = [];
+
+        foreach ($searchFacets as $facet) {
+            $searchFacetViews[] = new SearchFacetView(
+                $facet->getType(),
+                $facet->getLabel($query->locale),
+                $facet->getPlaceholder($query->locale),
+                $facet->isEnabled()
+            );
+        }
+
+        return new SearchFacetsView($searchFacetViews);
     }
 }

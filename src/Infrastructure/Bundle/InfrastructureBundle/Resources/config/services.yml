@@ -2800,6 +2800,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
 
+    query.catalog.search_facet_external_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+
     query.mail.participant_mail_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler
         arguments:
