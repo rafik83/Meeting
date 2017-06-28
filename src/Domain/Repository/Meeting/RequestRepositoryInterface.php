@@ -258,6 +258,13 @@ interface RequestRepositoryInterface
     public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state);
 
     /**
+     * @param Sheet[] $sheets
+     *
+     * @return Request[]
+     */
+    public function getUnallocatedRequestForSheets(array $sheets);
+
+    /**
      * @param Request $request
      */
     public function update(Request $request);

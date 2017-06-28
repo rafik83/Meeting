@@ -45,13 +45,14 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event       = EventFactory::createEvent();
-        $category    = null;
-        $startTime   = new \DateTime('2016-10-12 10:00:00');
-        $endTime     = new \DateTime('2016-10-12 18:00:00');
-        $eventDay    = new Day($event, $startTime, $endTime);
-        $sheet       = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
+        $event        = EventFactory::createEvent();
+        $category     = null;
+        $user         = UserFactory::create();
+        $startTime    = new \DateTime('2016-10-12 10:00:00');
+        $endTime      = new \DateTime('2016-10-12 18:00:00');
+        $eventDay     = new Day($event, $startTime, $endTime);
+        $sheet        = SheetFactory::create($event);
+        $participant  = ParticipantFactory::create($sheet);
         $massCategory = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
 
         // Data
@@ -61,7 +62,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $endHappening2   = new \DateTime('2016-10-12 16:50:00');
         $categoryH1      = new Happening\Category($event, 'Conference', 1, '#123123', '#123123');
         $categoryH2      = new Happening\Category($event, 'RDV', 2, '#123123', '#123123');
-        $happening1 = new Happening(
+        $happening1      = new Happening(
             $event,
             $beginHappening1,
             $endHappening1,
@@ -75,18 +76,11 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $categoryH2
         );
 
-        $participation1 = new HappeningParticipation($happening1, $participant);
-        $participation2 = new HappeningParticipation($happening2, $participant);
-
-        $reflection = new \ReflectionClass(Happening::class);
-        $property   = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($happening1, 1);
-        $property->setValue($happening2, 2);
-        $property->setAccessible(false);
+        $participation1 = new HappeningParticipation($happening1, $user);
+        $participation2 = new HappeningParticipation($happening2, $user);
 
         $unavailability = new Unavailability($participant->getUser(), $event, $beginHappening2, $endHappening2);
-        $mass = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
+        $mass           = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
 
         // Expected
         $happeningView1 = new HappeningView(
@@ -114,7 +108,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris'
         );
 
-        $massView           = new MassUnavailabilityView(
+        $massView = new MassUnavailabilityView(
             1,
             $beginHappening1,
             $endHappening1,
@@ -125,6 +119,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'rightColor',
             'Europe/Paris'
         );
+
         $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2, 'Europe/Paris');
 
         $expected = new DayView(
@@ -150,8 +145,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->shouldBeCalled()
-            ->willReturn($happeningView1)
-        ;
+            ->willReturn($happeningView1);
 
         $happeningViewQueryHandler
             ->handle(
@@ -162,8 +156,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->shouldBeCalled()
-            ->willReturn($happeningView2)
-        ;
+            ->willReturn($happeningView2);
 
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
@@ -195,6 +188,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $sheet,
             $event,
             $participant,
+            true,
             'fr',
             [$participation1, $participation2],
             [$unavailability],
@@ -206,13 +200,14 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithMeeting()
     {
-        $event       = EventFactory::createEvent();
-        $category    = null;
-        $startTime   = new \DateTime('2016-10-12 10:00:00');
-        $endTime     = new \DateTime('2016-10-12 18:00:00');
-        $eventDay    = new Day($event, $startTime, $endTime);
-        $sheet       = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
+        $user         = UserFactory::create('email@email.fr');
+        $event        = EventFactory::createEvent();
+        $category     = null;
+        $startTime    = new \DateTime('2016-10-12 10:00:00');
+        $endTime      = new \DateTime('2016-10-12 18:00:00');
+        $eventDay     = new Day($event, $startTime, $endTime);
+        $sheet        = SheetFactory::create($event);
+        $participant  = ParticipantFactory::create($sheet, $user);
         $massCategory = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
 
         // Data
@@ -222,7 +217,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $endHappening2   = new \DateTime('2016-10-12 16:50:00');
         $categoryH1      = new Happening\Category($event, 'Conference', 1, '#123123', '#123123');
         $categoryH2      = new Happening\Category($event, 'RDV', 2, '#123123', '#123123');
-        $happening1 = new Happening(
+        $happening1      = new Happening(
             $event,
             $beginHappening1,
             $endHappening1,
@@ -236,18 +231,11 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $categoryH2
         );
 
-        $participation1 = new HappeningParticipation($happening1, $participant);
-        $participation2 = new HappeningParticipation($happening2, $participant);
-
-        $reflection = new \ReflectionClass(Happening::class);
-        $property   = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($happening1, 1);
-        $property->setValue($happening2, 2);
-        $property->setAccessible(false);
+        $participation1 = new HappeningParticipation($happening1, $user);
+        $participation2 = new HappeningParticipation($happening2, $user);
 
         $unavailability = new Unavailability($participant->getUser(), $event, $beginHappening2, $endHappening2);
-        $mass = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
+        $mass           = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
 
         // Expected
         $happeningView1 = new HappeningView(
@@ -275,7 +263,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris'
         );
 
-        $massView           = new MassUnavailabilityView(
+        $massView = new MassUnavailabilityView(
             1,
             $beginHappening1,
             $endHappening1,
@@ -286,15 +274,17 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'rightColor',
             'Europe/Paris'
         );
+        
         $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2, 'Europe/Paris');
 
-        $user        = UserFactory::create('test2@test.fr');
-        $sheet2      = SheetFactory::create($event, $user);
-        $request     = new Request($sheet, [], $sheet2, [], new \DateTime(), $user);
+        $user2       = UserFactory::create('test2@test.fr');
+        $sheet2      = SheetFactory::create($event, $user2);
+        $request     = new Request($sheet, [], $sheet2, [], new \DateTime(), $user2, $event);
         $slot        = new MeetingSlot($event, $beginHappening1, $endHappening1, false);
         $spot        = new Spot('ref', $event, 2, 3, 4, true);
-        $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $event);
         $meetingView = new MeetingView(
+            'userSheetTitle',
             2,
             'title',
             $beginHappening1,
@@ -348,7 +338,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler
-            ->handle(new MeetingViewQuery($meeting, $sheet, $event, 'fr'))
+            ->handle(new MeetingViewQuery($meeting, $sheet, true, $user, $event, 'fr'))
             ->shouldBeCalled()
             ->willReturn($meetingView);
 
@@ -361,11 +351,12 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal()
         );
-        $result = $handler->handle(new DayViewQuery(
+        $result  = $handler->handle(new DayViewQuery(
             $eventDay,
             $sheet,
             $event,
             $participant,
+            true,
             'fr',
             [$participation1, $participation2],
             [$unavailability],
@@ -378,14 +369,15 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleCancelAttendance()
     {
-        $event       = EventFactory::createEvent();
-        $category    = null;
-        $startTime   = new \DateTime('2016-10-12 10:00:00');
-        $endTime     = new \DateTime('2016-10-12 18:00:00');
-        $eventDay    = new Day($event, $startTime, $endTime);
-        $sheet       = SheetFactory::create($event);
+        $event     = EventFactory::createEvent();
+        $user      = UserFactory::create();
+        $category  = null;
+        $startTime = new \DateTime('2016-10-12 10:00:00');
+        $endTime   = new \DateTime('2016-10-12 18:00:00');
+        $eventDay  = new Day($event, $startTime, $endTime);
+        $sheet     = SheetFactory::create($event);
         $sheet->setAttendance(false);
-        $participant = ParticipantFactory::create($sheet);
+        $participant  = ParticipantFactory::create($sheet);
         $massCategory = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
 
         // Data
@@ -395,7 +387,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $endHappening2   = new \DateTime('2016-10-12 16:50:00');
         $categoryH1      = new Happening\Category($event, 'Conference', 1, '#123123', '#123123');
         $categoryH2      = new Happening\Category($event, 'RDV', 2, '#123123', '#123123');
-        $happening1 = new Happening(
+        $happening1      = new Happening(
             $event,
             $beginHappening1,
             $endHappening1,
@@ -409,18 +401,11 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $categoryH2
         );
 
-        $participation1 = new HappeningParticipation($happening1, $participant);
-        $participation2 = new HappeningParticipation($happening2, $participant);
-
-        $reflection = new \ReflectionClass(Happening::class);
-        $property   = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($happening1, 1);
-        $property->setValue($happening2, 2);
-        $property->setAccessible(false);
+        $participation1 = new HappeningParticipation($happening1, $user);
+        $participation2 = new HappeningParticipation($happening2, $user);
 
         $unavailability = new Unavailability($participant->getUser(), $event, $beginHappening2, $endHappening2);
-        $mass = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
+        $mass           = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
 
         // Expected
         $expected = new DayView(
@@ -465,7 +450,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal()
         );
-        $result = $handler->handle(new DayViewQuery(
+        $result  = $handler->handle(new DayViewQuery(
             $eventDay,
             $sheet,
             $event,

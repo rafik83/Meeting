@@ -24,6 +24,8 @@ class SharedColumnsTranslationViewQueryHandlerTest extends \PHPUnit_Framework_Te
         $translator->trans('order.column.order_id', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Order id');
         $translator->trans('order.column.sheet_id', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Sheet id');
         $translator->trans('order.column.sheet_title', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Sheet title');
+        $translator->trans('order.column.invoice_number', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Invoice number');
+        $translator->trans('order.column.invoice_date', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('12/10/2017');
         $translator->trans('order.column.billing_info_gender', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Gender');
         $translator->trans('order.column.billing_info_last_name', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Last name');
         $translator->trans('order.column.billing_info_first_name', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('first name');
@@ -38,8 +40,7 @@ class SharedColumnsTranslationViewQueryHandlerTest extends \PHPUnit_Framework_Te
         $translator->trans('order.column.billing_info_country', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Country');
         $translator->trans('order.column.billing_info_vat_number', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Vat Number');
         $translator->trans('order.column.billing_info_reference', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Reference');
-        
-        
+
         $handler = new SharedColumnsTranslationViewQueryHandler($translator->reveal());
         $result = $handler->handle(new SharedColumnsTranslationViewQuery($adminLocale));
 
@@ -47,6 +48,8 @@ class SharedColumnsTranslationViewQueryHandlerTest extends \PHPUnit_Framework_Te
             'Order id',
             'Sheet id',
             'Sheet title',
+            'Invoice number',
+            '12/10/2017',
             'Gender',
             'Last name',
             'first name',

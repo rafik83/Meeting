@@ -12,7 +12,8 @@ namespace Proximum\Vimeet\Application\Components\Planning\Displayer;
 
 use Proximum\Vimeet\Application\Adapter\MarkdownAdapterInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ParticipantPlanningDisplayer
 {
@@ -39,29 +40,31 @@ class ParticipantPlanningDisplayer
     }
 
     /**
-     * @param Participant $participant
-     * @param string      $locale
+     * @param Event  $event
+     * @param User   $user
+     * @param string $locale
      *
      * @return string
      */
-    public function display(Participant $participant, $locale)
+    public function display(Event $event, User $user, $locale)
     {
         $planningMarkdown = $this
             ->participantPlanningFormatter
-            ->formatPlanningFromParticipantWithUnallocated($participant, $locale);
+            ->formatPlanningFromUserAndEventWithUnallocated($user, $event, $locale);
 
         return $this->markdown->toHtml($planningMarkdown);
     }
 
     /**
-     * To optimize the use of this service for multiple participant
-     * This method can be called to preload the participants data before
+     * To optimize the use of this service for multiple user
+     * This method can be called to preload the users data before
      * And avoid multiple unit call for each participant
      *
-     * @param Participant[] $participants
+     * @param User[] $users
+     * @param Event  $event
      */
-    public function preloadForParticipants(array $participants)
+    public function preloadForUsersAndEvent(array $users, Event $event)
     {
-        $this->participantPlanningFormatter->preloadPlanningHandlerForParticipants($participants);
+        $this->participantPlanningFormatter->preloadPlanningHandlerForUsersAndEvent($users, $event);
     }
 }

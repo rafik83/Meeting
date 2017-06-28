@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Repository\User;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
+
+interface UserEventPhoneRepositoryInterface
+{
+    /**
+     * @param UserEventPhone $userEventPhone
+     */
+    public function add(UserEventPhone $userEventPhone);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return UserEventPhone|null
+     */
+    public function find(User $user, Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return UserEventPhone|null
+     */
+    public function findValidated(User $user, Event $event);
+
+    /**
+     * @param UserEventPhone $userEventPhone
+     */
+    public function set(UserEventPhone $userEventPhone);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     */
+    public function remove(User $user, Event $event);
+}

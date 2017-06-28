@@ -42,3 +42,25 @@ Feature: Agenda
     Then I go to this page "/fr/sheet/2/agenda/participant/4"
     And the response status code should be 200
 
+  Scenario: I can see my agenda when I have multiple sheets
+    Given the database is purged
+    And the event "Best of web" is created
+    And there is 2 slot in this event
+    And there is an active spot "SPOTA1" with meeting capacity of 2, seat capacity of 6
+    And there is a sheet with the title "SheetA"
+    And the user "user@example.net" is created
+    And there is a participant for this sheet and this user
+    And there is a sheet with the title "SheetB"
+    And there is a participant for this sheet and this user
+    And there is a sheet with the title "SheetC"
+    And there is a participant for this sheet
+    And there is a meeting between "SheetA" and "SheetC" on spot "SPOTA1"
+    And there is a meeting between "SheetB" and "SheetC" on spot "SPOTA1"
+    And this event occurs today from "08:00" to "18:00"
+    And the agenda is open
+    And the meetings are published
+    When I am on the homepage of this event
+    And I am logged with this user
+    And I go to this page "/fr/sheet/1/agenda/participant/1"
+    Then I should see "SPOTA1 - SheetA - SheetC"
+    And I should see "SPOTA1 - SheetB - SheetC"

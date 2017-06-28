@@ -39,6 +39,6 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
 
 Proximum\Vimeet\Domain\Model\HappeningParticipation:
     happening_participation_01:
-        __construct: ['@happening_03', '@participant_asddays_1']
+        __construct: ['@happening_03', '@user_asddays_1']
     happening_participation_02:
-        __construct: ['@happening_02', '@participant_asddays_2']
+        __construct: ['@happening_02', '@user_asddays_2']

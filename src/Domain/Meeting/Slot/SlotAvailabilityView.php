@@ -71,4 +71,13 @@ class SlotAvailabilityView
     {
         return $this->type === SlotAvailability::MEETING_UNAVAILABILITY;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMassUnavaibility()
+    {
+        return $this->type === SlotAvailability::MASS_UNAVAILABILITY
+            || $this->type === SlotAvailability::MASS_ASSIGNMENT_UNAVAILABILITY;
+    }
 }

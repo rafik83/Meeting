@@ -11,10 +11,32 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             type: string
         onMeetingManagement:
             type: boolean
+            options:
+                default: false
         onCatalog:
             type: boolean
+            options:
+                default: false
         onPrintPlanning:
             type: boolean
+            options:
+                default: false
+        onSheet:
+            type: boolean
+            options:
+                default: false
+        onProgram:
+            type: boolean
+            options:
+                default: false
+        onAgenda:
+            type: boolean
+            options:
+                default: false
+        onConfirmationPhone:
+            type: boolean
+            options:
+                default: false
         createdAt:
             type: datetime
     oneToMany:
@@ -23,3 +45,6 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             mappedBy: tip
             indexBy: locale
             cascade: ['persist', 'remove']
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type

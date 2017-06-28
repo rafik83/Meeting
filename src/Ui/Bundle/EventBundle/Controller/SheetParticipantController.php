@@ -18,6 +18,8 @@ use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipant
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template;
@@ -152,6 +154,13 @@ class SheetParticipantController extends Controller
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_SHEET,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'                   => $eventDomain->getEvent(),
             'form_participant'        => $form->createView(),
@@ -164,6 +173,7 @@ class SheetParticipantController extends Controller
             'sheet'                   => $sheet,
             'taggedData'              => $taggedData,
             'templateData'            => $templateData,
+            'tipTranslationViews'     => $tipTranslationViews,
             'uid'                     => $key,
         ]);
     }
@@ -269,6 +279,13 @@ class SheetParticipantController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_SHEET,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'                   => $eventDomain->getEvent(),
             'form_remove'             => $form->createView(),
@@ -280,6 +297,7 @@ class SheetParticipantController extends Controller
             'sheet'                   => $sheet,
             'taggedData'              => $taggedData,
             'templateData'            => $templateData,
+            'tipTranslationViews'     => $tipTranslationViews,
             'uid'                     => $key,
         ]);
     }

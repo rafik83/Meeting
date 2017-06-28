@@ -33,9 +33,9 @@ class AgendaViewQuery
     public $sheet;
 
     /**
-     * @var null|User
+     * @var User
      */
-    public $user;
+    public $userViewing;
 
     /**
      * @var string
@@ -47,14 +47,14 @@ class AgendaViewQuery
      * @param Sheet       $sheet
      * @param Participant $participant
      * @param string      $locale
-     * @param null|User   $user
+     * @param User        $userViewing
      */
-    public function __construct(Event $event, Sheet $sheet, Participant $participant, $locale, User $user = null)
+    public function __construct(Event $event, Sheet $sheet, Participant $participant, $locale, User $userViewing)
     {
         $this->event       = $event;
         $this->sheet       = $sheet;
         $this->participant = $participant;
-        $this->user        = $user;
+        $this->userViewing = $userViewing;
         $this->locale      = $locale;
     }
 }

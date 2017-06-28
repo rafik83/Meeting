@@ -679,3 +679,30 @@ event_unavailability_remove:
         unavailability: \d+
     methods: [DELETE]
     defaults: { _controller: EventBundle:Unavailability:remove }
+
+#
+# UserEventToken
+#
+event_user_event_token_confirm_agenda:
+    path: /confirm/agenda/{token}
+    requirements:
+        token: \w+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Token\UserEventToken:confirmAgenda }
+
+#
+# UserEventPhone
+#
+event_user_event_phone_validate_code:
+    path: /confirm/agenda/{token}/validate/phone
+    requirements:
+        token: \w+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:User/Phone/Validate:validate }
+
+event_user_event_phone_validate_code_success:
+    path: /confirm/agenda/{token}/validate/phone/success
+    requirements:
+        token: \w+
+    methods: [GET]
+    defaults: { _controller: EventBundle:User/Phone/Validate:validateSuccess }

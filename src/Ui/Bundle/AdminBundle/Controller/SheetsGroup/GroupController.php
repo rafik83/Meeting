@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
 use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
+use Proximum\Vimeet\Application\Command\Sheet\Group\Update;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
@@ -19,8 +20,10 @@ use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailExcepti
 use Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\SearchType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -39,11 +42,12 @@ class GroupController extends Controller
      */
     public function listAction(Event $event)
     {
-        // Only admin & organizers are allowed to manage sheetsGroup
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $groupViews = $this->get('tactician.commandbus')->handle(new GroupListViewQuery($event));
+        $groupViews = $this->get('tactician.commandbus')->handle(
+            new GroupListViewQuery($event, $this->getUser())
+        );
 
         return $this->render('AdminBundle:SheetsGroup:list.html.twig', [
             'event'      => $event,
@@ -61,7 +65,7 @@ class GroupController extends Controller
      */
     public function preCreateAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $searchUser = new SearchUser($event);
@@ -100,7 +104,7 @@ class GroupController extends Controller
      */
     public function createAction(Request $request, Event $event, User $user)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         try {
@@ -127,6 +131,41 @@ class GroupController extends Controller
         return $this->render('@Admin/SheetsGroup/create.html.twig', [
             'event' => $event,
             'user'  => $user,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Group   $group
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request, Event $event, Group $group)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $command = new Update($group);
+        $form = $this->createForm(UpdateType::class, $command);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+            try {
+                $this->get('tactician.commandbus')->handle($command);
+                $this->addFlash('success', 'flash.admin.group.update.success');
+
+                return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
+            } catch (UserNotAllowedToManageGroupException $exception) {
+                $this->notifyFormError($form, 'email', 'validators.group.user_not_allowed_to_manage', ['%email%' => $exception->email]);
+            } catch (UserNotFoundForGivenEmailException $exception) {
+                $this->notifyFormError($form, 'email', 'validators.group.email_not_found', ['%email%' => $exception->email]);
+            }
+        }
+
+        return $this->render('AdminBundle:SheetsGroup:update.html.twig', [
+            'event' => $event,
             'form'  => $form->createView(),
         ]);
     }

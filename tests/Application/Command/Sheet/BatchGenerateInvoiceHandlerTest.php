@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice;
 use Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchGenerateInvoiceHandlerTest extends TestCase
 {
     public function testHandle()
     {

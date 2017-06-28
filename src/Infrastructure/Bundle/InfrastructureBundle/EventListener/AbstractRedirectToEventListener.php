@@ -96,9 +96,10 @@ abstract class AbstractRedirectToEventListener
     abstract protected function doRedirect(GetResponseEvent $getResponseEvent, Request $request, Event $event, $locale, $route);
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     * @param string  $route
+     * @param Request     $request
+     * @param Event       $event
+     * @param string      $route
+     * @param null|string $locale
      *
      * @return RedirectResponse
      */
@@ -109,6 +110,6 @@ abstract class AbstractRedirectToEventListener
             array_merge($request->attributes->get('_route_params', []), ['_locale' => $locale ?: $event->getFallback()])
         );
 
-        return new RedirectResponse($path, 301);
+        return new RedirectResponse($path);
     }
 }

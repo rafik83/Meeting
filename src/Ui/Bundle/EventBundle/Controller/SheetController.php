@@ -16,7 +16,10 @@ use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -119,6 +122,13 @@ class SheetController extends Controller
             $popinWelcome     = $this->get('tactician.commandbus.query')->handle($welcomeViewQuery);
         }
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_SHEET,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'                   => $eventDomain->getEvent(),
             'sheet'                   => $sheet,
@@ -132,6 +142,7 @@ class SheetController extends Controller
             'participantProductView'  => $participantProductView,
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
+            'tipTranslationViews'     => $tipTranslationViews,
         ]);
     }
 
@@ -255,30 +266,22 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
+        $templateObjectView = $this
+            ->get('tactician.commandbus')
+            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+        ;
 
-        $products = $this->get('package.product.template_product_guesser')->getProducts(
-            $object,
-            $sheet->getPackage()
-        );
-
-        // populate object needed variables
-        $object->setBuyableProducts($products);
-        $object->setSheet($sheet);
-
-        $form  = $this->createObjectForm($object, $locale, $key);
-        $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $form  = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
             'sheet'    => $sheet,
             'uid'      => $key,
-            'label'    => $label,
             'form'     => $form->createView(),
-            'object'   => $object,
             'locale'   => $locale,
             'currency' => $eventDomain->getEvent()->getCurrency(),
             'vatMode'  => $eventDomain->getEvent()->getMode(),
+            'label'    => $templateObjectView->label,
+            'templateObjectView' => $templateObjectView
         ]);
     }
 
@@ -400,6 +403,13 @@ class SheetController extends Controller
         );
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_SHEET,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
@@ -421,6 +431,7 @@ class SheetController extends Controller
             'vatMode'                 => $eventDomain->getEvent()->getMode(),
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
+            'tipTranslationViews'     => $tipTranslationViews,
         ]);
     }
 

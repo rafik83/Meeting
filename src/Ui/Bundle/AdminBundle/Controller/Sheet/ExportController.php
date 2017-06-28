@@ -86,7 +86,7 @@ class ExportController extends Controller
      */
     private function getFilters(Event $event, UserInterface $user, $locale)
     {
-        $filters = $this->get('filter.sheet_filter')->get();
+        $filters = $this->get('filter.sheet_filter')->get($event);
 
         if (null === $filters) {
             $filters = SheetFilterType::getDefaultFilters();

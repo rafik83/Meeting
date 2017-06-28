@@ -1,6 +1,5 @@
 var filterSheetForm = require('./../form/filterSheetForm'),
-    options         = require('../../../vueComponents/options'),
-    SheetFilter     = require('./../../filters/_SheetsFilter');
+    options         = require('../../../vueComponents/options');
 
 module.exports = {
     template: '#filter-modal',
@@ -42,8 +41,7 @@ module.exports = {
         },
         save: function () {
             this.setUsedFilter();
-            this.filteredSheets = new SheetFilter(this.filters).filter(this.sheets);
-            this.$emit('refresh-list', this.filteredSheets);
+            this.$emit('filter-sheets', this.filters);
             this.$emit('close-modal');
         },
         reset: function () {

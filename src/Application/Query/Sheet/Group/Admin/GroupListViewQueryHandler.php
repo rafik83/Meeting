@@ -47,7 +47,10 @@ class GroupListViewQueryHandler
 
         if (!empty($sheetsGroups)) {
             foreach ($sheetsGroups as $group) {
-                $groupViews[] = $this->groupViewQueryHandler->handle(new AdminGroupViewQuery($group));
+                $groupViews[] = $this->groupViewQueryHandler->handle(new AdminGroupViewQuery(
+                    $group,
+                    $groupListViewQuery->admin
+                ));
             }
         }
 

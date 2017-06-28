@@ -23,6 +23,18 @@ class Create
     
     /** @var bool */
     public $onPrintPlanning;
+
+    /** @var bool */
+    public $onSheet;
+
+    /** @var bool */
+    public $onProgram;
+
+    /** @var bool */
+    public $onAgenda;
+
+    /** @var bool */
+    public $onConfirmationPhone;
     
     /** @var array */
     public $translations;

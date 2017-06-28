@@ -11,27 +11,24 @@
 namespace Proximum\Vimeet\Application\Query\Planning\Day;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class MeetingViewQuery
 {
-    /**
-     * @var Meeting
-     */
+    /** @var Meeting */
     public $meeting;
 
     /**
-     * @var Sheet
-     */
-    public $sheet;
+     * @var User */
+    public $user;
 
     /**
      * @param Meeting $meeting
-     * @param Sheet   $sheet
+     * @param User    $user
      */
-    public function __construct(Meeting $meeting, Sheet $sheet)
+    public function __construct(Meeting $meeting, User $user)
     {
         $this->meeting = $meeting;
-        $this->sheet   = $sheet;
+        $this->user = $user;
     }
 }

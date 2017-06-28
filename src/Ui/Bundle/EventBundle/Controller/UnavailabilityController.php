@@ -17,12 +17,15 @@ use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedEx
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -46,7 +49,7 @@ class UnavailabilityController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
+        $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
         $this->checkSheetHasParticipant($sheet, $participant);
 
         $event = $eventDomain->getEvent();
@@ -139,11 +142,19 @@ class UnavailabilityController extends Controller
                 new AgendaViewQuery($event, $sheet, $participant, $request->getLocale(), $user)
             );
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet->getType(),
+            TipTranslationViewQueryHandler::CONTEXT_AGENDA,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Unavailability:create.html.twig', [
             'event'               => $event,
             'agenda'              => $agenda,
             'sheet'               => $sheet,
-            'form_unavailability' => $form->createView()
+            'form_unavailability' => $form->createView(),
+            'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
 
@@ -164,7 +175,7 @@ class UnavailabilityController extends Controller
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_REMOVE, $sheet);
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+        $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $event);
         $this->checkSheetHasParticipant($sheet, $participant);
 
         try {

@@ -15,6 +15,8 @@ class SharedColumnsTranslationView
     const COLUMN_ORDER_ID                = 'order_id';
     const COLUMN_SHEET_ID                = 'sheet_id';
     const COLUMN_SHEET_TITLE             = 'sheet_title';
+    const COLUMN_INVOICE_NUMBER          = 'invoice_number';
+    const COLUMN_INVOICE_DATE            = 'invoice_date';
     const COLUMN_BILLING_INFO_GENDER     = 'billing_info_gender';
     const COLUMN_BILLING_INFO_LAST_NAME  = 'billing_info_last_name';
     const COLUMN_BILLING_INFO_FIRST_NAME = 'billing_info_first_name';
@@ -81,10 +83,18 @@ class SharedColumnsTranslationView
     /** @var string */
     public $reference;
 
+    /** @var string */
+    public $invoiceNumber;
+
+    /** @var string */
+    public $invoiceDate;
+
     /**
      * @param string $orderId
      * @param string $sheetId
      * @param string $sheetTitle
+     * @param string $invoiceNumber
+     * @param string $invoiceDate
      * @param string $gender
      * @param string $lastName
      * @param string $firstName
@@ -104,6 +114,8 @@ class SharedColumnsTranslationView
         $orderId,
         $sheetId,
         $sheetTitle,
+        $invoiceNumber,
+        $invoiceDate,
         $gender,
         $lastName,
         $firstName,
@@ -122,6 +134,8 @@ class SharedColumnsTranslationView
         $this->orderId    = $orderId;
         $this->sheetId    = $sheetId;
         $this->sheetTitle = $sheetTitle;
+        $this->invoiceNumber = $invoiceNumber;
+        $this->invoiceDate   = $invoiceDate;
         $this->gender     = $gender;
         $this->lastName   = $lastName;
         $this->firstName  = $firstName;
@@ -147,6 +161,8 @@ class SharedColumnsTranslationView
             self::COLUMN_ORDER_ID                => $this->orderId,
             self::COLUMN_SHEET_ID                => $this->sheetId,
             self::COLUMN_SHEET_TITLE             => $this->sheetTitle,
+            self::COLUMN_INVOICE_NUMBER          => $this->invoiceNumber,
+            self::COLUMN_INVOICE_DATE            => $this->invoiceDate,
             self::COLUMN_BILLING_INFO_GENDER     => $this->gender,
             self::COLUMN_BILLING_INFO_LAST_NAME  => $this->lastName,
             self::COLUMN_BILLING_INFO_FIRST_NAME => $this->firstName,

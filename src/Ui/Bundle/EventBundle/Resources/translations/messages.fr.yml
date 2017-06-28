@@ -81,6 +81,10 @@ event.sheet.export.fields.sheet_turnover: 'Chiffre d''affaires'
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
+event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un code à 4 chiffres afin de valider votre numéro de téléphone'
+event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
+event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
+event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -341,6 +345,7 @@ sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
+sheet.object.product.included: Inclus
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
 sheet.participant.remove: 'Supprimer de la fiche'
@@ -360,7 +365,7 @@ sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
 sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nET\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
-sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFirstName% %toLastName% (%toEmail%)'
+sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFullname% (%toEmail%)'
 sheetGroup.quitImpersonation: Quitter
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
@@ -374,3 +379,7 @@ summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
 unavailability.title: Indisponible
+user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'
+user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
+user_event.confirm.agenda.title: 'Confirmation de l''agenda'
+user.phone.confirmationCode.message: 'Saisir le code suivant pour confirmer : %code%'

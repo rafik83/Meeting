@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\SheetContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class SheetContext implements Context
 {
@@ -31,34 +33,69 @@ class SheetContext implements Context
      */
     public function thereIsASheet()
     {
-        $event = $this->sheetContextProxy->getStorage()->get('event');
+        $this->thereIsASheetWithTheTitle(null);
+    }
 
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
+    /**
+     * @Given there is a sheet of this type
+     */
+    public function thereIsASheetOfThisType()
+    {
+        $event = $this->getEvent();
+
+        $type = $this->sheetContextProxy->getStorage()->get('type');
+
+        if (!$type instanceof Type) {
+            throw new \LogicException('Missing Type');
         }
 
-        $sheet = $this->sheetContextProxy->getSheetManager()->create($event);
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, $type);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @Given /^there is a sheet with the title "(?P<title>[^"]+)"$/
+     *
+     * @param string|null $title
+     */
+    public function thereIsASheetWithTheTitle($title)
+    {
+        $event = $this->getEvent();
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title);
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 
     /**
      * @Given /^there is a sheet in this group with the title "(?P<title>[^"]+)"$/
+     *
+     * @param string|null $title
      */
     public function thereIsASheetInThisGroup($title)
     {
-        $event = $this->sheetContextProxy->getStorage()->get('event');
+        $event = $this->getEvent();
         $group = $this->sheetContextProxy->getStorage()->get('group');
 
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
-
         if (null === $group) {
-            throw new \InvalidArgumentException('Missing Group');
+            throw new \LogicException('Missing Group');
         }
 
         $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title, $group);
 
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @return Event
+     * @throws \LogicException
+     */
+    private function getEvent()
+    {
+        $event = $this->sheetContextProxy->getStorage()->get('event');
+
+        if (!$event instanceof Event) {
+            throw new \LogicException('Missing Event');
+        }
+
+        return $event;
     }
 }

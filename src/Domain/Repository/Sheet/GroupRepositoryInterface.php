@@ -44,9 +44,22 @@ interface GroupRepositoryInterface
     public function add(Group $group);
 
     /**
+     * @param Group $group
+     */
+    public function set(Group $group);
+
+    /**
      * @param Event $event
      *
      * @return Group[]
      */
     public function getByEvent(Event $event);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Group|null
+     */
+    public function getByUserAndEvent(User $user, Event $event);
 }

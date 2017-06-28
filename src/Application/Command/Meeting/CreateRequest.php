@@ -10,44 +10,40 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class CreateRequest
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Event */
+    public $event;
+
+    /** @var Sheet */
     public $from;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $to;
 
-    /**
-     * @var Participant[]
-     */
+    /** @var Participant[] */
     public $participants = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $creator;
 
     /**
+     * @param Event $event
      * @param Sheet $from
      * @param Sheet $to
      * @param User  $creator
      */
-    public function __construct(Sheet $from, Sheet $to, User $creator)
+    public function __construct(Event $event, Sheet $from, Sheet $to, User $creator)
     {
+        $this->event        = $event;
         $this->from         = $from;
         $this->to           = $to;
         $this->creator      = $creator;

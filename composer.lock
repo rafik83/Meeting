@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1619d1988e96601c12b6afe7546f08a",
+    "content-hash": "4e93f0ce7bf5745cda32c2bc4ab6a3b9",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2875,6 +2875,41 @@
             "time": "2015-08-09T04:28:19+00:00"
         },
         {
+            "name": "ovh/ovh",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ovh/php-ovh.git",
+                "reference": "25a97501a150dff8a7848c372b5826395aab4df2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ovh/php-ovh/zipball/25a97501a150dff8a7848c372b5826395aab4df2",
+                "reference": "25a97501a150dff8a7848c372b5826395aab4df2",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phpunit/phpunit": "4.*",
+                "squizlabs/php_codesniffer": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ovh\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Wrapper for OVH APIs",
+            "time": "2016-02-10T13:16:38+00:00"
+        },
+        {
             "name": "pagerfanta/pagerfanta",
             "version": "v1.0.5",
             "source": {
@@ -5130,6 +5165,58 @@
             "time": "2017-06-06T04:00:14+00:00"
         },
         {
+            "name": "tilleuls/ovh-bundle",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coopTilleuls/CoopTilleulsOvhBundle.git",
+                "reference": "1942fb5e7ebe421d913b6193c998614787fde8fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coopTilleuls/CoopTilleulsOvhBundle/zipball/1942fb5e7ebe421d913b6193c998614787fde8fc",
+                "reference": "1942fb5e7ebe421d913b6193c998614787fde8fc",
+                "shasum": ""
+            },
+            "require": {
+                "ovh/ovh": "~2.0",
+                "php": ">=5.5",
+                "symfony/config": "~2.3|~3.0",
+                "symfony/dependency-injection": "~2.3|~3.0",
+                "symfony/http-kernel": "~2.3|~3.0"
+            },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "~1.0",
+                "phpspec/phpspec": "~2.1",
+                "satooshi/php-coveralls": "~0.6"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "CoopTilleuls\\OvhBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kévin Dunglas",
+                    "email": "kevin@les-tilleuls.coop",
+                    "homepage": "http://dunglas.fr"
+                }
+            ],
+            "description": "OVH SDK integration",
+            "homepage": "http://les-tilleuls.coop",
+            "keywords": [
+                "api",
+                "ovh",
+                "sdk"
+            ],
+            "time": "2016-05-12T13:38:01+00:00"
+        },
+        {
             "name": "twig/extensions",
             "version": "v1.5.0",
             "source": {
@@ -6345,7 +6432,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork maintainer"
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
@@ -7861,7 +7948,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9"
+        "php": "^7.1"
     },
     "platform-dev": []
 }

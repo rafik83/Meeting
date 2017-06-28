@@ -47,7 +47,7 @@ class PackageViewQueryHandler
      */
     public function handle(PackageViewQuery $packageQuery)
     {
-        if (!$packageQuery->sheet->getPackage()->isPassable()) {
+        if ($packageQuery->sheet->getPackage() === null || !$packageQuery->sheet->getPackage()->isPassable()) {
             return null;
         }
 

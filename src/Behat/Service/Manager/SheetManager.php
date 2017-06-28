@@ -72,6 +72,7 @@ class SheetManager
         $sheet = SheetFactory::create($event, $user, new \DateTime(), $type);
         $sheet->setData([]);
         $sheet->setRegistrationData([]);
+        $sheet->setTitle($title);
 
         if (null !== $group) {
             $sheet->setGroup($group);

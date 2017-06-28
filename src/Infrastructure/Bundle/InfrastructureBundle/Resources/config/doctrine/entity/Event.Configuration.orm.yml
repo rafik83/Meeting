@@ -24,6 +24,12 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         closeAnsweringMeetingRequestDate:
             type: datetime
             nullable: true
+        smsActivationDate:
+            type: datetime
+            nullable: true
+        agendaOnlineDate:
+            type: datetime
+            nullable: true
         meetingRequestUpdateLocked:
             type: boolean
             options:

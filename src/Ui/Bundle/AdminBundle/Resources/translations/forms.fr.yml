@@ -128,6 +128,9 @@ form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
 form.create_sheets_group.children.sheetViews.prototype.label: Fiches
 form.create_sheets_group.children.submit.label: Créer
 form.create_sheets_group.children.title.label: 'Titre de l''entité'
+form.update_sheets_group.children.email.label: 'Email du manager'
+form.update_sheets_group.children.title.label: 'Titre de l''entité'
+form.update_sheets_group.children.submit.label: 'Enregistrer'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
@@ -155,11 +158,13 @@ form.event_billing_configuration.children.translations.prototype.children.billin
 form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder: 'Exemple adresse, siret, capital ...'
+form.event_configure_date.children.agendaOnlineDate.label: 'Mise en ligne de l''agenda'
 form.event_configure_date.children.catalogOnlineDate.label: 'Mise en ligne du catalogue'
 form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloquer les acceptations/refus des RDV'
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
+form.event_configure_date.children.smsActivationDate.label: 'Date d''activation des notifications SMS'
 form.event_configure_date.children.submit.label: Enregistrer
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
@@ -542,11 +547,11 @@ form.promotion_code_create.children.stock.label: Stock
 form.promotion_code_create.children.submit.label: Enregistrer
 form.promotion_code_create.children.title.label: Titre
 form.promotion_code_create.children.validUntil.label: 'Valide jusqu''au'
+form.promotion_code_promotion.children.type.free: offert
+form.promotion_code_promotion.children.type.percentOff: '% de réduction'
+form.promotion_code_promotion.children.type.valueOff: réduction
 form.promotion_code_translation.children.description.label: Description
 form.promotion_code_translation.children.label.label: Libellé
-form.promotion_code_promotion.children.type.free: 'offert'
-form.promotion_code_promotion.children.type.percentOff: '% de réduction'
-form.promotion_code_promotion.children.type.valueOff: 'réduction'
 form.promotion_code_update.children.code.label: Code
 form.promotion_code_update.children.promotions.label: Promotions
 form.promotion_code_update.children.promotions.label_add: Ajouter
@@ -671,6 +676,7 @@ form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
 form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
 form.sheet.messaging_campaign.message.submit.label: Terminer
 form.sheet.messaging_campaign.recipients.submit.label: Valider
+form.sheet.sheetGroup.unAssignedGroup: 'Non assigné'
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.priority.label: Priorité
@@ -701,9 +707,13 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
+form.tip_create.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
 form.tip_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
 form.tip_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_create.children.onProgram.label: 'Visible sur le programme'
+form.tip_create.children.onSheet.label: 'Visible sur la fiche de présentation'
 form.tip_create.children.submit.label: 'Créer le message d''aide'
 form.tip_create.children.title.label: 'Libellé back office'
 form.tip_create.children.translations.label: Traductions
@@ -713,9 +723,19 @@ form.tip_create.children.translations.prototype.children.content.label: Contenu
 form.tip_create.children.translations.prototype.children.locale.label: Langue
 form.tip_create.children.translations.prototype.children.title.label: Libellé
 form.tip_create.children.translations.prototype.label: Traductions
+form.tip_event_affect.children.name.label: Libellé
+form.tip_event_affect.children.pages.label: 'Pages concernées'
+form.tip_event_affect.children.preview.label: 'Aperçu du message'
+form.tip_event_affect.children.submit.label: Affecter
+form.tip_event_affect.children.tip.label: 'Message d''aide'
+form.tip_event_affect.children.types.label: 'Types de participation'
+form.tip_update.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
 form.tip_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
 form.tip_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_update.children.onProgram.label: 'Visible sur le programme'
+form.tip_update.children.onSheet.label: 'Visible sur la fiche de présentation'
 form.tip_update.children.submit.label: 'Mettre à jour'
 form.tip_update.children.title.label: 'Libellé back office'
 form.tip_update.children.translations.label_add: 'Ajouter une traduction'

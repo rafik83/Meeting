@@ -1,0 +1,113 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Repository\User;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
+use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
+
+class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
+{
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(UserEventPhone $userEventPhone)
+    {
+        $this->entityManager->persist($userEventPhone);
+        $this->entityManager->flush($userEventPhone);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find(User $user, Event $event)
+    {
+        return $this
+            ->getQueryBuilderByUserAndEvent($user, $event)
+            ->select('user_event_phone')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findValidated(User $user, Event $event)
+    {
+        return $this
+            ->getQueryBuilderByUserAndEvent($user, $event)
+            ->select('user_event_phone')
+            ->andWhere('user_event_phone.validated = true')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(UserEventPhone $userEventPhone)
+    {
+        $this->entityManager->flush($userEventPhone);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(User $user, Event $event)
+    {
+        $this
+            ->getQueryBuilderByUserAndEvent($user, $event)
+            ->delete()
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return QueryBuilder
+     */
+    private function getQueryBuilderByUserAndEvent(User $user, Event $event)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->from(User\UserEventPhone::class, 'user_event_phone')
+            ->where('user_event_phone.user = :user')
+            ->andWhere('user_event_phone.event = :event')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+        ;
+    }
+}
