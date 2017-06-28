@@ -67,8 +67,6 @@ class CatalogExternalController extends Controller
         $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
 
         if ($request->isXmlHttpRequest()) {
-            $template = 'EventBundle:Catalog:External/catalog.html.twig';
-
             if ($page > 1) {
                 return new JsonResponse(
                     [
