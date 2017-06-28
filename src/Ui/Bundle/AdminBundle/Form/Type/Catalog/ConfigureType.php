@@ -32,7 +32,7 @@ class ConfigureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('catalogPublic', CheckboxType::class)
+            ->add('externalCatalogEnabled', CheckboxType::class)
             ->add('types', TypeChoiceType::class, [
                 'event' => $options['event'],
                 'locale' => $options['locale'],

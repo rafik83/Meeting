@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 
 class CatalogVisibilityRepository implements CatalogVisibilityRepositoryInterface
@@ -36,5 +37,29 @@ class CatalogVisibilityRepository implements CatalogVisibilityRepositoryInterfac
     {
         $this->entityManager->persist($catalogVisibility);
         $this->entityManager->flush($catalogVisibility);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(CatalogVisibility $catalogVisibility)
+    {
+        $this->entityManager->flush($catalogVisibility);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('catalogVisibility')
+            ->from(CatalogVisibility::class, 'catalogVisibility')
+            ->where('catalogVisibility.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

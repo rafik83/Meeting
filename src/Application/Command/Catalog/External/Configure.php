@@ -27,7 +27,7 @@ class Configure
     public $categories;
 
     /** @var bool */
-    public $catalogPublic;
+    public $externalCatalogEnabled;
 
     /** @var SearchFacet[] */
     public $searchFacets;
@@ -42,6 +42,6 @@ class Configure
     {
         $this->event = $event;
         $this->searchFacets = $searchFacets;
-        $this->catalogPublic = $event->isExternalCatalogEnabled();
+        $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
     }
 }

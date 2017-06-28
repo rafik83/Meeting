@@ -62,7 +62,7 @@ class CatalogController extends Controller
 
             $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
 
-            return $this->redirectToRoute('admin_event_read', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_event_external_catalog_configure', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Catalog/External:configure.html.twig', [

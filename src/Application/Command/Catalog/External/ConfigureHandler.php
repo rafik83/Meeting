@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Catalog\External;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class ConfigureHandler
 {
@@ -22,18 +23,24 @@ class ConfigureHandler
     /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
 
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
     /**
      * ConfigureHandler constructor.
      *
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
      * @param SearchFacetRepositoryInterface       $searchFacetRepository
+     * @param EventRepositoryInterface             $eventRepository
      */
     public function __construct(
         CatalogVisibilityRepositoryInterface $catalogVisibilityRepository,
-        SearchFacetRepositoryInterface $searchFacetRepository
+        SearchFacetRepositoryInterface $searchFacetRepository,
+        EventRepositoryInterface $eventRepository
     ) {
         $this->catalogVisibilityRepository = $catalogVisibilityRepository;
         $this->searchFacetRepository       = $searchFacetRepository;
+        $this->eventRepository             = $eventRepository;
     }
 
     /**
@@ -41,11 +48,17 @@ class ConfigureHandler
      */
     public function handle(Configure $command)
     {
-        $catalogVisibility = new CatalogVisibility(
-            $command->event,
-            $command->types,
-            $command->categories
-        );
+        $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($command->event);
+
+        if ($catalogVisibility === null) {
+            $catalogVisibility = new CatalogVisibility($command->event);
+        }
+
+        $command->event->setExternalCatalog($command->externalCatalogEnabled);
+
+        $catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
+
+        $this->catalogVisibilityRepository->set($catalogVisibility);
 
         foreach ($command->searchFacets as $searchFacet) {
             foreach ($searchFacet->getTranslations() as $locale => $translation) {
@@ -59,6 +72,6 @@ class ConfigureHandler
             }
         }
 
-        $this->catalogVisibilityRepository->add($catalogVisibility);
+        $this->eventRepository->set($command->event);
     }
 }

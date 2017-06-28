@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Repository\CatalogVisibilityRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -32,6 +33,9 @@ class ConfigureHandlerTest extends TestCase
     /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
 
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
     /** @var Event */
     private $event;
 
@@ -39,6 +43,7 @@ class ConfigureHandlerTest extends TestCase
     {
         $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepository::class);
         $this->searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
+        $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $this->event = EventFactory::createEvent();
     }
 
@@ -57,16 +62,20 @@ class ConfigureHandlerTest extends TestCase
             new Category($this->event),
         ];
 
+        $catalogVisibility = new CatalogVisibility($this->event);
+
+        $this->catalogVisibilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn($catalogVisibility);
+
+        $this->catalogVisibilityRepository->set($catalogVisibility)->shouldBeCalled();
+
         $this->searchFacetRepository->add($searchFacet)->shouldBeCalled();
 
-        $this
-            ->catalogVisibilityRepository
-            ->add(new CatalogVisibility($this->event, $command->types, $command->categories))
-            ->shouldBeCalled();
+        $this->eventRepository->set($this->event)->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
-            $this->searchFacetRepository->reveal()
+            $this->searchFacetRepository->reveal(),
+            $this->eventRepository->reveal()
         );
 
         $handler->handle($command);

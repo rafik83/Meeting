@@ -99,7 +99,7 @@ form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
 form.common.choices.all: 'Tout sélectionner'
-form.configure.children.catalogPublic.label: 'Activer le catalogue public'
+form.configure.children.externalCatalogEnabled.label: 'Activer le catalogue public'
 form.configure.children.types.label: 'Types visibles'
 form.configure.children.submit.label: 'Enregistrer'
 form.configure.children.categories.label: 'Catégories visibles'
