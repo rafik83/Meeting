@@ -12,14 +12,15 @@ Feature: Change my mail
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml         |
       | UserWithActivateAccountTokenAndSheet.yml                              |
-    And I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can change my email
-    When I go to this page "/fr/account/change_mail/azertyuiopqsdfghjklmwxcvbn"
+    When I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/account/change_mail/azertyuiopqsdfghjklmwxcvbn"
     Then I should be on this page "/fr/participant/1/step/1"
 
   Scenario: I can change my email full process
-    When I go to this page "/fr/account/sheet/1/change-mail"
+    When I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/account/sheet/1/change-mail"
     Then I fill in the following:
       | form.change_mail.children.mail.label | truc@bidule.com |
     And I press "common.validate"
@@ -33,5 +34,8 @@ Feature: Change my mail
     And the response status code should be 200
     Then I should be on "/fr/participant/1/step/1"
 
+  Scenario: I can not access the url when I am not logged in
+    When I go to "/fr/account/sheet/1/change-mail"
+    Then the response status code should be 403
 
 
