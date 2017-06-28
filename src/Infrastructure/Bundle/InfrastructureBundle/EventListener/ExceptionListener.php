@@ -89,6 +89,7 @@ class ExceptionListener
         } catch (\Exception $exception) {
             return;
         }
+
         $statusCode = $this->resolveHttpStatusCode($exception);
         $responseForExceptionEvent->setResponse($this->buildResponseFromHttpStatusCode($statusCode, $event));
         $responseForExceptionEvent->stopPropagation();
