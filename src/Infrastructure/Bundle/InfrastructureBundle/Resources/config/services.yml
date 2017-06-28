@@ -289,6 +289,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\User\Agenda\VersionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.adapter.job_repository_adapter:
+        class: Proximum\Vimeet\Infrastructure\Repository\Adapter\JobRepositoryAdapter
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1312,6 +1316,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ConfigureDates }
     command.participant.update_company_handler:
@@ -1364,6 +1369,14 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
+    command.event.user.agenda.version.generate_versions_handler:
+        class: Proximum\Vimeet\Application\Command\Event\User\Agenda\Version\GenerateVersionsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@datetime'
     command.event.billing_configuration_handler:
         class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
         arguments:
@@ -3743,6 +3756,14 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.planning.sheet_info_guesser_cache'
             - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: console.command }
+
+    command_event_user_agenda_version.generate_versions_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.event.user.agenda.version.generate_versions_handler'
         tags:
             - { name: console.command }
 
