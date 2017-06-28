@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TaggedInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class ParticipantInfoGuesserTest extends TestCase
@@ -66,7 +67,7 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->event                = EventFactory::createEvent();
         $this->type                 = new Type($this->event);
         $this->registrationTemplate = new RegistrationTemplate('Registration template', [], ['fr'], 'fr', new \DateTime('2017-12-01'));
-        $this->sheet                = new Sheet($this->event, $this->type, [], $this->user, new \DateTime());
+        $this->sheet                = SheetFactory::create($this->event, $this->user, new \DateTime(), $this->type );
         $this->participant          = new Participant($this->sheet, $this->user, [], true);
         $this->templateData         = new TemplateData($this->type, [], 'fr', 'fr');
         $this->locale               = 'fr';
@@ -187,11 +188,11 @@ class ParticipantInfoGuesserTest extends TestCase
             Tag::PARTICIPANT_PHONE,
             $this->locale
         )->shouldBeCalled()
-         ->willReturn('0643456786');
+         ->willReturn('0123456789');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
-        $this->assertEquals('0643456786', $guesser->guessParticipantPhone($this->participant, $this->locale));
+        $this->assertEquals('0123456789', $guesser->guessParticipantPhone($this->participant, $this->locale));
     }
 
     public function testGuessParticipantInfoForMail()
