@@ -3,19 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Model\Unavailability;
 
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 /**
- * Assignement of a time slot from a dispatched mass unavailability to a participant.
+ * Assignement of a time slot from a dispatched mass unavailability to a user.
  */
-class MassAssignment
+class MassAssignment implements TimeRangeInterface
 {
     /**
      * @var int
@@ -28,9 +29,9 @@ class MassAssignment
     private $mass;
 
     /**
-     * @var Participant
+     * @var User
      */
-    private $participant;
+    private $user;
 
     /**
      * @var \DateTimeInterface
@@ -51,16 +52,16 @@ class MassAssignment
      * MassAssignment constructor.
      *
      * @param Mass               $mass
-     * @param Participant        $participant
+     * @param User               $user
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      */
-    public function __construct(Mass $mass, Participant $participant, \DateTimeInterface $begin, \DateTimeInterface $end)
+    public function __construct(Mass $mass, User $user, \DateTimeInterface $begin, \DateTimeInterface $end)
     {
-        $this->mass        = $mass;
-        $this->participant = $participant;
-        $this->begin       = $begin;
-        $this->end         = $end;
+        $this->mass  = $mass;
+        $this->user  = $user;
+        $this->begin = $begin;
+        $this->end   = $end;
     }
 
     /**
@@ -74,13 +75,11 @@ class MassAssignment
     }
 
     /**
-     * Get participant
-     *
-     * @return Participant
+     * @return User
      */
-    public function getParticipant()
+    public function getUser()
     {
-        return $this->participant;
+        return $this->user;
     }
 
     /**

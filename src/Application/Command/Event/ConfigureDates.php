@@ -59,6 +59,20 @@ class ConfigureDates
     public $closeAnsweringMeetingRequestDate;
 
     /**
+     * "la date d'activation des notifications SMS"
+     *
+     * @var null|\DateTimeInterface
+     */
+    public $smsActivationDate;
+
+    /**
+     * "la date d'ouverture de l'agenda"
+     *
+     * @var null|\DateTimeInterface
+     */
+    public $agendaOnlineDate;
+
+    /**
      * ConfigureDates constructor.
      *
      * @param Event $event
@@ -71,5 +85,7 @@ class ConfigureDates
         $this->schedulePublishDate              = $event->getConfiguration()->getSchedulePublishDate();
         $this->closeMeetingRequestDate          = $event->getConfiguration()->getCloseMeetingRequestDate();
         $this->closeAnsweringMeetingRequestDate = $event->getConfiguration()->getCloseAnsweringMeetingRequestDate();
+        $this->smsActivationDate                = $event->getConfiguration()->getSmsActivationDate();
+        $this->agendaOnlineDate                 = $event->getConfiguration()->getAgendaOnlineDate();
     }
 }

@@ -43,11 +43,15 @@ class CreateHandler
             $command->onMeetingManagement,
             $command->onCatalog,
             $command->onPrintPlanning,
+            $command->onSheet,
+            $command->onAgenda,
+            $command->onProgram,
+            $command->onConfirmationPhone,
             $this->dateTime
         );
 
         foreach ($command->translations as $translation) {
-            $tip->translate($translation['locale'], $translation['title'], $translation['content']);
+            $tip->translate($translation['locale'], $translation['title'], $translation['content'], $this->dateTime);
         }
         $this->tipRepository->add($tip);
     }

@@ -14,57 +14,44 @@ use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 
 class MeetingView extends AbstractTimeEntityView
 {
-    /**
-     * @var int
-     */
+    /** @var string */
+    public $userSheetTitle;
+
+    /** @var int */
     public $sheetMetId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $spotRef;
 
-    /**
-     * @var MeetingParticipantView[]
-     */
+    /** @var MeetingParticipantView[] */
     public $participants;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $begin;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $end;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sheetMetTitle;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $timeZone;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $leftColor;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $rightColor;
     
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isSheetDetailsSeeAble;
 
+    /** @var bool */
+    public $isUserParticipantMultipleSheets;
+
     /**
+     * @param string                   $userSheetTitle
      * @param int                      $sheetMetId
      * @param string                   $sheetMetTitle
      * @param \DateTimeInterface       $begin
@@ -75,8 +62,10 @@ class MeetingView extends AbstractTimeEntityView
      * @param string                   $rightColor
      * @param MeetingParticipantView[] $participants
      * @param bool                     $isSheetDetailsSeeAble
+     * @param bool                     $isUserParticipantMultipleSheets
      */
     public function __construct(
+        $userSheetTitle,
         $sheetMetId,
         $sheetMetTitle,
         \DateTimeInterface $begin,
@@ -86,8 +75,10 @@ class MeetingView extends AbstractTimeEntityView
         $leftColor,
         $rightColor,
         array $participants,
-        $isSheetDetailsSeeAble = false
+        $isSheetDetailsSeeAble = false,
+        $isUserParticipantMultipleSheets = false
     ) {
+        $this->userSheetTitle        = $userSheetTitle;
         $this->sheetMetId            = $sheetMetId;
         $this->sheetMetTitle         = $sheetMetTitle;
         $this->spotRef               = $spotRef;
@@ -98,6 +89,7 @@ class MeetingView extends AbstractTimeEntityView
         $this->rightColor            = $rightColor;
         $this->participants          = $participants;
         $this->isSheetDetailsSeeAble = $isSheetDetailsSeeAble;
+        $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
     }
 
     /**

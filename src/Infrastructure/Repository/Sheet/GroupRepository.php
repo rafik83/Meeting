@@ -108,4 +108,33 @@ class GroupRepository implements GroupRepositoryInterface
         $this->entityManager->persist($group);
         $this->entityManager->flush($group);
     }
+
+    /**
+     * @param Group $group
+     */
+    public function set(Group $group)
+    {
+        $this->entityManager->flush($group);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByUserAndEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheetsGroup')
+            ->from(Group::class, 'sheetsGroup')
+            ->join('sheetsGroup.sheets', 'sheet', 'WITH', 'sheetsGroup.event = :event')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameters([
+                'event' => $event,
+                'user'  => $user,
+            ])
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

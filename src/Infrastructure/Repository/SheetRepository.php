@@ -171,7 +171,7 @@ class SheetRepository implements SheetRepositoryInterface
                 'sheet.participants',
                 'participant',
                 'WITH',
-                'sheet.event = :event AND sheet.enable = true AND (sheet.owner = :user OR participant.user = :user)'
+                '(sheet.owner = :user OR participant.user = :user) AND sheet.event = :event AND sheet.enable = true'
             )
             ->setParameter('event', $event)
             ->setParameter('user', $user)
@@ -227,14 +227,16 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param User           $user
+     * @param EventInterface $event
+     *
+     * @return QueryBuilder
      */
-    public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
+    private function sheetsByUserAndEventWhereUserIsParticipantQueryBuilder(User $user, EventInterface $event)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join(
                 'sheet.participants',
@@ -245,7 +247,31 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('user', $user)
             ->setParameter('event', $event->getId());
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
+    {
+        $queryBuilder = $this->sheetsByUserAndEventWhereUserIsParticipantQueryBuilder($user, $event);
+
+        return $queryBuilder->select('sheet')->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isParticipantToEnabledSheet(User $user, EventInterface $event)
+    {
+        $queryBuilder = $this->sheetsByUserAndEventWhereUserIsParticipantQueryBuilder($user, $event);
+
+        return null !== $queryBuilder
+                ->select('sheet.id')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
     }
 
     /**
@@ -277,22 +303,6 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->orderBy('sheet.id');
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSheetsWithoutGroupInGivenSheets(array $sheets)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->where('sheet.id IN (:sheets) AND sheet.group IS NULL')
-            ->setParameter('sheets', $sheets);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -870,5 +880,42 @@ class SheetRepository implements SheetRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserParticipantMultipleSheetsInEvent(User $user, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user AND sheet.event = :event')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+        ;
+
+        return count($queryBuilder->getQuery()->getResult()) > 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetByEventAndTitle(Event $event, $title)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet.title = :title')
+            ->setParameter('title', $title)
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

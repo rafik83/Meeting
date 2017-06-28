@@ -8,10 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable;
+use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -22,7 +25,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchEnableDisableHandlerTest extends TestCase
 {
     public function testHandle()
     {

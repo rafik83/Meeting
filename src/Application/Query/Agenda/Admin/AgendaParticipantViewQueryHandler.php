@@ -17,23 +17,16 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class AgendaParticipantViewQueryHandler
 {
-    /**
-     * @var DayRepositoryInterface
-     */
+    /** @var DayRepositoryInterface */
     private $dayRepository;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
-    /**
-     * @var AgendaDayViewQueryHandler
-     */
+    /** @var AgendaDayViewQueryHandler */
     private $agendaDayViewQueryHandler;
-    /**
-     * @var ParticipantInfoGuesser
-     */
+
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
     /**
@@ -65,7 +58,7 @@ class AgendaParticipantViewQueryHandler
 
         $meetingsOtherSheets = $this
             ->meetingRepository
-            ->findByUserAndEventExceptSheet($query->event, $query->participant->getUser(), $query->sheet);
+            ->findByUserAndEventExceptSheet($query->participant->getUser(), $query->event, $query->sheet);
 
         $dayViews = [];
 
@@ -87,11 +80,14 @@ class AgendaParticipantViewQueryHandler
             );
         }
 
-        $fullname = $this->participantInfoGuesser->guessParticipantCompleteName($query->participant, $query->locale);
+        $completeName = $this->participantInfoGuesser->guessParticipantCompleteName(
+            $query->participant,
+            $query->locale
+        );
 
         return new AgendaParticipantView(
             $query->participant->getId(),
-            $fullname,
+            $completeName,
             $query->participant->getUser()->getEmail(),
             $dayViews
         );

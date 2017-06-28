@@ -55,10 +55,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(0);
         $this->expectException(NotEnoughtRemainingParticipationsException::class);
@@ -97,10 +97,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository->getParticipantsForHappening($sheet, $happening)->shouldBeCalled()->willReturn([]);
@@ -143,10 +143,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $this->expectException(ParticipantRequiredException::class);
 
@@ -184,10 +184,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -195,13 +195,15 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
-        $happeningParticipationRepository->removeParticipantForHappening($participant, $happening)->shouldBeCalled();
+        $happeningParticipationRepository->removeUserForHappening($user, $happening)->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))
+            ->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, []);
 
@@ -237,10 +239,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -252,15 +254,22 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user
+        )->shouldBeCalled()->willReturn(null);
+
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant)
+            new HappeningParticipation($happening, $user)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))
+            ->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, [$participant]);
 
@@ -281,8 +290,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
 
-        $user1  = new User('user1@vimeet.com', 'salt', 'password', 'fr');
-        $user2  = new User('user2@vimeet.com', 'salt', 'password', 'fr');
+        $user1 = new User('user1@vimeet.com', 'salt', 'password', 'fr');
+        $user2 = new User('user2@vimeet.com', 'salt', 'password', 'fr');
 
         $sheet = SheetFactory::create($event, $user1);
 
@@ -299,10 +308,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -314,22 +323,37 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant1, $participant2]);
 
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user1
+        )->shouldBeCalled()->willReturn(null);
+
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user2
+        )->shouldBeCalled()->willReturn(null);
+
         $participate = new Participate($happening, $sheet, $user1, [$participant1, $participant2]);
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant1)
+            new HappeningParticipation($happening, $user1)
         )->shouldBeCalled();
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant2)
+            new HappeningParticipation($happening, $user2)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant1, $participant2], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant1))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [
+            $participant1,
+            $participant2,
+        ], $happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant1))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+            ->shouldBeCalled();
 
         $handler = new ParticipateHandler(
             $happeningParticipationRepository->reveal(),
@@ -348,8 +372,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
 
-        $user1  = new User('user1@vimeet.com', 'salt', 'password', 'fr');
-        $user2  = new User('user2@vimeet.com', 'salt', 'password', 'fr');
+        $user1 = new User('user1@vimeet.com', 'salt', 'password', 'fr');
+        $user2 = new User('user2@vimeet.com', 'salt', 'password', 'fr');
 
         $sheet = SheetFactory::create($event, $user1);
 
@@ -366,10 +390,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
 
@@ -386,18 +410,26 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$participant1, $participant2]);
         $participate = new Participate($happening, $sheet, $user1, [$participant2]);
 
-        $happeningParticipationRepository->removeParticipantForHappening($participant1, $happening)->shouldBeCalled();
+        $happeningParticipationRepository->removeUserForHappening($user1, $happening)->shouldBeCalled();
+
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user2
+        )->shouldBeCalled()->willReturn(null);
 
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant2)
+            new HappeningParticipation($happening, $user2)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant2], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant1))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant2], $happening))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant1))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+            ->shouldBeCalled();
 
         $handler = new ParticipateHandler(
             $happeningParticipationRepository->reveal(),
@@ -431,10 +463,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -446,15 +478,22 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user
+        )->shouldBeCalled()->willReturn(null);
+
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant)
+            new HappeningParticipation($happening, $user)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))
+            ->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, [$participant]);
 
@@ -490,10 +529,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -505,8 +544,13 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user
+        )->shouldBeCalled()->willReturn(null);
+
         $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $participant)
+            new HappeningParticipation($happening, $user)
         )->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
@@ -520,8 +564,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             )
         )->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))
+            ->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, [$participant], 'My question is...');
 
@@ -557,10 +603,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $participationCount               = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -568,13 +614,20 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn([$participant]);
 
-        $happeningParticipationRepository->removeParticipantForHappening($participant, $happening)->shouldBeCalled();
+        $happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $user
+        )->shouldNotBeCalled();
+
+        $happeningParticipationRepository->removeUserForHappening($user, $happening)->shouldBeCalled();
 
         $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
         $questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))
+            ->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))
+            ->shouldBeCalled();
 
         $participate = new Participate($happening, $sheet, $user, []);
 

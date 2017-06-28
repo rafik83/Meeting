@@ -3,6 +3,8 @@
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Tip
 {
@@ -12,41 +14,46 @@ class Tip
     const TRANS_VISIBLE_CATALOG = 'admin.tip.column.visible.catalog';
     const TRANS_VISIBLE_MEETING_MANAGEMENT = 'admin.tip.column.visible.meeting_management';
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
+    const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
+    const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
+    const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
+    const TRANS_VISIBLE_CONFIRMATION_PHONE = 'admin.tip.column.visible.onConfirmationPhone';
 
-    /**
-     * @var int
-     */
-    public $id;
-    
-    /**
-     * @var string
-     */
-    public $title;
-    
-    /**
-     * @var ArrayCollection
-     */
-    public $translations;
-    
-    /**
-     * @var bool
-     */
-    public $onMeetingManagement;
-    
-    /**
-     * @var bool
-     */
-    public $onCatalog;
-    
-    /**
-     * @var bool
-     */
-    public $onPrintPlanning;
+    /** @var int */
+    private $id;
 
-    /**
-     * @var \DateTimeInterface
-     */
-    public $createdAt;
+    /** @var string */
+    private $title;
+
+    /** @var ArrayCollection */
+    private $translations;
+
+    /** @var ArrayCollection */
+    private $types;
+
+    /** @var bool */
+    private $onMeetingManagement;
+
+    /** @var bool */
+    private $onCatalog;
+
+    /** @var bool */
+    private $onPrintPlanning;
+
+    /** @var bool */
+    private $onSheet;
+
+    /** @var bool */
+    private $onProgram;
+
+    /** @var bool */
+    private $onAgenda;
+
+    /** @var bool */
+    private $onConfirmationPhone;
+
+    /** @var \DateTimeInterface */
+    private $createdAt;
 
     /**
      * Tip constructor.
@@ -55,18 +62,36 @@ class Tip
      * @param bool               $onMeetingManagement
      * @param bool               $onCatalog
      * @param bool               $onPrintPlanning
+     * @param bool               $onSheet
+     * @param bool               $onAgenda
+     * @param bool               $onProgram
+     * @param bool               $onConfirmationPhone
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($title, $onMeetingManagement, $onCatalog, $onPrintPlanning, \DateTimeInterface $createdAt)
-    {
-        $this->title                = $title;
-        $this->onMeetingManagement  = $onMeetingManagement;
-        $this->onCatalog            = $onCatalog;
-        $this->onPrintPlanning      = $onPrintPlanning;
-        $this->translations         = new ArrayCollection();
-        $this->createdAt            = $createdAt;
+    public function __construct(
+        $title,
+        $onMeetingManagement,
+        $onCatalog,
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram,
+        $onConfirmationPhone,
+        \DateTimeInterface $createdAt
+    ) {
+        $this->title               = $title;
+        $this->onMeetingManagement = $onMeetingManagement;
+        $this->onCatalog           = $onCatalog;
+        $this->onPrintPlanning     = $onPrintPlanning;
+        $this->onSheet             = $onSheet;
+        $this->onAgenda            = $onAgenda;
+        $this->onProgram           = $onProgram;
+        $this->onConfirmationPhone = $onConfirmationPhone;
+        $this->translations        = new ArrayCollection();
+        $this->types               = new ArrayCollection();
+        $this->createdAt           = $createdAt;
     }
-    
+
     /**
      * Update Tip
      *
@@ -74,6 +99,10 @@ class Tip
      * @param bool   $onMeetingManagement
      * @param bool   $onCatalog
      * @param bool   $onPrintPlanning
+     * @param bool   $onSheet
+     * @param bool   $onAgenda
+     * @param bool   $onProgram
+     * @param bool   $onConfirmationPhone
      *
      * @return Tip
      */
@@ -81,29 +110,38 @@ class Tip
         $title,
         $onMeetingManagement,
         $onCatalog,
-        $onPrintPlanning
+        $onPrintPlanning,
+        $onSheet,
+        $onAgenda,
+        $onProgram,
+        $onConfirmationPhone
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
         $this->onCatalog           = $onCatalog;
         $this->onPrintPlanning     = $onPrintPlanning;
+        $this->onSheet             = $onSheet;
+        $this->onAgenda            = $onAgenda;
+        $this->onProgram           = $onProgram;
+        $this->onConfirmationPhone = $onConfirmationPhone;
 
         return $this;
     }
 
     /**
-     * @param string $locale
-     * @param string $title
-     * @param string $content
+     * @param string             $locale
+     * @param string             $title
+     * @param string             $content
+     * @param \DateTimeInterface $dateTime
      *
-     * @return Tip   $this
+     * @return Tip $this
      */
-    public function translate($locale, $title, $content)
+    public function translate($locale, $title, $content, \DateTimeInterface $dateTime)
     {
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($locale, $title, $content);
         } else {
-            $this->setTranslation($locale, $title, $content);
+            $this->setTranslation($locale, $title, $content, $dateTime);
         }
 
         return $this;
@@ -130,17 +168,18 @@ class Tip
     }
 
     /**
-     * @param string $locale
-     * @param string $title
-     * @param string $content
+     * @param string             $locale
+     * @param string             $title
+     * @param string             $content
+     * @param \DateTimeInterface $dateTime
      */
-    public function setTranslation($locale, $title, $content)
+    public function setTranslation($locale, $title, $content, \DateTimeInterface $dateTime)
     {
         $this->translations->set(
             $locale,
             new TipTranslation(
                 $this,
-                new \DateTime(),
+                $dateTime,
                 $title,
                 $locale,
                 $content
@@ -169,13 +208,45 @@ class Tip
     }
 
     /**
+     * @param string $locale
+     */
+    public function removeTranslation($locale)
+    {
+        $this->translations->remove($locale);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function setType(Type $type)
+    {
+        $this->types->set($type->getId(), $type);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function addType(Type $type)
+    {
+        $this->types->add($type);
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function removeType(Type $type)
+    {
+        $this->types->removeElement($type);
+    }
+
+    /**
      * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
      * @return string
      */
@@ -183,7 +254,7 @@ class Tip
     {
         return $this->title;
     }
-    
+
     /**
      * @return TipTranslation[]
      */
@@ -191,7 +262,15 @@ class Tip
     {
         return $this->translations->toArray();
     }
-    
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types->toArray();
+    }
+
     /**
      * @return bool
      */
@@ -199,7 +278,7 @@ class Tip
     {
         return $this->onMeetingManagement;
     }
-    
+
     /**
      * @return bool
      */
@@ -207,13 +286,45 @@ class Tip
     {
         return $this->onCatalog;
     }
-    
+
     /**
      * @return bool
      */
     public function isOnPrintPlanning()
     {
         return $this->onPrintPlanning;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnSheet()
+    {
+        return $this->onSheet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnProgram()
+    {
+        return $this->onProgram;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnAgenda()
+    {
+        return $this->onAgenda;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnConfirmationPhone()
+    {
+        return $this->onConfirmationPhone;
     }
 
     /**
@@ -243,6 +354,37 @@ class Tip
             $pagesTranslations[] = self::TRANS_VISIBLE_PRINT_PLANNING;
         }
 
+        if ($this->isOnSheet()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_SHEET;
+        }
+
+        if ($this->isOnAgenda()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_AGENDA;
+        }
+
+        if ($this->isOnProgram()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_PROGRAM;
+        }
+
+        if ($this->isOnConfirmationPhone()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_CONFIRMATION_PHONE;
+        }
+
         return $pagesTranslations;
+    }
+
+    /**
+     * @return Event[]
+     */
+    public function getUnduplicatedEventsTitle()
+    {
+        $events = [];
+
+        foreach ($this->types as $type) {
+            $events[$type->getEvent()->getTitle()] = $type->getEvent()->getTitle();
+        }
+        ksort($events);
+
+        return $events;
     }
 }

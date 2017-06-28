@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class AddCommentHandlerTest extends \PHPUnit_Framework_TestCase
+class AddCommentHandlerTest extends TestCase
 {
     public function testHandle()
     {

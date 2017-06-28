@@ -364,6 +364,7 @@ admin.messaging.message.compose.links.orders: 'Liste des commandes'
 admin.messaging.message.compose.links.package: Forfait
 admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
+admin.messaging.message.compose.tags.cta.agendaConfirmation: 'Lien CTA confirmation agenda'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
@@ -696,6 +697,7 @@ admin.sheets_group.column.sheet_list: 'Liste des fiches'
 admin.sheets_group.column.title: Titre
 admin.sheets_group.create: 'Nouvelle entité multi-fiches'
 admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
+admin.sheets_group.update.title: 'Modification d''une entité muti-fiches'
 admin.sheets_group.index: Multi-fiches
 admin.sheets_group.no_result: 'Aucuns résultats'
 admin.sheets_group.title: Multi-fiches
@@ -758,10 +760,26 @@ admin.tip.column.title: 'Libellé back office'
 admin.tip.column.translation: Langue(s)
 admin.tip.column.visible.catalog: Catalogue
 admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
+admin.tip.column.visible.onAgenda: Agenda
+admin.tip.column.visible.onConfirmationPhone: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+admin.tip.column.visible.onProgram: Programme
+admin.tip.column.visible.onSheet: 'Fiche de présentation'
 admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'
 admin.tip.empty: 'Aucun message d''aide'
+admin.tip.event.actions: Actions
+admin.tip.event.affect.form.title: 'Affecter un message d''aide'
+admin.tip.event.affect.link: 'Affecter un message d''aide'
+admin.tip.event.affect.title: 'Gestion des messages d''aide'
+admin.tip.event.empty: 'Aucun message affecté à cet évènement'
+admin.tip.event.no_pages: Aucune
+admin.tip.event.no_types: Aucun
+admin.tip.event.pages: 'Page concernées'
+admin.tip.event.remove.link: Retirer
+admin.tip.event.title: 'Libellé admin'
+admin.tip.event.types: 'Types de participation affectés'
+admin.tip.events: Evénements
 admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
 admin.tip.update.link: Modifier
@@ -1015,6 +1033,7 @@ notification.meeting_request.refused.withoutMessage: 'Demande refusée par %shee
 notification.participant.added.action: 'Participant ajouté'
 notification.participant.removed.action: 'Participant retiré'
 planning.participant.meeting: '%spotRef% - %sheetMet%'
+planning.participant.meeting_multiple_sheet: '%spotRef% - %userSheet% - %sheetMet%'
 planning.participant.time: '%beginHour% - %endHour% : '
 planning.participant.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
 planning.participant.unavailability: Indisponible
@@ -1023,3 +1042,5 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
+admin.sheets_group.update.link: 'Modifier'
+admin.sheets_group.update: 'Modification de l''entité'

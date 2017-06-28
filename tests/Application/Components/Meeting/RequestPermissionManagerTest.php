@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Components\Meeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -36,6 +37,9 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectProphecy */
     private $answeringMeetingRequestAccessChecker;
 
+    /** @var Event */
+    private $event;
+
     /**
      * Init mock for the suite test
      */
@@ -44,6 +48,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $this->requestRepository                    = $this->prophesize(RequestRepositoryInterface::class);
         $this->meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
         $this->answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $this->event                                = EventFactory::createEvent();
     }
 
     /**
@@ -67,7 +72,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $user2    = new User('test2@test.fr', 'test2', 'test2', 'en');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $sheet2   = new Sheet($event, $type, [], $user2, $datetime);
-        $request  = new Request($sheet, [], $sheet2, [], $datetime, $user);
+        $request  = new Request($sheet, [], $sheet2, [], $datetime, $user, $event);
 
         return [
             $datetime,
@@ -230,7 +235,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
-        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
         $request->setMeeting($meeting);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
@@ -269,7 +274,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
-        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->setMeeting($meeting);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
@@ -430,7 +435,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
-        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->setMeeting($meeting);
 
@@ -452,7 +457,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $request->approve($datetime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
-        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
         $request->setMeeting($meeting);
 
@@ -845,7 +850,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
 
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
-        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $request->setMeeting($meeting);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
@@ -868,7 +873,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
 
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
-        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $this->meetingPublishedAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
         $request->setMeeting($meeting);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);

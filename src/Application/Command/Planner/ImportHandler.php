@@ -174,7 +174,7 @@ class ImportHandler
 
         $index = 1;
         foreach ($plannerResult->meetings as $meetingResult) {
-            $meeting = $this->handleMeeting($meetingResult);
+            $meeting = $this->handleMeeting($event, $meetingResult);
 
             if (null !== $meeting) {
                 $toFlush[] = $meeting;
@@ -231,7 +231,7 @@ class ImportHandler
      *
      * @return Meeting|null
      */
-    private function handleMeeting(MeetingResult $meetingResult)
+    private function handleMeeting(Event $event, MeetingResult $meetingResult)
     {
         if (!isset($this->sheets[$meetingResult->sheetFrom->id])
             || !isset($this->sheets[$meetingResult->sheetTo->id])
@@ -279,7 +279,8 @@ class ImportHandler
             $sheetTo,
             $participantsTo,
             $this->dateTime,
-            $spot
+            $spot,
+            $event
         );
 
         if ($meetingResult->isBlockedSlot) {

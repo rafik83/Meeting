@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
@@ -28,6 +29,11 @@ class Meeting implements MessageSubjectInterface
      * @var MeetingSlot
      */
     private $slot;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     /**
      * @var Sheet
@@ -90,6 +96,7 @@ class Meeting implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param Spot               $spot
+     * @param Event              $event
      * @param bool               $blockedSpot
      * @param bool               $blockedSlot
      */
@@ -102,6 +109,7 @@ class Meeting implements MessageSubjectInterface
         array $toParticipants,
         \DateTimeInterface $createdAt,
         Spot $spot,
+        Event $event,
         $blockedSpot = false,
         $blockedSlot = false
     ) {
@@ -115,6 +123,7 @@ class Meeting implements MessageSubjectInterface
         $this->spot             = $spot;
         $this->blockedSpot      = $blockedSpot;
         $this->blockedSlot      = $blockedSlot;
+        $this->event            = $event;
     }
 
     /**
@@ -298,6 +307,25 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * @param User $user
+     *
+     * @return Sheet
+     * @throws NoSheetForUserException
+     */
+    public function getSheetOfUser(User $user)
+    {
+        if ($this->fromSheet->hasUser($user)) {
+            return $this->fromSheet;
+        }
+
+        if ($this->toSheet->hasUser($user)) {
+            return $this->toSheet;
+        }
+
+        throw new NoSheetForUserException();
+    }
+
+    /**
      * @return int
      */
     public function countParticipants()
@@ -409,7 +437,7 @@ class Meeting implements MessageSubjectInterface
      */
     public function getEvent()
     {
-        return $this->slot->getEvent();
+        return $this->event;
     }
 
     /**

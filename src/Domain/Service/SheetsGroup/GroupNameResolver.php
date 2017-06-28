@@ -1,0 +1,94 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Service\SheetsGroup;
+
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+
+class GroupNameResolver
+{
+    /**
+     * @var GroupRepositoryInterface
+     */
+    private $groupRepository;
+
+    /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
+     * GroupNameResolver constructor.
+     *
+     * @param GroupRepositoryInterface $groupRepository
+     * @param SheetRepositoryInterface $sheetRepository
+     */
+    public function __construct(GroupRepositoryInterface $groupRepository, SheetRepositoryInterface $sheetRepository)
+    {
+        $this->groupRepository = $groupRepository;
+        $this->sheetRepository = $sheetRepository;
+    }
+
+    /**
+     * If we found a Group return the group's title
+     * Else we return the sheet title
+     *
+     * @param Event   $event
+     * @param User    $user
+     * @param Sheet[] $sheets - Optional parameters to preload sheets
+     *
+     * @return string
+     * @throws SheetNotFoundException
+     */
+    public function resolve(Event $event, User $user, array $sheets = [])
+    {
+        if (null !== $groupTitle = $this->getGroupByUserAndEvent($event, $user)) {
+            return $groupTitle;
+        }
+
+        if (empty($sheets)) {
+            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+
+            if (empty($sheets)) {
+                throw new SheetNotFoundException('Sheet not found.');
+            }
+        }
+
+        $sheet = reset($sheets);
+
+        if (!$sheet instanceof Sheet) {
+            throw new SheetNotFoundException('Sheet not found.');
+        }
+
+        return $sheet->getTitle();
+    }
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return null|string
+     */
+    private function getGroupByUserAndEvent(Event $event, User $user)
+    {
+        $group = $this->groupRepository->getByUserAndEvent($user, $event);
+
+        if ($group !== null) {
+            return $group->getTitle();
+        }
+        
+        return null;
+    }
+}

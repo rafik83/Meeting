@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Behat\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,7 +29,11 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 {
     private $kernel;
 
+    /** @var string */
     private $baseUrl;
+
+    /** @var FeatureContextProxyInterface */
+    private $featureContextProxy;
 
     /**
      * Initializes context.
@@ -35,9 +41,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      * Every scenario gets its own context instance.
      * You can also pass arbitrary arguments to the
      * context constructor through behat.yml.
+     *
+     * @param FeatureContextProxyInterface $featureContextProxy
      */
-    public function __construct()
+    public function __construct(FeatureContextProxyInterface $featureContextProxy)
     {
+        $this->featureContextProxy = $featureContextProxy;
     }
 
     /**
@@ -98,7 +107,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function eslaticaIsPopulate()
     {
-        exec("bin/console fos:elastica:populate --env=test");
+        exec("bin/console fos:elastica:populate --env=test --quiet --no-interaction --no-debug");
     }
 
     /**
@@ -654,5 +663,23 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     private function setBaseUrl($url)
     {
         $this->baseUrl = $url . '/app_test.php';
+    }
+
+    /**
+     * This step help to debug tests
+     *
+     * @Given I am on the homepage of this event
+     */
+    public function iAmOnHomePageOfThisEvent()
+    {
+        /** @var Event|null $event */
+        $event = $this->featureContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->setBaseUrl(sprintf('http://%s', $event->getDomain()));
+        $this->goToThisPage('/');
     }
 }

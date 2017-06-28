@@ -118,7 +118,7 @@ class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
             22,
             'sheetTitle',
             'invoiceNumber',
-            '23/06/16',
+            '23/06/2016',
             5,
             10,
             7,

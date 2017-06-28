@@ -112,9 +112,21 @@ class ParticipateHandler
         // Add participants to happening
         foreach ($participate->participants as $participant) {
             if (false === in_array($participant, $previousParticipants)) {
-                $this->happeningParticipationRepository->add(
-                    new HappeningParticipation($participate->happening, $participant)
+
+                $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser(
+                    $participate->happening,
+                    $participant->getUser()
                 );
+
+                if ($happeningParticipation !== null) {
+                    $this->happeningParticipationRepository->update(
+                        $happeningParticipation->setDisabled(false)
+                    );
+                } else {
+                    $this->happeningParticipationRepository->add(
+                        new HappeningParticipation($participate->happening, $participant->getUser())
+                    );
+                }
 
                 $this->eventDispatcher->dispatch(
                     Events::HAPPENING_PARTICIPATE,
@@ -126,8 +138,8 @@ class ParticipateHandler
         // Remove deselected participants
         foreach ($previousParticipants as $participant) {
             if (false === in_array($participant, $participate->participants)) {
-                $this->happeningParticipationRepository->removeParticipantForHappening(
-                    $participant,
+                $this->happeningParticipationRepository->removeUserForHappening(
+                    $participant->getUser(),
                     $participate->happening
                 );
 

@@ -27,7 +27,7 @@ class RequestTransformableTest extends \PHPUnit_Framework_TestCase
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
 
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
@@ -44,7 +44,7 @@ class RequestTransformableTest extends \PHPUnit_Framework_TestCase
         $toSheet->addParticipant(new Participant($toSheet, $user, [], true));
         $toSheet->addParticipant(new Participant($toSheet, $user, [], true));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -63,10 +63,10 @@ class RequestTransformableTest extends \PHPUnit_Framework_TestCase
         $toSheet->addParticipant($participantOne);
         $toSheet->addParticipant($participantTwo);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $datetime, $user);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $datetime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $datetime, $user);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $datetime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -90,7 +90,7 @@ class RequestTransformableTest extends \PHPUnit_Framework_TestCase
         $toSheet->addParticipant($participantThree);
         $toSheet->addParticipant($participantFour);
 
-        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $datetime, $user);
+        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $datetime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 }
