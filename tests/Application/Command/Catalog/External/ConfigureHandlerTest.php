@@ -49,8 +49,9 @@ class ConfigureHandlerTest extends TestCase
 
     public function testHandle()
     {
+        $catalogVisibility = new CatalogVisibility($this->event);
         $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure($this->event, [$searchFacet]);
+        $command     = new Configure($this->event, $catalogVisibility, [$searchFacet]);
 
         $command->types = [
             new Type($this->event),
@@ -61,8 +62,6 @@ class ConfigureHandlerTest extends TestCase
             new Category($this->event),
             new Category($this->event),
         ];
-
-        $catalogVisibility = new CatalogVisibility($this->event);
 
         $this->catalogVisibilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn($catalogVisibility);
 

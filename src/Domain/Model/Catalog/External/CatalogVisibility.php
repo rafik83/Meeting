@@ -79,7 +79,7 @@ class CatalogVisibility
     public function updateTypes(array $types)
     {
         foreach ($types as $type) {
-            if (!$this->hasType($type)) {
+            if (!in_array($type, $this->getTypes())) {
                 $this->setType($type);
             }
         }
@@ -89,16 +89,6 @@ class CatalogVisibility
                 $this->removeType($type);
             }
         }
-    }
-
-    /**
-     * @param Type $type
-     *
-     * @return bool
-     */
-    public function hasType(Type $type): bool
-    {
-        return $this->types->containsKey($type->getId());
     }
 
     /**
@@ -123,7 +113,7 @@ class CatalogVisibility
     public function updateCategories(array $categories)
     {
         foreach ($categories as $category) {
-            if (!$this->hasCategory($category)) {
+            if (!in_array($category, $this->getCategories())) {
                 $this->setCategory($category);
             }
         }
@@ -133,16 +123,6 @@ class CatalogVisibility
                 $this->removeCategory($category);
             }
         }
-    }
-
-    /**
-     * @param Category $category
-     *
-     * @return bool
-     */
-    public function hasCategory(Category $category): bool
-    {
-        return $this->categories->containsKey($category->getId());
     }
 
     /**

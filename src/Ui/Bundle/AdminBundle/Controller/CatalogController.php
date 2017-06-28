@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
+use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
@@ -47,7 +48,11 @@ class CatalogController extends Controller
             }
         }
 
-        $configure = new Configure($event, $searchFacets);
+        if (null === $catalogVisibility = $this->get('repository.catalog_visibility_repository')->getByEvent($event)) {
+            $catalogVisibility = new CatalogVisibility($event);
+        }
+
+        $configure = new Configure($event, $catalogVisibility, $searchFacets);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
             'user' => $user,

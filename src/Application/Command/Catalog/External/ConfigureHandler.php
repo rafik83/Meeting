@@ -48,20 +48,18 @@ class ConfigureHandler
      */
     public function handle(Configure $command)
     {
-        $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($command->event);
-
-        if ($catalogVisibility === null) {
-            $catalogVisibility = new CatalogVisibility($command->event);
-        }
-
         // Set bool state to event
         $command->event->setExternalCatalog($command->externalCatalogEnabled);
 
         // Update CatalogVisibility types and categories
-        $catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
+        $command->catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
 
-        // Set CatalogVisibility
-        $this->catalogVisibilityRepository->set($catalogVisibility);
+        if (null !== $this->catalogVisibilityRepository->getByEvent($command->event)) {
+            // Set CatalogVisibility
+            $this->catalogVisibilityRepository->set($command->catalogVisibility);
+        } else {
+            $this->catalogVisibilityRepository->add($command->catalogVisibility);
+        }
 
         // Update or Add SearchFacet and SearchFacetTranslations for CatalogVisibility
         foreach ($command->searchFacets as $searchFacet) {
