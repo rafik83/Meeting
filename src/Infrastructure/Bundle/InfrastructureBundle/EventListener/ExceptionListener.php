@@ -21,10 +21,6 @@ use Symfony\Component\Templating\EngineInterface;
 
 class ExceptionListener
 {
-    const INTERNAL_SERVER_ERROR_CODE = 500;
-    const NOT_FOUND_CODE             = 404;
-    const FORBIDDEN_CODE             = 403;
-
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -33,6 +29,23 @@ class ExceptionListener
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
+
+    /**
+     * Route used on admin or in case of 500 http code on event
+     */
+    const ROUTES_ERRORS_TWIG = [
+        Response::HTTP_INTERNAL_SERVER_ERROR => 'TwigBundle:Exception:error500.html.twig',
+        Response::HTTP_NOT_FOUND             => 'TwigBundle:Exception:error404.html.twig',
+        Response::HTTP_FORBIDDEN             => 'TwigBundle:Exception:error403.html.twig',
+    ];
+
+    /**
+     * Route used on http error code on event
+     */
+    const ROUTES_ERRORS_EVENT = [
+        Response::HTTP_NOT_FOUND => 'EventBundle:Exception:error404.html.twig',
+        Response::HTTP_FORBIDDEN => 'EventBundle:Exception:error403.html.twig',
+    ];
 
     /**
      * @param EventRepositoryInterface             $eventRepository
@@ -56,6 +69,7 @@ class ExceptionListener
     {
         $request   = $responseForExceptionEvent->getRequest();
         $exception = $responseForExceptionEvent->getException();
+
         /**
          * Symfony throw a redirect when User is not logged
          * and there is AuthenticationException or AccessDeniedException
@@ -66,6 +80,7 @@ class ExceptionListener
         ) {
             return;
         }
+
         /**
          * Try to get the event matching the host.
          */
@@ -92,8 +107,8 @@ class ExceptionListener
             $statusCode = $exception->getStatusCode();
         }
 
-        if (!in_array($statusCode, [self::FORBIDDEN_CODE, self::NOT_FOUND_CODE])) {
-            $statusCode = self::INTERNAL_SERVER_ERROR_CODE;
+        if (!in_array($statusCode, [Response::HTTP_FORBIDDEN, Response::HTTP_NOT_FOUND])) {
+            $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
         return $statusCode;
@@ -105,33 +120,20 @@ class ExceptionListener
      *
      * @return Response
      */
-    private function buildResponseFromHttpStatusCode($statusCode, $event)
+    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null)
     {
-        $content      = 'error.' . $statusCode . '.content';
-        $route404_403 = 'TwigBundle:Exception:error' . $statusCode . '.html.twig';
+        $route = self::ROUTES_ERRORS_TWIG[$statusCode];
 
-        if (null !== $event) {
-            $route404_403 = 'EventBundle:Exception:error' . $statusCode . '.html.twig';
-        }
-
-        if (self::INTERNAL_SERVER_ERROR_CODE === $statusCode) {
-            return new Response(
-                $this->templating->render(
-                    'TwigBundle:Exception:error500.html.twig',
-                    [
-                        'content' => $content,
-                    ]
-                ),
-                $statusCode
-            );
+        if (null !== $event && $statusCode !== Response::HTTP_INTERNAL_SERVER_ERROR) {
+            $route = self::ROUTES_ERRORS_EVENT[$statusCode];
         }
 
         return new Response(
             $this->templating->render(
-                $route404_403,
+                $route,
                 [
                     'event'   => $event,
-                    'content' => $content,
+                    'content' => sprintf('error.%s.content', $statusCode),
                 ]
             ),
             $statusCode
