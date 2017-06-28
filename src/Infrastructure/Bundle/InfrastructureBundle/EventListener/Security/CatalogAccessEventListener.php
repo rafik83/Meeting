@@ -26,7 +26,6 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
     const ROUTES = [
         'event_catalog_redirect',
         'event_catalog_index',
-        'event_catalog_external_index',
         'event_catalog_search_localization',
         'event_catalog_search_keywords',
     ];

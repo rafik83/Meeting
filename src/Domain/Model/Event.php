@@ -720,4 +720,16 @@ class Event implements EventInterface, TraceableInterface
     {
         return true === $this->externalCatalogEnabled;
     }
+
+    /**
+     * @param bool $state
+     *
+     * @return Event
+     */
+    public function setExternalCatalog(bool $state)
+    {
+        $this->externalCatalogEnabled = $state;
+
+        return $this;
+    }
 }
