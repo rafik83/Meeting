@@ -37,10 +37,9 @@ class ParticipationCountTest extends TestCase
 
     public function setUp()
     {
-
-        $this->event      = EventFactory::createEvent();
-        $category = new Happening\Category($this->event, '', 0, '', '');
-        $this->happening  = new Happening($this->event, new \DateTime(), new \DateTime(), $category);
+        $this->event                            = EventFactory::createEvent();
+        $category                               = new Happening\Category($this->event, '', 0, '', '');
+        $this->happening                        = new Happening($this->event, new \DateTime(), new \DateTime(), $category);
         $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
     }
 
