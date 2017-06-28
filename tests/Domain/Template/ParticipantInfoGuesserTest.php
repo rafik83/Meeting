@@ -111,9 +111,10 @@ class ParticipantInfoGuesserTest extends TestCase
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
         $tags = Tag::getParticipantTags();
-        $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()
-                                  ->willReturn($this->templateData);
+        $this->templateDataFactory
+            ->createRegistrationFromParticipant($this->participant, $this->locale)
+            ->shouldBeCalled()
+            ->willReturn($this->templateData);
 
         foreach ($tags as $tag) {
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
@@ -197,9 +198,10 @@ class ParticipantInfoGuesserTest extends TestCase
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
-        $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()
-                                  ->willReturn($this->templateData);
+        $this->templateDataFactory
+            ->createRegistrationFromParticipant($this->participant, $this->locale)
+            ->shouldBeCalled()
+            ->willReturn($this->templateData);
 
         $mailBuildedInfo = [];
         foreach ($this->templateData->getAllTaggedDatas() as $tag => $values) {
@@ -215,9 +217,10 @@ class ParticipantInfoGuesserTest extends TestCase
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
-        $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()
-                                  ->willReturn($this->templateData);
+        $this->templateDataFactory
+            ->createRegistrationFromParticipant($this->participant, $this->locale)
+            ->shouldBeCalled()
+            ->willReturn($this->templateData);
 
         $expected = $this->templateData->getTaggedContentValue(Tag::PARTICIPANT_POSITION);
 
@@ -230,15 +233,17 @@ class ParticipantInfoGuesserTest extends TestCase
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
         $tags = Tag::getParticipantTags();
-        $this->templateDataFactory->createRegistrationFromParticipant($this->participant, $this->locale)
-                                  ->shouldBeCalled()
-                                  ->willReturn($this->templateData);
+        $this->templateDataFactory
+            ->createRegistrationFromParticipant($this->participant, $this->locale)
+            ->shouldBeCalled()
+            ->willReturn($this->templateData);
 
         foreach ($tags as $tag) {
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $this->templateData,
                 $tag
-            )->shouldBeCalled()->willReturn('foobar_' . $tag);
+            )->shouldBeCalled()
+             ->willReturn('foobar_' . $tag);
         }
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
