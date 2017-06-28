@@ -55,9 +55,10 @@ class UniqueCodeCheckerTest extends TestCase
      */
     public function testExist(bool $expected, array $promotionCodes)
     {
-        $this->promotionCodeRepository->findByEventAndCode($this->event, 'code')
-                                      ->shouldBeCalled()
-                                      ->willReturn($promotionCodes);
+        $this->promotionCodeRepository
+            ->findByEventAndCode($this->event, 'code')
+            ->shouldBeCalled()
+            ->willReturn($promotionCodes);
 
         $checker = new UniqueCodeChecker($this->promotionCodeRepository->reveal());
 
@@ -78,8 +79,8 @@ class UniqueCodeCheckerTest extends TestCase
 
         return [
             [false, []],
-            [true, [ $promotionCode ]],
-            [true, [ $promotionCode, $promotionCode]],
+            [true, [$promotionCode]],
+            [true, [$promotionCode, $promotionCode]],
         ];
     }
 }

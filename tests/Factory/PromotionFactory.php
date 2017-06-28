@@ -16,6 +16,9 @@ use Proximum\Vimeet\Domain\Model\PromotionCode;
 
 class PromotionFactory
 {
+    /**
+     * @return Promotion
+     */
     public static function createPromotion()
     {
         $event   = EventFactory::createEvent();
