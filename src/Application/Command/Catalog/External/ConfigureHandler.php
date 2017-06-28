@@ -54,12 +54,16 @@ class ConfigureHandler
             $catalogVisibility = new CatalogVisibility($command->event);
         }
 
+        // Set bool state to event
         $command->event->setExternalCatalog($command->externalCatalogEnabled);
 
+        // Update CatalogVisibility types and categories
         $catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
 
+        // Set CatalogVisibility
         $this->catalogVisibilityRepository->set($catalogVisibility);
 
+        // Update or Add SearchFacet and SearchFacetTranslations for CatalogVisibility
         foreach ($command->searchFacets as $searchFacet) {
             foreach ($searchFacet->getTranslations() as $locale => $translation) {
                 $searchFacet->translate($locale, $translation->getLabel(), $translation->getPlaceholder());
@@ -72,6 +76,7 @@ class ConfigureHandler
             }
         }
 
+        // Flush event
         $this->eventRepository->set($command->event);
     }
 }
