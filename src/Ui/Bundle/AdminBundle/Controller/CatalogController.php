@@ -28,7 +28,6 @@ class CatalogController extends Controller
      * @param UserInterface $user
      *
      * @return Response
-     *
      */
     public function configureAction(Request $request, Event $event, UserInterface $user)
     {
@@ -62,9 +61,7 @@ class CatalogController extends Controller
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
-
             $this->get('catalog.external.configure_handler')->handle($configure);
-
             $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
 
             return $this->redirectToRoute('admin_event_external_catalog_configure', ['event' => $event->getId()]);

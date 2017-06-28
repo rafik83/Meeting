@@ -48,14 +48,11 @@ class ConfigureHandler
      */
     public function handle(Configure $command)
     {
-        // Set bool state to event
         $command->event->setExternalCatalog($command->externalCatalogEnabled);
 
-        // Update CatalogVisibility types and categories
         $command->catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
 
         if (null !== $this->catalogVisibilityRepository->getByEvent($command->event)) {
-            // Set CatalogVisibility
             $this->catalogVisibilityRepository->set($command->catalogVisibility);
         } else {
             $this->catalogVisibilityRepository->add($command->catalogVisibility);
@@ -74,7 +71,6 @@ class ConfigureHandler
             }
         }
 
-        // Flush event
         $this->eventRepository->set($command->event);
     }
 }

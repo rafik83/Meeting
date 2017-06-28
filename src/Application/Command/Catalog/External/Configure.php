@@ -39,9 +39,9 @@ class Configure
     /**
      * Configure constructor.
      *
-     * @param Event                  $event
+     * @param Event             $event
      * @param CatalogVisibility $catalogVisibility
-     * @param SearchFacet[]          $searchFacets
+     * @param SearchFacet[]     $searchFacets
      */
     public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
     {
