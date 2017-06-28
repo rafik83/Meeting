@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e93f0ce7bf5745cda32c2bc4ab6a3b9",
+    "content-hash": "3670e05dd9d9a0b851ed3defa5d045ab",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2151,17 +2151,17 @@
         },
         {
             "name": "jms/job-queue-bundle",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "target-dir": "JMS/JobQueueBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSJobQueueBundle.git",
-                "reference": "b6389bb0e533279c863594210138d51eb759b297"
+                "reference": "4d0779030414ba593a3d7d29856c66c5375173c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSJobQueueBundle/zipball/b6389bb0e533279c863594210138d51eb759b297",
-                "reference": "b6389bb0e533279c863594210138d51eb759b297",
+                "url": "https://api.github.com/repos/schmittjoh/JMSJobQueueBundle/zipball/4d0779030414ba593a3d7d29856c66c5375173c9",
+                "reference": "4d0779030414ba593a3d7d29856c66c5375173c9",
                 "shasum": ""
             },
             "require": {
@@ -2175,7 +2175,6 @@
                 "doctrine/doctrine-bundle": "*",
                 "doctrine/doctrine-fixtures-bundle": "*",
                 "doctrine/orm": "*",
-                "pagerfanta/pagerfanta": "dev-master",
                 "phpunit/phpunit": "^5.2",
                 "sensio/framework-extra-bundle": "*",
                 "symfony/browser-kit": "*",
@@ -2190,7 +2189,6 @@
                 "symfony/yaml": "*"
             },
             "suggest": {
-                "pagerfanta/pagerfanta": "Required when using the webinterface.",
                 "sensio/framework-extra-bundle": "Required when using the webinterface.",
                 "symfony/twig-bundle": "Required when using the webinterface."
             },
@@ -2221,7 +2219,7 @@
                 "job",
                 "queue"
             ],
-            "time": "2017-04-08T09:53:30+00:00"
+            "time": "2017-06-28T06:26:38+00:00"
         },
         {
             "name": "jms/metadata",
