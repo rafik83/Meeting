@@ -56,7 +56,6 @@ class ExceptionListener
     {
         $request   = $responseForExceptionEvent->getRequest();
         $exception = $responseForExceptionEvent->getException();
-
         /**
          * Symfony throw a redirect when User is not logged
          * and there is AuthenticationException or AccessDeniedException
@@ -67,7 +66,6 @@ class ExceptionListener
         ) {
             return;
         }
-
         /**
          * Try to get the event matching the host.
          */
@@ -76,9 +74,7 @@ class ExceptionListener
         } catch (\Exception $exception) {
             return;
         }
-
         $statusCode = $this->resolveHttpStatusCode($exception);
-
         $responseForExceptionEvent->setResponse($this->buildResponseFromHttpStatusCode($statusCode, $event));
         $responseForExceptionEvent->stopPropagation();
     }
@@ -111,11 +107,11 @@ class ExceptionListener
      */
     private function buildResponseFromHttpStatusCode($statusCode, $event)
     {
-        $content = 'error.' . $statusCode . '.content';
-        $route404_403 = 'TwigBundle:Exception:error404-403.html.twig';
+        $content      = 'error.' . $statusCode . '.content';
+        $route404_403 = 'TwigBundle:Exception:error' . $statusCode . '.html.twig';
 
         if (null !== $event) {
-            $route404_403 = 'EventBundle:Exception:error404-403.html.twig';
+            $route404_403 = 'EventBundle:Exception:error' . $statusCode . '.html.twig';
         }
 
         if (self::INTERNAL_SERVER_ERROR_CODE === $statusCode) {

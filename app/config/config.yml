@@ -375,10 +375,6 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail:  { size: [250, 100], mode: inset }
-        vimeet_logo:
-            quality: 100
-            filters:
-                thumbnail:  { size: [800, 320], mode: inset }
 
 # Doctrine migrations configuration
 doctrine_migrations:

@@ -278,8 +278,11 @@
 
 .error-header {
   background-color: #0099E0;
+  > img {
+    max-height: 100px;
+  }
 }
 
 .error-title {
-  font-size: 26px;
+  font-size: 25px;
 }
