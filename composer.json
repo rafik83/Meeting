@@ -54,7 +54,7 @@
         "payum/paypal-express-checkout-nvp": "^1.3",
         "sendgrid/sendgrid": "^5.1",
         "egulias/email-validator": "1.*",
-        "jms/job-queue-bundle": "^1.4.0",
+        "jms/job-queue-bundle": "^1.4.2",
         "sentry/sentry-symfony": "^0.7.1",
         "tilleuls/ovh-bundle": "^1.0.1"
     },
