@@ -1,7 +1,7 @@
-{{ include('EventBundle:Catalog/External:search.html.twig', { searchForm: searchForm }, false) }}
+{{ include('EventBundle::Catalog/External/search.html.twig', { searchForm: searchForm }, false) }}
 
 <div class="catalog__list catalog__list--block">
-    {{ include('@Event/Catalog/External/list.html.twig', {
+    {{ include('EventBundle::Catalog/External/list.html.twig', {
         paginatedResult: paginatedResult,
         page: page,
     }, false) }}

@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="catalog catalog--advanced">
-        {{ include('@Event/Catalog/External/catalog.html.twig', {
+        {{ include('EventBundle::Catalog/External/catalog.html.twig', {
             searchForm: searchForm,
             paginatedResult: paginatedResult,
             seeMoreButton: seeMoreButton,

@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         {% for catalogSheetPreviewView in paginatedResult.results %}
-            {{ include('@Event/Catalog/External/sheet-card.html.twig', {
+            {{ include('EventBundle::Catalog/External/sheet-card.html.twig', {
                 catalogSheetPreviewView: catalogSheetPreviewView
             }) }}
             {% if loop.index % 3 == 0 %}
