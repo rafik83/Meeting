@@ -340,7 +340,7 @@ class DiffVerbalizer
      *
      * @return string
      */
-    public function format(\IntlDateFormatter $dateFormatter, \DateTimeInterface $date): string
+    private function format(\IntlDateFormatter $dateFormatter, \DateTimeInterface $date): string
     {
         $dateFormatted = $dateFormatter->format($date);
 

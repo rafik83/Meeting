@@ -1009,6 +1009,12 @@ event.sheet.update_product.title: 'Modifier un produit commandé'
 event.sheet.validationState.draft: Brouillon
 event.sheet.validationState.pending: 'Soumise à validation'
 event.sheet.validationState.validated: Validée
+gdr.user.agenda.version.modal.button.notify: 'Notifier par SMS'
+gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
+gdr.user.agenda.version.modal.diff: 'Voici les modifications appliquées sur l''agenda de la personne'
+gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'
+gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recevoir des notifications lives'
+gdr.user.agenda.version.modal.title: 'Différence dans les modifications de l''agenda'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
 login.title: Connexion
