@@ -21,6 +21,7 @@ final class Events
     const SHEET_VALIDATION_PENDING             = 'sheet.validation.pending';
     const SHEET_VALIDATION_VALIDATE            = 'sheet.validation.validate';
     const SHEET_GROUP_CREATED                  = 'sheet.group.created';
+    const SHEET_GROUP_UPDATED                  = 'sheet.group.updated';
     const SHEET_COMPLETENESS                   = 'sheet.completeness';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';

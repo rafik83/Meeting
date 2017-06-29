@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAccept;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchAcceptHandlerTest extends TestCase
 {
     public function testHandle()
     {

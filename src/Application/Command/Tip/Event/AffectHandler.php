@@ -41,7 +41,7 @@ class AffectHandler
      */
     public function handle(Affect $affect)
     {
-        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id);
+        $tip = $this->tipRepository->getById($affect->tip->id);
 
         if (null === $tip) {
             throw new TipNotFoundException();

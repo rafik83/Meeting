@@ -35,6 +35,7 @@ class Synchronizer
         Tag::PARTICIPANT_CITY      => 'City',
         Tag::PARTICIPANT_COUNTRY   => 'Country',
         Tag::PARTICIPANT_WEBSITE   => 'Website',
+        Tag::SHEET_TITLE           => 'Company',
         Tag::SHEET_ORGANIZATION    => 'Company',
         Tag::SHEET_ADDRESS         => 'CompanyAddress',
         Tag::SHEET_ZIPCODE         => 'CompanyZipCode',

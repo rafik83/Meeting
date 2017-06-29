@@ -1,0 +1,7 @@
+Proximum\Vimeet\Application\Command\Sheet\Group\Update:
+    properties:
+        email:
+            - NotNull: ~
+            - Email: ~
+        title:
+            - NotNull: ~

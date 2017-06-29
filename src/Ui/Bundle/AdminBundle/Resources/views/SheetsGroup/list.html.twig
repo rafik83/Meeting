@@ -41,6 +41,7 @@
                     {{ groupView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                 </td>
                 <td>
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_sheets_group_update', {'event': event.id, 'sheetGroup': groupView.id}) }}">{{ 'admin.sheets_group.update.link'|trans }}</a>
                     <a class="btn btn-default btn-sm" target="_blank" href="{{ groupView.impersonateLink }}">{{ 'admin.sheet.impersonate'|trans }}</a>
                 </td>
             </tr>

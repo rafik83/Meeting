@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -32,6 +33,11 @@ class Request implements MessageSubjectInterface
      * @var int
      */
     private $id;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     /**
      * @var Sheet
@@ -104,6 +110,7 @@ class Request implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param User               $creator
+     * @param Event              $event
      * @param bool               $disabled
      * @param bool               $hasMessage
      */
@@ -114,6 +121,7 @@ class Request implements MessageSubjectInterface
         array $toParticipants,
         DateTimeInterface $createdAt,
         User $creator,
+        Event $event,
         $disabled = false,
         $hasMessage = false
     ) {
@@ -128,6 +136,7 @@ class Request implements MessageSubjectInterface
         $this->disabled         = $disabled;
         $this->meeting          = new ArrayCollection();
         $this->hasMessage       = $hasMessage;
+        $this->event            = $event;
     }
 
     /**
@@ -535,6 +544,25 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param User $user
+     *
+     * @return Sheet
+     * @throws NoSheetForUserException
+     */
+    public function getSheetOfUser(User $user)
+    {
+        if ($this->from->hasUser($user)) {
+            return $this->from;
+        }
+
+        if ($this->to->hasUser($user)) {
+            return $this->to;
+        }
+
+        throw new NoSheetForUserException();
+    }
+
+    /**
      * "Quand la demande de RDV n'a pas de participant de préférence et que la liste
      *  des participants disponible est vide on utilise le seul participant de la fiche"
      *
@@ -611,7 +639,7 @@ class Request implements MessageSubjectInterface
      */
     public function getEvent()
     {
-        return $this->getFromSheet()->getEvent();
+        return $this->event;
     }
 
     /**

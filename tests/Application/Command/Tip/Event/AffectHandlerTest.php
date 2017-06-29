@@ -10,10 +10,8 @@
 
 namespace Application\Command\Tip\Event;
 
-use Proximum\Vimeet\Application\Exception\Tip\TipAlreadyAffectedToEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
-use Proximum\Vimeet\Application\Exception\Tip\TipTranslationNotAvailableForEventException;
-use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
@@ -51,15 +49,10 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
         $type     = new Type($event);
         $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
 
-        $tipTranslationView = new TipTranslationView(
-            $tip->getId(),
-            $tip->getTranslationTitle('fr'),
-            $tip->getTranslationContent('fr'),
-            'admin_title'
-        );
+        $tipView = new TipView($tip->getId(), 'admin_title', 'fr');
 
         $command        = new Affect($event);
-        $command->tip   = $tipTranslationView;
+        $command->tip   = $tipView;
         $command->types = [$typeView];
 
         $this->tipRepository  = $this->prophesize(TipRepositoryInterface::class);
@@ -71,7 +64,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
     }
     public function testHandle()
     {
-        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn($this->tip);
+        $this->tipRepository->getById(null)->shouldBeCalled()->willReturn($this->tip);
 
         $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
 
@@ -82,7 +75,7 @@ class AffectHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTipNotFoundException()
     {
-        $this->tipRepository->getByTipTranslationId(null)->shouldBeCalled()->willReturn(null);
+        $this->tipRepository->getById(null)->shouldBeCalled()->willReturn(null);
 
         $this->expectException(TipNotFoundException::class);
 

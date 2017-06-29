@@ -31,6 +31,11 @@ class Meeting implements MessageSubjectInterface
     private $slot;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * @var Sheet
      */
     private $fromSheet;
@@ -91,6 +96,7 @@ class Meeting implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param Spot               $spot
+     * @param Event              $event
      * @param bool               $blockedSpot
      * @param bool               $blockedSlot
      */
@@ -103,6 +109,7 @@ class Meeting implements MessageSubjectInterface
         array $toParticipants,
         \DateTimeInterface $createdAt,
         Spot $spot,
+        Event $event,
         $blockedSpot = false,
         $blockedSlot = false
     ) {
@@ -116,6 +123,7 @@ class Meeting implements MessageSubjectInterface
         $this->spot             = $spot;
         $this->blockedSpot      = $blockedSpot;
         $this->blockedSlot      = $blockedSlot;
+        $this->event            = $event;
     }
 
     /**
@@ -429,7 +437,7 @@ class Meeting implements MessageSubjectInterface
      */
     public function getEvent()
     {
-        return $this->slot->getEvent();
+        return $this->event;
     }
 
     /**

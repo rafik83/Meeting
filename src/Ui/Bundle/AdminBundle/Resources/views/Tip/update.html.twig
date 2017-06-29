@@ -3,14 +3,7 @@
 {% block form_title 'admin.tip.update.title'|trans %}
 
 {% block form_content %}
-    {{ form_row(form.title) }}
-    {{ form_row(form.onCatalog) }}
-    {{ form_row(form.onMeetingManagement) }}
-    {{ form_row(form.onPrintPlanning) }}
-    {{ form_row(form.onSheet) }}
-    {{ form_row(form.onProgram) }}
-    {{ form_row(form.onAgenda) }}
-    {{ form_row(form.translations) }}
+    {# show the form without customization #}
 {% endblock form_content %}
 
 {% block goback_link path('admin_tip_list') %}

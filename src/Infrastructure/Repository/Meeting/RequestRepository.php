@@ -422,6 +422,24 @@ class RequestRepository implements RequestRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getUnallocatedRequestForSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.to IN (:sheets) OR request.from IN (:sheets)')
+            ->andWhere('request.state = :state')
+            ->andWhere('request.disabled = false')
+            ->setParameter('sheets', $sheets)
+            ->setParameter('state', Request::STATE_APPROVED);
+
+        $this->requestsWithoutMeeting($queryBuilder);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */

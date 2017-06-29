@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchAssignToGroup extends AbstractBatch
 {
-    /** @var Group */
+    /** @var Group|null */
     public $group;
 
     /** @var string */
@@ -23,14 +23,14 @@ class BatchAssignToGroup extends AbstractBatch
     /**
      * BatchAssignToGroup constructor.
      *
-     * @param array  $ids
-     * @param Group  $group
-     * @param string $locale
+     * @param array      $ids
+     * @param Group|null $group
+     * @param string     $locale
      */
-    public function __construct(array $ids, Group $group, $locale)
+    public function __construct(array $ids, Group $group = null, $locale)
     {
-        $this->ids   = $ids;
-        $this->group = $group;
+        $this->ids    = $ids;
+        $this->group  = $group;
         $this->locale = $locale;
     }
 }

@@ -171,7 +171,7 @@ class SheetRepository implements SheetRepositoryInterface
                 'sheet.participants',
                 'participant',
                 'WITH',
-                'sheet.event = :event AND sheet.enable = true AND (sheet.owner = :user OR participant.user = :user)'
+                '(sheet.owner = :user OR participant.user = :user) AND sheet.event = :event AND sheet.enable = true'
             )
             ->setParameter('event', $event)
             ->setParameter('user', $user)
@@ -303,22 +303,6 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->orderBy('sheet.id');
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSheetsWithoutGroupInGivenSheets(array $sheets)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->where('sheet.id IN (:sheets) AND sheet.group IS NULL')
-            ->setParameter('sheets', $sheets);
 
         return $queryBuilder->getQuery()->getResult();
     }

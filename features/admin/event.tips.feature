@@ -38,12 +38,12 @@ Feature: List of tips by event and type
     Given the database is purged
     And I am logged as admin
     And the tip "Le saviez vous?" is created
-    When I send a "GET" request to "/fr/tip/1/preview/"
+    When I send a "GET" request to "/fr/tip/1/preview/fr"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
       {
-          "title": "title_fr",
+          "title": "Le saviez vous? (fr)",
           "content": "content_fr",
           "pages": [
               "admin.tip.column.visible.catalog",
@@ -51,7 +51,8 @@ Feature: List of tips by event and type
               "admin.tip.column.visible.print_planning",
               "admin.tip.column.visible.onSheet",
               "admin.tip.column.visible.onAgenda",
-              "admin.tip.column.visible.onProgram"
+              "admin.tip.column.visible.onProgram",
+              "admin.tip.column.visible.onConfirmationPhone"
           ]
       }
       """

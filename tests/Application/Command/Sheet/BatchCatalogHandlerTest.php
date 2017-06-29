@@ -8,8 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Sheet;
+namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Sheet\BatchCatalog;
+use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -17,11 +20,10 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchCatalogHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -36,9 +38,22 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
+        $sheet1 = new Sheet($event, $type, [], $user1, $date);
+        $sheet2 = new Sheet($event, $type, [], $user2, $date);
+        $sheet3 = new Sheet($event, $type, [], $user3, $date);
+
+        // expected sheet
+        $expectedSheet1 = new Sheet($event, $type, [], $user1, $date);
+        $expectedSheet1->setInCatalog(true);
+        $expectedSheet1->setInCatalogAt($date);
+
+        $expectedSheet2 = new Sheet($event, $type, [], $user2, $date);
+        $expectedSheet2->setInCatalog(true);
+        $expectedSheet2->setInCatalogAt($date);
+
+        $expectedSheet3 = new Sheet($event, $type, [], $user3, $date);
+        $expectedSheet3->setInCatalog(true);
+        $expectedSheet3->setInCatalogAt($date);
 
         $reflection  = new \ReflectionClass(Sheet::class);
         $property = $reflection->getProperty('id');

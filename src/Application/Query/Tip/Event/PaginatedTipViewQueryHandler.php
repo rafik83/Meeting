@@ -19,7 +19,7 @@ class PaginatedTipViewQueryHandler
     private $tipRepository;
 
     /**
-     * TipListViewQueryHandler constructor.
+     * PaginatedTipViewQueryHandler constructor.
      *
      * @param TipRepositoryInterface $tipRepository
      */

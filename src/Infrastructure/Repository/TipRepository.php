@@ -39,16 +39,16 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getByTipTranslationId($id)
+    public function getById($id)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('tip')
             ->from(Tip::class, 'tip')
-            ->join(TipTranslation::class, 'tipTranslation', 'WITH', 'tip = tipTranslation.tip')
-            ->where('tipTranslation.id = :id')
-            ->setParameter('id', $id);
+            ->where('tip.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
@@ -163,16 +163,15 @@ class TipRepository implements TipRepositoryInterface
     }
 
     /** {@inheritdoc} */
-    public function getTipTranslationViewByLocaleForEvent($locale)
+    public function getAll()
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('new \Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
+            ->select('tip, tipTranslation')
             ->from(Tip::class, 'tip')
-            ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.locale = :locale')
-            ->orderBy('tip.title')
-            ->setParameter('locale', $locale);
+            ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.tip = tip')
+            ->orderBy('tip.title');
 
         return $queryBuilder->getQuery()->getResult();
     }

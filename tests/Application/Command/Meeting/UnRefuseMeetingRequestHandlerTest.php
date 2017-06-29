@@ -36,11 +36,11 @@ class UnRefuseMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo   = new Sheet($event, $type, [], $user3, $dateTime);
 
         // Request to unRefuse
-        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2);
+        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2, $event);
         $unRefuseRequest = new UnRefuseMeetingRequest($user3, $request, $sheetTo);
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2, $event);
         $expectedRequest->unRefuse($dateTime);
 
         // Dependencies
@@ -75,11 +75,11 @@ class UnRefuseMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo   = new Sheet($event, $type, [], $user3, $dateTime);
 
         // Request to unRefuse
-        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2);
+        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2, $event);
         $unRefuseRequest = new UnRefuseMeetingRequest($user2, $request, $sheetFrom);
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user2, $event);
         $expectedRequest->unRefuse($dateTime);
 
         // Dependencies

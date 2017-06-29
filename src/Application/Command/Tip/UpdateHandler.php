@@ -17,14 +17,19 @@ class UpdateHandler
     /** @var TipRepositoryInterface */
     private $tipRepository;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * UpdateHandler constructor.
      *
      * @param TipRepositoryInterface $tipRepository
+     * @param \DateTimeInterface     $dateTime
      */
-    public function __construct(TipRepositoryInterface $tipRepository)
+    public function __construct(TipRepositoryInterface $tipRepository, \DateTimeInterface $dateTime)
     {
         $this->tipRepository = $tipRepository;
+        $this->dateTime = $dateTime;
     }
     
     /**
@@ -45,7 +50,8 @@ class UpdateHandler
             $command->tip->translate(
                 $translation['locale'],
                 $translation['title'],
-                $translation['content']
+                $translation['content'],
+                $this->dateTime
             );
         }
 
@@ -57,7 +63,8 @@ class UpdateHandler
                 $command->onPrintPlanning,
                 $command->onSheet,
                 $command->onAgenda,
-                $command->onProgram
+                $command->onProgram,
+                $command->onConfirmationPhone
             )
         );
     }

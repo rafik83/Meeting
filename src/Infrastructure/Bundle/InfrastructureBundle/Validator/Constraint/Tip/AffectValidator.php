@@ -36,7 +36,16 @@ class AffectValidator extends ConstraintValidator
      */
     public function validate($affect, Constraint $constraint)
     {
-        $tip = $this->tipRepository->getByTipTranslationId($affect->tip->id);
+        $tip = $this->tipRepository->getById($affect->tip->id);
+
+        if (null === $tip) {
+            $this->context
+                ->buildViolation('validators.tip.affect.not_found')
+                ->atPath('tip')
+                ->addViolation();
+
+            return;
+        }
 
         foreach ($affect->event->getLocales() as $locale) {
             if (!$tip->hasTranslation($locale)) {
@@ -44,6 +53,7 @@ class AffectValidator extends ConstraintValidator
                     ->buildViolation('validators.tip.affect.unavailable_locale')
                     ->atPath('tip')
                     ->addViolation();
+
                 break;
             }
         }
