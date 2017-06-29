@@ -48,6 +48,8 @@ class ParticipationCount
     }
 
     /**
+     * Return the remaining available participant count of the happening
+     *
      * @param Happening $happening
      *
      * @return double|int
