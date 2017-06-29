@@ -25,14 +25,19 @@ use Symfony\Component\HttpFoundation\Response;
 class VersionController extends Controller
 {
     /**
+     * @param Request     $request
      * @param Event       $event
      * @param Participant $participant
      *
      * @return JsonResponse
      */
-    public function userDiffAction(Event $event, Participant $participant): JsonResponse
+    public function userDiffAction(Request $request, Event $event, Participant $participant): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($participant->getSheet()->getEvent() !== $event) {
+            return $this->createErrorResponse('Wrong event', $request->getLocale());
+        }
 
         /** @var UserAgendaVersionDiffView $view */
         $view = $this->get('tactician.commandbus.query')->handle(
@@ -55,6 +60,10 @@ class VersionController extends Controller
     public function notifyAction(Request $request, Event $event, Participant $participant): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($participant->getSheet()->getEvent() !== $event) {
+            return $this->createErrorResponse('Wrong event', $request->getLocale());
+        }
 
         /** @var UserAgendaVersionDiffView $view */
         $view = $this->get('tactician.commandbus.query')->handle(
@@ -86,6 +95,10 @@ class VersionController extends Controller
     public function purgeAction(Request $request, Event $event, Participant $participant): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($participant->getSheet()->getEvent() !== $event) {
+            return $this->createErrorResponse('Wrong event', $request->getLocale());
+        }
 
         /** @var UserAgendaVersionDiffView $view */
         $view = $this->get('tactician.commandbus.query')->handle(
