@@ -133,8 +133,7 @@ class ExceptionListener
             $this->templating->render(
                 $route,
                 [
-                    'event'   => $event,
-                    'content' => sprintf('error.%s.content', $statusCode),
+                    'event' => $event,
                 ]
             ),
             $statusCode
