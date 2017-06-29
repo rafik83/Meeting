@@ -90,8 +90,8 @@
                 <hr>
 
                 {{ form_row(filter_form.hasScheduledMeeting, {'inline': true}) }}
-                {{ form_row(filter_form.hasPendingMeetingPropositions) }}
-                {{ form_row(filter_form.hasNoMeetingRequest) }}
+                {{ form_row(filter_form.hasPendingMeetingPropositions, {'inline': true}) }}
+                {{ form_row(filter_form.hasNoMeetingRequest, {'inline': true}) }}
 
                 {% if filter_form.boolean_filters is defined %}
                     <hr>
