@@ -1,0 +1,107 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Template;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\TaggedInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Telephone;
+
+class TaggedInfoGuesserTest extends TestCase
+{
+    /** @var  TemplateDataFactory */
+    private $templateDataFactory;
+
+    public function setUp()
+    {
+        $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+    }
+
+    public function testGuess()
+    {
+        $dateTime = new \DateTime('2017-01-01 10:00:00');
+
+        $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
+
+        // Template data
+        $phoneObject = new Telephone('phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr');
+        $phoneObject->setContentValue('060606060');
+        $block = new Block(12, [], 'fr', 'fr');
+        $block->addChild(0, 'barfoo', $phoneObject);
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $templateData->addChild(0, 'foobar', $block);
+
+        // Mock
+        $this->templateDataFactory
+            ->create([], [], 'fr', 'fr')
+            ->shouldBeCalled()
+            ->willReturn($templateData);
+
+        $guesser = new TaggedInfoGuesser($this->templateDataFactory->reveal());
+
+        $this->assertEquals(['060606060'], $guesser->guess($registrationTemplate, [], 'participant_mobile', 'fr'));
+    }
+
+    public function testGuessFirst()
+    {
+        $tag = 'participant_mobile';
+        $locale = 'fr';
+        $dateTime = new \DateTime('2017-01-01 10:00:00');
+
+        $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
+
+        // Template data
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block(12, [], 'fr', 'fr');
+        $phoneObject = new Telephone(
+            'phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr'
+        );
+        $block->addChild(0, 'dfsmkds', $phoneObject);
+        $templateData->addChild(0, 'dfdskjfls', $block);
+
+        $phoneObject->setContentValue('0123456789');
+
+        // Mock
+        $this->templateDataFactory
+            ->createFromTemplate($registrationTemplate, [], 'fr', 'fr')
+            ->shouldBeCalled()
+            ->willReturn($templateData);
+
+        $guesser = new TaggedInfoGuesser($this->templateDataFactory->reveal());
+
+        $expected = '0123456789';
+
+        $this->assertEquals($expected, $guesser->guessFirst($registrationTemplate, [], $tag, $locale));
+    }
+
+    public function testGuessFirstFromTemplateData()
+    {
+        $tag = 'participant_mobile';
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $block = new Block('12', [], 'fr', 'fr');
+        $phoneObject = new Telephone(
+            'phone', 'telephone', ['tags' => ['participant_mobile', 'participant_data']], 'fr', 'fr'
+        );
+        $block->addChild(0, 'dfsmkds', $phoneObject);
+        $templateData->addChild(0, 'dfdskjfls', $block);
+
+        $phoneObject->setContentValue('0089897');
+
+        $taggedData = '0089897';
+
+        $guesser = new TaggedInfoGuesser($this->templateDataFactory->reveal());
+
+        $this->assertEquals($taggedData, $guesser->guessFirstFromTemplateData($templateData, $tag));
+    }
+}
