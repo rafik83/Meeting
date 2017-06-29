@@ -23,22 +23,29 @@ class TaggedInfoGuesserTest extends TestCase
     /** @var  TemplateDataFactory */
     private $templateDataFactory;
 
+    /** @var  \DateTime */
+    private $dateTime;
+
+    /** @var  RegistrationTemplate */
+    private $registrationTemplate;
+
+    /** @var  Telephone */
+    private $phoneObject;
+
     public function setUp()
     {
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $this->dateTime = new \DateTime('2017-01-01 10:00:00');
+        $this->registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $this->dateTime);
+        $this->phoneObject = new Telephone('phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr');
     }
 
     public function testGuess()
     {
-        $dateTime = new \DateTime('2017-01-01 10:00:00');
-
-        $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
-
         // Template data
-        $phoneObject = new Telephone('phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr');
-        $phoneObject->setContentValue('060606060');
+        $this->phoneObject->setContentValue('060606060');
         $block = new Block(12, [], 'fr', 'fr');
-        $block->addChild(0, 'barfoo', $phoneObject);
+        $block->addChild(0, 'barfoo', $this->phoneObject);
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $templateData->addChild(0, 'foobar', $block);
 
@@ -50,31 +57,26 @@ class TaggedInfoGuesserTest extends TestCase
 
         $guesser = new TaggedInfoGuesser($this->templateDataFactory->reveal());
 
-        $this->assertEquals(['060606060'], $guesser->guess($registrationTemplate, [], 'participant_mobile', 'fr'));
+        $this->assertEquals(['060606060'], $guesser->guess($this->registrationTemplate, [], 'participant_mobile', 'fr'));
     }
 
     public function testGuessFirst()
     {
         $tag = 'participant_mobile';
         $locale = 'fr';
-        $dateTime = new \DateTime('2017-01-01 10:00:00');
-
-        $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
 
         // Template data
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block(12, [], 'fr', 'fr');
-        $phoneObject = new Telephone(
-            'phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr'
-        );
-        $block->addChild(0, 'dfsmkds', $phoneObject);
-        $templateData->addChild(0, 'dfdskjfls', $block);
 
-        $phoneObject->setContentValue('0123456789');
+        $block->addChild(0, 'a34e56d', $this->phoneObject);
+        $templateData->addChild(0, 'a34e56d', $block);
+
+        $this->phoneObject->setContentValue('0123456789');
 
         // Mock
         $this->templateDataFactory
-            ->createFromTemplate($registrationTemplate, [], 'fr', 'fr')
+            ->createFromTemplate($this->registrationTemplate, [], 'fr', 'fr')
             ->shouldBeCalled()
             ->willReturn($templateData);
 
@@ -82,7 +84,7 @@ class TaggedInfoGuesserTest extends TestCase
 
         $expected = '0123456789';
 
-        $this->assertEquals($expected, $guesser->guessFirst($registrationTemplate, [], $tag, $locale));
+        $this->assertEquals($expected, $guesser->guessFirst($this->registrationTemplate, [], $tag, $locale));
     }
 
     public function testGuessFirstFromTemplateData()
@@ -90,13 +92,11 @@ class TaggedInfoGuesserTest extends TestCase
         $tag = 'participant_mobile';
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $phoneObject = new Telephone(
-            'phone', 'telephone', ['tags' => ['participant_mobile', 'participant_data']], 'fr', 'fr'
-        );
-        $block->addChild(0, 'dfsmkds', $phoneObject);
-        $templateData->addChild(0, 'dfdskjfls', $block);
 
-        $phoneObject->setContentValue('0089897');
+        $block->addChild(0, 'a34e56d', $this->phoneObject);
+        $templateData->addChild(0, 'a34e56d', $block);
+
+        $this->phoneObject->setContentValue('0089897');
 
         $taggedData = '0089897';
 
