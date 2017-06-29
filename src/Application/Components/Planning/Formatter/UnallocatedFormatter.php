@@ -10,46 +10,42 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
 class UnallocatedFormatter
 {
     const TRANSLATE_UNALLOCATED = 'planning.participant.unallocated_meetings';
     const TRANSLATION_DOMAIN    = 'messages';
 
-    /**
-     * @var TranslatorAdapter
-     */
+    /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
 
     /**
-     * @param TranslatorAdapter          $translator
+     * @param TranslatorInterface          $translator
      * @param RequestRepositoryInterface $requestRepository
-     * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param SheetRepositoryInterface   $sheetRepository
      */
     public function __construct(
-        TranslatorAdapter $translator,
+        TranslatorInterface $translator,
         RequestRepositoryInterface $requestRepository,
-        SheetInfoGuesser $sheetInfoGuesser
+        SheetRepositoryInterface $sheetRepository
     ) {
         $this->translator        = $translator;
         $this->requestRepository = $requestRepository;
-        $this->sheetInfoGuesser  = $sheetInfoGuesser;
+        $this->sheetRepository   = $sheetRepository;
     }
 
     /**
@@ -73,8 +69,48 @@ class UnallocatedFormatter
         );
 
         $formatted .= implode(', ', array_map(function (Request $request) use ($sheet) {
-            return $this->sheetInfoGuesser->guessSheetTitle($request->getSheetMet($sheet));
+            return $request->getSheetMet($sheet)->getTitle();
         }, $requests));
+
+        return $formatted;
+    }
+
+    /**
+     * Return a list of all the meeting request of a user sheets not converted to meeting
+     *
+     * @param Event  $event
+     * @param User   $user
+     * @param string $locale
+     * @param bool   $isUserMultipleSheets
+     *
+     * @return string
+     */
+    public function formatForUser(Event $event, User $user, $locale, $isUserMultipleSheets = false)
+    {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+        $requests = $this->requestRepository->getUnallocatedRequestForSheets($sheets);
+
+        if (count($requests) === 0) {
+            return '';
+        }
+
+        $formatted = MarkdownFormatter::newLine(
+            $this->translator->trans(self::TRANSLATE_UNALLOCATED, [], self::TRANSLATION_DOMAIN, $locale)
+        );
+
+        $formatted .= implode(
+            ', ',
+            array_map(function (Request $request) use ($user, $isUserMultipleSheets) {
+                $userSheet       = $request->getSheetOfUser($user);
+                $unallocatedText = $request->getSheetMet($userSheet)->getTitle();
+
+                if ($isUserMultipleSheets) {
+                    $unallocatedText .= ' (' . $userSheet->getTitle() . ')';
+                }
+
+                return $unallocatedText;
+            }, $requests)
+        );
 
         return $formatted;
     }

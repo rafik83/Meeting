@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Tip;
+namespace Proximum\Vimeet\Tests\Application\Query\Tip;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
@@ -27,10 +27,10 @@ class TipTranslationViewQueryHandlerTest extends TestCase
         $event    = EventFactory::createEvent();
         $sheet    = SheetFactory::create($event);
 
-        $tip = new Tip('tip', true, true, true, false, false, false, $dateTime);
+        $tip = new Tip('tip', true, true, true, false, false, false, false, $dateTime);
         $tip->setTranslation('fr', 'title', 'content', $dateTime);
 
-        $tip2 = new Tip('tip2', true, true, true, false, false, false, $dateTime);
+        $tip2 = new Tip('tip2', true, true, true, false, false, false, false, $dateTime);
         $tip2->setTranslation('fr', 'title2', 'content2', $dateTime);
 
         $tipView1 = new TipTranslationView(1, 'title', 'content');

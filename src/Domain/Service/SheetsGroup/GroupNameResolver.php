@@ -42,24 +42,28 @@ class GroupNameResolver
     }
 
     /**
-     * @param Event $event
-     * @param User  $user
+     * If we found a Group return the group's title
+     * Else we return the sheet title
+     *
+     * @param Event   $event
+     * @param User    $user
+     * @param Sheet[] $sheets - Optional parameters to preload sheets
      *
      * @return string
      * @throws SheetNotFoundException
      */
-    public function resolve(Event $event, User $user)
+    public function resolve(Event $event, User $user, array $sheets = [])
     {
-        $group = $this->groupRepository->getByUserAndEvent($user, $event);
-
-        if ($group !== null) {
-            return $group->getTitle();
+        if (null !== $groupTitle = $this->getGroupByUserAndEvent($event, $user)) {
+            return $groupTitle;
         }
 
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
-
         if (empty($sheets)) {
-            throw new SheetNotFoundException('Sheet not found.');
+            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+
+            if (empty($sheets)) {
+                throw new SheetNotFoundException('Sheet not found.');
+            }
         }
 
         $sheet = reset($sheets);
@@ -69,5 +73,22 @@ class GroupNameResolver
         }
 
         return $sheet->getTitle();
+    }
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return null|string
+     */
+    private function getGroupByUserAndEvent(Event $event, User $user)
+    {
+        $group = $this->groupRepository->getByUserAndEvent($user, $event);
+
+        if ($group !== null) {
+            return $group->getTitle();
+        }
+        
+        return null;
     }
 }

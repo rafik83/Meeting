@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Messaging\SMS;
 
-class SMSException extends \Exception
+class SMSException extends \DomainException
 {
 }

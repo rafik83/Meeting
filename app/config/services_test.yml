@@ -154,6 +154,12 @@ services:
             - '@behat_storage'
             - '@behat_manager.spot'
 
+    behat_proxy.type_context:
+        class: Proximum\Vimeet\Behat\Proxy\TypeContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.type'
+
     behat_proxy.sheet_context:
         class: Proximum\Vimeet\Behat\Proxy\SheetContextProxy
         arguments:

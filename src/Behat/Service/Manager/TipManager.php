@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\TipFactory;
 
@@ -68,6 +69,22 @@ class TipManager
 
         $tip->setType($type);
 
+        $this->tipRepository->add($tip);
+
+        return $tip;
+    }
+
+    /**
+     * @param string $tipTitle
+     * @param Type   $type
+     * @param array  $contexts
+     *
+     * @return Tip
+     */
+    public function affectToType($tipTitle, Type $type, array $contexts)
+    {
+        $tip = TipFactory::createTip($tipTitle, $contexts, $type->getEvent()->getLocales());
+        $tip->setType($type);
         $this->tipRepository->add($tip);
 
         return $tip;

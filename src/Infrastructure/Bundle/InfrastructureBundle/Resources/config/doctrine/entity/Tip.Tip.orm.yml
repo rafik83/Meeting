@@ -33,6 +33,10 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             type: boolean
             options:
                 default: false
+        onConfirmationPhone:
+            type: boolean
+            options:
+                default: false
         createdAt:
             type: datetime
     oneToMany:

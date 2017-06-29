@@ -20,6 +20,7 @@ class TipFactory
     const ON_SHEET              = 'onSheet';
     const ON_AGENDA             = 'onAgenda';
     const ON_PROGRAM            = 'onProgram';
+    const ON_CONFIRMATION_PHONE = 'onConfirmationPhone';
 
     const LOCALES = ['fr', 'en'];
 
@@ -39,6 +40,7 @@ class TipFactory
             self::ON_AGENDA             => true,
             self::ON_SHEET              => true,
             self::ON_PROGRAM            => true,
+            self::ON_CONFIRMATION_PHONE => true,
         ],
         array $locales = self::LOCALES
     ) {
@@ -46,17 +48,18 @@ class TipFactory
 
         $tip = new Tip(
             $tipTitle,
-            $pages[self::ON_MEETING_MANAGEMENT],
-            $pages[self::ON_CATALOG],
-            $pages[self::ON_PRINT_PLANNING],
-            $pages[self::ON_SHEET],
-            $pages[self::ON_AGENDA],
-            $pages[self::ON_PROGRAM],
+            isset($pages[self::ON_MEETING_MANAGEMENT]) ? $pages[self::ON_MEETING_MANAGEMENT] : false,
+            isset($pages[self::ON_CATALOG]) ? $pages[self::ON_CATALOG] : false,
+            isset($pages[self::ON_PRINT_PLANNING]) ? $pages[self::ON_PRINT_PLANNING] : false,
+            isset($pages[self::ON_SHEET]) ? $pages[self::ON_SHEET] : false,
+            isset($pages[self::ON_AGENDA]) ? $pages[self::ON_AGENDA] : false,
+            isset($pages[self::ON_PROGRAM]) ? $pages[self::ON_PROGRAM] : false,
+            isset($pages[self::ON_CONFIRMATION_PHONE]) ? $pages[self::ON_CONFIRMATION_PHONE] : false,
             $dateTime
         );
 
         foreach ($locales as $locale) {
-            $tip->setTranslation($locale, 'title_' . $locale, 'content_' . $locale, $dateTime);
+            $tip->setTranslation($locale, $tipTitle . ' ('.$locale.')', 'content_' . $locale, $dateTime);
         }
 
         return $tip;

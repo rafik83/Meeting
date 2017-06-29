@@ -73,6 +73,12 @@ services:
             - '@domain.key_dates.checker.catalog_access_checker'
         tags:
             - { name: security.voter }
+    security_voter.agenda_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.agenda_access_checker'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -467,6 +473,11 @@ services:
             - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
 
+    domain.service.sheets_group.type_name_resolver:
+        class: Proximum\Vimeet\Domain\Service\Type\TypeNameResolver
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+
     impersonating_user_checker:
         class: Proximum\Vimeet\Application\Components\User\ImpersonatingUserChecker
         arguments:
@@ -499,3 +510,14 @@ services:
             - '@security.authorization_checker'
         tags:
             - { name: validator.constraint_validator }
+
+
+    #
+    # Handlers
+    #
+    handler.user.phone.send_code_form_handler:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeFormHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@form.factory'
+            - '@tactician.commandbus.query'
