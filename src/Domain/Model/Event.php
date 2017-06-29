@@ -22,148 +22,88 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Event implements EventInterface, TraceableInterface
 {
-    /**
-     * All Taxes Include : prices include taxes, no additional taxes computed
-     */
+    /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
 
-    /**
-     * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-     */
+    /** Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices*/
     const VAT_MODE_ET = 'et';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $domain;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $logo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoiceLogo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoiceLogoExtension;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $timeZone;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $translations;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $locales = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fallback;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserName;
 
-    /**
-     * @var Address
-     */
+    /** @var Address */
     private $paymentAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserEmail;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $legalInformation;
 
-    /**
-     * @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const
-     */
+    /** @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const */
     private $mode;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $vat;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $elementToJoinWithInvoice;
 
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $assetPath;
 
-    /**
-     * ISO 3166-1 alpha-2 country code
-     *
-     * @var string
-     */
+    /** @var string ISO 3166-1 alpha-2 country code */
     private $country;
 
-    /**
-     * ISO 4217 3-letter currency code
-     *
-     * @var string
-     */
+    /** @var string ISO 4217 3-letter currency code */
     private $currency;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $logoExtension;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $emailTeam;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $days;
 
-    /**
-     * @var null|Prefix
-     */
+    /** @var null|Prefix */
     private $invoicePrefix;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $externalCatalogEnabled = false;
 
     /**

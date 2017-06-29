@@ -34,7 +34,7 @@ class SearchFacet extends AbstractSearchFacet
     /**
      * @return SearchFacetTranslation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations->toArray();
     }

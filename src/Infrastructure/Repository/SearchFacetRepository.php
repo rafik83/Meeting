@@ -58,7 +58,7 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event)
+    public function getByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

@@ -29,7 +29,7 @@ class CatalogController extends Controller
      *
      * @return Response
      */
-    public function configureAction(Request $request, Event $event, UserInterface $user)
+    public function configureAction(Request $request, Event $event, UserInterface $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE', $event);
 

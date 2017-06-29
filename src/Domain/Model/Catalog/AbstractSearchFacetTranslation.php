@@ -14,29 +14,19 @@ use Proximum\Vimeet\Domain\Model\TypeTranslation;
 
 class AbstractSearchFacetTranslation
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $id;
 
-    /**
-     * @var AbstractSearchFacet
-     */
+    /** @var AbstractSearchFacet */
     protected $searchFacet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $label;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $placeholder;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $locale;
 
     /**
@@ -58,7 +48,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return AbstractSearchFacet
      */
-    public function getSearchFacet()
+    public function getSearchFacet(): AbstractSearchFacet
     {
         return $this->searchFacet;
     }
@@ -74,7 +64,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -90,7 +80,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return string
      */
-    public function getPlaceholder()
+    public function getPlaceholder(): string
     {
         return $this->placeholder;
     }
@@ -106,7 +96,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -122,7 +112,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
