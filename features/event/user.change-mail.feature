@@ -36,6 +36,4 @@ Feature: Change my mail
 
   Scenario: I can not access the url when I am not logged in
     When I go to "/fr/account/sheet/1/change-mail"
-    Then the response status code should be 403
-
-
+    Then I should be on this page "/fr/login"
