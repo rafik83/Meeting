@@ -34,10 +34,10 @@ class TaggedInfoGuesserTest extends TestCase
 
     public function setUp()
     {
-        $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
-        $this->dateTime = new \DateTime('2017-01-01 10:00:00');
+        $this->templateDataFactory  = $this->prophesize(TemplateDataFactory::class);
+        $this->dateTime             = new \DateTime('2017-01-01 10:00:00');
         $this->registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $this->dateTime);
-        $this->phoneObject = new Telephone('phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr');
+        $this->phoneObject          = new Telephone('phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr');
     }
 
     public function testGuess()
@@ -53,7 +53,8 @@ class TaggedInfoGuesserTest extends TestCase
         $this->templateDataFactory
             ->create([], [], 'fr', 'fr')
             ->shouldBeCalled()
-            ->willReturn($templateData);
+            ->willReturn($templateData)
+        ;
 
         $guesser = new TaggedInfoGuesser($this->templateDataFactory->reveal());
 
@@ -62,12 +63,12 @@ class TaggedInfoGuesserTest extends TestCase
 
     public function testGuessFirst()
     {
-        $tag = 'participant_mobile';
+        $tag    = 'participant_mobile';
         $locale = 'fr';
 
         // Template data
         $templateData = new TemplateData('root', [], 'fr', 'fr');
-        $block = new Block(12, [], 'fr', 'fr');
+        $block        = new Block(12, [], 'fr', 'fr');
 
         $block->addChild(0, 'a34e56d', $this->phoneObject);
         $templateData->addChild(0, 'a34e56d', $block);
@@ -78,7 +79,8 @@ class TaggedInfoGuesserTest extends TestCase
         $this->templateDataFactory
             ->createFromTemplate($this->registrationTemplate, [], 'fr', 'fr')
             ->shouldBeCalled()
-            ->willReturn($templateData);
+            ->willReturn($templateData)
+        ;
 
         $guesser = new TaggedInfoGuesser($this->templateDataFactory->reveal());
 
@@ -89,9 +91,9 @@ class TaggedInfoGuesserTest extends TestCase
 
     public function testGuessFirstFromTemplateData()
     {
-        $tag = 'participant_mobile';
+        $tag          = 'participant_mobile';
         $templateData = new TemplateData('root', [], 'fr', 'fr');
-        $block = new Block('12', [], 'fr', 'fr');
+        $block        = new Block('12', [], 'fr', 'fr');
 
         $block->addChild(0, 'a34e56d', $this->phoneObject);
         $templateData->addChild(0, 'a34e56d', $block);
