@@ -3871,6 +3871,7 @@ services:
         arguments:
             - '@repository.catalog_visibility_repository'
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+            - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
 

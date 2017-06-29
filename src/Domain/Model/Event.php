@@ -716,7 +716,7 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return bool
      */
-    public function isExternalCatalogEnabled()
+    public function isExternalCatalogEnabled(): bool
     {
         return true === $this->externalCatalogEnabled;
     }
@@ -726,7 +726,7 @@ class Event implements EventInterface, TraceableInterface
      *
      * @return Event
      */
-    public function setExternalCatalog(bool $state)
+    public function setExternalCatalog(bool $state): Event
     {
         $this->externalCatalogEnabled = $state;
 

@@ -21,6 +21,11 @@ interface CatalogVisibilityRepositoryInterface
     public function add(CatalogVisibility $catalogVisibility);
 
     /**
+     * @param CatalogVisibility $catalogVisibility
+     */
+    public function set(CatalogVisibility $catalogVisibility);
+
+    /**
      * @param Event $event
      *
      * @return CatalogVisibility|null

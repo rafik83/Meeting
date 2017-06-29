@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog;
 
+use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
@@ -32,7 +33,7 @@ class ConfigureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('catalogPublic', CheckboxType::class)
+            ->add('externalCatalogEnabled', CheckboxType::class)
             ->add('types', TypeChoiceType::class, [
                 'event' => $options['event'],
                 'locale' => $options['locale'],
@@ -66,6 +67,9 @@ class ConfigureType extends AbstractType
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setAllowedTypes('locale', 'string');
         $resolver->setAllowedTypes('user', Admin::class);
+        $resolver->setDefaults([
+            'data_class' => Configure::class,
+        ]);
     }
 
     /**

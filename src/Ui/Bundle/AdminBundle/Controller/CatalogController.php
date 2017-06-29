@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
+use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
@@ -27,7 +28,6 @@ class CatalogController extends Controller
      * @param UserInterface $user
      *
      * @return Response
-     *
      */
     public function configureAction(Request $request, Event $event, UserInterface $user)
     {
@@ -47,7 +47,11 @@ class CatalogController extends Controller
             }
         }
 
-        $configure = new Configure($event, $searchFacets);
+        if (null === $catalogVisibility = $this->get('repository.catalog_visibility_repository')->getByEvent($event)) {
+            $catalogVisibility = new CatalogVisibility($event);
+        }
+
+        $configure = new Configure($event, $catalogVisibility, $searchFacets);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
             'user' => $user,
@@ -57,12 +61,10 @@ class CatalogController extends Controller
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
-
             $this->get('catalog.external.configure_handler')->handle($configure);
-
             $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
 
-            return $this->redirectToRoute('admin_event_read', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_event_external_catalog_configure', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Catalog/External:configure.html.twig', [

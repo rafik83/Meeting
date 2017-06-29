@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -27,21 +28,28 @@ class Configure
     public $categories;
 
     /** @var bool */
-    public $catalogPublic;
+    public $externalCatalogEnabled;
 
     /** @var SearchFacet[] */
     public $searchFacets;
 
+    /** @var CatalogVisibility */
+    public $catalogVisibility;
+
     /**
      * Configure constructor.
      *
-     * @param Event         $event
-     * @param SearchFacet[] $searchFacets
+     * @param Event             $event
+     * @param CatalogVisibility $catalogVisibility
+     * @param SearchFacet[]     $searchFacets
      */
-    public function __construct(Event $event, array $searchFacets)
+    public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
     {
         $this->event = $event;
         $this->searchFacets = $searchFacets;
-        $this->catalogPublic = $event->isExternalCatalogEnabled();
+        $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
+        $this->catalogVisibility = $catalogVisibility;
+        $this->types = $catalogVisibility->getTypes();
+        $this->categories = $catalogVisibility->getCategories();
     }
 }
