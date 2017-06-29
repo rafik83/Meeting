@@ -40,10 +40,6 @@ class CatalogVisibilityViewQueryHandler
             $catalogVisibility = new CatalogVisibility($query->event);
         }
 
-        return new CatalogVisibilityView(
-            $catalogVisibility->getEvent(),
-            $catalogVisibility->getTypes(),
-            $catalogVisibility->getCategories()
-        );
+        return new CatalogVisibilityView($catalogVisibility);
     }
 }

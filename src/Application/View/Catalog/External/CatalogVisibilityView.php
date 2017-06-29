@@ -10,32 +10,20 @@
 
 namespace Proximum\Vimeet\Application\View\Catalog\External;
 
-use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 
 class CatalogVisibilityView
 {
-    /** @var Event */
-    public $event;
-
-    /** @var Type[] */
-    public $types;
-
-    /** @var Category[] */
-    public $categories;
+    /** @var CatalogVisibility */
+    public $catalogVisibility;
 
     /**
      * CatalogVisibilityView constructor.
      *
-     * @param Event      $event
-     * @param Type[]     $types
-     * @param Category[] $categories
+     * @param CatalogVisibility $catalogVisibility
      */
-    public function __construct(Event $event, array $types, array $categories)
+    public function __construct(CatalogVisibility $catalogVisibility)
     {
-        $this->event = $event;
-        $this->types = $types;
-        $this->categories = $categories;
+        $this->catalogVisibility = $catalogVisibility;
     }
 }
