@@ -20,6 +20,8 @@ use Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer;
 
 class SendNotificationHandler
 {
+    const EVENT_AGENDA_ROUTE = 'event_agenda';
+
     /** @var UserEventPhoneRepositoryInterface */
     private $userEventPhoneRepository;
 
@@ -65,7 +67,7 @@ class SendNotificationHandler
     {
         $userEventPhone = $this->userEventPhoneRepository->findValidated($command->user, $command->event);
 
-        if (null == $userEventPhone || !$userEventPhone->isValidated()) {
+        if (null === $userEventPhone) {
             throw new UserPhoneNotAvailableException();
         }
 
@@ -83,7 +85,7 @@ class SendNotificationHandler
 
         $agendaUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $command->event,
-            'event_agenda',
+            self::EVENT_AGENDA_ROUTE,
             ['sheet' => $command->sheet->getId(),
              '_locale' => $command->event->getAvailableLocale($command->user->getLocale())]
         );
