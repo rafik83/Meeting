@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityViewQuery;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -46,6 +47,10 @@ class CatalogController extends Controller
                 $searchFacets[] = new SearchFacet($event, $type);
             }
         }
+
+        $catalogVisibilityView = $this
+            ->get('query.catalog.external.catalog_visibility_view_query_handler')
+            ->handle(new CatalogVisibilityViewQuery($event));
 
         if (null === $catalogVisibility = $this->get('repository.catalog_visibility_repository')->getByEvent($event)) {
             $catalogVisibility = new CatalogVisibility($event);
