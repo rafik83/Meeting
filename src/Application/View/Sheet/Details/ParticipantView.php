@@ -37,17 +37,24 @@ class ParticipantView
     public $visio;
 
     /**
+     * @var string
+     */
+    public $email;
+
+    /**
      * @param int          $id
+     * @param string       $email
      * @param TemplateData $templateData
      * @param bool         $isOwner
      * @param bool         $visio
      */
-    public function __construct($id, TemplateData $templateData, $isOwner = false, $visio)
+    public function __construct($id, $email, TemplateData $templateData, $isOwner = false, bool $visio)
     {
         $this->id           = $id;
         $this->templateData = $templateData;
         $this->isOwner      = $isOwner;
         $this->visio        = $visio;
+        $this->email        = $email;
     }
 
     /**

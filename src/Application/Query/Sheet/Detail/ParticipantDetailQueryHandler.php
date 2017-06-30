@@ -57,6 +57,7 @@ class ParticipantDetailQueryHandler
         foreach ($sheet->getParticipants()->toArray() as $participant) {
             $participantViews[] = new ParticipantView(
                 $participant->getId(),
+                $participant->getEmail(),
                 $this->templateDataFactory->createRegistrationFromParticipant(
                     $participant,
                     $query->locale
