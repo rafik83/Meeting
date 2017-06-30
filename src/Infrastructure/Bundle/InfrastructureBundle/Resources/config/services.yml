@@ -2612,11 +2612,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
     query.catalog.external.catalog_visibility_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler
         arguments:
             - '@repository.catalog_visibility_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery }
     query.catalog.external.search_facet_query:
         class: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQueryHandler
         arguments:

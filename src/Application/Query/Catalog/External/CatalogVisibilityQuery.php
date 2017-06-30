@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Application\Query\Catalog\External;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CatalogVisibilityViewQuery
+class CatalogVisibilityQuery
 {
     /** @var Event */
     public $event;
 
     /**
-     * CatalogVisibilityViewQuery constructor.
+     * CatalogVisibilityQuery constructor.
      *
      * @param Event $event
      */

@@ -46,7 +46,7 @@ class ConfigureHandler
      */
     public function handle(Configure $command)
     {
-        $catalogVisibility = $command->catalogVisibilityView->catalogVisibility;
+        $catalogVisibility = $command->catalogVisibility;
 
         $command->event->setExternalCatalog($command->externalCatalogEnabled);
 

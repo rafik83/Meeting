@@ -10,17 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\External;
 
-use Proximum\Vimeet\Application\View\Catalog\External\CatalogVisibilityView;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 
-class CatalogVisibilityViewQueryHandler
+class CatalogVisibilityQueryHandler
 {
     /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
 
     /**
-     * CatalogVisibilityViewQueryHandler constructor.
+     * CatalogVisibilityQueryHandler constructor.
      *
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
      */
@@ -30,16 +29,16 @@ class CatalogVisibilityViewQueryHandler
     }
 
     /**
-     * @param CatalogVisibilityViewQuery $query
+     * @param CatalogVisibilityQuery $query
      *
-     * @return CatalogVisibilityView
+     * @return CatalogVisibility
      */
-    public function handle(CatalogVisibilityViewQuery $query): CatalogVisibilityView
+    public function handle(CatalogVisibilityQuery $query): CatalogVisibility
     {
         if (null === $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($query->event)) {
             $catalogVisibility = new CatalogVisibility($query->event);
         }
 
-        return new CatalogVisibilityView($catalogVisibility);
+        return $catalogVisibility;
     }
 }

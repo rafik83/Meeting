@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler;
 use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet;
 use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacetHandler;
-use Proximum\Vimeet\Application\View\Catalog\External\CatalogVisibilityView;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -48,9 +47,9 @@ class ConfigureHandlerTest extends TestCase
 
     public function testHandle()
     {
-        $catalogVisibilityView = new CatalogVisibilityView(new CatalogVisibility($this->event));
+        $catalogVisibility = new CatalogVisibility($this->event);
         $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure($this->event, $catalogVisibilityView, [$searchFacet]);
+        $command     = new Configure($this->event, $catalogVisibility, [$searchFacet]);
 
         $this
             ->catalogVisibilityRepository
@@ -58,7 +57,7 @@ class ConfigureHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $this->catalogVisibilityRepository->add($catalogVisibilityView->catalogVisibility)->shouldBeCalled();
+        $this->catalogVisibilityRepository->add($catalogVisibility)->shouldBeCalled();
 
         $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
 
@@ -75,17 +74,17 @@ class ConfigureHandlerTest extends TestCase
 
     public function testHandleWithExistingCatalogVisibility()
     {
-        $catalogVisibilityView = new CatalogVisibilityView(new CatalogVisibility($this->event));
+        $catalogVisibility = new CatalogVisibility($this->event);
         $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure($this->event, $catalogVisibilityView, [$searchFacet]);
+        $command     = new Configure($this->event, $catalogVisibility, [$searchFacet]);
 
         $this
             ->catalogVisibilityRepository
             ->getByEvent($this->event)
             ->shouldBeCalled()
-            ->willReturn($catalogVisibilityView->catalogVisibility);
+            ->willReturn($catalogVisibility);
 
-        $this->catalogVisibilityRepository->set($catalogVisibilityView->catalogVisibility)->shouldBeCalled();
+        $this->catalogVisibilityRepository->set($catalogVisibility)->shouldBeCalled();
 
         $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
 
