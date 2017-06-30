@@ -34,7 +34,7 @@ class FakerCodeGeneratorTest extends TestCase
 
         $codes = [];
 
-        while ($i++ < 100){
+        while ($i++ < 100) {
             $codes[] = $generator->generate($event);
         }
 
