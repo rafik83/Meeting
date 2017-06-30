@@ -22,13 +22,14 @@ class FakerCodeGeneratorTest extends TestCase
 
         $generator = new FakerCodeGenerator();
 
-        var_dump($generator->generate($event));
-
-        $this->assertRegExp('', $generator->generate($event));
+        $this->assertRegExp('[A-Z]{6}', '', $generator->generate($event));
     }
 
     public function testIfGeneratedCodeIsRandom()
     {
+        
+
+
         // generer plusieur code et vérifier qu'ils sont tous différent
     }
 }
