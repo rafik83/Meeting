@@ -1982,16 +1982,6 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.participant_info_guesser'
-    sheet.sheet_details_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
-        arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@template.template_data_factory'
-            - '@repository.sheet.comment_repository'
-            - '@repository.trace_repository'
-            - '@order.balance'
-            - '@sheet.sheet_details.invoice_view_query_handler'
     sheet.sheet_details.invoice_view_query_handler:
         class: Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler
         arguments:
@@ -2985,6 +2975,8 @@ services:
             - '@query.sheet.detail.sheet_meeting_indicator_query_handler'
             - '@query.sheet.detail.participant_detail_query_handler'
             - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery }
 
     ##
     #

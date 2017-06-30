@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 
 use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQuery;
 use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler;
-use Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsView;
+use Proximum\Vimeet\Application\View\Sheet\Details\SheetDetailsView;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;

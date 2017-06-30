@@ -8,11 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Sheet\Details;
+namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;
-use Proximum\Vimeet\Application\View\Sheet\Details\SheetMeetingIndicatorView;
-use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -34,7 +32,7 @@ class SheetDetailsView
     /**
      * @var SheetParticipantsView
      */
-    public $participantsView;
+    public $participants;
 
     /**
      * @var SheetMeetingIndicatorView
@@ -98,7 +96,7 @@ class SheetDetailsView
      *
      * @param string                    $title
      * @param string                    $state
-     * @param SheetParticipantsView     $participantsView
+     * @param SheetParticipantsView     $participants
      * @param SheetMeetingIndicatorView $meetingIndicator
      * @param Comment[]                 $comments
      * @param Trace[]                   $traces
@@ -113,7 +111,7 @@ class SheetDetailsView
     public function __construct(
         $title,
         $state,
-        SheetParticipantsView $participantsView,
+        SheetParticipantsView $participants,
         SheetMeetingIndicatorView $meetingIndicator,
         array $comments,
         array $traces,
@@ -136,7 +134,7 @@ class SheetDetailsView
         $this->remainingToPay   = $remainingToPay;
         $this->completeness     = $completeness;
         $this->companyObjects   = $companyObjects;
-        $this->participantsView = $participantsView;
+        $this->participants     = $participants;
         $this->meetingIndicator = $meetingIndicator;
     }
 
