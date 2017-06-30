@@ -174,7 +174,7 @@ class AbstractSearchFacet
      *
      * @return string
      */
-    public function getLabel($locale): string
+    public function getLabel($locale)
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getLabel() : '';
     }
@@ -184,7 +184,7 @@ class AbstractSearchFacet
      *
      * @return string
      */
-    public function getPlaceholder($locale): string
+    public function getPlaceholder($locale)
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPlaceholder() : '';
     }

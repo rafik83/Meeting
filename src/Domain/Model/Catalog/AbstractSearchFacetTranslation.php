@@ -64,7 +64,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return string
      */
-    public function getLabel(): string
+    public function getLabel()
     {
         return $this->label;
     }
@@ -80,7 +80,7 @@ class AbstractSearchFacetTranslation
     /**
      * @return string
      */
-    public function getPlaceholder(): string
+    public function getPlaceholder()
     {
         return $this->placeholder;
     }
