@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet\SearchFacetType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\SearchFacetType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
