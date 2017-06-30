@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -71,9 +72,7 @@ class SearchFacetExternalFactory
             throw new CatalogVisibilityNotFoundException();
         }
 
-        $typeViews = $this->commandBus->handle(
-            new TypeViewQuery($event, $catalogVisibility->getTypes(), $locale)
-        );
+        $typeViews = $this->getTypeViews($event, $locale);
 
         $organizationCategoryViews = $this->commandBus->handle(
             new OrganizationCategoryViewQuery($event, $locale)
@@ -92,5 +91,27 @@ class SearchFacetExternalFactory
         ]);
 
         return $form;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return TypeView[]
+     * @throws CatalogVisibilityNotFoundException
+     */
+    public function getTypeViews(Event $event, string $locale)
+    {
+        $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
+
+        if ($catalogVisibility === null) {
+            throw new CatalogVisibilityNotFoundException();
+        }
+
+        $typeViews = $this->commandBus->handle(
+            new TypeViewQuery($event, $catalogVisibility->getTypes(), $locale)
+        );
+
+        return $typeViews;
     }
 }

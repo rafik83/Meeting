@@ -2,7 +2,7 @@
 
 <div class="catalog__research">
     {% if searchForm.type is defined %}
-        {#{{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}#}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
     {% endif %}
 
     {% if searchForm.organizationCategory is defined %}

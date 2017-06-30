@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,6 +47,10 @@ class CatalogExternalController extends Controller
         try {
             $searchForm = $this->get('form_factory.search_facet_external_factory')
                 ->create($event, $locale, $filters);
+            $typeViews = $this->get('form_factory.search_facet_external_factory')
+                ->getTypeViews($event, $locale);
+
+            $filters[SearchType::FILTER_TYPE] = $typeViews;
         } catch (CatalogVisibilityNotFoundException $exception) {
             throw new NotFoundHttpException();
         }
@@ -67,6 +72,8 @@ class CatalogExternalController extends Controller
         $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
 
         if ($request->isXmlHttpRequest()) {
+            $template = 'EventBundle:Catalog:External/catalog.html.twig';
+
             if ($page > 1) {
                 return new JsonResponse(
                     [
@@ -89,6 +96,7 @@ class CatalogExternalController extends Controller
             'seeMoreButton'     => $seeMoreButtonStatus,
             'searchForm'        => $searchForm->createView(),
             'catalogOnlineDate' => $event->getConfiguration()->getCatalogOnlineDate()->format('d/m/Y'),
+            'typeViews'         => $typeViews
         ]);
     }
 

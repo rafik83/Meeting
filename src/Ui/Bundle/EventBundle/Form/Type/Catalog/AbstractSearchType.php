@@ -62,7 +62,6 @@ abstract class AbstractSearchType extends AbstractType
             new SearchFacetViewQuery($options['event'], $options['locale'])
         );
 
-
         // show type facette only if there is more than one filter
         if (count($typeViews) > 1 && ($typeSearchFacet = $searchFacetsView->hasType()) !== false) {
             $builder
