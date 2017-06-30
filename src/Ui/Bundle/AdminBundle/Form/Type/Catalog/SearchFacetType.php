@@ -24,12 +24,10 @@ class SearchFacetType extends AbstractSearchFacetType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('enabled', CheckboxType::class, [
-                'label'         => true,
-            ])
+            ->add('enabled', CheckboxType::class, ['label' => true])
             ->add('translations', CollectionType::class, [
-                'entry_type'    => TranslationType::class,
-                'label'         => false,
+                'entry_type' => TranslationType::class,
+                'label' => false,
             ]);
     }
 }
