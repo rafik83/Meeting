@@ -2965,6 +2965,27 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
 
+    query.sheet.detail.participant_detail_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\ParticipantDetailQueryHandler
+        arguments:
+            - '@template.template_data_factory'
+
+    query.sheet.detail.sheet_meeting_indicator_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetMeetingIndicatorQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    query.sheet.detail.sheet_detail_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQueryHandler
+        arguments:
+            - '@repository.sheet.comment_repository'
+            - '@repository.trace_repository'
+            - '@order.balance'
+            - '@sheet.sheet_details.invoice_view_query_handler'
+            - '@query.sheet.detail.sheet_meeting_indicator_query_handler'
+            - '@query.sheet.detail.participant_detail_query_handler'
+            - '@template.template_data_factory'
+
     ##
     #
     # Agenda Queries

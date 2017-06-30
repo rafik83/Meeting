@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;
-use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
-use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
+use Proximum\Vimeet\Application\View\Sheet\Details\SheetMeetingIndicatorView;
+use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -32,14 +32,14 @@ class SheetDetailsView
     public $state;
 
     /**
-     * @var OwnerView
+     * @var SheetParticipantsView
      */
-    public $owner;
+    public $participantsView;
 
     /**
-     * @var ParticipantView[]
+     * @var SheetMeetingIndicatorView
      */
-    public $participants;
+    public $meetingIndicator;
 
     /**
      * "Forfait"
@@ -47,48 +47,6 @@ class SheetDetailsView
      * @var string
      */
     public $package;
-
-    /**
-     * "nbre de demandes validée"
-     *
-     * @var int
-     */
-    public $approvedRequests;
-
-    /**
-     * "nbre de demandes en attente"
-     *
-     * @var int
-     */
-    public $pendingRequests;
-
-    /**
-     * "nbre de demandes refusées"
-     *
-     * @var int
-     */
-    public $refusedRequests;
-
-    /**
-     * "nbre de propositions validées"
-     *
-     * @var int
-     */
-    public $approvedPropositions;
-
-    /**
-     * "nbre de propositions en attente"
-     *
-     * @var int
-     */
-    public $pendingPropositions;
-
-    /**
-     * "nbre de proposition refusées"
-     *
-     * @var int
-     */
-    public $refusedPropositions;
 
     /**
      * @var Comment[]
@@ -138,37 +96,25 @@ class SheetDetailsView
     /**
      * SheetDetailsView constructor.
      *
-     * @param string            $title
-     * @param string            $state
-     * @param OwnerView         $owner
-     * @param ParticipantView[] $participants
-     * @param int               $approvedRequests
-     * @param int               $pendingRequests
-     * @param int               $refusedRequests
-     * @param int               $approvedPropositions
-     * @param int               $pendingPropositions
-     * @param int               $refusedPropositions
-     * @param Comment[]         $comments
-     * @param Trace[]           $traces
-     * @param OrderVatView[]    $orderVatViews
-     * @param Transaction[]     $transactions
-     * @param InvoiceView[]     $invoiceViews
-     * @param float             $total
-     * @param float             $remainingToPay
-     * @param int               $completeness
-     * @param TemplateObject[]  $companyObjects
+     * @param string                    $title
+     * @param string                    $state
+     * @param SheetParticipantsView     $participantsView
+     * @param SheetMeetingIndicatorView $meetingIndicator
+     * @param Comment[]                 $comments
+     * @param Trace[]                   $traces
+     * @param OrderVatView[]            $orderVatViews
+     * @param Transaction[]             $transactions
+     * @param InvoiceView[]             $invoiceViews
+     * @param float                     $total
+     * @param float                     $remainingToPay
+     * @param int                       $completeness
+     * @param TemplateObject[]          $companyObjects
      */
     public function __construct(
         $title,
         $state,
-        OwnerView $owner,
-        array $participants,
-        $approvedRequests,
-        $pendingRequests,
-        $refusedRequests,
-        $approvedPropositions,
-        $pendingPropositions,
-        $refusedPropositions,
+        SheetParticipantsView $participantsView,
+        SheetMeetingIndicatorView $meetingIndicator,
         array $comments,
         array $traces,
         array $orderVatViews,
@@ -179,25 +125,19 @@ class SheetDetailsView
         $completeness,
         array $companyObjects
     ) {
-        $this->title                = $title;
-        $this->state                = $state;
-        $this->owner                = $owner;
-        $this->participants         = $participants;
-        $this->approvedRequests     = $approvedRequests;
-        $this->pendingRequests      = $pendingRequests;
-        $this->refusedRequests      = $refusedRequests;
-        $this->approvedPropositions = $approvedPropositions;
-        $this->pendingPropositions  = $pendingPropositions;
-        $this->refusedPropositions  = $refusedPropositions;
-        $this->comments             = $comments;
-        $this->traces               = $traces;
-        $this->orderVatViews        = $orderVatViews;
-        $this->transactions         = $transactions;
-        $this->invoiceViews         = $invoiceViews;
-        $this->total                = $total;
-        $this->remainingToPay       = $remainingToPay;
-        $this->completeness         = $completeness;
-        $this->companyObjects       = $companyObjects;
+        $this->title            = $title;
+        $this->state            = $state;
+        $this->comments         = $comments;
+        $this->traces           = $traces;
+        $this->orderVatViews    = $orderVatViews;
+        $this->transactions     = $transactions;
+        $this->invoiceViews     = $invoiceViews;
+        $this->total            = $total;
+        $this->remainingToPay   = $remainingToPay;
+        $this->completeness     = $completeness;
+        $this->companyObjects   = $companyObjects;
+        $this->participantsView = $participantsView;
+        $this->meetingIndicator = $meetingIndicator;
     }
 
     /**
