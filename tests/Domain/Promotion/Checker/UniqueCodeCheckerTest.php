@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Tests\Domain\Promotion\Request;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
 use Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository;
