@@ -11,14 +11,14 @@
 namespace Application\Query\Catalog\External;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class CatalogVisibilityViewQueryHandlerTest extends TestCase
+class CatalogVisibilityQueryHandlerTest extends TestCase
 {
     /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
@@ -36,8 +36,8 @@ class CatalogVisibilityViewQueryHandlerTest extends TestCase
     {
         $this->catalogVisibilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn(null);
 
-        $query = new CatalogVisibilityViewQuery($this->event);
-        $handler = new CatalogVisibilityViewQueryHandler($this->catalogVisibilityRepository->reveal());
+        $query = new CatalogVisibilityQuery($this->event);
+        $handler = new CatalogVisibilityQueryHandler($this->catalogVisibilityRepository->reveal());
 
         $handler->handle($query);
     }
@@ -48,8 +48,8 @@ class CatalogVisibilityViewQueryHandlerTest extends TestCase
 
         $this->catalogVisibilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn($catalogVisibility);
 
-        $query = new CatalogVisibilityViewQuery($this->event);
-        $handler = new CatalogVisibilityViewQueryHandler($this->catalogVisibilityRepository->reveal());
+        $query = new CatalogVisibilityQuery($this->event);
+        $handler = new CatalogVisibilityQueryHandler($this->catalogVisibilityRepository->reveal());
 
         $handler->handle($query);
     }
