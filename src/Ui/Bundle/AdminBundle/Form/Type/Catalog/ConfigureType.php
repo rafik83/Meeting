@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\SearchFacetType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -33,7 +32,7 @@ class ConfigureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('externalCatalogEnabled', CheckboxType::class)
+            ->add('externalCatalogEnabled', CheckboxType::class, ['required' => false])
             ->add('types', TypeChoiceType::class, [
                 'event' => $options['event'],
                 'locale' => $options['locale'],
