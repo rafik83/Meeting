@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Catalog\External;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
@@ -58,7 +59,7 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event)
+    public function getByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

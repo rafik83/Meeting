@@ -22,29 +22,19 @@ class AbstractSearchFacet
     const TYPE_KEYWORDS              = 'keywords';
     const TYPE_LOCALIZATION          = 'localization';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     protected $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $type;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $enabled;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     protected $translations;
 
     /**
@@ -69,7 +59,7 @@ class AbstractSearchFacet
     /**
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
@@ -85,7 +75,7 @@ class AbstractSearchFacet
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -101,7 +91,7 @@ class AbstractSearchFacet
     /**
      * @return boolean
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -125,7 +115,7 @@ class AbstractSearchFacet
     /**
      * @return AbstractSearchFacetTranslation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations->toArray();
     }
@@ -141,7 +131,7 @@ class AbstractSearchFacet
     /**
      * @return array
      */
-    public static function getAllTypes()
+    public static function getAllTypes(): array
     {
         return [
             self::TYPE_CATEGORY,
@@ -160,7 +150,7 @@ class AbstractSearchFacet
      *
      * @return AbstractSearchFacet
      */
-    public function translate($locale, $label, $placeholder)
+    public function translate($locale, $label, $placeholder): AbstractSearchFacet
     {
         foreach ($this->translations as $translation) {
             if ($translation->getLocale() === $locale) {
@@ -174,7 +164,7 @@ class AbstractSearchFacet
     /**
      * @return bool
      */
-    public function hasPlaceholder()
+    public function hasPlaceholder(): bool
     {
         return !in_array($this->type, [self::TYPE_TYPE, self::TYPE_CATEGORY]);
     }
@@ -184,7 +174,7 @@ class AbstractSearchFacet
      *
      * @return string
      */
-    public function getLabel($locale)
+    public function getLabel($locale): string
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getLabel() : '';
     }
@@ -194,7 +184,7 @@ class AbstractSearchFacet
      *
      * @return string
      */
-    public function getPlaceholder($locale)
+    public function getPlaceholder($locale): string
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPlaceholder() : '';
     }

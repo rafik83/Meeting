@@ -13,15 +13,14 @@ namespace Application\Command\Catalog\External;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler;
+use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet;
+use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacetHandler;
+use Proximum\Vimeet\Application\View\Catalog\External\CatalogVisibilityView;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
-use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Repository\CatalogVisibilityRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -30,11 +29,11 @@ class ConfigureHandlerTest extends TestCase
     /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
 
-    /** @var SearchFacetRepositoryInterface */
-    private $searchFacetRepository;
-
     /** @var EventRepositoryInterface */
     private $eventRepository;
+    
+    /** @var SetSearchFacetHandler */
+    private $setSearchFacetHandler;
 
     /** @var Event */
     private $event;
@@ -42,39 +41,60 @@ class ConfigureHandlerTest extends TestCase
     public function setUp()
     {
         $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepository::class);
-        $this->searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
         $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
+        $this->setSearchFacetHandler = $this->prophesize(SetSearchFacetHandler::class);
         $this->event = EventFactory::createEvent();
     }
 
     public function testHandle()
     {
-        $catalogVisibility = new CatalogVisibility($this->event);
+        $catalogVisibilityView = new CatalogVisibilityView(new CatalogVisibility($this->event));
         $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure($this->event, $catalogVisibility, [$searchFacet]);
+        $command     = new Configure($this->event, $catalogVisibilityView, [$searchFacet]);
 
-        $command->types = [
-            new Type($this->event),
-            new Type($this->event),
-        ];
+        $this
+            ->catalogVisibilityRepository
+            ->getByEvent($this->event)
+            ->shouldBeCalled()
+            ->willReturn(null);
 
-        $command->categories = [
-            new Category($this->event),
-            new Category($this->event),
-        ];
+        $this->catalogVisibilityRepository->add($catalogVisibilityView->catalogVisibility)->shouldBeCalled();
 
-        $this->catalogVisibilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn($catalogVisibility);
-
-        $this->catalogVisibilityRepository->set($catalogVisibility)->shouldBeCalled();
-
-        $this->searchFacetRepository->add($searchFacet)->shouldBeCalled();
+        $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
 
         $this->eventRepository->set($this->event)->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
-            $this->searchFacetRepository->reveal(),
-            $this->eventRepository->reveal()
+            $this->eventRepository->reveal(),
+            $this->setSearchFacetHandler->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleWithExistingCatalogVisibility()
+    {
+        $catalogVisibilityView = new CatalogVisibilityView(new CatalogVisibility($this->event));
+        $searchFacet = new SearchFacet($this->event, 'type', true);
+        $command     = new Configure($this->event, $catalogVisibilityView, [$searchFacet]);
+
+        $this
+            ->catalogVisibilityRepository
+            ->getByEvent($this->event)
+            ->shouldBeCalled()
+            ->willReturn($catalogVisibilityView->catalogVisibility);
+
+        $this->catalogVisibilityRepository->set($catalogVisibilityView->catalogVisibility)->shouldBeCalled();
+
+        $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
+
+        $this->eventRepository->set($this->event)->shouldBeCalled();
+
+        $handler = new ConfigureHandler(
+            $this->catalogVisibilityRepository->reveal(),
+            $this->eventRepository->reveal(),
+            $this->setSearchFacetHandler->reveal()
         );
 
         $handler->handle($command);

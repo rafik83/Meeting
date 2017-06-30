@@ -58,7 +58,7 @@ class CatalogVisibility
     }
 
     /**
-     * @return array
+     * @return Type[]
      */
     public function getTypes(): array
     {
@@ -66,7 +66,7 @@ class CatalogVisibility
     }
 
     /**
-     * @return array
+     * @return Category[]
      */
     public function getCategories(): array
     {

@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
-use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
-use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,35 +29,26 @@ class CatalogController extends Controller
      *
      * @return Response
      */
-    public function configureAction(Request $request, Event $event, UserInterface $user)
+    public function configureAction(Request $request, Event $event, UserInterface $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE', $event);
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $searchFacets = $this
-            ->get('vimeet_infrastructure.repository.catalog.external.search_facet')
-            ->getByEvent($event);
+        $searchFacetQuery = new SearchFacetQuery($event);
+        $searchFacets = $this->get('query.catalog.external.search_facet_query')->handle($searchFacetQuery);
 
-        $types = SearchFacet::getAllTypes();
+        $catalogVisibilityView = $this
+            ->get('query.catalog.external.catalog_visibility_view_query_handler')
+            ->handle(new CatalogVisibilityViewQuery($event));
 
-        if (empty($searchFacets)) {
-            foreach ($types as $type) {
-                $searchFacets[] = new SearchFacet($event, $type);
-            }
-        }
-
-        if (null === $catalogVisibility = $this->get('repository.catalog_visibility_repository')->getByEvent($event)) {
-            $catalogVisibility = new CatalogVisibility($event);
-        }
-
-        $configure = new Configure($event, $catalogVisibility, $searchFacets);
+        $configure = new Configure($event, $catalogVisibilityView, $searchFacets);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
             'user' => $user,
             'event' => $event,
             'locale' => $locale,
-            'types' => $types,
+            'types' => $searchFacetQuery->types,
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
