@@ -22,20 +22,24 @@ class FakerCodeGeneratorTest extends TestCase
 
         $generator = new FakerCodeGenerator();
 
-        $this->assertRegExp('[A-Z]{6}', '', $generator->generate($event));
+        $this->assertRegExp('/[A-Z]{6}/', $generator->generate($event));
     }
 
     public function testIfGeneratedCodeIsRandom()
     {
-        
+        $i = 0;
 
+        $event = EventFactory::createEvent();
+        $generator = new FakerCodeGenerator();
 
-        // generer plusieur code et vérifier qu'ils sont tous différent
+        $codes = [];
+
+        while ($i++ < 100){
+            $codes[] = $generator->generate($event);
+        }
+
+        $uniqueCodes = array_unique($codes);
+
+        $this->assertEquals(count($codes), count($uniqueCodes));
     }
 }
-
-
-// static ne peut etre testée, donc pas de mock
-// dans un premier temps verifier que la fonction donne quelque chose avec 6 chiffres et en maj
-// verfier sur deux ou trois tours que l'on ne génère pas le même code, aléatoire
-
