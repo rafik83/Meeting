@@ -106,9 +106,9 @@ class CatalogExternalController extends Controller
      * @param Request     $request
      * @param EventDomain $eventDomain
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function searchLocalizationAction(Request $request, EventDomain $eventDomain): Response
+    public function searchLocalizationAction(Request $request, EventDomain $eventDomain): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException();

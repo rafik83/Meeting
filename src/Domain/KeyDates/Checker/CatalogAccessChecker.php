@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\KeyDates\Checker;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 
 class CatalogAccessChecker extends AccessChecker
 {
