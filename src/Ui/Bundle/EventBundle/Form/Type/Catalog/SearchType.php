@@ -10,18 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
-use Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
-use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
-use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractSearchType
 {
@@ -41,17 +33,17 @@ class SearchType extends AbstractSearchType
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
-            ]);
-
-        $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
-            'label'    => 'form.search.objective.label',
-            'expanded' => true,
-            'multiple' => true,
-            'choices'  => [
-                'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
-                'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
-            ],
-        ]);
+            ])
+            ->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
+                'label'    => 'form.search.objective.label',
+                'expanded' => true,
+                'multiple' => true,
+                'choices'  => [
+                    'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
+                    'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
+                ],
+            ])
+        ;
     }
 
     /**

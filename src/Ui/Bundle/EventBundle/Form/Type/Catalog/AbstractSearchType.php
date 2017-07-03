@@ -12,10 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetQueryHandlerInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet\Constant;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;

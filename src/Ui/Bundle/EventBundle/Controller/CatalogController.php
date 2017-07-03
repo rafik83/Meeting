@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -127,6 +126,11 @@ class CatalogController extends Controller
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = $searchForm->getData();
+
+            // if type field is empty, set the default types
+            if (empty($filters[SearchType::FILTER_TYPE])) {
+                $filters[SearchType::FILTER_TYPE] = $typeViews;
+            }
         }
 
         $page = $request->query->getInt('page', 1);
