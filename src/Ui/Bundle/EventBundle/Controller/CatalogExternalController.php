@@ -57,6 +57,11 @@ class CatalogExternalController extends Controller
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = $searchForm->getData();
+
+            // if type field is empty, set the default types
+            if (empty($filters[SearchFields::FILTER_TYPE])) {
+                $filters[SearchFields::FILTER_TYPE] = $typeViews;
+            }
         }
 
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
