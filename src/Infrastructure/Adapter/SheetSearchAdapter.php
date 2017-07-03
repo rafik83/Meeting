@@ -69,7 +69,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $getAggregations,
         $nomenclatureItems = []
     ) {
-        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])) ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]) : 0;
+        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
+            ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+            : 0;
 
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
 
