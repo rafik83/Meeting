@@ -25,7 +25,7 @@ class HomeController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function selectSheetAction(EventDomain $eventDomain, UserInterface $user)
+    public function selectSheetAction(EventDomain $eventDomain, UserInterface $user = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $event = $eventDomain->getEvent();
