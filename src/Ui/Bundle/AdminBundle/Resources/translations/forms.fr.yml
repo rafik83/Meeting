@@ -115,7 +115,7 @@ form.configure.children.searchFacets.position.help: 'Nomenclature sur champ tagu
 form.configure.children.searchFacets.position.label: Fonction
 form.configure.children.searchFacets.type.help: ''
 form.configure.children.searchFacets.type.label: Type
-form.configure.children.searchFacets.prototype.children.enabled.label: 'Activer'
+form.configure.children.searchFacets.prototype.children.enabled.label: 'Activé'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
