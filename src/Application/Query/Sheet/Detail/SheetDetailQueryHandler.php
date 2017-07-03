@@ -20,39 +20,25 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SheetDetailQueryHandler
 {
-    /**
-     * @var CommentRepositoryInterface
-     */
+    /** @var CommentRepositoryInterface */
     private $commentRepository;
 
-    /**
-     * @var TraceRepositoryInterface
-     */
+    /** @var TraceRepositoryInterface */
     private $traceRepository;
 
-    /**
-     * @var Balance
-     */
+    /** @var Balance */
     private $balance;
 
-    /**
-     * @var InvoiceViewQueryHandler
-     */
+    /** @var InvoiceViewQueryHandler */
     private $invoiceViewQueryHandler;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var SheetMeetingIndicatorQueryHandler
-     */
+    /** @var SheetMeetingIndicatorQueryHandler */
     private $sheetMeetingIndicatorQueryHandler;
 
-    /**
-     * @var ParticipantDetailQueryHandler
-     */
+    /** @var ParticipantDetailQueryHandler */
     private $participantDetailQueryHandler;
 
     /**
@@ -93,7 +79,6 @@ class SheetDetailQueryHandler
     {
         return new SheetDetailsView(
             $query->sheet->getTitle(),
-            // State
             $query->sheet->getState(),
             $this->participantDetailQueryHandler->handle(
                 new ParticipantDetailQuery($query->sheet, $query->locale)
@@ -101,21 +86,16 @@ class SheetDetailQueryHandler
             $this->sheetMeetingIndicatorQueryHandler->handle(
                 new SheetMeetingIndicatorQuery($query->sheet)
             ),
-            // Comments
             $this->commentRepository->getCommentsBySheet($query->sheet),
             // Trace for accepted
             $this->traceRepository->getAllTracesByObject($query->sheet),
-            // OrderVatView[]
             $this->balance->getOrderVatViews($query->sheet),
-            // Transactions
             $this->balance->getTransactions($query->sheet),
             // InvoiceView[]
             $this->invoiceViewQueryHandler->handle(new InvoiceViewQuery($query->sheet)),
-            // Total of orders
             $this->balance->getTotal($query->sheet),
             // Remaining to pay
             $this->balance->getBalance($query->sheet),
-            // Completeness
             $query->sheet->getCompleteness(),
             // Company Objects
             $this->templateDataFactory

@@ -12,14 +12,10 @@ namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
 class SheetParticipantsView
 {
-    /**
-     * @var OwnerView
-     */
+    /** @var OwnerView */
     public $owner;
 
-    /**
-     * @var ParticipantView[]
-     */
+    /** @var ParticipantView[] */
     public $participants;
 
     /**

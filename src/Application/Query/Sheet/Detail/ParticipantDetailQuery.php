@@ -10,18 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class ParticipantDetailQuery
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Event */
+    public $event;
+
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
@@ -32,6 +32,7 @@ class ParticipantDetailQuery
      */
     public function __construct(Sheet $sheet, string $locale)
     {
+        $this->event  = $sheet->getEvent();
         $this->sheet  = $sheet;
         $this->locale = $locale;
     }

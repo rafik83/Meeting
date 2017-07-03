@@ -14,14 +14,10 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetDetailQuery
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**

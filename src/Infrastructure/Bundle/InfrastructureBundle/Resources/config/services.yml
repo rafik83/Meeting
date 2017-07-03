@@ -2959,6 +2959,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\ParticipantDetailQueryHandler
         arguments:
             - '@template.template_data_factory'
+            - '@repository.token.user_event_token_repository'
 
     query.sheet.detail.sheet_meeting_indicator_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetMeetingIndicatorQueryHandler

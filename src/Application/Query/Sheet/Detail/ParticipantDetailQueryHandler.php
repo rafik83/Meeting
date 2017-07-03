@@ -14,23 +14,30 @@ use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class ParticipantDetailQueryHandler
 {
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
+
+    /** @var UserEventTokenRepositoryInterface */
+    private $userEventTokenRepository;
 
     /**
      * ParticipantDetailQueryHandler constructor.
      *
-     * @param TemplateDataFactory $templateDataFactory
+     * @param TemplateDataFactory               $templateDataFactory
+     * @param UserEventTokenRepositoryInterface $userEventTokenRepository
      */
-    public function __construct(TemplateDataFactory $templateDataFactory)
-    {
-        $this->templateDataFactory = $templateDataFactory;
+    public function __construct(
+        TemplateDataFactory $templateDataFactory,
+        UserEventTokenRepositoryInterface $userEventTokenRepository
+    ) {
+        $this->templateDataFactory      = $templateDataFactory;
+        $this->userEventTokenRepository = $userEventTokenRepository;
     }
 
     /**
@@ -63,7 +70,8 @@ class ParticipantDetailQueryHandler
                     $query->locale
                 ),
                 $participant->isOwnerParticipant(),
-                $participant->isVisio()
+                $participant->isVisio(),
+                $this->userEventTokenRepository->isAgendaConfirmedByUser($participant->getUser())
             );
         }
 

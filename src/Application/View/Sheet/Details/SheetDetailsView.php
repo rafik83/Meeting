@@ -19,76 +19,46 @@ use Proximum\Vimeet\Domain\View\OrderVatView;
 
 class SheetDetailsView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $state;
 
-    /**
-     * @var SheetParticipantsView
-     */
+    /** @var SheetParticipantsView */
     public $participants;
 
-    /**
-     * @var SheetMeetingIndicatorView
-     */
+    /** @var SheetMeetingIndicatorView */
     public $meetingIndicator;
 
-    /**
-     * "Forfait"
-     *
-     * @var string
-     */
+    /** @var string "Forfait" */
     public $package;
 
-    /**
-     * @var Comment[]
-     */
+    /** @var Comment[] */
     public $comments;
 
-    /**
-     * @var Trace[]
-     */
+    /** @var Trace[] */
     public $traces;
 
-    /**
-     * @var OrderVatView[]
-     */
+    /** @var OrderVatView[] */
     public $orderVatViews;
 
-    /**
-     * @var Transaction[]
-     */
+    /** @var Transaction[] */
     public $transactions;
 
-    /**
-     * @var InvoiceView[]
-     */
+    /** @var InvoiceView[] */
     public $invoiceViews;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $total;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $remainingToPay;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $completeness;
 
-    /**
-     * @var TemplateObject[]
-     */
+    /** @var TemplateObject[] */
     public $companyObjects;
 
     /**

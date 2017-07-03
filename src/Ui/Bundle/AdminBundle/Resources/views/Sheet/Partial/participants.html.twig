@@ -26,6 +26,10 @@
                         ({{ 'admin.sheet.details.owner.title'|trans }})
                     {% endif %}
 
+                    {% include '@Admin/Sheet/Partial/is_agenda_confirmed.html.twig' with {
+                        'isAgendaConfirmed': participant.isAgendaConfirmed
+                    } %}
+
                     <div class="pull-right">
                         <form class="form-participant-visio" action="{{ path('admin_sheet_update_participant_visio', {
                                     'event': event.id,

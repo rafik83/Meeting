@@ -14,9 +14,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetMeetingIndicatorQuery
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
     /**

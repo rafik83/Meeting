@@ -34,4 +34,11 @@ interface UserEventTokenRepositoryInterface
      * @return UserEventToken|null
      */
     public function findByEventAndUserAndType(Event $event, User $user, $type);
+
+    /**
+     * @param User $user
+     *
+     * @return bool|null
+     */
+    public function isAgendaConfirmedByUser(User $user);
 }

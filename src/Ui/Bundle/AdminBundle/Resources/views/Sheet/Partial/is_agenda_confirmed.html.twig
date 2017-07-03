@@ -1,0 +1,11 @@
+{% if isAgendaConfirmed is defined %}
+    {% if isAgendaConfirmed is not null %}
+        {% if isAgendaConfirmed == true %}
+            <span class="label label-success">{{ 'admin.sheet.details.participant.agenda_confirmed'|trans }}</span>
+        {% else %}
+            <span class="label label-warning">{{ 'admin.sheet.details.participant.agenda_not_confirmed'|trans }}</span>
+        {% endif %}
+    {% else %}
+        <span class="label label-danger">{{ 'admin.sheet.details.participant.confirmation_agenda_not_send'|trans }}</span>
+    {% endif %}
+{% endif %}

@@ -12,46 +12,22 @@ namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
 class SheetMeetingIndicatorView
 {
-    /**
-     * "nbre de demandes validée"
-     *
-     * @var int
-     */
+    /** @var int "nbre de demandes validée" */
     public $approvedRequests;
 
-    /**
-     * "nbre de demandes en attente"
-     *
-     * @var int
-     */
+    /** @var int "nbre de demandes en attente" */
     public $pendingRequests;
 
-    /**
-     * "nbre de demandes refusées"
-     *
-     * @var int
-     */
+    /** @var int "nbre de demandes refusées" */
     public $refusedRequests;
 
-    /**
-     * "nbre de propositions validées"
-     *
-     * @var int
-     */
+    /** @var int "nbre de propositions validées" */
     public $approvedPropositions;
 
-    /**
-     * "nbre de propositions en attente"
-     *
-     * @var int
-     */
+    /** @var int "nbre de propositions en attente" */
     public $pendingPropositions;
 
-    /**
-     * "nbre de proposition refusées"
-     *
-     * @var int
-     */
+    /** @var int "nbre de proposition refusées" */
     public $refusedPropositions;
 
     /**

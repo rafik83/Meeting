@@ -16,30 +16,23 @@ class ParticipantView
 {
     const VISIO_CHECKED = 'checked';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var TemplateData
-     */
+    /** @var TemplateData */
     public $templateData;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isOwner;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $visio;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
+
+    /** @var bool */
+    public $isAgendaConfirmed;
 
     /**
      * @param int          $id
@@ -47,14 +40,22 @@ class ParticipantView
      * @param TemplateData $templateData
      * @param bool         $isOwner
      * @param bool         $visio
+     * @param bool|null    $isAgendaConfirmed
      */
-    public function __construct($id, $email, TemplateData $templateData, $isOwner = false, bool $visio)
-    {
-        $this->id           = $id;
-        $this->templateData = $templateData;
-        $this->isOwner      = $isOwner;
-        $this->visio        = $visio;
-        $this->email        = $email;
+    public function __construct(
+        $id,
+        $email,
+        TemplateData $templateData,
+        $isOwner = false,
+        bool $visio,
+        $isAgendaConfirmed
+    ) {
+        $this->id                = $id;
+        $this->templateData      = $templateData;
+        $this->isOwner           = $isOwner;
+        $this->visio             = $visio;
+        $this->email             = $email;
+        $this->isAgendaConfirmed = $isAgendaConfirmed;
     }
 
     /**
