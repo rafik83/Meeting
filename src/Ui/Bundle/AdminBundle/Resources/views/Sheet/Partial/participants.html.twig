@@ -26,7 +26,7 @@
                         ({{ 'admin.sheet.details.owner.title'|trans }})
                     {% endif %}
 
-                    {% include '@Admin/Sheet/Partial/is_agenda_confirmed.html.twig' with {
+                    {% include 'AdminBundle:Sheet/Partial:is_agenda_confirmed.html.twig' with {
                         'isAgendaConfirmed': participant.isAgendaConfirmed
                     } %}
 
