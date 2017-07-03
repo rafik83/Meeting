@@ -149,7 +149,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function addEvent(Event $event)
     {
-        $this->events[] = $event;
+        $this->events->add($event);
 
         return $this;
     }
@@ -197,17 +197,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function setEvents(array $events)
     {
-        foreach ($this->events as $event) {
-            if (!in_array($event, $events)) {
-                $this->removeEvent($event);
-            }
-        }
-
-        foreach ($events as $event) {
-            if (!$this->hasEvent($event)) {
-                $this->addEvent($event);
-            }
-        }
+        $this->events = new ArrayCollection($events);
 
         return $this;
     }
