@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event;
 
 use JMS\JobQueueBundle\Entity\Job;
-use JMS\JobQueueBundle\Entity\Repository\JobRepository;
 use Proximum\Vimeet\Application\Event\Event\KeyDatesUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Repository\Adapter\JobRepositoryAdapterInterface;
@@ -46,7 +45,7 @@ class EventUpdatedEventSubscriber implements EventSubscriberInterface
 
         if (null !== $smsActivationDate) {
             if (null !== $job) {
-                if (!$job->isFinished() && !$job->isRunning()) {
+                if ($this->isJobUpdatable($job)) {
                     $this->jobQueueAdapter->scheduleVersionGeneration(
                         $keyDatesUpdatedEvent->getEvent(),
                         $smsActivationDate,
@@ -63,14 +62,24 @@ class EventUpdatedEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($job !== null && null === $smsActivationDate) {
-            if (!$job->isFinished() && !$job->isRunning()) {
-                $job->setState(Job::STATE_CANCELED);
-                $this->jobRepository->updateJob($job);
-            }
-
+        if ($job === null && null === $smsActivationDate) {
             return;
         }
+
+        if ($this->isJobUpdatable($job)) {
+            $job->setState(Job::STATE_CANCELED);
+            $this->jobRepository->updateJob($job);
+        }
+    }
+
+    /**
+     * @param Job $job
+     *
+     * @return bool
+     */
+    private function isJobUpdatable(Job $job): bool
+    {
+        return !$job->isFinished() && !$job->isRunning();
     }
 
     /**
