@@ -291,12 +291,16 @@ class DiffVerbalizer
         $changedViews = [];
 
         foreach ($intersectVersion as $key => $request) {
-            if ($this->diffChecker->checkTwoVersion($currentVersion, $key, $request)) {
-                $changedViews[] = new MeetingMovedView(
-                    $this->getSheetMet($userSheets, $request),
-                    $currentVersion[$key]['slot'],
-                    $currentVersion[$key]['spot']
-                );
+            try {
+                if ($this->diffChecker->checkTwoVersion($currentVersion, $key, $request)) {
+                    $changedViews[] = new MeetingMovedView(
+                        $this->getSheetMet($userSheets, $request),
+                        $currentVersion[$key]['slot'],
+                        $currentVersion[$key]['spot']
+                    );
+                }
+            } catch (\InvalidArgumentException $exception) {
+                continue;
             }
         }
 

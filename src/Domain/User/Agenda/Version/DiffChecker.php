@@ -32,6 +32,12 @@ class DiffChecker
             return true;
         }
 
+        if ((empty($lastVersion) && !empty($currentVersion))
+            || (!empty($lastVersion) && empty($currentVersion))
+        ) {
+            return true;
+        }
+
         // If the spot or the slot has changed, there is a diff
         foreach ($currentVersion as $requestId => $request) {
             if ($this->checkTwoVersion($lastVersion, $requestId, $request)) {
