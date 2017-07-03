@@ -15,8 +15,9 @@
                     {{ 'gdr.user.agenda.version.modal.no_diff'|trans }}
                 </p>
                 <div v-if="hasDiff">
-                    <h4>{{ 'gdr.user.agenda.version.modal.diff'|trans }}</h4>
-                    <pre>${ diff }</pre>
+                    <span v-for="line in diff.split('\n')">
+                        ${ line }<br />
+                    </span>
                 </div>
             </div>
             <div v-if="isLoading === true" class="modal-body text-center">
