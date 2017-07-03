@@ -99,33 +99,35 @@ class DiffVerbalizer
         $addedRequests   = array_diff_key($currentVersion, $lastVersion->getVersion());
         $toCheckChanges  = array_intersect_key($lastVersion->getVersion(), $currentVersion);
 
-        if (!empty($deletedRequests) || !empty($addedRequests) || !empty($toCheckChanges)) {
-            $userSheets = $this->sheetRepository
-                ->getSheetsByUserAndEvent($lastVersion->getUser(), $lastVersion->getEvent())
-            ;
-
-            $deletedRequestViews = $this->getDeletedMeeting($userSheets, $deletedRequests);
-            $addedRequestViews = $this->getAddedMeeting($userSheets, $addedRequests);
-            $changedViews = $this->getChangedMeeting($userSheets, $toCheckChanges, $currentVersion);
-            $this->getInfo($deletedRequestViews, $addedRequestViews, $changedViews);
-
-            $this->dayFormatter = new \IntlDateFormatter(
-                $locale,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::NONE,
-                $lastVersion->getEvent()->getTimeZone()
-            );
-            $this->hourFormatter = new \IntlDateFormatter(
-                $locale,
-                \IntlDateFormatter::NONE,
-                \IntlDateFormatter::SHORT,
-                $lastVersion->getEvent()->getTimeZone()
-            );
-
-            $this->addDeletedSentences($diffs, $deletedRequestViews, $locale);
-            $this->addAddedSentences($diffs, $addedRequestViews, $locale);
-            $this->addMovedSentences($diffs, $changedViews, $locale);
+        if (empty($deletedRequests) && empty($addedRequests) && empty($toCheckChanges)) {
+            return '';
         }
+
+        $userSheets = $this->sheetRepository
+            ->getSheetsByUserAndEvent($lastVersion->getUser(), $lastVersion->getEvent())
+        ;
+
+        $deletedRequestViews = $this->getDeletedMeeting($userSheets, $deletedRequests);
+        $addedRequestViews = $this->getAddedMeeting($userSheets, $addedRequests);
+        $changedViews = $this->getChangedMeeting($userSheets, $toCheckChanges, $currentVersion);
+        $this->getInfo($deletedRequestViews, $addedRequestViews, $changedViews);
+
+        $this->dayFormatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $lastVersion->getEvent()->getTimeZone()
+        );
+        $this->hourFormatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $lastVersion->getEvent()->getTimeZone()
+        );
+
+        $this->addDeletedSentences($diffs, $deletedRequestViews, $locale);
+        $this->addAddedSentences($diffs, $addedRequestViews, $locale);
+        $this->addMovedSentences($diffs, $changedViews, $locale);
 
         return implode("\n", $diffs);
     }
