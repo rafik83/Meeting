@@ -62,7 +62,7 @@
             </a>
         </li>
 
-        {% if not is_granted('ROLE_USER') and not menuHeaderView.hasSheet %}
+        {% if isShowingRegisterButton %}
             <li>
                 <a href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
             </li>

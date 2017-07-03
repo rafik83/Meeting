@@ -75,10 +75,13 @@ class NavigationController extends Controller
             );
         }
 
+        $isShowingRegisterButton = Route::EVENT !== $route && null === $user;
+
         return $this->render('EventBundle::Navigation/header.html.twig', [
-            'menuHeaderView' => $menuHeaderView,
-            'menuView'       => $menuView,
-            'submenuView'    => $submenuView,
+            'menuHeaderView'          => $menuHeaderView,
+            'menuView'                => $menuView,
+            'submenuView'             => $submenuView,
+            'isShowingRegisterButton' => $isShowingRegisterButton,
         ]);
     }
 }
