@@ -273,6 +273,7 @@ services:
             - '@tactician.commandbus.query'
             - '@repository.catalog_visibility_repository'
             - '@form.factory'
+            - '@adapter.router'
 
     #
     # Event Listener

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory;
 
 use League\Tactician\CommandBus;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
 class SearchFacetExternalFactory
@@ -32,8 +33,11 @@ class SearchFacetExternalFactory
     /** @var CommandBus */
     private $commandBus;
 
-    /** @var FormFactory */
+    /** @var FormFactoryInterface */
     private $formFactory;
+
+    /** @var RouterInterface */
+    private $router;
 
     /** @var array of TypeView[] indexed by Event id */
     private $typeViewsByEvent;
@@ -43,16 +47,19 @@ class SearchFacetExternalFactory
      *
      * @param CommandBus                           $commandBus
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
-     * @param FormFactory                          $formFactory
+     * @param FormFactoryInterface                 $formFactory
+     * @param RouterInterface                      $router
      */
     public function __construct(
         CommandBus $commandBus,
         CatalogVisibilityRepositoryInterface $catalogVisibilityRepository,
-        FormFactory $formFactory
+        FormFactoryInterface $formFactory,
+        RouterInterface $router
     ) {
         $this->catalogVisibilityRepository = $catalogVisibilityRepository;
         $this->commandBus                  = $commandBus;
         $this->formFactory                 = $formFactory;
+        $this->router                      = $router;
     }
 
     /**
@@ -183,6 +190,7 @@ class SearchFacetExternalFactory
         array $positionViews
     ): FormInterface {
         return $this->formFactory->createNamed('', SearchExternalType::class, $filters, [
+            'action'                    => $this->router->generate('event_catalog_external_index'),
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
