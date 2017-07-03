@@ -2699,6 +2699,13 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
 
+    query.catalog.filtered_fields_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
+
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:

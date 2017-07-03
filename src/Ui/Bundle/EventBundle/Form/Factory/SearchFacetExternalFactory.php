@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory;
 
 use League\Tactician\CommandBus;
+use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
+use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
@@ -24,20 +26,17 @@ use Symfony\Component\Form\FormInterface;
 
 class SearchFacetExternalFactory
 {
-    /**
-     * @var CatalogVisibilityRepositoryInterface
-     */
+    /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
 
-    /**
-     * @var CommandBus
-     */
+    /** @var CommandBus */
     private $commandBus;
 
-    /**
-     * @var FormFactory
-     */
+    /** @var FormFactory */
     private $formFactory;
+
+    /** @var array of TypeView[] indexed by Event id */
+    private $typeViewsByEvent;
 
     /**
      * SearchFacetExternalFactory constructor.
@@ -64,7 +63,7 @@ class SearchFacetExternalFactory
      * @return FormInterface
      * @throws CatalogVisibilityNotFoundException
      */
-    public function create(Event $event, string $locale, array $filters = []): FormInterface
+    public function create(Event $event, string $locale, array $filters): FormInterface
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
@@ -82,15 +81,61 @@ class SearchFacetExternalFactory
             new PositionViewQuery($event, $locale)
         );
 
-        $form = $this->formFactory->createNamed('', SearchExternalType::class, $filters, [
-            'typeViews'                 => $typeViews,
-            'organizationCategoryViews' => $organizationCategoryViews,
-            'positionViews'             => $positionViews,
-            'event'                     => $event,
-            'locale'                    => $locale,
-        ]);
+        return $this->getForm($event, $locale, $filters, $typeViews, $organizationCategoryViews, $positionViews);
+    }
 
-        return $form;
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param array  $currentAggregations
+     *
+     * @return FormInterface
+     * @throws CatalogVisibilityNotFoundException
+     */
+    public function createFiltered(
+        Event $event,
+        string $locale,
+        array $filters,
+        array $currentAggregations
+    ): FormInterface {
+        $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
+
+        if ($catalogVisibility === null) {
+            throw new CatalogVisibilityNotFoundException();
+        }
+
+        $typeViews = $this->getTypeViews($event, $locale);
+
+        $organizationCategoryViews = $this->commandBus->handle(
+            new OrganizationCategoryViewQuery($event, $locale)
+        );
+
+        $positionViews = $this->commandBus->handle(
+            new PositionViewQuery($event, $locale)
+        );
+
+        /** @var FilteredFieldsView $filteredFieldsView */
+        $filteredFieldsView = $this->commandBus->handle(
+            new FilteredFieldsQuery(
+                $event,
+                $filters,
+                $currentAggregations,
+                $typeViews,
+                $organizationCategoryViews,
+                $positionViews,
+                $locale
+            )
+        );
+
+        return $this->getForm(
+            $event,
+            $locale,
+            $filters,
+            $filteredFieldsView->typeViews,
+            $filteredFieldsView->organizationCategoryViews,
+            $filteredFieldsView->positionViews
+        );
     }
 
     /**
@@ -100,7 +145,7 @@ class SearchFacetExternalFactory
      * @return TypeView[]
      * @throws CatalogVisibilityNotFoundException
      */
-    public function getTypeViews(Event $event, string $locale)
+    public function getTypeViews(Event $event, string $locale): array
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
@@ -108,10 +153,41 @@ class SearchFacetExternalFactory
             throw new CatalogVisibilityNotFoundException();
         }
 
-        $typeViews = $this->commandBus->handle(
+        if (isset($this->typeViewsByEvent[$event->getId()])) {
+            return $this->typeViewsByEvent[$event->getId()];
+        }
+
+        $this->typeViewsByEvent[$event->getId()] = $this->commandBus->handle(
             new TypeViewQuery($event, $catalogVisibility->getTypes(), $locale)
         );
 
-        return $typeViews;
+        return $this->typeViewsByEvent[$event->getId()];
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param array  $typeViews
+     * @param array  $organizationCategoryViews
+     * @param array  $positionViews
+     *
+     * @return FormInterface
+     */
+    private function getForm(
+        Event $event,
+        string $locale,
+        array $filters = [],
+        array $typeViews,
+        array $organizationCategoryViews,
+        array $positionViews
+    ): FormInterface {
+        return $this->formFactory->createNamed('', SearchExternalType::class, $filters, [
+            'typeViews'                 => $typeViews,
+            'organizationCategoryViews' => $organizationCategoryViews,
+            'positionViews'             => $positionViews,
+            'event'                     => $event,
+            'locale'                    => $locale,
+        ]);
     }
 }

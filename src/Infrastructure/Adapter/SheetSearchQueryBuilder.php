@@ -20,6 +20,7 @@ use Elastica\Query\Range;
 use Elastica\Query\Term;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -32,7 +33,6 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilder;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 
 class SheetSearchQueryBuilder
 {
@@ -156,8 +156,8 @@ class SheetSearchQueryBuilder
             $this->filterByBooleanFilter($filters['boolean_filters']);
         }
 
-        if (isset($filters[SearchType::FILTER_OBJECTIVE])) {
-            $this->filterByObjective($filters[SearchType::FILTER_OBJECTIVE]);
+        if (isset($filters[SearchFields::FILTER_OBJECTIVE])) {
+            $this->filterByObjective($filters[SearchFields::FILTER_OBJECTIVE]);
         }
 
         if (isset($filters[Constant::HAS_ORDER])) {
@@ -214,7 +214,7 @@ class SheetSearchQueryBuilder
      */
     protected function filterByContent(array &$filters)
     {
-        if (empty($filters['content']) || null === $filters['content']) {
+        if (empty($filters[SearchFields::FILTER_CONTENT]) || null === $filters[SearchFields::FILTER_CONTENT]) {
             return;
         }
 
@@ -231,7 +231,7 @@ class SheetSearchQueryBuilder
 
         $boolQuery = new BoolQuery();
 
-        foreach (explode(',', $filters['content']) as $keyword) {
+        foreach (explode(',', $filters[SearchFields::FILTER_CONTENT]) as $keyword) {
             $multiMatch = new MultiMatch();
             $multiMatch
                 ->setFields($fields)

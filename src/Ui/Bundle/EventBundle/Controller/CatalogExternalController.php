@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,7 +50,7 @@ class CatalogExternalController extends Controller
             $typeViews = $this->get('form_factory.search_facet_external_factory')
                 ->getTypeViews($event, $locale);
 
-            $filters[SearchType::FILTER_TYPE] = $typeViews;
+            $filters[SearchFields::FILTER_TYPE] = $typeViews;
         } catch (CatalogVisibilityNotFoundException $exception) {
             throw new NotFoundHttpException();
         }
@@ -68,6 +68,9 @@ class CatalogExternalController extends Controller
                 $request->getLocale()
             )
         );
+
+        $searchForm = $this->get('form_factory.search_facet_external_factory')
+            ->createFiltered($event, $locale, $filters, $paginatedResult->aggregations);
 
         $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
 

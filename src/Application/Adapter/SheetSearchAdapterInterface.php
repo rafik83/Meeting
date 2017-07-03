@@ -119,4 +119,14 @@ interface SheetSearchAdapterInterface
      * @return array
      */
     public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param string $filterToRemove
+     *
+     * @return array
+     */
+    public function getPositionAggregations(Event $event, $locale, array $filters, $filterToRemove);
 }

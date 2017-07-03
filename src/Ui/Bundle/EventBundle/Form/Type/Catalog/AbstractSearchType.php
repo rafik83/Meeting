@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetQueryHandlerInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
@@ -23,14 +24,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSearchType extends AbstractType
 {
-    const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
-    const FILTER_LOCALIZATION          = 'localization';
-    const FILTER_POSITION              = 'position';
-    const FILTER_TYPE                  = 'type';
-    const FILTER_CONTENT               = 'content';
-    const FILTER_OBJECTIVE             = 'objective';
-    const ORDER_BY                     = 'orderBy';
-
     /**
      * @var SearchFacetQueryHandlerInterface
      */
@@ -63,7 +56,7 @@ abstract class AbstractSearchType extends AbstractType
         if (count($typeViews) > 1 && ($typeSearchFacet = $searchFacetsView->hasType()) !== false) {
             $builder
                 ->add(
-                    self::FILTER_TYPE,
+                    SearchFields::FILTER_TYPE,
                     ChoiceType::class,
                     [
                         'label'        => $typeSearchFacet->label,
@@ -81,7 +74,7 @@ abstract class AbstractSearchType extends AbstractType
         }
 
         if (($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) !== false) {
-            $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
+            $builder->add(SearchFields::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
                 'label'        => $organizationCategoryFacet->label,
                 'choices'      => $organizationCategoryViews,
                 'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
@@ -108,7 +101,7 @@ abstract class AbstractSearchType extends AbstractType
         }
 
         if (($positionFacet = $searchFacetsView->hasPosition()) !== false) {
-            $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
+            $builder->add(SearchFields::FILTER_POSITION, TagChoiceType::class, [
                 'label'   => $positionFacet->label,
                 'choices' => $positionViews,
                 'attr' => [
@@ -119,7 +112,7 @@ abstract class AbstractSearchType extends AbstractType
         }
 
         if (($localizationFacet = $searchFacetsView->hasLocalization()) !== false) {
-            $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
+            $builder->add(SearchFields::FILTER_LOCALIZATION, HiddenType::class, [
                 'label'    => $localizationFacet->label,
                 'required' => false,
                 'attr'     => [
@@ -129,7 +122,7 @@ abstract class AbstractSearchType extends AbstractType
         }
 
         if (($keywordFacet = $searchFacetsView->hasKeywords()) !== false) {
-            $builder->add(self::FILTER_CONTENT, HiddenType::class, [
+            $builder->add(SearchFields::FILTER_CONTENT, HiddenType::class, [
                 'label' => $keywordFacet->label,
                 'attr'  => [
                     'data-placeholder' => $keywordFacet->placeholder,

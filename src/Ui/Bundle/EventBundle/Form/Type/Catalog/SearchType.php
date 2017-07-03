@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,7 +26,7 @@ class SearchType extends AbstractSearchType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add(self::ORDER_BY, ChoiceType::class, [
+            ->add(SearchFields::ORDER_BY, ChoiceType::class, [
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
@@ -34,7 +35,7 @@ class SearchType extends AbstractSearchType
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
             ])
-            ->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
+            ->add(SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
                 'label'    => 'form.search.objective.label',
                 'expanded' => true,
                 'multiple' => true,
