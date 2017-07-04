@@ -14,30 +14,28 @@ use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class ParticipantDetailQueryHandler
 {
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var UserEventTokenRepositoryInterface */
-    private $userEventTokenRepository;
+    /** @var AgendaConfirmationStatusQueryHandler */
+    private $agendaConfirmationStatusQueryHandler;
 
     /**
      * ParticipantDetailQueryHandler constructor.
      *
-     * @param TemplateDataFactory               $templateDataFactory
-     * @param UserEventTokenRepositoryInterface $userEventTokenRepository
+     * @param TemplateDataFactory                  $templateDataFactory
+     * @param AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
-        UserEventTokenRepositoryInterface $userEventTokenRepository
+        AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler
     ) {
-        $this->templateDataFactory      = $templateDataFactory;
-        $this->userEventTokenRepository = $userEventTokenRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->agendaConfirmationStatusQueryHandler = $agendaConfirmationStatusQueryHandler;
     }
 
     /**
@@ -71,7 +69,9 @@ class ParticipantDetailQueryHandler
                 ),
                 $participant->isOwnerParticipant(),
                 $participant->isVisio(),
-                $this->userEventTokenRepository->getConfirmationStatusByUserAndType($participant->getUser())
+                $this->agendaConfirmationStatusQueryHandler->handle(
+                    new AgendaConfirmationStatusQuery($participant, $query->event)
+                )
             );
         }
 

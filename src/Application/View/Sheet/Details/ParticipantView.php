@@ -31,7 +31,7 @@ class ParticipantView
     /** @var string */
     public $email;
 
-    /** @var bool */
+    /** @var array */
     public $agendaConfirmationStatus;
 
     /**
@@ -40,7 +40,7 @@ class ParticipantView
      * @param TemplateData $templateData
      * @param bool         $isOwner
      * @param bool         $visio
-     * @param bool|null    $agendaConfirmationStatus
+     * @param array        $agendaConfirmationStatus
      */
     public function __construct(
         $id,
@@ -48,7 +48,7 @@ class ParticipantView
         TemplateData $templateData,
         $isOwner = false,
         bool $visio,
-        $agendaConfirmationStatus
+        array $agendaConfirmationStatus
     ) {
         $this->id                = $id;
         $this->templateData      = $templateData;

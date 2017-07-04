@@ -1,11 +1,5 @@
-{% if agendaConfirmationStatus is defined %}
-    {% if agendaConfirmationStatus is not null %}
-        {% if agendaConfirmationStatus == true %}
-            <span class="label label-success">{{ 'admin.sheet.details.participant.agenda_confirmed'|trans }}</span>
-        {% else %}
-            <span class="label label-warning">{{ 'admin.sheet.details.participant.agenda_not_confirmed'|trans }}</span>
-        {% endif %}
-    {% else %}
-        <span class="label label-danger">{{ 'admin.sheet.details.participant.confirmation_agenda_not_send'|trans }}</span>
-    {% endif %}
+{% if agendaConfirmationStatus is not empty %}
+    <span class="label label-{{ agendaConfirmationStatus.css_class }}">
+        {{ agendaConfirmationStatus.translation_key |trans }}
+    </span>
 {% endif %}
