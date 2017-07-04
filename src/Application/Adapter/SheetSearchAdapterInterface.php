@@ -28,27 +28,15 @@ interface SheetSearchAdapterInterface
     const ES_DOC_COUNT = 'doc_count';
     const ES_KEY = 'key';
 
-    /**
-     * @param Event       $event
-     * @param array       $filters
-     * @param null|string $orderBy
-     * @param int         $page
-     * @param int         $limit
-     * @param string      $locale
-     * @param bool        $getAggregations
-     * @param array       $nomenclatureItems
-     *
-     * @return PaginatedResult
-     */
     public function find(
         Event $event,
         array $filters,
-        $orderBy,
-        $page,
-        $limit,
-        $locale,
-        $getAggregations,
-        $nomenclatureItems = []
+        string $orderBy = null,
+        int $page,
+        int $limit,
+        string $locale,
+        bool $getAggregations,
+        array $nomenclatureItems = []
     ): PaginatedResult;
 
     /**
@@ -56,9 +44,9 @@ interface SheetSearchAdapterInterface
      * @param array  $filters
      * @param string $locale
      *
-     * @return array
+     * @return int[]
      */
-    public function getSheetIds(Event $event, array $filters, $locale): array;
+    public function getSheetIds(Event $event, array $filters, string $locale): array;
 
     /**
      * @param Event  $event
@@ -67,71 +55,29 @@ interface SheetSearchAdapterInterface
      *
      * @return SheetListView[]
      */
-    public function getSheetListView(Event $event, array $filters, $locale): array;
+    public function getSheetListView(Event $event, array $filters, string $locale): array;
 
-    /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     *
-     * @return SheetIdsView
-     */
-    public function getSheetIdsView(Event $event, array $filters, $locale): SheetIdsView;
+    public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView;
 
-    /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     *
-     * @return ParticipantsSheetIdsView
-     */
-    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale): ParticipantsSheetIdsView;
+    public function getParticipantsSheetIdsView(Event $event, array $filters, string $locale): ParticipantsSheetIdsView;
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     * @param string $locale
-     *
-     * @return array
-     */
-    public function findLocalization(Event $event, $filter, $locale): array;
+    public function findLocalization(Event $event, string $filter, string $locale): array;
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     * @param string $locale
-     *
-     * @return array
-     */
-    public function findKeyword(Event $event, $filter, $locale): array;
+    public function findKeyword(Event $event, string $filter, string $locale): array;
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param string $filterToRemove
-     *
-     * @return array
-     */
-    public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove): array;
+    public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array;
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param string $filterToRemove
-     *
-     * @return array
-     */
-    public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove): array;
+    public function getOrganizationCategoryAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove
+    ): array;
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param string $filterToRemove
-     *
-     * @return array
-     */
-    public function getPositionAggregations(Event $event, $locale, array $filters, $filterToRemove): array;
+    public function getPositionAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove
+    ): array;
 }
