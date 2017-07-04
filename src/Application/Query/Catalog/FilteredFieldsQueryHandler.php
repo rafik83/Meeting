@@ -222,14 +222,18 @@ class FilteredFieldsQueryHandler
      */
     private function getAggregationsIndexedByKey(array $aggregations, string $fieldName, bool $subField = false): array
     {
-        if (null === $aggregations
-            || !isset($aggregations[$fieldName])
-            || false === $subField && !isset($aggregations[$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])
-            || true === $subField && (
-                !isset($aggregations[$fieldName][$fieldName])
-                || !isset($aggregations[$fieldName][$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])
-            )
-        ) {
+        if (null === $aggregations || !isset($aggregations[$fieldName])) {
+            return [];
+        }
+
+        if (!$subField && !isset($aggregations[$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])) {
+            return [];
+        }
+
+        if ($subField && (
+            !isset($aggregations[$fieldName][$fieldName])
+            || !isset($aggregations[$fieldName][$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])
+        )) {
             return [];
         }
 
