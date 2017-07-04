@@ -12,10 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
-use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 
 class FilteredFieldsQueryHandler
 {
@@ -133,13 +131,10 @@ class FilteredFieldsQueryHandler
 
         $aggregations = null !== $typeAggregations ? $typeAggregations : $filteredFieldsQuery->currentAggregations;
 
-        $typeField = SheetSearchAdapterInterface::ES_FIELD_TYPE;
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$typeField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_TYPE
+        );
 
         foreach ($filteredFieldsQuery->typeViews as $typeView) {
             if (isset($aggregationsIndexedByKey[$typeView->id])) {
@@ -161,21 +156,15 @@ class FilteredFieldsQueryHandler
 
         $aggregations = null !== $aggregations ? $aggregations : $filteredFieldsQuery->currentAggregations;
 
-        $organizationCategoryField = SheetSearchAdapterInterface::ES_FIELD_ORGANIZATION_CATEGORY;
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_ORGANIZATION_CATEGORY
+        );
 
-        if (null === $aggregations
-            || !isset($aggregations[$organizationCategoryField])
-            || !isset($aggregations[$organizationCategoryField]['buckets'])
-        ) {
+        if (empty($aggregationsIndexedByKey)) {
             $filteredFieldsQuery->organizationCategoryViews = [];
 
             return;
-        }
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$organizationCategoryField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
         }
 
         foreach ($filteredFieldsQuery->organizationCategoryViews as $index => $organizationCategoryView) {
@@ -201,21 +190,16 @@ class FilteredFieldsQueryHandler
 
         $aggregations = null !== $aggregations ? $aggregations : $filteredFieldsQuery->currentAggregations;
 
-        $positionField = SheetSearchAdapterInterface::ES_FIELD_POSITION;
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_POSITION,
+            true
+        );
 
-        if (null === $aggregations
-            || !isset($aggregations[$positionField])
-            || !isset($aggregations[$positionField][$positionField]['buckets'])
-        ) {
+        if (empty($aggregationsIndexedByKey)) {
             $filteredFieldsQuery->positionViews = [];
 
             return;
-        }
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$positionField][$positionField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
         }
 
         foreach ($filteredFieldsQuery->positionViews as $index => $positionView) {
@@ -226,5 +210,41 @@ class FilteredFieldsQueryHandler
                 unset($filteredFieldsQuery->positionViews[$index]);
             }
         }
+    }
+
+    /**
+     * @param array  $aggregations ElasticSearch aggregations
+     * @param string $fieldName ElasticSearch field name
+     * @param bool   $subField: is aggregations is organized in subfield: $aggregations['position']['position'] = [...]
+     *                          else: $aggregations['type'] = [...]
+     *
+     * @return array
+     */
+    private function getAggregationsIndexedByKey(array $aggregations, string $fieldName, bool $subField = false): array
+    {
+        if (null === $aggregations
+            || !isset($aggregations[$fieldName])
+            || false === $subField && !isset($aggregations[$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])
+            || true === $subField && (
+                !isset($aggregations[$fieldName][$fieldName])
+                || !isset($aggregations[$fieldName][$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])
+            )
+        ) {
+            return [];
+        }
+
+        if ($subField) {
+            $items = $aggregations[$fieldName][$fieldName][SheetSearchAdapterInterface::ES_BUCKETS];
+        } else {
+            $items = $aggregations[$fieldName][SheetSearchAdapterInterface::ES_BUCKETS];
+        }
+
+        $aggregationsIndexedByKey = [];
+
+        foreach ($items as $item) {
+            $aggregationsIndexedByKey[$item[SheetSearchAdapterInterface::ES_KEY]] = $item[SheetSearchAdapterInterface::ES_DOC_COUNT];
+        }
+
+        return $aggregationsIndexedByKey;
     }
 }

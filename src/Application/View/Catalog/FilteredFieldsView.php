@@ -25,9 +25,9 @@ class FilteredFieldsView
     public $positionViews;
 
     /**
-     * @param TypeView[] $typeViews
+     * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
-     * @param PositionView[] $positionViews
+     * @param PositionView[]             $positionViews
      */
     public function __construct(array $typeViews, array $organizationCategoryViews, array $positionViews)
     {

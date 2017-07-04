@@ -23,6 +23,11 @@ interface SheetSearchAdapterInterface
     const ES_FIELD_IN_CATALOG            = 'inCatalog';
     const ES_FIELD_POSITION              = 'position';
 
+    /** ElasticSearch keys */
+    const ES_BUCKETS = 'buckets';
+    const ES_DOC_COUNT = 'doc_count';
+    const ES_KEY = 'key';
+
     /**
      * @param Event       $event
      * @param array       $filters
@@ -44,7 +49,7 @@ interface SheetSearchAdapterInterface
         $locale,
         $getAggregations,
         $nomenclatureItems = []
-    );
+    ): PaginatedResult;
 
     /**
      * @param Event  $event
@@ -53,7 +58,7 @@ interface SheetSearchAdapterInterface
      *
      * @return array
      */
-    public function getSheetIds(Event $event, array $filters, $locale);
+    public function getSheetIds(Event $event, array $filters, $locale): array;
 
     /**
      * @param Event  $event
@@ -62,7 +67,7 @@ interface SheetSearchAdapterInterface
      *
      * @return SheetListView[]
      */
-    public function getSheetListView(Event $event, array $filters, $locale);
+    public function getSheetListView(Event $event, array $filters, $locale): array;
 
     /**
      * @param Event  $event
@@ -71,7 +76,7 @@ interface SheetSearchAdapterInterface
      *
      * @return SheetIdsView
      */
-    public function getSheetIdsView(Event $event, array $filters, $locale);
+    public function getSheetIdsView(Event $event, array $filters, $locale): SheetIdsView;
 
     /**
      * @param Event  $event
@@ -80,7 +85,7 @@ interface SheetSearchAdapterInterface
      *
      * @return ParticipantsSheetIdsView
      */
-    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale);
+    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale): ParticipantsSheetIdsView;
 
     /**
      * @param Event  $event
@@ -89,7 +94,7 @@ interface SheetSearchAdapterInterface
      *
      * @return array
      */
-    public function findLocalization(Event $event, $filter, $locale);
+    public function findLocalization(Event $event, $filter, $locale): array;
 
     /**
      * @param Event  $event
@@ -98,7 +103,7 @@ interface SheetSearchAdapterInterface
      *
      * @return array
      */
-    public function findKeyword(Event $event, $filter, $locale);
+    public function findKeyword(Event $event, $filter, $locale): array;
 
     /**
      * @param Event  $event
@@ -108,7 +113,7 @@ interface SheetSearchAdapterInterface
      *
      * @return array
      */
-    public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove);
+    public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove): array;
 
     /**
      * @param Event  $event
@@ -118,7 +123,7 @@ interface SheetSearchAdapterInterface
      *
      * @return array
      */
-    public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove);
+    public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove): array;
 
     /**
      * @param Event  $event
@@ -128,5 +133,5 @@ interface SheetSearchAdapterInterface
      *
      * @return array
      */
-    public function getPositionAggregations(Event $event, $locale, array $filters, $filterToRemove);
+    public function getPositionAggregations(Event $event, $locale, array $filters, $filterToRemove): array;
 }

@@ -72,23 +72,16 @@ class SearchFacetExternalFactory
      */
     public function create(Event $event, string $locale, array $filters): FormInterface
     {
-        $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
+        $initialFieldsView = $this->getInitialFieldsView($event, $locale);
 
-        if ($catalogVisibility === null) {
-            throw new CatalogVisibilityNotFoundException();
-        }
-
-        $typeViews = $this->getTypeViews($event, $locale);
-
-        $organizationCategoryViews = $this->commandBus->handle(
-            new OrganizationCategoryViewQuery($event, $locale)
+        return $this->getForm(
+            $event,
+            $locale,
+            $filters,
+            $initialFieldsView->typeViews,
+            $initialFieldsView->organizationCategoryViews,
+            $initialFieldsView->positionViews
         );
-
-        $positionViews = $this->commandBus->handle(
-            new PositionViewQuery($event, $locale)
-        );
-
-        return $this->getForm($event, $locale, $filters, $typeViews, $organizationCategoryViews, $positionViews);
     }
 
     /**
@@ -106,21 +99,7 @@ class SearchFacetExternalFactory
         array $filters,
         array $currentAggregations
     ): FormInterface {
-        $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
-
-        if ($catalogVisibility === null) {
-            throw new CatalogVisibilityNotFoundException();
-        }
-
-        $typeViews = $this->getTypeViews($event, $locale);
-
-        $organizationCategoryViews = $this->commandBus->handle(
-            new OrganizationCategoryViewQuery($event, $locale)
-        );
-
-        $positionViews = $this->commandBus->handle(
-            new PositionViewQuery($event, $locale)
-        );
+        $initialFieldsView = $this->getInitialFieldsView($event, $locale);
 
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->commandBus->handle(
@@ -128,9 +107,9 @@ class SearchFacetExternalFactory
                 $event,
                 $filters,
                 $currentAggregations,
-                $typeViews,
-                $organizationCategoryViews,
-                $positionViews,
+                $initialFieldsView->typeViews,
+                $initialFieldsView->organizationCategoryViews,
+                $initialFieldsView->positionViews,
                 $locale
             )
         );
@@ -154,21 +133,47 @@ class SearchFacetExternalFactory
      */
     public function getTypeViews(Event $event, string $locale): array
     {
+        if (!isset($this->typeViewsByEvent[$event->getId()])) {
+            $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
+
+            if ($catalogVisibility === null) {
+                throw new CatalogVisibilityNotFoundException();
+            }
+
+            $this->typeViewsByEvent[$event->getId()] = $this->commandBus->handle(
+                new TypeViewQuery($event, $catalogVisibility->getTypes(), $locale)
+            );
+        }
+
+        return $this->typeViewsByEvent[$event->getId()];
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return FilteredFieldsView
+     * @throws CatalogVisibilityNotFoundException
+     */
+    private function getInitialFieldsView(Event $event, string $locale): FilteredFieldsView
+    {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
         if ($catalogVisibility === null) {
             throw new CatalogVisibilityNotFoundException();
         }
 
-        if (isset($this->typeViewsByEvent[$event->getId()])) {
-            return $this->typeViewsByEvent[$event->getId()];
-        }
+        $typeViews = $this->getTypeViews($event, $locale);
 
-        $this->typeViewsByEvent[$event->getId()] = $this->commandBus->handle(
-            new TypeViewQuery($event, $catalogVisibility->getTypes(), $locale)
+        $organizationCategoryViews = $this->commandBus->handle(
+            new OrganizationCategoryViewQuery($event, $locale)
         );
 
-        return $this->typeViewsByEvent[$event->getId()];
+        $positionViews = $this->commandBus->handle(
+            new PositionViewQuery($event, $locale)
+        );
+
+        return new FilteredFieldsView($typeViews, $organizationCategoryViews, $positionViews);
     }
 
     /**
