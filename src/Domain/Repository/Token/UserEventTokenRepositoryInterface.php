@@ -40,5 +40,5 @@ interface UserEventTokenRepositoryInterface
      *
      * @return bool|null
      */
-    public function isAgendaConfirmedByUser(User $user);
+    public function getConfirmationStatusByUserAndType(User $user);
 }

@@ -27,7 +27,7 @@
                     {% endif %}
 
                     {% include 'AdminBundle:Sheet/Partial:is_agenda_confirmed.html.twig' with {
-                        'isAgendaConfirmed': participant.isAgendaConfirmed
+                        'agendaConfirmationStatus': participant.agendaConfirmationStatus
                     } %}
 
                     <div class="pull-right">

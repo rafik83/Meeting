@@ -1,6 +1,6 @@
-{% if isAgendaConfirmed is defined %}
-    {% if isAgendaConfirmed is not null %}
-        {% if isAgendaConfirmed == true %}
+{% if agendaConfirmationStatus is defined %}
+    {% if agendaConfirmationStatus is not null %}
+        {% if agendaConfirmationStatus == true %}
             <span class="label label-success">{{ 'admin.sheet.details.participant.agenda_confirmed'|trans }}</span>
         {% else %}
             <span class="label label-warning">{{ 'admin.sheet.details.participant.agenda_not_confirmed'|trans }}</span>

@@ -32,7 +32,7 @@ class ParticipantView
     public $email;
 
     /** @var bool */
-    public $isAgendaConfirmed;
+    public $agendaConfirmationStatus;
 
     /**
      * @param int          $id
@@ -40,7 +40,7 @@ class ParticipantView
      * @param TemplateData $templateData
      * @param bool         $isOwner
      * @param bool         $visio
-     * @param bool|null    $isAgendaConfirmed
+     * @param bool|null    $agendaConfirmationStatus
      */
     public function __construct(
         $id,
@@ -48,14 +48,14 @@ class ParticipantView
         TemplateData $templateData,
         $isOwner = false,
         bool $visio,
-        $isAgendaConfirmed
+        $agendaConfirmationStatus
     ) {
         $this->id                = $id;
         $this->templateData      = $templateData;
         $this->isOwner           = $isOwner;
         $this->visio             = $visio;
         $this->email             = $email;
-        $this->isAgendaConfirmed = $isAgendaConfirmed;
+        $this->agendaConfirmationStatus = $agendaConfirmationStatus;
     }
 
     /**

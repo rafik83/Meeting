@@ -71,7 +71,7 @@ class ParticipantDetailQueryHandler
                 ),
                 $participant->isOwnerParticipant(),
                 $participant->isVisio(),
-                $this->userEventTokenRepository->isAgendaConfirmedByUser($participant->getUser())
+                $this->userEventTokenRepository->getConfirmationStatusByUserAndType($participant->getUser())
             );
         }
 

@@ -71,7 +71,7 @@ class UserEventTokenRepository implements UserEventTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function isAgendaConfirmedByUser(User $user)
+    public function getConfirmationStatusByUserAndType(User $user)
     {
         $queryBuilder = $this
             ->entityManager
