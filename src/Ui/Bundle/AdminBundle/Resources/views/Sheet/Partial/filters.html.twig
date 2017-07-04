@@ -44,8 +44,8 @@
                     <hr>
 
                     {{ form_row(form.hasScheduledMeeting, {'inline': true}) }}
-                    {{ form_row(form.hasPendingMeetingPropositions) }}
-                    {{ form_row(form.hasNoMeetingRequest) }}
+                    {{ form_row(form.hasPendingMeetingPropositions, {'inline': true}) }}
+                    {{ form_row(form.hasNoMeetingRequest, {'inline': true}) }}
                 </div>
                 <div class="col-md-6">
                     {{ form_row(form.follower) }}

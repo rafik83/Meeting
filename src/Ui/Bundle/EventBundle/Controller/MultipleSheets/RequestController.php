@@ -31,8 +31,9 @@ class RequestController extends Controller
      *
      * @return Response
      */
-    public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user)
+    public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $event = $eventDomain->getEvent();
 
         $sheets = $this
