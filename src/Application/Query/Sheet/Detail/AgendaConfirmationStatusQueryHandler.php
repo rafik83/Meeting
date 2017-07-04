@@ -16,18 +16,22 @@ use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 
 class AgendaConfirmationStatusQueryHandler
 {
-    const AGENDA_CONFIRMED = [
-        'translation_key' => 'admin.sheet.details.participant.agenda_confirmed',
-        'css_class'       => 'success'
-    ];
-    const AGENDA_NOT_CONFIRMED = [
-        'translation_key' => 'admin.sheet.details.participant.agenda_not_confirmed',
-        'css_class'       => 'warning'
-    ];
-    const CONFIRMATION_NOT_SENT = [
-        'translation_key' => 'admin.sheet.details.participant.agenda_confirmation_not_send',
-        'css_class'       => 'danger'
-    ];
+    const PREFIX_TRANS_KEY = 'admin.sheet.details.participant.';
+    const AGENDA_CONFIRMED =
+        [
+            'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmed',
+            'css_class'       => 'success'
+        ];
+    const AGENDA_NOT_CONFIRMED =
+        [
+            'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_not_confirmed',
+            'css_class'       => 'warning'
+        ];
+    const CONFIRMATION_NOT_SENT =
+        [
+            'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmation_not_send',
+            'css_class'       => 'danger'
+        ];
     const USER_NOT_CONCERNED = [];
 
     /** @var UserEventTokenRepositoryInterface */
@@ -56,12 +60,17 @@ class AgendaConfirmationStatusQueryHandler
         $this->meetingRepository = $meetingRepository;
     }
 
+    /**
+     * @param AgendaConfirmationStatusQuery $query
+     *
+     * @return array ['translation_key' => '', 'css_class' => '']
+     */
     public function handle(AgendaConfirmationStatusQuery $query): array
     {
         $user = $query->participant->getUser();
 
-        if (null !== $confirmationStatus = $this->userEventTokenRepository->getConfirmationStatusByUserAndType($user)) {
-            return (true === $confirmationStatus) ? self::AGENDA_CONFIRMED : self::AGENDA_NOT_CONFIRMED;
+        if (null !== $userEventToken = $this->userEventTokenRepository->getConfirmationStatusByUserAndType($user)) {
+            return $userEventToken->isConfirmed() ? self::AGENDA_CONFIRMED : self::AGENDA_NOT_CONFIRMED;
         }
 
         if (null !== $this->happenningParticipationRepository->checkAnyParticipation($user, $query->event)

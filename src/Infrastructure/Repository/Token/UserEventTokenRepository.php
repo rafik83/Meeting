@@ -71,12 +71,12 @@ class UserEventTokenRepository implements UserEventTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfirmationStatusByUserAndType(User $user)
+    public function getConfirmationStatusByUserAndType(User $user): ?UserEventToken
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('userEventToken.confirmed')
+            ->select('userEventToken')
             ->from(UserEventToken::class, 'userEventToken')
             ->where('userEventToken.user = :user AND userEventToken.type = :type')
             ->setParameter('user', $user)
