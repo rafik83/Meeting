@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -30,28 +31,17 @@ class ExceptionListener
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /**
-     * Route used on admin or in case of 500 http code on event
-     */
-    const ROUTES_ERRORS_TWIG = [
+    const TEMPLATE_MAIN_ERRORS = [
         Response::HTTP_INTERNAL_SERVER_ERROR => 'TwigBundle:Exception:error500.html.twig',
         Response::HTTP_NOT_FOUND             => 'TwigBundle:Exception:error404.html.twig',
         Response::HTTP_FORBIDDEN             => 'TwigBundle:Exception:error403.html.twig',
     ];
 
-    /**
-     * Route used on http error code on event
-     */
-    const ROUTES_ERRORS_EVENT = [
+    const TEMPLATE_EVENT_ERRORS = [
         Response::HTTP_NOT_FOUND => 'EventBundle:Exception:error404.html.twig',
         Response::HTTP_FORBIDDEN => 'EventBundle:Exception:error403.html.twig',
     ];
 
-    /**
-     * @param EventRepositoryInterface             $eventRepository
-     * @param EngineInterface                      $templating
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         EngineInterface $templating,
@@ -62,9 +52,6 @@ class ExceptionListener
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
-    /**
-     * @param GetResponseForExceptionEvent $responseForExceptionEvent
-     */
     public function onKernelException(GetResponseForExceptionEvent $responseForExceptionEvent)
     {
         $request   = $responseForExceptionEvent->getRequest();
@@ -91,16 +78,20 @@ class ExceptionListener
         }
 
         $statusCode = $this->resolveHttpStatusCode($exception);
-        $responseForExceptionEvent->setResponse($this->buildResponseFromHttpStatusCode($statusCode, $event));
+
+        $responseForExceptionEvent->setResponse(
+            $this->buildResponseFromHttpStatusCode($statusCode, $event, $request)
+        );
+
         $responseForExceptionEvent->stopPropagation();
     }
 
     /**
      * @param \Exception $exception
      *
-     * @return int one of 403, 404, 500
+     * @return int one of 403, 404 or 500
      */
-    private function resolveHttpStatusCode(\Exception $exception)
+    private function resolveHttpStatusCode(\Exception $exception): int
     {
         $statusCode = $exception->getCode();
 
@@ -115,27 +106,19 @@ class ExceptionListener
         return $statusCode;
     }
 
-    /**
-     * @param int        $statusCode
-     * @param null|Event $event
-     *
-     * @return Response
-     */
-    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null)
+    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null, Request $request): Response
     {
-        $route = self::ROUTES_ERRORS_TWIG[$statusCode];
-
         if (null !== $event && $statusCode !== Response::HTTP_INTERNAL_SERVER_ERROR) {
-            $route = self::ROUTES_ERRORS_EVENT[$statusCode];
+            $request->setLocale($event->getAvailableLocale($request->getLocale()));
+
+            return new Response(
+                $this->templating->render(self::TEMPLATE_EVENT_ERRORS[$statusCode], ['event' => $event]),
+                $statusCode
+            );
         }
 
         return new Response(
-            $this->templating->render(
-                $route,
-                [
-                    'event' => $event,
-                ]
-            ),
+            $this->templating->render(self::TEMPLATE_MAIN_ERRORS[$statusCode]),
             $statusCode
         );
     }
