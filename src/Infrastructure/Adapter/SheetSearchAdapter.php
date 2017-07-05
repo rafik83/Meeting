@@ -290,9 +290,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         // remove filter
         unset($filters[$filterToRemove]);
 
-        // add inCatalog filter
-        $filters = array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $filters);
-
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
 

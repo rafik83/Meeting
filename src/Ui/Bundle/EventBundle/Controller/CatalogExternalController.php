@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
+use Proximum\Vimeet\Domain\Catalog\ExternalCatalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -63,6 +64,8 @@ class CatalogExternalController extends Controller
                 $filters[SearchFields::FILTER_TYPE] = $typeViews;
             }
         }
+
+        $filters = array_merge($filters, ExternalCatalog::DEFAULT_FILTERS);
 
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
             new PaginatedSheetExternalViewQuery(

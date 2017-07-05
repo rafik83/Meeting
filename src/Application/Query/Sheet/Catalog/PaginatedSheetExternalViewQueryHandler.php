@@ -18,13 +18,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class PaginatedSheetExternalViewQueryHandler
 {
-    const DEFAULT_FILTERS = [
-        'state' => [
-            Sheet::STATE_ACCEPTED,
-            Sheet::STATE_VALIDATED,
-        ],
-    ];
-
     /**
      * @var SheetSearchAdapterInterface
      */
@@ -58,7 +51,7 @@ class PaginatedSheetExternalViewQueryHandler
     {
         $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
-            array_merge($query->filters, self::DEFAULT_FILTERS),
+            $query->filters,
             Sheet\Constant::ORDER_BY_ALPHABETICAL,
             $query->page,
             $query->limit,
