@@ -28,7 +28,9 @@ class DiffChecker
         $lastVersion = $lastUserVersion->getVersion();
 
         // In case of addition or deletion in the version, there is a diff
-        if (!empty(array_diff_key($lastVersion, $currentVersion))) {
+        if (!empty(array_diff_key($lastVersion, $currentVersion))
+            || !empty(array_diff_key($currentVersion, $lastVersion))
+        ) {
             return true;
         }
 
