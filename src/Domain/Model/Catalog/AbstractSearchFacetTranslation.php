@@ -20,10 +20,10 @@ class AbstractSearchFacetTranslation
     /** @var AbstractSearchFacet */
     protected $searchFacet;
 
-    /** @var string */
+    /** @var string|null */
     protected $label;
 
-    /** @var string */
+    /** @var string|null */
     protected $placeholder;
 
     /** @var string */
@@ -33,8 +33,8 @@ class AbstractSearchFacetTranslation
      * AbstractSearchFacetTranslation constructor.
      *
      * @param AbstractSearchFacet $searchFacet
-     * @param string      $label
-     * @param string      $placeholder
+     * @param string|null $label
+     * @param string|null $placeholder
      * @param string      $locale
      */
     public function __construct(AbstractSearchFacet $searchFacet, $label, $placeholder, $locale)
@@ -62,7 +62,7 @@ class AbstractSearchFacetTranslation
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -78,7 +78,7 @@ class AbstractSearchFacetTranslation
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPlaceholder()
     {
