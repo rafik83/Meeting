@@ -1,5 +1,11 @@
 {{ include('EventBundle::Catalog/External/search.html.twig', { searchForm: searchForm, typeViews: typeViews }, false) }}
 
+<div class="catalog__filters">
+    <div class="select-all">
+        <span class="total-result">({{ paginatedResult.total }})</span>
+    </div>
+</div>
+
 <div class="catalog__list catalog__list--block">
     {{ include('EventBundle::Catalog/External/list.html.twig', {
         paginatedResult: paginatedResult,
