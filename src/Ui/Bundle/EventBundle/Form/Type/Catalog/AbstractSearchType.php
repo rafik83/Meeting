@@ -105,8 +105,9 @@ abstract class AbstractSearchType extends AbstractType
                 'label'   => $positionFacet->label,
                 'choices' => $positionViews,
                 'attr' => [
-                    'class'            => 'form-control select2',
-                    'data-placeholder' => $positionFacet->placeholder,
+                    'class'               => 'form-control select2',
+                    'data-disallow-clear' => 'true',
+                    'data-placeholder'    => $positionFacet->placeholder,
                 ],
             ]);
         }
