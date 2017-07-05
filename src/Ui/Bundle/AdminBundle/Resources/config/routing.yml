@@ -425,6 +425,30 @@ admin_agenda_sheet_redirect_to_update_attendance:
     methods: [GET]
     defaults: { _controller: AdminBundle:Sheet/Attendance:redirectToCancelAttendance }
 
+admin_agenda_user_agenda_version:
+    path: /event/{event}/agenda/participant/{participant}/agenda/version
+    requirements:
+        event: \d+
+        participant: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Version/Version:userDiff }
+
+admin_agenda_user_agenda_version_notify:
+    path: /event/{event}/agenda/participant/{participant}/agenda/version/notify
+    requirements:
+        event: \d+
+        participant: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Version/Version:notify }
+
+admin_agenda_user_agenda_version_purge:
+    path: /event/{event}/agenda/participant/{participant}/agenda/version/purge
+    requirements:
+        event: \d+
+        participant: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Agenda/Version/Version:purge }
+
 #
 # Meeting
 #

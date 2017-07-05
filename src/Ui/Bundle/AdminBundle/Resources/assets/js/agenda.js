@@ -1,4 +1,5 @@
 var Vue                    = require('vue'),
+    store                  = require('./agenda/store/index'),
     options                = require('./vueComponents/options'),
     spot                   = require('./agenda/spot/Spot'),
     meeting                = require('./agenda/meeting/Meeting');
@@ -19,5 +20,6 @@ Vue.component('meeting', meeting);
 
 new Vue({
     el: '#agenda',
-    delimiters: options.delimiters
+    delimiters: options.delimiters,
+    store: store
 });

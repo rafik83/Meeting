@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
@@ -227,6 +228,33 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 $sendEmailToTeam ? SendEmailingCommand::BOOL_YES : SendEmailingCommand::BOOL_NO,
             ]
         );
+        $this->setJob($job);
+    }
+
+    /**
+     * @param Event     $event
+     * @param \DateTime $dateTime
+     * @param Job|null  $job
+     */
+    public function scheduleVersionGeneration(Event $event, \DateTime $dateTime, Job $job = null)
+    {
+        if ($job !== null) {
+            $job->setExecuteAfter($dateTime);
+
+            $this->updateJob($job);
+
+            return;
+        }
+
+        $job = new Job(
+            GenerateVersionsCommand::NAME,
+            [
+                $event->getId(),
+            ]
+        );
+        $job->addRelatedEntity($event);
+        $job->setExecuteAfter($dateTime);
+
         $this->setJob($job);
     }
 }
