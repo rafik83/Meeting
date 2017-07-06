@@ -168,7 +168,7 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
-    public function getRequestsByEventAndUser(Event $event, User $user);
+    public function getRequestsPlacedByEventAndUser(Event $event, User $user);
 
     /**
      * @param Sheet $sheet

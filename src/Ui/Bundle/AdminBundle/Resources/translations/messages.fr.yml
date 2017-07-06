@@ -135,6 +135,7 @@ admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de 
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
+admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
 admin.event.fallback: 'Par défaut'
@@ -156,6 +157,7 @@ admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
+admin.event.external_catalog_configure: 'Catalogue public'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
@@ -1013,6 +1015,11 @@ event.sheet.update_product.title: 'Modifier un produit commandé'
 event.sheet.validationState.draft: Brouillon
 event.sheet.validationState.pending: 'Soumise à validation'
 event.sheet.validationState.validated: Validée
+gdr.user.agenda.version.modal.button.notify: 'Notifier par SMS'
+gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
+gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'
+gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recevoir des notifications lives'
+gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
 login.title: Connexion
@@ -1043,6 +1050,10 @@ planning.participant.unallocated_meetings: 'Liste des rendez-vous validés non o
 planning.participant.unavailability: Indisponible
 register.email_already_exists: 'Un compte associé à cette adresse mail existe déjà'
 reset_password.title: 'Demande de nouveau mot de passe'
+user.agenda.version.agendaModified: 'Votre planning a été modifié:'
+user.agenda.version.meetingAdded: 'Vous avez un nouveau rendez-vous avec %sheetTitle% le %day% à %hour% en %spotRef%.'
+user.agenda.version.meetingDeleted: 'Le rendez-vous avec %sheetTitle% a été supprimé.'
+user.agenda.version.meetingMoved: 'Le rendez-vous avec %sheetTitle% a été déplacé au %day% à %hour% en %spotRef%.'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'

@@ -41,4 +41,13 @@ interface UserEventTokenRepositoryInterface
      * @return UserEventToken|null
      */
     public function getConfirmationStatusByUserAndType(User $user): ?UserEventToken;
+
+    /**
+     * @param Event  $event
+     * @param string $type
+     * @param User[] $users
+     *
+     * @return UserEventToken[]
+     */
+    public function getForEventTypeAndUsers(Event $event, string $type, array $users): array;
 }
