@@ -19,41 +19,31 @@ use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 
 class ConfigureDatesType extends AbstractType
 {
+    const configurationDates =
+        [
+            'catalogOnlineDate',
+            'happeningsOpenDate',
+            'schedulePublishDate',
+            'closeMeetingRequestDate',
+            'closeAnsweringMeetingRequestDate',
+            'smsActivationDate',
+            'agendaOnlineDate',
+            'registrationOpenDate',
+            'registrationCloseDate',
+        ];
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('catalogOnlineDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('happeningsOpenDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('schedulePublishDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('closeMeetingRequestDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('closeAnsweringMeetingRequestDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('smsActivationDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('agendaOnlineDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-        ;
+        foreach (self::configurationDates as $configurationDate) {
+            $builder
+                ->add($configurationDate, DateTimePickerType::class, [
+                    'view_timezone' => $options['event']->getTimezone(),
+                    'required' => false,
+                ]);
+        }
     }
 
     /**
