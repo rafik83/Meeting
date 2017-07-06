@@ -229,8 +229,14 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
 
         // Registration data
         foreach ($this->registrationFields as $fieldKey => $fieldName) {
-            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
-            $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+            $input     = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+
+            // Avoid set to null in field with same name
+            if ($input === null && isset($normalizedData[$fieldName])) {
+                continue;
+            }
+
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 

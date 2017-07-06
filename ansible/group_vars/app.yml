@@ -195,25 +195,6 @@ app_patterns:
   # Supervisor #
   ##############
 
-  #supervisor_configs:
-  #  - file:     app.conf
-  #    template: configs/app_program.{{ env }}.j2
-  #    config:
-  #      - foo-bar:
-  #        - command:        php bin/console app:foo:bar --no-interaction -vv
-  #        - directory:      "{{ app.dir }}{{ app.dir_release }}"
-  #        - user:           "{{ app.user }}"
-  #        - stdout_logfile: "{{ app.log_dir }}/supervisor.foo-bar.log"
-  #        - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
-  #        # Dev
-  #        - autostart:       false
-
-
-
-  ##############
-  # Supervisor #
-  ##############
-
   supervisor_configs:
     - file:     app.conf
       template: configs/app_program.{{ env }}.j2

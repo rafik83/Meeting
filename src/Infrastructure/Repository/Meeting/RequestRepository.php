@@ -383,19 +383,19 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestsByEventAndUser(Event $event, User $user)
+    public function getRequestsPlacedByEventAndUser(Event $event, User $user)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
-
-        // By event and user
-        $queryBuilder
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->from(Request::class, 'request')
+            ->join('request.meeting', 'meeting')
+            ->leftJoin('meeting.fromParticipants', 'fp')
+            ->leftJoin('meeting.toParticipants', 'tp')
+            ->where('request.event = :event')
+            ->andWhere('(fp.user = :user OR tp.user = :user)')
             ->setParameter('event', $event)
-            ->join('toSheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
@@ -422,6 +422,9 @@ class RequestRepository implements RequestRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUnallocatedRequestForSheets(array $sheets)
     {
         $queryBuilder = $this

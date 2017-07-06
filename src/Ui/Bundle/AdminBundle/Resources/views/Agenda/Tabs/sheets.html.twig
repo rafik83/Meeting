@@ -197,6 +197,8 @@
 
         <update-participant-modal v-show="showParticipantModal" v-on:close-modal="showParticipantModal = false" ref="updateParticipantModal" v-on:refresh-request-list-of-sheet="refreshRequestListOfSheet"></update-participant-modal>
 
+        <agenda-version-modal></agenda-version-modal>
+
         <meeting-update-modal
                 v-bind:meeting-to-update="meetingToUpdate"
                 v-on:close-modal="clearMeetingToUpdate"
