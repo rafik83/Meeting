@@ -67,7 +67,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     ): PaginatedResult {
         $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
             ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
-            : 0;
+            : 1;
 
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
 

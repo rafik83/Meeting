@@ -80,7 +80,7 @@ class SheetSearchQueryBuilder
         $nomenclatureItems = []
     ) {
         $this->locale            = $locale;
-        $this->initialBooster    = $initialBooster;
+        $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
         $this->nomenclatureItems = $nomenclatureItems;
 
         $this->query = new BoolQuery();
