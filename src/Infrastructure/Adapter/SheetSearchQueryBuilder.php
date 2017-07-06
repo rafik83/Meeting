@@ -298,19 +298,21 @@ class SheetSearchQueryBuilder
     protected function filterByState(array &$filters)
     {
         /** @var array|string $filters ['state'] */
-        if (isset($filters['state'])) {
-            // Cast into array:
-            $states        = (array) $filters['state'];
-            $filterByState = new BoolQuery();
-
-            foreach ($states as $state) {
-                if (in_array($state, Sheet::getAllStates())) {
-                    $filterByState->addShould((new Term())->setTerm('state', $state));
-                }
-            }
-
-            $this->query->addMust($filterByState);
+        if (!isset($filters['state']) || empty($filters['state'])) {
+            return;
         }
+
+        // Cast into array:
+        $states        = (array) $filters['state'];
+        $filterByState = new BoolQuery();
+
+        foreach ($states as $state) {
+            if (in_array($state, Sheet::getAllStates())) {
+                $filterByState->addShould((new Term())->setTerm('state', $state));
+            }
+        }
+
+        $this->query->addMust($filterByState);
     }
 
     /**
@@ -318,17 +320,19 @@ class SheetSearchQueryBuilder
      */
     protected function filterByValidationState(array &$filters)
     {
-        if (isset($filters['validationState'])) {
-            // Cast validationState into array:
-            $validationStates        = (array) $filters['validationState'];
-            $filterByValidationState = new BoolQuery();
-            foreach ($validationStates as $validationState) {
-                if (in_array($validationState, Sheet::getAllValidationStates())) {
-                    $filterByValidationState->addShould((new Term())->setTerm('validationState', $validationState));
-                }
-            }
-            $this->query->addMust($filterByValidationState);
+        if (!isset($filters['validationState']) || empty($filters['validationState'])) {
+            return;
         }
+
+        // Cast validationState into array:
+        $validationStates        = (array) $filters['validationState'];
+        $filterByValidationState = new BoolQuery();
+        foreach ($validationStates as $validationState) {
+            if (in_array($validationState, Sheet::getAllValidationStates())) {
+                $filterByValidationState->addShould((new Term())->setTerm('validationState', $validationState));
+            }
+        }
+        $this->query->addMust($filterByValidationState);
     }
 
     /**
@@ -336,9 +340,11 @@ class SheetSearchQueryBuilder
      */
     protected function filterByEnabled(array &$filters)
     {
-        if (isset($filters['enabled'])) {
-            $this->query->addMust((new Term())->setTerm('enabled', (bool) $filters['enabled']));
+        if (!isset($filters['enabled']) || empty($filters['enabled'])) {
+            return;
         }
+
+        $this->query->addMust((new Term())->setTerm('enabled', (bool) $filters['enabled']));
     }
 
     /**
@@ -346,25 +352,27 @@ class SheetSearchQueryBuilder
      */
     protected function filterByType(array &$filters)
     {
-        if (isset($filters['type'])) {
-            if ($filters['type'] instanceof Type) {
-                $this->query->addMust((new Term())->setTerm('type', $filters['type']->getId()));
+        if (!isset($filters['type']) || empty($filters['type'])) {
+            return;
+        }
 
-            } elseif (is_array($filters['type'])) {
-                $filterByTypes = new BoolQuery();
+        if ($filters['type'] instanceof Type) {
+            $this->query->addMust((new Term())->setTerm('type', $filters['type']->getId()));
 
-                foreach ($filters['type'] as $type) {
-                    $typeId = null;
+        } elseif (is_array($filters['type'])) {
+            $filterByTypes = new BoolQuery();
 
-                    if ($type instanceof TypeInterface) {
-                        $typeId = $type->getId();
-                    }
+            foreach ($filters['type'] as $type) {
+                $typeId = null;
 
-                    $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                if ($type instanceof TypeInterface) {
+                    $typeId = $type->getId();
                 }
 
-                $this->query->addMust($filterByTypes);
+                $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
             }
+
+            $this->query->addMust($filterByTypes);
         }
     }
 
@@ -373,24 +381,29 @@ class SheetSearchQueryBuilder
      */
     protected function filterByCategory(array &$filters)
     {
-        if (isset($filters['category']) && !empty($filters['category'])) {
-            $categories = $filters['category'];
-            if ($categories instanceof Category) {
-                $categories = [$categories];
-            }
-            $nested    = new Nested();
-            $boolQuery = new BoolQuery();
-            foreach ($categories as $category) {
-                if ($category instanceof Category) {
-                    $matchQuery = new Match();
-                    $matchQuery->setField('categories.id', $category->getId());
-                    $boolQuery->addShould($matchQuery);
-                }
-            }
-
-            $nested->setQuery($boolQuery)->setPath('categories');
-            $this->query->addMust($nested);
+        if (!isset($filters['category']) || empty($filters['category'])) {
+            return;
         }
+
+        $categories = $filters['category'];
+
+        if ($categories instanceof Category) {
+            $categories = [$categories];
+        }
+
+        $nested    = new Nested();
+        $boolQuery = new BoolQuery();
+
+        foreach ($categories as $category) {
+            if ($category instanceof Category) {
+                $matchQuery = new Match();
+                $matchQuery->setField('categories.id', $category->getId());
+                $boolQuery->addShould($matchQuery);
+            }
+        }
+
+        $nested->setQuery($boolQuery)->setPath('categories');
+        $this->query->addMust($nested);
     }
 
     /**
@@ -398,25 +411,27 @@ class SheetSearchQueryBuilder
      */
     protected function filterByFollower(array &$filters)
     {
-        if (isset($filters['follower'])) {
-            $followers = $filters['follower'];
-
-            $followerQuery = new BoolQuery();
-
-            foreach ($followers as $follower) {
-                if ($follower === FollowerConstant::UNASSIGNED_FOLLOWER) {
-                    $matchFollower = new Term();
-                    $matchFollower->setTerm('followUp', 0);
-                    $followerQuery->addShould($matchFollower);
-                } elseif ($follower instanceof Admin) {
-                    $matchFollower = new Term();
-                    $matchFollower->setTerm('followUp', $follower->getId());
-                    $followerQuery->addShould($matchFollower);
-                }
-            }
-
-            $this->query->addMust($followerQuery);
+        if (!isset($filters['follower']) || empty($filters['follower'])) {
+            return;
         }
+
+        $followers = $filters['follower'];
+
+        $followerQuery = new BoolQuery();
+
+        foreach ($followers as $follower) {
+            if ($follower === FollowerConstant::UNASSIGNED_FOLLOWER) {
+                $matchFollower = new Term();
+                $matchFollower->setTerm('followUp', 0);
+                $followerQuery->addShould($matchFollower);
+            } elseif ($follower instanceof Admin) {
+                $matchFollower = new Term();
+                $matchFollower->setTerm('followUp', $follower->getId());
+                $followerQuery->addShould($matchFollower);
+            }
+        }
+
+        $this->query->addMust($followerQuery);
     }
 
     /**
@@ -424,12 +439,14 @@ class SheetSearchQueryBuilder
      */
     protected function filterByPredefined(array &$filters)
     {
-        if (isset($filters['predefined'])) {
-            if ($filters['predefined'] === Constant::CREATED_TODAY) {
-                $this->filterCreatedToday();
-            } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
-                $this->filterCreatedThisWeek();
-            }
+        if (!isset($filters['predefined'])) {
+            return;
+        }
+
+        if ($filters['predefined'] === Constant::CREATED_TODAY) {
+            $this->filterCreatedToday();
+        } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
+            $this->filterCreatedThisWeek();
         }
     }
 
@@ -474,7 +491,7 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['inCatalog'])) {
             $matchInCatalog = new Term();
-            $matchInCatalog->setTerm('inCatalog', $filters['inCatalog']);
+            $matchInCatalog->setTerm('inCatalog', (bool) $filters['inCatalog']);
 
             $this->query->addMust($matchInCatalog);
         }
@@ -485,19 +502,24 @@ class SheetSearchQueryBuilder
      */
     protected function filterByOrganizationCategory(array &$filters)
     {
-        if (isset($filters['organizationCategory']) && is_array($filters['organizationCategory'])) {
-            $matchOrganizationCategory = new BoolQuery();
-
-            foreach ($filters['organizationCategory'] as $organizationCategory) {
-                if ($organizationCategory instanceof OrganizationCategoryView) {
-                    $matchOrganizationCategory->addShould(
-                        (new Term)->setTerm('organizationCategory', $organizationCategory->key)
-                    );
-                }
-            }
-
-            $this->query->addMust($matchOrganizationCategory);
+        if (!isset($filters['organizationCategory'])
+            || !is_array($filters['organizationCategory'])
+            || empty($filters['organizationCategory'])
+        ) {
+            return;
         }
+
+        $matchOrganizationCategory = new BoolQuery();
+
+        foreach ($filters['organizationCategory'] as $organizationCategory) {
+            if ($organizationCategory instanceof OrganizationCategoryView) {
+                $matchOrganizationCategory->addShould(
+                    (new Term)->setTerm('organizationCategory', $organizationCategory->key)
+                );
+            }
+        }
+
+        $this->query->addMust($matchOrganizationCategory);
     }
 
     /**
@@ -505,32 +527,37 @@ class SheetSearchQueryBuilder
      */
     protected function filterByLocalization(array &$filters)
     {
-        if (isset($filters['localization'])) {
-            $localizations = explode(',', $filters['localization']);
-
-            $boolQuery = new BoolQuery();
-
-            foreach ($localizations as $localization) {
-                if (strlen($localization) >= 2 && preg_match('/^[0-9]*$/', $localization)) {
-                    $boolQuery->addShould(new Match('zipcode', $localization));
-                } else {
-                    $boolQuery->addShould(new Match('city', $localization));
-
-                    $nested           = new Nested();
-                    $nestedBoolQuery  = new BoolQuery();
-                    $matchQuery       = new Match('country.label', $localization);
-                    $matchLocaleQuery = new Match('country.locale', $this->locale);
-
-                    $nestedBoolQuery->addMust($matchQuery);
-                    $nestedBoolQuery->addMust($matchLocaleQuery);
-
-                    $nested->setQuery($nestedBoolQuery)->setPath('country');
-                    $boolQuery->addShould($nested);
-                }
-            }
-
-            $this->query->addMust($boolQuery);
+        if (!isset($filters['localization'])
+            || !is_array($filters['localization'])
+            || empty($filters['localization'])
+        ) {
+            return;
         }
+
+        $localizations = explode(',', $filters['localization']);
+
+        $boolQuery = new BoolQuery();
+
+        foreach ($localizations as $localization) {
+            if (strlen($localization) >= 2 && preg_match('/^[0-9]*$/', $localization)) {
+                $boolQuery->addShould(new Match('zipcode', $localization));
+            } else {
+                $boolQuery->addShould(new Match('city', $localization));
+
+                $nested           = new Nested();
+                $nestedBoolQuery  = new BoolQuery();
+                $matchQuery       = new Match('country.label', $localization);
+                $matchLocaleQuery = new Match('country.locale', $this->locale);
+
+                $nestedBoolQuery->addMust($matchQuery);
+                $nestedBoolQuery->addMust($matchLocaleQuery);
+
+                $nested->setQuery($nestedBoolQuery)->setPath('country');
+                $boolQuery->addShould($nested);
+            }
+        }
+
+        $this->query->addMust($boolQuery);
     }
 
     /**
@@ -637,12 +664,13 @@ class SheetSearchQueryBuilder
      */
     protected function filterByCanceledAttendance(array &$filters)
     {
-        if (isset($filters['cancelAttendance'])) {
-            $matchAttend = new Term();
-            $matchAttend->setTerm('attend', !$filters['cancelAttendance']);
-
-            $this->query->addMust($matchAttend);
+        if (!isset($filters['cancelAttendance'])) {
+            return;
         }
+
+        $matchAttend = new Term();
+        $matchAttend->setTerm('attend', !$filters['cancelAttendance']);
+        $this->query->addMust($matchAttend);
     }
 
     /**
@@ -653,12 +681,13 @@ class SheetSearchQueryBuilder
      */
     protected function filterByHasGroup(array &$filters)
     {
-        if (isset($filters['hasGroup'])) {
-            $matchHasGroup = new Term();
-            $matchHasGroup->setTerm('hasGroup', (bool) $filters['hasGroup']);
-
-            $this->query->addMust($matchHasGroup);
+        if (!isset($filters['hasGroup'])) {
+            return;
         }
+
+        $matchHasGroup = new Term();
+        $matchHasGroup->setTerm('hasGroup', (bool) $filters['hasGroup']);
+        $this->query->addMust($matchHasGroup);
     }
 
     /**
@@ -666,23 +695,25 @@ class SheetSearchQueryBuilder
      */
     private function filterByPosition(array &$filters)
     {
-        if (isset($filters['position']) && is_array($filters['position'])) {
-            $nested = new Nested();
-            $nested->setPath('participants');
-
-            $matchPosition = new BoolQuery();
-
-            foreach ($filters['position'] as $position) {
-                if ($position instanceof PositionView) {
-                    $matchPosition->addShould(
-                        (new Term)->setTerm('participants.position', $position->getKey())
-                    );
-                }
-            }
-
-            $nested->setQuery($matchPosition);
-            $this->query->addMust($nested);
+        if (!isset($filters['position']) || !is_array($filters['position']) || empty($filters['position'])) {
+            return;
         }
+
+        $nested = new Nested();
+        $nested->setPath('participants');
+
+        $matchPosition = new BoolQuery();
+
+        foreach ($filters['position'] as $position) {
+            if ($position instanceof PositionView) {
+                $matchPosition->addShould(
+                    (new Term)->setTerm('participants.position', $position->getKey())
+                );
+            }
+        }
+
+        $nested->setQuery($matchPosition);
+        $this->query->addMust($nested);
     }
 
     /**
@@ -720,9 +751,15 @@ class SheetSearchQueryBuilder
      */
     private function filterByHasHappeningParticipation(array &$filters)
     {
-        if (isset($filters['hasHappeningParticipation'])) {
-            $this->query->addMust((new Term())->setTerm('hasHappeningParticipation', (bool) $filters['hasHappeningParticipation']));
+        if (!isset($filters['hasHappeningParticipation'])) {
+            return;
         }
+
+        $this
+            ->query
+            ->addMust((new Term())
+            ->setTerm('hasHappeningParticipation', (bool) $filters['hasHappeningParticipation']))
+        ;
     }
 
     /**
@@ -730,9 +767,15 @@ class SheetSearchQueryBuilder
      */
     private function filterByHasScheduledMeeting(array &$filters)
     {
-        if (isset($filters['hasScheduledMeeting'])) {
-            $this->query->addMust((new Term())->setTerm('hasScheduledMeeting', (bool) $filters['hasScheduledMeeting']));
+        if (!isset($filters['hasScheduledMeeting'])) {
+            return;
         }
+
+        $this
+            ->query
+            ->addMust((new Term())
+            ->setTerm('hasScheduledMeeting', (bool) $filters['hasScheduledMeeting']))
+        ;
     }
 
     /**
@@ -740,9 +783,11 @@ class SheetSearchQueryBuilder
      */
     private function filterByHasInvoice(array &$filters)
     {
-        if (isset($filters['hasInvoice'])) {
-            $this->query->addMust((new Term())->setTerm('hasInvoice', (bool) $filters['hasInvoice']));
+        if (!isset($filters['hasInvoice'])) {
+            return;
         }
+
+        $this->query->addMust((new Term())->setTerm('hasInvoice', (bool) $filters['hasInvoice']));
     }
 
     /**
@@ -776,7 +821,7 @@ class SheetSearchQueryBuilder
      */
     private function filterByImported(array &$filters)
     {
-        if (!isset($filters[Constant::FILTER_IMPORTED])) {
+        if (!isset($filters[Constant::FILTER_IMPORTED]) || empty($filters[Constant::FILTER_IMPORTED])) {
             return;
         }
 
