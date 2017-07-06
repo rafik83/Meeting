@@ -214,7 +214,10 @@ class SheetSearchQueryBuilder
      */
     protected function filterByContent(array &$filters)
     {
-        if (empty($filters[SearchFields::FILTER_CONTENT]) || null === $filters[SearchFields::FILTER_CONTENT]) {
+        if (!isset($filters[SearchFields::FILTER_CONTENT])
+            || empty($filters[SearchFields::FILTER_CONTENT])
+            || null === $filters[SearchFields::FILTER_CONTENT]
+        ) {
             return;
         }
 
@@ -298,7 +301,7 @@ class SheetSearchQueryBuilder
     protected function filterByState(array &$filters)
     {
         /** @var array|string $filters ['state'] */
-        if (!isset($filters['state']) || empty($filters['state'])) {
+        if (!isset($filters['state']) || is_array($filters['state']) && empty($filters['state'])) {
             return;
         }
 
@@ -340,7 +343,7 @@ class SheetSearchQueryBuilder
      */
     protected function filterByEnabled(array &$filters)
     {
-        if (!isset($filters['enabled']) || empty($filters['enabled'])) {
+        if (!isset($filters['enabled'])) {
             return;
         }
 
@@ -528,7 +531,6 @@ class SheetSearchQueryBuilder
     protected function filterByLocalization(array &$filters)
     {
         if (!isset($filters['localization'])
-            || !is_array($filters['localization'])
             || empty($filters['localization'])
         ) {
             return;
