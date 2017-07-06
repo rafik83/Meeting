@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class AgendaConfirmationStatusQueryHandler
 {
@@ -67,9 +68,14 @@ class AgendaConfirmationStatusQueryHandler
      */
     public function handle(AgendaConfirmationStatusQuery $query): array
     {
-        $user = $query->participant->getUser();
+        $user           = $query->participant->getUser();
+        $userEventToken = $this->userEventTokenRepository->findByEventAndUserAndType(
+            $query->event,
+            $user,
+            UserEventTokenType::AGENDA_CONFIRMATION
+        );
 
-        if (null !== $userEventToken = $this->userEventTokenRepository->getConfirmationStatusByUserAndEventAndType($user, $query->event)) {
+        if (null !== $userEventToken) {
             return $userEventToken->isConfirmed() ? self::AGENDA_CONFIRMED : self::AGENDA_NOT_CONFIRMED;
         }
 

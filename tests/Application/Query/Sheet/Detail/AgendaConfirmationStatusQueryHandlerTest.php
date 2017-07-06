@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -94,7 +95,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $this->userEventToken->confirm($this->dateTime);
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
+            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn($this->userEventToken);
 
@@ -108,7 +109,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::AGENDA_NOT_CONFIRMED;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
+            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn($this->userEventToken);
 
@@ -124,7 +125,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::CONFIRMATION_NOT_SENT;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
+            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn(null);
 
@@ -148,7 +149,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::CONFIRMATION_NOT_SENT;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
+            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn(null);
 
@@ -171,7 +172,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::USER_NOT_CONCERNED;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
+            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn(null);
 
