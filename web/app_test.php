@@ -19,9 +19,7 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 }
 */
 
-/**
- * @var Composer\Autoload\ClassLoader $loader
- */
+/** @var \Composer\Autoload\ClassLoader $loader */
 $loader = require __DIR__.'/../vendor/autoload.php';
 
 $kernel = new AppKernel('test', false);
