@@ -61,9 +61,9 @@ interface SheetSearchAdapterInterface
 
     public function getParticipantsSheetIdsView(Event $event, array $filters, string $locale): ParticipantsSheetIdsView;
 
-    public function findLocalization(Event $event, string $filter, string $locale): array;
+    public function findLocalization(Event $event, string $filter, array $defaultFilters, string $locale): array;
 
-    public function findKeyword(Event $event, string $filter, string $locale): array;
+    public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array;
 
     public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array;
 

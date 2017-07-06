@@ -171,11 +171,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return new ParticipantsSheetIdsView($sheetIds);
     }
 
-    public function findLocalization(Event $event, string $filter, string $locale): array
+    public function findLocalization(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder(
             $event,
-            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $defaultFilters,
             $locale
         );
 
@@ -187,11 +187,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query)->getAggregations();
     }
 
-    public function findKeyword(Event $event, string $filter, string $locale): array
+    public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder(
             $event,
-            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $defaultFilters,
             $locale
         );
 

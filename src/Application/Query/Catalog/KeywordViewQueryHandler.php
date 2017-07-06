@@ -40,6 +40,7 @@ class KeywordViewQueryHandler
         $keywords = $this->sheetSearchAdapter->findKeyword(
             $query->event,
             $query->filter,
+            $query->defaultFilters,
             $query->locale
         );
 

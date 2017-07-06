@@ -129,6 +129,7 @@ class CatalogExternalController extends Controller
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
                 $request->get('query'),
+                ExternalCatalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
         );
@@ -152,6 +153,7 @@ class CatalogExternalController extends Controller
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
                 $request->get('query'),
+                ExternalCatalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
         );
