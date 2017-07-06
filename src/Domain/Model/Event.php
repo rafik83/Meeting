@@ -175,9 +175,17 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     */
+    public function setDomain(string $domain)
+    {
+        $this->domain = $domain;
     }
 
     /**

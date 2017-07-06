@@ -1,0 +1,47 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Event;
+
+class ArchiveUnArchiveHandler
+{
+    /** @var ArchiveHandler */
+    private $archiveHandler;
+
+    /** @var UnArchiveHandler */
+    private $unArchiveHandler;
+    /**
+     * @param ArchiveHandler   $archiveHandler
+     * @param UnArchiveHandler $unArchiveHandler
+     */
+    public function __construct(ArchiveHandler $archiveHandler, UnArchiveHandler $unArchiveHandler)
+    {
+        $this->archiveHandler = $archiveHandler;
+        $this->unArchiveHandler = $unArchiveHandler;
+    }
+
+    /**
+     * @param ArchiveUnArchive $command
+     *
+     * @return null|string
+     */
+    public function handle(ArchiveUnArchive $command): ?string
+    {
+        if ($command->archive) {
+            return $this->archiveHandler->handle(new Archive($command->event));
+        }
+
+        if ($command->unArchive) {
+            return $this->unArchiveHandler->handle(new UnArchive($command->event));
+        }
+
+        return null;
+    }
+}
