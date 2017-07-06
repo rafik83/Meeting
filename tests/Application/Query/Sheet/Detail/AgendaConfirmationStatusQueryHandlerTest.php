@@ -94,7 +94,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $this->userEventToken->confirm($this->dateTime);
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndType($this->participant->getUser())
+            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
             ->shouldBeCalled()
             ->willReturn($this->userEventToken);
 
@@ -108,7 +108,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::AGENDA_NOT_CONFIRMED;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndType($this->participant->getUser())
+            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
             ->shouldBeCalled()
             ->willReturn($this->userEventToken);
 
@@ -124,7 +124,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::CONFIRMATION_NOT_SENT;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndType($this->participant->getUser())
+            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
             ->shouldBeCalled()
             ->willReturn(null);
 
@@ -148,7 +148,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::CONFIRMATION_NOT_SENT;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndType($this->participant->getUser())
+            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
             ->shouldBeCalled()
             ->willReturn(null);
 
@@ -171,7 +171,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $expected = AgendaConfirmationStatusQueryHandler::USER_NOT_CONCERNED;
 
         $this->userEventTokenRepository
-            ->getConfirmationStatusByUserAndType($this->participant->getUser())
+            ->getConfirmationStatusByUserAndEventAndType($this->participant->getUser(), $this->event)
             ->shouldBeCalled()
             ->willReturn(null);
 

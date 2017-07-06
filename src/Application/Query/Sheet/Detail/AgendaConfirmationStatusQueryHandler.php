@@ -69,7 +69,7 @@ class AgendaConfirmationStatusQueryHandler
     {
         $user = $query->participant->getUser();
 
-        if (null !== $userEventToken = $this->userEventTokenRepository->getConfirmationStatusByUserAndType($user)) {
+        if (null !== $userEventToken = $this->userEventTokenRepository->getConfirmationStatusByUserAndEventAndType($user, $query->event)) {
             return $userEventToken->isConfirmed() ? self::AGENDA_CONFIRMED : self::AGENDA_NOT_CONFIRMED;
         }
 
