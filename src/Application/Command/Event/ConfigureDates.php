@@ -73,6 +73,20 @@ class ConfigureDates
     public $agendaOnlineDate;
 
     /**
+     * "Date d'ouverture des inscriptions"
+     *
+     * @var null|\DateTimeInterface
+     */
+    public $registrationOpenDate;
+
+    /**
+     * "Date de cloture des inscriptions"
+     *
+     * @var null|\DateTimeInterface
+     */
+    public $registrationCloseDate;
+
+    /**
      * ConfigureDates constructor.
      *
      * @param Event $event
@@ -87,5 +101,7 @@ class ConfigureDates
         $this->closeAnsweringMeetingRequestDate = $event->getConfiguration()->getCloseAnsweringMeetingRequestDate();
         $this->smsActivationDate                = $event->getConfiguration()->getSmsActivationDate();
         $this->agendaOnlineDate                 = $event->getConfiguration()->getAgendaOnlineDate();
+        $this->registrationOpenDate             = $event->getConfiguration()->getRegistrationOpenDate();
+        $this->registrationCloseDate            = $event->getConfiguration()->getRegistrationCloseDate();
     }
 }

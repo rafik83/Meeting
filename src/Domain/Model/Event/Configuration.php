@@ -502,4 +502,20 @@ class Configuration
     {
         return $this->agendaOnlineDate;
     }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getRegistrationOpenDate(): ?\DateTimeInterface
+    {
+        return $this->registrationOpenDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getRegistrationCloseDate(): ?\DateTimeInterface
+    {
+        return $this->registrationCloseDate;
+    }
 }
