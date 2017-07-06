@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandl
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewExternalView;
+use Proximum\Vimeet\Domain\Catalog\ExternalCatalog;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -39,33 +40,42 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
         $limit = 48;
 
         // Mock
-        $sheetSearchAdapter                 = $this->prophesize(SheetSearchAdapterInterface::class);
-        $sheetPreviewLogoutViewQueryHandler = $this->prophesize(SheetPreviewExternalViewQueryHandler::class);
+        $sheetSearchAdapter                   = $this->prophesize(SheetSearchAdapterInterface::class);
+        $sheetPreviewExternalViewQueryHandler = $this->prophesize(SheetPreviewExternalViewQueryHandler::class);
 
-        $sheetSearchAdapter->find($event, PaginatedSheetExternalViewQueryHandler::DEFAULT_FILTERS, Sheet\Constant::ORDER_BY_ALPHABETICAL, $page, $limit, $locale, true, [])
+        $sheetSearchAdapter
+            ->find(
+                $event,
+                ExternalCatalog::DEFAULT_FILTERS,
+                Sheet\Constant::ORDER_BY_ALPHABETICAL,
+                $page,
+                $limit,
+                $locale,
+                true,
+                []
+            )
             ->shouldBeCalled()
-            ->willReturn(
-                new PaginatedResult([$sheet1, $sheet2], $page, $limit, 2)
-            );
+            ->willReturn(new PaginatedResult([$sheet1, $sheet2], $page, $limit, 2))
+        ;
 
         $sheet1Preview = new CatalogSheetPreviewExternalView(1, 'Elao', 'Fournisseur', [], $sheet1);
 
-        $sheetPreviewLogoutViewQueryHandler->handle(
-            new SheetPreviewExternalViewQuery($sheet1, $locale, $event)
-        )->shouldBeCalled()
+        $sheetPreviewExternalViewQueryHandler
+            ->handle(new SheetPreviewExternalViewQuery($sheet1, $locale, $event))
+            ->shouldBeCalled()
             ->willReturn($sheet1Preview);
 
         $sheet2Preview = new CatalogSheetPreviewExternalView(2, 'Vimeet', 'Investisseur', [], $sheet2);
 
-        $sheetPreviewLogoutViewQueryHandler->handle(
-            new SheetPreviewExternalViewQuery($sheet2, $locale, $event)
-        )->shouldBeCalled()
+        $sheetPreviewExternalViewQueryHandler
+            ->handle(new SheetPreviewExternalViewQuery($sheet2, $locale, $event))
+            ->shouldBeCalled()
             ->willReturn($sheet2Preview);
 
-        $query   = new PaginatedSheetExternalViewQuery($event, [], $page, $limit, $locale);
+        $query = new PaginatedSheetExternalViewQuery($event, ExternalCatalog::DEFAULT_FILTERS, $page, $limit, $locale);
         $handler = new PaginatedSheetExternalViewQueryHandler(
             $sheetSearchAdapter->reveal(),
-            $sheetPreviewLogoutViewQueryHandler->reveal()
+            $sheetPreviewExternalViewQueryHandler->reveal()
         );
 
         // Expected
