@@ -105,7 +105,7 @@ class Event implements EventInterface, TraceableInterface
 
     /** @var bool */
     private $externalCatalogEnabled = false;
-    
+
     /** @var bool */
     private $userAgendaVersionsGenerated;
 

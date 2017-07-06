@@ -68,4 +68,25 @@ class UserEventTokenRepository implements UserEventTokenRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForEventTypeAndUsers(Event $event, string $type, array $users): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('userEventToken')
+            ->from(UserEventToken::class, 'userEventToken')
+            ->where('userEventToken.user IN (:users)')
+            ->andWhere('userEventToken.event = :event')
+            ->andWhere('userEventToken.type = :type')
+            ->setParameter('users', $users)
+            ->setParameter('event', $event)
+            ->setParameter('type', $type)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

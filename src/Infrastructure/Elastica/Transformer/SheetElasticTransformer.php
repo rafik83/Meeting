@@ -37,49 +37,31 @@ use Symfony\Component\Intl\Intl;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @var CartRowRepositoryInterface
-     */
+    /** @var CartRowRepositoryInterface */
     private $cartRowRepository;
 
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var Balance
-     */
+    /** @var Balance */
     private $orderBalance;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
-    /**
-     * @var InvoiceRepositoryInterface
-     */
+    /** @var InvoiceRepositoryInterface */
     private $invoiceRepository;
 
     /**
@@ -184,6 +166,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 'state'                   => $sheet->getState(),
                 'validationState'         => $sheet->getValidationState(),
+                'agendaConfirmedStatus'   => $sheet->getAgendaConfirmedStatus(),
                 'enabled'                 => $sheet->isEnabled(),
                 'completed'               => $sheet->isCompleted(),
                 'type'                    => $sheet->getType()->getId(),
