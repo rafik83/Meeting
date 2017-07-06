@@ -38,7 +38,7 @@ class PaginatedSheetExternalViewQueryHandler
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewExternalViewQueryHandler $sheetPreviewExternalViewQueryHandler
     ) {
-        $this->sheetSearchAdapter                 = $sheetSearchAdapter;
+        $this->sheetSearchAdapter                   = $sheetSearchAdapter;
         $this->sheetPreviewExternalViewQueryHandler = $sheetPreviewExternalViewQueryHandler;
     }
 
