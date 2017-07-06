@@ -19,18 +19,17 @@ use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 
 class ConfigureDatesType extends AbstractType
 {
-    const configurationDates =
-        [
-            'catalogOnlineDate',
-            'happeningsOpenDate',
-            'schedulePublishDate',
-            'closeMeetingRequestDate',
-            'closeAnsweringMeetingRequestDate',
-            'smsActivationDate',
-            'agendaOnlineDate',
-            'registrationOpenDate',
-            'registrationCloseDate',
-        ];
+    const configurationDates = [
+        'catalogOnlineDate',
+        'happeningsOpenDate',
+        'schedulePublishDate',
+        'closeMeetingRequestDate',
+        'closeAnsweringMeetingRequestDate',
+        'smsActivationDate',
+        'agendaOnlineDate',
+        'registrationOpenDate',
+        'registrationCloseDate',
+    ];
 
     /**
      * {@inheritdoc}
