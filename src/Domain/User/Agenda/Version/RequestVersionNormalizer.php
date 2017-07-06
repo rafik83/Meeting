@@ -1,0 +1,40 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\User\Agenda\Version;
+
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+
+class RequestVersionNormalizer
+{
+    /**
+     * @param Request $request
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function normalize(Request $request): array
+    {
+        if (!$request->hasMeeting()) {
+            throw new \InvalidArgumentException('The given request does not have a meeting');
+        }
+
+        $meeting = $request->getMeeting();
+
+        return [
+            'request'   => $request->getId(),
+            'fromSheet' => $request->getFromSheet()->getId(),
+            'toSheet'   => $request->getToSheet()->getId(),
+            'slot'      => $meeting->getSlot()->getId(),
+            'spot'      => $meeting->getSpot()->getId(),
+        ];
+    }
+}

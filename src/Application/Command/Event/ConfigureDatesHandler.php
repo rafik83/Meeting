@@ -10,23 +10,31 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Event\KeyDatesUpdatedEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class ConfigureDatesHandler
 {
-    /**
-     * @var EventRepositoryInterface
-     */
+    /** @var EventRepositoryInterface */
     private $eventRepository;
+
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
 
     /**
      * ConfigureDatesHandler constructor.
      *
-     * @param EventRepositoryInterface $eventRepository
+     * @param EventRepositoryInterface        $eventRepository
+     * @param DelayedEventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EventRepositoryInterface $eventRepository)
-    {
+    public function __construct(
+        EventRepositoryInterface $eventRepository,
+        DelayedEventDispatcherInterface $eventDispatcher
+    ) {
         $this->eventRepository = $eventRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -45,5 +53,10 @@ class ConfigureDatesHandler
         );
 
         $this->eventRepository->set($configureDates->event);
+
+        $this->eventDispatcher->dispatch(
+            Events::EVENT_KEY_DATES_UPDATED,
+            new KeyDatesUpdatedEvent($configureDates->event)
+        );
     }
 }

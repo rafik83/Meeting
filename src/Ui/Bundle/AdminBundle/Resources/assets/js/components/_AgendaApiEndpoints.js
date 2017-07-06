@@ -147,4 +147,16 @@ AgendaApiEndpoints.prototype.updateSheetAttendance = function (sheetId) {
     return this.getPathname() + '/sheet/' + sheetId + '/attend/form';
 };
 
+AgendaApiEndpoints.prototype.getUserAgendaVersion = function (participantId) {
+    return this.getPathname() + '/participant/' + participantId + '/agenda/version';
+};
+
+AgendaApiEndpoints.prototype.notifyUserAgendaVersion = function (participantId) {
+    return this.getPathname() + '/participant/' + participantId + '/agenda/version/notify';
+};
+
+AgendaApiEndpoints.prototype.purgeUserAgendaVersion = function (participantId) {
+    return this.getPathname() + '/participant/' + participantId + '/agenda/version/purge';
+};
+
 module.exports = AgendaApiEndpoints;

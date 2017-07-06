@@ -48,6 +48,7 @@ final class Events
     const MEETING_UPDATE_MESSAGE                       = 'meeting.update.message';
     const EVENT_PRE_REGISTERED                         = 'event.preregistered';
     const EVENT_LOCALE_CHANGED                         = 'event.locale_changed';
+    const EVENT_KEY_DATES_UPDATED                      = 'event.key_dates.updated';
     const USER_REGISTERED                              = 'user.registered';
     const USER_RESET_PASSWORD_CONFIRMED                = 'user.reset_password.confirm';
     const ORDER_CONFIRMED                              = 'order.confirm';

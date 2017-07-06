@@ -32,99 +32,61 @@ class Event implements EventInterface, TraceableInterface
      */
     const VAT_MODE_ET = 'et';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $domain;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $logo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoiceLogo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoiceLogoExtension;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $timeZone;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $translations;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $locales = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fallback;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserName;
 
-    /**
-     * @var Address
-     */
+    /** @var Address */
     private $paymentAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserEmail;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $legalInformation;
 
-    /**
-     * @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const
-     */
+    /** @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const */
     private $mode;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $vat;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $elementToJoinWithInvoice;
 
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $assetPath;
 
     /**
@@ -141,25 +103,20 @@ class Event implements EventInterface, TraceableInterface
      */
     private $currency;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $logoExtension;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $emailTeam;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $days;
 
-    /**
-     * @var null|Prefix
-     */
+    /** @var null|Prefix */
     private $invoicePrefix;
+
+    /** @var bool */
+    private $userAgendaVersionsGenerated;
 
     /**
      * @param string      $title
@@ -206,6 +163,8 @@ class Event implements EventInterface, TraceableInterface
         $this->emailTeam      = $emailTeam;
         $this->invoicePrefix  = $invoicePrefix;
         $this->assetPath      = '';
+
+        $this->userAgendaVersionsGenerated = false;
     }
 
     /**
@@ -706,5 +665,21 @@ class Event implements EventInterface, TraceableInterface
         } catch (DayNotDefinedException $exception) {
             return null;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUserAgendaVersionsGenerated(): bool
+    {
+        return $this->userAgendaVersionsGenerated;
+    }
+
+    /**
+     * @param bool $userAgendaVersionsGenerated
+     */
+    public function setUserAgendaVersionsGenerated(bool $userAgendaVersionsGenerated)
+    {
+        $this->userAgendaVersionsGenerated = $userAgendaVersionsGenerated;
     }
 }
