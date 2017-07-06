@@ -364,6 +364,8 @@ class Configuration
      * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
      * @param \DateTimeInterface|null $smsActivationDate
      * @param \DateTimeInterface|null $agendaOnlineDate
+     * @param \DateTimeInterface|null $registrationOpenDate
+     * @param \DateTimeInterface|null $registrationCloseDate
      *
      * @return Configuration
      */
@@ -374,7 +376,9 @@ class Configuration
         \DateTimeInterface $closeMeetingRequestDate = null,
         \DateTimeInterface $closeAnsweringMeetingRequestDate = null,
         \DateTimeInterface $smsActivationDate = null,
-        \DateTimeInterface $agendaOnlineDate = null
+        \DateTimeInterface $agendaOnlineDate = null,
+        \DateTimeInterface $registrationOpenDate = null,
+        \DateTimeInterface $registrationCloseDate = null
     ) {
         $this->catalogOnlineDate                = $catalogOnlineDate;
         $this->happeningsOpenDate               = $happeningsOpenDate;
@@ -383,6 +387,8 @@ class Configuration
         $this->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
         $this->smsActivationDate                = $smsActivationDate;
         $this->agendaOnlineDate                 = $agendaOnlineDate;
+        $this->registrationOpenDate             = $registrationOpenDate;
+        $this->registrationCloseDate            = $registrationCloseDate;
 
         return $this;
     }
