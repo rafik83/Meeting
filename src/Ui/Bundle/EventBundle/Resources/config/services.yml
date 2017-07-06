@@ -361,6 +361,13 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    event_listener.sheet_agenda.agenda_confirmation_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Agenda\AgendaConfirmationEventSubscriber
+        arguments:
+            - '@command.sheet.agenda.update_agenda_confirmed_status_handler'
+        tags:
+            - { name: kernel.event_subscriber }
+
     #
     # Twig extension
     #

@@ -616,6 +616,11 @@ form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de 
 form.sheet_comment.children.filter.label: Filtrer
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
+form.sheet_filter.children.agendaConfirmedStatus.label: 'A validé son agenda'
+form.sheet_filter.children.agendaConfirmedStatus.choice.all_confirmed: 'Validé'
+form.sheet_filter.children.agendaConfirmedStatus.choice.partly_confirmed: 'Partiellement validé (au moins 1 participant n''ayant pas validé)'
+form.sheet_filter.children.agendaConfirmedStatus.choice.none_confirmed: 'Non validé'
+form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'Peu importe'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_filter.children.cart.no.label: Sans
