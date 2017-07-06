@@ -96,13 +96,15 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
-            ->add('hasNoMeetingRequest', CheckboxType::class, [
+            ->add('hasNoMeetingRequest', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.hasNoMeetingRequest.label',
                 'required' => false,
+                'expanded' => true,
             ])
-            ->add('hasPendingMeetingPropositions', CheckboxType::class, [
+            ->add('hasPendingMeetingPropositions', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
                 'required' => false,
+                'expanded' => true,
             ])
             ->add('imported', ImportedChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.imported.label',

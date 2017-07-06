@@ -106,6 +106,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $externalCatalogEnabled = false;
 
+    /** @var bool */
+    private $userAgendaVersionsGenerated;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -151,6 +154,8 @@ class Event implements EventInterface, TraceableInterface
         $this->emailTeam      = $emailTeam;
         $this->invoicePrefix  = $invoicePrefix;
         $this->assetPath      = '';
+
+        $this->userAgendaVersionsGenerated = false;
     }
 
     /**
@@ -671,5 +676,21 @@ class Event implements EventInterface, TraceableInterface
         $this->externalCatalogEnabled = $state;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUserAgendaVersionsGenerated(): bool
+    {
+        return $this->userAgendaVersionsGenerated;
+    }
+
+    /**
+     * @param bool $userAgendaVersionsGenerated
+     */
+    public function setUserAgendaVersionsGenerated(bool $userAgendaVersionsGenerated)
+    {
+        $this->userAgendaVersionsGenerated = $userAgendaVersionsGenerated;
     }
 }

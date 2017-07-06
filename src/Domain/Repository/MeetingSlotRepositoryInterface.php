@@ -91,4 +91,11 @@ interface MeetingSlotRepositoryInterface
      * @return array
      */
     public function findWithAtLeastOneMeetingByEvent(Event $event);
+
+    /**
+     * @param array $slotIds
+     *
+     * @return MeetingSlot[]
+     */
+    public function findByIds(array $slotIds): array;
 }
