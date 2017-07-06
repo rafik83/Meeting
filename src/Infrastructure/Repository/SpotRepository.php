@@ -148,9 +148,9 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('spots')
-            ->from(Spot::class, 'spots')
-            ->where('spots.id IN (:spotsIds)')
+            ->select('spot')
+            ->from(Spot::class, 'spot', 'spot.id')
+            ->where('spot.id IN (:spotsIds)')
             ->setParameter('spotsIds', $spotsIds)
         ;
 

@@ -8,44 +8,36 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Catalog;
 
-class SearchFacetTranslation
+use Proximum\Vimeet\Domain\Model\TypeTranslation;
+
+class AbstractSearchFacetTranslation
 {
-    /**
-     * @var int
-     */
-    private $id;
+    /** @var int */
+    protected $id;
+
+    /** @var AbstractSearchFacet */
+    protected $searchFacet;
+
+    /** @var string|null */
+    protected $label;
+
+    /** @var string|null */
+    protected $placeholder;
+
+    /** @var string */
+    protected $locale;
 
     /**
-     * @var SearchFacet
-     */
-    private $searchFacet;
-
-    /**
-     * @var string
-     */
-    private $label;
-
-    /**
-     * @var string
-     */
-    private $placeholder;
-
-    /**
-     * @var string
-     */
-    private $locale;
-
-    /**
-     * SearchFacetTranslation constructor.
+     * AbstractSearchFacetTranslation constructor.
      *
-     * @param SearchFacet $searchFacet
-     * @param string      $label
-     * @param string      $placeholder
+     * @param AbstractSearchFacet $searchFacet
+     * @param string|null $label
+     * @param string|null $placeholder
      * @param string      $locale
      */
-    public function __construct(SearchFacet $searchFacet, $label, $placeholder, $locale)
+    public function __construct(AbstractSearchFacet $searchFacet, $label, $placeholder, $locale)
     {
         $this->searchFacet = $searchFacet;
         $this->label       = $label;
@@ -54,15 +46,15 @@ class SearchFacetTranslation
     }
 
     /**
-     * @return SearchFacet
+     * @return AbstractSearchFacet
      */
-    public function getSearchFacet()
+    public function getSearchFacet(): AbstractSearchFacet
     {
         return $this->searchFacet;
     }
 
     /**
-     * @param SearchFacet $searchFacet
+     * @param AbstractSearchFacet $searchFacet
      */
     public function setSearchFacet($searchFacet)
     {
@@ -70,7 +62,7 @@ class SearchFacetTranslation
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -86,7 +78,7 @@ class SearchFacetTranslation
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPlaceholder()
     {
@@ -104,7 +96,7 @@ class SearchFacetTranslation
     /**
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -120,7 +112,7 @@ class SearchFacetTranslation
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

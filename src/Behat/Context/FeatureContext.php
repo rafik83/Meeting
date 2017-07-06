@@ -682,4 +682,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $this->setBaseUrl(sprintf('http://%s', $event->getDomain()));
         $this->goToThisPage('/');
     }
+
+    /**
+     * @Given I am on the homepage of the admin
+     */
+    public function iAmOnHomePageOfTheAdmin()
+    {
+        $this->setBaseUrl('http://admin.vimeet.proximum.dev');
+    }
 }

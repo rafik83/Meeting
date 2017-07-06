@@ -31,6 +31,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\SearchFacetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.catalog.external.search_facet:
+        class: Proximum\Vimeet\Infrastructure\Repository\Catalog\External\SearchFacetRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
@@ -283,6 +287,18 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.user.user_event_phone_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\User\UserEventPhoneRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.catalog_visibility_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\CatalogVisibilityRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.user.agenda.version_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\User\Agenda\VersionRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.adapter.job_repository_adapter:
+        class: Proximum\Vimeet\Infrastructure\Repository\Adapter\JobRepositoryAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -1308,6 +1324,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ConfigureDates }
     command.participant.update_company_handler:
@@ -1360,6 +1377,14 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
+    command.event.user.agenda.version.generate_versions_handler:
+        class: Proximum\Vimeet\Application\Command\Event\User\Agenda\Version\GenerateVersionsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@datetime'
     command.event.billing_configuration_handler:
         class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
         arguments:
@@ -1772,6 +1797,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgendaHandler
         arguments:
             - '@repository.token.user_event_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Token\UserEventToken\ConfirmAgenda }
@@ -1798,6 +1824,41 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\ValidateCode }
+
+    command.sheet.agenda.update_agenda_confirmed_status_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Agenda\UpdateAgendaConfirmedStatusHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.agenda.confirmation_calculator'
+
+    command.user.agenda.version.notify_handler:
+        class: Proximum\Vimeet\Application\Command\User\Agenda\Version\NotifyHandler
+        arguments:
+            - '@command.user.agenda.version.send_notification_handler'
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@domain.user.agenda.version.diff_checker'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Agenda\Version\Notify }
+
+    command.user.agenda.version.purge_handler:
+        class: Proximum\Vimeet\Application\Command\User\Agenda\Version\PurgeHandler
+        arguments:
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Agenda\Version\Purge }
+
+    command.user.agenda.version.send_notification_handler:
+        class: Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotificationHandler
+        arguments:
+            - '@domain.user.agenda.version.diff_verbalizer'
+            - '@adapter.smssender_alias'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.user.user_event_phone_repository'
+            - '@adapter.event_url_generator'
 
     #
     # Post Batch Action
@@ -2603,6 +2664,18 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
+    query.catalog.external.catalog_visibility_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler
+        arguments:
+            - '@repository.catalog_visibility_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery }
+    query.catalog.external.search_facet_query:
+        class: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery }
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
@@ -3081,6 +3154,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@query.agenda.agenda_day_view_query_handler'
             - '@template.participant_info_guesser'
+            - '@domain.key_dates.checker.sms_activation_date_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaParticipantViewQuery }
     query.agenda.agenda_day_view_query_handler:
@@ -3171,6 +3245,18 @@ services:
             - '@repository.sheet.sheet_viewed_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery }
+
+    query.agenda.admin.version.retrieve_user_agenda_version_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Version\RetrieveUserAgendaVersionHandler
+        arguments:
+            - '@repository.user.user_event_phone_repository'
+            - '@repository.user.agenda.version_repository'
+            - '@datetime'
+            - '@domain.user.agenda.version.diff_checker'
+            - '@domain.user.agenda.version.generator'
+            - '@domain.user.agenda.version.diff_verbalizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Version\RetrieveUserAgendaVersion }
 
     ##
     # Navigation builder
@@ -3742,6 +3828,14 @@ services:
         tags:
             - { name: console.command }
 
+    command_event_user_agenda_version.generate_versions_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.event.user.agenda.version.generate_versions_handler'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
@@ -3836,6 +3930,21 @@ services:
         arguments:
             - '@repository.filter.tagged_nomenclature_filter_repository'
             - '@repository.nomenclature_repository'
+    catalog.external.configure_handler:
+        class: Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler
+        arguments:
+            - '@repository.catalog_visibility_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@catalog.external.set_search_facet_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
+    catalog.external.set_search_facet_handler:
+        class: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacetHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet }
+
 
     #
     # Promotion
@@ -3988,6 +4097,11 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker
         arguments:
              - '@datetime'
+
+    domain.key_dates.checker.sms_activation_date_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\SmsActivationDateAccessChecker
+        arguments:
+            - '@datetime'
 
     #
     # Nomenclature
@@ -4877,6 +4991,7 @@ services:
         arguments:
             - '@repository.token.user_event_token_repository'
             - '@domain.token.uniqid_generator'
+            - '@event_dispatcher'
             - '@datetime'
 
     #
@@ -4901,3 +5016,38 @@ services:
     #
     domain.user.phone.phone_sanitizer:
         class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer
+
+    #
+    # Agenda confirmation calculator
+    #
+    domain.sheet.agenda.confirmation_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Agenda\ConfirmationCalculator
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+
+    #
+    # User Agenda Version
+    #
+    domain.user.agenda.version.request_version_normalizer:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer
+    domain.user.agenda.version.version_normalizer:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\VersionNormalizer
+        arguments:
+            - '@domain.user.agenda.version.request_version_normalizer'
+    domain.user.agenda.version.generator:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\Generator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@domain.user.agenda.version.version_normalizer'
+    domain.user.agenda.version.diff_checker:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\DiffChecker
+    domain.user.agenda.version.diff_verbalizer:
+        class: Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer
+        arguments:
+            - '@domain.user.agenda.version.diff_checker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'

@@ -54,6 +54,14 @@ Proximum\Vimeet\Domain\Model\Event:
         emailTeam:
             type: string
             nullable: true
+        externalCatalogEnabled:
+            type: boolean
+            options:
+                default: false
+        userAgendaVersionsGenerated:
+            type: boolean
+            options:
+                default: false
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address

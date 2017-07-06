@@ -5,7 +5,7 @@
 {% block body %}
     {{ 'mail.orderConfirm.body'|trans({
         '%orderNumero%': mail.order.numero,
-        '%orderDate%': mail.order.createdAt|localizeddate('medium', 'none', mail.locale),
+        '%orderDate%': mail.order.createdAt|localizeddate('medium', 'none', mail.locale, mail.event.timeZone),
         '%firstname%': mail.firstname|capitalize,
         '%lastname%': mail.lastname|upper,
         '%participationType%': mail.participantType

@@ -99,6 +99,23 @@ form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
 form.common.choices.all: 'Tout sélectionner'
+form.configure.children.externalCatalogEnabled.label: 'Catalogue public activé'
+form.configure.children.types.label: 'Types visibles'
+form.configure.children.submit.label: 'Enregistrer'
+form.configure.children.categories.label: 'Catégories visibles'
+form.configure.children.searchFacets.category.help: ''
+form.configure.children.searchFacets.category.label: Catégorie
+form.configure.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
+form.configure.children.searchFacets.keywords.label: 'Mots clés'
+form.configure.children.searchFacets.localization.help: 'Champs tagués ville, pays et code postal (à 2 chiffres uniquement pour la France)'
+form.configure.children.searchFacets.localization.label: Localisation
+form.configure.children.searchFacets.organizationCategory.help: 'Tag catégorie de la société'
+form.configure.children.searchFacets.organizationCategory.label: Structure
+form.configure.children.searchFacets.position.help: 'Nomenclature sur champ tagué fonction du participant'
+form.configure.children.searchFacets.position.label: Fonction
+form.configure.children.searchFacets.type.help: ''
+form.configure.children.searchFacets.type.label: Type
+form.configure.children.searchFacets.prototype.children.enabled.label: 'Activé'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -338,6 +355,7 @@ form.messaging_update_message.children.submit.label: Enregistrer
 form.new_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.new_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.new_password.children.submit.label: Envoyez
+form.noCategoryFound: 'Aucune catégorie disponible'
 form.nomenclature_assign_type.children.event.help: 'La nomenclature sera dupliquée pour être assignée à cet événement. Vous la retrouverez dans les nomenclatures de l''événement.'
 form.nomenclature_assign_type.children.event.label: Événement
 form.nomenclature_assign_type.children.submit.label: Assigner
@@ -616,6 +634,11 @@ form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de 
 form.sheet_comment.children.filter.label: Filtrer
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
+form.sheet_filter.children.agendaConfirmedStatus.label: 'A validé son agenda'
+form.sheet_filter.children.agendaConfirmedStatus.choice.all_confirmed: 'Validé'
+form.sheet_filter.children.agendaConfirmedStatus.choice.partly_confirmed: 'Partiellement validé (au moins 1 participant n''ayant pas validé)'
+form.sheet_filter.children.agendaConfirmedStatus.choice.none_confirmed: 'Non validé'
+form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'Peu importe'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_filter.children.cart.no.label: Sans

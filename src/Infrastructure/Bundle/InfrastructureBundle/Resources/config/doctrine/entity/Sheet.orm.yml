@@ -42,6 +42,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
         title:
             type: string
             nullable: true
+        agendaConfirmedStatus:
+            type: string
+            options:
+                default: 'agenda_not_concerned'
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
