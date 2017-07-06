@@ -150,6 +150,20 @@ class Configuration
     private $agendaOnlineDate;
 
     /**
+     * "Date d'ouverture des inscriptions"
+     *
+     * @var \DateTimeInterface|null
+     */
+    private $registrationOpenDate;
+
+    /**
+     * "Date de cloture des inscriptions"
+     *
+     * @var \DateTimeInterface|null
+     */
+    private $registrationCloseDate;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
