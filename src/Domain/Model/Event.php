@@ -22,14 +22,10 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Event implements EventInterface, TraceableInterface
 {
-    /**
-     * All Taxes Include : prices include taxes, no additional taxes computed
-     */
+    /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
 
-    /**
-     * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-     */
+    /** Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices*/
     const VAT_MODE_ET = 'et';
 
     /** @var int */
@@ -89,18 +85,10 @@ class Event implements EventInterface, TraceableInterface
     /** @var string */
     private $assetPath;
 
-    /**
-     * ISO 3166-1 alpha-2 country code
-     *
-     * @var string
-     */
+    /** @var string ISO 3166-1 alpha-2 country code */
     private $country;
 
-    /**
-     * ISO 4217 3-letter currency code
-     *
-     * @var string
-     */
+    /** @var string ISO 4217 3-letter currency code */
     private $currency;
 
     /** @var string */
@@ -114,6 +102,9 @@ class Event implements EventInterface, TraceableInterface
 
     /** @var null|Prefix */
     private $invoicePrefix;
+
+    /** @var bool */
+    private $externalCatalogEnabled = false;
 
     /** @var bool */
     private $userAgendaVersionsGenerated;
@@ -665,6 +656,26 @@ class Event implements EventInterface, TraceableInterface
         } catch (DayNotDefinedException $exception) {
             return null;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExternalCatalogEnabled(): bool
+    {
+        return true === $this->externalCatalogEnabled;
+    }
+
+    /**
+     * @param bool $state
+     *
+     * @return Event
+     */
+    public function setExternalCatalog(bool $state): Event
+    {
+        $this->externalCatalogEnabled = $state;
+
+        return $this;
     }
 
     /**

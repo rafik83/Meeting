@@ -1,18 +1,19 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Model;
+namespace Proximum\Vimeet\Domain\Model\Catalog;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 
-class SearchFacet
+class AbstractSearchFacet
 {
     const TYPE_TYPE                  = 'type';
     const TYPE_POSITION              = 'position';
@@ -21,33 +22,23 @@ class SearchFacet
     const TYPE_KEYWORDS              = 'keywords';
     const TYPE_LOCALIZATION          = 'localization';
 
-    /**
-     * @var int
-     */
-    private $id;
+    /** @var int */
+    protected $id;
+
+    /** @var Event */
+    protected $event;
+
+    /** @var string */
+    protected $type;
+
+    /** @var bool */
+    protected $enabled;
+
+    /** @var ArrayCollection */
+    protected $translations;
 
     /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var bool
-     */
-    private $enabled;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $translations;
-
-    /**
-     * SearchFacet constructor.
+     * AbstractSearchFacet constructor.
      *
      * @param Event  $event
      * @param string $type
@@ -61,14 +52,14 @@ class SearchFacet
         $this->translations = new ArrayCollection();
 
         foreach ($event->getLocales() as $locale) {
-            $this->translations[$locale] = new SearchFacetTranslation($this, '', '', $locale);
+            $this->translations[$locale] = new AbstractSearchFacetTranslation($this, '', '', $locale);
         }
     }
 
     /**
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
@@ -84,7 +75,7 @@ class SearchFacet
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -100,7 +91,7 @@ class SearchFacet
     /**
      * @return boolean
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -122,15 +113,15 @@ class SearchFacet
     }
 
     /**
-     * @return SearchFacetTranslation[]
+     * @return AbstractSearchFacetTranslation[]
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         return $this->translations->toArray();
     }
 
     /**
-     * @param SearchFacetTranslation[] $translations
+     * @param AbstractSearchFacetTranslation[] $translations
      */
     public function setTranslations(array $translations)
     {
@@ -140,7 +131,7 @@ class SearchFacet
     /**
      * @return array
      */
-    public static function getAllTypes()
+    public static function getAllTypes(): array
     {
         return [
             self::TYPE_CATEGORY,
@@ -157,9 +148,9 @@ class SearchFacet
      * @param string $label
      * @param string $placeholder
      *
-     * @return SearchFacet
+     * @return AbstractSearchFacet
      */
-    public function translate($locale, $label, $placeholder)
+    public function translate($locale, $label, $placeholder): AbstractSearchFacet
     {
         foreach ($this->translations as $translation) {
             if ($translation->getLocale() === $locale) {
@@ -173,7 +164,7 @@ class SearchFacet
     /**
      * @return bool
      */
-    public function hasPlaceholder()
+    public function hasPlaceholder(): bool
     {
         return !in_array($this->type, [self::TYPE_TYPE, self::TYPE_CATEGORY]);
     }
