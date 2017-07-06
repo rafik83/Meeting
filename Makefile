@@ -196,7 +196,7 @@ test-phpunit@test:
 
 test-behat:
 	bin/console ca:cl --env=test
-	bin/behat
+	bin/behat --format progress --no-interaction
 
 test-behat@test:
 	rm -rf var/cache/test/*

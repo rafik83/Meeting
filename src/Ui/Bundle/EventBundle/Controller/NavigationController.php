@@ -55,7 +55,7 @@ class NavigationController extends Controller
                 $eventDomain->getEvent(),
                 $request->getLocale(),
                 $route,
-                $routeParameters,
+                null === $routeParameters ? [] : $routeParameters,
                 $registration,
                 $sheet,
                 $user
