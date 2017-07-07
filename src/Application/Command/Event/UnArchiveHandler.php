@@ -30,10 +30,8 @@ class UnArchiveHandler
      * @param UnArchive $command
      *
      * @throws EventNotArchivedException
-     *
-     * @return string
      */
-    public function handle(UnArchive $command): string
+    public function handle(UnArchive $command)
     {
         if (!$command->event->isArchived()) {
             throw new EventNotArchivedException(
@@ -43,7 +41,5 @@ class UnArchiveHandler
 
         $command->event->unArchive();
         $this->eventRepository->set($command->event);
-
-        return ArchiveUnArchive::UN_ARCHIVE_DONE;
     }
 }

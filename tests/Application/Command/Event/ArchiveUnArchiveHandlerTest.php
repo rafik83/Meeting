@@ -49,7 +49,6 @@ class ArchiveUnArchiveHandlerTest extends TestCase
         $this->archiveHandler
             ->handle(new Archive($this->event->reveal()))
             ->shouldBeCalled()
-            ->willReturn(ArchiveUnArchive::ARCHIVE_DONE)
         ;
 
         // Handler
@@ -59,7 +58,7 @@ class ArchiveUnArchiveHandlerTest extends TestCase
         );
         $result = $handler->handle($command);
 
-        $this->assertEquals(ArchiveUnArchive::ARCHIVE_DONE, $result);
+        $this->assertEquals(ArchiveUnArchive::ARCHIVED, $result);
     }
 
     public function testHandleUnArchive()
@@ -72,7 +71,6 @@ class ArchiveUnArchiveHandlerTest extends TestCase
         $this->unArchiveHandler
             ->handle(new UnArchive($this->event->reveal()))
             ->shouldBeCalled()
-            ->willReturn(ArchiveUnArchive::UN_ARCHIVE_DONE)
         ;
 
         // Handler
@@ -82,7 +80,7 @@ class ArchiveUnArchiveHandlerTest extends TestCase
         );
         $result = $handler->handle($command);
 
-        $this->assertEquals(ArchiveUnArchive::UN_ARCHIVE_DONE, $result);
+        $this->assertEquals(ArchiveUnArchive::UN_ARCHIVED, $result);
     }
 
     public function testHandleNothing()

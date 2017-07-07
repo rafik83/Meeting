@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Exception\Event\EventAlreadyArchivedException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class ArchiveHandler
@@ -32,10 +33,8 @@ class ArchiveHandler
      *
      * @throws DayNotDefinedException
      * @throws EventAlreadyArchivedException
-     *
-     * @return string
      */
-    public function handle(Archive $command): string
+    public function handle(Archive $command)
     {
         if ($command->event->isArchived()) {
             throw new EventAlreadyArchivedException(
@@ -43,29 +42,36 @@ class ArchiveHandler
             );
         }
 
-        $days = $command->event->getDays();
+        $this->setDomainWithYear($command->event);
+        $command->event->archive();
+
+        $this->eventRepository->set($command->event);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @throws DayNotDefinedException
+     */
+    private function setDomainWithYear(Event $event)
+    {
+        $days = $event->getDays();
         $firstDay = reset($days);
 
-        if (empty($days) || false === $firstDay) {
+        if (false === $firstDay) {
             throw new DayNotDefinedException(
                 'The days of the event are not defined and therefore the suffix can not be added'
             );
         }
 
         $year = $firstDay->getStartTime()->format('Y');
-        $domainSplit = explode('.', $command->event->getDomain());
+        $domainSplit = explode('.', $event->getDomain(), 2);
 
         if (mb_substr($domainSplit[0], -4) !== $year) {
             $domainSplit[0] .= '-' . $year;
             $domain         = implode('.', $domainSplit);
 
-            $command->event->setDomain($domain);
+            $event->setDomain($domain);
         }
-
-        $command->event->archive();
-
-        $this->eventRepository->set($command->event);
-
-        return ArchiveUnArchive::ARCHIVE_DONE;
     }
 }

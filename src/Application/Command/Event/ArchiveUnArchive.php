@@ -14,8 +14,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ArchiveUnArchive
 {
-    const ARCHIVE_DONE = 'event_archived';
-    const UN_ARCHIVE_DONE = 'event_un_archived';
+    const ARCHIVED = 'event_archived';
+    const UN_ARCHIVED = 'event_un_archived';
 
     /** @var bool */
     public $archive = false;

@@ -35,11 +35,15 @@ class ArchiveUnArchiveHandler
     public function handle(ArchiveUnArchive $command): ?string
     {
         if ($command->archive) {
-            return $this->archiveHandler->handle(new Archive($command->event));
+            $this->archiveHandler->handle(new Archive($command->event));
+
+            return ArchiveUnArchive::ARCHIVED;
         }
 
         if ($command->unArchive) {
-            return $this->unArchiveHandler->handle(new UnArchive($command->event));
+            $this->unArchiveHandler->handle(new UnArchive($command->event));
+
+            return ArchiveUnArchive::UN_ARCHIVED;
         }
 
         return null;

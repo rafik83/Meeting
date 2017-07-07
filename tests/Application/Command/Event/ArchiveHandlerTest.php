@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Event\Archive;
 use Proximum\Vimeet\Application\Command\Event\ArchiveHandler;
-use Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive;
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Exception\Event\EventAlreadyArchivedException;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -83,9 +82,7 @@ class ArchiveHandlerTest extends TestCase
 
         // handler
         $archiveHandler = new ArchiveHandler($eventRepository->reveal());
-        $result = $archiveHandler->handle(new Archive($event));
-
-        $this->assertEquals(ArchiveUnArchive::ARCHIVE_DONE, $result);
+        $archiveHandler->handle(new Archive($event));
     }
 
     public function testHandle()
@@ -110,8 +107,6 @@ class ArchiveHandlerTest extends TestCase
 
         // handler
         $archiveHandler = new ArchiveHandler($eventRepository->reveal());
-        $result = $archiveHandler->handle(new Archive($event));
-
-        $this->assertEquals(ArchiveUnArchive::ARCHIVE_DONE, $result);
+        $archiveHandler->handle(new Archive($event));
     }
 }

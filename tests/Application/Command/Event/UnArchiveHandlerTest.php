@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive;
 use Proximum\Vimeet\Application\Command\Event\UnArchive;
 use Proximum\Vimeet\Application\Command\Event\UnArchiveHandler;
 use Proximum\Vimeet\Domain\Exception\Event\EventNotArchivedException;
@@ -52,8 +51,6 @@ class UnArchiveHandlerTest extends TestCase
 
         // handler
         $unArchiveHandler = new UnArchiveHandler($eventRepository->reveal());
-        $result = $unArchiveHandler->handle(new UnArchive($event));
-
-        $this->assertEquals(ArchiveUnArchive::UN_ARCHIVE_DONE, $result);
+        $unArchiveHandler->handle(new UnArchive($event));
     }
 }
