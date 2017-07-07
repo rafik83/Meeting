@@ -2664,18 +2664,28 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
+
+    query.catalog.sheet_preview_external_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQueryHandler
+        arguments:
+            - '@sheet.preview'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery }
+
     query.catalog.external.catalog_visibility_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler
         arguments:
             - '@repository.catalog_visibility_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery }
+
     query.catalog.external.search_facet_query:
         class: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery }
+
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
@@ -2688,6 +2698,15 @@ services:
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+
+    query.sheet.catalog.paginated_sheet_external_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@query.catalog.sheet_preview_external_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
+
     query.invoice.invoice_data_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler
         arguments:
@@ -2732,6 +2751,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+
+    query.catalog.filtered_fields_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
@@ -2844,9 +2870,14 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserListViewQuery }
 
     query.catalog.search_facet_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+
+    query.catalog.search_facet_external_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
 
     query.mail.participant_mail_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler

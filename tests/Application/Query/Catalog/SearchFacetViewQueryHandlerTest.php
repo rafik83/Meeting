@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
