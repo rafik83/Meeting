@@ -28,9 +28,17 @@ class ArchiveUnArchiveType extends AbstractType
         $event = $options['event'];
 
         if ($event->isArchived()) {
-            $builder->add('unArchive', SubmitType::class);
+            $builder->add('unArchive', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-lg',
+                ]
+            ]);
         } else {
-            $builder->add('archive', SubmitType::class);
+            $builder->add('archive', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-lg',
+                ]
+            ]);
         }
     }
 
@@ -39,8 +47,8 @@ class ArchiveUnArchiveType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefined('event');
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => ArchiveUnArchive::class,
         ]);

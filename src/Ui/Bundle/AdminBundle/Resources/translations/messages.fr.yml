@@ -129,6 +129,7 @@ admin.common.export.no: Non
 admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
+admin.event.archive.title: 'Archiver l''événement %eventTitle%'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
@@ -167,6 +168,7 @@ admin.event.template.registration: Inscription
 admin.event.template.sheet: Présentation
 admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
+admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
 admin.event.update.link: Modifier
 admin.event.update.title: 'Modifier l''évènement'
 admin.event.vatMode.ati: TTC

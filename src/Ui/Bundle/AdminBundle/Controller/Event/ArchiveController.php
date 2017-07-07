@@ -10,9 +10,15 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive;
+use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
+use Proximum\Vimeet\Domain\Exception\Event\EventAlreadyArchivedException;
+use Proximum\Vimeet\Domain\Exception\Event\EventNotArchivedException;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ArchiveUnArchiveType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ArchiveController extends Controller
@@ -31,7 +37,56 @@ class ArchiveController extends Controller
         $archiveUnArchive = new ArchiveUnArchive($event);
         $form = $this->createForm(ArchiveUnArchiveType::class, $archiveUnArchive, [
             'event' => $event,
+            'confirm' => 'form.archive_un_archive.confirm.submit.label',
         ]);
-        return $this->render('');
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            if ($form->has('archive')) {
+                $archiveUnArchive->archive = $form->get('archive')->isClicked();
+            }
+            if ($form->has('unArchive')) {
+                $archiveUnArchive->unArchive = $form->get('unArchive')->isClicked();
+            }
+
+            try {
+                $result = $this->get('tactician.commandbus')->handle($archiveUnArchive);
+
+                if ($result === ArchiveUnArchive::ARCHIVED) {
+                    $translatedMessage = $this
+                        ->get('translator')
+                        ->trans('flash.admin.event.archive.success', ['%domain%' => $event->getDomain()], 'flashes')
+                    ;
+
+                    $this->addFlash('success', $translatedMessage);
+
+                    return $this->redirectToRoute('admin_event_archive', [
+                        'event' => $event->getId(),
+                    ]);
+                } elseif ($result === ArchiveUnArchive::UN_ARCHIVED) {
+                    $this->addFlash('success', 'flash.admin.event.un_archive.success');
+
+                    return $this->redirectToRoute('admin_event_archive', [
+                        'event' => $event->getId(),
+                    ]);
+                }
+            } catch (DayNotDefinedException $exception) {
+                $form->addError(new FormError(
+                   $this->get('translator')->trans('validators.event.archive.dayNotDefined', [], 'validators')
+                ));
+            } catch (EventAlreadyArchivedException $exception) {
+                $form->addError(new FormError(
+                    $this->get('translator')->trans('validators.event.archive.alreadyArchived', [], 'validators')
+                ));
+            } catch (EventNotArchivedException $exception) {
+                $form->addError(new FormError(
+                    $this->get('translator')->trans('validators.event.unArchive.notArchived', [], 'validators')
+                ));
+            }
+        }
+
+        return $this->render('AdminBundle:Event:archive.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
     }
 }
