@@ -260,4 +260,4 @@ services:
             - '@templating'
             - '@adapter.authorization_checker'
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, priority: 999 }
+            - { name: kernel.event_listener, event: kernel.exception, priority: -127 }
