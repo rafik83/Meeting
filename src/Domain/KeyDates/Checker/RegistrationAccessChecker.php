@@ -42,7 +42,6 @@ class RegistrationAccessChecker extends AccessChecker
         $this->registrationDateCloseAccessChecker = $registrationDateCloseAccessChecker;
     }
 
-
     /**
      * @param Event $event
      *
