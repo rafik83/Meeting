@@ -16,7 +16,7 @@ class RegistrationAccessChecker extends AccessChecker
 {
     const REGISTRATION_OPEN_DATE_NOT_REACHED = 'registration_open_date_not_reached';
     const REGISTRATION_CLOSE_DATE_REACHED = 'registration_close_date_reached';
-    const REGISTRATION_DATE_VALID = 'registration_date_valid';
+    const REGISTRATION_OPEN = 'registration_open';
 
     /** @var RegistrationOpenDateAccessChecker */
     private $registrationDateOpenAccessChecker;
@@ -47,7 +47,7 @@ class RegistrationAccessChecker extends AccessChecker
      *
      * @return string
      */
-    public function allowedToAccess(Event $event): string
+    public function getRegistrationAccessStatus(Event $event): string
     {
         if (!$this->registrationDateOpenAccessChecker->allowedToAccess($event)) {
             return self::REGISTRATION_OPEN_DATE_NOT_REACHED;
@@ -57,6 +57,6 @@ class RegistrationAccessChecker extends AccessChecker
             return self::REGISTRATION_CLOSE_DATE_REACHED;
         }
 
-        return self::REGISTRATION_DATE_VALID;
+        return self::REGISTRATION_OPEN;
     }
 }

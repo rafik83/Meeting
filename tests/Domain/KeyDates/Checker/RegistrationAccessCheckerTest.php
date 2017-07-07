@@ -54,8 +54,8 @@ class RegistrationAccessCheckerTest extends TestCase
         $this->registrationCloseDateAccessChecker->allowedToAccess($this->event)->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(
-            RegistrationAccessChecker::REGISTRATION_DATE_VALID,
-            $this->registrationAccessChecker->allowedToAccess($this->event)
+            RegistrationAccessChecker::REGISTRATION_OPEN,
+            $this->registrationAccessChecker->getRegistrationAccessStatus($this->event)
         );
     }
 
@@ -66,7 +66,7 @@ class RegistrationAccessCheckerTest extends TestCase
 
         $this->assertEquals(
             RegistrationAccessChecker::REGISTRATION_OPEN_DATE_NOT_REACHED,
-            $this->registrationAccessChecker->allowedToAccess($this->event)
+            $this->registrationAccessChecker->getRegistrationAccessStatus($this->event)
         );
     }
 
@@ -77,7 +77,7 @@ class RegistrationAccessCheckerTest extends TestCase
 
         $this->assertEquals(
             RegistrationAccessChecker::REGISTRATION_CLOSE_DATE_REACHED,
-            $this->registrationAccessChecker->allowedToAccess($this->event)
+            $this->registrationAccessChecker->getRegistrationAccessStatus($this->event)
         );
     }
 }
