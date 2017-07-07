@@ -182,6 +182,8 @@ form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la de
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
 form.event_configure_date.children.smsActivationDate.label: 'Date d''activation des notifications SMS'
+form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
+form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.submit.label: Enregistrer
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise

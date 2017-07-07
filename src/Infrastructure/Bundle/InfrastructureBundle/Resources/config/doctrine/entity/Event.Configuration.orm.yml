@@ -30,6 +30,12 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         agendaOnlineDate:
             type: datetime
             nullable: true
+        registrationOpenDate:
+            type: datetime
+            nullable: true
+        registrationCloseDate:
+            type: datetime
+            nullable: true
         meetingRequestUpdateLocked:
             type: boolean
             options:

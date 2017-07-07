@@ -49,7 +49,9 @@ class ConfigureDatesHandler
             $configureDates->closeMeetingRequestDate,
             $configureDates->closeAnsweringMeetingRequestDate,
             $configureDates->smsActivationDate,
-            $configureDates->agendaOnlineDate
+            $configureDates->agendaOnlineDate,
+            $configureDates->registrationOpenDate,
+            $configureDates->registrationCloseDate
         );
 
         $this->eventRepository->set($configureDates->event);
