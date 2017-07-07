@@ -61,6 +61,12 @@
                 <i class="icon-Appeler"></i>
             </a>
         </li>
+
+        {% if isShowingRegisterButton %}
+            <li>
+                <a href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+            </li>
+        {% endif %}
     </ul>
 </div>
 

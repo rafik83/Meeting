@@ -53,6 +53,8 @@ default:
                     - '@behat_proxy.login_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Event\DayContext:
                     - '@behat_proxy.event.day_context'
+                - Proximum\Vimeet\Behat\Context\Domain\CatalogVisibilityContext:
+                    - '@behat.proxy.catalog_visibility_context_proxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Token\UserEventTokenContext:
                     - '@behat_proxy.token.user_event_token_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Invoice\PrefixContext:

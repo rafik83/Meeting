@@ -58,9 +58,19 @@ class CatalogController extends Controller
             return $this->redirectToRoute('admin_event_external_catalog_configure', ['event' => $event->getId()]);
         }
 
+        $externalCatalogUrls = [];
+        foreach ($event->getLocales() as $locale) {
+            $externalCatalogUrls[] = $this->get('adapter.event_url_generator')->generateEventAbsoluteUrl(
+                $event,
+                'event_catalog_external_index',
+                ['_locale' => $locale]
+            );
+        }
+
         return $this->render('AdminBundle:Catalog/External:configure.html.twig', [
-            'event' => $event,
-            'form' => $configureForm->createView(),
+            'event'               => $event,
+            'externalCatalogUrls' => $externalCatalogUrls,
+            'form'                => $configureForm->createView(),
         ]);
     }
 }

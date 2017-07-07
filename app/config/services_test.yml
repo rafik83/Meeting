@@ -131,6 +131,11 @@ services:
         arguments:
             - '@repository.invoice.prefix_repository'
 
+    behat.service.manager.catalog_visibility_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
+        arguments:
+            - '@repository.catalog_visibility_repository'
+
     #
     # Proxies
     #
@@ -217,6 +222,12 @@ services:
         class: Proximum\Vimeet\Behat\Proxy\LoginContextProxy
         arguments:
              - '@behat_storage'
+
+    behat.proxy.catalog_visibility_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\CatalogVisibilityContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.catalog_visibility_manager'
 
     behat_proxy.event.day_context:
         class: Proximum\Vimeet\Behat\Proxy\Event\DayContextProxy

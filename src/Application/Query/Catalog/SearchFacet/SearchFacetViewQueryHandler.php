@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Catalog;
+namespace Proximum\Vimeet\Application\Query\Catalog\SearchFacet;
 
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 
-class SearchFacetViewQueryHandler
+class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
 {
     /**
      * @var SearchFacetRepositoryInterface
@@ -36,7 +36,7 @@ class SearchFacetViewQueryHandler
      *
      * @return SearchFacetsView
      */
-    public function handle(SearchFacetViewQuery $query)
+    public function handle($query): SearchFacetsView
     {
         $searchFacets = $this->searchFacetRepository->getByEvent($query->event);
 

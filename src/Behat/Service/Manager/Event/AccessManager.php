@@ -61,4 +61,14 @@ class AccessManager
 
         $this->eventRepository->set($event);
     }
+
+    /**
+     * @param Event $event
+     */
+    public function openExternalCatalog(Event $event)
+    {
+        $event->setExternalCatalog(true);
+
+        $this->eventRepository->set($event);
+    }
 }
