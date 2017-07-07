@@ -29,9 +29,9 @@ class EventContext implements Context
     /**
      * @Given /^the event "(?P<eventTitle>[^"]+)" is created$/
      *
-     * @param string $eventTitle
+     * @param string|null $eventTitle
      */
-    public function createEvent($eventTitle = null)
+    public function createEvent(string $eventTitle = null)
     {
         $event = $this->eventContextProxy->getEventManager()->create($eventTitle);
         $this->eventContextProxy->getStorage()->set('event', $event);
