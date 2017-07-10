@@ -46,6 +46,7 @@ Feature: See, create and update event
     And I should see "flash.admin.event.create.success"
     And I should be on this page "/en/event"
     And I should see "Super Event"
+    And I should not see "Invisible"
 
   Scenario: update event
     Given I am logged with "test@test.com" on admin
@@ -53,7 +54,6 @@ Feature: See, create and update event
     When I follow "admin.event.update.link"
     Then the response status code should be 200
     And I should be on this page "/en/event/1/update"
-    And I check "form.event_update.children.visible.label"
     And I fill in the following:
       | event_update_title                       | Other event                                                                    |
       | event_update_translations_fr_description | LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE                                  |
@@ -86,3 +86,13 @@ Feature: See, create and update event
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
     And the "event_update_invoicePrefix" field should contain "1"
+
+  Scenario: i should not access to an invisible event
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/en/event/1"
+    And I go to this page "/en/event/1/update"
+    When I uncheck "form.event_update.children.visible.label"
+    And I press "form.event_update.children.submit.label"
+    Then I go to this page "/en/event"
+    And I should see "Invisible"
+    And this page "/fr/unknow-route" returns 404
