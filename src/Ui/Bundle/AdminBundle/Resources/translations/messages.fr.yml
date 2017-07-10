@@ -144,6 +144,7 @@ admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.list.currents.title: 'Événements actuels'
 admin.event.list.pasts.title: 'Événements passés'
+admin.event.list.archived.title: 'Événements archivés'
 admin.event.page.invoice.title: 'Export des factures'
 admin.event.page.invoice.link: 'Factures'
 admin.event.page.list.title: 'Liste de mes événements'

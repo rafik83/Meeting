@@ -637,7 +637,9 @@ class Event implements EventInterface, TraceableInterface
             throw new DayNotDefinedException();
         }
 
-        return reset($this->getDays());
+        $days = $this->getDays();
+
+        return reset($days);
     }
 
     /**
@@ -651,7 +653,9 @@ class Event implements EventInterface, TraceableInterface
             throw new DayNotDefinedException();
         }
 
-        return reset(array_reverse($this->getDays()));
+        $days = array_reverse($this->getDays());
+
+        return reset($days);
     }
 
     /**

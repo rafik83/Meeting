@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalI
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
-use Proximum\Vimeet\Application\Query\Event\EventListQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
@@ -31,26 +30,9 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventController extends Controller
 {
-    /**
-     * @param UserInterface $admin
-     *
-     * @return Response
-     */
-    public function listAction(UserInterface $admin): Response
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $events = $this->get('tactician.commandbus.query')->handle(new EventListQuery($admin));
-
-        return $this->render('AdminBundle:Event:list.html.twig', [
-            'events' => $events,
-        ]);
-    }
-
     /**
      * @param Event $event
      *

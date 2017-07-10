@@ -114,8 +114,18 @@ admin_create_new_password:
 
 admin_event_list:
     path: /event
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:list }
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event/Current:list }
+
+admin_past_event_list:
+    path: /event/past
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event/Past:list }
+
+admin_archived_event_list:
+    path: /event/archived
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event/Archived:list }
 
 admin_event_transaction_export:
     path: /event/transaction/export
