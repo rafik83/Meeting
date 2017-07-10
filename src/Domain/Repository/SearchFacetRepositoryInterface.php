@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 
 interface SearchFacetRepositoryInterface
 {

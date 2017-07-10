@@ -121,6 +121,11 @@ services:
         arguments:
              - '@repository.token.user_event_token_repository'
 
+    behat.service.manager.catalog_visibility_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
+        arguments:
+            - '@repository.catalog_visibility_repository'
+
     #
     # Proxies
     #
@@ -220,6 +225,13 @@ services:
             - '@behat_storage'
             - '@behat_manager.token.user_event_token_manager'
 
+
+    behat.proxy.catalog_visibility_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\CatalogVisibilityContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.catalog_visibility_manager'
+
     infrastructure.adapter.monolog_smssender_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter
         arguments:
@@ -234,4 +246,4 @@ services:
             - '@templating'
             - '@adapter.authorization_checker'
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, priority: 999 }
+            - { name: kernel.event_listener, event: kernel.exception, priority: -127 }

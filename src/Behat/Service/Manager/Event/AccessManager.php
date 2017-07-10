@@ -99,6 +99,14 @@ class AccessManager
             null,
             $dateTime
         );
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function openExternalCatalog(Event $event)
+    {
+        $event->setExternalCatalog(true);
 
         $this->eventRepository->set($event);
     }

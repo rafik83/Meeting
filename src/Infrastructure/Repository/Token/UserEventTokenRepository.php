@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
+use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class UserEventTokenRepository implements UserEventTokenRepositoryInterface
 {
@@ -58,14 +59,33 @@ class UserEventTokenRepository implements UserEventTokenRepositoryInterface
             ->createQueryBuilder()
             ->select('userEventToken')
             ->from(UserEventToken::class, 'userEventToken')
-            ->where('userEventToken.user = :user')
-            ->andWhere('userEventToken.event = :event')
-            ->andWhere('userEventToken.type = :type')
+            ->where('userEventToken.user = :user AND userEventToken.event = :event AND userEventToken.type = :type')
             ->setParameter('user', $user)
             ->setParameter('event', $event)
             ->setParameter('type', $type)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForEventTypeAndUsers(Event $event, string $type, array $users): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('userEventToken')
+            ->from(UserEventToken::class, 'userEventToken')
+            ->where('userEventToken.user IN (:users)')
+            ->andWhere('userEventToken.event = :event')
+            ->andWhere('userEventToken.type = :type')
+            ->setParameter('users', $users)
+            ->setParameter('event', $event)
+            ->setParameter('type', $type)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

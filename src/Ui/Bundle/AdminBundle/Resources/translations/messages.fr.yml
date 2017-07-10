@@ -135,6 +135,7 @@ admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de 
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
+admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
 admin.event.fallback: 'Par défaut'
@@ -156,6 +157,7 @@ admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
+admin.event.external_catalog_configure: 'Catalogue public'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
@@ -476,6 +478,8 @@ admin.participant.export.fields.planning.unavailability: Indisponible
 admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.participant.export.fields.sheet_enable: 'Fiche Active'
+admin.participant.export.fields.user_id: 'ID User'
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non
@@ -620,6 +624,10 @@ admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
 admin.sheet.details.participant.title: Participant
 admin.sheet.details.participant.visio: Visio
+admin.sheet.details.participant.agenda_confirmed: 'Agenda validé'
+admin.sheet.details.participant.agenda_not_confirmed: 'Agenda non-validé'
+admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''agenda non envoyée'
+admin.sheet.details.participant.email: 'Email'
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
@@ -641,6 +649,7 @@ admin.sheet.export.fields.registration_date: 'Date inscription'
 admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
+admin.sheet.export.fields.sheet_enable: Fiche active
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type

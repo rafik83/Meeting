@@ -49,6 +49,20 @@ class EventContext implements Context
     }
 
     /**
+     * @Given /^the external catalog is open$/
+     */
+    public function theExternalCatalogIsOpen()
+    {
+        $event = $this->eventContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->eventContextProxy->getAccessManager()->openExternalCatalog($event);
+    }
+
+    /**
      * @Given the meetings are published
      */
     public function theMeetingsArePublished()

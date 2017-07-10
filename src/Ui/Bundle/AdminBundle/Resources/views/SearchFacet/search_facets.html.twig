@@ -1,0 +1,6 @@
+{% for searchFacet in form.searchFacets %}
+    {{ form_label(searchFacet) }}
+    <p class="help-block">{{ searchFacet.vars.help|trans({}, searchFacet.vars.translation_domain) }}</p>
+    {{ form_row(searchFacet.enabled, {'label': 'admin.event.search_facet.enabled.label'|trans }) }}
+    {{ form_row(searchFacet.translations, {widget_columns: 8}) }}
+{% endfor %}

@@ -327,6 +327,25 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function hasMeetingForUserAndEvent(User $user, Event $event): bool
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromParticipants', 'fromParticipants', 'WITH', 'meeting.event = :event AND meeting.state = :state')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('toParticipants.user = :user OR fromParticipants.user = :user')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasScheduledMeetingByParticipant(Participant $participant)
     {
         $queryBuilder = $this

@@ -1,0 +1,76 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
+
+use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery;
+use Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+class CatalogController extends Controller
+{
+    /**
+     * @param Request       $request
+     * @param Event         $event
+     * @param UserInterface $user
+     *
+     * @return Response
+     */
+    public function configureAction(Request $request, Event $event, UserInterface $user): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE', $event);
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $searchFacetQuery = new SearchFacetQuery($event);
+        $searchFacets = $this->get('query.catalog.external.search_facet_query')->handle($searchFacetQuery);
+
+        $catalogVisibility = $this
+            ->get('query.catalog.external.catalog_visibility_view_query_handler')
+            ->handle(new CatalogVisibilityQuery($event));
+
+        $configure = new Configure($event, $catalogVisibility, $searchFacets);
+
+        $configureForm = $this->createForm(ConfigureType::class, $configure, [
+            'user' => $user,
+            'event' => $event,
+            'locale' => $locale,
+            'types' => $searchFacetQuery->types,
+        ]);
+
+        if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
+            $this->get('catalog.external.configure_handler')->handle($configure);
+            $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
+
+            return $this->redirectToRoute('admin_event_external_catalog_configure', ['event' => $event->getId()]);
+        }
+
+        $externalCatalogUrls = [];
+        foreach ($event->getLocales() as $locale) {
+            $externalCatalogUrls[] = $this->get('adapter.event_url_generator')->generateEventAbsoluteUrl(
+                $event,
+                'event_catalog_external_index',
+                ['_locale' => $locale]
+            );
+        }
+
+        return $this->render('AdminBundle:Catalog/External:configure.html.twig', [
+            'event'               => $event,
+            'externalCatalogUrls' => $externalCatalogUrls,
+            'form'                => $configureForm->createView(),
+        ]);
+    }
+}

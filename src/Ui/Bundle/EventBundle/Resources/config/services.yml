@@ -218,6 +218,13 @@ services:
         tags:
             - { name: form.type }
 
+    form_type.catalog_search_external_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType
+        arguments:
+            - '@query.catalog.search_facet_external_view_query_handler'
+        tags:
+            - { name: form.type }
+
     form_type.happening_participate_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType
         arguments:
@@ -256,6 +263,17 @@ services:
              - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: form.type }
+
+    #
+    # Form Factory
+    #
+    form_factory.search_facet_external_factory:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory\SearchFacetExternalFactory
+        arguments:
+            - '@tactician.commandbus.query'
+            - '@repository.catalog_visibility_repository'
+            - '@form.factory'
+            - '@adapter.router'
 
     #
     # Event Listener
@@ -338,6 +356,17 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\XHRAuthenticationExpiredExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 250 }
+
+    event_listener_security.catalog_access_event_listener:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener
+        arguments:
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@security.token_storage'
+            - '@router.default'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: accessChecker }
+
     event_listener.sheet.sheet_populate_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber
         arguments:
@@ -358,6 +387,13 @@ services:
         arguments:
             - '@domain.unavailability.participant_unavailable_aggregator'
             - '@domain.request.participant_assigned_aggregator'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    event_listener.sheet_agenda.agenda_confirmation_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Agenda\AgendaConfirmationEventSubscriber
+        arguments:
+            - '@command.sheet.agenda.update_agenda_confirmed_status_handler'
         tags:
             - { name: kernel.event_subscriber }
 

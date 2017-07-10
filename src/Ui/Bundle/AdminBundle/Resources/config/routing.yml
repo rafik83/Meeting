@@ -177,6 +177,16 @@ admin_event_search_facets:
     defaults: { _controller: AdminBundle:SearchFacet:update }
 
 #
+# External Catalog
+#
+admin_event_external_catalog_configure:
+    path: /event/{event}/catalog-external
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Catalog:configure }
+
+#
 # Content
 #
 admin_content_update:

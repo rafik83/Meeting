@@ -431,6 +431,24 @@ event_catalog_meeting_request_discussion:
     defaults: { _controller: EventBundle:MeetingRequest/Message:displayDiscussion }
 
 #
+# Catalog external
+#
+event_catalog_external_index:
+    path: /list
+    methods: [GET]
+    defaults: { _controller: EventBundle:CatalogExternal:index }
+
+event_catalog_external_search_localization:
+    path: /list/search-localization
+    methods:  [POST]
+    defaults: { _controller: EventBundle:CatalogExternal:searchLocalization }
+
+event_catalog_external_search_keywords:
+    path: /list/search-keywords
+    methods:  [POST]
+    defaults: { _controller: EventBundle:CatalogExternal:searchKeywords }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:
