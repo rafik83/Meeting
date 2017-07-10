@@ -716,7 +716,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('participant', $participant)
             ->setParameter('approved', Request::STATE_APPROVED);
 
-        return ((int)$queryBuilder->getQuery()->getSingleScalarResult()) > 0;
+        return ((int) $queryBuilder->getQuery()->getSingleScalarResult()) > 0;
     }
 
     /**
