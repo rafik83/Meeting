@@ -45,7 +45,8 @@ class EventListQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'super-event.vimeet.proximum.dev',
             ['fr', 'en'],
             'fr',
-            [new DayView($startTime, $endTime)]
+            [new DayView($startTime, $endTime)],
+            true
         );
 
         $pastEvent = new EventListView(
@@ -54,7 +55,8 @@ class EventListQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'super-event.vimeet.proximum.dev',
             ['fr', 'en'],
             'fr',
-            [new DayView($startTimeTwo, $endTimeTwo)]
+            [new DayView($startTimeTwo, $endTimeTwo)],
+            true
         );
 
         $expectedEventListsView = new EventListsView(
