@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\FilterQueryBuilder;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\RequestQueryBuilder;
 
 class RequestRepository implements RequestRepositoryInterface
@@ -286,47 +287,22 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = [])
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->leftJoin('request.meeting', 'meeting')
-            ->where('request.disabled = FALSE')
-            ->setParameter('event', $event);
-
-        $this->requestsWithoutMeeting($queryBuilder);
+        $queryBuilder = new FilterQueryBuilder($this->entityManager);
 
         if (!empty($filter)) {
-            if (isset($filter['state'])) {
-                $queryBuilder
-                    ->andWhere('request.state = :state')
-                    ->setParameter('state', $filter['state']);
+            if (!empty($filter['state'])) {
+                $filterState = $filter['state'];
+
+                if ($filterState === Request::STATE_PLANNED) {
+                    $queryBuilder->filterPlanned();
+                } else {
+                    $queryBuilder->filterState($filterState);
+                }
             }
 
             if (!empty($filter['orderBy']) && in_array($filter['orderBy'], $this->getOrderBy())) {
-                if ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
-                    $queryBuilder
-                        ->orderBy('request.createdAt', 'ASC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
-                    $queryBuilder
-                        ->orderBy('request.createdAt', 'DESC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
-                    $queryBuilder
-                        ->orderBy('request.stateUpdatedAt', 'ASC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
-                    $queryBuilder
-                        ->orderBy('request.stateUpdatedAt', 'DESC');
-                }
-            } else {
-                $queryBuilder
-                    ->orderBy('request.stateUpdatedAt', 'DESC');
+                $queryBuilder->order($filter['orderBy']);
             }
-        } else {
-            $queryBuilder
-                ->orderBy('request.stateUpdatedAt', 'DESC');
         }
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
