@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Event;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Event\EventListQuery;
 use Proximum\Vimeet\Application\Query\Event\EventListQueryHandler;
 use Proximum\Vimeet\Application\View\Event\DayView;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\View\EventListView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class EventListQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class EventListQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
