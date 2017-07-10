@@ -19,7 +19,7 @@ use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 
 class ConfigureDatesType extends AbstractType
 {
-    const configurationDates = [
+    const CONFIGURATION_DATES = [
         'catalogOnlineDate',
         'happeningsOpenDate',
         'schedulePublishDate',
@@ -36,7 +36,7 @@ class ConfigureDatesType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        foreach (self::configurationDates as $configurationDate) {
+        foreach (self::CONFIGURATION_DATES as $configurationDate) {
             $builder
                 ->add($configurationDate, DateTimePickerType::class, [
                     'view_timezone' => $options['event']->getTimezone(),
