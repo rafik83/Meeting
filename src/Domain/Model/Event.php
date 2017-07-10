@@ -619,23 +619,25 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasDay()
+    {
+        return !empty($this->days->toArray());
+    }
+
+    /**
      * @return Event\Day
      *
      * @throws DayNotDefinedException
      */
     public function getFirstDay()
     {
-        $days = $this->days->toArray();
-
-        if (empty($days)) {
+        if (!$this->hasDay()) {
             throw new DayNotDefinedException();
         }
 
-        usort($days, function (Day $day1, Day $day2) {
-            return $day1->getDay() > $day2->getDay();
-        });
-
-        return reset($days);
+        return reset($this->getDays());
     }
 
     /**
@@ -645,17 +647,11 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getLastDay()
     {
-        $days = $this->days->toArray();
-
-        if (empty($days)) {
+        if (!$this->hasDay()) {
             throw new DayNotDefinedException();
         }
 
-        usort($days, function (Day $day1, Day $day2) {
-            return $day1->getDay() < $day2->getDay();
-        });
-
-        return reset($days);
+        return reset(array_reverse($this->getDays()));
     }
 
     /**
