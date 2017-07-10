@@ -63,9 +63,10 @@ class AccessManager
     }
 
     /**
-     * @param Event $event
+     * @param \DateTime $dateTime
+     * @param Event     $event
      */
-    public function setRegistrationOpenDate(Event $event)
+    public function setRegistrationOpenDate(\DateTime $dateTime, Event $event)
     {
         $event->getConfiguration()->setDates(
             $event->getConfiguration()->getCatalogOnlineDate(),
@@ -75,16 +76,17 @@ class AccessManager
             $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
             $event->getConfiguration()->getsmsActivationDate(),
             $event->getConfiguration()->getAgendaOnlineDate(),
-            new \DateTime('2017-01-10 10:00:00')
+            $dateTime
         );
 
         $this->eventRepository->set($event);
     }
 
     /**
-     * @param Event $event
+     * @param \DateTime $dateTime
+     * @param Event     $event
      */
-    public function setRegistrationCloseDate(Event $event)
+    public function setRegistrationCloseDate(\DateTime $dateTime, Event $event)
     {
         $event->getConfiguration()->setDates(
             $event->getConfiguration()->getCatalogOnlineDate(),
@@ -95,7 +97,7 @@ class AccessManager
             $event->getConfiguration()->getsmsActivationDate(),
             $event->getConfiguration()->getAgendaOnlineDate(),
             null,
-            new \DateTime('2017-01-20 10:00:00')
+            $dateTime
         );
 
         $this->eventRepository->set($event);

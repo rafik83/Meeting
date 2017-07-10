@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\EventContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class EventContext implements Context
 {
@@ -42,11 +43,7 @@ class EventContext implements Context
      */
     public function theAgendaIsOpen()
     {
-        $event = $this->eventContextProxy->getStorage()->get('event');
-
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
+        $event = $this->getEvent();
 
         $this->eventContextProxy->getAccessManager()->openTheAgenda($event);
     }
@@ -56,11 +53,7 @@ class EventContext implements Context
      */
     public function theMeetingsArePublished()
     {
-        $event = $this->eventContextProxy->getStorage()->get('event');
-
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
+        $event = $this->getEvent();
 
         $this->eventContextProxy->getAccessManager()->publishMeetings($event);
     }
@@ -70,13 +63,11 @@ class EventContext implements Context
      */
     public function theRegistrationAreNotOpen()
     {
-        $event = $this->eventContextProxy->getStorage()->get('event');
+        $event = $this->getEvent();
 
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
-
-        $this->eventContextProxy->getAccessManager()->setRegistrationOpenDate($event);
+        $this->eventContextProxy->getAccessManager()->setRegistrationOpenDate(
+            new \Datetime('2017-01-01 08:00:00'), $event
+        );
     }
 
     /**
@@ -84,12 +75,41 @@ class EventContext implements Context
      */
     public function theRegistrationAreClosed()
     {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getAccessManager()->setRegistrationCloseDate(
+            new \Datetime('2017-01-11 08:00:00'), $event
+        );
+    }
+
+    /**
+     * @Given the registration are open
+     */
+    public function theRegistrationAreOpen()
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getAccessManager()->setRegistrationOpenDate(
+            new \Datetime('now'), $event
+        );
+        $this->eventContextProxy->getAccessManager()->setRegistrationCloseDate(
+            new \Datetime('now + 1 day'), $event
+        );
+    }
+
+    /**
+     * @return Event
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function getEvent()
+    {
         $event = $this->eventContextProxy->getStorage()->get('event');
 
         if (null === $event) {
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $this->eventContextProxy->getAccessManager()->setRegistrationCloseDate($event);
+        return $event;
     }
 }
