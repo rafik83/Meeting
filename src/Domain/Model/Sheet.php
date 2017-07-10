@@ -833,9 +833,9 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return Spot
+     * @return Spot|null
      */
-    public function getSpot()
+    public function getSpot(): ?Spot
     {
         return $this->spot;
     }
