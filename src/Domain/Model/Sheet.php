@@ -139,9 +139,7 @@ class Sheet implements TraceableInterface
      */
     private $inCatalogAt;
 
-    /**
-     * @var Spot
-     */
+    /** @var Spot|null */
     private $spot;
 
     /**
