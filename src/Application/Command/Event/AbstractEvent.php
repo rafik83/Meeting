@@ -94,4 +94,7 @@ abstract class AbstractEvent
      * @var null|Prefix
      */
     public $invoicePrefix;
+
+    /** @var bool */
+    public $visible;
 }
