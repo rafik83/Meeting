@@ -61,4 +61,43 @@ class AccessManager
 
         $this->eventRepository->set($event);
     }
+
+    /**
+     * @param Event $event
+     */
+    public function setRegistrationOpenDate(Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $event->getConfiguration()->getHappeningsOpenDate(),
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            new \DateTime('2017-01-10 10:00:00')
+        );
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function setRegistrationCloseDate(Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $event->getConfiguration()->getHappeningsOpenDate(),
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            null,
+            new \DateTime('2017-01-20 10:00:00')
+        );
+
+        $this->eventRepository->set($event);
+    }
 }

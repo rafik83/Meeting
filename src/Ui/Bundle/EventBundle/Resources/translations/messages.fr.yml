@@ -91,6 +91,8 @@ event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un cod
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
+event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez vous'
+event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
