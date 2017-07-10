@@ -2042,16 +2042,6 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.participant_info_guesser'
-    sheet.sheet_details_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
-        arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@template.template_data_factory'
-            - '@repository.sheet.comment_repository'
-            - '@repository.trace_repository'
-            - '@order.balance'
-            - '@sheet.sheet_details.invoice_view_query_handler'
     sheet.sheet_details.invoice_view_query_handler:
         class: Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler
         arguments:
@@ -3067,6 +3057,39 @@ services:
         class: Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+
+    query.sheet.detail.participant_detail_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\ParticipantDetailQueryHandler
+        arguments:
+            - '@template.template_data_factory'
+            - '@query.sheet.detail.agenda_confirmation_status_query_handler'
+
+    query.sheet.detail.agenda_confirmation_status_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQueryHandler
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQuery }
+
+    query.sheet.detail.sheet_meeting_indicator_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetMeetingIndicatorQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    query.sheet.detail.sheet_detail_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQueryHandler
+        arguments:
+            - '@repository.sheet.comment_repository'
+            - '@repository.trace_repository'
+            - '@order.balance'
+            - '@sheet.sheet_details.invoice_view_query_handler'
+            - '@query.sheet.detail.sheet_meeting_indicator_query_handler'
+            - '@query.sheet.detail.participant_detail_query_handler'
+            - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery }
 
     ##
     #
