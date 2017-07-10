@@ -626,6 +626,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * Event page returns 404
+     *
+     * @Then /^this event page "(?P<page>[^"]+)" returns 404$/
+     */
+    public function eventPageReturns404(string $eventPageUrl)
+    {
+        $this->visit($eventPageUrl);
+        $this->assertResponseStatus(404);
+    }
+
+    /**
      * Checks, that current page PATH is equal to specified.
      *
      * @Then /^(?:|I )should be on this page "(?P<page>[^"]+)"$/
