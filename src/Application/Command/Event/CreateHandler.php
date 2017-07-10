@@ -86,7 +86,8 @@ class CreateHandler
             $create->domain,
             $create->organiserName,
             $create->emailTeam,
-            $create->invoicePrefix
+            $create->invoicePrefix,
+            $create->visible
         );
 
         $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
