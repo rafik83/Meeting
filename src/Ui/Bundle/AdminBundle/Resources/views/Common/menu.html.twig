@@ -26,11 +26,7 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li>
-                            <a href="{{ path('admin_event_list') }}">
-                                {{ 'admin.events.link'|trans }}
-                            </a>
-                        </li>
+                        {{ include('AdminBundle:Event:linkCurrentPastArchived.html.twig', {horizontal: false}) }}
                         {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
                         <li>
                             <a href="{{ path('admin_event_order_invoice_find') }}">
@@ -133,11 +129,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ path('admin_event_list') }}">
-                                        {{ 'admin.events.link'|trans }}
-                                    </a>
-                                </li>
+                                {{ include('AdminBundle:Event:linkCurrentPastArchived.html.twig', {horizontal: true}) }}
                                 {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
                                     <li>
                                         <a href="{{ path('admin_event_order_invoice_find') }}">
