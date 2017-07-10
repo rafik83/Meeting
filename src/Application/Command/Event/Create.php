@@ -27,5 +27,6 @@ class Create extends AbstractEvent
         $this->admin    = $admin;
         $this->timeZone = 'Europe/Paris';
         $this->country  = 'FR';
+        $this->visible  = true;
     }
 }

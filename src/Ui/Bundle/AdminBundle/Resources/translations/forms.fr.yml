@@ -204,6 +204,7 @@ form.event_create.children.textColor.label: 'Couleur du texte'
 form.event_create.children.timeZone.label: 'Fuseau horaire'
 form.event_create.children.title.label: Titre
 form.event_create.children.vat.label: TVA
+form.event_create.children.visible.label: Visible
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -237,6 +238,7 @@ form.event_update.children.timeZone.label: 'Fuseau horaire'
 form.event_update.children.title.label: Titre
 form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
 form.event_update.children.vat.label: TVA
+form.event_update.children.visible.label: Visible
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
