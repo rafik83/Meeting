@@ -144,14 +144,16 @@ admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.list.currents.title: 'Événements actuels'
 admin.event.list.pasts.title: 'Événements passés'
-admin.event.page.invoice.title: Factures
+admin.event.page.invoice.title: 'Export des factures'
+admin.event.page.invoice.link: 'Factures'
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
 admin.event.page.orderFinder.title: 'Recherche commande'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
 admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
 admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
-admin.event.page.transactions.title: Transactions
+admin.event.page.transactions.title: 'Export des transactions'
+admin.event.page.transactions.link: 'Transactions'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'

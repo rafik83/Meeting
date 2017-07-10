@@ -119,7 +119,7 @@ admin_event_list:
 
 admin_event_transaction_export:
     path: /event/transaction/export
-    methods: [POST]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Transaction/Export:export }
 
 admin_event_read:
@@ -1320,7 +1320,7 @@ admin_invoice_globals_create:
     methods: [GET, POST]
 admin_invoice_export:
     path: /event/invoice/export
-    methods: [POST]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Invoice/Export:export }
 
 
@@ -1466,3 +1466,11 @@ admin_event_archive:
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:Event/Archive:archive }
+
+#
+# Event action
+#
+admin_event_order_invoice_find:
+    path: /event/order-invoice/find
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event/OrderInvoiceFinder:find }
