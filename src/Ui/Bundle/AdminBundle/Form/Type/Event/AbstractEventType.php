@@ -80,7 +80,7 @@ abstract class AbstractEventType extends AbstractType
 
         $builder
             ->add('visible', CheckboxType::class, [
-                'required' => false
+                'required' => false,
             ])
             ->add('title', TextType::class)
             ->add('locales', LocaleType::class, [
