@@ -31,7 +31,7 @@ class AdminContext implements Context
      *
      * @param string $email
      */
-    public function createSuperAdmin($email)
+    public function createSuperAdmin(string $email)
     {
         $user = $this->adminContextProxy->getAdminManager()->create($email, 'ROLE_SUPER_ADMIN');
 
