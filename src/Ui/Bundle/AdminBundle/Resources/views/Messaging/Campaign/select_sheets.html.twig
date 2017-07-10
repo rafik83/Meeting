@@ -84,8 +84,8 @@
                 <hr>
 
                 {{ form_row(filter_form.hasRemainingToPay, {'inline': true}) }}
-                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_ORDER')], {'inline': true}) }}
-                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')], {'inline': true}) }}
+                {{ form_row(filter_form.has_order, {'inline': true}) }}
+                {{ form_row(filter_form.has_cart, {'inline': true}) }}
                 {{ form_row(filter_form.hasInvoice, {'inline': true}) }}
 
                 <hr>
