@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -38,25 +37,15 @@ class RequestRepository implements RequestRepositoryInterface
     private $paginator;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * RequestRepository constructor.
      *
-     * @param EntityManager    $entityManager
-     * @param Paginator        $paginator
-     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param EntityManager $entityManager
+     * @param Paginator     $paginator
      */
-    public function __construct(
-        EntityManager $entityManager,
-        Paginator $paginator,
-        SheetInfoGuesser $sheetInfoGuesser
-    ) {
-        $this->entityManager    = $entityManager;
-        $this->paginator        = $paginator;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
+    {
+        $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -100,8 +89,7 @@ class RequestRepository implements RequestRepositoryInterface
 
         $request = $requestQueryBuilder
             ->where('request = :request')
-            ->setParameter('request', $request)
-        ;
+            ->setParameter('request', $request);
 
         return $request->getQuery()->getOneOrNullResult();
     }
@@ -262,8 +250,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-        ;
+            ->from(Request::class, 'request');
 
         if (!empty($filters) && isset($filters['disabled'])) {
             $queryBuilder->where('request.disabled = :disabled')
@@ -306,6 +293,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->leftJoin('request.meeting', 'meeting')
             ->where('request.disabled = FALSE')
             ->setParameter('event', $event);
 
@@ -347,13 +335,14 @@ class RequestRepository implements RequestRepositoryInterface
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
+                $request->getFromSheet()->getTitle(),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
+                $request->getToSheet()->getTitle(),
                 $request->getState(),
                 $request->getCreatedAt(),
                 $request->getStateUpdatedAt(),
-                ''
+                '',
+                $request->hasMeeting()
             );
         }, $results), $page, $limit, $count);
     }
@@ -480,8 +469,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-        ;
+            ->from(Request::class, 'request');
 
         if (!empty($filters)) {
             if (isset($filters['disabled'])) {
@@ -492,7 +480,7 @@ class RequestRepository implements RequestRepositoryInterface
             if (isset($filters['isToAttending'])) {
                 $queryBuilder->join('request.to', 'to', 'WITH', 'to.attend = true');
             }
-            
+
             if (isset($filters['isFromAttending'])) {
                 $queryBuilder->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
             }
@@ -728,7 +716,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('participant', $participant)
             ->setParameter('approved', Request::STATE_APPROVED);
 
-        return ((int) $queryBuilder->getQuery()->getSingleScalarResult()) > 0;
+        return ((int)$queryBuilder->getQuery()->getSingleScalarResult()) > 0;
     }
 
     /**
