@@ -296,7 +296,7 @@ class RequestRepository implements RequestRepositoryInterface
                 if ($filterState === Request::STATE_PLANNED) {
                     $queryBuilder->filterPlanned();
                 } else {
-                    $queryBuilder->filterState($filterState);
+                    $queryBuilder->filterByState($filterState);
                 }
             }
 

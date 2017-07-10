@@ -29,8 +29,7 @@ class FilterQueryBuilder extends QueryBuilder
             ->select('request')
             ->from(Request::class, 'request', 'request.id')
             ->where('request.disabled = FALSE')
-            ->orderBy('request.stateUpdatedAt', 'DESC')
-        ;
+            ->orderBy('request.stateUpdatedAt', 'DESC');
     }
 
     /**
@@ -56,7 +55,7 @@ class FilterQueryBuilder extends QueryBuilder
     /**
      * @param string $state
      */
-    public function filterState(string $state)
+    public function filterByState(string $state)
     {
         $this
             ->andWhere('request.state = :state')
@@ -70,17 +69,13 @@ class FilterQueryBuilder extends QueryBuilder
     public function order(string $order)
     {
         if ($order === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
-            $this
-                ->orderBy('request.createdAt', 'ASC');
+            $this->orderBy('request.createdAt', 'ASC');
         } elseif ($order === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
-            $this
-                ->orderBy('request.createdAt', 'DESC');
+            $this->orderBy('request.createdAt', 'DESC');
         } elseif ($order === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
-            $this
-                ->orderBy('request.stateUpdatedAt', 'ASC');
+            $this->orderBy('request.stateUpdatedAt', 'ASC');
         } elseif ($order === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
-            $this
-                ->orderBy('request.stateUpdatedAt', 'DESC');
+            $this->orderBy('request.stateUpdatedAt', 'DESC');
         }
     }
 }
