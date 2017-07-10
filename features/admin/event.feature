@@ -87,7 +87,7 @@ Feature: See, create and update event
     And I should see "flash.admin.event.update.success"
     And the "event_update_invoicePrefix" field should contain "1"
 
-  Scenario: i should not access to an invisible event
+  Scenario: I should not access to an invisible event
     Given I am logged with "test@test.com" on admin
     And I am on this page "/en/event/1"
     And I go to this page "/en/event/1/update"
@@ -95,4 +95,5 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then I go to this page "/en/event"
     And I should see "Invisible"
-    And this page "/fr/unknow-route" returns 404
+    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr"
+    Then the response status code should be 404
