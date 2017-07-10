@@ -27,6 +27,8 @@ default:
                     - '@behat_proxy.event_context'
                 - Proximum\Vimeet\Behat\Context\Domain\UserContext:
                     - '@behat_proxy.user_context'
+                - Proximum\Vimeet\Behat\Context\Domain\AdminContext:
+                    - '@behat_proxy.admin_context'
                 - Proximum\Vimeet\Behat\Context\Domain\TypeContext:
                     - '@behat_proxy.type_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SheetContext:
@@ -55,6 +57,8 @@ default:
                     - '@behat.proxy.catalog_visibility_context_proxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Token\UserEventTokenContext:
                     - '@behat_proxy.token.user_event_token_context'
+                - Proximum\Vimeet\Behat\Context\Domain\Invoice\PrefixContext:
+                    - '@behat_proxy.invoice.prefix_context'
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser

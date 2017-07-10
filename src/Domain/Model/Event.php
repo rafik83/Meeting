@@ -109,6 +109,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $userAgendaVersionsGenerated;
 
+    /** @var bool */
+    private $archived;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -156,6 +159,7 @@ class Event implements EventInterface, TraceableInterface
         $this->assetPath      = '';
 
         $this->userAgendaVersionsGenerated = false;
+        $this->archived = false;
     }
 
     /**
@@ -171,9 +175,17 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     */
+    public function setDomain(string $domain)
+    {
+        $this->domain = $domain;
     }
 
     /**
@@ -692,5 +704,29 @@ class Event implements EventInterface, TraceableInterface
     public function setUserAgendaVersionsGenerated(bool $userAgendaVersionsGenerated)
     {
         $this->userAgendaVersionsGenerated = $userAgendaVersionsGenerated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    /**
+     * Archive the event
+     */
+    public function archive()
+    {
+        $this->archived = true;
+    }
+
+    /**
+     * Un archive the event
+     */
+    public function unArchive()
+    {
+        $this->archived = false;
     }
 }

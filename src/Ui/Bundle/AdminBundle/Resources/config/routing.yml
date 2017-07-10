@@ -1456,3 +1456,13 @@ admin_tip_event_preview:
         tip: \d+
         locale: \w+
     defaults: { _controller: AdminBundle:Tip/TipEvent:preview }
+
+#
+# Event Archive
+#
+admin_event_archive:
+    path: /event/{event}/archive
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/Archive:archive }

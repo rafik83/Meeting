@@ -5,16 +5,9 @@ Feature: See, create and update event
 
   Scenario: See event
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
+    And the event "Les rendez-vous CARNOT 2016" is created
+    And the super admin "test@test.com" is created
+    And I am logged with this admin
     When I go to this page "/en/event"
     Then I should see "Les rendez-vous CARNOT 2016"
 
@@ -26,14 +19,14 @@ Feature: See, create and update event
     Then the response status code should be 200
     And I should be on this page "/en/event/create"
     And I fill in the following:
-      | form.event_create.children.title.label         | Super Event                     |
-      | form.event_create.children.domain.label        | super-event.vimeet.proximum.dev |
-      | form.event_create.children.vat.label           | 20                              |
-      | form.event_create.children.leftColor.label     | #123456                         |
-      | form.event_create.children.rightColor.label    | #123456                         |
-      | form.event_create.children.textColor.label     | #123456                         |
-      | form.event_create.children.organiserName.label | Proximum                        |
-      | form.event_create.children.emailTeam.label     | team-project@example.net        |
+      | form.event_create.children.title.label         | Alternative Event                     |
+      | form.event_create.children.domain.label        | alternative-event.vimeet.proximum.dev |
+      | form.event_create.children.vat.label           | 20                                    |
+      | form.event_create.children.leftColor.label     | #123456                               |
+      | form.event_create.children.rightColor.label    | #123456                               |
+      | form.event_create.children.textColor.label     | #123456                               |
+      | form.event_create.children.organiserName.label | Proximum                              |
+      | form.event_create.children.emailTeam.label     | team-project@example.net              |
     And I select "Europe/Paris" from "form.event_create.children.timeZone.label"
     And I select "fr" from "form.event_create.children.fallback.label"
     And I select "fr" from "form.event_create.children.locales.label"
@@ -44,7 +37,7 @@ Feature: See, create and update event
     Then the response status code should be 200
     And I should see "flash.admin.event.create.success"
     And I should be on this page "/en/event"
-    And I should see "Super Event"
+    And I should see "Alternative Event"
 
   Scenario: update event
     Given I am logged with "test@test.com" on admin
@@ -58,6 +51,7 @@ Feature: See, create and update event
       | event_update_translations_en_description | In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion. |
       | event_update_emailTeam                   | team-event@example.net                                                         |
       | event_update_analyticsCode               | analyticsCode                                                                  |
+      | event_update_domain                      | rdv-carnot-2016.vimeet.proximum.dev                                            |
     And I select "fr" from "event_update_fallback"
     And I select "EUR" from "event_update_currency"
     And I press "form.event_update.children.submit.label"
@@ -74,7 +68,9 @@ Feature: See, create and update event
     And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
 
   Scenario: update invoice prefix on event
-    Given I am logged with "test@test.com" on admin
+    Given the invoice prefix with name "ViMeet" and prefix "Vi" is created and is default
+    And the invoice prefix with name "RdvCarnot" and prefix "RdvCarnot" is created
+    And I am logged with "test@test.com" on admin
     And I am on this page "/en/event/1"
     When I follow "admin.event.update.link"
     Then the response status code should be 200
@@ -83,4 +79,4 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
-    And the "event_update_invoicePrefix" field should contain "1"
+    And the "event_update_invoicePrefix" field should contain "0"
