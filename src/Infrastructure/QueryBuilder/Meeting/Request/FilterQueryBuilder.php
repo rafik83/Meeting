@@ -38,8 +38,8 @@ class FilterQueryBuilder extends QueryBuilder
     public function joinSheet(Event $event)
     {
         $this
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'request.event = :event')
             ->setParameter('event', $event);
     }
 
