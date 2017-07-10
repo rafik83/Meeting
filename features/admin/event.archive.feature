@@ -10,7 +10,7 @@ Feature: Archive an event
     And the super admin "test_archive@example.net" is created
     And I am logged with this admin
     When I am on the homepage of the admin
-    And I go to this page "/fr/event"
+    And I go to this page "/fr/event/past"
     Then I should see "super-event.vimeet.proximum.dev"
     When I go to this page "/fr/event/archived"
     Then I should not see "super-event-2017.vimeet.proximum.dev"
@@ -21,5 +21,5 @@ Feature: Archive an event
     And I should see "flash.admin.event.archive.success"
     When I go to this page "/fr/event/archived"
     Then I should see "super-event-2017.vimeet.proximum.dev"
-    When I go to this page "/fr/event"
+    When I go to this page "/fr/event/past"
     Then I should not see "super-event-2017.vimeet.proximum.dev"
