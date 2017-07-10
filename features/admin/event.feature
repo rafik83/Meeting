@@ -25,6 +25,7 @@ Feature: See, create and update event
     Then I follow "admin.event.create.title"
     Then the response status code should be 200
     And I should be on this page "/en/event/create"
+    And I check "form.event_create.children.visible.label"
     And I fill in the following:
       | form.event_create.children.title.label         | Super Event                     |
       | form.event_create.children.domain.label        | super-event.vimeet.proximum.dev |
@@ -52,6 +53,7 @@ Feature: See, create and update event
     When I follow "admin.event.update.link"
     Then the response status code should be 200
     And I should be on this page "/en/event/1/update"
+    And I check "form.event_update.children.visible.label"
     And I fill in the following:
       | event_update_title                       | Other event                                                                    |
       | event_update_translations_fr_description | LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE                                  |
