@@ -20,7 +20,6 @@ Feature: Operator Activate Account
     And I press "form.admin_activate_account_password.children.submit.label"
     Then I should be on this page "/fr/event"
     And I should see "flash.admin.activate_account.success"
-    And I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: I can add an operator and activate the account
     Given I am logged with "test@test.com" on admin
@@ -45,4 +44,3 @@ Feature: Operator Activate Account
     And I press "form.admin_activate_account_password.children.submit.label"
     Then I should be on this page "/fr/event"
     And I should see "flash.admin.activate_account.success"
-    And I should see "Les rendez-vous CARNOT 2016"

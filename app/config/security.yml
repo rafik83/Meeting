@@ -89,6 +89,8 @@ security:
         - { path: ^/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: ^/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: ^/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+        - { path: ^/(fr|en)/event/past, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+        - { path: ^/(fr|en)/event/archived, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event$', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
