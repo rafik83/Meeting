@@ -10,18 +10,41 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WaitingController extends Controller
 {
-    public function indexAction(Request $request, EventDomain $eventDomain)
+    /**
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function indexAction(EventDomain $eventDomain): Response
     {
         $event = $eventDomain->getEvent();
+        $type  = $this
+            ->get('domain.key_dates.checker.registration_access_checker')
+            ->getRegistrationAccessStatus($event);
+
+        $translator = $this->get('translator');
+
+        $isLoginActivated = false;
+        $message = '';
+
+        if ($type === HomeDispatchAnonymousUser::TYPE_REGISTRATION_NOT_OPEN) {
+            $message = $translator->trans('event.registration_not_open');
+        } elseif ($type === HomeDispatchAnonymousUser::TYPE_REGISTRATION_CLOSED) {
+            $message = $translator->trans('event.registration_closed');
+            $isLoginActivated = true;
+        }
 
         return $this->render('EventBundle:WaitingPage:index.html.twig', [
-            'event' => $event,
+            'event'   => $event,
+            'message' => $message,
+            'isLoginActivated' => $isLoginActivated,
         ]);
     }
 }

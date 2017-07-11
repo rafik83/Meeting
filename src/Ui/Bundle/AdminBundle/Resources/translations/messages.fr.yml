@@ -1025,6 +1025,7 @@ gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recev
 gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
+login.link.label: 'Se connecter'
 login.title: Connexion
 logout.confirmation: 'Êtes vous sûr de vouloir vous déconnecter de votre compte ?'
 logout.link: Déconnecter

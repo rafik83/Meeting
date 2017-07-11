@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
 class HomeDispatchAnonymousView
 {
     /** @var string */
-    private $type;
+    public $type;
 
     /**
      * HomeDispatchAnonymousView constructor.

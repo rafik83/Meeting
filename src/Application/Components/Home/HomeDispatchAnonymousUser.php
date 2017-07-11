@@ -35,9 +35,9 @@ class HomeDispatchAnonymousUser
     /**
      * @param Event $event
      *
-     * @return HomeDispatchAnonymousView
+     * @return null|HomeDispatchAnonymousView
      */
-    public function handle(Event $event)
+    public function handle(Event $event): ?HomeDispatchAnonymousView
     {
         $registrationAccessStatus = $this->registrationAccessChecker->getRegistrationAccessStatus($event);
 
@@ -46,5 +46,7 @@ class HomeDispatchAnonymousUser
         ) {
             return new HomeDispatchAnonymousView($registrationAccessStatus);
         }
+        
+        return null;
     }
 }

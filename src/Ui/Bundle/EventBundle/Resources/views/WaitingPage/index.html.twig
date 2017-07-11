@@ -2,17 +2,23 @@
 
 {% block title event.title %}
 
+{% block body_attributes 'class="grey"' %}
+
 {% block content %}
-    <section class="main">
-        <header>
-Waiting page
-        </header>
+    <div class="mg-tp well text-center">
+        <b>
+            {{ message }}
+        </b>
+        <br>
+        {% if isLoginActivated == true %}
+            <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
+                {{ 'login.link.label'|trans }}
+            </a>
+        {% endif %}
 
-        <div class="main__content">
-
-        </div>
-    </section>
-
-    <section id="type-description" class="important hide">
-    </section>
+    </div>
+    <div class="text-center">
+        <img src="{{ asset('assets/images/vimeet_poweredby.png') }}">
+    </div>
 {% endblock %}
+

@@ -112,17 +112,19 @@ class HomeController extends Controller
     /**
      * @param Event $event
      *
-     * @return RedirectResponse
+     * @return null|RedirectResponse
      */
-    private function attemptDispatchUnloggedUser(Event $event): RedirectResponse
+    private function attemptDispatchUnloggedUser(Event $event): ?RedirectResponse
     {
         $homeDispatchView = $this->get('components.home.home_dispatch_anonymous_user')->handle($event);
 
         if (null !== $homeDispatchView) {
-
             if ($homeDispatchView->isRegistrationNotOpen() || $homeDispatchView->isRegistrationClosed()) {
-                return $this->redirectToRoute('event_waiting_page', []);
+
+                return $this->redirectToRoute('event_waiting_page');
             }
         }
+
+        return null;
     }
 }
