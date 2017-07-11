@@ -135,6 +135,15 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Nomenclature $nomenclature)
+    {
+        $this->entityManager->remove($nomenclature);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findClone($nomenclature, $event)
     {
         $queryBuilder = $this
