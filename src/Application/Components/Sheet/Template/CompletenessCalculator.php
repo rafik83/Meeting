@@ -38,7 +38,7 @@ class CompletenessCalculator
      *
      * @return array
      */
-    private function getTranslatables(array $config)
+    private function getTranslatables(array $config): array
     {
         if (!isset($config['component'])) {
             return array_reduce($config, function (array $carry, array $component) {
@@ -69,7 +69,7 @@ class CompletenessCalculator
      *
      * @return array
      */
-    private function getTranslated(array $translatables)
+    private function getTranslated(array $translatables): array
     {
         return array_filter($translatables, function (array $translatable) {
             foreach ($translatable as $locale => $value) {

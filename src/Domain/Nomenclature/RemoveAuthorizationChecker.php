@@ -88,7 +88,7 @@ class RemoveAuthorizationChecker
      *
      * @return bool
      */
-    public function canBeRemoved(Nomenclature $nomenclature)
+    public function canBeRemoved(Nomenclature $nomenclature): bool
     {
         if (null === $nomenclature->getEvent()) {
             return true;
