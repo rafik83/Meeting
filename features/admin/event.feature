@@ -95,4 +95,4 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then I go to this page "/en/event"
     And I should see "Invisible"
-    Then this event page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr" returns 404
+    Then this event page "http://super-event.vimeet.proximum.dev/app_test.php/fr" returns 404
