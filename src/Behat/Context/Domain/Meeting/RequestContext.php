@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Behat\Context\Domain\Meeting;
 
 use Behat\Behat\Context\Context;
-use Proximum\Vimeet\Behat\Context\Domain\Proxy\Meeting\RequestContextProxyInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\MeetingContextProxyInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\SheetContextProxyInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\UserContextProxyInterface;
@@ -51,12 +50,12 @@ class RequestContext implements Context
     }
 
     /**
-     * @Given /^there is a request between "(?P<fromSheet>[^"]+)" and "(?P<toSheet>[^"]+)"$/
+     * @Given /^there is a request between "(?P<fromSheetTitle>[^"]+)" and "(?P<toSheetTitle>[^"]+)"$/
      *
-     * @param string $fromSheet
-     * @param string $toSheet
+     * @param string $fromSheetTitle
+     * @param string $toSheetTitle
      */
-    public function thereIsARequestBetweenTwoSheets(string $fromSheet, string $toSheet)
+    public function thereIsARequestBetweenTwoSheets(string $fromSheetTitle, string $toSheetTitle)
     {
         $event = $this->meetingContextProxy->getStorage()->get('event');
 
@@ -65,10 +64,20 @@ class RequestContext implements Context
         }
 
         $fromSheet = $this->sheetContextProxy->getSheetManager()
-            ->create($event, null, null, $fromSheet);
+            ->getSheetByEventAndTitle($event, $fromSheetTitle);
+
+        if ($fromSheet === null) {
+            $fromSheet = $this->sheetContextProxy->getSheetManager()
+                ->create($event, null, null, $fromSheetTitle);
+        }
 
         $toSheet = $this->sheetContextProxy->getSheetManager()
-            ->create($event, null, null, $toSheet);
+            ->getSheetByEventAndTitle($event, $toSheetTitle);
+
+        if ($toSheet === null) {
+            $toSheet = $this->sheetContextProxy->getSheetManager()
+                ->create($event, null, null, $toSheetTitle);
+        }
 
         $request = $this->meetingContextProxy->getMeetingManager()
             ->createMeetingRequest($event, $fromSheet, [], $toSheet, []);

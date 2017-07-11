@@ -59,7 +59,7 @@ class SheetManager
      *
      * @return Sheet
      */
-    public function create(Event $event, User $user = null, Type $type = null, $title = null, Sheet\Group $group = null)
+    public function create(Event $event, User $user = null, Type $type = null, string $title = '', Sheet\Group $group = null)
     {
         if (null === $user) {
             $user = $this->userManager->create();
@@ -85,5 +85,16 @@ class SheetManager
         $this->sheetRepository->add($sheet);
 
         return $sheet;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $sheetTitle
+     *
+     * @return null|Sheet
+     */
+    public function getSheetByEventAndTitle(Event $event, string $sheetTitle):? Sheet
+    {
+        return $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
     }
 }
