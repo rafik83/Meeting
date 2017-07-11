@@ -288,6 +288,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = [])
     {
         $queryBuilder = new FilterQueryBuilder($this->entityManager);
+        $queryBuilder->joinSheet($event);
 
         if (!empty($filter)) {
             if (!empty($filter['state'])) {
