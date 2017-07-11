@@ -85,22 +85,24 @@ class HomeUserDispatcher
     {
         $homeDispatchView = $this->homeDispatch->handle($event, $user);
 
-        if ($homeDispatchView->isGroup()) {
-            return new RedirectResponse($this->router->generate(
-                'event_sheet_group_index',
-                ['sheetGroup' => $homeDispatchView->getGroup()->getId()]
-            ));
-        }
+        if ($homeDispatchView !== null) {
+            if ($homeDispatchView->isGroup()) {
+                return new RedirectResponse($this->router->generate(
+                    'event_sheet_group_index',
+                    ['sheetGroup' => $homeDispatchView->getGroup()->getId()]
+                ));
+            }
 
-        if ($homeDispatchView->isOneSheet()) {
-            return new RedirectResponse($this->router->generate(
-                'event_sheet_default',
-                ['sheet' => $homeDispatchView->getSheet()->getId()]
-            ));
-        }
+            if ($homeDispatchView->isOneSheet()) {
+                return new RedirectResponse($this->router->generate(
+                    'event_sheet_default',
+                    ['sheet' => $homeDispatchView->getSheet()->getId()]
+                ));
+            }
 
-        if ($homeDispatchView->isMultipleSheet()) {
-            return new RedirectResponse($this->router->generate('event_select_sheet'));
+            if ($homeDispatchView->isMultipleSheet()) {
+                return new RedirectResponse($this->router->generate('event_select_sheet'));
+            }
         }
 
         return null;
@@ -115,8 +117,10 @@ class HomeUserDispatcher
     {
         $homeDispatchView = $this->homeDispatchAnonymousUser->handle($event);
 
-        if ($homeDispatchView->isRegistrationNotOpen() || $homeDispatchView->isRegistrationClosed()) {
-            return new RedirectResponse($this->router->generate('event_waiting_page'));
+        if ($homeDispatchView !== null) {
+            if ($homeDispatchView->isRegistrationNotOpen() || $homeDispatchView->isRegistrationClosed()) {
+                return new RedirectResponse($this->router->generate('event_waiting_page'));
+            }
         }
 
         return null;
