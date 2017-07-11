@@ -10,7 +10,7 @@
             <b>{{ message }}</b>
         </p>
 
-        {% if isLoginActivated == true %}
+        {% if isLoginActivated == true and app.user is not defined %}
             <a href="{{ path('event_login') }}" class="btn btn-primary" title="{{ 'login.link'|trans }}">
                 {{ 'login.link.label'|trans }}
             </a>

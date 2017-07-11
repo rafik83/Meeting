@@ -37,11 +37,7 @@ class HomeController extends Controller
         $locale = $request->getLocale();
         $event = $eventDomain->getEvent();
 
-        if ($user === null) {
-            $response = $this->attemptDispatchAnonymousUser($event);
-        } else {
-            $response = $this->attemptDispatchLoggedUser($event, $user);
-        }
+       $response = $this->attemptDispatchUser($event, $user);
 
         if ($response instanceof RedirectResponse) {
             return $response;
@@ -126,5 +122,22 @@ class HomeController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * @param Event $event
+     * @param null|UserInterface $user
+     *
+     * @return Response
+     */
+    private function attemptDispatchUser(Event $event, UserInterface $user = null): Response
+    {
+        if (null !== $response = $this->attemptDispatchAnonymousUser($event)) {
+            return $response;
+        }
+
+        if (null !== $response = $this->attemptDispatchLoggedUser($event, $user)){
+            return $response;
+        }
     }
 }
