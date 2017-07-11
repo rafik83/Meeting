@@ -30,19 +30,20 @@ class WaitingController extends Controller
             ->getRegistrationAccessStatus($event);
 
         $translator = $this->get('translator');
-
         $isLoginActivated = false;
-        $message = '';
 
         if ($type === HomeDispatchAnonymousUser::TYPE_REGISTRATION_NOT_OPEN) {
             $message = $translator->trans('event.registration_not_open');
         } elseif ($type === HomeDispatchAnonymousUser::TYPE_REGISTRATION_CLOSED) {
             $message = $translator->trans('event.registration_closed');
             $isLoginActivated = true;
+        } else {
+
+            return $this->redirectToRoute('event', ['event' => $event]);
         }
 
         return $this->render('EventBundle:WaitingPage:index.html.twig', [
-            'event'   => $event,
+            'event' => $event,
             'message' => $message,
             'isLoginActivated' => $isLoginActivated,
         ]);

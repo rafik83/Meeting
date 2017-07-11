@@ -6,12 +6,12 @@
 
 {% block content %}
     <div class="mg-tp well text-center">
-        <b>
-            {{ message }}
-        </b>
-        <br>
+        <p>
+            <b>{{ message }}</b>
+        </p>
+
         {% if isLoginActivated == true %}
-            <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
+            <a href="{{ path('event_login') }}" class="btn btn-primary" title="{{ 'login.link'|trans }}">
                 {{ 'login.link.label'|trans }}
             </a>
         {% endif %}

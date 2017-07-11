@@ -38,7 +38,7 @@ class HomeController extends Controller
         $event = $eventDomain->getEvent();
 
         if ($user === null) {
-            $response = $this->attemptDispatchUnLoggedUser($event);
+            $response = $this->attemptDispatchAnonymousUser($event);
         } else {
             $response = $this->attemptDispatchLoggedUser($event, $user);
         }
@@ -114,7 +114,7 @@ class HomeController extends Controller
      *
      * @return null|RedirectResponse
      */
-    private function attemptDispatchUnloggedUser(Event $event): ?RedirectResponse
+    private function attemptDispatchAnonymousUser(Event $event): ?RedirectResponse
     {
         $homeDispatchView = $this->get('components.home.home_dispatch_anonymous_user')->handle($event);
 
