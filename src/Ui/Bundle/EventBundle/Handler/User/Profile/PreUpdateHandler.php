@@ -62,7 +62,7 @@ class PreUpdateHandler
 
         $mobileTemplateObject = $update->templateData->getObjectByTag(Tag::PARTICIPANT_MOBILE);
 
-        if ($tipTranslationViews === null || $mobileTemplateObject === null) {
+        if (empty($tipTranslationViews) || $mobileTemplateObject === null) {
             return self::MOBILE_VALIDATION_NOT_NEED;
         }
 

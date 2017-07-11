@@ -35,7 +35,7 @@ class ValidateController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function validateAction(
+    public function validateWithTokenAction(
         Request $request,
         EventDomain $eventDomain,
         UserEventToken $userEventToken,
@@ -79,6 +79,11 @@ class ValidateController extends Controller
             'form'  => $form->createView(),
             'token' => $userEventToken->getToken(),
         ]);
+    }
+
+    public function validateAction(Request $request)
+    {
+        dump('here');
     }
 
     /**

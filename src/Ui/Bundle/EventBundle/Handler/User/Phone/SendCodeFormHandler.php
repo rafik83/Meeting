@@ -42,8 +42,8 @@ class SendCodeFormHandler
         CommandBus $commandBus
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
-        $this->formFactory = $formFactory;
-        $this->commandBus = $commandBus;
+        $this->formFactory              = $formFactory;
+        $this->commandBus               = $commandBus;
     }
 
     /**
@@ -54,14 +54,16 @@ class SendCodeFormHandler
     public function handle(SendCodeForm $sendCodeForm)
     {
         $request = $sendCodeForm->request;
-        $locale = $request->getLocale();
-        $user = $sendCodeForm->user;
-        $event = $sendCodeForm->event;
+        $locale  = $request->getLocale();
+        $user    = $sendCodeForm->user;
+        $event   = $sendCodeForm->event;
 
-        $userEventPhoneValidated = $this->userEventPhoneRepository->findValidated($user, $event);
+        if ($sendCodeForm->ignorePhoneAlreadyValidated === false) {
+            $userEventPhoneValidated = $this->userEventPhoneRepository->findValidated($user, $event);
 
-        if (null !== $userEventPhoneValidated) {
-            return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
+            if (null !== $userEventPhoneValidated) {
+                return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
+            }
         }
 
         $tipTranslationViews = $this->commandBus->handle(
@@ -77,10 +79,10 @@ class SendCodeFormHandler
             return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
         }
 
-        $sendCode = new SendCode($user, $event, $user->getPhone(), $locale);
-        $form = $this->formFactory->create(SendCodeType::class, $sendCode, [
+        $sendCode = new SendCode($user, $event, $user->getMobile(), $locale);
+        $form     = $this->formFactory->create(SendCodeType::class, $sendCode, [
             'country' => $event->getCountry(),
-            'submit' => true,
+            'submit'  => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

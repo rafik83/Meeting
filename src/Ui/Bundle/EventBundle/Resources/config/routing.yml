@@ -709,12 +709,25 @@ event_user_event_token_confirm_agenda:
     defaults: { _controller: EventBundle:Token\UserEventToken:confirmAgenda }
 
 #
+# SendCode
+#
+event_user_phone_validate:
+    path: /account/validate/phone
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:User/Phone/SendCode:sendCode }
+
+#
 # UserEventPhone
 #
-event_user_event_phone_validate_code:
+event_user_event_phone_validate_code_with_token:
     path: /confirm/agenda/{token}/validate/phone
     requirements:
         token: \w+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:User/Phone/Validate:validateWithToken }
+
+event_user_event_phone_validate_code:
+    path: /account/validate/phone/confirm
     methods: [GET, POST]
     defaults: { _controller: EventBundle:User/Phone/Validate:validate }
 
