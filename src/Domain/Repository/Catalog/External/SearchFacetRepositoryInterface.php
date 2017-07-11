@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Repository\Catalog\External;
+
+use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Event;
+
+interface SearchFacetRepositoryInterface
+{
+    /**
+     * @param SearchFacet $searchFacet
+     */
+    public function add(SearchFacet $searchFacet);
+
+    /**
+     * @param SearchFacet $searchFacet
+     */
+    public function set(SearchFacet $searchFacet);
+
+    /**
+     * @param Event $event
+     *
+     * @return SearchFacet[]
+     */
+    public function getByEvent(Event $event);
+}

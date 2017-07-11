@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\SmsActivationDateAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -29,22 +30,28 @@ class AgendaParticipantViewQueryHandler
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
+    /** @var SmsActivationDateAccessChecker */
+    private $smsActivationDateAccessChecker;
+
     /**
-     * @param DayRepositoryInterface     $dayRepository
-     * @param MeetingRepositoryInterface $meetingRepository
-     * @param AgendaDayViewQueryHandler  $agendaDayViewQueryHandler
-     * @param ParticipantInfoGuesser     $participantInfoGuesser
+     * @param DayRepositoryInterface         $dayRepository
+     * @param MeetingRepositoryInterface     $meetingRepository
+     * @param AgendaDayViewQueryHandler      $agendaDayViewQueryHandler
+     * @param ParticipantInfoGuesser         $participantInfoGuesser
+     * @param SmsActivationDateAccessChecker $smsActivationDateAccessChecker
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
         MeetingRepositoryInterface $meetingRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        SmsActivationDateAccessChecker $smsActivationDateAccessChecker
     ) {
-        $this->dayRepository             = $dayRepository;
-        $this->meetingRepository         = $meetingRepository;
-        $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
-        $this->participantInfoGuesser    = $participantInfoGuesser;
+        $this->dayRepository                  = $dayRepository;
+        $this->meetingRepository              = $meetingRepository;
+        $this->agendaDayViewQueryHandler      = $agendaDayViewQueryHandler;
+        $this->participantInfoGuesser         = $participantInfoGuesser;
+        $this->smsActivationDateAccessChecker = $smsActivationDateAccessChecker;
     }
 
     /**
@@ -89,7 +96,9 @@ class AgendaParticipantViewQueryHandler
             $query->participant->getId(),
             $completeName,
             $query->participant->getUser()->getEmail(),
-            $dayViews
+            $dayViews,
+            $query->sheet->attend(),
+            $this->smsActivationDateAccessChecker->allowedToAccess($query->event)
         );
     }
 }

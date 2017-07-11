@@ -12,7 +12,19 @@
             <table class="table-agenda table-condensed">
                 <tr>
                     <td v-for="participant in sheet.participants">
-                        <p class="text-center">${ participant.fullname }</p>
+                        <div >
+
+                        </div>
+                        <p class="text-center">
+                            ${ participant.fullname }
+                            <button
+                                v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true" style="text-align: center;"
+                                class="btn btn-default btn-xs pull-right"
+                                v-on:click="$store.commit('OPEN_USER_AGENDA_VERSION_MODAL', participant.id)"
+                            >
+                                <i class="icon-Smartphone"></i>
+                            </button>
+                        </p>
                         <table class="table">
                             <tr>
                                 <td v-for="day in participant.days" class="col-xs-6">

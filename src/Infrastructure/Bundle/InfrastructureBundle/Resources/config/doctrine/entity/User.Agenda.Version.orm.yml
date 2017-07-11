@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\User\Agenda\Version:
+    type:  entity
+    table: user_agenda_version
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        version:
+            type: json_array
+            nullable: true
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

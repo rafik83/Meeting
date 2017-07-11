@@ -14,114 +14,64 @@ use Proximum\Vimeet\Domain\Payment\Mode;
 
 class Configuration
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $leftColor;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $rightColor;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $textColor;
 
-    /**
-     * In Minutes
-     *
-     * @var int
-     */
+    /** @var int In Minutes */
     private $scheduleScale = 30;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $legalInfo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $contactLastName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $contactFirstName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserPhone;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserWebsite;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $allowDeposit = false;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $depositUntil;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $minimumForDeposit;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $deposit;
 
-    /**
-     * "la date de mise en ligne du catalogue"
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null "la date de mise en ligne du catalogue" */
     private $catalogOnlineDate;
 
-    /**
-     * "la date d'ouverture des inscriptions au s-event"
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null "la date d'ouverture des inscriptions au s-event" */
     private $happeningsOpenDate;
 
-    /**
-     * "la date de publication des agendas définitifs (RDV)"
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null "la date de publication des agendas définitifs (RDV)" */
     private $schedulePublishDate;
 
-    /**
-     * "la date d'activation des notifications SMS"
-     *
-     * @var null|\DateTimeInterface
-     */
+    /** @var null|\DateTimeInterface "la date d'activation des notifications SMS" */
     private $smsActivationDate;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $meetingRequestUpdateLocked;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $paymentModes;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $analyticsCode;
 
     /**
@@ -142,12 +92,14 @@ class Configuration
      */
     private $closeAnsweringMeetingRequestDate;
 
-    /**
-     * Date d'ouverture de l'agenda
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null Date d'ouverture de l'agenda */
     private $agendaOnlineDate;
+
+    /** @var \DateTimeInterface|null "Date d'ouverture des inscriptions" */
+    private $registrationOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture des inscriptions" */
+    private $registrationCloseDate;
 
     /**
      * @param string $leftColor
@@ -350,6 +302,8 @@ class Configuration
      * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
      * @param \DateTimeInterface|null $smsActivationDate
      * @param \DateTimeInterface|null $agendaOnlineDate
+     * @param \DateTimeInterface|null $registrationOpenDate
+     * @param \DateTimeInterface|null $registrationCloseDate
      *
      * @return Configuration
      */
@@ -360,7 +314,9 @@ class Configuration
         \DateTimeInterface $closeMeetingRequestDate = null,
         \DateTimeInterface $closeAnsweringMeetingRequestDate = null,
         \DateTimeInterface $smsActivationDate = null,
-        \DateTimeInterface $agendaOnlineDate = null
+        \DateTimeInterface $agendaOnlineDate = null,
+        \DateTimeInterface $registrationOpenDate = null,
+        \DateTimeInterface $registrationCloseDate = null
     ) {
         $this->catalogOnlineDate                = $catalogOnlineDate;
         $this->happeningsOpenDate               = $happeningsOpenDate;
@@ -369,6 +325,8 @@ class Configuration
         $this->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
         $this->smsActivationDate                = $smsActivationDate;
         $this->agendaOnlineDate                 = $agendaOnlineDate;
+        $this->registrationOpenDate             = $registrationOpenDate;
+        $this->registrationCloseDate            = $registrationCloseDate;
 
         return $this;
     }
@@ -481,5 +439,21 @@ class Configuration
     public function getAgendaOnlineDate()
     {
         return $this->agendaOnlineDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getRegistrationOpenDate(): ?\DateTimeInterface
+    {
+        return $this->registrationOpenDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getRegistrationCloseDate(): ?\DateTimeInterface
+    {
+        return $this->registrationCloseDate;
     }
 }

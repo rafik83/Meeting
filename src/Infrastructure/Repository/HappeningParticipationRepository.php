@@ -83,6 +83,29 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
+    public function hasParticipationForUserAndEvent(User $user, Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation.id')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening',
+                'happening',
+                'WITH',
+                'happening.event = :event AND participation.user = :user AND participation.disabled = false'
+            )
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEventAndUsers(Event $event, array $users)
     {
         $queryBuilder = $this

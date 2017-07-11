@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
@@ -22,13 +23,17 @@ use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
+use Proximum\Vimeet\Domain\Catalog\Catalog;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -40,6 +45,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class CatalogController
+ *
+ * Routes are being protected by security access checker
+ *
+ * @see CatalogAccessEventListener
+ */
 class CatalogController extends Controller
 {
     /**
@@ -77,11 +89,6 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $event = $eventDomain->getEvent();
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createNotFoundException();
-        }
-
         $locale = $request->getLocale();
 
         if (!$sheet->isInCatalog()) {
@@ -123,9 +130,16 @@ class CatalogController extends Controller
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = $searchForm->getData();
+
+            // if type field is empty, set the default types
+            if (empty($filters[SearchFields::FILTER_TYPE])) {
+                $filters[SearchFields::FILTER_TYPE] = $typeViews;
+            }
         }
 
         $page = $request->query->getInt('page', 1);
+
+        $filters = array_merge(Catalog::DEFAULT_FILTERS, $filters);
 
         try {
             /** @var PaginatedResult $paginatedResult */
@@ -154,7 +168,6 @@ class CatalogController extends Controller
             $event,
             $sheet,
             $locale,
-            $visibleTypes,
             $filters,
             $paginatedResult->aggregations,
             $typeViews,
@@ -221,16 +234,11 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
-
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
                 $request->get('query'),
+                Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
         );
@@ -254,16 +262,11 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
-
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
         $keywordView = $this->get('tactician.commandbus.query')->handle(
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
                 $request->get('query'),
+                Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
         );
@@ -294,10 +297,6 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $event = $eventDomain->getEvent();
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createAccessDeniedException();
-        }
 
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
@@ -423,106 +422,11 @@ class CatalogController extends Controller
     private function getDefaultFilters(array $typeViews)
     {
         $filters = [
-            SearchType::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchType::FILTER_TYPE => $typeViews,
+            SearchFields::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE => $typeViews,
         ];
 
         return $filters;
-    }
-
-    /**
-     * @param TypeView[] $typeViews
-     * @param array|null $aggregations
-     *
-     * @return TypeView[]
-     */
-    private function filterTypeViews(array $typeViews, array $aggregations = null)
-    {
-        $typeField = SheetSearchAdapterInterface::ES_FIELD_TYPE;
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$typeField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
-
-        foreach ($typeViews as $typeView) {
-            if (isset($aggregationsIndexedByKey[$typeView->id])) {
-                $typeView->count = $aggregationsIndexedByKey[$typeView->id];
-            }
-        }
-
-        return $typeViews;
-    }
-
-    /**
-     * @param OrganizationCategoryView[] $organizationCategoryViews
-     * @param array|null                 $aggregations
-     *
-     * @return OrganizationCategoryView[]
-     */
-    private function filterOrganizationCategoryViews(array $organizationCategoryViews, array $aggregations = null)
-    {
-        $organizationCategoryField = SheetSearchAdapterInterface::ES_FIELD_ORGANIZATION_CATEGORY;
-
-        if (null === $aggregations
-            || !isset($aggregations[$organizationCategoryField])
-            || !isset($aggregations[$organizationCategoryField]['buckets'])
-        ) {
-            return [];
-        }
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$organizationCategoryField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
-
-        foreach ($organizationCategoryViews as $index => $organizationCategoryView) {
-            // Show only filter which have result
-            if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key])
-                || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0
-            ) {
-                unset($organizationCategoryViews[$index]);
-            }
-        }
-
-        return $organizationCategoryViews;
-    }
-
-    /**
-     * @param PositionView[] $positionViews
-     * @param array|null     $aggregations
-     *
-     * @return array
-     */
-    private function filterPositionViews(array $positionViews, array $aggregations = null)
-    {
-        $positionField = SheetSearchAdapterInterface::ES_FIELD_POSITION;
-
-        if (null === $aggregations
-            || !isset($aggregations[$positionField])
-            || !isset($aggregations[$positionField][$positionField]['buckets'])
-        ) {
-            return [];
-        }
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$positionField][$positionField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
-
-        foreach ($positionViews as $index => $positionView) {
-            // Show only filter which have result
-            if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
-                || $aggregationsIndexedByKey[$positionView->getKey()] === 0
-            ) {
-                unset($positionViews[$index]);
-            }
-        }
-
-        return $positionViews;
     }
 
     /**
@@ -559,7 +463,6 @@ class CatalogController extends Controller
      * @param Event                      $event
      * @param Sheet                      $sheet
      * @param string                     $locale
-     * @param array                      $visibleTypes
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
@@ -572,67 +475,30 @@ class CatalogController extends Controller
         Event $event,
         Sheet $sheet,
         $locale,
-        array $visibleTypes,
         array $filters,
         array $currentAggregations,
         array $typeViews,
         array $organizationCategoryViews,
         array $positionViews
     ) {
-        $searchAdapter = $this->get('adapter.sheet_search_adapter');
-
-        if (!isset($filters[SearchType::FILTER_TYPE])
-            || count($filters[SearchType::FILTER_TYPE]) !== count($visibleTypes)
-        ) {
-            // if type filter is used, type aggs need to be done with a ES query without type filter
-            $typeAggregations = $searchAdapter->getTypeAggregations(
+        /** @var FilteredFieldsView $filteredFieldsView */
+        $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
+            new FilteredFieldsQuery(
                 $event,
-                $locale,
                 $filters,
-                SearchType::FILTER_TYPE
-            );
-        }
-
-        if (isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
-            // if organizationCategory filter is used,
-            // organizationCategory aggs need to be done with a ES query without organizationCategory filter
-            $categoryOrganisationAggregations = $searchAdapter->getOrganizationCategoryAggregations(
-                $event,
-                $locale,
-                $filters,
-                SearchType::FILTER_ORGANIZATION_CATEGORY
-            );
-        }
-
-        if (isset($filters[SearchType::FILTER_POSITION])) {
-            $positionAggregations = $searchAdapter->getPositionAggregations(
-                $event,
-                $locale,
-                $filters,
-                SearchType::FILTER_POSITION
-            );
-        }
-
-        $filteredTypeViews = $this->filterTypeViews(
-            $typeViews,
-            isset($typeAggregations) ? $typeAggregations : $currentAggregations
-        );
-
-        $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-            $organizationCategoryViews,
-            isset($categoryOrganisationAggregations) ? $categoryOrganisationAggregations : $currentAggregations
-        );
-
-        $filteredPositionViews = $this->filterPositionViews(
-            $positionViews,
-            isset($positionAggregations) ? $positionAggregations : $currentAggregations
+                $currentAggregations,
+                $typeViews,
+                $organizationCategoryViews,
+                $positionViews,
+                $locale
+            )
         );
 
         return $this->getSearchForm(
             $filters,
-            $filteredTypeViews,
-            $filteredOrganizationCategoryViews,
-            $filteredPositionViews,
+            $filteredFieldsView->typeViews,
+            $filteredFieldsView->organizationCategoryViews,
+            $filteredFieldsView->positionViews,
             $event,
             $sheet,
             $locale

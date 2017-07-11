@@ -15,6 +15,8 @@ Feature: I can manage key dates for an event
       | event_configure_date_closeAnsweringMeetingRequestDate | 16/10/2016 13:30 |
       | event_configure_date_smsActivationDate                | 17/10/2016 13:30 |
       | event_configure_date_agendaOnlineDate                 | 18/10/2016 13:30 |
+      | event_configure_date_registrationOpenDate             | 10/10/2016 12:00 |
+      | event_configure_date_registrationCloseDate            | 18/10/2016 21:00 |
     And I press "event_configure_date_submit"
     Then I should see "flash.admin.event.configure_dates.success"
     When I go to this page "/fr/event/1/dates"
@@ -25,3 +27,5 @@ Feature: I can manage key dates for an event
     And the "event_configure_date_closeAnsweringMeetingRequestDate" field should contain "16/10/2016 13:30"
     And the "event_configure_date_smsActivationDate" field should contain "17/10/2016 13:30"
     And the "event_configure_date_agendaOnlineDate" field should contain "18/10/2016 13:30"
+    And the "event_configure_date_registrationOpenDate" field should contain "10/10/2016 12:00"
+    And the "event_configure_date_registrationCloseDate" field should contain "18/10/2016 21:00"

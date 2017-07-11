@@ -34,6 +34,21 @@ class Sheet implements TraceableInterface
     const STATE_VALIDATION_VALIDATED = 'validated';
 
     /**
+     * "Etat de validation des agendas des utilisateurs de la fiche"
+     */
+    const AGENDA_ALL_CONFIRMED    = 'all_agenda_confirmed';
+    const AGENDA_PARTLY_CONFIRMED = 'agenda_partly_confirmed';
+    const AGENDA_NONE_CONFIRMED   = 'no_agenda_confirmed';
+    const AGENDA_NOT_CONCERNED    = 'agenda_not_concerned';
+
+    const AGENDA_CONFIRMED_STATUS = [
+        self::AGENDA_ALL_CONFIRMED,
+        self::AGENDA_PARTLY_CONFIRMED,
+        self::AGENDA_NONE_CONFIRMED,
+        self::AGENDA_NOT_CONCERNED,
+    ];
+
+    /**
      * @var int
      */
     private $id;
@@ -150,6 +165,9 @@ class Sheet implements TraceableInterface
      * @var string|null
      */
     private $title = null;
+
+    /** @var string */
+    private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
     /**
      * Sheet constructor.
@@ -953,5 +971,23 @@ class Sheet implements TraceableInterface
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * Status of the agenda confirmation
+     *
+     * @return string
+     */
+    public function getAgendaConfirmedStatus(): string
+    {
+        return $this->agendaConfirmedStatus;
+    }
+
+    /**
+     * @param string $agendaConfirmedStatus
+     */
+    public function setAgendaConfirmedStatus(string $agendaConfirmedStatus)
+    {
+        $this->agendaConfirmedStatus = $agendaConfirmedStatus;
     }
 }

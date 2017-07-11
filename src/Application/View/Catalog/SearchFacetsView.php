@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Catalog;
 
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 
 class SearchFacetsView
 {
