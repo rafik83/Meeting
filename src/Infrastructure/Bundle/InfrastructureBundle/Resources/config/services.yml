@@ -5127,3 +5127,14 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+
+    #
+    # HomeDispatcher
+    #
+    domain.service.home_dispatch.home_user_dispatcher:
+        class: Proximum\Vimeet\Domain\Service\HomeDispatch\HomeUserDispatcher
+        arguments:
+            - '@router'
+            - '@components.home.home_dispatch'
+            - '@components.home.home_dispatch_anonymous_user'
+            - '@adapter.authorization_checker'
