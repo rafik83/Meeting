@@ -79,10 +79,10 @@ abstract class AbstractEventType extends AbstractType
         $event = $options['event'];
 
         $builder
+            ->add('title', TextType::class)
             ->add('visible', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('title', TextType::class)
             ->add('locales', LocaleType::class, [
                 'multiple'          => true,
                 'preferred_choices' => $this->preferredLocales,
