@@ -14,9 +14,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class RegistrationAccessChecker extends AccessChecker
 {
-    const REGISTRATION_OPEN_DATE_NOT_REACHED = 'registration_open_date_not_reached';
-    const REGISTRATION_CLOSE_DATE_REACHED = 'registration_close_date_reached';
-    const REGISTRATION_OPEN = 'registration_open';
+    const REGISTRATION_NOT_OPEN = 'registration_not_open';
+    const REGISTRATION_CLOSED   = 'registration_closed';
+    const REGISTRATION_OPEN     = 'registration_open';
 
     /** @var RegistrationOpenDateAccessChecker */
     private $registrationDateOpenAccessChecker;
@@ -50,11 +50,11 @@ class RegistrationAccessChecker extends AccessChecker
     public function getRegistrationAccessStatus(Event $event): string
     {
         if (!$this->registrationDateOpenAccessChecker->allowedToAccess($event)) {
-            return self::REGISTRATION_OPEN_DATE_NOT_REACHED;
+            return self::REGISTRATION_NOT_OPEN;
         }
 
         if (!$this->registrationDateCloseAccessChecker->allowedToAccess($event)) {
-            return self::REGISTRATION_CLOSE_DATE_REACHED;
+            return self::REGISTRATION_CLOSED;
         }
 
         return self::REGISTRATION_OPEN;
