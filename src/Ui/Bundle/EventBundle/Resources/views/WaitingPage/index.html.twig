@@ -10,7 +10,7 @@
             <b>{{ message }}</b>
         </p>
 
-        {% if isLoginActivated == true and is_granted('ROLE_USER') == false %}
+        {% if isLoginActivated == true and not is_granted('ROLE_USER') %}
             <a href="{{ path('event_login') }}" class="btn btn-primary" title="{{ 'login.link'|trans }}">
                 {{ 'login.link.label'|trans }}
             </a>

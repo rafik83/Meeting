@@ -38,7 +38,6 @@ class WaitingController extends Controller
             $message = $translator->trans('event.registration_closed');
             $isLoginActivated = true;
         } else {
-
             return $this->redirectToRoute('event', ['event' => $event]);
         }
 

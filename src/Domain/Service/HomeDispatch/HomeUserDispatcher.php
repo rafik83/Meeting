@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -58,9 +57,9 @@ class HomeUserDispatcher
      * @param Event              $event
      * @param null|UserInterface $user
      *
-     * @return Response|null
+     * @return RedirectResponse|null
      */
-    public function attemptDispatchUser(Event $event, UserInterface $user = null): ? Response
+    public function attemptDispatchUser(Event $event, UserInterface $user = null): ? RedirectResponse
     {
         if (null !== $response = $this->attemptDispatchAnonymousUser($event)) {
             return $response;
@@ -79,9 +78,9 @@ class HomeUserDispatcher
      * @param Event              $event
      * @param null|UserInterface $user
      *
-     * @return null|Response
+     * @return null|RedirectResponse
      */
-    private function attemptDispatchLoggedUser(Event $event, UserInterface $user = null)
+    private function attemptDispatchLoggedUser(Event $event, UserInterface $user = null): ? RedirectResponse
     {
         $homeDispatchView = $this->homeDispatch->handle($event, $user);
 
@@ -111,9 +110,9 @@ class HomeUserDispatcher
     /**
      * @param Event $event
      *
-     * @return null|Response
+     * @return null|RedirectResponse
      */
-    private function attemptDispatchAnonymousUser(Event $event): ? Response
+    private function attemptDispatchAnonymousUser(Event $event): ? RedirectResponse
     {
         $homeDispatchView = $this->homeDispatchAnonymousUser->handle($event);
 
