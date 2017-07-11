@@ -67,7 +67,7 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->event                = EventFactory::createEvent();
         $this->type                 = new Type($this->event);
         $this->registrationTemplate = new RegistrationTemplate('Registration template', [], ['fr'], 'fr', new \DateTime('2017-12-01'));
-        $this->sheet                = SheetFactory::create($this->event, $this->user, new \DateTime(), $this->type );
+        $this->sheet                = SheetFactory::create($this->event, $this->user, new \DateTime(), $this->type);
         $this->participant          = new Participant($this->sheet, $this->user, [], true);
         $this->templateData         = new TemplateData($this->type, [], 'fr', 'fr');
         $this->locale               = 'fr';
@@ -83,8 +83,9 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->participant->getData(),
             Tag::PARTICIPANT_LASTNAME,
             $this->locale
-        )->shouldBeCalled()
-         ->willReturn('Moreau');
+        )
+            ->shouldBeCalled()
+            ->willReturn('Moreau');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
@@ -100,8 +101,9 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->participant->getData(),
             Tag::PARTICIPANT_FIRSTNAME,
             $this->locale
-        )->shouldBeCalled()
-         ->willReturn('Ludovic');
+        )
+            ->shouldBeCalled()
+            ->willReturn('Ludovic');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
@@ -121,8 +123,9 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $this->templateData,
                 $tag
-            )->shouldBeCalled()
-             ->willReturn('foobar_' . $tag);
+            )
+                ->shouldBeCalled()
+                ->willReturn('foobar_' . $tag);
         }
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
@@ -154,8 +157,9 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $this->templateData,
                 $tag
-            )->shouldBeCalled()
-             ->willReturn('foobar_' . $tag);
+            )
+                ->shouldBeCalled()
+                ->willReturn('foobar_' . $tag);
         }
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
@@ -187,8 +191,9 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->participant->getData(),
             Tag::PARTICIPANT_PHONE,
             $this->locale
-        )->shouldBeCalled()
-         ->willReturn('0123456789');
+        )
+            ->shouldBeCalled()
+            ->willReturn('0123456789');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
@@ -243,8 +248,9 @@ class ParticipantInfoGuesserTest extends TestCase
             $this->taggedInfoGuesser->guessFirstFromTemplateData(
                 $this->templateData,
                 $tag
-            )->shouldBeCalled()
-             ->willReturn('foobar_' . $tag);
+            )
+                ->shouldBeCalled()
+                ->willReturn('foobar_' . $tag);
         }
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
