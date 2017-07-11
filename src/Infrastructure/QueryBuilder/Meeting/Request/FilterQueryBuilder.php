@@ -26,7 +26,7 @@ class FilterQueryBuilder extends QueryBuilder
         parent::__construct($em);
 
         $this
-            ->select('request')
+            ->select('request', 'fromSheet', 'toSheet')
             ->from(Request::class, 'request', 'request.id')
             ->where('request.disabled = FALSE')
             ->orderBy('request.stateUpdatedAt', 'DESC');
@@ -48,8 +48,7 @@ class FilterQueryBuilder extends QueryBuilder
      */
     public function filterPlanned()
     {
-        $this
-            ->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
+        $this->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
     }
 
     /**

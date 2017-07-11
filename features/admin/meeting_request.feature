@@ -26,10 +26,8 @@ Feature: See meeting request
 
   Scenario: I can filter meeting request list by meeting request planned
     Given the database is purged
-    And the following fixtures files are loaded:
-      | Admin.yml |
     And the event "RdvCarnot" is created
-    And I am logged with "test@test.com" on admin
+    And I am logged as admin
     And there is an active spot "Spot01" with meeting capacity of 1, seat capacity of 2
     And there is 1 slot in this event
     And there is a request between "Proximum" and "Elao"
