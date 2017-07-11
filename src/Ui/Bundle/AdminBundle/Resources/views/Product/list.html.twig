@@ -49,9 +49,8 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in products %}
-            {% set bought = row.bought %}
-            {% set product = row[0] %}
+        {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+        {% for product in products %}
             <tr>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
@@ -66,18 +65,16 @@
                     {% if product.hasIncludedProducts %}
                         <ul>
                             {% for includedProduct in product.includedProducts %}
-                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.included.name }}</li>
+                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.name }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    {% if bought > 0 %}
-                        {% set availabilityStatus = product.getAvailabilityStatus(bought) %}
-                        {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+                    {% if product.bought > 0 %}
                         <a href="{{ path('admin_sheet_order_list', {'event': event.id, 'product': product.id}) }}">
-                            <span class="label label-{{ availabilityCssClass[availabilityStatus] }}">
-                                {{ bought }}
+                            <span class="label label-{{ availabilityCssClass[product.availabilityStatus] }}">
+                                {{ product.bought }}
                             </span>
                         </a>
                     {% endif %}
