@@ -99,6 +99,8 @@ class AccessManager
             null,
             $dateTime
         );
+
+        $this->eventRepository->set($event);
     }
 
     /**
