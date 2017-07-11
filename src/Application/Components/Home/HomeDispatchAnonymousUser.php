@@ -41,9 +41,7 @@ class HomeDispatchAnonymousUser
     {
         $registrationAccessStatus = $this->registrationAccessChecker->getRegistrationAccessStatus($event);
 
-        if ($registrationAccessStatus === self::TYPE_REGISTRATION_NOT_OPEN
-            || $registrationAccessStatus === self::TYPE_REGISTRATION_CLOSED
-        ) {
+        if (in_array($registrationAccessStatus, [self::TYPE_REGISTRATION_NOT_OPEN, self::TYPE_REGISTRATION_CLOSED])) {
             return new HomeDispatchAnonymousView($registrationAccessStatus);
         }
         
