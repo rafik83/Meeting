@@ -48,8 +48,8 @@ class ParticipantInfoGuesser
         $infos = $this->guessParticipantInfos($participant, $locale);
 
         return (isset($infos[Tag::PARTICIPANT_FIRSTNAME]) ? $infos[Tag::PARTICIPANT_FIRSTNAME] : '')
-        .' '
-        .(isset($infos[Tag::PARTICIPANT_LASTNAME]) ? $infos[Tag::PARTICIPANT_LASTNAME] : '');
+            . ' '
+            . (isset($infos[Tag::PARTICIPANT_LASTNAME]) ? $infos[Tag::PARTICIPANT_LASTNAME] : '');
     }
 
     /**
@@ -138,14 +138,18 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantPhone(Participant $participant, $locale)
     {
-        $template = $participant->getSheet()->getType()->getRegistrationTemplate();
+        return $this->guessByTag($participant, Tag::PARTICIPANT_PHONE, $locale);
+    }
 
-        return $this->taggedInfoGuesser->guessFirst(
-            $template,
-            $participant->getData(),
-            Tag::PARTICIPANT_PHONE,
-            $locale
-        );
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return null|string
+     */
+    public function guessParticipantMobile(Participant $participant, string $locale)
+    {
+        return $this->guessByTag($participant, Tag::PARTICIPANT_MOBILE, $locale);
     }
 
     /**
@@ -177,5 +181,24 @@ class ParticipantInfoGuesser
         $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
         return $templateData->getTaggedContentValue(Tag::PARTICIPANT_POSITION);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $tag
+     * @param string      $locale
+     *
+     * @return null|string
+     */
+    public function guessByTag(Participant $participant, string $tag, string $locale):? string
+    {
+        $template = $participant->getSheet()->getType()->getRegistrationTemplate();
+
+        return $this->taggedInfoGuesser->guessFirst(
+            $template,
+            $participant->getData(),
+            $tag,
+            $locale
+        );
     }
 }
