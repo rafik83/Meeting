@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -140,5 +141,8 @@ class ParticipateHandler
 
         $mustSelectPackageEvent = new MustSelectPackageEvent($sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $mustSelectPackageEvent);
+
+        $sheetTitleCheckEvent = new SheetTitleCheckEvent($sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, $sheetTitleCheckEvent);
     }
 }
