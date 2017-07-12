@@ -46,6 +46,15 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Product $product)
+    {
+        $this->entityManager->remove($product);
+        $this->entityManager->flush($product);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this

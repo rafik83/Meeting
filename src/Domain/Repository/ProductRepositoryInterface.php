@@ -21,6 +21,11 @@ interface ProductRepositoryInterface
     public function add(Product $product);
 
     /**
+     * @param Product $product
+     */
+    public function remove(Product $product);
+
+    /**
      * @param Event $event
      *
      * @return Product[]
