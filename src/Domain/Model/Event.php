@@ -653,6 +653,7 @@ class Event implements EventInterface, TraceableInterface
             throw new DayNotDefinedException();
         }
 
+        $days = $this->getDays();
         return end($days);
     }
 
