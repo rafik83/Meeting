@@ -40,6 +40,7 @@ class LocalizationViewQueryHandler
         $localizations = $this->sheetSearchAdapter->findLocalization(
             $query->event,
             $query->filter,
+            $query->defaultFilters,
             $query->locale
         );
 

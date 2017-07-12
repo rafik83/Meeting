@@ -1,0 +1,25 @@
+<div class="col-md-4">
+    <div class="catalog__item">
+        <div class="content__sheet-card">
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: true }, false) }}
+        </div>
+        <footer>
+            <div class="actions">
+                <div>
+                    <a href="#" data-toggle="modal" data-target="#catalogRegisterModal">
+                        <i class="icon-Document_1"></i>
+                        <span>{{ 'catalog.complete_sheet'|trans }}</span>
+                    </a>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#catalogRegisterModal">
+                        <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.create'|trans }}
+                    </button>
+                </div>
+            </div>
+            <p class="tags">
+                <i class="icon-LienTag"></i> {{ catalogSheetPreviewView.type }}
+            </p>
+        </footer>
+    </div>
+</div>

@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
@@ -261,7 +262,9 @@ class SheetController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $locale);
+        $sheetDetailView = $this->get('tactician.commandbus.query')->handle(new SheetDetailQuery(
+            $sheet, $locale
+        ));
 
         $changeTypeForm = null;
 
@@ -315,7 +318,7 @@ class SheetController extends Controller
             'event'              => $event,
             'sheet'              => $sheet,
             'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
-            'details'            => $details,
+            'details'            => $sheetDetailView,
             'addCommentForm'     => $addCommentForm->createView(),
             'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
             'impersonationToken' => $impersonationToken,
