@@ -653,9 +653,7 @@ class Event implements EventInterface, TraceableInterface
             throw new DayNotDefinedException();
         }
 
-        $days = array_reverse($this->getDays());
-
-        return reset($days);
+        return end($days);
     }
 
     /**
