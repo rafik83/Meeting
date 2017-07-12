@@ -119,12 +119,12 @@ class ParticipantController extends Controller
                 new PreUpdate($user, $participant, $eventDomain->getEvent(), $data, $profileTemplate, $locale)
             );
 
+            $updateProfile = new UpdateProfile($profileTemplate, $participant, $locale, $data, $user);
+            $this->get('tactician.commandbus')->handle($updateProfile);
+
             if ($preUpdateState === PreUpdateHandler::MOBILE_VALIDATION_NEEDED) {
                 return $this->redirectToRoute('event_user_phone_validate');
             }
-
-            $updateProfile = new UpdateProfile($profileTemplate, $participant, $locale, $data, $user);
-            $this->get('tactician.commandbus')->handle($updateProfile);
 
             return $this->redirectToRoute('event_account_participant', [
                 'participant' => $participant->getId(),

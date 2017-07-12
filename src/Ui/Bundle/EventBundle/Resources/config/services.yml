@@ -562,4 +562,4 @@ services:
         arguments:
             - '@tactician.commandbus.query'
             - '@template.participant_info_guesser'
-            - '@session'
+            - '@session.update_participant_session_manager'

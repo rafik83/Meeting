@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager;
 
 class PreUpdateHandler
 {
@@ -34,25 +34,25 @@ class PreUpdateHandler
     private $participantInfoGuesser;
 
     /**
-     * @var Session
+     * @var UpdateParticipantSessionManager
      */
-    private $session;
+    private $updateParticipantSessionManager;
 
     /**
      * PreUpdateHandler constructor.
      *
-     * @param CommandBus             $commandBus
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     * @param Session                $session
+     * @param CommandBus                      $commandBus
+     * @param ParticipantInfoGuesser          $participantInfoGuesser
+     * @param UpdateParticipantSessionManager $updateParticipantSessionManager
      */
     public function __construct(
         CommandBus $commandBus,
         ParticipantInfoGuesser $participantInfoGuesser,
-        Session $session
+        UpdateParticipantSessionManager $updateParticipantSessionManager
     ) {
-        $this->commandBus             = $commandBus;
-        $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->session = $session;
+        $this->commandBus                      = $commandBus;
+        $this->participantInfoGuesser          = $participantInfoGuesser;
+        $this->updateParticipantSessionManager = $updateParticipantSessionManager;
     }
 
     /**
@@ -87,7 +87,11 @@ class PreUpdateHandler
         $currentMobile = $update->data[$mobileTemplateObject->getKey()]['telephone'];
 
         if ($currentMobile !== $previousMobile) {
-            $this->session->set(self::MOBILE_NUMBER_TO_VALIDATE, $currentMobile);
+            $this->updateParticipantSessionManager->set(
+                $update->participant->getSheet(),
+                $update->participant,
+                $currentMobile
+            );
 
             return self::MOBILE_VALIDATION_NEEDED;
         }
