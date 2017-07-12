@@ -238,7 +238,7 @@ class ProductRepository implements ProductRepositoryInterface
                     LEFT JOIN package.planRanks packagePlanRank
                     WHERE participant = product
                         OR planning = product
-                        or packagePlanRank.plan = product
+                        OR packagePlanRank.plan = product
                         OR optionRank.option = product
                 )
             )')
