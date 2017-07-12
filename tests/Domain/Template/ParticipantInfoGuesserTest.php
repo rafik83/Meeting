@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,48 +66,55 @@ class ParticipantInfoGuesserTest extends TestCase
         $this->user                 = UserFactory::create();
         $this->event                = EventFactory::createEvent();
         $this->type                 = new Type($this->event);
-        $this->registrationTemplate = new RegistrationTemplate('Registration template', [], ['fr'], 'fr', new \DateTime('2017-12-01'));
+        $this->registrationTemplate = new RegistrationTemplate(
+            'Registration template',
+            [],
+            ['fr'],
+            'fr',
+            new \DateTime('2017-12-01')
+        );
         $this->sheet                = SheetFactory::create($this->event, $this->user, new \DateTime(), $this->type);
         $this->participant          = new Participant($this->sheet, $this->user, [], true);
         $this->templateData         = new TemplateData($this->type, [], 'fr', 'fr');
         $this->locale               = 'fr';
-
     }
 
     public function testGuessParticipantLastName()
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
-        $this->taggedInfoGuesser->guessFirst(
-            $this->registrationTemplate,
-            $this->participant->getData(),
-            Tag::PARTICIPANT_LASTNAME,
-            $this->locale
-        )
+        $this->taggedInfoGuesser
+            ->guessFirst(
+                $this->registrationTemplate,
+                $this->participant->getData(),
+                Tag::PARTICIPANT_LASTNAME,
+                $this->locale
+            )
             ->shouldBeCalled()
-            ->willReturn('Moreau');
+            ->willReturn('LastName');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
-        $this->assertEquals('Moreau', $guesser->guessParticipantLastName($this->participant, $this->locale));
+        $this->assertEquals('LastName', $guesser->guessParticipantLastName($this->participant, $this->locale));
     }
 
     public function testGuessParticipantFirstName()
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
-        $this->taggedInfoGuesser->guessFirst(
-            $this->registrationTemplate,
-            $this->participant->getData(),
-            Tag::PARTICIPANT_FIRSTNAME,
-            $this->locale
-        )
+        $this->taggedInfoGuesser
+            ->guessFirst(
+                $this->registrationTemplate,
+                $this->participant->getData(),
+                Tag::PARTICIPANT_FIRSTNAME,
+                $this->locale
+            )
             ->shouldBeCalled()
-            ->willReturn('Ludovic');
+            ->willReturn('FirstName');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
-        $this->assertEquals('Ludovic', $guesser->guessParticipantFirstName($this->participant, $this->locale));
+        $this->assertEquals('FirstName', $guesser->guessParticipantFirstName($this->participant, $this->locale));
     }
 
     public function testGuessParticipantInfos()
@@ -120,10 +127,11 @@ class ParticipantInfoGuesserTest extends TestCase
             ->willReturn($this->templateData);
 
         foreach ($tags as $tag) {
-            $this->taggedInfoGuesser->guessFirstFromTemplateData(
-                $this->templateData,
-                $tag
-            )
+            $this->taggedInfoGuesser
+                ->guessFirstFromTemplateData(
+                    $this->templateData,
+                    $tag
+                )
                 ->shouldBeCalled()
                 ->willReturn('foobar_' . $tag);
         }
@@ -154,10 +162,11 @@ class ParticipantInfoGuesserTest extends TestCase
         $tags = Tag::getParticipantTags();
 
         foreach ($tags as $tag) {
-            $this->taggedInfoGuesser->guessFirstFromTemplateData(
-                $this->templateData,
-                $tag
-            )
+            $this->taggedInfoGuesser
+                ->guessFirstFromTemplateData(
+                    $this->templateData,
+                    $tag
+                )
                 ->shouldBeCalled()
                 ->willReturn('foobar_' . $tag);
         }
@@ -186,12 +195,13 @@ class ParticipantInfoGuesserTest extends TestCase
     {
         $this->type->setRegistrationTemplate($this->registrationTemplate);
 
-        $this->taggedInfoGuesser->guessFirst(
-            $this->registrationTemplate,
-            $this->participant->getData(),
-            Tag::PARTICIPANT_PHONE,
-            $this->locale
-        )
+        $this->taggedInfoGuesser
+            ->guessFirst(
+                $this->registrationTemplate,
+                $this->participant->getData(),
+                Tag::PARTICIPANT_PHONE,
+                $this->locale
+            )
             ->shouldBeCalled()
             ->willReturn('0123456789');
 
@@ -245,10 +255,11 @@ class ParticipantInfoGuesserTest extends TestCase
             ->willReturn($this->templateData);
 
         foreach ($tags as $tag) {
-            $this->taggedInfoGuesser->guessFirstFromTemplateData(
-                $this->templateData,
-                $tag
-            )
+            $this->taggedInfoGuesser
+                ->guessFirstFromTemplateData(
+                    $this->templateData,
+                    $tag
+                )
                 ->shouldBeCalled()
                 ->willReturn('foobar_' . $tag);
         }
@@ -259,5 +270,4 @@ class ParticipantInfoGuesserTest extends TestCase
 
         $this->assertEquals($expected, $guesser->guessParticipantCompleteName($this->participant, $this->locale));
     }
-
 }
