@@ -654,6 +654,7 @@ class Event implements EventInterface, TraceableInterface
         }
 
         $days = $this->getDays();
+
         return end($days);
     }
 
