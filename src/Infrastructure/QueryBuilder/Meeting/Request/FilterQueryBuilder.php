@@ -21,25 +21,17 @@ class FilterQueryBuilder extends QueryBuilder
     /**
      * {@inheritdoc}
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, Event $event)
     {
         parent::__construct($em);
 
         $this
             ->select('request', 'fromSheet', 'toSheet')
             ->from(Request::class, 'request', 'request.id')
-            ->where('request.disabled = FALSE')
-            ->orderBy('request.stateUpdatedAt', 'DESC');
-    }
-
-    /**
-     * @param Event $event
-     */
-    public function joinSheet(Event $event)
-    {
-        $this
             ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
             ->join('request.to', 'toSheet')
+            ->where('request.disabled = FALSE')
+            ->orderBy('request.stateUpdatedAt', 'DESC')
             ->setParameter('event', $event);
     }
 
