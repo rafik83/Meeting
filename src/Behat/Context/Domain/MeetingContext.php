@@ -90,8 +90,7 @@ class MeetingContext implements Context
     }
 
     /**
-     * @Given /^there is a meeting between "(?P<sheetTitle>[^"]+)" and "(?P<otherSheetTitle>[^"]+)" on spot
-     *        "(?P<spotReference>[^"]+)"$/
+     * @Given /^there is a meeting between "(?P<sheetTitle>[^"]+)" and "(?P<otherSheetTitle>[^"]+)" on spot "(?P<spotReference>[^"]+)"$/
      *
      * @param string $sheetTitle
      * @param string $otherSheetTitle
