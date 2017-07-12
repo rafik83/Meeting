@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone;
 
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,14 +31,14 @@ class SendCodeController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $mobileNumber = $this->get('session')->get(PreUpdateHandler::MOBILE_NUMBER_TO_VALIDATE);
+
         $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
-            new SendCodeForm($request, $user, $eventDomain->getEvent(), true)
+            new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber, true)
         );
 
         if ($sendCodeView->isSuccess()) {
-            return $this->redirectToRoute(
-                'event_user_event_phone_validate_code'
-            );
+            return $this->redirectToRoute('event_user_event_phone_validate_code');
         }
 
         return $this->render('EventBundle:SendCode:validateMobile.html.twig', [

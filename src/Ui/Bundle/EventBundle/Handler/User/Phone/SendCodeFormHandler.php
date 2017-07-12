@@ -79,7 +79,7 @@ class SendCodeFormHandler
             return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
         }
 
-        $sendCode = new SendCode($user, $event, $user->getMobile(), $locale);
+        $sendCode = new SendCode($user, $event, $sendCodeForm->mobileNumberToValidate ?? $user->getMobile(), $locale);
         $form     = $this->formFactory->create(SendCodeType::class, $sendCode, [
             'country' => $event->getCountry(),
             'submit'  => true,
@@ -90,7 +90,6 @@ class SendCodeFormHandler
                 $this->commandBus->handle($sendCode);
 
                 return new SendCodeView(SendCodeView::SEND_CODE_SUCCESS);
-
             } catch (InvalidReceiverException $invalidReceiverException) {
                 $form->get('phone')->addError(new FormError('validators.send_code.error.invalidReceiver'));
             }

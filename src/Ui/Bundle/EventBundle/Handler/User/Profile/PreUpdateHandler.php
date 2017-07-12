@@ -15,11 +15,13 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class PreUpdateHandler
 {
     const MOBILE_VALIDATION_NEEDED   = 'mobile_validation_needed';
     const MOBILE_VALIDATION_NOT_NEED = 'mobile_validation_not_need';
+    const MOBILE_NUMBER_TO_VALIDATE  = 'mobile_number_to_validate';
 
     /**
      * @var CommandBus
@@ -32,15 +34,25 @@ class PreUpdateHandler
     private $participantInfoGuesser;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * PreUpdateHandler constructor.
      *
      * @param CommandBus             $commandBus
      * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param Session                $session
      */
-    public function __construct(CommandBus $commandBus, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        CommandBus $commandBus,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        Session $session
+    ) {
         $this->commandBus             = $commandBus;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->session = $session;
     }
 
     /**
@@ -75,6 +87,8 @@ class PreUpdateHandler
         $currentMobile = $update->data[$mobileTemplateObject->getKey()]['telephone'];
 
         if ($currentMobile !== $previousMobile) {
+            $this->session->set(self::MOBILE_NUMBER_TO_VALIDATE, $currentMobile);
+
             return self::MOBILE_VALIDATION_NEEDED;
         }
 

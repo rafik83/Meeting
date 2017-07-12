@@ -74,16 +74,50 @@ class ValidateController extends Controller
             }
         }
 
-        return $this->render('EventBundle:User/Phone:validateCode.html.twig', [
+        return $this->render('validateCodeWithToken.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
             'token' => $userEventToken->getToken(),
         ]);
     }
 
-    public function validateAction(Request $request)
+    /**
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param UserInterface $user
+     *
+     * @return RedirectResponse|Response
+     */
+    public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user)
     {
-        dump('here');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        
+        $userEventPhone = $this
+            ->get('repository.user.user_event_phone_repository')
+            ->find($user, $eventDomain->getEvent())
+        ;
+
+        $validate = new ValidateCode($userEventPhone);
+        $form = $this->createForm(ValidateCodeType::class, $validate);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($validate);
+
+                return $this->redirectToRoute('event_sheet'); // TODO: choose redirect route
+            } catch (CodeNotValidException $exception) {
+                $form->get('code')->addError(new FormError(
+                    $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
+                ));
+            } catch (CodeAlreadyValidatedException $exception) {
+                return $this->redirectToRoute('event_user_phone_validate');
+            }
+        }
+
+        return $this->render('EventBundle:User/Phone:validateCode.html.twig', [
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
+        ]);
     }
 
     /**
