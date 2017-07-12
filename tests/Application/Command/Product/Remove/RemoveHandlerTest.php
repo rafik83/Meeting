@@ -53,7 +53,6 @@ class RemoveHandlerTest extends TestCase
 
     public function testHandle()
     {
-
         $this->removeAuthorizationChecker->canBeRemoved($this->product->reveal())->shouldBeCalled()->willReturn(true);
         $this->productRepository->remove($this->product->reveal())->shouldBeCalled();
 
