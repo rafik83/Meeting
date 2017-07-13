@@ -79,6 +79,13 @@ services:
             - '@domain.key_dates.checker.agenda_access_checker'
         tags:
             - { name: security.voter }
+    security_voter.validate_mobile_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter
+        arguments:
+            - '@request_stack'
+            - '@security.validate_mobile_process_access_checker'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -562,6 +569,6 @@ services:
     handler_user_profile.pre_update_handler:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler
         arguments:
-            - '@tactician.commandbus.query'
+            - '@security.validate_mobile_process_access_checker'
             - '@template.participant_info_guesser'
             - '@session.update_participant_session_manager'

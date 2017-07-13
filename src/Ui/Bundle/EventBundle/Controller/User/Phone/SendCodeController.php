@@ -30,11 +30,12 @@ class SendCodeController extends Controller
     public function sendCodeAction(Request $request, EventDomain $eventDomain, UserInterface $user): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_USER_VALIDATE_MOBILE_ACCESS');
 
         $mobileNumber = $this->get('session.update_participant_session_manager')->getMobile();
 
         $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
-            new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber, true)
+            new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber ?? $user->getMobile(), true)
         );
 
         if ($sendCodeView->isSuccess()) {

@@ -10,10 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile;
 
-use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\Security\ValidateMobileProcessAccessChecker;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager;
 
@@ -22,11 +20,6 @@ class PreUpdateHandler
     const MOBILE_VALIDATION_NEEDED   = 'mobile_validation_needed';
     const MOBILE_VALIDATION_NOT_NEED = 'mobile_validation_not_need';
     const MOBILE_NUMBER_TO_VALIDATE  = 'mobile_number_to_validate';
-
-    /**
-     * @var CommandBus
-     */
-    private $commandBus;
 
     /**
      * @var ParticipantInfoGuesser
@@ -39,20 +32,25 @@ class PreUpdateHandler
     private $updateParticipantSessionManager;
 
     /**
+     * @var ValidateMobileProcessAccessChecker
+     */
+    private $validateMobileProcessAccessChecker;
+
+    /**
      * PreUpdateHandler constructor.
      *
-     * @param CommandBus                      $commandBus
-     * @param ParticipantInfoGuesser          $participantInfoGuesser
-     * @param UpdateParticipantSessionManager $updateParticipantSessionManager
+     * @param ValidateMobileProcessAccessChecker $validateMobileProcessAccessChecker
+     * @param ParticipantInfoGuesser             $participantInfoGuesser
+     * @param UpdateParticipantSessionManager    $updateParticipantSessionManager
      */
     public function __construct(
-        CommandBus $commandBus,
+        ValidateMobileProcessAccessChecker $validateMobileProcessAccessChecker,
         ParticipantInfoGuesser $participantInfoGuesser,
         UpdateParticipantSessionManager $updateParticipantSessionManager
     ) {
-        $this->commandBus                      = $commandBus;
-        $this->participantInfoGuesser          = $participantInfoGuesser;
-        $this->updateParticipantSessionManager = $updateParticipantSessionManager;
+        $this->participantInfoGuesser             = $participantInfoGuesser;
+        $this->updateParticipantSessionManager    = $updateParticipantSessionManager;
+        $this->validateMobileProcessAccessChecker = $validateMobileProcessAccessChecker;
     }
 
     /**
@@ -63,18 +61,12 @@ class PreUpdateHandler
      */
     public function handle(PreUpdate $update): string
     {
-        $tipTranslationViews = $this->commandBus->handle(
-            new TipTranslationViewByUserQuery(
-                $update->event,
-                $update->user,
-                TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
-                $update->locale
-            )
-        );
+        $allowToAccess = $this->validateMobileProcessAccessChecker
+            ->allowToAccess($update->event, $update->user, $update->locale);
 
         $mobileTemplateObject = $update->templateData->getObjectByTag(Tag::PARTICIPANT_MOBILE);
 
-        if (empty($tipTranslationViews) || $mobileTemplateObject === null) {
+        if (!$allowToAccess || $mobileTemplateObject === null) {
             return self::MOBILE_VALIDATION_NOT_NEED;
         }
 
