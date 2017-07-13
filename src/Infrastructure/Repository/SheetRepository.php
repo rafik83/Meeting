@@ -892,7 +892,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet.id')
             ->from(Sheet::class, 'sheet')
-            ->join(
+            ->leftJoin(
                 'sheet.participants',
                 'participant',
                 'WITH',
@@ -901,6 +901,10 @@ class SheetRepository implements SheetRepositoryInterface
                 AND sheet.enable = true
                 AND (sheet.group IS NULL OR sheet.group != :group)'
             )
+            ->where('sheet.event = :event')
+            ->andWhere('sheet.enable = true')
+            ->andWhere('sheet.owner = :user')
+            ->andWhere('sheet.group != :group OR sheet.group IS NULL')
             ->setParameter('user', $user)
             ->setParameter('group', $group)
             ->setParameter('event', $group->getEvent())

@@ -96,7 +96,7 @@ class UserToGroupManagerChecker
          * on same event in different group or no group at all,
          * he is not allowed to manage a group
          */
-        if ($this->sheetRepository->hasSheetWithOtherGroupByUserByEvent($user, $group)) {
+        if ($this->sheetRepository->hasSheetWithOtherGroupByUserByEvent($user, $group) === true) {
 
             throw new UserAlreadyParticipantOrOwnerOnGroupOnSameEventException($user->getEmail());
         }
