@@ -25,15 +25,30 @@ class SendCodeForm
     /** @var Event */
     public $event;
 
+    /** @var bool */
+    public $ignorePhoneAlreadyValidated;
+
+    /** @var string */
+    public $mobileNumberToValidate;
+
     /**
      * @param Request $request
      * @param User    $user
      * @param Event   $event
+     * @param null    $mobileNumberToValidate
+     * @param bool    $ignorePhoneAlreadyValidated
      */
-    public function __construct(Request $request, User $user, Event $event)
-    {
+    public function __construct(
+        Request $request,
+        User $user,
+        Event $event,
+        $mobileNumberToValidate = null,
+        bool $ignorePhoneAlreadyValidated = false
+    ) {
         $this->request = $request;
         $this->user = $user;
         $this->event = $event;
+        $this->ignorePhoneAlreadyValidated = $ignorePhoneAlreadyValidated;
+        $this->mobileNumberToValidate = $mobileNumberToValidate;
     }
 }

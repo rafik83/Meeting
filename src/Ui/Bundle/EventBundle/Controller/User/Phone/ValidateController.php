@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone;
 
 use Proximum\Vimeet\Application\Command\User\Phone\ValidateCode;
+use Proximum\Vimeet\Application\Event\User\ValidationCode\CodeValidatedEvent;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeAlreadyValidatedException;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeNotValidException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -35,7 +37,7 @@ class ValidateController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function validateAction(
+    public function validateWithTokenAction(
         Request $request,
         EventDomain $eventDomain,
         UserEventToken $userEventToken,
@@ -74,10 +76,56 @@ class ValidateController extends Controller
             }
         }
 
-        return $this->render('EventBundle:User/Phone:validateCode.html.twig', [
+        return $this->render('EventBundle:User/Phone:validateCodeWithToken.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
             'token' => $userEventToken->getToken(),
+        ]);
+    }
+
+    /**
+     * @param Request       $request
+     * @param EventDomain   $eventDomain
+     * @param UserInterface $user
+     *
+     * @return RedirectResponse|Response
+     */
+    public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        
+        $userEventPhone = $this
+            ->get('repository.user.user_event_phone_repository')
+            ->find($user, $eventDomain->getEvent())
+        ;
+
+        $validate = new ValidateCode($userEventPhone);
+        $form = $this->createForm(ValidateCodeType::class, $validate);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($validate);
+                $sheet = $this->get('session.update_participant_session_manager')->getSheet();
+                $participant = $this->get('session.update_participant_session_manager')->getParticipant();
+                $this->get('session.update_participant_session_manager')->remove();
+
+                $this->addFlash('success', 'flash.event.user_event_phone.validate.success');
+
+                return $this->redirectToRoute('event_account_participant_profile', [
+                    'sheet' => $sheet, 'participant' => $participant,
+                ]);
+            } catch (CodeNotValidException $exception) {
+                $form->get('code')->addError(new FormError(
+                    $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
+                ));
+            } catch (CodeAlreadyValidatedException $exception) {
+                return $this->redirectToRoute('event_user_phone_validate');
+            }
+        }
+
+        return $this->render('EventBundle:User/Phone:validateCode.html.twig', [
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 
