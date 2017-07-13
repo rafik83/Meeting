@@ -859,7 +859,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasSheetWithGroupByUserByEvent(User $user, Event $event)
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event): bool
     {
         $queryBuilder = $this
             ->entityManager
@@ -877,6 +877,33 @@ class SheetRepository implements SheetRepositoryInterface
             )
             ->setParameter('user', $user)
             ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSheetWithOtherGroupByUserByEvent(User $user, Group $group): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                '(sheet.owner = :user OR participant.user = :user) 
+                AND sheet.event = :event
+                AND sheet.enable = true
+                AND (sheet.group IS NULL OR sheet.group != :group)'
+            )
+            ->setParameter('user', $user)
+            ->setParameter('group', $group)
+            ->setParameter('event', $group->getEvent())
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult() !== null;

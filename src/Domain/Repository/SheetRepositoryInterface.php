@@ -340,7 +340,15 @@ interface SheetRepositoryInterface
      *
      * @return bool
      */
-    public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event): bool;
+
+    /**
+     * @param User  $user
+     * @param Group $group
+     *
+     * @return bool
+     */
+    public function hasSheetWithOtherGroupByUserByEvent(User $user, Group $group): bool;
 
     /**
      * @param User  $user
