@@ -62,7 +62,7 @@ class ValidateMobileAccessVoter extends Voter
         /** @var Event $event */
         $event = $subject;
 
-        $this->validateMobileProcessAccessChecker->allowToAccess(
+        return $this->validateMobileProcessAccessChecker->allowToAccess(
             $event,
             $token->getUser(),
             $this->requestStack->getCurrentRequest()->getLocale()
