@@ -42,26 +42,4 @@ class UpdateParticipantSessionManagerTest extends TestCase
 
         $this->assertEquals('010203040506', $this->sessionManager->getMobile());
     }
-
-    public function testGetSheet()
-    {
-        $this->session->get(UpdateParticipantSessionManager::UPDATE_PARTICIPANT_SESSION_DATA)
-            ->shouldBeCalled()
-            ->willReturn([
-                UpdateParticipantSessionManager::UPDATE_PARTICIPANT__SHEET => 1
-            ]);
-
-        $this->assertEquals('1', $this->sessionManager->getSheet());
-    }
-
-    public function testGetParticipant()
-    {
-        $this->session->get(UpdateParticipantSessionManager::UPDATE_PARTICIPANT_SESSION_DATA)
-            ->shouldBeCalled()
-            ->willReturn([
-                UpdateParticipantSessionManager::UPDATE_PARTICIPANT__PARTICIPANT => 21
-            ]);
-
-        $this->assertEquals('21', $this->sessionManager->getParticipant());
-    }
 }

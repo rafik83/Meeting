@@ -13,7 +13,7 @@
 
             {{ include('EventBundle:User/Phone:_validateCodeForm.html.twig') }}
 
-            <a class="link" href="{{ path('event_user_phone_validate') }}">
+            <a class="link" href="{{ path('event_user_phone_validate', {'sheet': sheet.id, 'participant': participant.id}) }}">
                 <i class="icon-Appeler"></i>
                 {{ 'event.user_event_phone.validate.returnToPhone'|trans }}
             </a>

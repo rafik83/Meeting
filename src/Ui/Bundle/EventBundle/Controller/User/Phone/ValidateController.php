@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Event\User\ValidationCode\CodeValidatedEvent;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeAlreadyValidatedException;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeNotValidException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
@@ -87,10 +89,12 @@ class ValidateController extends Controller
      * @param Request       $request
      * @param EventDomain   $eventDomain
      * @param UserInterface $user
+     * @param Sheet         $sheet
+     * @param Participant   $participant
      *
      * @return RedirectResponse|Response
      */
-    public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user)
+    public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         
@@ -105,14 +109,12 @@ class ValidateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($validate);
-                $sheet = $this->get('session.update_participant_session_manager')->getSheet();
-                $participant = $this->get('session.update_participant_session_manager')->getParticipant();
                 $this->get('session.update_participant_session_manager')->remove();
 
                 $this->addFlash('success', 'flash.event.user_event_phone.validate.success');
 
                 return $this->redirectToRoute('event_account_participant_profile', [
-                    'sheet' => $sheet, 'participant' => $participant,
+                    'sheet' => $sheet->getId(), 'participant' => $participant->getId(),
                 ]);
             } catch (CodeNotValidException $exception) {
                 $form->get('code')->addError(new FormError(
@@ -126,6 +128,8 @@ class ValidateController extends Controller
         return $this->render('EventBundle:User/Phone:validateCode.html.twig', [
             'event' => $eventDomain->getEvent(),
             'form'  => $form->createView(),
+            'sheet' => $sheet,
+            'participant' => $participant
         ]);
     }
 
