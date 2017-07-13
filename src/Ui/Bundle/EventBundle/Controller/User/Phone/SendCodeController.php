@@ -47,5 +47,4 @@ class SendCodeController extends Controller
             'tipTranslationViews' => $sendCodeView->tipTranslationViews
         ]);
     }
-
 }
