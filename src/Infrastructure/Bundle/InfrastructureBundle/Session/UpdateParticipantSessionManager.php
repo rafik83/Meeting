@@ -60,26 +60,6 @@ class UpdateParticipantSessionManager
         return $participantData[self::UPDATE_PARTICIPANT__MOBILE] ?? null;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getSheet(): ?int
-    {
-        $participantData = $this->session->get(self::UPDATE_PARTICIPANT_SESSION_DATA);
-
-        return $participantData[self::UPDATE_PARTICIPANT__SHEET] ?? null;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getParticipant(): ?int
-    {
-        $participantData = $this->session->get(self::UPDATE_PARTICIPANT_SESSION_DATA);
-
-        return $participantData[self::UPDATE_PARTICIPANT__PARTICIPANT] ?? null;
-    }
-
     public function remove()
     {
         $this->session->remove(self::UPDATE_PARTICIPANT_SESSION_DATA);
