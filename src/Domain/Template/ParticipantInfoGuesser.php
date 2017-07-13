@@ -134,9 +134,9 @@ class ParticipantInfoGuesser
      * @param Participant $participant
      * @param string      $locale
      *
-     * @return string
+     * @return null|string
      */
-    public function guessParticipantPhone(Participant $participant, $locale)
+    public function guessParticipantPhone(Participant $participant, $locale): ?string
     {
         return $this->guessByTag($participant, Tag::PARTICIPANT_PHONE, $locale);
     }
@@ -176,7 +176,7 @@ class ParticipantInfoGuesser
      *
      * @return null|string
      */
-    public function guessParticipantPosition(Participant $participant, $locale)
+    public function guessParticipantPosition(Participant $participant, $locale): ?string
     {
         $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
@@ -190,7 +190,7 @@ class ParticipantInfoGuesser
      *
      * @return null|string
      */
-    public function guessByTag(Participant $participant, string $tag, string $locale):? string
+    public function guessByTag(Participant $participant, string $tag, string $locale): ?string
     {
         $template = $participant->getSheet()->getType()->getRegistrationTemplate();
 

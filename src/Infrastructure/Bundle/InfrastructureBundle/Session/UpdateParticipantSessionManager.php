@@ -53,7 +53,7 @@ class UpdateParticipantSessionManager
     /**
      * @return null|string
      */
-    public function getMobile():? string
+    public function getMobile(): ?string
     {
         $participantData = $this->session->get(self::UPDATE_PARTICIPANT_SESSION_DATA);
 
@@ -63,7 +63,7 @@ class UpdateParticipantSessionManager
     /**
      * @return int|null
      */
-    public function getSheet():? int
+    public function getSheet(): ?int
     {
         $participantData = $this->session->get(self::UPDATE_PARTICIPANT_SESSION_DATA);
 
@@ -73,7 +73,7 @@ class UpdateParticipantSessionManager
     /**
      * @return int|null
      */
-    public function getParticipant():? int
+    public function getParticipant(): ?int
     {
         $participantData = $this->session->get(self::UPDATE_PARTICIPANT_SESSION_DATA);
 
