@@ -4166,6 +4166,7 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter
         arguments:
             - '@application.nomenclature.id.uniqu_id_generator'
+            - '@adapter.intl_adapter'
     application.nomenclature.export.csv_exporter:
         class: Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter
     application.nomenclature.nomenclature_cloner:
