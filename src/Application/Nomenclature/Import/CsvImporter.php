@@ -76,8 +76,16 @@ class CsvImporter implements ImporterInterface
             if ($depth === 1) {
                 $values[$id] = $this->parseLabels($locales, $row, $depth);
             } elseif ($depth === 2) {
+                if (!isset($depths[1])) {
+                    throw new DepthException();
+                }
+
                 $values[$depths[1]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
             } elseif ($depth === 3) {
+                if (!isset($depths[1]) || !isset($depths[2])) {
+                    throw new DepthException();
+                }
+
                 $values[$depths[1]]['children'][$depths[2]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
             }
         }
