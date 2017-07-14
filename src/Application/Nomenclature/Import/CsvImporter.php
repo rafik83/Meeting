@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
@@ -25,13 +27,20 @@ class CsvImporter implements ImporterInterface
     private $generator;
 
     /**
+     * @var IntlInterface
+     */
+    private $intl;
+
+    /**
      * CsvImporter constructor.
      *
      * @param IdGeneratorInterface $generator
+     * @param IntlInterface        $intl
      */
-    public function __construct(IdGeneratorInterface $generator)
+    public function __construct(IdGeneratorInterface $generator, IntlInterface $intl)
     {
         $this->generator = $generator;
+        $this->intl = $intl;
     }
 
     /**
@@ -105,14 +114,28 @@ class CsvImporter implements ImporterInterface
      * @param array $csv
      *
      * @return array
+     *
+     * @throws InvalidLocaleException
      * @throws NoLocaleSpecifiedException
      */
-    private function parseLocales(array $csv)
+    private function parseLocales(array $csv): array
     {
         $locales = $this->filterEmpty(array_slice($csv[0], 1));
 
         if (empty($locales)) {
             throw new NoLocaleSpecifiedException('No locale specified.');
+        }
+
+        $locales = array_map('trim', $locales);
+
+        $validLocales = $this->intl->getLocales();
+
+        foreach ($locales as &$locale) {
+            $locale = trim($locale);
+
+            if (!in_array($locale, $validLocales)) {
+                throw new InvalidLocaleException($locale);
+            }
         }
 
         return $locales;

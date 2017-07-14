@@ -10,12 +10,15 @@
 
 namespace Proximum\Vimeet\Tests\Application\Nomenclature;
 
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Tests\Application\Nomenclature\Id\StaticIdGenerator;
 
-class CsvImporterTest extends \PHPUnit_Framework_TestCase
+class CsvImporterTest extends TestCase
 {
     public function testGenerator()
     {
@@ -43,8 +46,11 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             'aaaaba', 'aaaabb', 'aaaabc', 'aaaabd', 'aaaabe', 'aaaabf', 'aaaabg', 'aaaabh', 'aaaabi', 'aaaabj', 'aaaabk', 'aaaabl', 'aaaabm', 'aaaabn', 'aaaabo', 'aaaabp', 'aaaabq', 'aaaabr', 'aaaabs', 'aaaabt', 'aaaabu', 'aaaabv', 'aaaabw', 'aaaabx', 'aaaaby', 'aaaabz',
         ];
 
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['es', 'fr', 'en']);
+
         $generator    = new StaticIdGenerator($ids);
-        $importer     = new CsvImporter($generator);
+        $importer     = new CsvImporter($generator, $intl->reveal());
         $nomenclature = new Nomenclature('Offres et besoins');
         $expected     = new Nomenclature('Offres et besoins', 1, [
             'aaaaaa' => [
@@ -130,8 +136,11 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             'aaaaba', 'aaaabb', 'aaaabc', 'aaaabd', 'aaaabe', 'aaaabf', 'aaaabg', 'aaaabh', 'aaaabi', 'aaaabj', 'aaaabk', 'aaaabl', 'aaaabm', 'aaaabn', 'aaaabo', 'aaaabp', 'aaaabq', 'aaaabr', 'aaaabs', 'aaaabt', 'aaaabu', 'aaaabv', 'aaaabw', 'aaaabx', 'aaaaby', 'aaaabz',
         ];
 
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['es', 'fr', 'en']);
+
         $generator    = new StaticIdGenerator($ids);
-        $importer     = new CsvImporter($generator);
+        $importer     = new CsvImporter($generator, $intl->reveal());
         $nomenclature = new Nomenclature('Offres et besoins');
         $expected     = new Nomenclature('Offres et besoins', 3, [
             'aaaaaa' => [
@@ -332,8 +341,11 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             'aaaaba', 'aaaabb', 'aaaabc', 'aaaabd', 'aaaabe', 'aaaabf', 'aaaabg', 'aaaabh', 'aaaabi', 'aaaabj', 'aaaabk', 'aaaabl', 'aaaabm', 'aaaabn', 'aaaabo', 'aaaabp', 'aaaabq', 'aaaabr', 'aaaabs', 'aaaabt', 'aaaabu', 'aaaabv', 'aaaabw', 'aaaabx', 'aaaaby', 'aaaabz',
         ];
 
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['es', 'fr', 'en']);
+
         $generator    = new StaticIdGenerator($ids);
-        $importer     = new CsvImporter($generator);
+        $importer     = new CsvImporter($generator, $intl->reveal());
         $nomenclature = new Nomenclature('Offres et besoins');
         $expected     = new Nomenclature('Offres et besoins', 3, [
             'aaaaaa' => [
@@ -534,8 +546,11 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             'aaaaba', 'aaaabb', 'aaaabc', 'aaaabd', 'aaaabe', 'aaaabf', 'aaaabg', 'aaaabh', 'aaaabi', 'aaaabj', 'aaaabk', 'aaaabl', 'aaaabm', 'aaaabn', 'aaaabo', 'aaaabp', 'aaaabq', 'aaaabr', 'aaaabs', 'aaaabt', 'aaaabu', 'aaaabv', 'aaaabw', 'aaaabx', 'aaaaby', 'aaaabz',
         ];
 
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['es', 'fr', 'en']);
+
         $generator    = new StaticIdGenerator($ids);
-        $importer     = new CsvImporter($generator);
+        $importer     = new CsvImporter($generator, $intl->reveal());
         $nomenclature = new Nomenclature('Offres et besoins', 3, [
             '5770ec3cf1356' => [
                 'label' => [
@@ -919,5 +934,16 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
         $importer->import($nomenclature, __DIR__.'/competences_update.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
+    }
+
+    public function testInvalidLocaleException()
+    {
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['es', 'fr', 'en']);
+
+        $importer  = new CsvImporter($this->prophesize(StaticIdGenerator::class)->reveal(), $intl->reveal());
+
+        $this->expectException(InvalidLocaleException::class);
+        $importer->import(new Nomenclature('Nomenclature title', 1, []), __DIR__.'/wrong-locale.csv', Charset::UTF_8);
     }
 }

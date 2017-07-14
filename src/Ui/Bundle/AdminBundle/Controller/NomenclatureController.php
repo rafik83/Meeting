@@ -19,6 +19,8 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysExcept
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ExportData;
@@ -234,10 +236,21 @@ class NomenclatureController extends Controller
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
                 return $this->getReadNomenclatureUrl($data->nomenclature);
-            } catch (ImportException $exception) {
-                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+            } catch (NoLocaleSpecifiedException $noLocaleSpecifiedException) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.noLocaleSpecified'));
+            } catch (InvalidLocaleException $invalidLocaleException) {
+                $form->addError($this->get('error_factory')->create(
+                    'validators.nomenclature.import.invalidLocale',
+                    null,
+                    'validators',
+                    ['%invalidLocale%' => $invalidLocaleException->getInvalidLocale()]
+                ));
             } catch (MissingKeysException $exception) {
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
+            } catch (ImportException $exception) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+            } catch (\Exception $exception) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
         }
 
