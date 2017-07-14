@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Serializer\Charset;
@@ -54,8 +55,12 @@ class CsvImporter implements ImporterInterface
         $locales = $this->parseLocales($csv);
         $this->validateLocales($nomenclature->getEvent(), $locales);
 
-        $values  = [];
-        $depths  = [];
+        $values = [];
+        $depths = [];
+
+        if (!is_array($csv)) {
+            throw new ImportException();
+        }
 
         foreach (array_slice($csv, 1) as $row) {
 
@@ -119,11 +124,16 @@ class CsvImporter implements ImporterInterface
      *
      * @return array
      *
+     * @throws ImportException
      * @throws InvalidLocaleException
      * @throws NoLocaleSpecifiedException
      */
     private function parseLocales(array $csv): array
     {
+        if (!isset($csv[0]) || !is_array($csv[0])) {
+            throw new ImportException();
+        }
+
         $locales = $this->filterEmpty(array_slice($csv[0], 1));
 
         if (empty($locales)) {

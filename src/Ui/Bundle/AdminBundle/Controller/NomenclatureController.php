@@ -254,8 +254,6 @@ class NomenclatureController extends Controller
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
             } catch (ImportException $exception) {
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
-            } catch (\Exception $exception) {
-                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
         }
 
