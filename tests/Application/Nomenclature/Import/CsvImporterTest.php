@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Tests\Application\Nomenclature;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Tests\Application\Nomenclature\Id\StaticIdGenerator;
 
@@ -944,6 +946,26 @@ class CsvImporterTest extends TestCase
         $importer  = new CsvImporter($this->prophesize(StaticIdGenerator::class)->reveal(), $intl->reveal());
 
         $this->expectException(InvalidLocaleException::class);
-        $importer->import(new Nomenclature('Nomenclature title', 1, []), __DIR__.'/wrong-locale.csv', Charset::UTF_8);
+        $importer->import(new Nomenclature('Nomenclature title'), __DIR__.'/wrong-locale.csv', Charset::UTF_8);
+    }
+
+    public function testLocalesMustCorrespondToThoseOfTheEventException()
+    {
+        $event = $this->prophesize(Event::class);
+        $event->getLocales()->willReturn(['fr', 'es']);
+
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['es', 'fr', 'en']);
+
+        $importer  = new CsvImporter($this->prophesize(StaticIdGenerator::class)->reveal(), $intl->reveal());
+
+        $this->expectException(LocalesMustCorrespondToThoseOfTheEventException::class);
+
+        // The Event is in "fr / es", and we import a "en / fr" file
+        $importer->import(
+            new Nomenclature('Nomenclature title', 1, [], true, $event->reveal()),
+            __DIR__ . '/competences_update.csv',
+            Charset::UTF_8
+        );
     }
 }

@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
@@ -244,6 +245,10 @@ class NomenclatureController extends Controller
                     null,
                     'validators',
                     ['%invalidLocale%' => $invalidLocaleException->getInvalidLocale()]
+                ));
+            } catch (LocalesMustCorrespondToThoseOfTheEventException $localesMustCorrespondToThoseOfTheEventException) {
+                $form->addError($this->get('error_factory')->create(
+                    'validators.nomenclature.import.localesMustCorrespondToThoseOfTheEventException'
                 ));
             } catch (MissingKeysException $exception) {
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));

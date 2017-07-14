@@ -12,11 +12,13 @@ namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class CsvImporter implements ImporterInterface
@@ -50,6 +52,8 @@ class CsvImporter implements ImporterInterface
     {
         $csv     = $this->parseFile($value, $charset);
         $locales = $this->parseLocales($csv);
+        $this->validateLocales($nomenclature->getEvent(), $locales);
+
         $values  = [];
         $depths  = [];
 
@@ -139,6 +143,27 @@ class CsvImporter implements ImporterInterface
         }
 
         return $locales;
+    }
+
+    /**
+     * @param Event|null $event
+     * @param array      $locales
+     *
+     * @throws LocalesMustCorrespondToThoseOfTheEventException
+     */
+    private function validateLocales(Event $event = null, array $locales)
+    {
+        if (null === $event) {
+            return;
+        }
+
+        $eventLocales = $event->getLocales();
+        sort($eventLocales);
+        sort($locales);
+
+        if ($eventLocales != $locales) {
+            throw new LocalesMustCorrespondToThoseOfTheEventException();
+        }
     }
 
     /**
