@@ -949,6 +949,25 @@ class CsvImporterTest extends TestCase
         $importer->import(new Nomenclature('Nomenclature title'), __DIR__.'/wrong-locale.csv', Charset::UTF_8);
     }
 
+    public function testLocalesCorrespondingToThoseOfTheEvent()
+    {
+        $ids = [
+            'aaaaaa', 'aaaaab', 'aaaaac', 'aaaaad', 'aaaaae', 'aaaaaf', 'aaaaag', 'aaaaah', 'aaaaai', 'aaaaaj', 'aaaaak', 'aaaaal', 'aaaaam', 'aaaaan', 'aaaaao', 'aaaaap', 'aaaaaq', 'aaaaar', 'aaaaas', 'aaaaat', 'aaaaau', 'aaaaav', 'aaaaaw', 'aaaaax', 'aaaaay', 'aaaaaz',
+            'aaaaba', 'aaaabb', 'aaaabc', 'aaaabd', 'aaaabe', 'aaaabf', 'aaaabg', 'aaaabh', 'aaaabi', 'aaaabj', 'aaaabk', 'aaaabl', 'aaaabm', 'aaaabn', 'aaaabo', 'aaaabp', 'aaaabq', 'aaaabr', 'aaaabs', 'aaaabt', 'aaaabu', 'aaaabv', 'aaaabw', 'aaaabx', 'aaaaby', 'aaaabz',
+        ];
+
+        $generator = new StaticIdGenerator($ids);
+
+        $event = $this->prophesize(Event::class);
+        $event->getLocales()->willReturn(['fr', 'en']);
+
+        $intl = $this->prophesize(IntlInterface::class);
+        $intl->getLocales()->willReturn(['en', 'fr']);
+
+        $importer = new CsvImporter($generator, $intl->reveal());
+        $importer->import(new Nomenclature('Nomenclature title', 3), __DIR__.'/competences.csv', Charset::UTF_8);
+    }
+
     public function testLocalesMustCorrespondToThoseOfTheEventException()
     {
         $event = $this->prophesize(Event::class);
