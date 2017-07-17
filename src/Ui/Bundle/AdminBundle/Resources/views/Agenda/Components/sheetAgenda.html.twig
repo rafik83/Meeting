@@ -17,13 +17,19 @@
                         </div>
                         <p class="text-center">
                             ${ participant.fullname }
-                            <button
-                                v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true" style="text-align: center;"
-                                class="btn btn-default btn-xs pull-right"
-                                v-on:click="$store.commit('OPEN_USER_AGENDA_VERSION_MODAL', participant.id)"
-                            >
-                                <i class="icon-Smartphone"></i>
-                            </button>
+                            <span v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true">
+                                <button
+                                    v-if="!participant.stopSMS"
+                                    style="text-align: center;"
+                                    class="btn btn-default btn-xs pull-right"
+                                    v-on:click="$store.commit('OPEN_USER_AGENDA_VERSION_MODAL', participant.id)"
+                                >
+                                    <i class="icon-Smartphone"></i>
+                                </button>
+                                <span class="label label-danger" v-if="participant.stopSMS">
+                                    {{ 'admin.agenda.stopSMS'|trans }}
+                                </span>
+                            </span>
                         </p>
                         <table class="table">
                             <tr>

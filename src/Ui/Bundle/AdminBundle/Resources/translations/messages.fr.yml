@@ -25,6 +25,7 @@ admin.agenda.countRequest: 'Nombre de demandes'
 admin.agenda.countSlots: 'Nombre de slots'
 admin.agenda.countValidatedRequest: 'Nombre de demandes et propositions acceptées'
 admin.agenda.dayPrefix: D
+admin.agenda.stopSMS: STOP SMS
 admin.agenda.event.configuration.isMeetingRequestLocked: 'Les demandes de rendez-vous sont verrouillées'
 admin.agenda.export.link: Export
 admin.agenda.export.omz: OMZ
