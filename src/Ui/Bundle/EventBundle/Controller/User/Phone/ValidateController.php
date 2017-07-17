@@ -97,6 +97,7 @@ class ValidateController extends Controller
     public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_USER_VALIDATE_MOBILE_ACCESS', $eventDomain->getEvent());
         
         $userEventPhone = $this
             ->get('repository.user.user_event_phone_repository')
