@@ -1860,6 +1860,12 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@adapter.event_url_generator'
 
+    command.user.phone.update_black_list_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackListHandler
+        arguments:
+            - '@adapter.smsblack_list_adapter'
+            - '@repository.user.user_event_phone_repository'
+
     #
     # Post Batch Action
     #

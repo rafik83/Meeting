@@ -47,4 +47,14 @@ interface UserEventPhoneRepositoryInterface
      * @param Event $event
      */
     public function remove(User $user, Event $event);
+
+    /**
+     * @param array $blackList
+     */
+    public function setIntoBlackList(array $blackList);
+
+    /**
+     * @param array $blackList
+     */
+    public function unsetFromBlackList(array $blackList);
 }

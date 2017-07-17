@@ -110,4 +110,38 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
             ->setParameter('event', $event)
         ;
     }
+
+    /**
+     * @param array $blackList
+     */
+    public function setIntoBlackList(array $blackList)
+    {
+        $this->entityManager
+            ->createQueryBuilder()
+            ->update(UserEventPhone::class, 'userEventPhone')
+            ->set('userEventPhone.stop', 'true')
+            ->where('userEventPhone.stop = false')
+            ->andWhere('userEventPhone.phone IN (:blackList)')
+            ->setParameter('blackList', $blackList)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    /**
+     * @param array $blackList
+     */
+    public function unsetFromBlackList(array $blackList)
+    {
+        $this->entityManager
+            ->createQueryBuilder()
+            ->update(UserEventPhone::class, 'userEventPhone')
+            ->set('userEventPhone.stop', 'false')
+            ->where('userEventPhone.stop = true')
+            ->andWhere('userEventPhone.phone NOT IN (:blackList)')
+            ->setParameter('blackList', $blackList)
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }
