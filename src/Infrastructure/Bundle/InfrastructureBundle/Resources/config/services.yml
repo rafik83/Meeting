@@ -1865,6 +1865,8 @@ services:
         arguments:
             - '@adapter.smsblack_list_adapter'
             - '@repository.user.user_event_phone_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackList }
 
     #
     # Post Batch Action
