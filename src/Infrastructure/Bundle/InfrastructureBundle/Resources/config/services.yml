@@ -5065,6 +5065,12 @@ services:
             - '%ovh_sender_name%'
     adapter.smssender_alias: '@adapter.smssender_adapter'
 
+    adapter.smsblack_list_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SMSBlackListAdapter
+        arguments:
+            - '@ovh'
+            - '%ovh_service_name%'
+
     #
     # User Phone
     #
