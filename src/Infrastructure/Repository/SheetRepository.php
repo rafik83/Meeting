@@ -885,26 +885,22 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasSheetWithOtherGroupByUserByEvent(User $user, Group $group): bool
+    public function hasSheetOutOfGroup(User $user, Group $group): bool
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('sheet.id')
             ->from(Sheet::class, 'sheet')
-            ->leftJoin(
+            ->join(
                 'sheet.participants',
                 'participant',
                 'WITH',
-                '(sheet.owner = :user OR participant.user = :user) 
-                AND sheet.event = :event
+                'sheet.event = :event
+                AND (sheet.owner = :user OR participant.user = :user)
                 AND sheet.enable = true
                 AND (sheet.group IS NULL OR sheet.group != :group)'
             )
-            ->where('sheet.event = :event')
-            ->andWhere('sheet.enable = true')
-            ->andWhere('(sheet.owner = :user OR participant.user = :user)')
-            ->andWhere('(sheet.group != :group OR sheet.group IS NULL)')
             ->setParameter('user', $user)
             ->setParameter('group', $group)
             ->setParameter('event', $group->getEvent())
