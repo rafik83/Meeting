@@ -20,8 +20,7 @@
                             <span v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true">
                                 <button
                                     v-if="!participant.stopSMS"
-                                    style="text-align: center;"
-                                    class="btn btn-default btn-xs pull-right"
+                                    class="btn btn-default btn-xs pull-right text-center"
                                     v-on:click="$store.commit('OPEN_USER_AGENDA_VERSION_MODAL', participant.id)"
                                 >
                                     <i class="icon-Smartphone"></i>
