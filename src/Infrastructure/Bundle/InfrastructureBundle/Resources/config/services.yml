@@ -3215,6 +3215,7 @@ services:
             - '@query.agenda.agenda_day_view_query_handler'
             - '@template.participant_info_guesser'
             - '@domain.key_dates.checker.sms_activation_date_access_checker'
+            - '@repository.user.user_event_phone_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaParticipantViewQuery }
     query.agenda.agenda_day_view_query_handler:
