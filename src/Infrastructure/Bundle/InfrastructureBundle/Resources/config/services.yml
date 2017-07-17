@@ -3899,6 +3899,13 @@ services:
         tags:
             - { name: console.command }
 
+    command_user.update_smsblack_list_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\User\UpdateSMSBlackListCommand
+        arguments:
+            - '@tactician.commandbus'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
