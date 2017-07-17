@@ -179,7 +179,7 @@ class CsvImporter implements ImporterInterface
         sort($eventLocales);
         sort($locales);
 
-        if ($eventLocales != $locales) {
+        if ($eventLocales !== $locales) {
             throw new LocalesMustCorrespondToThoseOfTheEventException();
         }
     }
