@@ -25,7 +25,7 @@ class SMSBlackListAdapter implements SMSBlackListInterface
      * @param Api    $api
      * @param string $ovhServiceName
      */
-    public function __construct(Api $api, $ovhServiceName)
+    public function __construct(Api $api, string $ovhServiceName)
     {
         $this->api = $api;
         $this->ovhServiceName = $ovhServiceName;
