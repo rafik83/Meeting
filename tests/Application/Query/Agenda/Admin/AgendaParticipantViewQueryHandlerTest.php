@@ -94,7 +94,6 @@ class AgendaParticipantViewQueryHandlerTest extends TestCase
         $user->getEmail()->willReturn('email@example.net');
         $this->sheet->attend()->willReturn(true);
 
-
         // Expected
         $this->dayRepository
             ->findByEvent($this->event->reveal())
@@ -207,7 +206,6 @@ class AgendaParticipantViewQueryHandlerTest extends TestCase
         $userEventPhone->isStop()->shouldBeCalled()->willReturn(true);
         $user->getEmail()->willReturn('email@example.net');
         $this->sheet->attend()->willReturn(true);
-
 
         // Expected
         $this->dayRepository->findByEvent($this->event->reveal())->shouldBeCalled()->willReturn([1 => $day1->reveal()]);
