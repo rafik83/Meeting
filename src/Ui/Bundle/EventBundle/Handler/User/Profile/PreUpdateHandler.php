@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager;
 
 class PreUpdateHandler
 {
@@ -34,34 +33,26 @@ class PreUpdateHandler
     private $participantInfoGuesser;
 
     /**
-     * @var UpdateParticipantSessionManager
-     */
-    private $updateParticipantSessionManager;
-
-    /**
      * PreUpdateHandler constructor.
      *
      * @param CommandBus                      $commandBus
      * @param ParticipantInfoGuesser          $participantInfoGuesser
-     * @param UpdateParticipantSessionManager $updateParticipantSessionManager
      */
     public function __construct(
         CommandBus $commandBus,
-        ParticipantInfoGuesser $participantInfoGuesser,
-        UpdateParticipantSessionManager $updateParticipantSessionManager
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
-        $this->commandBus                      = $commandBus;
-        $this->participantInfoGuesser          = $participantInfoGuesser;
-        $this->updateParticipantSessionManager = $updateParticipantSessionManager;
+        $this->commandBus             = $commandBus;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
      * @param PreUpdate $update
      *
-     * @return string
+     * @return PreUpdateView
      * @throws \Exception
      */
-    public function handle(PreUpdate $update): string
+    public function handle(PreUpdate $update): PreUpdateView
     {
         $tipTranslationViews = $this->commandBus->handle(
             new TipTranslationViewByUserQuery(
@@ -75,7 +66,7 @@ class PreUpdateHandler
         $mobileTemplateObject = $update->templateData->getObjectByTag(Tag::PARTICIPANT_MOBILE);
 
         if (empty($tipTranslationViews) || $mobileTemplateObject === null) {
-            return self::MOBILE_VALIDATION_NOT_NEED;
+            return new PreUpdateView(null, self::MOBILE_VALIDATION_NOT_NEED);
         }
 
         $previousMobile = $this->participantInfoGuesser->guessParticipantMobile($update->participant, $update->locale);
@@ -87,15 +78,9 @@ class PreUpdateHandler
         $currentMobile = $update->data[$mobileTemplateObject->getKey()]['telephone'];
 
         if ($currentMobile !== $previousMobile) {
-            $this->updateParticipantSessionManager->set(
-                $update->participant->getSheet(),
-                $update->participant,
-                $currentMobile
-            );
-
-            return self::MOBILE_VALIDATION_NEEDED;
+            return new PreUpdateView($currentMobile, self::MOBILE_VALIDATION_NEEDED);
         }
 
-        return self::MOBILE_VALIDATION_NOT_NEED;
+        return new PreUpdateView($currentMobile, self::MOBILE_VALIDATION_NOT_NEED);
     }
 }

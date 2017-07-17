@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -50,9 +49,8 @@ class PreUpdateHandlerTest extends TestCase
         $templateData->addChild(1, '811f6edf', $block);
 
         // Mock
-        $commandBus                      = $this->prophesize(CommandBus::class);
-        $participantInfoGuesser          = $this->prophesize(ParticipantInfoGuesser::class);
-        $updateParticipantSessionManager = $this->prophesize(UpdateParticipantSessionManager::class);
+        $commandBus             = $this->prophesize(CommandBus::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
 
         $commandBus->handle(
             new TipTranslationViewByUserQuery(
@@ -68,22 +66,15 @@ class PreUpdateHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('01000000000');
 
-        $updateParticipantSessionManager->set(
-            $sheet,
-            $participant,
-            $currentMobile
-        )->shouldBeCalled();
-
         $query = new PreUpdate($user, $participant, $event, $data, $templateData, $locale);
-        
+
         $handler = new PreUpdateHandler(
             $commandBus->reveal(),
-            $participantInfoGuesser->reveal(),
-            $updateParticipantSessionManager->reveal()
+            $participantInfoGuesser->reveal()
         );
 
-        $preUpdateState = $handler->handle($query);
+        $preUpdateView = $handler->handle($query);
 
-        $this->assertEquals(PreUpdateHandler::MOBILE_VALIDATION_NEEDED, $preUpdateState);
+        $this->assertEquals(PreUpdateHandler::MOBILE_VALIDATION_NEEDED, $preUpdateView->preUpdateState);
     }
 }

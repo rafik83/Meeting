@@ -34,7 +34,7 @@ class SendCodeController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $mobileNumber = $this->get('session.update_participant_session_manager')->getMobile();
+        $mobileNumber = $request->query->get('mobile', null);
 
         $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
             new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber, true)
