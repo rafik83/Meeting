@@ -4274,14 +4274,6 @@ services:
             - '@session'
 
     #
-    # Session Manager
-    #
-    session.update_participant_session_manager:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager
-        arguments:
-            - '@adapter.session'
-
-    #
     # Happening
     #
     domain.happening.participation_count:

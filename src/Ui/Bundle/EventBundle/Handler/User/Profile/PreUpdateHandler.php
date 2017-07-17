@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Security\ValidateMobileProcessAccessChecker;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager;
 
 class PreUpdateHandler
 {
@@ -27,11 +26,6 @@ class PreUpdateHandler
     private $participantInfoGuesser;
 
     /**
-     * @var UpdateParticipantSessionManager
-     */
-    private $updateParticipantSessionManager;
-
-    /**
      * @var ValidateMobileProcessAccessChecker
      */
     private $validateMobileProcessAccessChecker;
@@ -41,25 +35,22 @@ class PreUpdateHandler
      *
      * @param ValidateMobileProcessAccessChecker $validateMobileProcessAccessChecker
      * @param ParticipantInfoGuesser             $participantInfoGuesser
-     * @param UpdateParticipantSessionManager    $updateParticipantSessionManager
      */
     public function __construct(
         ValidateMobileProcessAccessChecker $validateMobileProcessAccessChecker,
-        ParticipantInfoGuesser $participantInfoGuesser,
-        UpdateParticipantSessionManager $updateParticipantSessionManager
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->participantInfoGuesser             = $participantInfoGuesser;
-        $this->updateParticipantSessionManager    = $updateParticipantSessionManager;
         $this->validateMobileProcessAccessChecker = $validateMobileProcessAccessChecker;
     }
 
     /**
      * @param PreUpdate $update
      *
-     * @return string
+     * @return PreUpdateView
      * @throws \Exception
      */
-    public function handle(PreUpdate $update): string
+    public function handle(PreUpdate $update): PreUpdateView
     {
         $allowToAccess = $this->validateMobileProcessAccessChecker
             ->allowToAccess($update->event, $update->user, $update->locale);
@@ -67,7 +58,7 @@ class PreUpdateHandler
         $mobileTemplateObject = $update->templateData->getObjectByTag(Tag::PARTICIPANT_MOBILE);
 
         if (!$allowToAccess || $mobileTemplateObject === null) {
-            return self::MOBILE_VALIDATION_NOT_NEED;
+            return new PreUpdateView(null, self::MOBILE_VALIDATION_NOT_NEED);
         }
 
         $previousMobile = $this->participantInfoGuesser->guessParticipantMobile($update->participant, $update->locale);
@@ -79,15 +70,9 @@ class PreUpdateHandler
         $currentMobile = $update->data[$mobileTemplateObject->getKey()]['telephone'];
 
         if ($currentMobile !== $previousMobile) {
-            $this->updateParticipantSessionManager->set(
-                $update->participant->getSheet(),
-                $update->participant,
-                $currentMobile
-            );
-
-            return self::MOBILE_VALIDATION_NEEDED;
+            return new PreUpdateView($currentMobile, self::MOBILE_VALIDATION_NEEDED);
         }
 
-        return self::MOBILE_VALIDATION_NOT_NEED;
+        return new PreUpdateView($currentMobile, self::MOBILE_VALIDATION_NOT_NEED);
     }
 }

@@ -11,16 +11,11 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Handler\User\Profile;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Security\ValidateMobileProcessAccessChecker;
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Session\UpdateParticipantSessionManager;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -52,7 +47,6 @@ class PreUpdateHandlerTest extends TestCase
         // Mock
         $validateMobileProcessAccessChecker = $this->prophesize(ValidateMobileProcessAccessChecker::class);
         $participantInfoGuesser             = $this->prophesize(ParticipantInfoGuesser::class);
-        $updateParticipantSessionManager    = $this->prophesize(UpdateParticipantSessionManager::class);
 
         $validateMobileProcessAccessChecker->allowToAccess($event, $user, $locale)
             ->shouldBeCalled()->willReturn(true);
@@ -62,22 +56,15 @@ class PreUpdateHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('01000000000');
 
-        $updateParticipantSessionManager->set(
-            $sheet,
-            $participant,
-            $currentMobile
-        )->shouldBeCalled();
-
         $query = new PreUpdate($user, $participant, $event, $data, $templateData, $locale);
 
         $handler = new PreUpdateHandler(
             $validateMobileProcessAccessChecker->reveal(),
-            $participantInfoGuesser->reveal(),
-            $updateParticipantSessionManager->reveal()
+            $participantInfoGuesser->reveal()
         );
 
-        $preUpdateState = $handler->handle($query);
+        $preUpdateView = $handler->handle($query);
 
-        $this->assertEquals(PreUpdateHandler::MOBILE_VALIDATION_NEEDED, $preUpdateState);
+        $this->assertEquals(PreUpdateHandler::MOBILE_VALIDATION_NEEDED, $preUpdateView->preUpdateState);
     }
 }

@@ -571,4 +571,3 @@ services:
         arguments:
             - '@security.validate_mobile_process_access_checker'
             - '@template.participant_info_guesser'
-            - '@session.update_participant_session_manager'
