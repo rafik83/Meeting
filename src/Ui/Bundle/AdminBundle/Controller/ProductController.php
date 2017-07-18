@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning;
+use Proximum\Vimeet\Application\Query\Product\ProductsViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Import\ImportType;
@@ -46,7 +47,7 @@ class ProductController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $products = $this->get('vimeet_infrastructure.repository.product_repository')->countByEvent($event);
+        $products = $this->get('query.product.products_view_query_handler')->handle(new ProductsViewQuery($event));
 
         return $this->render('AdminBundle:Product:list.html.twig', [
             'event'    => $event,

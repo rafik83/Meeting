@@ -143,6 +143,7 @@ class SheetSearchQueryBuilder
         $this->filterByImported($filters);
         $this->filterByCanceledAttendance($filters);
         $this->filterByHasGroup($filters);
+        $this->filterByHasSpot($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
@@ -695,6 +696,22 @@ class SheetSearchQueryBuilder
 
         $matchHasGroup = new Term();
         $matchHasGroup->setTerm('hasGroup', (bool) $filters['hasGroup']);
+        $this->query->addMust($matchHasGroup);
+    }
+
+    /**
+     * Filter sheet with spot
+     *
+     * @param array $filters
+     */
+    protected function filterByHasSpot(array &$filters)
+    {
+        if (!isset($filters['hasSpot'])) {
+            return;
+        }
+
+        $matchHasGroup = new Term();
+        $matchHasGroup->setTerm('hasSpot', (bool) $filters['hasSpot']);
         $this->query->addMust($matchHasGroup);
     }
 
