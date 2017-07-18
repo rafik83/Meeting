@@ -199,7 +199,7 @@ class SubstitutionsProvider
                     $recipient :
                     $sheet->getParticipantOwner();
 
-                if ($participant == null) {
+                if ($participant === null) {
                     return '';
                 }
 
