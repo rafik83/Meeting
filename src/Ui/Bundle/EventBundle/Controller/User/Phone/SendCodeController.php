@@ -36,10 +36,10 @@ class SendCodeController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
 
-        $mobileNumber = $request->query->get('mobile', null);
+        $mobileNumber = $request->query->get('mobile', $user->getMobile());
 
         $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
-            new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber ?? $user->getMobile(), true)
+            new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber, true)
         );
 
         if ($sendCodeView->isSuccess()) {
