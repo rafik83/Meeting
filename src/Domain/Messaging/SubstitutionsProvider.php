@@ -196,17 +196,19 @@ class SubstitutionsProvider
                 ]);
             case Compose::LINK_VALIDATE_MOBILE_PHONE:
                 $participant = $recipient instanceof Participant ?
-                    $recipient:
+                    $recipient :
                     $sheet->getParticipantOwner();
 
-                if($participant !== null) {
-                    return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_user_phone_validate', [
-                            'sheet'       => $sheet->getId(),
-                            'participant' => $participant->getId(),
-                            '_locale'     => $locale,
-                        ]
-                    );
+                if ($participant == null) {
+                    return '';
                 }
+
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_user_phone_validate', [
+                        'sheet'       => $sheet->getId(),
+                        'participant' => $participant->getId(),
+                        '_locale'     => $locale,
+                    ]
+                );
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);
