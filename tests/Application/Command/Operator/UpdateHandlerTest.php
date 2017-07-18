@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Operator;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Operator\Update;
 use Proximum\Vimeet\Application\Command\Operator\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
@@ -21,28 +22,35 @@ use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $dateTime  = new \DateTime();
-        $event     = EventFactory::createEvent();
-        $event2    = EventFactory::createEvent();
-        $event3    = EventFactory::createEvent();
+        $event     = EventFactory::createEvent('a');
+        $event2    = EventFactory::createEvent('b');
+        $event3    = EventFactory::createEvent('c');
+        $event4    = EventFactory::createEvent('d');
         $operator  = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $operator->addEvent($event);
         $operator->addEvent($event2);
+        $operator->addEvent($event4);
+        $events = [
+            $event,
+            $event2,
+            $event3,
+        ];
 
-        $command            = new Update($operator);
+        $command            = new Update($operator, $events);
         $command->email     = 'test2@test.com';
         $command->firstname = 'truc';
         $command->lastname  = 'muche';
-        $command->events[]  = $event;
-        $command->events[]  = $event3;
+        $command->events    = [$event, $event3];
 
         $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'truc', 'muche', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator->addEvent($event);
         $expectedOperator->addEvent($event3);
+        $expectedOperator->addEvent($event4);
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $adminRepository->emailExists($command->email)->shouldNotBeCalled();
@@ -54,7 +62,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedOperator,
             'STRING',
-            new \DateTime()
+            $dateTime
         );
 
         $activateAccountEvent = new ActivateAccountEvent(
@@ -77,19 +85,18 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithNewMail()
     {
         $dateTime  = new \DateTime();
-        $event     = EventFactory::createEvent();
-        $event2    = EventFactory::createEvent();
-        $event3    = EventFactory::createEvent();
+        $event     = EventFactory::createEvent('a');
+        $event2    = EventFactory::createEvent('b');
+        $event3    = EventFactory::createEvent('c');
         $operator  = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $operator->addEvent($event);
         $operator->addEvent($event2);
 
-        $command            = new Update($operator);
+        $command            = new Update($operator, [$event, $event2, $event3]);
         $command->email     = 'test2@test.com';
         $command->firstname = 'truc';
         $command->lastname  = 'muche';
-        $command->events[]  = $event;
-        $command->events[]  = $event3;
+        $command->events    = [$event, $event3];
 
         $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'truc', 'muche', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator->addEvent($event);
@@ -105,7 +112,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedOperator,
             'STRING',
-            new \DateTime()
+            $dateTime
         );
 
         $activateAccountEvent = new ActivateAccountEvent(

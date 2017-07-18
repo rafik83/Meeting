@@ -431,6 +431,24 @@ event_catalog_meeting_request_discussion:
     defaults: { _controller: EventBundle:MeetingRequest/Message:displayDiscussion }
 
 #
+# Catalog external
+#
+event_catalog_external_index:
+    path: /list
+    methods: [GET]
+    defaults: { _controller: EventBundle:CatalogExternal:index }
+
+event_catalog_external_search_localization:
+    path: /list/search-localization
+    methods:  [POST]
+    defaults: { _controller: EventBundle:CatalogExternal:searchLocalization }
+
+event_catalog_external_search_keywords:
+    path: /list/search-keywords
+    methods:  [POST]
+    defaults: { _controller: EventBundle:CatalogExternal:searchKeywords }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:
@@ -687,5 +705,22 @@ event_user_event_token_confirm_agenda:
     path: /confirm/agenda/{token}
     requirements:
         token: \w+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: EventBundle:Token\UserEventToken:confirmAgenda }
+
+#
+# UserEventPhone
+#
+event_user_event_phone_validate_code:
+    path: /confirm/agenda/{token}/validate/phone
+    requirements:
+        token: \w+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:User/Phone/Validate:validate }
+
+event_user_event_phone_validate_code_success:
+    path: /confirm/agenda/{token}/validate/phone/success
+    requirements:
+        token: \w+
+    methods: [GET]
+    defaults: { _controller: EventBundle:User/Phone/Validate:validateSuccess }

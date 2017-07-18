@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Spot\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQueryHandler;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class ListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

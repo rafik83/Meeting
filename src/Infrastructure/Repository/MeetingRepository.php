@@ -211,6 +211,27 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventAndUsers(Event $event, array $users)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting, slot, fromSheet, toSheet')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event AND meeting.state = :state')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.fromParticipants', 'fromParticipants')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('toParticipants.user IN (:users) OR fromParticipants.user IN (:users)')
+            ->setParameter('users', $users)
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByUserAndEvent(User $user, Event $event)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
@@ -301,6 +322,25 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeetingForUserAndEvent(User $user, Event $event): bool
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromParticipants', 'fromParticipants', 'WITH', 'meeting.event = :event AND meeting.state = :state')
+            ->join('meeting.toParticipants', 'toParticipants')
+            ->where('toParticipants.user = :user OR fromParticipants.user = :user')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

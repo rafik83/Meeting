@@ -19,37 +19,30 @@ use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 
 class ConfigureDatesType extends AbstractType
 {
+    const CONFIGURATION_DATES = [
+        'catalogOnlineDate',
+        'happeningsOpenDate',
+        'schedulePublishDate',
+        'closeMeetingRequestDate',
+        'closeAnsweringMeetingRequestDate',
+        'smsActivationDate',
+        'agendaOnlineDate',
+        'registrationOpenDate',
+        'registrationCloseDate',
+    ];
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('catalogOnlineDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('happeningsOpenDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('schedulePublishDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('closeMeetingRequestDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('closeAnsweringMeetingRequestDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-            ->add('smsActivationDate', DateTimePickerType::class, [
-                'view_timezone' => $options['event']->getTimezone(),
-                'required'      => false,
-            ])
-        ;
+        foreach (self::CONFIGURATION_DATES as $configurationDate) {
+            $builder
+                ->add($configurationDate, DateTimePickerType::class, [
+                    'view_timezone' => $options['event']->getTimezone(),
+                    'required' => false,
+                ]);
+        }
     }
 
     /**

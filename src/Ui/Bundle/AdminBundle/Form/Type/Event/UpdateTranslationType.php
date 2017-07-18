@@ -22,7 +22,7 @@ class UpdateTranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description', TextareaType::class, ['required' => false])
+            ->add('description', TextareaType::class, ['required' => true])
         ;
     }
 }

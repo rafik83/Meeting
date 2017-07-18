@@ -44,6 +44,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ path('admin_event_external_catalog_configure', { 'event': event.id }) }}">
+                    {{ 'admin.event.external_catalog_configure'|trans }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
                     {{ 'admin.event.see_on_front.link'|trans }}
                 </a>
@@ -203,12 +208,14 @@
     </li>
 {% endif %}
 
-{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+{% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
     <li>
         <a href="{{ path('admin_sheets_group_list', { 'event': event.id }) }}">
             {{ 'admin.sheets_group.index'|trans }}
         </a>
     </li>
+{% endif %}
+{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
     <li>
         <a href="{{ path('admin_tip_event_list', { 'event': event.id }) }}">
             {{ 'admin.tip.link'|trans }}

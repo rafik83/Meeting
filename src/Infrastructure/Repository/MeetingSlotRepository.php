@@ -276,4 +276,21 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByIds(array $slotIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot', 'slot.id')
+            ->where('slot.id IN (:slotIds)')
+            ->setParameter('slotIds', $slotIds)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

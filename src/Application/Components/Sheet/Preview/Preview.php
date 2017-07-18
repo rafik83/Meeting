@@ -18,10 +18,10 @@ use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
-use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class Preview
@@ -50,10 +50,10 @@ class Preview
         Applyer $applyer,
         TranslatorInterface $translator
     ) {
-        $this->taggedDataFactory       = $taggedDataFactory;
-        $this->applyer                 = $applyer;
-        $this->cardViewQueryHandler    = $cardViewQueryHandler;
-        $this->translator              = $translator;
+        $this->taggedDataFactory    = $taggedDataFactory;
+        $this->applyer              = $applyer;
+        $this->cardViewQueryHandler = $cardViewQueryHandler;
+        $this->translator           = $translator;
     }
 
     /**
@@ -98,9 +98,7 @@ class Preview
                         $previewView->strong = true;
                     }
 
-                    if ($object->getContentValue() === ''
-                        && $object->getTag() !== null
-                    ) {
+                    if ($object->getContentValue() === '' && $object->getTag() !== null) {
                         // In EditableText there is only one tag therefore it is not useful to add a comma
                         foreach ($object->getTaggedDataViews() as $taggedDataView) {
                             $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);

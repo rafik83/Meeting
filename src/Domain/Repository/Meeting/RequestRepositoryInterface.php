@@ -168,7 +168,7 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
-    public function getRequestsByEventAndUser(Event $event, User $user);
+    public function getRequestsPlacedByEventAndUser(Event $event, User $user);
 
     /**
      * @param Sheet $sheet
@@ -256,6 +256,13 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state);
+
+    /**
+     * @param Sheet[] $sheets
+     *
+     * @return Request[]
+     */
+    public function getUnallocatedRequestForSheets(array $sheets);
 
     /**
      * @param Request $request

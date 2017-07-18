@@ -18,7 +18,11 @@ use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ExportData;
@@ -228,16 +232,35 @@ class NomenclatureController extends Controller
             $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
 
             try {
-                $import = new Import($data->nomenclature, $data->file ? $data->file->getPathname() : null, $data->charset);
+                $import = new Import(
+                    $data->nomenclature,
+                    $data->file ? $data->file->getPathname() : null,
+                    $data->charset
+                );
 
                 $this->get('tactician.commandbus')->handle($import);
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
                 return $this->getReadNomenclatureUrl($data->nomenclature);
-            } catch (ImportException $exception) {
-                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+            } catch (DepthException $depthException) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.depthError'));
+            } catch (NoLocaleSpecifiedException $noLocaleSpecifiedException) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.noLocaleSpecified'));
+            } catch (InvalidLocaleException $invalidLocaleException) {
+                $form->addError($this->get('error_factory')->create(
+                    'validators.nomenclature.import.invalidLocale',
+                    null,
+                    'validators',
+                    ['%invalidLocale%' => $invalidLocaleException->getInvalidLocale()]
+                ));
+            } catch (LocalesMustCorrespondToThoseOfTheEventException $localesMustCorrespondToThoseOfTheEventException) {
+                $form->addError($this->get('error_factory')->create(
+                    'validators.nomenclature.import.localesMustCorrespondToThoseOfTheEventException'
+                ));
             } catch (MissingKeysException $exception) {
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
+            } catch (ImportException $exception) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
         }
 

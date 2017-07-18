@@ -107,7 +107,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function eslaticaIsPopulate()
     {
-        exec("bin/console fos:elastica:populate --env=test");
+        exec("bin/console fos:elastica:populate --env=test --quiet --no-interaction --no-debug");
     }
 
     /**
@@ -681,5 +681,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $this->setBaseUrl(sprintf('http://%s', $event->getDomain()));
         $this->goToThisPage('/');
+    }
+
+    /**
+     * @Given I am on the homepage of the admin
+     */
+    public function iAmOnHomePageOfTheAdmin()
+    {
+        $this->setBaseUrl('http://admin.vimeet.proximum.dev');
     }
 }

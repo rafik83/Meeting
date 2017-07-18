@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\TipContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Tests\Factory\TipFactory;
 
 class TipContext implements Context
 {
@@ -46,6 +49,33 @@ class TipContext implements Context
     public function createTipForEvent($title, $eventTitle)
     {
         $tip = $this->tipContextProxy->getTipManager()->createForEvent($title, $eventTitle);
+        $this->tipContextProxy->getStorage()->set('tip', $tip);
+    }
+
+    /**
+     * @Given /^a tip "(?P<tipTitle>[^"]+)" is enabled on confirmation phone context for this type$/
+     *
+     * @param string $tipTitle
+     */
+    public function aTipIsEnabledOnConfirmationPhoneContextForThisType($tipTitle)
+    {
+        $type = $this->tipContextProxy->getStorage()->get('type');
+
+        if (!$type instanceof Type) {
+            throw new \LogicException('Missing Type');
+        }
+
+        $this->aTipIsEnabledOn($tipTitle, $type, [TipFactory::ON_CONFIRMATION_PHONE => true]);
+    }
+
+    /**
+     * @param string $tipTitle
+     * @param Type   $type
+     * @param array  $contexts
+     */
+    private function aTipIsEnabledOn($tipTitle, Type $type, array $contexts)
+    {
+        $tip = $this->tipContextProxy->getTipManager()->affectToType($tipTitle, $type, $contexts);
         $this->tipContextProxy->getStorage()->set('tip', $tip);
     }
 }

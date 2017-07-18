@@ -63,6 +63,14 @@ interface MeetingRepositoryInterface
     public function findByParticipants(array $participants);
 
     /**
+     * @param Event  $event
+     * @param User[] $users
+     *
+     * @return Meeting[]
+     */
+    public function findByEventAndUsers(Event $event, array $users);
+
+    /**
      * @param Event $event
      * @param User  $user
      *
@@ -137,6 +145,14 @@ interface MeetingRepositoryInterface
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasMeetingForUserAndEvent(User $user, Event $event): bool;
 
     /**
      * @param Participant $participant

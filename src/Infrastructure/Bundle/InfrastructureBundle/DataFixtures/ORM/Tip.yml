@@ -8,6 +8,7 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             - false
             - false
             - false
+            - false
             - <dateTime()>
         types:
             - '@type_exposant'
@@ -20,18 +21,3 @@ Proximum\Vimeet\Domain\Model\Tip\TipTranslation:
             - 'tip_title_fr'
             - 'fr'
             - 'tip_content_fr'
-
-Proximum\Vimeet\Domain\Model\Tip\Tip:
-    tip_1:
-        __construct:
-            - "tip_title"
-            - true
-            - true
-            - true
-            - false
-            - false
-            - false
-            - ['@tip_translation_fr']
-            - <dateTime()>
-        types:
-            - '@type_exposant_fr'

@@ -39,12 +39,32 @@ interface HappeningParticipationRepositoryInterface
     public function findByUser(User $user, Event $event, array $filters = []);
 
     /**
-     * @param Participant[] $participants
-     * @param Event         $event
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasParticipationForUserAndEvent(User $user, Event $event): bool;
+
+    /**
+     * @param Event  $event
+     * @param User[] $users
      *
      * @return HappeningParticipation[]
      */
-    public function findByUsers(array $participants, Event $event);
+    public function findByEventAndUsers(Event $event, array $users);
+
+    /**
+     * @deprecated
+     *
+     * @see findByEventAndUsers
+     *
+     * @param Participant[] $participants
+     * @param Event $event
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByParticipants(array $participants, Event $event);
 
     /**
      * @param Happening $happening

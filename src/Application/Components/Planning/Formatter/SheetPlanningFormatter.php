@@ -91,9 +91,12 @@ class SheetPlanningFormatter
             )
         );
 
+        $event = $participant->getSheet()->getEvent();
+        $user = $participant->getUser();
+
         // display participant planning
         $planning .= MarkdownFormatter::newLine(
-            $this->participantPlanningFormatter->formatPlanningFromParticipant($participant, $locale)
+            $this->participantPlanningFormatter->formatPlanningFromUserAndEvent($user, $event, $locale)
         );
 
         return $planning;

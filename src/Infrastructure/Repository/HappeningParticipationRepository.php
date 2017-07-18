@@ -83,12 +83,57 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function findByUsers(array $participants, Event $event)
+    public function hasParticipationForUserAndEvent(User $user, Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation.id')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening',
+                'happening',
+                'WITH',
+                'happening.event = :event AND participation.user = :user AND participation.disabled = false'
+            )
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventAndUsers(Event $event, array $users)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation, happening')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join(
+                'participation.happening',
+                'happening',
+                'WITH',
+                'happening.event = :event AND participation.user IN (:users) AND participation.disabled = false'
+            )
+            ->setParameter('users', $users)
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipants(array $participants, Event $event)
     {
         $users = array_map(function (Participant $participant) {
             return $participant->getUser();
         }, $participants);
-
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -103,7 +148,6 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('users', $users)
             ->setParameter('event', $event)
         ;
-
         return $queryBuilder->getQuery()->getResult();
     }
 
