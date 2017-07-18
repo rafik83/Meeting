@@ -714,6 +714,9 @@ event_user_event_token_confirm_agenda:
 event_user_phone_validate:
     path: /account/sheet/{sheet}/participant/{participant}/validate/phone
     methods: [GET, POST]
+    requirements:
+        sheet: \d+
+        participant: \d+
     defaults: { _controller: EventBundle:User/Phone/SendCode:sendCode }
 
 #

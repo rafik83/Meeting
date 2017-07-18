@@ -166,7 +166,14 @@ class SubstitutionsProvider
             case Compose::LINK_EXPORT_MEETING_SHEET:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', ['sheet' => $sheet->getId(), '_locale' => $locale]);
             case Compose::LINK_VALIDATE_MOBILE_PHONE:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_user_phone_validate', ['_locale' => $locale]);
+                if ($recipient instanceof Participant) {
+                    return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_user_phone_validate', [
+                            'sheet'       => $sheet->getId(),
+                            'participant' => $recipient->getId(),
+                            '_locale'     => $locale,
+                        ]
+                    );
+                }
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);

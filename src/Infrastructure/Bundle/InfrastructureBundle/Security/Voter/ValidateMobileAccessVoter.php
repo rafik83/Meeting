@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ValidateMobileAccessVoter extends Voter
 {
+    const PERMISSION_NAME = 'PERMISSION_USER_VALIDATE_MOBILE_ACCESS';
+
     /**
      * @var ValidateMobileProcessAccessChecker
      */
@@ -51,7 +53,7 @@ class ValidateMobileAccessVoter extends Voter
             return false;
         }
 
-        return $attribute === 'PERMISSION_USER_VALIDATE_MOBILE_ACCESS';
+        return $attribute === self::PERMISSION_NAME;
     }
 
     /**
