@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Exception\Event\EventNotArchivedException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class UnArchiveHandler
@@ -40,6 +41,32 @@ class UnArchiveHandler
         }
 
         $command->event->unArchive();
+
+        $this->unsetYearOnDomain($command->event);
+
         $this->eventRepository->set($command->event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    private function unsetYearOnDomain(Event $event)
+    {
+        $days = $event->getDays();
+        $firstDay = reset($days);
+
+        if (false === $firstDay) {
+            return;
+        }
+
+        $year = $firstDay->getStartTime()->format('Y');
+        $domainSplit = explode('.', $event->getDomain(), 2);
+
+        if (mb_substr($domainSplit[0], -5) === '-' . $year) {
+            $domainSplit[0] = mb_substr($domainSplit[0], 0, -5);
+            $domain         = implode('.', $domainSplit);
+
+            $event->setDomain($domain);
+        }
     }
 }
