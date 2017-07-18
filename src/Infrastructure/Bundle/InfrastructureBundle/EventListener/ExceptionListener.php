@@ -77,7 +77,7 @@ class ExceptionListener
             return;
         }
 
-        if (!$event->isVisible()) {
+        if ($event instanceof Event && !$event->isVisible()) {
             return;
         }
 
