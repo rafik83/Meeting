@@ -1,0 +1,53 @@
+pre-commit:
+    enabled: true
+    execute:
+        composer: false
+        jsonlint: true
+        phplint: true
+        phpmd:
+            enabled: true
+            options: null
+        phpcs:
+            enabled: true
+            standard: PSR2
+            ignore: ''
+        php-cs-fixer:
+            enabled: true
+            levels:
+                psr0: true
+                psr1: true
+                psr2: true
+                symfony: true
+            options: '--fixers=short_array_syntax --diff'
+        phpunit:
+            enabled: false
+            random-mode: false
+            options: null
+            strict-coverage:
+                enabled: false
+                minimum: null
+            guard-coverage:
+                enabled: false
+                message: null
+    message:
+        right-message: 'Well done!'
+        error-message: 'Please, fix your code.'
+commit-msg:
+    enabled: true
+    regular-expression: '[0-9]{2,7}'
+pre-push:
+    enabled: false
+    execute:
+        phpunit:
+            enabled: false
+            random-mode: false
+            options: null
+            strict-coverage:
+                enabled: false
+                minimum: null
+            guard-coverage:
+                enabled: false
+                message: null
+    message:
+        right-message: null
+        error-message: null

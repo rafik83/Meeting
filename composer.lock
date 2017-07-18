@@ -5122,6 +5122,61 @@
     ],
     "packages-dev": [
         {
+            "name": "beberlei/assert",
+            "version": "v2.7.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/assert.git",
+                "reference": "2f688ee39ea9ce9e2c2164c9db62df3246b8fbff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/2f688ee39ea9ce9e2c2164c9db62df3246b8fbff",
+                "reference": "2f688ee39ea9ce9e2c2164c9db62df3246b8fbff",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.1.1",
+                "phpunit/phpunit": "^4|^5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Assert\\": "lib/Assert"
+                },
+                "files": [
+                    "lib/Assert/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Richard Quadling",
+                    "email": "rquadling@gmail.com",
+                    "role": "Collaborator"
+                }
+            ],
+            "description": "Thin assertion library for input validation in business models.",
+            "keywords": [
+                "assert",
+                "assertion",
+                "validation"
+            ],
+            "time": "2017-04-26T09:32:13+00:00"
+        },
+        {
             "name": "behat/behat",
             "version": "v3.2.1",
             "source": {
@@ -5700,6 +5755,207 @@
             "time": "2016-02-19T18:29:26+00:00"
         },
         {
+            "name": "bruli/event-bus-bundle",
+            "version": "0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bruli/event-bus-bundle.git",
+                "reference": "0e493988781fea6035ab5b3d9bfeca46038fb130"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bruli/event-bus-bundle/zipball/0e493988781fea6035ab5b3d9bfeca46038fb130",
+                "reference": "0e493988781fea6035ab5b3d9bfeca46038fb130",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/config": "~2.3|~3.0",
+                "symfony/dependency-injection": "~2.3|~3.0",
+                "symfony/http-kernel": "^3.1",
+                "symfony/yaml": "~2.3|~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bruli\\EventBusBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo Braulio",
+                    "email": "brulics@gmail.com"
+                }
+            ],
+            "description": "Bundle to use event bus in symfony projects",
+            "keywords": [
+                "command bus",
+                "event bus",
+                "symfony"
+            ],
+            "time": "2016-10-28T10:10:37+00:00"
+        },
+        {
+            "name": "bruli/ignore-files",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bruli/ignore-files.git",
+                "reference": "78645e2efc5c019cc4d5add96f52981133146a4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bruli/ignore-files/zipball/78645e2efc5c019cc4d5add96f52981133146a4b",
+                "reference": "78645e2efc5c019cc4d5add96f52981133146a4b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6",
+                "symfony/config": ">=2.7",
+                "symfony/dependency-injection": ">=2.7"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.4",
+                "phpunit/phpunit": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "IgnoreFiles\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo Braulio",
+                    "email": "brulics@gmail.com"
+                }
+            ],
+            "description": "Ignore files",
+            "time": "2016-02-27T20:06:58+00:00"
+        },
+        {
+            "name": "bruli/php-git-hooks",
+            "version": "4.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bruli/php-git-hooks.git",
+                "reference": "1985d6f5ab6c3fb827eecd9e525cae73c008ccc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bruli/php-git-hooks/zipball/1985d6f5ab6c3fb827eecd9e525cae73c008ccc4",
+                "reference": "1985d6f5ab6c3fb827eecd9e525cae73c008ccc4",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "~2.7",
+                "bruli/event-bus-bundle": "~0.2",
+                "bruli/ignore-files": "~1.0",
+                "bruli/php-value-objects": "~0.1",
+                "fiunchinho/phpunit-randomizer": "~3.0",
+                "friendsofphp/php-cs-fixer": "^2.1",
+                "mybuilder/phpunit-accelerator": "^1.1",
+                "php": ">=5.6",
+                "phpmd/phpmd": "~2.6",
+                "phpunit/php-code-coverage": "~4.0",
+                "phpunit/phpunit": "~5.0",
+                "phpunit/phpunit-mock-objects": "~3.0",
+                "seld/jsonlint": "~1.5",
+                "squizlabs/php_codesniffer": "~2.8",
+                "symfony/config": "~2.7|~3.0",
+                "symfony/dependency-injection": "~2.7|~3.0",
+                "symfony/yaml": "~2.7|~3.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0@dev",
+                "fzaninotto/faker": "^1.6",
+                "mockery/mockery": "~0.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "PhpGitHooks": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo Braulio",
+                    "email": "brulics@gmail.com"
+                }
+            ],
+            "description": "Git hooks for PHP projects.",
+            "keywords": [
+                "HOOK",
+                "git",
+                "quality"
+            ],
+            "time": "2017-03-02T10:51:55+00:00"
+        },
+        {
+            "name": "bruli/php-value-objects",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bruli/php-value-objects.git",
+                "reference": "0b9dc64c0dba571eea779f330de1d636998088f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bruli/php-value-objects/zipball/0b9dc64c0dba571eea779f330de1d636998088f6",
+                "reference": "0b9dc64c0dba571eea779f330de1d636998088f6",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "^2.5",
+                "php": ">=5.6",
+                "symfony/intl": "^3.1"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "^1.6",
+                "phpunit/phpunit": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PhpValueObjects": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo Braulio",
+                    "email": "brulics@gmail.com"
+                }
+            ],
+            "description": "PHP Value objects to use for DDD domains.",
+            "keywords": [
+                "ddd",
+                "objects",
+                "php",
+                "value"
+            ],
+            "time": "2017-02-09T08:07:09+00:00"
+        },
+        {
             "name": "easycorp/easy-log-handler",
             "version": "v1.0.2",
             "source": {
@@ -5799,6 +6055,53 @@
             "time": "2015-11-05T12:58:44+00:00"
         },
         {
+            "name": "fiunchinho/phpunit-randomizer",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fiunchinho/phpunit-randomizer.git",
+                "reference": "7a5867b3023d5923e9b864513d4cac0ecd93a84f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fiunchinho/phpunit-randomizer/zipball/7a5867b3023d5923e9b864513d4cac0ecd93a84f",
+                "reference": "7a5867b3023d5923e9b864513d4cac0ecd93a84f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0"
+            },
+            "bin": [
+                "bin/phpunit-randomizer"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "PHPUnitRandomizer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Jose Manuel Armesto",
+                    "email": "jose@armesto.net"
+                }
+            ],
+            "description": "Execute your test cases in random order, so you can check if they have hidden dependencies",
+            "homepage": "http://armesto.net/",
+            "keywords": [
+                "phpunit",
+                "testing",
+                "unit testing"
+            ],
+            "time": "2017-02-05T15:42:47+00:00"
+        },
+        {
             "name": "friends-of-behat/context-service-extension",
             "version": "v0.3.0",
             "source": {
@@ -5887,43 +6190,62 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v1.12.2",
+            "version": "v2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "baa7112bef3b86c65fcfaae9a7a50436e3902b41"
+                "reference": "d5257f7433bb490299c4f300d95598fd911a8ab0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/baa7112bef3b86c65fcfaae9a7a50436e3902b41",
-                "reference": "baa7112bef3b86c65fcfaae9a7a50436e3902b41",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d5257f7433bb490299c4f300d95598fd911a8ab0",
+                "reference": "d5257f7433bb490299c4f300d95598fd911a8ab0",
                 "shasum": ""
             },
             "require": {
+                "doctrine/annotations": "^1.2",
                 "ext-tokenizer": "*",
-                "php": "^5.3.6 || >=7.0 <7.2",
-                "sebastian/diff": "^1.1",
-                "symfony/console": "^2.3 || ^3.0",
-                "symfony/event-dispatcher": "^2.1 || ^3.0",
-                "symfony/filesystem": "^2.1 || ^3.0",
-                "symfony/finder": "^2.1 || ^3.0",
-                "symfony/process": "^2.3 || ^3.0",
-                "symfony/stopwatch": "^2.5 || ^3.0"
+                "php": "^5.6 || >=7.0 <7.2",
+                "sebastian/diff": "^1.4",
+                "symfony/console": "^3.0",
+                "symfony/event-dispatcher": "^3.0",
+                "symfony/filesystem": "^3.0",
+                "symfony/finder": "^3.0",
+                "symfony/options-resolver": "^3.0",
+                "symfony/polyfill-php54": "^1.0",
+                "symfony/polyfill-php55": "^1.3",
+                "symfony/polyfill-php70": "^1.0",
+                "symfony/polyfill-xml": "^1.3",
+                "symfony/process": "^3.0",
+                "symfony/stopwatch": "^3.0"
             },
             "conflict": {
-                "hhvm": "<3.9"
+                "hhvm": "<3.18"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.5|^5",
-                "satooshi/php-coveralls": "^1.0"
+                "gecko-packages/gecko-php-unit": "^2.0",
+                "justinrainbow/json-schema": "^5.0",
+                "phpunit/phpunit": "^4.5 || ^5.0",
+                "satooshi/php-coveralls": "^1.0",
+                "symfony/phpunit-bridge": "^3.2.2"
+            },
+            "suggest": {
+                "ext-mbstring": "For handling non-UTF8 characters in cache signature.",
+                "ext-xml": "For better performance.",
+                "symfony/polyfill-mbstring": "When enabling `ext-mbstring` is not possible."
             },
             "bin": [
                 "php-cs-fixer"
             ],
             "type": "application",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\CS\\": "Symfony/CS/"
+                    "PhpCsFixer\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5941,7 +6263,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2016-09-27T07:57:59+00:00"
+            "time": "2017-04-25T20:50:30+00:00"
         },
         {
             "name": "hautelook/alice-bundle",
@@ -6085,6 +6407,48 @@
             "time": "2015-06-15T20:19:33+00:00"
         },
         {
+            "name": "ircmaxell/password-compat",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ircmaxell/password_compat.git",
+                "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/5c5cde8822a69545767f7c7f3058cb15ff84614c",
+                "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/password.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthony Ferrara",
+                    "email": "ircmaxell@php.net",
+                    "homepage": "http://blog.ircmaxell.com"
+                }
+            ],
+            "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
+            "homepage": "https://github.com/ircmaxell/password_compat",
+            "keywords": [
+                "hashing",
+                "password"
+            ],
+            "time": "2014-11-20T16:49:30+00:00"
+        },
+        {
             "name": "justinrainbow/json-schema",
             "version": "1.6.1",
             "source": {
@@ -6151,6 +6515,51 @@
             "time": "2016-01-25T15:43:01+00:00"
         },
         {
+            "name": "mybuilder/phpunit-accelerator",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mybuilder/phpunit-accelerator.git",
+                "reference": "11d4850d174257b3718f2f3ac016cb9cc66e4de7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mybuilder/phpunit-accelerator/zipball/11d4850d174257b3718f2f3ac016cb9cc66e4de7",
+                "reference": "11d4850d174257b3718f2f3ac016cb9cc66e4de7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6",
+                "phpunit/phpunit": ">=4.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MyBuilder\\PhpunitAccelerator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Keyvan Akbary",
+                    "email": "keyvan@mybuilder.com"
+                }
+            ],
+            "description": "PHPUnit accelerator",
+            "keywords": [
+                "accelerator",
+                "fast",
+                "free",
+                "memory",
+                "phpunit",
+                "property"
+            ],
+            "time": "2016-11-15T10:37:19+00:00"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.5.4",
             "source": {
@@ -6194,16 +6603,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.2.4",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "b086687f3a01dc6bb92d633aef071d2c5dd0db06"
+                "reference": "0c50874333149c0dad5a2877801aed148f2767ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/b086687f3a01dc6bb92d633aef071d2c5dd0db06",
-                "reference": "b086687f3a01dc6bb92d633aef071d2c5dd0db06",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/0c50874333149c0dad5a2877801aed148f2767ff",
+                "reference": "0c50874333149c0dad5a2877801aed148f2767ff",
                 "shasum": ""
             },
             "require": {
@@ -6230,7 +6639,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2016-03-10T15:15:04+00:00"
+            "time": "2017-01-19T14:23:36+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6380,21 +6789,22 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.4.3",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "2b9c2417a18696dfb578b38c116cd0ddc19b256e"
+                "reference": "4e9924b2c157a3eb64395460fcf56b31badc8374"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/2b9c2417a18696dfb578b38c116cd0ddc19b256e",
-                "reference": "2b9c2417a18696dfb578b38c116cd0ddc19b256e",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/4e9924b2c157a3eb64395460fcf56b31badc8374",
+                "reference": "4e9924b2c157a3eb64395460fcf56b31badc8374",
                 "shasum": ""
             },
             "require": {
-                "pdepend/pdepend": "^2.0.4",
-                "php": ">=5.3.0"
+                "ext-xml": "*",
+                "pdepend/pdepend": "^2.5",
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.0",
@@ -6441,7 +6851,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-04-04T11:52:04+00:00"
+            "time": "2017-01-20T14:41:10+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -7405,6 +7815,55 @@
             "time": "2016-02-04T12:56:52+00:00"
         },
         {
+            "name": "seld/jsonlint",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/jsonlint.git",
+                "reference": "791f8c594f300d246cdf01c6b3e1e19611e301d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/791f8c594f300d246cdf01c6b3e1e19611e301d8",
+                "reference": "791f8c594f300d246cdf01c6b3e1e19611e301d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5"
+            },
+            "bin": [
+                "bin/jsonlint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Seld\\JsonLint\\": "src/Seld/JsonLint/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "JSON Linter",
+            "keywords": [
+                "json",
+                "linter",
+                "parser",
+                "validator"
+            ],
+            "time": "2017-03-06T16:42:24+00:00"
+        },
+        {
             "name": "sensio/generator-bundle",
             "version": "v3.0.11",
             "source": {
@@ -7455,6 +7914,256 @@
             ],
             "description": "This bundle generates code for you",
             "time": "2016-10-10T14:17:42+00:00"
+        },
+        {
+            "name": "squizlabs/php_codesniffer",
+            "version": "2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.1.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "bin": [
+                "scripts/phpcs",
+                "scripts/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "CodeSniffer.php",
+                    "CodeSniffer/CLI.php",
+                    "CodeSniffer/Exception.php",
+                    "CodeSniffer/File.php",
+                    "CodeSniffer/Fixer.php",
+                    "CodeSniffer/Report.php",
+                    "CodeSniffer/Reporting.php",
+                    "CodeSniffer/Sniff.php",
+                    "CodeSniffer/Tokens.php",
+                    "CodeSniffer/Reports/",
+                    "CodeSniffer/Tokenizers/",
+                    "CodeSniffer/DocGenerators/",
+                    "CodeSniffer/Standards/AbstractPatternSniff.php",
+                    "CodeSniffer/Standards/AbstractScopeSniff.php",
+                    "CodeSniffer/Standards/AbstractVariableSniff.php",
+                    "CodeSniffer/Standards/IncorrectPatternException.php",
+                    "CodeSniffer/Standards/Generic/Sniffs/",
+                    "CodeSniffer/Standards/MySource/Sniffs/",
+                    "CodeSniffer/Standards/PEAR/Sniffs/",
+                    "CodeSniffer/Standards/PSR1/Sniffs/",
+                    "CodeSniffer/Standards/PSR2/Sniffs/",
+                    "CodeSniffer/Standards/Squiz/Sniffs/",
+                    "CodeSniffer/Standards/Zend/Sniffs/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "time": "2017-03-01T22:17:45+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php54",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php54.git",
+                "reference": "90e085822963fdcc9d1c5b73deb3d2e5783b16a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/90e085822963fdcc9d1c5b73deb3d2e5783b16a0",
+                "reference": "90e085822963fdcc9d1c5b73deb3d2e5783b16a0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php54\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ],
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 5.4+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2016-11-14T01:06:16+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php55",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php55.git",
+                "reference": "03e3f0350bca2220e3623a0e340eef194405fc67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/03e3f0350bca2220e3623a0e340eef194405fc67",
+                "reference": "03e3f0350bca2220e3623a0e340eef194405fc67",
+                "shasum": ""
+            },
+            "require": {
+                "ircmaxell/password-compat": "~1.0",
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php55\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 5.5+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2016-11-14T01:06:16+00:00"
+        },
+        {
+            "name": "symfony/polyfill-xml",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-xml.git",
+                "reference": "64b6a864f18ab4fddad49f5025f805f6781dfabd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-xml/zipball/64b6a864f18ab4fddad49f5025f805f6781dfabd",
+                "reference": "64b6a864f18ab4fddad49f5025f805f6781dfabd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-xml": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Xml\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for xml's utf8_encode and utf8_decode functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "theofidry/alice-bundle-extension",
