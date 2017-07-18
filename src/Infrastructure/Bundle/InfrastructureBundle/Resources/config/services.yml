@@ -2263,6 +2263,11 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.sheet.group_repository'
 
+    components.home.home_dispatch_anonymous_user:
+        class: Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser
+        arguments:
+            - '@domain.key_dates.checker.registration_access_checker'
+
     #
     # Happening component
     #
@@ -4178,6 +4183,23 @@ services:
         arguments:
             - '@datetime'
 
+    domain.key_dates.checker.registration_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationAccessChecker
+        arguments:
+            - '@datetime'
+            - '@domain.key_dates.checker.registration_open_date_access_checker'
+            - '@domain.key_dates.checker.registration_close_date_access_checker'
+
+    domain.key_dates.checker.registration_open_date_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationOpenDateAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.registration_close_date_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
+        arguments:
+            - '@datetime'
+
     #
     # Nomenclature
     #
@@ -5127,3 +5149,14 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+
+    #
+    # HomeDispatcher
+    #
+    infrastructure.route.home_dispatch.home_user_dispatcher:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher
+        arguments:
+            - '@router'
+            - '@components.home.home_dispatch'
+            - '@components.home.home_dispatch_anonymous_user'
+            - '@adapter.authorization_checker'
