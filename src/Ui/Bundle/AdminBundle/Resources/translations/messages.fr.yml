@@ -503,6 +503,9 @@ admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
+admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
+admin.product.remove.link: 'Supprimer'
+admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'

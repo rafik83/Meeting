@@ -48,6 +48,7 @@ validators.paymentModesChoiceEmpty: 'Il faut sélectionner au moins un mode de p
 validators.planner.import.invalidXml: 'Le fichier XML proposé n''est pas valide, il ne contient certains des noeuds indispensables à la récupération des rendez-vous'
 validators.position_meeting.fromParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.position_meeting.toParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
+validators.product.canNotBeRemoved: 'Le produit %productTitle% ne peut pas être supprimé car il est utilisé dans un forfait, une formule ou dans une commande'
 validators.product.quantity.greaterOrEqual: 'La quantité min doit être inférieure à la quantité max'
 validators.product.quantity.maxRequired: 'Si vous définissez une quantité, vous devez définir un min et un max'
 validators.product.quantity.minRequired: 'Si vous définissez une quantité, vous devez définir un min et un max'

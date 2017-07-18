@@ -1860,6 +1860,14 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@adapter.event_url_generator'
 
+    command.product.remove.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@domain.product.remove_authorization_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Remove\Remove }
+
     #
     # Post Batch Action
     #
@@ -3092,6 +3100,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery }
 
+    query.product.products_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Product\ProductsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@domain.product.remove_authorization_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }
+
     ##
     #
     # Agenda Queries
@@ -3701,6 +3717,12 @@ services:
     #
     transformer.product.id_to_product_transformer:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+
+    # Product
+    domain.product.remove_authorization_checker:
+        class: Proximum\Vimeet\Domain\Product\RemoveAuthorizationChecker
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
 
