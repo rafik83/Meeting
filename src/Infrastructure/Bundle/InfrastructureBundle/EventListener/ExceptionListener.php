@@ -77,6 +77,10 @@ class ExceptionListener
             return;
         }
 
+        if (!$event->isVisible()) {
+            return;
+        }
+
         $statusCode = $this->resolveHttpStatusCode($exception);
 
         $responseForExceptionEvent->setResponse(
