@@ -340,7 +340,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
         $sheet->setImported(true);
-        $sheet->setTitle($sheetTitle);
+        $sheet->setTitle(!empty($sheetTitle) ? $sheetTitle : $user->getFullname());
 
         $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);

@@ -297,6 +297,7 @@ admin.meeting_request.state.approved: Accepté
 admin.meeting_request.state.cancelled: Annulé
 admin.meeting_request.state.refused: Refusé
 admin.meeting_request.state.sent: Envoyé
+admin.meeting_request.state.planned: Planifié
 admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
@@ -478,6 +479,7 @@ admin.participant.export.fields.planning.unavailability: Indisponible
 admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.participant.export.fields.sheet_enable: 'Fiche Active'
 admin.participant.export.fields.user_id: 'ID User'
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
@@ -502,6 +504,9 @@ admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
+admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
+admin.product.remove.link: 'Supprimer'
+admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -623,6 +628,10 @@ admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
 admin.sheet.details.participant.title: Participant
 admin.sheet.details.participant.visio: Visio
+admin.sheet.details.participant.agenda_confirmed: 'Agenda validé'
+admin.sheet.details.participant.agenda_not_confirmed: 'Agenda non-validé'
+admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''agenda non envoyée'
+admin.sheet.details.participant.email: 'Email'
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
@@ -644,6 +653,7 @@ admin.sheet.export.fields.registration_date: 'Date inscription'
 admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
+admin.sheet.export.fields.sheet_enable: Fiche active
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type

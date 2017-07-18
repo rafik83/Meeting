@@ -46,3 +46,6 @@ ansible.cfg
 
 # Sessions
 /app/sessions
+
+# php-git-hooks tool.
+.guard_coverage

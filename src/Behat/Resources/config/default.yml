@@ -53,6 +53,10 @@ default:
                     - '@behat_proxy.event.day_context'
                 - Proximum\Vimeet\Behat\Context\Domain\CatalogVisibilityContext:
                     - '@behat.proxy.catalog_visibility_context_proxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Meeting\RequestContext:
+                    - '@behat_proxy.meeting_context'
+                    - '@behat_proxy.sheet_context'
+                    - '@behat_proxy.user_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Token\UserEventTokenContext:
                     - '@behat_proxy.token.user_event_token_context'
                 - behatch:json

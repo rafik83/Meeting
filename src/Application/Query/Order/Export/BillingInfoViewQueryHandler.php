@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Export;
 
-use Proximum\Vimeet\Application\Adapter\IntlAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Order\Export\BillingInfoView;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
@@ -31,18 +31,18 @@ class BillingInfoViewQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
-    /** @var IntlAdapterInterface */
+    /** @var IntlInterface */
     private $intlAdapter;
 
     /**
      * @param BillingInfoRepositoryInterface $billingInfoRepository
      * @param TranslatorInterface            $translator
-     * @param IntlAdapterInterface           $intlAdapter
+     * @param IntlInterface                  $intlAdapter
      */
     public function __construct(
         BillingInfoRepositoryInterface $billingInfoRepository,
         TranslatorInterface $translator,
-        IntlAdapterInterface $intlAdapter
+        IntlInterface $intlAdapter
     ) {
         $this->billingInfoRepository = $billingInfoRepository;
         $this->translator            = $translator;
