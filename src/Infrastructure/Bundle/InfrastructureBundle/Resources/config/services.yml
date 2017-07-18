@@ -5131,8 +5131,8 @@ services:
     #
     # HomeDispatcher
     #
-    domain.service.home_dispatch.home_user_dispatcher:
-        class: Proximum\Vimeet\Domain\Service\HomeDispatch\HomeUserDispatcher
+    infrastructure.route.home_dispatch.home_user_dispatcher:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher
         arguments:
             - '@router'
             - '@components.home.home_dispatch'

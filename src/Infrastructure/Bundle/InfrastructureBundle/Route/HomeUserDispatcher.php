@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Service\HomeDispatch;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route;
 
 use Proximum\Vimeet\Application\Components\Home\HomeDispatch;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
@@ -59,7 +59,7 @@ class HomeUserDispatcher
      *
      * @return RedirectResponse|null
      */
-    public function attemptDispatchUser(Event $event, UserInterface $user = null): ? RedirectResponse
+    public function attemptDispatchUser(Event $event, UserInterface $user = null): ?RedirectResponse
     {
         if (null !== $response = $this->attemptDispatchAnonymousUser($event)) {
             return $response;
@@ -80,7 +80,7 @@ class HomeUserDispatcher
      *
      * @return null|RedirectResponse
      */
-    private function attemptDispatchLoggedUser(Event $event, UserInterface $user = null): ? RedirectResponse
+    private function attemptDispatchLoggedUser(Event $event, UserInterface $user = null): ?RedirectResponse
     {
         $homeDispatchView = $this->homeDispatch->handle($event, $user);
 
@@ -112,7 +112,7 @@ class HomeUserDispatcher
      *
      * @return null|RedirectResponse
      */
-    private function attemptDispatchAnonymousUser(Event $event): ? RedirectResponse
+    private function attemptDispatchAnonymousUser(Event $event): ?RedirectResponse
     {
         $homeDispatchView = $this->homeDispatchAnonymousUser->handle($event);
 

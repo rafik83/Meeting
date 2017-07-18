@@ -104,7 +104,7 @@ class EventContext implements Context
         $event = $this->getEvent();
 
         $this->eventContextProxy->getAccessManager()->setRegistrationOpenDate(
-            new \Datetime('now'), $event
+            new \Datetime(), $event
         );
         $this->eventContextProxy->getAccessManager()->setRegistrationCloseDate(
             new \Datetime('now + 1 day'), $event

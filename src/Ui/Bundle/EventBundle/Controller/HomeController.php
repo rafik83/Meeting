@@ -38,7 +38,7 @@ class HomeController extends Controller
         $event = $eventDomain->getEvent();
 
        $response = $this
-           ->get('domain.service.home_dispatch.home_user_dispatcher')
+           ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
            ->attemptDispatchUser($event, $user);
 
         if ($response instanceof RedirectResponse) {
