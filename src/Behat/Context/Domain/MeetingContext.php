@@ -68,7 +68,7 @@ class MeetingContext implements Context
     /**
      * @Given /^there is a meeting on slot "(?P<slotId>\d+)" and spot "(?P<spotReference>[^"]+)" for this participant$/
      *
-     * @param int $slotId
+     * @param int    $slotId
      * @param string $spotReference
      */
     public function thereIsAMeetingOnSlotAndSpotForThisParticipant($slotId, $spotReference)
@@ -110,5 +110,38 @@ class MeetingContext implements Context
             ->createMeetingForSheetsAndSpot($event, $sheetTitle, $otherSheetTitle, $spotReference);
 
         $this->meetingContextProxy->getStorage()->set('meeting', $meeting);
+    }
+
+    /**
+     * @Given /^there is a meeting for this request on slot "(?P<slotId>\d+)" and spot "(?P<spotReference>[^"]+)"$/
+     */
+    public function thereIsAMeetingForThisRequest(string $slotId, string $spotReference)
+    {
+        $request = $this->meetingContextProxy->getStorage()->get('request');
+
+        if (null === $request) {
+            throw new \InvalidArgumentException('Missing Request');
+        }
+
+        $event = $this->meetingContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $slot = $this->meetingContextProxy->getSlotManager()->findByEventAndId($event, $slotId);
+
+        if (null === $slot) {
+            throw new \InvalidArgumentException('Missing Slot');
+        }
+
+        $spot = $this->meetingContextProxy->getSpotManager()->getByReference($event, $spotReference);
+
+        if (null === $spot) {
+            throw new \InvalidArgumentException('Missing Spot');
+        }
+
+        $this->meetingContextProxy->getMeetingManager()
+            ->createMeetingFromRequest($event, $request, $slot, $spot);
     }
 }

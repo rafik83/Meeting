@@ -49,6 +49,9 @@ form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
 form.admin.sheet.filter.children.submit.label: Filtrer
 form.admin.sheet.follower.un-assigned: 'Non assigné'
+form.archive_un_archive.children.archive.label: 'Archiver'
+form.archive_un_archive.children.unArchive.label: 'Désarchiver'
+form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -668,6 +671,7 @@ form.sheet_filter.children.hasRemainingToPay.no.label: Non
 form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'Peu importe'
 form.sheet_filter.children.hasRemainingToPay.yes.label: Oui
 form.sheet_filter.children.hasScheduledMeeting.label: 'A au moins un RDV planifié'
+form.sheet_filter.children.hasSpot.label: 'A un lieu attribué'
 form.sheet_filter.children.imported.all.label: Tous
 form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'

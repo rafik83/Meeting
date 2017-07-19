@@ -25,6 +25,7 @@ class Request implements MessageSubjectInterface
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
+    const STATE_PLANNED  = 'planned';
 
     const TYPE_REQUEST     = 'request';
     const TYPE_PROPOSITION = 'proposition';

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -23,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\FilterQueryBuilder;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\RequestQueryBuilder;
 
 class RequestRepository implements RequestRepositoryInterface
@@ -38,25 +38,15 @@ class RequestRepository implements RequestRepositoryInterface
     private $paginator;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * RequestRepository constructor.
      *
-     * @param EntityManager    $entityManager
-     * @param Paginator        $paginator
-     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param EntityManager $entityManager
+     * @param Paginator     $paginator
      */
-    public function __construct(
-        EntityManager $entityManager,
-        Paginator $paginator,
-        SheetInfoGuesser $sheetInfoGuesser
-    ) {
-        $this->entityManager    = $entityManager;
-        $this->paginator        = $paginator;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
+    {
+        $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -100,8 +90,7 @@ class RequestRepository implements RequestRepositoryInterface
 
         $request = $requestQueryBuilder
             ->where('request = :request')
-            ->setParameter('request', $request)
-        ;
+            ->setParameter('request', $request);
 
         return $request->getQuery()->getOneOrNullResult();
     }
@@ -262,8 +251,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-        ;
+            ->from(Request::class, 'request');
 
         if (!empty($filters) && isset($filters['disabled'])) {
             $queryBuilder->where('request.disabled = :disabled')
@@ -299,46 +287,22 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = [])
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->where('request.disabled = FALSE')
-            ->setParameter('event', $event);
-
-        $this->requestsWithoutMeeting($queryBuilder);
+        $queryBuilder = new FilterQueryBuilder($this->entityManager, $event);
 
         if (!empty($filter)) {
-            if (isset($filter['state'])) {
-                $queryBuilder
-                    ->andWhere('request.state = :state')
-                    ->setParameter('state', $filter['state']);
+            if (!empty($filter['state'])) {
+                $filterState = $filter['state'];
+
+                if ($filterState === Request::STATE_PLANNED) {
+                    $queryBuilder->filterPlanned();
+                } else {
+                    $queryBuilder->filterByState($filterState);
+                }
             }
 
             if (!empty($filter['orderBy']) && in_array($filter['orderBy'], $this->getOrderBy())) {
-                if ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
-                    $queryBuilder
-                        ->orderBy('request.createdAt', 'ASC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
-                    $queryBuilder
-                        ->orderBy('request.createdAt', 'DESC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
-                    $queryBuilder
-                        ->orderBy('request.stateUpdatedAt', 'ASC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
-                    $queryBuilder
-                        ->orderBy('request.stateUpdatedAt', 'DESC');
-                }
-            } else {
-                $queryBuilder
-                    ->orderBy('request.stateUpdatedAt', 'DESC');
+                $queryBuilder->order($filter['orderBy']);
             }
-        } else {
-            $queryBuilder
-                ->orderBy('request.stateUpdatedAt', 'DESC');
         }
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
@@ -347,13 +311,14 @@ class RequestRepository implements RequestRepositoryInterface
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
+                $request->getFromSheet()->getTitle(),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
+                $request->getToSheet()->getTitle(),
                 $request->getState(),
                 $request->getCreatedAt(),
                 $request->getStateUpdatedAt(),
-                ''
+                '',
+                $request->hasMeeting()
             );
         }, $results), $page, $limit, $count);
     }
@@ -480,8 +445,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-        ;
+            ->from(Request::class, 'request');
 
         if (!empty($filters)) {
             if (isset($filters['disabled'])) {
@@ -492,7 +456,7 @@ class RequestRepository implements RequestRepositoryInterface
             if (isset($filters['isToAttending'])) {
                 $queryBuilder->join('request.to', 'to', 'WITH', 'to.attend = true');
             }
-            
+
             if (isset($filters['isFromAttending'])) {
                 $queryBuilder->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
             }

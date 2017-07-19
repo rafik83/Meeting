@@ -130,6 +130,8 @@ admin.common.export.no: Non
 admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
+admin.event.archive.link: 'Archivage'
+admin.event.archive.title: 'Archiver l''événement %eventTitle%'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
@@ -143,14 +145,17 @@ admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.list.currents.title: 'Événements actuels'
 admin.event.list.pasts.title: 'Événements passés'
-admin.event.page.invoice.title: Factures
+admin.event.list.archived.title: 'Événements archivés'
+admin.event.page.invoice.title: 'Export des factures'
+admin.event.page.invoice.link: 'Factures'
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
 admin.event.page.orderFinder.title: 'Recherche commande'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
 admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
 admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
-admin.event.page.transactions.title: Transactions
+admin.event.page.transactions.title: 'Export des transactions'
+admin.event.page.transactions.link: 'Transactions'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
@@ -168,6 +173,7 @@ admin.event.template.registration: Inscription
 admin.event.template.sheet: Présentation
 admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
+admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
 admin.event.update.link: Modifier
 admin.event.update.title: 'Modifier l''évènement'
 admin.event.vatMode.ati: TTC
@@ -298,6 +304,7 @@ admin.meeting_request.state.approved: Accepté
 admin.meeting_request.state.cancelled: Annulé
 admin.meeting_request.state.refused: Refusé
 admin.meeting_request.state.sent: Envoyé
+admin.meeting_request.state.planned: Planifié
 admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
@@ -504,6 +511,9 @@ admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
+admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
+admin.product.remove.link: 'Supprimer'
+admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -1026,6 +1036,7 @@ gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recev
 gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
+login.link.label: 'Se connecter'
 login.title: Connexion
 logout.confirmation: 'Êtes vous sûr de vouloir vous déconnecter de votre compte ?'
 logout.link: Déconnecter

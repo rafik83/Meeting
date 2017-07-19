@@ -21,6 +21,11 @@ interface ProductRepositoryInterface
     public function add(Product $product);
 
     /**
+     * @param Product $product
+     */
+    public function remove(Product $product);
+
+    /**
      * @param Event $event
      *
      * @return Product[]
@@ -67,4 +72,18 @@ interface ProductRepositoryInterface
      * @return null|Product
      */
     public function findById($productId);
+
+    /**
+     * @param Event $event
+     *
+     * @return Product[]
+     */
+    public function findRemovableProductsForEvent(Event $event): array;
+
+    /**
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function isProductRemovable(Product $product): bool;
 }
