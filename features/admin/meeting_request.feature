@@ -20,8 +20,9 @@ Feature: See meeting request
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     And I am on this page "/fr/event"
-    When I follow "admin.meeting_request.link"
-    And I should be on this page "/fr/event/1/meeting-request"
+    When I go to this page "/fr/event/past"
+    And I follow "admin.meeting_request.link"
+    Then I should be on this page "/fr/event/1/meeting-request"
     And I should see "WorldCompanyInc"
 
   Scenario: I can filter meeting request list by meeting request planned

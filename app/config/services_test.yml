@@ -136,6 +136,11 @@ services:
         arguments:
             - '@repository.catalog_visibility_repository'
 
+    behat_manager.event.content_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Event\ContentManager
+        arguments:
+            - '@repository.event.content_repository'
+
     behat.service.manager.meeting.request_manager:
         class: Proximum\Vimeet\Behat\Service\Manager\Meeting\RequestManager
         arguments:
@@ -253,6 +258,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.invoice.prefix_manager'
+
+    behat_proxy.event.content_context:
+        class: Proximum\Vimeet\Behat\Proxy\Event\ContentContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.event.content_manager'
 
     #
     # Other services
