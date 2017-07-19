@@ -363,7 +363,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -414,7 +415,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -537,7 +539,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -588,7 +591,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);

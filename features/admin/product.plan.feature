@@ -15,12 +15,13 @@ Feature: Handle Product
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admins.yml                                                               |
     And I am logged with "test2@test.com" on admin
-    Given I go to this page "/fr/event"
-    Then I follow "admin.product.link"
-    And I should be on this page "/fr/event/1/product"
+    And I go to this page "/fr/event"
+    When I go to this page "/fr/event/past"
+    And I follow "admin.product.link"
+    Then I should be on this page "/fr/event/1/product"
     And I should see "admin.zero-result"
-    Then I follow "admin.product_create.plan.title"
-    And I should be on this page "/fr/event/1/product/create/plan"
+    When I follow "admin.product_create.plan.title"
+    Then I should be on this page "/fr/event/1/product/create/plan"
     And I fill in the following:
       | form.product_create_plan.children.name.label        | ProductTitre   |
       | product_create_plan_translations_fr_title           | Titre fr       |

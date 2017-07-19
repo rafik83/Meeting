@@ -114,12 +114,22 @@ admin_create_new_password:
 
 admin_event_list:
     path: /event
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:list }
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event/Current:list }
+
+admin_past_event_list:
+    path: /event/past
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event/Past:list }
+
+admin_archived_event_list:
+    path: /event/archived
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Event/Archived:list }
 
 admin_event_transaction_export:
     path: /event/transaction/export
-    methods: [POST]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Transaction/Export:export }
 
 admin_event_read:
@@ -986,6 +996,14 @@ admin_product_template_import:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:import }
 
+admin_product_remove:
+    path: /event/{event}/product/{product}/remove
+    requirements:
+        event: \d+
+        product: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Product/Remove:remove }
+
 #
 # Organizer
 #
@@ -1327,7 +1345,7 @@ admin_invoice_globals_create:
     methods: [GET, POST]
 admin_invoice_export:
     path: /event/invoice/export
-    methods: [POST]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Invoice/Export:export }
 
 
@@ -1463,3 +1481,21 @@ admin_tip_event_preview:
         tip: \d+
         locale: \w+
     defaults: { _controller: AdminBundle:Tip/TipEvent:preview }
+
+#
+# Event Archive
+#
+admin_event_archive:
+    path: /event/{event}/archive
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/Archive:archive }
+
+#
+# Event action
+#
+admin_event_order_invoice_find:
+    path: /event/order-invoice/find
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event/OrderInvoiceFinder:find }

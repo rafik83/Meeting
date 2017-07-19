@@ -109,6 +109,12 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $userAgendaVersionsGenerated;
 
+    /** @var bool */
+    private $archived;
+
+    /** @var bool */
+    private $visible;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -121,7 +127,8 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
-     * @param Prefix $invoicePrefix
+     * @param Prefix      $invoicePrefix
+     * @param bool        $visible
      */
     public function __construct(
         $title,
@@ -135,7 +142,8 @@ class Event implements EventInterface, TraceableInterface
         $domain,
         $organiserName,
         $emailTeam,
-        Prefix $invoicePrefix
+        Prefix $invoicePrefix,
+        bool $visible = true
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -154,8 +162,9 @@ class Event implements EventInterface, TraceableInterface
         $this->emailTeam      = $emailTeam;
         $this->invoicePrefix  = $invoicePrefix;
         $this->assetPath      = '';
-
+        $this->visible        = $visible;
         $this->userAgendaVersionsGenerated = false;
+        $this->archived = false;
     }
 
     /**
@@ -171,9 +180,17 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     */
+    public function setDomain(string $domain)
+    {
+        $this->domain = $domain;
     }
 
     /**
@@ -405,6 +422,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $organiserName
      * @param string|null $emailTeam
      * @param null|Prefix $invoicePrefix
+     * @param bool        $visible
      */
     public function update(
         $title,
@@ -418,7 +436,8 @@ class Event implements EventInterface, TraceableInterface
         $domain,
         $organiserName,
         $emailTeam,
-        Prefix $invoicePrefix
+        Prefix $invoicePrefix,
+        bool $visible
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
@@ -432,6 +451,7 @@ class Event implements EventInterface, TraceableInterface
         $this->organiserName = $organiserName;
         $this->emailTeam     = $emailTeam;
         $this->invoicePrefix = $invoicePrefix;
+        $this->visible       = $visible;
     }
 
     /**
@@ -607,21 +627,25 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasDay()
+    {
+        return !empty($this->days->toArray());
+    }
+
+    /**
      * @return Event\Day
      *
      * @throws DayNotDefinedException
      */
     public function getFirstDay()
     {
-        $days = $this->days->toArray();
-
-        if (empty($days)) {
+        if (!$this->hasDay()) {
             throw new DayNotDefinedException();
         }
 
-        usort($days, function (Day $day1, Day $day2) {
-            return $day1->getDay() > $day2->getDay();
-        });
+        $days = $this->getDays();
 
         return reset($days);
     }
@@ -633,17 +657,13 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getLastDay()
     {
-        $days = $this->days->toArray();
-
-        if (empty($days)) {
+        if (!$this->hasDay()) {
             throw new DayNotDefinedException();
         }
 
-        usort($days, function (Day $day1, Day $day2) {
-            return $day1->getDay() < $day2->getDay();
-        });
+        $days = $this->getDays();
 
-        return reset($days);
+        return end($days);
     }
 
     /**
@@ -692,5 +712,37 @@ class Event implements EventInterface, TraceableInterface
     public function setUserAgendaVersionsGenerated(bool $userAgendaVersionsGenerated)
     {
         $this->userAgendaVersionsGenerated = $userAgendaVersionsGenerated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    /**
+     * Archive the event
+     */
+    public function archive()
+    {
+        $this->archived = true;
+    }
+
+    /**
+     * Un archive the event
+     */
+    public function unArchive()
+    {
+        $this->archived = false;
     }
 }

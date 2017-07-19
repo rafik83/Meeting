@@ -12,8 +12,9 @@ Feature: See, create and update an emailing message
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Messaging-Message.yml |
       | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
-    When I go to this page "/en/event"
+    And I am logged with "test@test.com" on admin
+    And I go to this page "/en/event"
+    When I go to this page "/en/event/past"
     Then I should see "ASD Days"
     When I follow "admin.messaging.message.link"
     Then I should see "dummy-name"

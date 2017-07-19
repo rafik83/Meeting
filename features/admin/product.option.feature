@@ -15,7 +15,8 @@ Feature: Handle Product
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admins.yml                                                               |
     And I am logged with "test2@test.com" on admin
-    Given I go to this page "/fr/event"
+    And I go to this page "/fr/event"
+    When I go to this page "/fr/event/past"
     Then I follow "admin.product.link"
     And I should be on this page "/fr/event/1/product"
     And I should see "admin.zero-result"

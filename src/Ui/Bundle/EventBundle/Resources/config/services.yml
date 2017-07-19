@@ -344,6 +344,8 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetUpdatedEventSubscriber
         arguments:
             - '@sheet.completeness_calculator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.sheet.package_orders_updated_event_subscriber:
