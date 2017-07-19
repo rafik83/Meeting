@@ -27,6 +27,7 @@ final class Events
     const SHEET_CATALOG                                = 'sheet.catalog';
     const SHEET_INVOICED                               = 'sheet.invoiced';
     const SHEET_UPDATED                                = 'sheet.updated';
+    const SHEET_TITLE_CHECK                            = 'sheet.title';
     const SHEET_CREATE_BY_GROUP_MANAGER                = 'group.sheet.created';
     const USER_MAIL_CHANGED                            = 'change_mail';
     const MEETING_PARTICIPANT_ADDED                    = 'meeting.participant.added';

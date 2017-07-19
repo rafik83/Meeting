@@ -303,6 +303,7 @@ admin.meeting_request.state.approved: Accepté
 admin.meeting_request.state.cancelled: Annulé
 admin.meeting_request.state.refused: Refusé
 admin.meeting_request.state.sent: Envoyé
+admin.meeting_request.state.planned: Planifié
 admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
@@ -509,6 +510,9 @@ admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
+admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
+admin.product.remove.link: 'Supprimer'
+admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -1031,6 +1035,7 @@ gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recev
 gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
+login.link.label: 'Se connecter'
 login.title: Connexion
 logout.confirmation: 'Êtes vous sûr de vouloir vous déconnecter de votre compte ?'
 logout.link: Déconnecter

@@ -85,6 +85,11 @@ Remarks :
 - Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
 - Your locale translations will be updated with a `pull` command (new, update or delete).
 
+## Commits
+
+Please provide the User Story Id in the commit message: `"1337 - Add a killing feature".
+You can ignore pre commit hooks with `-n` option: `$ git commit -n`
+
 ### Deployment
 
 To deploy to preprod and prod, you need to be connected to VPN with this  ~/.ssh/config :

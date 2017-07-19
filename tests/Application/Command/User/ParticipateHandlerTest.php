@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -319,6 +320,12 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, Argument::that(
             function (MustSelectPackageEvent $event) {
+                return true;
+            }
+        ))->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, Argument::that(
+            function (SheetTitleCheckEvent $sheetTitleCheckEvent) {
                 return true;
             }
         ))->shouldBeCalled();
