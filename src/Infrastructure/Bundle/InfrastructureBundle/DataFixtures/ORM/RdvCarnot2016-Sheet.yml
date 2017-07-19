@@ -13,6 +13,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 d691d21c: { text: { fr: "<sentence()>" } }
             - '@user_test'
             - <dateTime()>
+        title: 'WorldCompanyInc'
         registrationData:
             3ad4b72f: { text: 'WorldCompanyInc' }
             93de093f: { text: "<address()>" }

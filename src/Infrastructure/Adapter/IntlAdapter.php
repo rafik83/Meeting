@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Proximum\Vimeet\Application\Adapter\IntlAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Symfony\Component\Intl\Intl;
 
-class IntlAdapter implements IntlAdapterInterface
+class IntlAdapter implements IntlInterface
 {
     /**
      * {@inheritdoc}
@@ -21,5 +21,13 @@ class IntlAdapter implements IntlAdapterInterface
     public function getCountryName($countryCode, $locale = null)
     {
         return Intl::getRegionBundle()->getCountryName($countryCode, $locale);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocales(): array
+    {
+        return Intl::getLocaleBundle()->getLocales();
     }
 }

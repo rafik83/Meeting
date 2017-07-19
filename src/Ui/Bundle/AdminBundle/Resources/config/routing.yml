@@ -986,6 +986,14 @@ admin_product_template_import:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:import }
 
+admin_product_remove:
+    path: /event/{event}/product/{product}/remove
+    requirements:
+        event: \d+
+        product: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Product/Remove:remove }
+
 #
 # Organizer
 #
