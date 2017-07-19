@@ -25,6 +25,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
 {
     const COL_SHEET_ID               = 'sheet_id';
     const COL_SHEET_NAME             = 'sheet_name';
+    const COL_SHEET_ENABLE           = 'sheet_enable';
     const COL_PARTICIPANT_TYPE       = 'participant_type';
     const COL_USER_ID                = 'user_id';
     const COL_PARTICIPANT_ID         = 'participant_id';
@@ -37,6 +38,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
         self::COL_SHEET_ID,
         self::COL_PARTICIPANT_TYPE,
         self::COL_SHEET_NAME,
+        self::COL_SHEET_ENABLE,
         self::COL_USER_ID,
         self::COL_PARTICIPANT_ID,
         self::COL_PARTICIPANT_EMAIL,
@@ -147,7 +149,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
      *
      * @return array Raw data about sheet
      */
-    private function getParticipantRawData(Participant $participant, $locale)
+    private function getParticipantRawData(Participant $participant, string $locale)
     {
         $event = $participant->getSheet()->getEvent();
 
@@ -167,6 +169,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
             self::COL_SHEET_ID               => $sheet->getId(),
             self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($availableLocale),
             self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
+            self::COL_SHEET_ENABLE           => $this->normalizeBoolean($sheet->isEnabled()),
             self::COL_USER_ID                => $participant->getUser()->getId(),
             self::COL_PARTICIPANT_ID         => $participant->getId(),
             self::COL_PARTICIPANT_EMAIL      => $participant->getUser()->getEmail(),

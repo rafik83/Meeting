@@ -1,0 +1,5 @@
+{% if agendaConfirmationStatus is not empty %}
+    <span class="label label-{{ agendaConfirmationStatus.css_class }}">
+        {{ agendaConfirmationStatus.translation_key |trans }}
+    </span>
+{% endif %}

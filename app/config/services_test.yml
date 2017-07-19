@@ -136,6 +136,11 @@ services:
         arguments:
             - '@repository.catalog_visibility_repository'
 
+    behat.service.manager.meeting.request_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Meeting\RequestManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
     #
     # Proxies
     #
@@ -205,6 +210,8 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.meeting'
+            - '@behat_manager.spot'
+            - '@behat_manager.slot'
 
     behat_proxy.order_context:
         class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
@@ -256,6 +263,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.token.user_event_token_manager'
+
+    behat.proxy.meeting.request_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.meeting.request_manager'
 
     infrastructure.adapter.monolog_smssender_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter

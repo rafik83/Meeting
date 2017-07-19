@@ -200,8 +200,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
                 'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
                 'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
-                'attend' => $sheet->attend(),
-                'hasGroup' => $sheet->hasGroup()
+                'attend'   => $sheet->attend(),
+                'hasGroup' => $sheet->hasGroup(),
+                'hasSpot'  => $sheet->getSpot() !== null,
             ],
             $contentByLocale
         ));
