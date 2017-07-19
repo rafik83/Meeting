@@ -40,6 +40,9 @@ class UserEventPhone
     /** @var DateTimeInterface|null */
     private $validatedAt;
 
+    /** @var bool */
+    private $stop;
+
     /**
      * @param User              $user
      * @param Event             $event
@@ -56,6 +59,7 @@ class UserEventPhone
         $this->createdAt = $createdAt;
         $this->validated = false;
         $this->validatedAt = null;
+        $this->stop = false;
     }
 
     /**
@@ -129,5 +133,13 @@ class UserEventPhone
     {
         $this->validatedAt = $dateTime;
         $this->validated = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStop(): bool
+    {
+        return $this->stop;
     }
 }

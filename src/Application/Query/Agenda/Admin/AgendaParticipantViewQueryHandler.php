@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\SmsActivationDateAccessChecker;
+use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class AgendaParticipantViewQueryHandler
@@ -33,25 +35,31 @@ class AgendaParticipantViewQueryHandler
     /** @var SmsActivationDateAccessChecker */
     private $smsActivationDateAccessChecker;
 
+    /** @var UserEventPhoneRepositoryInterface */
+    private $userEventPhoneRepository;
+
     /**
-     * @param DayRepositoryInterface         $dayRepository
-     * @param MeetingRepositoryInterface     $meetingRepository
-     * @param AgendaDayViewQueryHandler      $agendaDayViewQueryHandler
-     * @param ParticipantInfoGuesser         $participantInfoGuesser
-     * @param SmsActivationDateAccessChecker $smsActivationDateAccessChecker
+     * @param DayRepositoryInterface            $dayRepository
+     * @param MeetingRepositoryInterface        $meetingRepository
+     * @param AgendaDayViewQueryHandler         $agendaDayViewQueryHandler
+     * @param ParticipantInfoGuesser            $participantInfoGuesser
+     * @param SmsActivationDateAccessChecker    $smsActivationDateAccessChecker
+     * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
         MeetingRepositoryInterface $meetingRepository,
         AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
         ParticipantInfoGuesser $participantInfoGuesser,
-        SmsActivationDateAccessChecker $smsActivationDateAccessChecker
+        SmsActivationDateAccessChecker $smsActivationDateAccessChecker,
+        UserEventPhoneRepositoryInterface $userEventPhoneRepository
     ) {
         $this->dayRepository                  = $dayRepository;
         $this->meetingRepository              = $meetingRepository;
         $this->agendaDayViewQueryHandler      = $agendaDayViewQueryHandler;
         $this->participantInfoGuesser         = $participantInfoGuesser;
         $this->smsActivationDateAccessChecker = $smsActivationDateAccessChecker;
+        $this->userEventPhoneRepository       = $userEventPhoneRepository;
     }
 
     /**
@@ -78,7 +86,7 @@ class AgendaParticipantViewQueryHandler
                     $query->participant,
                     $query->locale,
                     $query->happeningParticipations,
-                    $query->unavailabilites,
+                    $query->unavailabilities,
                     $query->masses,
                     $query->meetings,
                     $query->massAssignments,
@@ -92,13 +100,21 @@ class AgendaParticipantViewQueryHandler
             $query->locale
         );
 
+        $stopSMS = false;
+        $userEventPhone = $this->userEventPhoneRepository->find($query->participant->getUser(), $query->event);
+
+        if ($userEventPhone instanceof UserEventPhone) {
+            $stopSMS = $userEventPhone->isStop();
+        }
+
         return new AgendaParticipantView(
             $query->participant->getId(),
             $completeName,
             $query->participant->getUser()->getEmail(),
             $dayViews,
             $query->sheet->attend(),
-            $this->smsActivationDateAccessChecker->allowedToAccess($query->event)
+            $this->smsActivationDateAccessChecker->allowedToAccess($query->event),
+            $stopSMS
         );
     }
 }

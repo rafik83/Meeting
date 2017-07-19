@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSlotView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -28,7 +29,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class MeetingUpdateSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingUpdateSlotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
