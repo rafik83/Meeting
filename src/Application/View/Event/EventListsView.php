@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\View\EventListView;
 class EventListsView
 {
     /** @var EventListView[] */
-    public $currentsEventListView;
+    public $list;
 
     /**
      * @param EventListView[] $list
