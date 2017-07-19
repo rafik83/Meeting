@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -79,6 +80,9 @@ abstract class AbstractEventType extends AbstractType
 
         $builder
             ->add('title', TextType::class)
+            ->add('visible', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('locales', LocaleType::class, [
                 'multiple'          => true,
                 'preferred_choices' => $this->preferredLocales,

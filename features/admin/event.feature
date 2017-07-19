@@ -18,6 +18,7 @@ Feature: See, create and update event
     Then I follow "admin.event.create.title"
     Then the response status code should be 200
     And I should be on this page "/en/event/create"
+    And I check "form.event_create.children.visible.label"
     And I fill in the following:
       | form.event_create.children.title.label         | Alternative Event                     |
       | form.event_create.children.domain.label        | alternative-event.vimeet.proximum.dev |
@@ -38,6 +39,7 @@ Feature: See, create and update event
     And I should see "flash.admin.event.create.success"
     And I should be on this page "/en/event"
     And I should see "Alternative Event"
+    And I should not see "Invisible"
 
   Scenario: update event
     Given I am logged with "test@test.com" on admin
@@ -80,3 +82,13 @@ Feature: See, create and update event
     Then the response status code should be 200
     And I should see "flash.admin.event.update.success"
     And the "event_update_invoicePrefix" field should contain "0"
+
+  Scenario: I should not access to an invisible event
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/en/event/1"
+    And I go to this page "/en/event/1/update"
+    When I uncheck "form.event_update.children.visible.label"
+    And I press "form.event_update.children.submit.label"
+    Then I go to this page "/en/event"
+    And I should see "Invisible"
+    Then this event page "http://super-event.vimeet.proximum.dev/app_test.php/fr" returns 404

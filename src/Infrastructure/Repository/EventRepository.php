@@ -64,7 +64,7 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback, event.visible)')
             ->from(Event::class, 'event')
             ->orderBy('event.title');
 
@@ -169,7 +169,7 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback, event.visible)')
             ->from(Event::class, 'event')
             ->orderBy('event.title');
 

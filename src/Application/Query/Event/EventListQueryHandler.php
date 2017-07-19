@@ -66,6 +66,7 @@ class EventListQueryHandler
                 $event->getDomain(),
                 $event->getLocales(),
                 $event->getFallback(),
+                $event->isVisible(),
                 array_map(function (Day $day) {
                     return new DayView($day->getStartTime(), $day->getEndTime());
                 }, $event->getDays())

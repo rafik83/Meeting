@@ -63,6 +63,7 @@ class EventListQueryHandlerTest extends TestCase
             'super-event.vimeet.proximum.dev',
             ['fr', 'en'],
             'fr',
+            true,
             [new DayView($startTime, $endTime)]
         );
 
@@ -72,6 +73,7 @@ class EventListQueryHandlerTest extends TestCase
             'super-event.vimeet.proximum.dev',
             ['fr', 'en'],
             'fr',
+            true,
             []
         );
         $expectedEventListsView = new EventListsView([$currentEvent1, $currentEvent2]);
@@ -113,6 +115,7 @@ class EventListQueryHandlerTest extends TestCase
                 'super-event.vimeet.proximum.dev',
                 ['fr', 'en'],
                 'fr',
+                true,
                 [new DayView($startTimeThree, $endTimeThree)]
             )
         ]);
@@ -152,6 +155,7 @@ class EventListQueryHandlerTest extends TestCase
                 'super-event.vimeet.proximum.dev',
                 ['fr', 'en'],
                 'fr',
+                true,
                 [new DayView($startTime, $endTime)]
             ),
             new EventListView(
@@ -160,6 +164,7 @@ class EventListQueryHandlerTest extends TestCase
                 'super-event.vimeet.proximum.dev',
                 ['fr', 'en'],
                 'fr',
+                true,
                 [new DayView($startTimeThree, $endTimeThree)]
             )
         ]);
