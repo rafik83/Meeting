@@ -41,7 +41,7 @@ class HomeDispatch
      *
      * @return null|HomeDispatchView
      */
-    public function handle(Event $event, User $user)
+    public function handle(Event $event, User $user): ?HomeDispatchView
     {
         // User is a manager of Sheets group
         $group = $this->groupRepository->getByEventAndManager($event, $user);

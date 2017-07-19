@@ -40,6 +40,7 @@ admin.check-all: 'Check all'
 admin.common.close: Close
 admin.create_admin.title: 'Create a new backoffice user'
 admin.dashboard.link: Dashboard
+admin.event.archive.link: 'Archiving'
 admin.event.billing.configuration.link: 'Billing information'
 admin.event.configuration.key_dates.title: 'Key date of the event'
 admin.event.configure_dates: 'Key dates'

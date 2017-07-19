@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,18 +14,23 @@ use Proximum\Vimeet\Domain\Model\Admin;
 
 class EventListQuery
 {
-    /**
-     * @var Admin
-     */
+    const STATE_CURRENT = 'current';
+    const STATE_PAST = 'past';
+    const STATE_ARCHIVED = 'archived';
+
+    /** @var Admin */
     public $admin;
 
+    /** @var string */
+    public $state;
+
     /**
-     * EventListQuery constructor.
-     *
-     * @param Admin $admin
+     * @param Admin  $admin
+     * @param string $state
      */
-    public function __construct(Admin $admin)
+    public function __construct(Admin $admin, $state)
     {
         $this->admin = $admin;
+        $this->state = $state;
     }
 }
