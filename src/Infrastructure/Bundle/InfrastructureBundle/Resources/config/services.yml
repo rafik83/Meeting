@@ -1360,6 +1360,13 @@ services:
             - '@application.nomenclature.nomenclature_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
+    command.nomenclature.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\RemoveHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@domain.nomenclature.remove_authorization_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Remove }
     command.event.payment_conditions.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler
         arguments:
@@ -3058,6 +3065,25 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery }
 
+    query.nomenclature.abstract_nomenclature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Nomenclature\AbstractNomenclatureViewQueryHandler
+        abstract: true
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@domain.nomenclature.remove_authorization_checker'
+
+    query.nomenclature.event_nomenclature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQueryHandler
+        parent: query.nomenclature.abstract_nomenclature_view_query_handler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQuery }
+
+    query.nomenclature.global_nomenclature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQueryHandler
+        parent: query.nomenclature.abstract_nomenclature_view_query_handler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery }
+
     #
     # Program query
     #
@@ -4250,6 +4276,13 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
         arguments:
             - '@repository.nomenclature_repository'
+    domain.nomenclature.remove_authorization_checker:
+        class: Proximum\Vimeet\Domain\Nomenclature\RemoveAuthorizationChecker
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@repository.template.sheet_template_repository'
+            - '@template.template_data_factory'
+
     #
     # Event
     #

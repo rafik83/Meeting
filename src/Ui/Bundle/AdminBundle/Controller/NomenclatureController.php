@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,6 +20,8 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQuery;
+use Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
@@ -66,8 +68,7 @@ class NomenclatureController extends Controller
             return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
         }
 
-        $repository    = $this->get('repository.nomenclature_repository');
-        $nomenclatures = $repository->findGlobals();
+        $nomenclatures = $this->get('tactician.commandbus.query')->handle(new GlobalNomenclatureViewQuery());
 
         return $this->render('AdminBundle:Nomenclature:globals.html.twig', [
             'form'          => $form->createView(),
@@ -98,8 +99,7 @@ class NomenclatureController extends Controller
             return $this->redirect($this->getReadNomenclatureUrl($result->nomenclature));
         }
 
-        $repository    = $this->get('repository.nomenclature_repository');
-        $nomenclatures = $repository->findByEvent($event);
+        $nomenclatures = $this->get('tactician.commandbus.query')->handle(new EventNomenclatureViewQuery($event));
 
         return $this->render('AdminBundle:Nomenclature:event.html.twig', [
             'event'         => $event,

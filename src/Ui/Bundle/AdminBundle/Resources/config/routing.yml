@@ -1121,6 +1121,13 @@ admin_nomenclature_event_read:
         event: \d+
         nomenclature: \d+
 
+admin_nomenclature_remove:
+    path: /nomenclature/{nomenclature}/remove
+    requirements:
+        nomenclature: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Nomenclature/Remove:remove }
+
 # Event Template
 admin_event_template_registration:
     path: /event/{event}/template/registration

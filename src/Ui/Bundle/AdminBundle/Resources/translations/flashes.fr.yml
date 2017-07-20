@@ -35,6 +35,7 @@ flash.admin.messaging.campaign.create.success: 'Campagne d''emailing créée ave
 flash.admin.messaging.campaign.message.success: 'Campagne créée avec succès. Elle est désormais prête à être envoyée.'
 flash.admin.messaging.campaign.recipients.success: 'Destinataires enregistrés avec succès. Vous pouvez à présent sélectionner votre message'
 flash.admin.nomenclature.assign.success: 'La nomenclature a bien été assignée'
+flash.admin.nomenclature.remove.success: 'La nomenclature a bien été supprimée'
 flash.admin.nomenclature.import.success: 'La nomenclature a bien été importée'
 flash.admin.nomenclature.update.success: 'La nomenclature a bien été mise à jour'
 flash.admin.operator.create.success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
