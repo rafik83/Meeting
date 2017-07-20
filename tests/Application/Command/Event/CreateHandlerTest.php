@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Create;
@@ -26,7 +27,7 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -64,6 +65,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -78,7 +80,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -168,6 +171,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -182,7 +186,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -281,6 +286,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -295,7 +301,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));

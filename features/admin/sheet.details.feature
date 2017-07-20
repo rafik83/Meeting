@@ -22,6 +22,7 @@ Feature: See sheet details
     And elastica is populate
     And I am logged with "test@test.com" on admin
     And I go to "/fr/event"
+    When I go to this page "/fr/event/past"
     When I follow "admin.sheet.link"
     Then the response status code should be 200
     And I should be on this page "/fr/event/1/sheet"

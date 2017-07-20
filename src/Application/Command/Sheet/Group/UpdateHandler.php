@@ -71,9 +71,9 @@ class UpdateHandler
             }
 
             try {
-                $this->userToGroupManagerChecker->isUserToGroupManagerAllowed(
-                    $update->group->getEvent(),
-                    $manager
+                $this->userToGroupManagerChecker->isUserAllowedToManageGroupOnUpdate(
+                    $manager,
+                    $update->group
                 );
                 $update->group->setManager($manager);
                 $isManagerChanged = true;

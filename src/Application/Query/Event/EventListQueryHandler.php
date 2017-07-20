@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -50,38 +50,49 @@ class EventListQueryHandler
      */
     public function handle(EventListQuery $query)
     {
-        $events        = $this->eventRepository->getEventsWithDaysByAdmin($query->admin);
+        $eventListView = [];
         $pastEventDate = clone $this->datetime->modify('-1 month');
-        $currentEvents = [];
-        $pastEvents    = [];
+
+        if ($query->state === EventListQuery::STATE_ARCHIVED) {
+            $events = $this->eventRepository->findArchivedByAdmin($query->admin);
+        } else {
+            $events = $this->eventRepository->getEventsWithDaysByAdmin($query->admin);
+        }
 
         foreach ($events as $event) {
-            $eventListView = new EventListView(
+            $eventView = new EventListView(
                 $event->getId(),
                 $event->getTitle(),
                 $event->getDomain(),
                 $event->getLocales(),
                 $event->getFallback(),
+                $event->isVisible(),
                 array_map(function (Day $day) {
                     return new DayView($day->getStartTime(), $day->getEndTime());
                 }, $event->getDays())
             );
 
-            try {
-                $lastDay = $event->getLastDay();
-            } catch (DayNotDefinedException $dayNotDefinedException) {
-                $currentEvents[] = $eventListView;
-                
-                continue;
+            if ($query->state !== EventListQuery::STATE_ARCHIVED) {
+                try {
+                    $lastDay = $event->getLastDay();
+
+                    if ($lastDay->getDay() < $pastEventDate && $query->state === EventListQuery::STATE_CURRENT) {
+                        continue;
+                    }
+
+                    if ($lastDay->getDay() > $pastEventDate && $query->state === EventListQuery::STATE_PAST) {
+                        continue;
+                    }
+                } catch (DayNotDefinedException $exception) {
+                    if ($query->state === EventListQuery::STATE_PAST) {
+                        continue;
+                    }
+                }
             }
 
-            if ($lastDay->getEndTime() <= $pastEventDate) {
-                $pastEvents[] = $eventListView;
-            } else {
-                $currentEvents[] = $eventListView;
-            }
+            $eventListView[] = $eventView;
         }
 
-        return new EventListsView($currentEvents, $pastEvents);
+        return new EventListsView($eventListView);
     }
 }

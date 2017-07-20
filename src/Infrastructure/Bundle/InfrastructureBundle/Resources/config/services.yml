@@ -1853,6 +1853,32 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@adapter.event_url_generator'
 
+    command.user.phone.update_black_list_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackListHandler
+        arguments:
+            - '@adapter.smsblack_list_adapter'
+            - '@repository.user.user_event_phone_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackList }
+
+    command.event.archive_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ArchiveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    command.event.un_archive_handler:
+        class: Proximum\Vimeet\Application\Command\Event\UnArchiveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    command.event.archive_un_archive_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchiveHandler
+        arguments:
+            - '@command.event.archive_handler'
+            - '@command.event.un_archive_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
+
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
         arguments:
@@ -3228,6 +3254,7 @@ services:
             - '@query.agenda.agenda_day_view_query_handler'
             - '@template.participant_info_guesser'
             - '@domain.key_dates.checker.sms_activation_date_access_checker'
+            - '@repository.user.user_event_phone_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaParticipantViewQuery }
     query.agenda.agenda_day_view_query_handler:
@@ -3912,6 +3939,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.event.user.agenda.version.generate_versions_handler'
+        tags:
+            - { name: console.command }
+
+    command_user.update_smsblack_list_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\User\UpdateSMSBlackListCommand
+        arguments:
+            - '@tactician.commandbus'
         tags:
             - { name: console.command }
 
@@ -5107,6 +5141,12 @@ services:
             - '%ovh_service_name%'
             - '%ovh_sender_name%'
     adapter.smssender_alias: '@adapter.smssender_adapter'
+
+    adapter.smsblack_list_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SMSBlackListAdapter
+        arguments:
+            - '@ovh'
+            - '%ovh_service_name%'
 
     #
     # User Phone

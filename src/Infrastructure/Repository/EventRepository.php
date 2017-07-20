@@ -64,13 +64,37 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback, event.visible)')
             ->from(Event::class, 'event')
             ->orderBy('event.title');
 
         if ($admin->hasEvents()) {
             $queryBuilder
                 ->where('event IN (:events)')
+                ->setParameter('events', $admin->getEvents());
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findArchivedByAdmin(Admin $admin): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event', 'days')
+            ->from(Event::class, 'event')
+            ->leftJoin('event.days', 'days')
+            ->where('event.archived = true')
+            ->addOrderBy('event.title')
+            ->addOrderBy('days.endTime', 'DESC');
+
+        if ($admin->hasEvents()) {
+            $queryBuilder
+                ->andWhere('event IN (:events)')
                 ->setParameter('events', $admin->getEvents());
         }
 
@@ -88,12 +112,13 @@ class EventRepository implements EventRepositoryInterface
             ->select('event', 'days')
             ->from(Event::class, 'event')
             ->leftJoin('event.days', 'days')
+            ->where('event.archived = false')
             ->addOrderBy('event.title')
             ->addOrderBy('days.endTime', 'DESC');
 
         if ($admin->hasEvents()) {
             $queryBuilder
-                ->where('event IN (:events)')
+                ->andWhere('event IN (:events)')
                 ->setParameter('events', $admin->getEvents());
         }
 
@@ -144,7 +169,7 @@ class EventRepository implements EventRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
+            ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback, event.visible)')
             ->from(Event::class, 'event')
             ->orderBy('event.title');
 
