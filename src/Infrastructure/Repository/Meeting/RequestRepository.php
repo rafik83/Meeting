@@ -706,7 +706,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->leftjoin('request.toParticipants', 'toParticipant')
             ->where(
                 'request.state = :approved AND request.disabled = false 
-            AND (fromParticipant.id = :participant OR toParticipant.id = :participant)'
+                AND (fromParticipant.id = :participant OR toParticipant.id = :participant)'
             )
             ->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)')
             ->setParameter('participant', $participant)
@@ -729,7 +729,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->leftjoin('request.toParticipants', 'toParticipant')
             ->where(
                 '(fromParticipant.id = :participant OR toParticipant.id = :participant) 
-            AND request.disabled = false'
+                AND request.disabled = false'
             )
             ->setParameter('participant', $participant)
             ->setMaxResults(1);
