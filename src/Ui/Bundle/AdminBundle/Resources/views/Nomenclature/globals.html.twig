@@ -9,6 +9,6 @@
         {{ include('AdminBundle:Nomenclature:create.html.twig', { 'form': form }, false) }}
     {% endif %}
 
-    {{ include('AdminBundle:Nomenclature:table.html.twig', { 'nomenclatures': nomenclatures }, false) }}
+    {{ include('AdminBundle:Nomenclature:table.html.twig', { 'nomenclatures': nomenclatures, 'tableType': 'global'}, false) }}
 
 {% endblock %}
