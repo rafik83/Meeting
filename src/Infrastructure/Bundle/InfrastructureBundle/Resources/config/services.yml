@@ -4521,6 +4521,10 @@ services:
     #
     adapter.intl_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter
+    adapter.locale_helper_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\LocaleHelperAdapter
+        arguments:
+            - '@sonata.intl.templating.helper.locale'
 
     #
     # Guesser Cache
