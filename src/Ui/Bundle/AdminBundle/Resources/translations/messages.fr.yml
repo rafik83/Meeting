@@ -138,6 +138,7 @@ admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de 
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
+admin.event.create.from.title: 'Créer un événement à partir de'
 admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
