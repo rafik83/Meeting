@@ -3464,6 +3464,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+            - '@adapter.locale_helper_adapter'
     query.navigation.category_program_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler
         arguments:
