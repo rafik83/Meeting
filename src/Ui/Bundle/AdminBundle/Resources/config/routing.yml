@@ -145,7 +145,7 @@ admin_event_create:
     defaults: { _controller: AdminBundle:Event:create }
 
 admin_event_create_from:
-    path: /event/{event}/create
+    path: /event/create/from/{event}
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:create }
 

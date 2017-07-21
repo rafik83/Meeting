@@ -142,6 +142,7 @@ admin.event.create.from.title: 'Créer un événement à partir de'
 admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
+admin.event.duplicate.title: 'Créer un événement à partir de'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.list.currents.title: 'Événements actuels'

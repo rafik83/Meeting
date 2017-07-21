@@ -188,6 +188,8 @@ form.event_configure_date.children.smsActivationDate.label: 'Date d''activation 
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.submit.label: Enregistrer
+form.event_duplicate.children.event.label: 'Événement'
+form.event_duplicate.children.submit.label: 'Créer'
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
 form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'

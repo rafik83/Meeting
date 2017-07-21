@@ -27,4 +27,12 @@ class DuplicateType extends AbstractType
             'multiple' => false,
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'event_duplicate';
+    }
 }
