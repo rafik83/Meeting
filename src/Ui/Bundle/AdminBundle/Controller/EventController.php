@@ -54,11 +54,15 @@ class EventController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, Event $event = null)
+    public function createAction(Request $request, Event $event = null): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $create = new Create($this->getUser());
+        if ($event !== null) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        }
+
+        $create = new Create($this->getUser(), $event);
 
         $form = $this->createForm(CreateType::class, $create, [
             'currentLocale' => $request->getLocale(),
@@ -134,6 +138,8 @@ class EventController extends Controller
      */
     public function duplicateAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
         $duplicateForm = $this->createForm(DuplicateType::class, [], [
             'submit' => true,
         ]);
@@ -230,7 +236,6 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.event.paymentConditions.update.success');
 
