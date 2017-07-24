@@ -46,11 +46,11 @@ class CatalogVisibility
      */
     public function __construct(Event $event, bool $hasMessage = true)
     {
-        $this->event = $event;
-        $this->types = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->event               = $event;
+        $this->types               = new ArrayCollection();
+        $this->categories          = new ArrayCollection();
         $this->messageTranslations = new ArrayCollection();
-        $this->hasMessage = $hasMessage;
+        $this->hasMessage          = $hasMessage;
     }
 
     /**

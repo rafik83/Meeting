@@ -37,8 +37,12 @@ class CatalogVisibilityTranslation
      *
      * @internal param int $id
      */
-    public function __construct(CatalogVisibility $catalogVisibility, string $title, string $content, string $locale)
-    {
+    public function __construct(
+        CatalogVisibility $catalogVisibility,
+        string $title,
+        string $content,
+        string $locale
+    ) {
         $this->title             = $title;
         $this->content           = $content;
         $this->locale            = $locale;
