@@ -29,16 +29,28 @@ class CatalogVisibility
     /** @var ArrayCollection of Category */
     private $categories;
 
+    /** @var bool */
+    private $hasMessage;
+
+    /**
+     * @var ArrayCollection of CatalogVisibilityTranslation
+     * @see CatalogVisibilityTranslation
+     */
+    private $messageTranslations;
+
     /**
      * CatalogVisibility constructor.
      *
      * @param Event $event
+     * @param bool  $hasMessage
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, bool $hasMessage = true)
     {
         $this->event = $event;
         $this->types = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->messageTranslations = new ArrayCollection();
+        $this->hasMessage = $hasMessage;
     }
 
     /**
