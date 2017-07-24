@@ -50,6 +50,16 @@ class CatalogVisibilityTranslation
     }
 
     /**
+     * @param string $title
+     * @param string $content
+     */
+    public function update(string $title, string $content)
+    {
+        $this->title   = $title;
+        $this->content = $content;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -79,5 +89,21 @@ class CatalogVisibilityTranslation
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent(string $content)
+    {
+        $this->content = $content;
     }
 }

@@ -25,15 +25,11 @@ class CatalogVisibilityTranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('content', TextareaType::class);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(['data_class' => CatalogVisibilityTranslation::class]);
+            ->add('title', TextType::class, [
+                'required' => false,
+            ])
+            ->add('content', TextareaType::class, [
+                'required' => false,
+            ]);
     }
 }

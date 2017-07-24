@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
-use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibilityTranslation;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -40,7 +39,7 @@ class Configure
     /** @var bool */
     public $hasMessage;
 
-    /** @var array */
+    /** @var array of CatalogVisibilityTranslation index by locale */
     public $messageTranslations;
 
     /**
@@ -58,14 +57,16 @@ class Configure
         $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
         $this->types                  = $catalogVisibility->getTypes();
         $this->categories             = $catalogVisibility->getCategories();
+        $this->hasMessage             = $catalogVisibility->hasMessage();
 
         foreach ($event->getLocales() as $locale) {
-            $this->messageTranslations[$locale] = new CatalogVisibilityTranslation(
-                $catalogVisibility,
-                '',
-                '',
-                $locale
-            );
+            if (($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale)) !== null) {
+                $this->messageTranslations[$locale]['title']   = $catalogVisibilityTranslation->getTitle();
+                $this->messageTranslations[$locale]['content'] = $catalogVisibilityTranslation->getContent();
+            } else {
+                $this->messageTranslations[$locale]['title']   = '';
+                $this->messageTranslations[$locale]['content'] = '';
+            }
         }
     }
 }

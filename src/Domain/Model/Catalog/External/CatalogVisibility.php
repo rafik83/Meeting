@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Catalog\External;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -161,5 +162,65 @@ class CatalogVisibility
     {
         $this->updateTypes($types);
         $this->updateCategories($categories);
+    }
+
+    /**
+     * @param bool $state
+     *
+     * @return CatalogVisibility
+     */
+    public function enableMessage(bool $state)
+    {
+        $this->hasMessage = $state;
+
+        return $this;
+    }
+
+    /**
+     * @param string $title
+     * @param string $content
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function translate($title, $content, string $locale)
+    {
+        if ($this->messageTranslations->containsKey($locale)) {
+            $this->messageTranslations->get($locale)->update($title, $content);
+        } else {
+            $this->messageTranslations->set($locale, new CatalogVisibilityTranslation(
+                $this, $title, $content, $locale
+            ));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMessage(): bool
+    {
+        return $this->hasMessage;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return CatalogVisibilityTranslation|null
+     */
+    public function getMessage(string $locale): ?CatalogVisibilityTranslation
+    {
+        return $this->messageTranslations->containsKey($locale) ?
+            $this->messageTranslations->get($locale) :
+            null;
+    }
+
+    /**
+     * @return ArrayCollection|PersistentCollection
+     */
+    public function getMessageTranslations()
+    {
+        return $this->messageTranslations;
     }
 }

@@ -2,6 +2,8 @@ Proximum\Vimeet\Application\Command\Schedule\Configure:
     properties:
         event:
             - NotBlank: ~
+        hasMessage:
+            - NotNull: ~
         scale:
             - NotBlank: ~
             - Type: { type: integer }
