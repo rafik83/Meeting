@@ -15,7 +15,6 @@ class Version20170724084018 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE catalog_visibility_translation (id INT AUTO_INCREMENT NOT NULL, catalog_visibility_id INT NOT NULL, title VARCHAR(255) NOT NULL, content VARCHAR(255) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_9E96BD7CCBF8E70D (catalog_visibility_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');

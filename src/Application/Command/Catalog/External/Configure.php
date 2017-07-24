@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
+use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibilityTranslation;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -36,6 +37,12 @@ class Configure
     /** @var CatalogVisibility */
     public $catalogVisibility;
 
+    /** @var bool */
+    public $hasMessage;
+
+    /** @var array */
+    public $messageTranslations;
+
     /**
      * Configure constructor.
      *
@@ -45,11 +52,20 @@ class Configure
      */
     public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
     {
-        $this->event = $event;
-        $this->catalogVisibility = $catalogVisibility;
-        $this->searchFacets = $searchFacets;
+        $this->event                  = $event;
+        $this->catalogVisibility      = $catalogVisibility;
+        $this->searchFacets           = $searchFacets;
         $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
-        $this->types = $catalogVisibility->getTypes();
-        $this->categories = $catalogVisibility->getCategories();
+        $this->types                  = $catalogVisibility->getTypes();
+        $this->categories             = $catalogVisibility->getCategories();
+
+        foreach ($event->getLocales() as $locale) {
+            $this->messageTranslations[$locale] = new CatalogVisibilityTranslation(
+                $catalogVisibility,
+                '',
+                '',
+                $locale
+            );
+        }
     }
 }

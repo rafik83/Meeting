@@ -40,7 +40,9 @@ class CatalogVisibilityManager
      */
     public function create(Event $event, array $types = [], array $categories = []): CatalogVisibility
     {
-        $catalogVisibility = new CatalogVisibility($event, $types, $categories);
+        $catalogVisibility = new CatalogVisibility($event);
+        $catalogVisibility->updateTypes($types);
+        $catalogVisibility->updateCategories($categories);
 
         $this->catalogVisibilityRepository->add($catalogVisibility);
 
