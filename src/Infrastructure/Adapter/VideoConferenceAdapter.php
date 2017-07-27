@@ -17,6 +17,11 @@ use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 class VideoConferenceAdapter implements VideoConferenceInterface
 {
     /**
+     * @var string
+     */
+    private $apiKey;
+
+    /**
      * @var OpenTok
      */
     private $openTok;
@@ -29,13 +34,12 @@ class VideoConferenceAdapter implements VideoConferenceInterface
      */
     public function __construct(string $apiKey, string $apiSecret)
     {
+        $this->apiKey = $apiKey;
         $this->openTok = new OpenTok($apiKey, $apiSecret);
     }
 
     /**
-     * @param array $options
-     *
-     * @return Session
+     * {@inheritdoc}
      */
     public function createSession(array $options = []): Session
     {
@@ -43,13 +47,18 @@ class VideoConferenceAdapter implements VideoConferenceInterface
     }
 
     /**
-     * @param Session $session
-     * @param array   $options
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function generateAccessToken(Session $session, array $options = []): string
     {
         return $this->openTok->generateToken($session->getSessionId(),$options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
     }
 }

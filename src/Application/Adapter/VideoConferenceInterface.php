@@ -28,4 +28,9 @@ interface VideoConferenceInterface
      * @return string
      */
     public function generateAccessToken(Session $session, array $options = []): string;
+
+    /**
+     * @return string
+     */
+    public function getApiKey(): string;
 }

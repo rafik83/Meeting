@@ -3196,6 +3196,7 @@ services:
         arguments:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
             - '@repository.rule_repository'
+            - '@query.meeting.video_conference_view_query_handler'
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
         arguments:
@@ -3616,6 +3617,14 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery }
+
+    query.meeting.video_conference_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQueryHandler
+        arguments:
+            - '@adapter.video_conference_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQuery }
+
     query.meeting.message.message_meeting_request_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\Message\MessageMeetingRequestViewQueryHandler
     query.meeting.message.discussion_meeting_request_view_query_handler:

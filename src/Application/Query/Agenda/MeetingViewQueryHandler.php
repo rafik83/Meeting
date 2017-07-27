@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
@@ -28,15 +30,23 @@ class MeetingViewQueryHandler
     private $ruleRepository;
 
     /**
+     * @var VideoConferenceViewQueryHandler
+     */
+    private $videoConferenceViewQueryHandler;
+
+    /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
+     * @param VideoConferenceViewQueryHandler    $videoConferenceViewQueryHandler
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
-        RuleRepositoryInterface $ruleRepository
+        RuleRepositoryInterface $ruleRepository,
+        VideoConferenceViewQueryHandler $videoConferenceViewQueryHandler
     ) {
-        $this->participantHandler = $participantHandler;
-        $this->ruleRepository     = $ruleRepository;
+        $this->participantHandler              = $participantHandler;
+        $this->ruleRepository                  = $ruleRepository;
+        $this->videoConferenceViewQueryHandler = $videoConferenceViewQueryHandler;
     }
 
     /**
@@ -46,9 +56,9 @@ class MeetingViewQueryHandler
      */
     public function handle(MeetingViewQuery $query)
     {
-        $userSheet = $query->meeting->getSheetOfUser($query->user);
-        $sheetMet = $query->meeting->getSheetMet($userSheet);
-        $rules = $this
+        $userSheet    = $query->meeting->getSheetOfUser($query->user);
+        $sheetMet     = $query->meeting->getSheetMet($userSheet);
+        $rules        = $this
             ->ruleRepository
             ->getBySeerTypeAndSeeableType($query->currentSheet->getType(), $sheetMet->getType());
         $participants = [];
@@ -60,7 +70,19 @@ class MeetingViewQueryHandler
         }
 
         $isSheetDetailsSeeAble = !empty($rules);
-        
+        $userParticipant = $query->meeting->getParticipantForUserAndSheet($query->user, $userSheet);
+
+        if ($query->meeting->getSpot()->isVisio() && $userParticipant !== null && $userParticipant->isVisio()) {
+            $videoConferenceView = $this->videoConferenceViewQueryHandler->handle(
+                new VideoConferenceViewQuery(
+                    $query->meeting,
+                    $query->meeting->getSlot(),
+                    $query->meeting->getSpot()
+                )
+            );
+        }
+
+
         $meeting = new MeetingView(
             $userSheet->getTitle(),
             $sheetMet->getId(),
@@ -73,7 +95,9 @@ class MeetingViewQueryHandler
             $query->event->getConfiguration()->getRightColor(),
             $participants,
             $isSheetDetailsSeeAble,
-            $query->isUserParticipantMultipleSheets
+            $query->isUserParticipantMultipleSheets,
+            $query->meeting->getSpot()->isVisio(),
+            $videoConferenceView ?? null
         );
 
         return $meeting;

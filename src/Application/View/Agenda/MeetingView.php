@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
+use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 
 class MeetingView extends AbstractTimeEntityView
 {
@@ -50,6 +51,12 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     public $isUserParticipantMultipleSheets;
 
+    /** @var bool */
+    private $isVisio;
+
+    /** @var null|VideoConferenceView */
+    private $videoConferenceView;
+
     /**
      * @param string                   $userSheetTitle
      * @param int                      $sheetMetId
@@ -63,6 +70,8 @@ class MeetingView extends AbstractTimeEntityView
      * @param MeetingParticipantView[] $participants
      * @param bool                     $isSheetDetailsSeeAble
      * @param bool                     $isUserParticipantMultipleSheets
+     * @param bool                     $isVisio
+     * @param VideoConferenceView|null $videoConferenceView
      */
     public function __construct(
         $userSheetTitle,
@@ -76,7 +85,9 @@ class MeetingView extends AbstractTimeEntityView
         $rightColor,
         array $participants,
         $isSheetDetailsSeeAble = false,
-        $isUserParticipantMultipleSheets = false
+        $isUserParticipantMultipleSheets = false,
+        bool $isVisio = false,
+        VideoConferenceView $videoConferenceView = null
     ) {
         $this->userSheetTitle        = $userSheetTitle;
         $this->sheetMetId            = $sheetMetId;
@@ -90,13 +101,31 @@ class MeetingView extends AbstractTimeEntityView
         $this->participants          = $participants;
         $this->isSheetDetailsSeeAble = $isSheetDetailsSeeAble;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
+        $this->isVisio = $isVisio;
+        $this->videoConferenceView = $videoConferenceView;
     }
 
     /**
      * @return \DateInterval
      */
-    public function getDuration()
+    public function getDuration(): \DateInterval
     {
         return $this->end->diff($this->begin);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisio(): bool
+    {
+        return $this->isVisio;
+    }
+
+    /**
+     * @return null|VideoConferenceView
+     */
+    public function getVideoConference(): ?VideoConferenceView
+    {
+        return $this->videoConferenceView;
     }
 }
