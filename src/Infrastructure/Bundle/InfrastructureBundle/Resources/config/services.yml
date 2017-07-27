@@ -2054,6 +2054,12 @@ services:
             - '@adapter.event_url_generator'
             - '@router'
 
+    adapter.video_conference_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter
+        arguments:
+            - '%tokbox_api_key%'
+            - '%tokbox_api_secret%'
+
     #
     # Components
     #

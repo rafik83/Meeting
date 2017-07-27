@@ -52,7 +52,8 @@
         "jms/job-queue-bundle": "^1.4.0",
         "sentry/sentry-symfony": "^0.7.1",
         "tilleuls/ovh-bundle": "^1.0.1",
-        "behat/behat": "^3.3.1"
+        "behat/behat": "^3.3.1",
+        "opentok/opentok": "^3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

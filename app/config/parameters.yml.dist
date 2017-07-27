@@ -64,3 +64,6 @@ parameters:
     ovh_consumer_key:       'thisConsumerKeyIsNotSecretYouShouldChangeIt'
     ovh_service_name:       'thisServiceNameIsNotSecretYouShouldChangeIt'
     ovh_sender_name:        'thisSenderNameIsNotSecretYouShouldChangeIt'
+
+    tokbox_api_key: ~
+    tokbox_api_secret: ~
