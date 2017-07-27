@@ -22,6 +22,13 @@ interface VideoConferenceInterface
     public function createSession(array $options = []): Session;
 
     /**
+     * @param string $sessionId
+     *
+     * @return Session
+     */
+    public function getSession(string $sessionId): Session;
+
+    /**
      * @param Session $session
      * @param array   $options
      *

@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\VideoConferenceToken:
+    type:  entity
+    table: video_conference_token
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        token:
+            type: string
+    manyToOne:
+        videoConference:
+            targetEntity: Proximum\Vimeet\Domain\Model\VideoConference
+            joinColumn:
+                onDelete: CASCADE
+            cascade: ["persist"]
+            inversedBy: tokens
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+                cascade: ["persist"]

@@ -729,3 +729,14 @@ event_user_event_phone_validate_code_success:
         token: \w+
     methods: [GET]
     defaults: { _controller: EventBundle:User/Phone/Validate:validateSuccess }
+
+#
+# VideoConference
+#
+event_video_conference_request_access:
+    path: /video/{meeting}/request/access
+    requirements:
+        meeting: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:VideoConference:requestAccess }
+

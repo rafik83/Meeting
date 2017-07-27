@@ -300,6 +300,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Adapter\JobRepositoryAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.video_conference_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\VideoConferenceRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1899,6 +1903,14 @@ services:
             - '@domain.product.remove_authorization_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Remove\Remove }
+
+    command.video_conference.connect_session_handler:
+        class: Proximum\Vimeet\Application\Command\VideoConference\ConnectSessionHandler
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@repository.video_conference_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\ConnectSession }
 
     #
     # Post Batch Action

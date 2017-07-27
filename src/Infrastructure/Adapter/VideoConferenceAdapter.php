@@ -61,4 +61,14 @@ class VideoConferenceAdapter implements VideoConferenceInterface
     {
         return $this->apiKey;
     }
+
+    /**
+     * @param string $sessionId
+     *
+     * @return Session
+     */
+    public function getSession(string $sessionId): Session
+    {
+        return new Session($this->openTok, $sessionId);
+    }
 }
