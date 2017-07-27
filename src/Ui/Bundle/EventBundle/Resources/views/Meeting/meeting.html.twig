@@ -1,4 +1,5 @@
 <div class="has-details meet"
+     data-meeting-id="{{ meeting.id }}"
      data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}"
      data-duration="{{ meeting.duration.format('%H:%I') }}"
         {% if meeting.visio %}
@@ -24,9 +25,9 @@
         <div class="row">
             <div class="col-md-12">
                 {% if meeting.visio %}
-                    <div class="videos">
-                        <div class="subscriber"></div>
-                        <div class="publisher"></div>
+                    <div id="videos">
+                        <div id="publisher-{{ meeting.id }}"></div>
+                        <div id="subscriber-{{ meeting.id }}"></div>
                     </div>
                 {% endif %}
                 <div class="list list--users">

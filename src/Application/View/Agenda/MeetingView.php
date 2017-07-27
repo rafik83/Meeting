@@ -15,6 +15,9 @@ use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 
 class MeetingView extends AbstractTimeEntityView
 {
+    /** @var int */
+    public $id;
+
     /** @var string */
     public $userSheetTitle;
 
@@ -44,7 +47,7 @@ class MeetingView extends AbstractTimeEntityView
 
     /** @var string */
     public $rightColor;
-    
+
     /** @var bool */
     public $isSheetDetailsSeeAble;
 
@@ -58,6 +61,7 @@ class MeetingView extends AbstractTimeEntityView
     private $videoConferenceView;
 
     /**
+     * @param int                      $id
      * @param string                   $userSheetTitle
      * @param int                      $sheetMetId
      * @param string                   $sheetMetTitle
@@ -74,6 +78,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param VideoConferenceView|null $videoConferenceView
      */
     public function __construct(
+        int $id,
         $userSheetTitle,
         $sheetMetId,
         $sheetMetTitle,
@@ -89,20 +94,21 @@ class MeetingView extends AbstractTimeEntityView
         bool $isVisio = false,
         VideoConferenceView $videoConferenceView = null
     ) {
-        $this->userSheetTitle        = $userSheetTitle;
-        $this->sheetMetId            = $sheetMetId;
-        $this->sheetMetTitle         = $sheetMetTitle;
-        $this->spotRef               = $spotRef;
-        $this->begin                 = $begin;
-        $this->end                   = $end;
-        $this->timeZone              = $timeZone;
-        $this->leftColor             = $leftColor;
-        $this->rightColor            = $rightColor;
-        $this->participants          = $participants;
-        $this->isSheetDetailsSeeAble = $isSheetDetailsSeeAble;
+        $this->id                              = $id;
+        $this->userSheetTitle                  = $userSheetTitle;
+        $this->sheetMetId                      = $sheetMetId;
+        $this->sheetMetTitle                   = $sheetMetTitle;
+        $this->spotRef                         = $spotRef;
+        $this->begin                           = $begin;
+        $this->end                             = $end;
+        $this->timeZone                        = $timeZone;
+        $this->leftColor                       = $leftColor;
+        $this->rightColor                      = $rightColor;
+        $this->participants                    = $participants;
+        $this->isSheetDetailsSeeAble           = $isSheetDetailsSeeAble;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
-        $this->isVisio = $isVisio;
-        $this->videoConferenceView = $videoConferenceView;
+        $this->isVisio                         = $isVisio;
+        $this->videoConferenceView             = $videoConferenceView;
     }
 
     /**

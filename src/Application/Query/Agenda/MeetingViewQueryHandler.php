@@ -84,6 +84,7 @@ class MeetingViewQueryHandler
 
 
         $meeting = new MeetingView(
+            $query->meeting->getId(),
             $userSheet->getTitle(),
             $sheetMet->getId(),
             $sheetMet->getTitle(),
