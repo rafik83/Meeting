@@ -36,10 +36,6 @@ class VideoConferenceController extends Controller
             return new JsonResponse('Meeting is not visio', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (!$request->isXmlHttpRequest()) {
-            throw new AccessDeniedException();
-        }
-
         $videoConferenceView = $this->get('tactician.commandbus')->handle(
             new ConnectSession($meeting, $this->getUser())
         );

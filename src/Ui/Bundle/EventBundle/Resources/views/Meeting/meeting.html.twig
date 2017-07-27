@@ -3,10 +3,8 @@
      data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}"
      data-duration="{{ meeting.duration.format('%H:%I') }}"
         {% if meeting.visio %}
+            data-visio-callback="{{ path('event_video_conference_request_access', {'meeting': meeting.id}) }}"
             data-isVisio="{{ meeting.visio }}"
-            data-apiKey="{{ meeting.videoConference.apiKey }}"
-            data-sessionId="{{ meeting.videoConference.sessionId }}"
-            data-token="{{ meeting.videoConference.token }}"
         {% endif %}
 >
     <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">

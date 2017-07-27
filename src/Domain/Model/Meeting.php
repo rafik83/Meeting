@@ -404,23 +404,6 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
-     * @param User  $user
-     * @param Sheet $sheet
-     *
-     * @return null|Participant
-     */
-    public function getParticipantForUserAndSheet(User $user, Sheet $sheet): ?Participant
-    {
-        foreach ($this->getParticipants($sheet) as $participant) {
-            if($participant->getUser()->getId() === $user->getId()) {
-                return $participant;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @return Sheet[]
      */
     public function getSheets()

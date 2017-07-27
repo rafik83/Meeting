@@ -55,7 +55,8 @@ class ConnectSessionHandler
 
             if ($token === null) {
                 $token = $this->videoConference->generateAccessToken(
-                    $this->videoConference->getSession($videoConference->getSessionId())
+                    $this->videoConference->getSession($videoConference->getSessionId()),
+                    $connectSession->meeting->getSlot()
                 );
             }
 
@@ -67,7 +68,7 @@ class ConnectSessionHandler
         }
 
         $session = $this->videoConference->createSession();
-        $token   = $this->videoConference->generateAccessToken($session);
+        $token   = $this->videoConference->generateAccessToken($session, $connectSession->meeting->getSlot());
 
         $this->videoConferenceRepository->set(
             new VideoConference($session->getSessionId(), $connectSession->meeting)

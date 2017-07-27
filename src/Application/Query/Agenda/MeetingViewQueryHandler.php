@@ -30,23 +30,15 @@ class MeetingViewQueryHandler
     private $ruleRepository;
 
     /**
-     * @var VideoConferenceViewQueryHandler
-     */
-    private $videoConferenceViewQueryHandler;
-
-    /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
-     * @param VideoConferenceViewQueryHandler    $videoConferenceViewQueryHandler
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
-        RuleRepositoryInterface $ruleRepository,
-        VideoConferenceViewQueryHandler $videoConferenceViewQueryHandler
+        RuleRepositoryInterface $ruleRepository
     ) {
-        $this->participantHandler              = $participantHandler;
-        $this->ruleRepository                  = $ruleRepository;
-        $this->videoConferenceViewQueryHandler = $videoConferenceViewQueryHandler;
+        $this->participantHandler = $participantHandler;
+        $this->ruleRepository     = $ruleRepository;
     }
 
     /**
@@ -70,18 +62,6 @@ class MeetingViewQueryHandler
         }
 
         $isSheetDetailsSeeAble = !empty($rules);
-        $userParticipant = $query->meeting->getParticipantForUserAndSheet($query->user, $userSheet);
-
-        if ($query->meeting->getSpot()->isVisio() && $userParticipant !== null && $userParticipant->isVisio()) {
-            $videoConferenceView = $this->videoConferenceViewQueryHandler->handle(
-                new VideoConferenceViewQuery(
-                    $query->meeting,
-                    $query->meeting->getSlot(),
-                    $query->meeting->getSpot()
-                )
-            );
-        }
-
 
         $meeting = new MeetingView(
             $query->meeting->getId(),

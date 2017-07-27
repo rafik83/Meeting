@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use OpenTok\OpenTok;
+use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class VideoConferenceAdapter implements VideoConferenceInterface
 {
@@ -49,9 +51,19 @@ class VideoConferenceAdapter implements VideoConferenceInterface
     /**
      * {@inheritdoc}
      */
-    public function generateAccessToken(Session $session, array $options = []): string
+    public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string
     {
-        return $this->openTok->generateToken($session->getSessionId(),$options);
+        $slotEndDate    = clone $slot->getEnd();
+        $sessionEndDate = $slotEndDate->modify('+15 min');
+
+        $defaultOption = [
+            'role' => Role::PUBLISHER,
+//            'expireTime' => $sessionEndDate->getTimeStamp()
+        ];
+
+        return $this->openTok->generateToken($session->getSessionId(),array_merge(
+            $defaultOption, $options
+        ));
     }
 
     /**

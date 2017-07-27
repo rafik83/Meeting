@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Adapter;
 
 use OpenTok\Session;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 interface VideoConferenceInterface
 {
@@ -29,12 +30,13 @@ interface VideoConferenceInterface
     public function getSession(string $sessionId): Session;
 
     /**
-     * @param Session $session
-     * @param array   $options
+     * @param Session     $session
+     * @param MeetingSlot $slot
+     * @param array       $options
      *
      * @return string
      */
-    public function generateAccessToken(Session $session, array $options = []): string;
+    public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string;
 
     /**
      * @return string

@@ -1,25 +1,49 @@
 'use strict';
 
 var tokbox = require('@opentok/client');
+var axios = require('axios');
 
+/**
+ * @param {Node} element
+ * @constructor
+ */
 function VideoConference(element) {
     this.element = element;
 
-    if (tokbox.checkSystemRequirements() === 1) {
-        this.session = tokbox.initSession(this.element.dataset.apikey, this.element.dataset.sessionid);
-
-        // Event Listener
-        this.element.querySelector('.start-visio').addEventListener('click', this.connect.bind(this));
-        this.element.querySelector('.end-visio').addEventListener('click', this.disconnect.bind(this));
-        this.session.on('streamCreated', this.subscribe.bind(this));
-    }
+    // Event Listener
+    this.element.querySelector('.start-visio').addEventListener('click', this.requestAccess.bind(this));
+    this.element.querySelector('.end-visio').addEventListener('click', this.disconnect.bind(this));
 }
 
-VideoConference.prototype.connect = function () {
+VideoConference.prototype.requestAccess = function () {
+    var url = this.element.dataset.visioCallback;
+
+    axios.get(url).then(function (response) {
+        this.init(response.data.apiKey, response.data.sessionId, response.data.token);
+    }.bind(this));
+};
+
+/**
+ * @param {string} apiKey
+ * @param {string} sessionId
+ * @param {string} token
+ */
+VideoConference.prototype.init = function (apiKey, sessionId, token) {
+    if (tokbox.checkSystemRequirements() === 1) {
+        this.session = tokbox.initSession(apiKey, sessionId);
+        this.session.on('streamCreated', this.subscribe.bind(this));
+        this.connect(token);
+    }
+};
+
+/**
+ * @param {string} token
+ */
+VideoConference.prototype.connect = function (token) {
     this.element.querySelector('.start-visio').classList.toggle('hide');
     this.element.querySelector('.end-visio').classList.toggle('hide');
 
-    this.session.connect(this.element.dataset.token, function (error) {
+    this.session.connect(token, function (error) {
         if (!error) {
             // create video view
             var publisher = this.initPublisher();
