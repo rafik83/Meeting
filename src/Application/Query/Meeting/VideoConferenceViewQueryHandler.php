@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
+use OpenTok\Role;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 
@@ -43,9 +44,14 @@ class VideoConferenceViewQueryHandler
         $sessionEndDate = $slotEndDate->modify('+15 min');
 
         $token = $this->videoConference->generateAccessToken($session, [
-            'expireTime' => $sessionEndDate->getTimeStamp()
+            'role' => Role::PUBLISHER,
+//            'expireTime' => $sessionEndDate->getTimeStamp()
         ]);
 
-        return new VideoConferenceView($token, $this->videoConference->getApiKey());
+        return new VideoConferenceView(
+            $token,
+            $session->getSessionId(),
+            $this->videoConference->getApiKey()
+        );
     }
 }

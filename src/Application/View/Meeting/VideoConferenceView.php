@@ -23,14 +23,21 @@ class VideoConferenceView
     public $apiKey;
 
     /**
+     * @var string
+     */
+    public $sessionId;
+
+    /**
      * VideoConferenceView constructor.
      *
      * @param string $token
+     * @param string $sessionId
      * @param string $apiKey
      */
-    public function __construct(string $token, string $apiKey)
+    public function __construct(string $token, string $sessionId, string $apiKey)
     {
         $this->token  = $token;
         $this->apiKey = $apiKey;
+        $this->sessionId = $sessionId;
     }
 }
