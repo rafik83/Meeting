@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
-class ConnectSessionHandler
+class RequestAccessHandler
 {
     /**
      * @var VideoConferenceRepositoryInterface
@@ -28,7 +28,7 @@ class ConnectSessionHandler
     private $videoConference;
 
     /**
-     * ConnectSessionHandler constructor.
+     * RequestAccessHandler constructor.
      *
      * @param VideoConferenceInterface           $videoConference
      * @param VideoConferenceRepositoryInterface $videoConferenceRepository
@@ -42,11 +42,11 @@ class ConnectSessionHandler
     }
 
     /**
-     * @param ConnectSession $connectSession
+     * @param RequestAccess $connectSession
      *
      * @return VideoConferenceView
      */
-    public function handle(ConnectSession $connectSession): VideoConferenceView
+    public function handle(RequestAccess $connectSession): VideoConferenceView
     {
         $videoConference = $this->videoConferenceRepository->findByMeeting($connectSession->meeting);
 
@@ -70,7 +70,7 @@ class ConnectSessionHandler
         $session = $this->videoConference->createSession();
         $token   = $this->videoConference->generateAccessToken($session, $connectSession->meeting->getSlot());
 
-        $this->videoConferenceRepository->set(
+        $this->videoConferenceRepository->add(
             new VideoConference($session->getSessionId(), $connectSession->meeting)
         );
 

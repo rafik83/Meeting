@@ -3,12 +3,20 @@
 var tokbox = require('@opentok/client');
 var axios = require('axios');
 
+var Publisher = require('./Publisher');
+var Subscriber = require('./Subscriber');
+
 /**
  * @param {Node} element
  * @constructor
  */
 function VideoConference(element) {
     this.element = element;
+
+    this.publisherContainer = element.querySelector('#publisher-' + element.dataset.meetingId);
+    this.subscriberContainer = element.querySelector('#subscriber-' + element.dataset.meetingId);
+
+    this.publisher = new Publisher(this.publisherContainer);
 
     // Event Listener
     this.element.querySelector('.start-visio').addEventListener('click', this.requestAccess.bind(this));
@@ -31,7 +39,11 @@ VideoConference.prototype.requestAccess = function () {
 VideoConference.prototype.init = function (apiKey, sessionId, token) {
     if (tokbox.checkSystemRequirements() === 1) {
         this.session = tokbox.initSession(apiKey, sessionId);
-        this.session.on('streamCreated', this.subscribe.bind(this));
+
+        var subscriber = new Subscriber(this.session, this.subscriberContainer);
+
+        // The Session object dispatches a streamCreated event when a new stream (other than your own) is created in a session
+        this.session.on('streamCreated', subscriber.subscribe.bind(subscriber));
         this.connect(token);
     }
 };
@@ -46,10 +58,11 @@ VideoConference.prototype.connect = function (token) {
     this.session.connect(token, function (error) {
         if (!error) {
             // create video view
-            var publisher = this.initPublisher();
+            var publisher = this.publisher.create();
 
             // publish video to other participant
             this.session.publish(publisher, this.handleError);
+            this.publisherContainer.classList.toggle('hide');
         } else {
             console.log(error);
         }
@@ -58,39 +71,12 @@ VideoConference.prototype.connect = function (token) {
 
 VideoConference.prototype.disconnect = function () {
     this.session.disconnect();
+
     this.element.querySelector('.start-visio').classList.toggle('hide');
     this.element.querySelector('.end-visio').classList.toggle('hide');
-};
 
-VideoConference.prototype.subscribe = function (event) {
-    var selector = 'subscriber-' + this.element.dataset.meetingId;
-
-    var subscriberOptions = {
-        insertMode: 'replace',
-        width: '500px',
-        height: '500px'
-    };
-
-    this.session.subscribe(event.stream, selector, subscriberOptions, this.handleError);
-};
-
-/**
- * The Publisher object represents the view of a video you publish
- */
-VideoConference.prototype.initPublisher = function () {
-    var publisherOptions = {
-        insertMode: 'replace',
-        width: '500px',
-        height: '500px',
-        accessAllowed: true
-    };
-
-    var selector = 'publisher-' + this.element.dataset.meetingId;
-
-    this.element.querySelector('#' + selector).style.width = '500px';
-    this.element.querySelector('#' + selector).style.height = '500px';
-
-    return tokbox.initPublisher(selector, publisherOptions, this.handleError);
+    this.publisherContainer.classList.toggle('hide');
+    this.subscriberContainer.classList.toggle('hide');
 };
 
 VideoConference.prototype.handleError = function (error) {

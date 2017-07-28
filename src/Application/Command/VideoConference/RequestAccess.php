@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\VideoConference;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ConnectSession
+class RequestAccess
 {
     /**
      * @var Meeting

@@ -1905,12 +1905,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Remove\Remove }
 
     command.video_conference.connect_session_handler:
-        class: Proximum\Vimeet\Application\Command\VideoConference\ConnectSessionHandler
+        class: Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler
         arguments:
             - '@adapter.video_conference_adapter'
             - '@repository.video_conference_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\ConnectSession }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestAccess }
 
     #
     # Post Batch Action

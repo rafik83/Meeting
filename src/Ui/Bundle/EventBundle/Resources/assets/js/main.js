@@ -21,7 +21,7 @@ var $                     = require('jquery'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType   = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination     = require('./components/_CatalogPagination'),
-    VideoConference       = require('./components/_VideoConference')
+    VideoConference       = require('./components/VideoConference/_VideoConference')
 ;
 
 require('bootstrap');
