@@ -15,4 +15,4 @@
       - app_(\w*)_patterns
   roles:
     - manala.skeleton
-    - elao.https
+    - vimeet-https
