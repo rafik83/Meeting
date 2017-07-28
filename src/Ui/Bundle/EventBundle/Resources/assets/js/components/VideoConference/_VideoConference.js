@@ -15,6 +15,7 @@ function VideoConference(element) {
 
     this.publisherContainer = element.querySelector('#publisher-' + element.dataset.meetingId);
     this.subscriberContainer = element.querySelector('#subscriber-' + element.dataset.meetingId);
+    this.helperContainer = element.querySelector('#video-' + element.dataset.meetingId + ' > .video-helper');
 
     this.publisher = new Publisher(this.publisherContainer);
 
@@ -49,6 +50,7 @@ VideoConference.prototype.init = function (apiKey, sessionId, token) {
 
             var subscriber = new Subscriber(this.session, this.subscriberContainer);
             subscriber.subscribe(event);
+            this.helperContainer.classList.toggle('hide');
         }.bind(this));
 
         this.connect(token);
@@ -70,6 +72,7 @@ VideoConference.prototype.connect = function (token) {
             // publish video to other participant
             this.session.publish(publisher, this.handleError);
             this.publisherContainer.classList.toggle('hide');
+            this.helperContainer.classList.toggle('hide');
         } else {
             console.log(error);
         }

@@ -23,16 +23,19 @@ Subscriber.prototype.subscribe = function (event) {
     var subscriber = this.session.subscribe(event.stream, this.container.id, subscriberOptions, this.handleError);
 
     subscriber.on('disconnected', function () {
+        this.container.classList.toggle('hide');
         console.log('disconnected');
-    });
+    }.bind(this));
 
     subscriber.on('destroyed', function () {
+        this.container.classList.toggle('hide');
         console.log('destroyed')
-    });
+    }.bind(this));
 
     subscriber.on('connected', function () {
+        this.container.classList.toggle('hide');
         console.log('connected');
-    });
+    }.bind(this));
 };
 
 Subscriber.prototype.handleError = function (error) {

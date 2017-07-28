@@ -396,3 +396,4 @@ catalog.external.modal.content: 'Pour accéder à ce contenu, vous devez être i
 catalog.external.modal.content.logged: 'La prise de rendez-vous sera accessible le %catalogOnlineDate%.'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.end: 'Arrêter le RDV'
+meeting.video.waitingForParticipant: "En attente d'un participant"

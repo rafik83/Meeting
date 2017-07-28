@@ -1,5 +1,5 @@
 pre-commit:
-    enabled: true
+    enabled: false
     execute:
         composer: false
         jsonlint: true
