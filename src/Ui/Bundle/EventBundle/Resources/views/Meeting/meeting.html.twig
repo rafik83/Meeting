@@ -49,8 +49,12 @@
             {% endif %}
             <div class="actions">
                 {% if meeting.visio %}
-                    <button class="button start-visio">Démarrer le RDV</button>
-                    <button class="button end-visio hide">Déconnexion</button>
+                    <button class="btn btn-primary start-visio">
+                        <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}
+                    </button>
+                    <button class="btn btn-danger end-visio hide">
+                        <i class="icon-Appeler"></i> {{ 'meeting.video.end'|trans }}
+                    </button>
                 {% endif %}
                 <i class="icon icon-Localiser"></i> {{ meeting.spotRef }}
             </div>

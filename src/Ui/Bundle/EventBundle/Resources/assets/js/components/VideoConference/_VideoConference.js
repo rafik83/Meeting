@@ -25,8 +25,10 @@ function VideoConference(element) {
 
 VideoConference.prototype.requestAccess = function () {
     var url = this.element.dataset.visioCallback;
+    this.element.querySelector('.start-visio').disabled = true;
 
     axios.get(url).then(function (response) {
+        // init and connect to session
         this.init(response.data.apiKey, response.data.sessionId, response.data.token);
     }.bind(this));
 };
@@ -40,10 +42,15 @@ VideoConference.prototype.init = function (apiKey, sessionId, token) {
     if (tokbox.checkSystemRequirements() === 1) {
         this.session = tokbox.initSession(apiKey, sessionId);
 
-        var subscriber = new Subscriber(this.session, this.subscriberContainer);
 
         // The Session object dispatches a streamCreated event when a new stream (other than your own) is created in a session
-        this.session.on('streamCreated', subscriber.subscribe.bind(subscriber));
+        this.session.on('streamCreated', function(event) {
+            console.log('other stream created > subscribe');
+
+            var subscriber = new Subscriber(this.session, this.subscriberContainer);
+            subscriber.subscribe(event);
+        }.bind(this));
+
         this.connect(token);
     }
 };
@@ -73,6 +80,7 @@ VideoConference.prototype.disconnect = function () {
     this.session.disconnect();
 
     this.element.querySelector('.start-visio').classList.toggle('hide');
+    this.element.querySelector('.start-visio').disabled = false;
     this.element.querySelector('.end-visio').classList.toggle('hide');
 
     this.publisherContainer.classList.toggle('hide');

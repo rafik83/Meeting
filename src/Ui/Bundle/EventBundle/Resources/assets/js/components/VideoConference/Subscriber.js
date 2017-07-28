@@ -11,7 +11,7 @@ function Subscriber(session, container) {
 }
 
 Subscriber.prototype.subscribe = function (event) {
-    console.log('Subscribe');
+    console.log('Subscribe to:', event.stream);
 
     var subscriberOptions = {
         insertMode: 'append',
