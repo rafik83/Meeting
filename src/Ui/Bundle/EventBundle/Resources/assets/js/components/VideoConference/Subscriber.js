@@ -8,6 +8,7 @@
 function Subscriber(session, container) {
     this.session = session;
     this.container = container;
+    this.subscriber = null;
 }
 
 Subscriber.prototype.subscribe = function (event) {
@@ -20,22 +21,9 @@ Subscriber.prototype.subscribe = function (event) {
         accessAllowed: true
     };
     
-    var subscriber = this.session.subscribe(event.stream, this.container.id, subscriberOptions, this.handleError);
-
-    subscriber.on('disconnected', function () {
-        this.container.classList.toggle('hide');
-        console.log('disconnected');
-    }.bind(this));
-
-    subscriber.on('destroyed', function () {
-        this.container.classList.toggle('hide');
-        console.log('destroyed')
-    }.bind(this));
-
-    subscriber.on('connected', function () {
-        this.container.classList.toggle('hide');
-        console.log('connected');
-    }.bind(this));
+    this.subscriber = this.session.subscribe(event.stream, this.container.id, subscriberOptions, this.handleError);
+    
+    return this.subscriber;
 };
 
 Subscriber.prototype.handleError = function (error) {

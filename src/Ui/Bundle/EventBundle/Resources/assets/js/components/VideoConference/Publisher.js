@@ -8,6 +8,7 @@ var tokbox = require('@opentok/client');
  */
 function Publisher(container) {
     this.container = container;
+    this.publisher = null;
 }
 
 /**
@@ -24,7 +25,15 @@ Publisher.prototype.create = function () {
     this.container.style.width = '500px';
     this.container.style.height = '500px';
 
-    return tokbox.initPublisher(this.container.id, publisherOptions, this.handleError);
+    this.publisher = tokbox.initPublisher(this.container.id, publisherOptions, this.handleError);
+    console.log('Publisher created', this.publisher);
+
+    return this.publisher;
+};
+
+Publisher.prototype.destroy = function () {
+    this.publisher.destroy();
+    console.log('Publisher destroy');
 };
 
 Publisher.prototype.handleError = function (error) {

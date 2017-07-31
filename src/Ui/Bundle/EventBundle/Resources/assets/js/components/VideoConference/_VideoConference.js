@@ -43,15 +43,27 @@ VideoConference.prototype.init = function (apiKey, sessionId, token) {
     if (tokbox.checkSystemRequirements() === 1) {
         this.session = tokbox.initSession(apiKey, sessionId);
 
-
-        // The Session object dispatches a streamCreated event when a new stream (other than your own) is created in a session
-        this.session.on('streamCreated', function(event) {
+        // The Session object dispatches a streamCreated event
+        // when a new stream (other than your own) is created in a session
+        this.session.on('streamCreated', function (event) {
             console.log('other stream created > subscribe');
 
-            var subscriber = new Subscriber(this.session, this.subscriberContainer);
-            subscriber.subscribe(event);
+            var subscriberManager = new Subscriber(this.session, this.subscriberContainer);
+            subscriberManager.subscribe(event);
+
+            this.subscriberContainer.classList.toggle('hide');
             this.helperContainer.classList.toggle('hide');
         }.bind(this));
+
+        // When a stream, other than your own, leaves a session
+        // the Session object dispatches a streamDestroyed event
+        this.session.on("streamDestroyed", function (event) {
+            console.log('Stream destroyed');
+        }.bind(this));
+
+        this.session.on("sessionDisconnected", function(event) {
+            console.log("Session disconnected", event);
+        });
 
         this.connect(token);
     }
@@ -71,6 +83,7 @@ VideoConference.prototype.connect = function (token) {
 
             // publish video to other participant
             this.session.publish(publisher, this.handleError);
+
             this.publisherContainer.classList.toggle('hide');
             this.helperContainer.classList.toggle('hide');
         } else {
@@ -88,6 +101,7 @@ VideoConference.prototype.disconnect = function () {
 
     this.publisherContainer.classList.toggle('hide');
     this.subscriberContainer.classList.toggle('hide');
+    this.helperContainer.classList.toggle('hide');
 };
 
 VideoConference.prototype.handleError = function (error) {
