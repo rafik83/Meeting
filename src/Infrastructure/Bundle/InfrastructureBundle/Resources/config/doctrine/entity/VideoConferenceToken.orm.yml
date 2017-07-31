@@ -8,7 +8,7 @@ Proximum\Vimeet\Domain\Model\VideoConferenceToken:
                 strategy: AUTO
     fields:
         token:
-            type: string
+            type: text
     manyToOne:
         videoConference:
             targetEntity: Proximum\Vimeet\Domain\Model\VideoConference

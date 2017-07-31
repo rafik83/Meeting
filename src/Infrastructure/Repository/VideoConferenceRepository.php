@@ -53,4 +53,12 @@ class VideoConferenceRepository implements VideoConferenceRepositoryInterface
         $this->entityManager->persist($videoConference);
         $this->entityManager->flush();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(VideoConference $videoConference)
+    {
+        $this->entityManager->flush($videoConference);
+    }
 }

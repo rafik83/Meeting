@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\VideoConference;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\VideoConference;
+use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandler
@@ -51,13 +52,25 @@ class RequestAccessHandler
         $videoConference = $this->videoConferenceRepository->findByMeeting($connectSession->meeting);
 
         if ($videoConference !== null) {
-            $token = $videoConference->getTokenByUser($connectSession->user);
+            $videoConferenceToken = $videoConference->getTokenByUser($connectSession->user);
 
-            if ($token === null) {
+            if ($videoConferenceToken === null) {
                 $token = $this->videoConference->generateAccessToken(
                     $this->videoConference->getSession($videoConference->getSessionId()),
                     $connectSession->meeting->getSlot()
                 );
+
+                $videoConference->setToken(
+                    new VideoConferenceToken(
+                        $videoConference,
+                        $connectSession->user,
+                        $token
+                    )
+                );
+
+                $this->videoConferenceRepository->set($videoConference);
+            } else {
+                $token = $videoConferenceToken->getToken();
             }
 
             return new VideoConferenceView(

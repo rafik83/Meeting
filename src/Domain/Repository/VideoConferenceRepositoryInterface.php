@@ -26,4 +26,9 @@ interface VideoConferenceRepositoryInterface
      * @param VideoConference $videoConference
      */
     public function add(VideoConference $videoConference);
+
+    /**
+     * @param VideoConference $videoConference
+     */
+    public function set(VideoConference $videoConference);
 }
