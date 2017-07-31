@@ -43,27 +43,27 @@ class RequestAccessHandler
     }
 
     /**
-     * @param RequestAccess $connectSession
+     * @param RequestAccess $requestAccess
      *
      * @return VideoConferenceView
      */
-    public function handle(RequestAccess $connectSession): VideoConferenceView
+    public function handle(RequestAccess $requestAccess): VideoConferenceView
     {
-        $videoConference = $this->videoConferenceRepository->findByMeeting($connectSession->meeting);
+        $videoConference = $this->videoConferenceRepository->findByMeeting($requestAccess->meeting);
 
         if ($videoConference !== null) {
-            $videoConferenceToken = $videoConference->getTokenByUser($connectSession->user);
+            $videoConferenceToken = $videoConference->getTokenByUser($requestAccess->user);
 
             if ($videoConferenceToken === null) {
                 $token = $this->videoConference->generateAccessToken(
                     $this->videoConference->getSession($videoConference->getSessionId()),
-                    $connectSession->meeting->getSlot()
+                    $requestAccess->meeting->getSlot()
                 );
 
                 $videoConference->setToken(
                     new VideoConferenceToken(
                         $videoConference,
-                        $connectSession->user,
+                        $requestAccess->user,
                         $token
                     )
                 );
@@ -81,10 +81,10 @@ class RequestAccessHandler
         }
 
         $session = $this->videoConference->createSession();
-        $token   = $this->videoConference->generateAccessToken($session, $connectSession->meeting->getSlot());
+        $token   = $this->videoConference->generateAccessToken($session, $requestAccess->meeting->getSlot());
 
         $this->videoConferenceRepository->add(
-            new VideoConference($session->getSessionId(), $connectSession->meeting)
+            new VideoConference($session->getSessionId(), $requestAccess->meeting)
         );
 
         return new VideoConferenceView(
