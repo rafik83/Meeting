@@ -63,11 +63,14 @@ class EventController extends Controller
         }
 
         $create = new Create($this->getUser(), $event);
+        $action = $event !== null ?
+            $this->generateUrl('admin_event_create_from', ['event' => $event->getId()]) :
+            $this->generateUrl('admin_event_create');
 
         $form = $this->createForm(CreateType::class, $create, [
             'currentLocale' => $request->getLocale(),
             'submit'        => true,
-            'action'        => $this->generateUrl('admin_event_create'),
+            'action'        => $action,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

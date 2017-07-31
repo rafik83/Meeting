@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -97,4 +98,7 @@ abstract class AbstractEvent
 
     /** @var bool */
     public $visible;
+
+    /** @var null|Event */
+    public $duplicatedFrom;
 }

@@ -57,5 +57,6 @@ class Create extends AbstractEvent
         $this->emailTeam     = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->visible       = $event->isVisible();
+        $this->duplicatedFrom = $event;
     }
 }
