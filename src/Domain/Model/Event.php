@@ -222,7 +222,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getDescription($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -232,7 +234,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getBankInfo($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBankInfo() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getBankInfo() : '';
     }
 
     /**
@@ -242,7 +246,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getBillingAddress($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBillingAddress() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getBillingAddress() : '';
     }
 
     /**
@@ -252,7 +258,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getPaymentCondition($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentCondition() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getPaymentCondition() : '';
     }
 
     /**
@@ -262,7 +270,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getPaymentFooter($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentFooter() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getPaymentFooter() : '';
     }
 
     /**
