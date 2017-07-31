@@ -761,4 +761,12 @@ class Event implements EventInterface, TraceableInterface
     {
         $this->archived = false;
     }
+
+    /**
+     * @return null|Event
+     */
+    public function getDuplicatedFrom()
+    {
+        return $this->duplicatedFrom;
+    }
 }
