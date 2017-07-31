@@ -72,11 +72,11 @@ class VideoConference
     }
 
     /**
-     * @return ArrayCollection
+     * @return array
      */
-    public function getTokens(): ArrayCollection
+    public function getTokens(): array
     {
-        return $this->tokens;
+        return $this->tokens->toArray();
     }
 
     /**
