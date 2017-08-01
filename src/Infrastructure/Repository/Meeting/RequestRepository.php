@@ -227,6 +227,34 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countApprovedRequestBySheets(Event $event, array $sheets): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('count(request.id) AS countRequest, sheet.id AS sheetId')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join(
+                Request::class,
+                'request',
+                'WITH',
+                'sheet.event = :event
+                AND sheet.id IN (:sheets)
+                AND request.state = :state
+                AND request.event = :event
+                AND (request.from = sheet OR request.to = sheet)
+            ')
+            ->groupBy('sheet.id')
+            ->setParameter('state', Request::STATE_APPROVED)
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasRequestSentBySheet(Sheet $sheet)
     {
         return $this->countRequestSentBySheet($sheet) > 0;
@@ -280,6 +308,19 @@ class RequestRepository implements RequestRepositoryInterface
         $this->requestsWithoutMeeting($queryBuilder);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countApprovedByEvent(Event $event): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->count()->fromEvent($event)->approved()->isEnabled();
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

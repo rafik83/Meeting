@@ -1,0 +1,16 @@
+services:
+    command.analytic.meeting_solution.create_handler:
+        class: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\CreateHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@repository.analytic.meeting_solution_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@query.analytic.meeting_solution.sheet.sheet_satisfaction_list_query_handler'
+            - '@query.analytic.meeting_solution.spot.spot_satisfaction_list_query_handler'
+            - '@query.analytic.meeting_solution.spot_filling_rate.spot_filling_rate_query_handler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\Create }

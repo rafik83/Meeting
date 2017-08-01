@@ -1,0 +1,5 @@
+services:
+    repository.analytic.meeting_solution_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Analytic\MeetingSolutionRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'

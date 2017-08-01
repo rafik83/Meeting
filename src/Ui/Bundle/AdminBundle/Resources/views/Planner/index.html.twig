@@ -33,5 +33,67 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <th>Date</th>
+                    <th class="text-right">Meetings</th>
+                    <th class="text-right">Requests</th>
+                    <th class="text-right">Ratio</th>
+                    <th class="text-right">Rate</th>
+                    <th class="text-right">Details</th>
+                </thead>
+                <tbody>
+                    {% for meetingSolution in meetingSolutions %}
+                        <tr>
+                            <td>{{ meetingSolution.createdAt|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
+                            <td class="text-right">{{ meetingSolution.numberOfMeetings }}</td>
+                            <td class="text-right">{{ meetingSolution.numberOfRequests }}</td>
+                            <td class="text-right">{{ meetingSolution.ratio|round(2, 'floor') }}%</td>
+                            <td class="text-right">{{ meetingSolution.fillingRate|round(2, 'floor') }}%</td>
+                            <td class="text-right">Details</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <ul>
+                                {% for sheetSatisfaction in meetingSolution.sheetSatisfactions.sheetSatisfaction %}
+                                    <li>
+                                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': sheetSatisfaction.id}) }}">
+                                            {{ sheetSatisfaction.title }}
+                                        </a>
+                                        , {{ sheetSatisfaction.typeTitle }},
+                                        {{ sheetSatisfaction.satisfaction|round(2, 'floor') }}%
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <ul>
+                                    {% set toto = 0 %}
+                                    {% set titi = 0 %}
+                                    {% for spotSatisfaction in meetingSolution.spotSatisfactions.spotSatisfaction %}
+                                        <li>
+                                            {{ spotSatisfaction.reference }}
+                                            , {{ spotSatisfaction.shared ? 'Mutualisé,' : '' }}
+                                            {{ spotSatisfaction.visio ? 'Visio,' : '' }}
+                                            {{ spotSatisfaction.satisfaction|round(2, 'floor') }}%
+                                        </li>
+                                        {% if spotSatisfaction.shared %}
+                                            {% set toto = spotSatisfaction.satisfaction + toto %}
+                                            {% set titi = titi + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+
+                                {{ toto }}<br>
+                                {{ titi }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

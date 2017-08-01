@@ -387,4 +387,24 @@ class SpotRepository implements SpotRepositoryInterface
 
         return $queryBuilder;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findSharedByEvent(Event $event): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('spot, unavailabilities')
+            ->from(Spot::class, 'spot')
+            ->leftJoin('spot.spotUnavailabilities', 'unavailabilities')
+            ->leftJoin('spot.sheets', 'sheet')
+            ->where('spot.event = :event')
+            ->andWhere('sheet.id IS NULL')
+            ->andWhere('spot.active = TRUE')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

@@ -153,4 +153,11 @@ interface SpotRepositoryInterface
         Sheet $toSheet = null,
         $visio = false
     );
+
+    /**
+     * @param Event $event
+     *
+     * @return Spot[]
+     */
+    public function findSharedByEvent(Event $event): array;
 }

@@ -140,6 +140,46 @@ interface MeetingRepositoryInterface
     public function countMeetingsOfEvent(Event $event);
 
     /**
+     * @param Event $event
+     * @param array $sheets
+     *
+     * @return array of ['countMeetings' => int, 'sheetId' => int]
+     */
+    public function countMeetingBySheets(Event $event, array $sheets): array;
+
+    /**
+     * @param Event  $event
+     * @param Spot[] $spots
+     *
+     * @return array of ['countMeetings' => int, 'spotId' => int]
+     */
+    public function countMeetingsBySpots(Event $event, array $spots): array;
+
+    /**
+     * @param Event  $event
+     * @param Spot[] $spots
+     *
+     * @return int
+     */
+    public function countMeetingForSpots(Event $event, array $spots): int;
+
+    /**
+     * @param Event       $event
+     * @param Spot[]      $spots
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return int
+     */
+    public function countMeetingForSpotsAndSlot(Event $event, array $spots, MeetingSlot $meetingSlot): int;
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEvent(Event $event): int;
+
+    /**
      * @param Participant $participant
      *
      * @return int
