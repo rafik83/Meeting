@@ -27,11 +27,11 @@
         width: 100%;
         flex-flow: row;
         z-index: 9999;
-        position: absolute;
+        position: relative;
         margin-left: 10px;
         padding-right: 45px;
         right: 0;
-        bottom: 5%;
+        padding-top: 24px;
         > a, .label {
           float: right;
           margin-left: 5px;
@@ -50,11 +50,9 @@
 
     &.open {
       > header {
-        height: 56px !important;
         .actions {
           display: block;
           z-index: 9999;
-          position: absolute;
           right: 45px;
           bottom: 16%;
         }
@@ -70,11 +68,12 @@
       overflow: hidden;
 
       .content {
+        position: absolute;
         display: flex;
         flex-direction: row;
         align-items: center;
         height: 100%;
-        padding: 0 10px 0 25px;
+        padding: 0 0 0 24px;
         color: #fff;
 
         &:hover,
@@ -82,7 +81,6 @@
 
         > span {
           min-width: 30px;
-          margin-right: 20px;
           line-height: 1;
           font-size: 15px;
           font-weight: bold;
