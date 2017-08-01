@@ -1,0 +1,167 @@
+.program-container {
+  margin: 50px 0 0 0;
+  z-index: 0;
+
+  .program-head,
+  .program-foot {
+    font-size: 17px;
+
+    strong {
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-right: 3px;
+    }
+  }
+
+  .program-head { margin-bottom: 20px; }
+  .program-foot { text-align: right; }
+
+  .meets {
+    z-index: 1;
+    .happening {
+      header {
+        position: relative;
+      }
+      .actions {
+        display: inline-block;
+        width: 100%;
+        flex-flow: row;
+        z-index: 9999;
+        position: absolute;
+        margin-left: 10px;
+        padding-right: 45px;
+        right: 0;
+        bottom: 5%;
+        > a, .label {
+          float: right;
+          margin-left: 5px;
+        }
+        > .label {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .meet {
+    left: 0;
+    width: 100%;
+    padding: $agenda-meet-margin;
+
+    &.open {
+      > header {
+        height: 56px !important;
+        .actions {
+          display: block;
+          z-index: 9999;
+          position: absolute;
+          right: 45px;
+          bottom: 16%;
+        }
+      }
+
+      .details { display: block; }
+    }
+
+    > header {
+      min-height: 80px;
+      background-color: #0093df;
+      height: 100%;
+      overflow: hidden;
+
+      .content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 100%;
+        padding: 0 10px 0 25px;
+        color: #fff;
+
+        &:hover,
+        &:focus { text-decoration: none; }
+
+        > span {
+          min-width: 30px;
+          margin-right: 20px;
+          line-height: 1;
+          font-size: 15px;
+          font-weight: bold;
+          text-align: center;
+          text-transform: uppercase;
+
+          .icon {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 20px;
+          }
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        width: 100%;
+        line-height: 30px;
+      }
+
+      .happeningParticipateIcon {
+        font-size: 30px;
+      }
+    }
+
+    &.lock {
+      > header { background-color: rgba(#545454, .9); }
+    }
+
+    &.break {
+      > header { background-color: #78c23a; }
+    }
+
+    > .details {
+      position: relative;
+      display: none;
+      padding: 20px;
+      font-size: 14px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-top: 0;
+      z-index: 1;
+
+      footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 15px;
+
+        p { margin: 0; }
+
+        a.btn { margin-left: 8px; }
+      }
+    }
+
+    &.collapsed {
+      header {
+        text-align: center;
+
+        .actions {
+          display: none;
+        }
+
+        .content {
+          padding: 0;
+
+          .prefix {
+            margin: 0 auto;
+          }
+          .title {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
