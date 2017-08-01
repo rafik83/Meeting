@@ -765,7 +765,7 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return null|Event
      */
-    public function getDuplicatedFrom()
+    public function getDuplicatedFrom(): ?Event
     {
         return $this->duplicatedFrom;
     }
