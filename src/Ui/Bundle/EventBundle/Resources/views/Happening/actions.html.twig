@@ -21,5 +21,7 @@
         {% endif %}
     {% endif %}
 
-    <a href="" class="btn btn-gray">{{ 'happening.participate.detail'|trans }} </a>
+    {% if displayDetailsButton is defined and displayDetailsButton == true %}
+        <a href="" class="btn btn-gray">{{ 'happening.participate.detail'|trans }} </a>
+    {% endif %}
 </div>

@@ -1,6 +1,4 @@
 .program-container {
-  margin: 50px 0 0 0;
-  z-index: 0;
 
   .program-head,
   .program-foot {
@@ -17,7 +15,6 @@
   .program-foot { text-align: right; }
 
   .meets {
-    z-index: 1;
     .happening {
       header {
         position: relative;
@@ -26,7 +23,6 @@
         display: inline-block;
         width: 100%;
         flex-flow: row;
-        z-index: 9999;
         position: relative;
         margin-left: 10px;
         padding-right: 45px;
@@ -52,7 +48,6 @@
       > header {
         .actions {
           display: block;
-          z-index: 9999;
           right: 45px;
           bottom: 16%;
         }
@@ -75,9 +70,7 @@
         height: 100%;
         padding: 0 0 0 24px;
         color: #fff;
-
-        &:hover,
-        &:focus { text-decoration: none; }
+        z-index: 10;
 
         > span {
           min-width: 30px;
@@ -126,7 +119,6 @@
       background-color: #fff;
       border: 1px solid #ccc;
       border-top: 0;
-      z-index: 1;
 
       footer {
         display: flex;

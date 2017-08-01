@@ -1,10 +1,20 @@
 <header style="background: linear-gradient(to right, {{ leftColor }} 0%, {{ rightColor }} 100%) !important;">
     <a class="content" href="#{{ happening.title|url_encode }}">
+
+        {% if withHourPrefix is defined and withHourPrefix == true %}
+            {{ happening.beginHour|date('H:i', happening.timeZone) }} {{ happening.endHour|date('H:i', happening.timeZone) }}
+        {% endif %}
+
         <span class="prefix"><i class="icon icon-{{ picto }}"></i></span>
         <p class="title">
             {{ happening.title }}
             <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>
         </p>
     </a>
-    {{ include('EventBundle:Happening:actions.html.twig', { 'sheet': sheet, 'happening': happening, 'isUserAloneParticipant': isUserAloneParticipant }) }}
+    {{ include('EventBundle:Happening:actions.html.twig', {
+        'sheet': sheet,
+        'happening': happening,
+        'isUserAloneParticipant': isUserAloneParticipant,
+        'displayDetailsButton': displayDetailsButton
+    }) }}
 </header>
