@@ -27,39 +27,25 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Imperson
 
 class PaginatedSheetListViewQueryHandler
 {
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @var Impersonate
-     */
+    /** @var Impersonate */
     private $impersonate;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var TraceRepositoryInterface
-     */
+    /** @var TraceRepositoryInterface */
     private $traceRepository;
 
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
     /**

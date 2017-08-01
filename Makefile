@@ -165,18 +165,18 @@ watch-assets:
 trans-push: trans-openl10n-push
 
 trans-openl10n-push:
-	openl10n push --locale=all
+	openl10n-cli push --locale=all
 
 ## Translations pull
 trans-pull: trans-openl10n-pull
 
 trans-openl10n-pull:
-	openl10n pull --locale=all
+	openl10n-cli pull --locale=all
 
 ## Translations sync
 trans-sync:
-	openl10n push --locale=all
-	openl10n pull --locale=all
+	openl10n-cli push --locale=all
+	openl10n-cli pull --locale=all
 
 ########
 # Test #

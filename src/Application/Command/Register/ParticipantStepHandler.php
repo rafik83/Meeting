@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Register;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
@@ -133,6 +134,10 @@ class ParticipantStepHandler
         // Send Sheet Update Event to recalculate completeness of the sheet
         $sheetUpdatedEvent = new SheetUpdatedEvent($participantStep->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
+
+        // Send event to check and update sheet title depends on sheet title or owner fullname settings
+        $sheetTitleCheckEvent = new SheetTitleCheckEvent($participantStep->sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, $sheetTitleCheckEvent);
     }
 
     /**

@@ -91,7 +91,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     {
         $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
-            array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $query->filters),
+            $query->filters,
             $query->filters['orderBy'],
             $query->page,
             $query->limit,

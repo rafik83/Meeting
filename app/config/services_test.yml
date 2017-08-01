@@ -121,6 +121,31 @@ services:
         arguments:
              - '@repository.token.user_event_token_repository'
 
+    behat_manager.admin_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\AdminManager
+        arguments:
+            - '@repository.admin_repository'
+
+    behat_manager.invoice.prefix_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Invoice\PrefixManager
+        arguments:
+            - '@repository.invoice.prefix_repository'
+
+    behat.service.manager.catalog_visibility_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
+        arguments:
+            - '@repository.catalog_visibility_repository'
+
+    behat_manager.event.content_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Event\ContentManager
+        arguments:
+            - '@repository.event.content_repository'
+
+    behat.service.manager.meeting.request_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Meeting\RequestManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
     #
     # Proxies
     #
@@ -190,6 +215,8 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.meeting'
+            - '@behat_manager.spot'
+            - '@behat_manager.slot'
 
     behat_proxy.order_context:
         class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
@@ -208,17 +235,51 @@ services:
         arguments:
              - '@behat_storage'
 
+    behat.proxy.catalog_visibility_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\CatalogVisibilityContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.catalog_visibility_manager'
+
     behat_proxy.event.day_context:
         class: Proximum\Vimeet\Behat\Proxy\Event\DayContextProxy
         arguments:
             - '@behat_storage'
             - '@behat_manager.event.day'
 
+    behat_proxy.admin_context:
+        class: Proximum\Vimeet\Behat\Proxy\AdminContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.admin_manager'
+
+    behat_proxy.invoice.prefix_context:
+        class: Proximum\Vimeet\Behat\Proxy\Invoice\PrefixContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.invoice.prefix_manager'
+
+    behat_proxy.event.content_context:
+        class: Proximum\Vimeet\Behat\Proxy\Event\ContentContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.event.content_manager'
+
+    #
+    # Other services
+    #
+
     behat_proxy.token.user_event_token_context:
         class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
         arguments:
             - '@behat_storage'
             - '@behat_manager.token.user_event_token_manager'
+
+    behat.proxy.meeting.request_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.meeting.request_manager'
 
     infrastructure.adapter.monolog_smssender_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter
@@ -234,4 +295,4 @@ services:
             - '@templating'
             - '@adapter.authorization_checker'
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, priority: 999 }
+            - { name: kernel.event_listener, event: kernel.exception, priority: -127 }

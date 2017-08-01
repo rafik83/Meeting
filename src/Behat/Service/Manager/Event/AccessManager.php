@@ -61,4 +61,55 @@ class AccessManager
 
         $this->eventRepository->set($event);
     }
+
+    /**
+     * @param \DateTime $dateTime
+     * @param Event     $event
+     */
+    public function setRegistrationOpenDate(\DateTime $dateTime, Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $event->getConfiguration()->getHappeningsOpenDate(),
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            $dateTime
+        );
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @param Event     $event
+     */
+    public function setRegistrationCloseDate(\DateTime $dateTime, Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $event->getConfiguration()->getHappeningsOpenDate(),
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            null,
+            $dateTime
+        );
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function openExternalCatalog(Event $event)
+    {
+        $event->setExternalCatalog(true);
+
+        $this->eventRepository->set($event);
+    }
 }

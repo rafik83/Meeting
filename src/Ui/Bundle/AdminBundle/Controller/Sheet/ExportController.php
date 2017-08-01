@@ -61,7 +61,7 @@ class ExportController extends Controller
      */
     public function exportParticipantAction(UserInterface $user, Request $request, Event $event)
     {
-        // Only super admin & organizers are allowed to export sheets:
+        // Only super admin & organizers are allowed to export participants:
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 

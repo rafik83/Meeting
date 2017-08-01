@@ -44,6 +44,8 @@ class ConfigureDatesHandlerTest extends TestCase
         $closeMeetingRequestDate          = new \DateTime('2016-07-08 12:00:00');
         $closeAnsweringMeetingRequestDate = new \DateTime('2016-07-09 12:00:00');
         $smsActivationDate                = new \DateTime('2016-06-09 12:00:00');
+        $registrationOpenDate             = new \DateTime('2016-06-09 12:00:00');
+        $registrationCloseDate            = new \DateTime('2016-06-10 12:00:00');
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setDates(
@@ -52,7 +54,10 @@ class ConfigureDatesHandlerTest extends TestCase
             $schedulePublishDate,
             $closeMeetingRequestDate,
             $closeAnsweringMeetingRequestDate,
-            $smsActivationDate
+            $smsActivationDate,
+            null,
+            $registrationOpenDate,
+            $registrationCloseDate
         );
 
         $this->eventRepository->set($expectedEvent)->shouldBeCalled();
@@ -65,6 +70,8 @@ class ConfigureDatesHandlerTest extends TestCase
         $command->closeMeetingRequestDate          = $closeMeetingRequestDate;
         $command->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
         $command->smsActivationDate                = $smsActivationDate;
+        $command->registrationOpenDate             = $registrationOpenDate;
+        $command->registrationCloseDate            = $registrationCloseDate;
 
         $handler = new ConfigureDatesHandler($this->eventRepository->reveal(), $this->eventDispatcher->reveal());
         $handler->handle($command);
@@ -98,6 +105,8 @@ class ConfigureDatesHandlerTest extends TestCase
         $command->closeMeetingRequestDate          = null;
         $command->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
         $command->smsActivationDate                = null;
+        $command->registrationOpenDate             = null;
+        $command->registrationCloseDate            = null;
 
         $handler = new ConfigureDatesHandler($this->eventRepository->reveal(), $this->eventDispatcher->reveal());
         $handler->handle($command);

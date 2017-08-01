@@ -29,7 +29,6 @@
         "sensio/distribution-bundle": "~5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.1",
-
         "league/tactician": "^1.0",
         "league/tactician-bundle": "~0.4",
         "league/tactician-doctrine": "^1.0",
@@ -56,13 +55,12 @@
         "egulias/email-validator": "1.*",
         "jms/job-queue-bundle": "^1.4.2",
         "sentry/sentry-symfony": "^0.7.1",
-        "tilleuls/ovh-bundle": "^1.0.1"
+        "tilleuls/ovh-bundle": "^1.0.1",
+        "behat/behat": "^3.3.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
-
         "phpunit/phpunit": "~5.0",
-        "behat/behat": "~3.1",
         "behat/symfony2-extension": "~2.1",
         "behat/mink": "~1.7.1",
         "behat/mink-extension": "~2.2",
@@ -71,12 +69,12 @@
         "behat/mink-goutte-driver": "~1.2.1",
         "theofidry/alice-bundle-extension": "~1.1",
         "hautelook/alice-bundle": "~1.2.2",
-        "friendsofphp/php-cs-fixer": "^1.10",
-        "phpmd/phpmd": "^2.4",
+        "friendsofphp/php-cs-fixer": "^2.1",
         "easycorp/easy-log-handler": "^1.0",
         "behatch/contexts": "^2.5",
         "friends-of-behat/performance-extension": "^1.0",
         "friends-of-behat/context-service-extension": "^0.3.0",
+        "bruli/php-git-hooks": "^4.12",
         "phpspec/prophecy": "^1.7"
     },
     "scripts": {
@@ -94,7 +92,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "PhpGitHooks\\Infrastructure\\Composer\\ConfiguratorScript::buildConfig"
         ],
         "post-update-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -102,14 +101,14 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "PhpGitHooks\\Infrastructure\\Composer\\ConfiguratorScript::buildConfig"
         ]
     },
     "config": {
         "bin-dir": "bin",
         "process-timeout": 600
     },
-
     "extra": {
         "symfony-app-dir": "app",
         "symfony-bin-dir": "bin",

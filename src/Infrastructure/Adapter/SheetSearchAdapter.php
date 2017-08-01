@@ -46,10 +46,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     private $searchable;
 
-    /**
-     * @param PaginatedFinderInterface $finder
-     * @param SearchableInterface      $searchable
-     */
     public function __construct(PaginatedFinderInterface $finder, SearchableInterface $searchable)
     {
         $this->finder     = $finder;
@@ -62,14 +58,16 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     public function find(
         Event $event,
         array $filters,
-        $orderBy,
-        $page,
-        $limit,
-        $locale,
-        $getAggregations,
-        $nomenclatureItems = []
-    ) {
-        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])) ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]) : 0;
+        string $orderBy = null,
+        int $page,
+        int $limit,
+        string $locale,
+        bool $getAggregations,
+        array $nomenclatureItems = []
+    ): PaginatedResult {
+        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
+            ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+            : 1;
 
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
 
@@ -128,7 +126,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetIds(Event $event, array $filters, $locale)
+    public function getSheetIds(Event $event, array $filters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
@@ -142,7 +140,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetListView(Event $event, array $filters, $locale)
+    public function getSheetListView(Event $event, array $filters, string $locale): array
     {
         $results = $this->getSearchResults($event, $filters, $locale);
 
@@ -151,10 +149,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         }, $results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSheetIdsView(Event $event, array $filters, $locale)
+    public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView
     {
         $results = $this->getSearchResults($event, $filters, $locale);
 
@@ -165,10 +160,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return new SheetIdsView($sheetIds);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParticipantsSheetIdsView(Event $event, array $filters, $locale)
+    public function getParticipantsSheetIdsView(Event $event, array $filters, string $locale): ParticipantsSheetIdsView
     {
         $results = $this->getSearchResults($event, $filters, $locale);
 
@@ -179,14 +171,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return new ParticipantsSheetIdsView($sheetIds);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findLocalization(Event $event, $filter, $locale)
+    public function findLocalization(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder(
             $event,
-            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $defaultFilters,
             $locale
         );
 
@@ -198,14 +187,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query)->getAggregations();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findKeyword(Event $event, $filter, $locale)
+    public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder(
             $event,
-            [SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true],
+            $defaultFilters,
             $locale
         );
 
@@ -244,19 +230,17 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query)->getAggregations();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove)
+    public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
     {
         return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_TYPE);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove)
-    {
+    public function getOrganizationCategoryAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove
+    ): array {
         return $this->searchAggregations(
             $event,
             $locale,
@@ -266,10 +250,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPositionAggregations(Event $event, $locale, array $filters, $filterToRemove)
+    public function getPositionAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
     {
         return $this->searchAggregations(
             $event,
@@ -281,9 +262,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return Result[]
      */
-    private function getSearchResults(Event $event, array $filters, $locale)
+    private function getSearchResults(Event $event, array $filters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
 
@@ -295,22 +280,15 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query, $options)->getResults();
     }
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param string $filterToRemove
-     * @param string $elasticField
-     *
-     * @return array
-     */
-    private function searchAggregations(Event $event, $locale, array $filters, $filterToRemove, $elasticField)
-    {
+    private function searchAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove,
+        string $elasticField
+    ): array {
         // remove filter
         unset($filters[$filterToRemove]);
-
-        // add inCatalog filter
-        $filters = array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $filters);
 
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
@@ -328,12 +306,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $result->getAggregations();
     }
 
-    /**
-     * @param string $field
-     *
-     * @return Terms
-     */
-    private function getAggregation($field)
+    private function getAggregation(string $field): Terms
     {
         $aggregation = new Terms($field);
         $aggregation->setField($field);
@@ -341,7 +314,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $aggregation;
     }
 
-    private function getNestedAggregation($field)
+    private function getNestedAggregation(string $field): Nested
     {
         $nested = new Nested($field, 'participants');
         $nested->addAggregation($this->getAggregation($field));
@@ -349,13 +322,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $nested;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     *
-     * @return Filter
-     */
-    private function findCityQuery(Event $event, $filter)
+    private function findCityQuery(Event $event, string $filter): Filter
     {
         $matchCity = new Query\BoolQuery();
         $matchCity->addMust(new Query\Match('event', $event->getId()));
@@ -375,14 +342,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $cities;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     * @param string $locale
-     *
-     * @return Filter
-     */
-    private function findCountryQuery(Event $event, $filter, $locale)
+    private function findCountryQuery(Event $event, string $filter, string $locale): Filter
     {
         $filterEventQuery = new FilterQuery();
         $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
@@ -415,13 +375,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $filterCountryEvent;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     *
-     * @return Filter
-     */
-    private function findSheetnameQuery(Event $event, $filter)
+    private function findSheetnameQuery(Event $event, string $filter): Filter
     {
         $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust(new Query\Term(['sheetName.autocomplete' => $filter]));

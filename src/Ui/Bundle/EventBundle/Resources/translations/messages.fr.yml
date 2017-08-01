@@ -64,12 +64,15 @@ event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a �
 event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
+event.invisible.label: Invisible
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.filter.all: Toutes
 event.meeting.listRequest.filter.propositions: 'Propositions reçues'
 event.meeting.listRequest.filter.requests: 'Mes demandes'
 event.meeting.request.answering.closed: 'Les validations de rendez-vous sont terminées'
 event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
+event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
+event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
 event.sheet.export.fields.participant_email: 'Email participant'
 event.sheet.export.fields.participant_firstname: Prénom
@@ -389,3 +392,5 @@ user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'
 user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
 user_event.confirm.agenda.title: 'Confirmation de l''agenda'
 user.phone.confirmationCode.message: 'Saisir le code suivant pour confirmer : %code%'
+catalog.external.modal.content: 'Pour accéder à ce contenu, vous devez être inscrit ou connecté.'
+catalog.external.modal.content.logged: 'La prise de rendez-vous sera accessible le %catalogOnlineDate%.'

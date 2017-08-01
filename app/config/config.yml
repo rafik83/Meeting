@@ -233,6 +233,8 @@ fos_elastica:
                             type: boolean
                         hasInvoice:
                             type: boolean
+                        hasSpot:
+                            type: boolean
                         attend:
                             type: boolean
                         hasGroup:
