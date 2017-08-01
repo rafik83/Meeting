@@ -34,7 +34,7 @@ class Product
     /**
      * Ceil in percentage
      */
-    const AVAILABILITY_CEIL_ALERT = 10;
+    const AVAILABILITY_CEIL_ALERT     = 10;
     const AVAILABILITY_STATUS_DEFAULT = 'default';
     const AVAILABILITY_STATUS_WARNING = 'warning';
     const AVAILABILITY_STATUS_ALERT   = 'alert';
@@ -1001,6 +1001,22 @@ class Product
         return self::AVAILABILITY_STATUS_DEFAULT;
     }
 
+    /**
+     * @param string                  $type
+     * @param Event                   $event
+     * @param string                  $name
+     * @param string                  $image
+     * @param int                     $unitPrice
+     * @param int                     $quantityMax
+     * @param int                     $availabilityCurrent
+     * @param int                     $availabilityMax
+     * @param bool                    $updatable
+     * @param \DateTimeInterface|null $deletableUntil
+     * @param bool                    $subjectedToValidation
+     * @param \DateTimeInterface|null $buyableUntil
+     *
+     * @return Product
+     */
     public static function createProductFromType(
         string $type,
         Event $event,
@@ -1016,7 +1032,6 @@ class Product
         \DateTimeInterface $buyableUntil = null
     ) {
         if ($type === self::TYPE_OPTION) {
-
             return self::createOption(
                 $event,
                 $name,
@@ -1031,11 +1046,8 @@ class Product
                 $buyableUntil
             );
         } elseif ($type === self::TYPE_PARTICIPANT) {
-
             return self::createParticipant($event, $name, $unitPrice, $quantityMax);
-
         } elseif ($type === self::TYPE_PLAN) {
-
             return self::createPlan(
                 $event,
                 $name,
@@ -1044,9 +1056,7 @@ class Product
                 $availabilityCurrent,
                 $availabilityMax
             );
-
         } elseif ($type === self::TYPE_PLANNING) {
-
             return self::createPlanning($event, $name, $unitPrice, $quantityMax);
         }
     }
