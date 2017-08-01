@@ -35,13 +35,13 @@ class Duplicator
      */
     public function duplicate(Event $event)
     {
-        $duplicatedEvent = $event->getDuplicatedFrom();
+        $duplicatedEvent              = $event->getDuplicatedFrom();
         $duplicatedEventConfiguration = $duplicatedEvent->getConfiguration();
 
         $event->setOrganiserName($duplicatedEvent->getOrganiserName());
         $event->setOrganiserEmail($duplicatedEvent->getOrganiserEmail());
         $event->getConfiguration()->updatePracticalInfo(
-          $duplicatedEventConfiguration->getContactFirstName(),
+            $duplicatedEventConfiguration->getContactFirstName(),
             $duplicatedEventConfiguration->getContactLastName(),
             $duplicatedEventConfiguration->getOrganiserPhone(),
             $duplicatedEventConfiguration->getOrganiserWebsite()
