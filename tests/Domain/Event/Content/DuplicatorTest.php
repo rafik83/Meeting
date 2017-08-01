@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Domain\Event\Content;
 
 use PHPUnit\Framework\TestCase;
@@ -43,5 +51,3 @@ class DuplicatorTest extends TestCase
         (new Duplicator($contentRepository->reveal()))->duplicate($event, Content::TYPE_TERMS_OF_SALE);
     }
 }
-
-

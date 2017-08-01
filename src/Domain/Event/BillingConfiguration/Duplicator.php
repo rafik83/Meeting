@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Domain\Event\BillingConfiguration;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
@@ -38,8 +46,8 @@ class Duplicator
      */
     public function duplicate(Event $event)
     {
-        $eventDuplicatedFrom = $event->getDuplicatedFrom();
-        $legalInfo           = $eventDuplicatedFrom->getConfiguration()->getLegalInfo();
+        $eventDuplicated = $event->getDuplicatedFrom();
+        $legalInfo       = $eventDuplicated->getConfiguration()->getLegalInfo();
 
         $event->getConfiguration()->setLegalInfo($legalInfo);
 
@@ -47,16 +55,16 @@ class Duplicator
             /** @var EventTranslation $eventTranslation */
             $eventTranslation = $event->getTranslations()->get($locale);
             $eventTranslation->setBillingConfiguration(
-                $eventDuplicatedFrom->getBankInfo($locale),
-                $eventDuplicatedFrom->getBillingAddress($locale),
-                $eventDuplicatedFrom->getPaymentCondition($locale),
-                $eventDuplicatedFrom->getPaymentFooter($locale)
+                $eventDuplicated->getBankInfo($locale),
+                $eventDuplicated->getBillingAddress($locale),
+                $eventDuplicated->getPaymentCondition($locale),
+                $eventDuplicated->getPaymentFooter($locale)
             );
         }
 
-        if (!empty($eventDuplicatedFrom->getInvoiceLogo())) {
-            $invoiceLogo = $this->fileStorage->copyAndRename($eventDuplicatedFrom->getInvoiceLogo());
-            $event->setInvoiceLogo($invoiceLogo, $eventDuplicatedFrom->getInvoiceLogoExtension());
+        if (!empty($eventDuplicated->getInvoiceLogo())) {
+            $invoiceLogo = $this->fileStorage->copyAndRename($eventDuplicated->getInvoiceLogo());
+            $event->setInvoiceLogo($invoiceLogo, $eventDuplicated->getInvoiceLogoExtension());
         }
 
         $this->eventRepository->add($event);
