@@ -46,14 +46,11 @@ class Duplicator
      */
     public function duplicate(Event $event)
     {
-        $results = $this->productRepository->countByEvent($event->getDuplicatedFrom());
+        $products = $this->productRepository->findByEvent($event->getDuplicatedFrom());
 
-        foreach ($results as $result) {
-
-            /** @var Product $product */
-            $product = $result[0];
-
-            $productToAdd = Product::createOption(
+        foreach ($products as $product) {
+            $productToAdd = Product::createProductFromType(
+                $product->getType(),
                 $event,
                 $product->getName(),
                 $this->fileStorage->copyAndRename($product->getImage()),
@@ -63,18 +60,21 @@ class Duplicator
                 $product->getAvailabilityMax(),
                 $product->isUpdatable(),
                 $product->getDeletableUntil(),
-                $product->isSubjectedToValidation()
+                $product->isSubjectedToValidation(),
+                $product->getBuyableUntil()
             );
+
+            if ($product->getType() === Product::TYPE_PLAN) {
+                $this->handlePlanProductsAndFeatures($productToAdd, $product);
+            }
 
             foreach ($product->getTranslationsData() as $locale => $translation) {
                 if (in_array($locale, $event->getLocales())) {
-                    $title       = isset($translation['title']) ? $translation['title'] : '';
-                    $description = isset($translation['description']) ? $translation['description'] : '';
-                    $addon       = isset($translation['addon']) ? $translation['addon'] : '';
+                    $title       = $translation['title'] ?? '';
+                    $description = $translation['description'] ?? '';
+                    $addon       = $translation['addon'] ?? '';
 
-                    $subjectedToValidationHelp = isset($translation['subjectedToValidationHelp']) ?
-                        $translation['subjectedToValidationHelp']
-                        : '';
+                    $subjectedToValidationHelp = $translation['subjectedToValidationHelp'] ?? '';
 
                     $product->translate(
                         $locale,
@@ -87,6 +87,27 @@ class Duplicator
                 }
             }
             $this->productRepository->add($productToAdd);
+        }
+    }
+
+    /**
+     * @param Product $productToAdd
+     * @param Product $product
+     */
+    public function handlePlanProductsAndFeatures(Product $productToAdd, Product $product)
+    {
+        foreach ($product->getIncludedProducts() as $productIncluded) {
+            $productToAdd->includeProduct($productIncluded->getIncluded(), $productIncluded->getQuantity());
+        }
+
+        foreach ($product->getFeatures() as $feature) {
+            $object = new Product\Feature($productToAdd);
+
+            foreach ($feature->getTranslations()->toArray() as $locale => $translation) {
+                $object->translate($locale, $translation->getTitle(), $translation->getDescription());
+            }
+
+            $productToAdd->addFeature($object);
         }
     }
 }

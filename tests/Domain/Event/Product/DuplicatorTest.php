@@ -31,7 +31,7 @@ class DuplicatorTest extends TestCase
             $eventDuplicated
         );
 
-        $result          = [[ProductFactory::create($eventDuplicated)]];
+        $result          = [ProductFactory::create($eventDuplicated)];
         $expectedProduct = ProductFactory::create($event);
         $expectedProduct->updateOption(
             $expectedProduct->getName(),
@@ -50,7 +50,7 @@ class DuplicatorTest extends TestCase
         $fileStorage       = $this->prophesize(FileStorageInterface::class);
 
         $fileStorage->copyAndRename('image')->shouldBeCalled()->willReturn('new image');
-        $productRepository->countByEvent($eventDuplicated)->shouldBeCalled()->willReturn($result);
+        $productRepository->findByEvent($eventDuplicated)->shouldBeCalled()->willReturn($result);
         $productRepository->add($expectedProduct)->shouldBeCalled();
 
         (new Duplicator($productRepository->reveal(), $fileStorage->reveal()))->duplicate($event);
