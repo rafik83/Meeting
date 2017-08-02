@@ -75,8 +75,7 @@ class MeetingViewQueryHandler
             $participants,
             $isSheetDetailsSeeAble,
             $query->isUserParticipantMultipleSheets,
-            $query->meeting->getSpot()->isVisio(),
-            $videoConferenceView ?? null
+            $query->meeting->getSpot()->isVisio()
         );
 
         return $meeting;

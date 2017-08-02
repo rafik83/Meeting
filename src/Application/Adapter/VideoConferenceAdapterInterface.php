@@ -33,7 +33,8 @@ interface VideoConferenceAdapterInterface
      * @param Session     $session
      * @param MeetingSlot $slot
      * @param array       $options
-     *
+     * @throw InvalidTokenGeneratorArgumentsException
+     *        
      * @return string
      */
     public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string;

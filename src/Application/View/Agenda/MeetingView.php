@@ -57,9 +57,6 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     private $isVisio;
 
-    /** @var null|VideoConferenceView */
-    private $videoConferenceView;
-
     /**
      * @param int                      $id
      * @param string                   $userSheetTitle
@@ -75,7 +72,6 @@ class MeetingView extends AbstractTimeEntityView
      * @param bool                     $isSheetDetailsSeeAble
      * @param bool                     $isUserParticipantMultipleSheets
      * @param bool                     $isVisio
-     * @param VideoConferenceView|null $videoConferenceView
      */
     public function __construct(
         int $id,
@@ -91,8 +87,7 @@ class MeetingView extends AbstractTimeEntityView
         array $participants,
         $isSheetDetailsSeeAble = false,
         $isUserParticipantMultipleSheets = false,
-        bool $isVisio = false,
-        VideoConferenceView $videoConferenceView = null
+        bool $isVisio = false
     ) {
         $this->id                              = $id;
         $this->userSheetTitle                  = $userSheetTitle;
@@ -108,7 +103,6 @@ class MeetingView extends AbstractTimeEntityView
         $this->isSheetDetailsSeeAble           = $isSheetDetailsSeeAble;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
         $this->isVisio                         = $isVisio;
-        $this->videoConferenceView             = $videoConferenceView;
     }
 
     /**
@@ -128,10 +122,22 @@ class MeetingView extends AbstractTimeEntityView
     }
 
     /**
-     * @return null|VideoConferenceView
+     * @return bool
      */
-    public function getVideoConference(): ?VideoConferenceView
+    public function isVisioExpired(): bool
     {
-        return $this->videoConferenceView;
+        $expirationDate = (clone $this->end)->modify('+15 min');
+
+        return new \DateTime() >= $expirationDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisioAvailable(): bool
+    {
+        $availableDate = (clone $this->begin)->modify('-15 min');
+
+        return new \DateTime() >= $availableDate;
     }
 }

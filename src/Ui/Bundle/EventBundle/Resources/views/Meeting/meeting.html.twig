@@ -2,7 +2,7 @@
      data-meeting-id="{{ meeting.id }}"
      data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}"
      data-duration="{{ meeting.duration.format('%H:%I') }}"
-        {% if meeting.visio %}
+        {% if meeting.visio and meeting.visioAvailable and not meeting.visioExpired %}
             data-visio-callback="{{ path('event_video_conference_request_access', {'meeting': meeting.id}) }}"
             data-isVisio="{{ meeting.visio }}"
         {% endif %}
@@ -51,7 +51,7 @@
                 </a>
             {% endif %}
             <div class="actions">
-                {% if meeting.visio %}
+                {% if meeting.visio and meeting.visioAvailable and not meeting.visioExpired %}
                     <button class="btn btn-primary start-visio">
                         <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}
                     </button>

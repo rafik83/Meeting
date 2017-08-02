@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
+use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,9 +37,13 @@ class VideoConferenceController extends Controller
             return new JsonResponse('Meeting is not visio', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $videoConferenceView = $this->get('tactician.commandbus')->handle(
-            new RequestAccess($meeting, $this->getUser())
-        );
+        try {
+            $videoConferenceView = $this->get('tactician.commandbus')->handle(
+                new RequestAccess($meeting, $this->getUser())
+            );
+        } catch (InvalidTokenGeneratorArgumentsException $exception) {
+            return new JsonResponse('Invalid token generator arguments', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return new JsonResponse($videoConferenceView);
     }

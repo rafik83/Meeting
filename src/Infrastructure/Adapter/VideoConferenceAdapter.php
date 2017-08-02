@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use InvalidArgumentException;
 use OpenTok\OpenTok;
 use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
+use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
@@ -37,7 +39,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function __construct(string $apiKey, string $apiSecret)
     {
-        $this->apiKey = $apiKey;
+        $this->apiKey  = $apiKey;
         $this->openTok = new OpenTok($apiKey, $apiSecret);
     }
 
@@ -55,16 +57,20 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string
     {
         $slotEndDate    = clone $slot->getEnd();
-        $sessionEndDate = $slotEndDate->modify('+15 min');
+        $sessionEndDate = $slotEndDate->modify('-1 month');
 
         $defaultOption = [
-            'role' => Role::PUBLISHER,
-//            'expireTime' => $sessionEndDate->getTimeStamp()
+            'role'       => Role::PUBLISHER,
+            'expireTime' => $sessionEndDate->getTimeStamp(),
         ];
 
-        return $this->openTok->generateToken($session->getSessionId(),array_merge(
-            $defaultOption, $options
-        ));
+        try {
+            return $this->openTok->generateToken($session->getSessionId(), array_merge(
+                $defaultOption, $options
+            ));
+        } catch (InvalidArgumentException $argumentException) {
+            throw new InvalidTokenGeneratorArgumentsException();
+        }
     }
 
     /**

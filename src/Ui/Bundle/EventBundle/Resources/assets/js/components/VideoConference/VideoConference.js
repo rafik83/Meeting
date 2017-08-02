@@ -32,9 +32,16 @@ VideoConference.prototype.requestAccess = function () {
     var url = this.element.dataset.visioCallback;
     this.element.querySelector('.start-visio').disabled = true;
 
-    axios.get(url).then(function (response) {
+    var request = axios.get(url);
+
+    request.then(function (response) {
         // init and connect to session
         this.init(response.data.apiKey, response.data.sessionId, response.data.token);
+    }.bind(this));
+
+    request.catch(function (error) {
+        alert('Impossible de démarrer le RDV en visio-conférence.');
+        this.element.querySelector('.start-visio').disabled = false;
     }.bind(this));
 };
 
