@@ -7,8 +7,9 @@ var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 
 /**
- * @param {Node} element
  * @constructor
+ *
+ * @param {Node} element
  */
 function VideoConference(element) {
     this.element = element;
@@ -24,6 +25,9 @@ function VideoConference(element) {
     this.element.querySelector('.end-visio').addEventListener('click', this.disconnect.bind(this));
 }
 
+/**
+ * Request session ID and token in order to access to the session
+ */
 VideoConference.prototype.requestAccess = function () {
     var url = this.element.dataset.visioCallback;
     this.element.querySelector('.start-visio').disabled = true;
@@ -35,6 +39,8 @@ VideoConference.prototype.requestAccess = function () {
 };
 
 /**
+ * Initialize session and subscribe to new other stream
+ *
  * @param {string} apiKey
  * @param {string} sessionId
  * @param {string} token
@@ -51,14 +57,14 @@ VideoConference.prototype.init = function (apiKey, sessionId, token) {
             var subscriberManager = new Subscriber(this.session, this.subscriberContainer);
             subscriberManager.subscribe(event);
 
-            this.subscriberContainer.classList.toggle('hide');
-            this.helperContainer.classList.toggle('hide');
+            this.subscriberContainer.classList.remove('hide');
+            this.helperContainer.classList.add('hide');
         }.bind(this));
 
         // When a stream, other than your own, leaves a session
         // the Session object dispatches a streamDestroyed event
         this.session.on("streamDestroyed", function (event) {
-            console.log('Stream destroyed');
+            console.log('Stream destroyed', event);
         }.bind(this));
 
         this.session.on("sessionDisconnected", function(event) {
@@ -70,6 +76,8 @@ VideoConference.prototype.init = function (apiKey, sessionId, token) {
 };
 
 /**
+ * Connect to the session, create and publish your stream
+ *
  * @param {string} token
  */
 VideoConference.prototype.connect = function (token) {
@@ -84,26 +92,36 @@ VideoConference.prototype.connect = function (token) {
             // publish video to other participant
             this.session.publish(publisher, this.handleError);
 
-            this.publisherContainer.classList.toggle('hide');
-            this.helperContainer.classList.toggle('hide');
+            this.publisherContainer.classList.remove('hide');
+            this.helperContainer.classList.remove('hide');
         } else {
             console.log(error);
         }
     }.bind(this));
 };
 
+/**
+ * Disconnect from the session
+ */
 VideoConference.prototype.disconnect = function () {
     this.session.disconnect();
+    this.session.off();
+    this.session = null;
 
     this.element.querySelector('.start-visio').classList.toggle('hide');
     this.element.querySelector('.start-visio').disabled = false;
     this.element.querySelector('.end-visio').classList.toggle('hide');
 
-    this.publisherContainer.classList.toggle('hide');
-    this.subscriberContainer.classList.toggle('hide');
-    this.helperContainer.classList.toggle('hide');
+    this.publisherContainer.classList.add('hide');
+    this.subscriberContainer.classList.add('hide');
+    this.helperContainer.classList.add('hide');
 };
 
+/**
+ * Handle callback errors
+ *
+ * @param {Object} error
+ */
 VideoConference.prototype.handleError = function (error) {
     if (error) {
         console.log('There was an error: ', error.name, error.message);

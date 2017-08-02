@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @param session
+ * @param {Session} session
  * @param {Node} container
  * @constructor
  */
@@ -11,6 +11,10 @@ function Subscriber(session, container) {
     this.subscriber = null;
 }
 
+/**
+ * @param {Object} event
+ * @returns {null|Subscriber}
+ */
 Subscriber.prototype.subscribe = function (event) {
     console.log('Subscribe to:', event.stream);
 
@@ -22,10 +26,15 @@ Subscriber.prototype.subscribe = function (event) {
     };
     
     this.subscriber = this.session.subscribe(event.stream, this.container.id, subscriberOptions, this.handleError);
-    
+
     return this.subscriber;
 };
 
+/**
+ * Handle subscriber callback errors
+ *
+ * @param {Object} error
+ */
 Subscriber.prototype.handleError = function (error) {
     if (error) {
         console.log('Subscriber error:', error);
