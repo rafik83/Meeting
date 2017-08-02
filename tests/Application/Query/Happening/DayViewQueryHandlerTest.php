@@ -117,8 +117,13 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 $happeningView1,
                 $happeningView2,
+
             ],
-            [$massView]
+            [
+                $massView,
+                $happeningView1,
+                $happeningView2,
+            ]
         );
 
         // Mock
