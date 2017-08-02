@@ -29,7 +29,7 @@
                             {% if massesAndHappeningsView.type == 'happening' %}
                                 {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': massesAndHappeningsView, 'isUserAloneParticipant': isUserAloneParticipant }) }}
                             {% elseif massesAndHappeningsView.type == 'mass_unavaibility' %}
-                                {{ include('EventBundle:Program:mass.html.twig', { 'mass': massesAndHappeningsView }) }}
+                                {{ include('EventBundle:Program:mass.html.twig', { 'mass': massesAndHappeningsView, 'withHourPrefix': true }) }}
                             {% endif %}
                         {% endfor %}
                     </div>
