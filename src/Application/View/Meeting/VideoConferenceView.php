@@ -36,8 +36,8 @@ class VideoConferenceView
      */
     public function __construct(string $token, string $sessionId, string $apiKey)
     {
-        $this->token  = $token;
-        $this->apiKey = $apiKey;
+        $this->token     = $token;
+        $this->apiKey    = $apiKey;
         $this->sessionId = $sessionId;
     }
 }
