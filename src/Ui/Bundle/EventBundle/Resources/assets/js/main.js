@@ -13,6 +13,7 @@ var $                     = require('jquery'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
     Agenda                = require('./components/agenda/_Agenda'),
+    Program               = require('./components/agenda/_Program'),
     ShowMore              = require('./components/_ShowMore'),
     ShowMoreParticipants  = require('./components/_ShowMoreParticipants'),
     CatalogFilters        = require('./components/_CatalogFilters'),
@@ -79,6 +80,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.agenda'), function (element) {
         new Agenda(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.happening'), function(element) {
+       new Program(element);
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__meeting_request'), function (element) {
