@@ -81,10 +81,6 @@ function init (target) {
         new Agenda(element);
     });
 
-    [].forEach.call(target.querySelectorAll('.program'), function (element) {
-        new Agenda(element);
-    });
-
     [].forEach.call(target.querySelectorAll('.catalog__meeting_request'), function (element) {
         var buttons = target.querySelector('[data-meeting-request-filter-type-buttons]');
 

@@ -1,3 +1,6 @@
+{% if suffixTitleWithTick is defined %}
+    {% set displayTickOnActionsBlock = (suffixTitleWithTick == true ? false : true) %}
+{% endif %}
 <header style="background: linear-gradient(to right, {{ leftColor }} 0%, {{ rightColor }} 100%) !important;">
     <a class="content" href="#{{ happening.title|url_encode }}">
 
@@ -8,13 +11,17 @@
         <span class="prefix"><i class="icon icon-{{ picto }}"></i></span>
         <p class="title">
             {{ happening.title }}
-            <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>
+            {% if suffixTitleWithTick is defined and suffixTitleWithTick == true %}
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>
+            {% endif %}
         </p>
     </a>
     {{ include('EventBundle:Happening:actions.html.twig', {
         'sheet': sheet,
         'happening': happening,
         'isUserAloneParticipant': isUserAloneParticipant,
-        'displayDetailsButton': displayDetailsButton
+        'displayDetailsButton': displayDetailsButton,
+        'displayTickOnActionsBlock': displayTickOnActionsBlock,
+        'doesCurrentUserParticipate': doesCurrentUserParticipate
     }) }}
 </header>

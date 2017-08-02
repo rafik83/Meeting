@@ -1,5 +1,9 @@
 .program-container {
 
+  .program {
+    margin-top: 40px;
+  }
+
   .program-head,
   .program-foot {
     font-size: 17px;
@@ -21,12 +25,10 @@
       }
       .actions {
         display: inline-block;
-        width: 100%;
+        float: right;
         flex-flow: row;
         position: relative;
-        margin-left: 10px;
         padding-right: 45px;
-        right: 0;
         padding-top: 24px;
         > a, .label {
           float: right;
@@ -72,6 +74,9 @@
         color: #fff;
         z-index: 10;
 
+        &:hover,
+        &:focus { text-decoration: none; }
+
         > span {
           min-width: 30px;
           line-height: 1;
@@ -96,6 +101,9 @@
         -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
+
+        &:hover,
+        &:focus { text-decoration: underline !important; }
       }
 
       .happeningParticipateIcon {
