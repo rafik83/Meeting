@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
@@ -44,7 +45,7 @@ class RequestAccessHandler
 
     /**
      * @param RequestAccess $requestAccess
-     * @throw InvalidTokenGeneratorArgumentsException
+     * @throws InvalidTokenGeneratorArgumentsException
      *
      * @return VideoConferenceView
      */
