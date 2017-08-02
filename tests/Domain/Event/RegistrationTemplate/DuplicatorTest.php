@@ -1,0 +1,79 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Event\RegistrationTemplate;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class DuplicatorTest extends TestCase
+{
+    public function testDuplicate()
+    {
+        $date                       = new \DateTime();
+        $eventDuplicated            = EventFactory::createEvent('event duplicated');
+        $event                      = EventFactory::createEvent(
+            'event',
+            EventFactory::FALLBACK_LOCALE_DEFAULT,
+            ['fr', 'en',],
+            Event::VAT_MODE_ET,
+            $eventDuplicated
+        );
+        $registrationTemplate       = new RegistrationTemplate(
+            'registration template',
+            [],
+            ['fr'],
+            'fr',
+            $date
+        );
+        $clonedRegistrationTemplate = new RegistrationTemplate(
+            'registration template',
+            [],
+            ['fr'],
+            'fr',
+            $date
+        );
+
+        $templateData = new TemplateData('type', [], 'fr', 'fr');
+        $registrationTemplate->setValue($templateData->getConfig());
+
+        $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
+        $registrationTemplateRepository->set($registrationTemplate)->shouldBeCalled();
+        $registrationTemplateRepository
+            ->getTemplateForGivenEvent($eventDuplicated)
+            ->shouldBeCalled()
+            ->willReturn([$registrationTemplate]);
+
+        $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
+        $registrationTemplateCloner
+            ->duplicate($registrationTemplate, $event, $registrationTemplate->getTitle())
+            ->shouldBeCalled()
+            ->willReturn($clonedRegistrationTemplate);
+
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createFromTemplate($registrationTemplate)
+            ->shouldBeCalled()
+            ->willReturn($templateData);
+
+        (new Duplicator(
+            $registrationTemplateRepository->reveal(),
+            $templateDataFactory->reveal(),
+            $registrationTemplateCloner->reveal()
+        ))->duplicate($event, []);
+    }
+}
