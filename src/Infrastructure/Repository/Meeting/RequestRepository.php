@@ -307,7 +307,7 @@ class RequestRepository implements RequestRepositoryInterface
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
 
-        return new PaginatedResult(array_map(function (Request $request) use ($locale) {
+        return new PaginatedResult(array_map(function (Request $request) {
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
