@@ -27,6 +27,9 @@ class Duplicator
      */
     private $fileStorage;
 
+    /** @var array */
+    private $duplicationHelper = [];
+
     /**
      * Duplicator constructor.
      *
@@ -43,61 +46,96 @@ class Duplicator
 
     /**
      * @param Event $event
+     *
+     * @return array
      */
     public function duplicate(Event $event)
     {
         $products = $this->productRepository->findByEvent($event->getDuplicatedFrom());
+        $plans = [];
 
         foreach ($products as $product) {
-            $productToAdd = Product::createProductFromType(
-                $product->getType(),
-                $event,
-                $product->getName(),
-                $this->fileStorage->copyAndRename($product->getImage()),
-                $product->getUnitPrice(),
-                $product->getQuantityMax(),
-                $product->getAvailabilityCurrent(),
-                $product->getAvailabilityMax(),
-                $product->isUpdatable(),
-                $product->getDeletableUntil(),
-                $product->isSubjectedToValidation(),
-                $product->getBuyableUntil()
-            );
 
+            /*
+             * We need to store plans to handle them after the others products
+             * to use the duplicate products newly created
+             */
             if ($product->getType() === Product::TYPE_PLAN) {
-                $this->handlePlanProductsAndFeatures($productToAdd, $product);
+                $plans[] = $product;
+                continue;
             }
 
-            foreach ($product->getTranslationsData() as $locale => $translation) {
-                if (in_array($locale, $event->getLocales())) {
-                    $title       = $translation['title'] ?? '';
-                    $description = $translation['description'] ?? '';
-                    $addon       = $translation['addon'] ?? '';
-
-                    $subjectedToValidationHelp = $translation['subjectedToValidationHelp'] ?? '';
-
-                    $product->translate(
-                        $locale,
-                        $title,
-                        null,
-                        $description,
-                        $addon,
-                        $subjectedToValidationHelp
-                    );
-                }
-            }
-            $this->productRepository->add($productToAdd);
+            $this->duplicatedProduct($product, $event);
         }
+
+        foreach ($plans as $plan) {
+            $this->duplicatedProduct($plan, $event);
+        }
+
+        return $this->duplicationHelper;
+    }
+
+    /**
+     * @param Product $product
+     * @param Event   $event
+     */
+    private function duplicatedProduct(Product $product, Event $event)
+    {
+        $productToAdd = Product::createProductFromType(
+            $product->getType(),
+            $event,
+            $product->getName(),
+            $this->fileStorage->copyAndRename($product->getImage()),
+            $product->getUnitPrice(),
+            $product->getQuantityMax(),
+            $product->getAvailabilityCurrent(),
+            $product->getAvailabilityMax(),
+            $product->isUpdatable(),
+            $product->getDeletableUntil(),
+            $product->isSubjectedToValidation(),
+            $product->getBuyableUntil()
+        );
+
+        foreach ($product->getTranslationsData() as $locale => $translation) {
+            if (in_array($locale, $event->getLocales())) {
+                $title       = $translation['title'] ?? '';
+                $description = $translation['description'] ?? '';
+                $addon       = $translation['addon'] ?? '';
+
+                $subjectedToValidationHelp = $translation['subjectedToValidationHelp'] ?? '';
+
+                $product->translate(
+                    $locale,
+                    $title,
+                    null,
+                    $description,
+                    $addon,
+                    $subjectedToValidationHelp
+                );
+            }
+        }
+        $this->duplicationHelper['product'][$product->getId()] = $productToAdd;
+
+        if ($product->getType() === Product::TYPE_PLAN) {
+            $this->handlePlanProductsAndFeatures($productToAdd, $product);
+        }
+
+        $this->productRepository->add($productToAdd);
     }
 
     /**
      * @param Product $productToAdd
      * @param Product $product
      */
-    public function handlePlanProductsAndFeatures(Product $productToAdd, Product $product)
-    {
+    private function handlePlanProductsAndFeatures(
+        Product $productToAdd,
+        Product $product
+    ) {
         foreach ($product->getIncludedProducts() as $productIncluded) {
-            $productToAdd->includeProduct($productIncluded->getIncluded(), $productIncluded->getQuantity());
+            $productToAdd->includeProduct(
+                $this->duplicationHelper['product'][$productIncluded->getIncluded()->getId()],
+                $productIncluded->getQuantity()
+            );
         }
 
         foreach ($product->getFeatures() as $feature) {
