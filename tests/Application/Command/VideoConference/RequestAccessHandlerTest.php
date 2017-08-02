@@ -10,6 +10,7 @@
 
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler;
@@ -29,7 +30,7 @@ class RequestAccessHandlerTest extends TestCase
 
         // Mock
         $session                   = $this->prophesize(Session::class);
-        $videoConference           = $this->prophesize(VideoConferenceInterface::class);
+        $videoConference           = $this->prophesize(VideoConferenceAdapterInterface::class);
         $videoConferenceRepository = $this->prophesize(VideoConferenceRepositoryInterface::class);
 
         $session->getSessionId()->shouldBeCalled()->willReturn('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9');
@@ -75,7 +76,7 @@ class RequestAccessHandlerTest extends TestCase
         // Mock
         $videoConference           = $this->prophesize(VideoConference::class);
         $session                   = $this->prophesize(Session::class);
-        $videoConferenceInterface  = $this->prophesize(VideoConferenceInterface::class);
+        $videoConferenceInterface  = $this->prophesize(VideoConferenceAdapterInterface::class);
         $videoConferenceRepository = $this->prophesize(VideoConferenceRepositoryInterface::class);
 
         $videoConference->getTokenByUser($user)->willReturn(null);

@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 use OpenTok\Session;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
-interface VideoConferenceInterface
+interface VideoConferenceAdapterInterface
 {
     /**
      * @param array $options

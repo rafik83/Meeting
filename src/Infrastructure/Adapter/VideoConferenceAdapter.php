@@ -13,10 +13,11 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 use OpenTok\OpenTok;
 use OpenTok\Role;
 use OpenTok\Session;
+use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
-class VideoConferenceAdapter implements VideoConferenceInterface
+class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
     /**
      * @var string
@@ -75,9 +76,7 @@ class VideoConferenceAdapter implements VideoConferenceInterface
     }
 
     /**
-     * @param string $sessionId
-     *
-     * @return Session
+     * {@inheritdoc}
      */
     public function getSession(string $sessionId): Session
     {

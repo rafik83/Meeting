@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
+use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\VideoConference;
@@ -24,22 +25,22 @@ class RequestAccessHandler
     private $videoConferenceRepository;
 
     /**
-     * @var VideoConferenceInterface
+     * @var VideoConferenceAdapterInterface
      */
-    private $videoConference;
+    private $videoConferenceAdapter;
 
     /**
      * RequestAccessHandler constructor.
      *
-     * @param VideoConferenceInterface           $videoConference
+     * @param VideoConferenceAdapterInterface    $videoConferenceAdapter
      * @param VideoConferenceRepositoryInterface $videoConferenceRepository
      */
     public function __construct(
-        VideoConferenceInterface $videoConference,
+        VideoConferenceAdapterInterface $videoConferenceAdapter,
         VideoConferenceRepositoryInterface $videoConferenceRepository
     ) {
         $this->videoConferenceRepository = $videoConferenceRepository;
-        $this->videoConference           = $videoConference;
+        $this->videoConferenceAdapter    = $videoConferenceAdapter;
     }
 
     /**
@@ -55,8 +56,8 @@ class RequestAccessHandler
             $videoConferenceToken = $videoConference->getTokenByUser($requestAccess->user);
 
             if ($videoConferenceToken === null) {
-                $token = $this->videoConference->generateAccessToken(
-                    $this->videoConference->getSession($videoConference->getSessionId()),
+                $token = $this->videoConferenceAdapter->generateAccessToken(
+                    $this->videoConferenceAdapter->getSession($videoConference->getSessionId()),
                     $requestAccess->meeting->getSlot()
                 );
 
@@ -76,12 +77,12 @@ class RequestAccessHandler
             return new VideoConferenceView(
                 $token,
                 $videoConference->getSessionId(),
-                $this->videoConference->getApiKey()
+                $this->videoConferenceAdapter->getApiKey()
             );
         }
 
-        $session = $this->videoConference->createSession();
-        $token   = $this->videoConference->generateAccessToken($session, $requestAccess->meeting->getSlot());
+        $session = $this->videoConferenceAdapter->createSession();
+        $token   = $this->videoConferenceAdapter->generateAccessToken($session, $requestAccess->meeting->getSlot());
 
         $this->videoConferenceRepository->add(
             new VideoConference($session->getSessionId(), $requestAccess->meeting)
@@ -90,7 +91,7 @@ class RequestAccessHandler
         return new VideoConferenceView(
             $token,
             $session->getSessionId(),
-            $this->videoConference->getApiKey()
+            $this->videoConferenceAdapter->getApiKey()
         );
     }
 }
