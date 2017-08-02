@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Domain\Event\SheetTemplate;
 
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
@@ -71,7 +79,7 @@ class Duplicator
 
             $clonedTemplate->setValue($templateData->getConfig());
             $this->sheetTemplateRepository->set($clonedTemplate);
-            $duplicationHelper['registrationTemplate'][$sheetTemplate->getId()] = $clonedTemplate;
+            $duplicationHelper['sheetTemplate'][$sheetTemplate->getId()] = $clonedTemplate;
         }
 
         return $duplicationHelper;

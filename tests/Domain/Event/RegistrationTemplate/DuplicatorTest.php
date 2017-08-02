@@ -33,13 +33,19 @@ class DuplicatorTest extends TestCase
             Event::VAT_MODE_ET,
             $eventDuplicated
         );
-        $registrationTemplate       = new RegistrationTemplate(
+
+        $registrationTemplate = new RegistrationTemplate(
             'registration template',
             [],
             ['fr'],
             'fr',
             $date
         );
+        $reflection = new \ReflectionClass(RegistrationTemplate::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($registrationTemplate, 4);
+
         $clonedRegistrationTemplate = new RegistrationTemplate(
             'registration template',
             [],
@@ -52,7 +58,7 @@ class DuplicatorTest extends TestCase
         $registrationTemplate->setValue($templateData->getConfig());
 
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
-        $registrationTemplateRepository->set($registrationTemplate)->shouldBeCalled();
+        $registrationTemplateRepository->set($clonedRegistrationTemplate)->shouldBeCalled();
         $registrationTemplateRepository
             ->getTemplateForGivenEvent($eventDuplicated)
             ->shouldBeCalled()
@@ -70,10 +76,12 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($templateData);
 
-        (new Duplicator(
+        $duplicationhelper = (new Duplicator(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $registrationTemplateCloner->reveal()
         ))->duplicate($event, []);
+
+        $this->assertEquals($clonedRegistrationTemplate, $duplicationhelper['registrationTemplate'][4]);
     }
 }

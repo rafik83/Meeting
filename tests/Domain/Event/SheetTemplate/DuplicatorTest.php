@@ -47,12 +47,16 @@ class DuplicatorTest extends TestCase
             'fr',
             $date
         );
+        $reflection = new \ReflectionClass(SheetTemplate::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheetTemplate, 5);
 
         $templateData = new TemplateData('type', [], 'fr', 'fr');
         $sheetTemplate->setValue($templateData->getConfig());
 
         $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
-        $sheetTemplateRepository->set($sheetTemplate)->shouldBeCalled();
+        $sheetTemplateRepository->set($clonedSheetTemplate)->shouldBeCalled();
         $sheetTemplateRepository
             ->getTemplateForGivenEvent($eventDuplicated)
             ->shouldBeCalled()
@@ -70,10 +74,12 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($templateData);
 
-        (new Duplicator(
+        $duplicationhelper = (new Duplicator(
             $sheetTemplateRepository->reveal(),
             $sheetTemplateCloner->reveal(),
             $templateDataFactory->reveal()
         ))->duplicate($event, []);
+
+        $this->assertEquals($clonedSheetTemplate, $duplicationhelper['sheetTemplate'][5]);
     }
 }
