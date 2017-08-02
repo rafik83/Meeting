@@ -47,7 +47,7 @@ class Duplicator
      *
      * @return array
      */
-    public function duplicate(Event $event, array $duplicationHelper)
+    public function duplicate(Event $event, array $duplicationHelper): array
     {
         $sheetTemplates = $this
             ->sheetTemplateRepository
