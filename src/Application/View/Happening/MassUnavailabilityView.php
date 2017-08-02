@@ -14,4 +14,13 @@ use Proximum\Vimeet\Application\View\Unavailability\Mass\AbstractMassView;
 
 class MassUnavailabilityView extends AbstractMassView
 {
+    const TYPE_MASS_UNAVAIBILITY = 'mass_unavaibility';
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return self::TYPE_MASS_UNAVAIBILITY;
+    }
 }

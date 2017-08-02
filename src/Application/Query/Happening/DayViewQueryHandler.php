@@ -59,7 +59,7 @@ class DayViewQueryHandler
         );
 
         $happeningViews = [];
-        $massView       = [];
+        $massViews      = [];
 
         foreach ($happenings as $happening) {
             $happeningViews[] = $this->happeningViewQueryHandler->handle(
@@ -71,7 +71,7 @@ class DayViewQueryHandler
             if ($mass->getBegin() >= $query->eventDay->getStartTime()
                 && $mass->getEnd() <= $query->eventDay->getEndTime()
             ) {
-                $massView[] = $this->massUnavailabilityViewQueryHandler->handle(
+                $massViews[] = $this->massUnavailabilityViewQueryHandler->handle(
                     new MassUnavailabilityViewQuery($mass, $query->event, $query->locale)
                 );
             }
@@ -82,7 +82,31 @@ class DayViewQueryHandler
             $query->eventDay->getEndTime(),
             $query->event->getConfiguration()->getScheduleScale(),
             $happeningViews,
-            $massView
+            $this->mergeAndSortMassViewsAndHappeningViews($happeningViews, $massViews)
         );
+    }
+
+    /**
+     * Merge array of MassUnavaibilityView and array of HappeningView
+     * Then sort it by begin date, if begin date are equals the one who have the lowest end date rule
+     *
+     * @param array $happeningViews
+     * @param array $massUnavailabilityView
+     *
+     * @return array of MassUnavaibilityView and HappeningView
+     */
+    private function mergeAndSortMassViewsAndHappeningViews(array $happeningViews, array $massUnavailabilityView): array
+    {
+        $massesAndHappenings = array_merge($happeningViews, $massUnavailabilityView);
+
+        usort($massesAndHappenings, function ($first, $second) {
+            if ($first->begin === $second->begin) {
+                return 0;
+            }
+
+            return $first->begin < $second->begin ? -1 : 1;
+        });
+
+        return $massesAndHappenings;
     }
 }
