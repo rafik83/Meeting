@@ -55,7 +55,6 @@ class Duplicator
         $plans = [];
 
         foreach ($products as $product) {
-
             /*
              * We need to store plans to handle them after the others products
              * to use the duplicate products newly created
