@@ -26,7 +26,7 @@ class RequestAccess
     public $user;
 
     /**
-     * ConnectAction constructor.
+     * RequestAccess constructor.
      *
      * @param Meeting $meeting
      * @param User    $user

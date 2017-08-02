@@ -79,6 +79,10 @@ services:
             - '@domain.key_dates.checker.agenda_access_checker'
         tags:
             - { name: security.voter }
+    security_voter.meeting_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\MeetingAccessVoter
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension

@@ -17,9 +17,13 @@ Proximum\Vimeet\Domain\Model\VideoConference:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
             joinColumn:
                 onDelete: CASCADE
+                nullable: false
             cascade: ["persist"]
     oneToMany:
         tokens:
             targetEntity: Proximum\Vimeet\Domain\Model\VideoConferenceToken
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
             cascade: ["persist"]
             mappedBy: videoConference

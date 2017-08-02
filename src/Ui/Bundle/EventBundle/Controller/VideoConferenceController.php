@@ -26,10 +26,11 @@ class VideoConferenceController extends Controller
      *
      * @return JsonResponse
      */
-    public function requestAccessAction(EventDomain $eventDomain, Meeting $meeting)
+    public function requestAccessAction(EventDomain $eventDomain, Meeting $meeting): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
+        $this->denyAccessUnlessGranted('PERMISSION_MEETING_ACCESS', $meeting);
 
         if (!$meeting->getSpot()->isVisio()) {
             return new JsonResponse('Meeting is not visio', Response::HTTP_UNPROCESSABLE_ENTITY);
