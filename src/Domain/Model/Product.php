@@ -1005,7 +1005,7 @@ class Product
      * @param string                  $type
      * @param Event                   $event
      * @param string                  $name
-     * @param string                  $image
+     * @param null|string             $image
      * @param int                     $unitPrice
      * @param int                     $quantityMax
      * @param int                     $availabilityCurrent
@@ -1020,15 +1020,15 @@ class Product
     public static function createProductFromType(
         string $type,
         Event $event,
-        $name,
-        $image,
-        $unitPrice,
-        $quantityMax,
-        $availabilityCurrent,
-        $availabilityMax,
-        $updatable,
+        string $name,
+        string $image = null,
+        int $unitPrice,
+        int $quantityMax,
+        int $availabilityCurrent,
+        int $availabilityMax,
+        bool $updatable,
         \DateTimeInterface $deletableUntil = null,
-        $subjectedToValidation = false,
+        bool $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
     ) {
         if ($type === self::TYPE_OPTION) {
