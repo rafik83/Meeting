@@ -151,7 +151,10 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled()->willReturn($happeningView2);
 
         $massHandler = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $massHandler
+            ->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))
+            ->shouldBeCalled()
+            ->willReturn($massView);
 
 
         $handler = new DayViewQueryHandler(
