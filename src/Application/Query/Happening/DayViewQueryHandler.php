@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
+use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
 use Proximum\Vimeet\Application\View\Happening\DayView;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
@@ -99,7 +100,7 @@ class DayViewQueryHandler
     {
         $massesAndHappenings = array_merge($happeningViews, $massUnavailabilityView);
 
-        usort($massesAndHappenings, function ($first, $second) {
+        usort($massesAndHappenings, function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
             if ($first->begin === $second->begin) {
                 return 0;
             }
