@@ -82,7 +82,7 @@ function init (target) {
         new Agenda(element);
     });
 
-    [].forEach.call(target.querySelectorAll('.happening, .mass'), function(element) {
+    [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function(element) {
        new Program(element);
     });
 

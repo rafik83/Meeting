@@ -13,7 +13,6 @@ function Program(element) {
     if (this.element.classList.contains('has-details')) {
         this.link.addEventListener('click', this.toggleOpen);
     }
-    console.log(this.open);
 }
 
 /**

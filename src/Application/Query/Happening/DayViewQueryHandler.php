@@ -102,7 +102,7 @@ class DayViewQueryHandler
 
         usort($massesAndHappenings, function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
             if ($first->begin === $second->begin) {
-                return 0;
+                return $first->end < $second->end ? -1 : 1;
             }
 
             return $first->begin < $second->begin ? -1 : 1;

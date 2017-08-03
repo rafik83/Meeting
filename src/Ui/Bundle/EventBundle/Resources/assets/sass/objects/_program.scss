@@ -1,5 +1,4 @@
 .program-container {
-
   .program {
     margin-top: 40px;
   }
@@ -19,8 +18,8 @@
   .program-foot { text-align: right; }
 
   .meets {
-    .happening,
-    .mass {
+    .program-happening,
+    .program-mass {
       header {
         position: relative;
       }
@@ -139,27 +138,6 @@
         p { margin: 0; }
 
         a.btn { margin-left: 8px; }
-      }
-    }
-
-    &.collapsed {
-      header {
-        text-align: center;
-
-        .actions {
-          display: none;
-        }
-
-        .content {
-          padding: 0;
-
-          .prefix {
-            margin: 0 auto;
-          }
-          .title {
-            display: none;
-          }
-        }
       }
     }
   }
