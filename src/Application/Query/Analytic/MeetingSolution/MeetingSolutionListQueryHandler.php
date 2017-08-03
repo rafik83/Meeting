@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Graph\SpotFillingR
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\MeetingSolutionView;
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Sheet\SheetSatisfactionListView;
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Spot\SpotSatisfactionListView;
-use Proximum\Vimeet\Domain\Model\Analytic\MeetingSolution;
 use Proximum\Vimeet\Domain\Repository\Analytic\MeetingSolutionRepositoryInterface;
 
 class MeetingSolutionListQueryHandler
