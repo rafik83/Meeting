@@ -1,143 +1,274 @@
 .program-container {
-  .program {
-    margin-top: 40px;
-  }
 
-  .program-head,
-  .program-foot {
-    font-size: 17px;
+  @media (max-width: 640px) {
+    .meets {
+      .program-happening,
+      .program-mass {
 
-    strong {
-      font-size: 18px;
-      text-transform: uppercase;
-      margin-right: 3px;
-    }
-  }
+        margin-bottom: 10px;
 
-  .program-head { margin-bottom: 20px; }
-  .program-foot { text-align: right; }
-
-  .meets {
-    .program-happening,
-    .program-mass {
-      header {
-        position: relative;
-      }
-      .actions {
-        display: inline-block;
-        float: right;
-        flex-flow: row;
-        position: relative;
-        padding-right: 45px;
-        padding-top: 24px;
-        > a, .label {
-          float: right;
-          margin-left: 5px;
+        header {
+          position: relative;
         }
-        > .label {
-          margin-top: 10px;
-        }
-      }
-    }
-  }
-
-  .meet {
-    left: 0;
-    width: 100%;
-    padding: $agenda-meet-margin;
-
-    &.open {
-      > header {
         .actions {
-          display: block;
-          right: 45px;
-          bottom: 16%;
-        }
-      }
+          font-size: 10px;
+          line-height: 1px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-bottom: 10px;
+          > a, .label {
 
-      .details { display: block; }
-    }
+          }
+          > .label {
 
-    > header {
-      min-height: 80px;
-      background-color: #0093df;
-      height: 100%;
-      overflow: hidden;
-
-      .content {
-        position: absolute;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        height: 100%;
-        padding: 0 0 0 24px;
-        color: #fff;
-        z-index: 10;
-
-        &:hover,
-        &:focus { text-decoration: none; }
-
-        > span {
-          min-width: 30px;
-          line-height: 1;
-          font-size: 15px;
-          font-weight: bold;
-          text-align: center;
-          text-transform: uppercase;
-
-          .icon {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 20px;
           }
         }
       }
+    }
 
-      p {
-        margin-bottom: 0;
+    .meet {
+      &.open {
+        .details {
+          display: block;
+        }
+      }
+      > .details {
+        position: relative;
+        display: none;
+        padding: 20px;
+        font-size: 12px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: 0;
+
+        footer {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 12px;
+
+          p {
+            margin: 0;
+          }
+
+          a.btn {
+            margin-left: 4px;
+          }
+        }
+      }
+      > header {
+        min-height: 80px;
+        background-color: #0093df;
+
+        .content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 100%;
+          padding: 2% 0 0 4%;
+          color: #fff;
+          z-index: 10;
+
+          &:hover,
+          &:focus {
+            text-decoration: none;
+          }
+
+          > span {
+            min-width: 30px;
+            line-height: 1;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+
+            .icon {
+              display: block;
+              margin-bottom: 5px;
+              font-size: 20px;
+            }
+          }
+        }
+
+        p {
+          margin-bottom: 0;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          width: 100%;
+          line-height: 30px;
+
+          &:hover,
+          &:focus {
+            text-decoration: underline !important;
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 641px) {
+    .program {
+      margin-top: 40px;
+    }
+
+    .program-head,
+    .program-foot {
+      font-size: 17px;
+
+      strong {
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-right: 3px;
+      }
+    }
+
+    .program-head {
+      margin-bottom: 20px;
+    }
+    .program-foot {
+      text-align: right;
+    }
+
+    .meets {
+      .program-happening,
+      .program-mass {
+        header {
+          position: relative;
+        }
+        .actions {
+          display: inline-block;
+          float: right;
+          flex-flow: row;
+          position: relative;
+          padding-right: 45px;
+          padding-top: 24px;
+          > a, .label {
+            float: right;
+            margin-left: 5px;
+          }
+          > .label {
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+
+    .meet {
+      left: 0;
+      width: 100%;
+      padding: $agenda-meet-margin;
+
+      &.open {
+        > header {
+          .actions {
+            display: block;
+            right: 45px;
+            bottom: 16%;
+          }
+        }
+
+        .details {
+          display: block;
+        }
+      }
+
+      > header {
+        min-height: 80px;
+        background-color: #0093df;
+        height: 100%;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        width: 100%;
-        line-height: 30px;
 
-        &:hover,
-        &:focus { text-decoration: underline !important; }
+        .content {
+          position: absolute;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 100%;
+          padding: 0 0 0 24px;
+          color: #fff;
+          z-index: 10;
+
+          &:hover,
+          &:focus {
+            text-decoration: none;
+          }
+
+          > span {
+            min-width: 30px;
+            line-height: 1;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+
+            .icon {
+              display: block;
+              margin-bottom: 5px;
+              font-size: 20px;
+            }
+          }
+        }
+
+        p {
+          margin-bottom: 0;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          width: 100%;
+          line-height: 30px;
+
+          &:hover,
+          &:focus {
+            text-decoration: underline !important;
+          }
+        }
+
+        .happeningParticipateIcon {
+          font-size: 30px;
+        }
       }
 
-      .happeningParticipateIcon {
-        font-size: 30px;
+      &.lock {
+        > header {
+          background-color: rgba(#545454, .9);
+        }
       }
-    }
 
-    &.lock {
-      > header { background-color: rgba(#545454, .9); }
-    }
+      &.break {
+        > header {
+          background-color: #78c23a;
+        }
+      }
 
-    &.break {
-      > header { background-color: #78c23a; }
-    }
+      > .details {
+        position: relative;
+        display: none;
+        padding: 20px;
+        font-size: 14px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: 0;
 
-    > .details {
-      position: relative;
-      display: none;
-      padding: 20px;
-      font-size: 14px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-top: 0;
+        footer {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 15px;
 
-      footer {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 15px;
+          p {
+            margin: 0;
+          }
 
-        p { margin: 0; }
-
-        a.btn { margin-left: 8px; }
+          a.btn {
+            margin-left: 8px;
+          }
+        }
       }
     }
   }
