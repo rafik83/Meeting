@@ -57,6 +57,9 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     private $isVisio;
 
+    /** @var bool */
+    private $isVisioAvailable;
+
     /**
      * @param int                      $id
      * @param string                   $userSheetTitle
@@ -72,6 +75,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param bool                     $isSheetDetailsSeeAble
      * @param bool                     $isUserParticipantMultipleSheets
      * @param bool                     $isVisio
+     * @param bool                     $isVisioAvailable
      */
     public function __construct(
         int $id,
@@ -87,7 +91,8 @@ class MeetingView extends AbstractTimeEntityView
         array $participants,
         $isSheetDetailsSeeAble = false,
         $isUserParticipantMultipleSheets = false,
-        bool $isVisio = false
+        bool $isVisio = false,
+        $isVisioAvailable = false
     ) {
         $this->id                              = $id;
         $this->userSheetTitle                  = $userSheetTitle;
@@ -103,6 +108,7 @@ class MeetingView extends AbstractTimeEntityView
         $this->isSheetDetailsSeeAble           = $isSheetDetailsSeeAble;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
         $this->isVisio                         = $isVisio;
+        $this->isVisioAvailable                = $isVisioAvailable;
     }
 
     /**
@@ -124,20 +130,8 @@ class MeetingView extends AbstractTimeEntityView
     /**
      * @return bool
      */
-    public function isVisioExpired(): bool
-    {
-        $expirationDate = (clone $this->end)->modify('+15 min');
-
-        return new \DateTime() >= $expirationDate;
-    }
-
-    /**
-     * @return bool
-     */
     public function isVisioAvailable(): bool
     {
-        $availableDate = (clone $this->begin)->modify('-15 min');
-
-        return new \DateTime() >= $availableDate;
+        return $this->isVisioAvailable;
     }
 }

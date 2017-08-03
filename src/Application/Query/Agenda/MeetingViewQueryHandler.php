@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQuery;
@@ -30,15 +31,23 @@ class MeetingViewQueryHandler
     private $ruleRepository;
 
     /**
+     * @var VideoMeetingAccess
+     */
+    private $videoMeetingAccess;
+
+    /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
-     * @param RuleRepositoryInterface            $ruleRepository
+     * @param RuleRepositoryInterface $ruleRepository
+     * @param VideoMeetingAccess $videoMeetingAccess
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
-        RuleRepositoryInterface $ruleRepository
+        RuleRepositoryInterface $ruleRepository,
+        VideoMeetingAccess $videoMeetingAccess
     ) {
         $this->participantHandler = $participantHandler;
-        $this->ruleRepository     = $ruleRepository;
+        $this->ruleRepository = $ruleRepository;
+        $this->videoMeetingAccess = $videoMeetingAccess;
     }
 
     /**
@@ -75,7 +84,8 @@ class MeetingViewQueryHandler
             $participants,
             $isSheetDetailsSeeAble,
             $query->isUserParticipantMultipleSheets,
-            $query->meeting->getSpot()->isVisio()
+            $query->meeting->getSpot()->isVisio(),
+            $this->videoMeetingAccess->allowedToAccess($query->meeting)
         );
 
         return $meeting;

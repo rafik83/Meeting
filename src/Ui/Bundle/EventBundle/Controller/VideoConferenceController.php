@@ -32,6 +32,7 @@ class VideoConferenceController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
         $this->denyAccessUnlessGranted('PERMISSION_MEETING_ACCESS', $meeting);
+        $this->denyAccessUnlessGranted('PERMISSION_VIDEO_MEETING_ACCESS', $meeting);
 
         if (!$meeting->getSpot()->isVisio()) {
             return new JsonResponse('Meeting is not visio', Response::HTTP_UNPROCESSABLE_ENTITY);

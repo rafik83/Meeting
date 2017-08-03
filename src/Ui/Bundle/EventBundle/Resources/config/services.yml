@@ -83,6 +83,12 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\MeetingAccessVoter
         tags:
             - { name: security.voter }
+    security_voter.video_meeting_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter
+        arguments:
+            - '@components.security.video_meeting_access'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension

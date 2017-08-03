@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
@@ -82,6 +83,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
+        $videoMeetingAccess = $this->prophesize(VideoMeetingAccess::class);
+
         $participantHandler
             ->handle(new MeetingParticipantViewQuery($participant->reveal(), [$rule], 'fr'))
             ->shouldBeCalled()
@@ -90,11 +93,15 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->handle(new MeetingParticipantViewQuery($participant2->reveal(), [$rule], 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantView2);
+
         $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
+
+        $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
-            $ruleRepository->reveal()
+            $ruleRepository->reveal(),
+            $videoMeetingAccess->reveal()
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -169,6 +176,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
+        $videoMeetingAccess = $this->prophesize(VideoMeetingAccess::class);
+
         $participantHandler
             ->handle($participantViewQuery1)
             ->shouldBeCalled()
@@ -179,9 +188,12 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($participantView2);
         $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
 
+        $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
-            $ruleRepository->reveal()
+            $ruleRepository->reveal(),
+            $videoMeetingAccess->reveal()
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
