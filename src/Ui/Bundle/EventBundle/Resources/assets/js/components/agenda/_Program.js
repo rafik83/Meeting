@@ -8,10 +8,9 @@ function Program(element) {
     this.element    = element;
     this.link       = this.element.querySelector('.title');
     this.open       = false;
-    this.toggleOpen = this.toggleOpen.bind(this);
 
     if (this.element.classList.contains('has-details')) {
-        this.link.addEventListener('click', this.toggleOpen);
+        this.link.addEventListener('click', this.toggleOpen.bind(this));
     }
 }
 
