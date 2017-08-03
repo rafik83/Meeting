@@ -39,13 +39,25 @@ class SheetSatisfactionListViewDenormalizerTest extends TestCase
         $result = $serializer->denormalize($data, SheetSatisfactionListView::class, 'json');
 
         $sheetSatisfaction1 = new SheetSatisfactionView(271, 'SATT GRAND EST', 12, 'Fournisseur', 100);
-        $sheetSatisfaction2 = new SheetSatisfactionView(319, 'EBAUCHES MICROMECANIQUE PRECITRAME', 12, 'Fournisseur', 89);
+        $sheetSatisfaction2 = new SheetSatisfactionView(
+            319,
+            'EBAUCHES MICROMECANIQUE PRECITRAME',
+            12,
+            'Fournisseur',
+            89
+        );
         $sheetSatisfaction3 = new SheetSatisfactionView(339, 'FUNCOATS', 14, 'Start-up', 48);
         $sheetSatisfaction4 = new SheetSatisfactionView(358, 'MULTIPRISE', 13, 'Donneur d\'ordres', 70);
         $sheetSatisfaction5 = new SheetSatisfactionView(427, 'MOULINAGE DU SOLIER', 13, 'Donneur d\'ordres', 100);
-        $sheetSatisfaction6 = new SheetSatisfactionView(437, 'IPC INNOVATION PLASTURGIE COMPOSITES', 12, 'Fournisseur', 87);
+        $sheetSatisfaction6 = new SheetSatisfactionView(
+            437,
+            'IPC INNOVATION PLASTURGIE COMPOSITES',
+            12,
+            'Fournisseur',
+            87
+        );
         $sheetSatisfaction7 = new SheetSatisfactionView(449, 'KERANOVA', 13, 'Donneur d\'ordres', 100);
-        $expected = new SheetSatisfactionListView();
+        $expected           = new SheetSatisfactionListView();
         $expected->addSheetSatisfaction($sheetSatisfaction1);
         $expected->addSheetSatisfaction($sheetSatisfaction2);
         $expected->addSheetSatisfaction($sheetSatisfaction3);
