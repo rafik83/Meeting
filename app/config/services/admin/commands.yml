@@ -11,6 +11,7 @@ services:
             - '@query.analytic.meeting_solution.sheet.sheet_satisfaction_list_query_handler'
             - '@query.analytic.meeting_solution.spot.spot_satisfaction_list_query_handler'
             - '@query.analytic.meeting_solution.spot_filling_rate.spot_filling_rate_query_handler'
+            - '@query.analytic.meeting_solution.filling_rate_query_handler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\Create }

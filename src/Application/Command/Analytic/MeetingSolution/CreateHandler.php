@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Analytic\MeetingSolution;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\FillingRateQuery;
+use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\FillingRateQueryHandler;
 use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionListQuery;
 use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionListQueryHandler;
 use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot\SpotSatisfactionListQuery;
@@ -18,8 +20,6 @@ use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot\SpotSatisfac
 use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\SpotFillingRate\SpotFillingRateQuery;
 use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\SpotFillingRate\SpotFillingRateQueryHandler;
 use Proximum\Vimeet\Domain\Model\Analytic\MeetingSolution;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\Analytic\MeetingSolutionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -43,9 +43,6 @@ class CreateHandler
     /** @var MeetingSlotRepositoryInterface */
     private $slotRepository;
 
-    /** @var array */
-    private $spotUnavailabilities = [];
-
     /** @var SheetSatisfactionListQueryHandler */
     private $sheetSatisfactionListQueryHandler;
 
@@ -61,6 +58,9 @@ class CreateHandler
     /** @var SpotFillingRateQueryHandler */
     private $spotFillingRateQueryHandler;
 
+    /** @var FillingRateQueryHandler */
+    private $fillingRateQueryHandler;
+
     /**
      * @param SerializerAdapterInterface         $serializer
      * @param MeetingSolutionRepositoryInterface $meetingSolutionRepository
@@ -71,6 +71,7 @@ class CreateHandler
      * @param SheetSatisfactionListQueryHandler  $sheetSatisfactionListQueryHandler
      * @param SpotSatisfactionListQueryHandler   $spotSatisfactionListQueryHandler
      * @param SpotFillingRateQueryHandler        $spotFillingRateQueryHandler
+     * @param FillingRateQueryHandler            $fillingRateQueryHandler
      * @param \DateTimeInterface                 $dateTime
      */
     public function __construct(
@@ -83,6 +84,7 @@ class CreateHandler
         SheetSatisfactionListQueryHandler $sheetSatisfactionListQueryHandler,
         SpotSatisfactionListQueryHandler $spotSatisfactionListQueryHandler,
         SpotFillingRateQueryHandler $spotFillingRateQueryHandler,
+        FillingRateQueryHandler $fillingRateQueryHandler,
         \DateTimeInterface $dateTime
     ) {
         $this->serializer = $serializer;
@@ -95,6 +97,7 @@ class CreateHandler
         $this->dateTime = $dateTime;
         $this->meetingSolutionRepository = $meetingSolutionRepository;
         $this->spotFillingRateQueryHandler = $spotFillingRateQueryHandler;
+        $this->fillingRateQueryHandler = $fillingRateQueryHandler;
     }
 
     /**
@@ -108,21 +111,9 @@ class CreateHandler
         $sharedSpots = $this->spotRepository->findSharedByEvent($command->event);
         $slots = $this->slotRepository->getAvailableSlotByEvent($command->event);
 
-        $capacity = 0;
-
-        foreach ($slots as $slot) {
-            foreach ($sharedSpots as $spot) {
-                $capacity += $this->getSpotCapacityForSlot($spot, $slot);
-            }
-        }
-
-        // Avoid divide by 0
-        if (0 === $capacity) {
-            $capacity = 1;
-        }
-
-        $numberOfMeetingOnShared = $this->meetingRepository->countMeetingForSpots($command->event, $sharedSpots);
-        $fillingRate = 100 * ($numberOfMeetingOnShared / $capacity);
+        $fillingRate = $this->fillingRateQueryHandler->handle(
+            new FillingRateQuery($command->event, $slots, $sharedSpots)
+        );
 
         $sheetSatisfaction = $this->serializer->serialize(
             $this->sheetSatisfactionListQueryHandler->handle(new SheetSatisfactionListQuery($command->event)),
@@ -151,28 +142,5 @@ class CreateHandler
         );
 
         $this->meetingSolutionRepository->add($meetingSolution);
-    }
-
-    /**
-     * @param Spot        $spot
-     * @param MeetingSlot $slot
-     *
-     * @return int
-     */
-    private function getSpotCapacityForSlot(Spot $spot, MeetingSlot $slot): int
-    {
-        if (!isset($this->spotUnavailabilities[$spot->getId()])) {
-            $this->spotUnavailabilities[$spot->getId()] = [];
-
-            foreach ($spot->getSpotUnavailabilities() as $unavailability) {
-                $this->spotUnavailabilities[$spot->getId()][$unavailability->getSlot()->getId()] = true;
-            }
-        }
-
-        if (isset($this->spotUnavailabilities[$spot->getId()][$slot->getId()])) {
-            return 0;
-        }
-
-        return $spot->getMeetingCapacity();
     }
 }

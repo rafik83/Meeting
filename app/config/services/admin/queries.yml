@@ -34,3 +34,8 @@ services:
             - '@adapter.serializer_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQuery }
+
+    query.analytic.meeting_solution.filling_rate_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\FillingRateQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
