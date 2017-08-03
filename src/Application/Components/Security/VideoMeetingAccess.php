@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Security;
 
-
 use Proximum\Vimeet\Domain\Model\Meeting;
 
 class VideoMeetingAccess

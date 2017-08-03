@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter;
 
-
 use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
