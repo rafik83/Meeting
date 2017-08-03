@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
-use Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\Create;
 use Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,7 +26,6 @@ class PlannerController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        //$this->get('tactician.commandbus')->handle(new Create($event));
         $view = $this->get('tactician.commandbus.query')->handle(new MeetingSolutionListQuery($event));
 
         return $this->render('AdminBundle:Planner:index.html.twig', [

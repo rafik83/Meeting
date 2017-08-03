@@ -32,13 +32,13 @@ class MeetingSolution
     /** @var int */
     private $fillingRate;
 
-    /** @var array */
+    /** @var string */
     private $sheetSatisfaction;
 
-    /** @var array */
+    /** @var string */
     private $spotSatisfaction;
 
-    /** @var array */
+    /** @var string */
     private $spotFillingGraph;
 
     /**

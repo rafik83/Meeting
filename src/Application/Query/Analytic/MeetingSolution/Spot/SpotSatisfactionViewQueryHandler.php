@@ -32,7 +32,7 @@ class SpotSatisfactionViewQueryHandler
         return new SpotSatisfactionView(
             $query->spot->getId(),
             $query->spot->getReference(),
-            $query->spot->hasSheets(),
+            !$query->spot->hasSheets(),
             $query->spot->isVisio(),
             $satisfaction
         );

@@ -8,6 +8,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "bootstrap-sass": "3.3.6",
+    "chart.js": "^2.6.0",
     "elao-form.js": "0.1.*",
     "eonasdan-bootstrap-datetimepicker": "4.15.35",
     "intl-tel-input": "8.5.2",

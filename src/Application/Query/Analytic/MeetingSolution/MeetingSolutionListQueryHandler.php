@@ -45,6 +45,8 @@ class MeetingSolutionListQueryHandler
      */
     public function handle(MeetingSolutionListQuery $query): array
     {
+        $meetingSolutionView = [];
+
         $meetingSolutions = $this->meetingSolutionRepository->findByEvent($query->event);
 
         foreach ($meetingSolutions as $meetingSolution) {
