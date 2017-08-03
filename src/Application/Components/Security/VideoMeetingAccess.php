@@ -37,8 +37,8 @@ class VideoMeetingAccess
      */
     public function allowedToAccess(Meeting $meeting): bool
     {
-        $start = clone($meeting->getSlot()->getBegin())->modify('-15 min');
-        $end = clone($meeting->getSlot()->getEnd())->modify('+15 min');
+        $start = (clone $meeting->getSlot()->getBegin())->modify('-15 min');
+        $end = (clone $meeting->getSlot()->getEnd())->modify('+15 min');
 
         return $this->dateTime >= $start && $this->dateTime <= $end;
     }
