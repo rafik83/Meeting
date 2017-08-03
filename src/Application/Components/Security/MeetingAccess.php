@@ -21,7 +21,7 @@ class MeetingAccess
      *
      * @return bool
      */
-    public function allowedToAccess(Meeting $meeting, User $user)
+    public function allowedToAccess(Meeting $meeting, User $user): bool
     {
         foreach ($meeting->getAllParticipants() as $participant) {
             if ($participant->getUser()->getId() === $user->getId()) {

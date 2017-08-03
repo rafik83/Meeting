@@ -57,7 +57,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string
     {
         $slotEndDate    = clone $slot->getEnd();
-        $sessionEndDate = $slotEndDate->modify('-1 month');
+        $sessionEndDate = $slotEndDate->modify('-15 min');
 
         $defaultOption = [
             'role'       => Role::PUBLISHER,

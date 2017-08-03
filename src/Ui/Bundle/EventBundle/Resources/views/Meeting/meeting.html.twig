@@ -2,10 +2,10 @@
      data-meeting-id="{{ meeting.id }}"
      data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}"
      data-duration="{{ meeting.duration.format('%H:%I') }}"
-        {% if meeting.visio and meeting.visioAvailable and not meeting.visioExpired %}
-            data-visio-callback="{{ path('event_video_conference_request_access', {'meeting': meeting.id}) }}"
-            data-isVisio="{{ meeting.visio }}"
-        {% endif %}
+    {% if meeting.visio and meeting.visioAvailable and not meeting.visioExpired %}
+        data-visio-callback="{{ path('event_video_conference_request_access', {'meeting': meeting.id}) }}"
+        data-isVisio="{{ meeting.visio }}"
+    {% endif %}
 >
     <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">
         <a class="content" href="#">
