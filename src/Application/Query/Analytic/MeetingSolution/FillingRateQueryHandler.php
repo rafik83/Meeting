@@ -46,7 +46,7 @@ class FillingRateQueryHandler
             }
         }
 
-        // Avoid divide by 0
+        // Avoid division by 0
         if (0 === $capacity) {
             $capacity = 1;
         }

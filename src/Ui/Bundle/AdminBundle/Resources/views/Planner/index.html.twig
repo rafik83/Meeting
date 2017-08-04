@@ -117,8 +117,8 @@
                                             data-chart-label='[{% for slotView in dayView.slotsFillingRate %}"{{ slotView.begin|date('H:i', dayView.timeZone) }}"{% if not loop.last %},{% endif %}{% endfor %}]'
                                             data-chart-data="[{% for slotView in dayView.slotsFillingRate %}{{ slotView.fillingRate }}{% if not loop.last %},{% endif %}{% endfor %}]"
                                             data-chart-legend="{{ 'admin.planner.analytics.slotFillingRate.graph.legend'|trans }}"
-                                                data-chart-axeY-min="0"
-                                                data-chart-axeY-max="100"
+                                            data-chart-axeY-min="0"
+                                            data-chart-axeY-max="100"
                                         ></canvas>
                                     </div>
                                     {% endfor %}
