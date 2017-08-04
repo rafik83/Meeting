@@ -43,12 +43,12 @@ class SubmenuButtonView
     /**
      * SubmenuButtonView constructor.
      *
-     * @param string $icon
-     * @param string $label
-     * @param string $link
-     * @param bool   $state
-     * @param bool   $alert
-     * @param bool   $isShowOnMobile
+     * @param string|null $icon
+     * @param string|null $label
+     * @param string|null $link
+     * @param bool        $state
+     * @param bool        $alert
+     * @param bool        $isShowOnMobile
      */
     public function __construct(
         ?string $icon,
