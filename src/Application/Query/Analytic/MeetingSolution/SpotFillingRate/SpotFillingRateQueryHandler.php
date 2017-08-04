@@ -53,7 +53,7 @@ class SpotFillingRateQueryHandler
                 }
             }
 
-            $numberOfmeeting = $this->meetingRepository->countMeetingForSpotsAndSlot(
+            $numberOfMeeting = $this->meetingRepository->countMeetingForSpotsAndSlot(
                 $query->event,
                 $spotsOnSlot,
                 $meetingSlot
@@ -64,7 +64,7 @@ class SpotFillingRateQueryHandler
                 $capacity = 1;
             }
 
-            $fillingRate = 100 * ($numberOfmeeting / $capacity);
+            $fillingRate = 100 * ($numberOfMeeting / $capacity);
 
             $spotFillingRateSlotView = new SpotFillingRateSlotView(
                 $meetingSlot->getBegin(),
