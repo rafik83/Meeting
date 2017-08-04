@@ -14,10 +14,12 @@ Proximum\Vimeet\Domain\Model\VideoConferenceToken:
             targetEntity: Proximum\Vimeet\Domain\Model\VideoConference
             joinColumn:
                 onDelete: CASCADE
+                nullable: false
             cascade: ["persist"]
             inversedBy: tokens
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
+                nullable: false
                 cascade: ["persist"]
