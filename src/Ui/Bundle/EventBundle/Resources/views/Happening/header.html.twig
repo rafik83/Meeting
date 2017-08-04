@@ -2,17 +2,16 @@
     {% set displayTickOnActionsBlock = (suffixTitleWithTick != true) %}
 {% endif %}
 <header style="background: linear-gradient(to right, {{ leftColor }} 0%, {{ rightColor }} 100%) !important;">
-    <a class="content" href="#{{ happening.title|url_encode }}">
+    {% if withHourPrefix is defined and withHourPrefix == true %}
+        <div class="hour">{{ happening.begin|date('H:i', happening.timeZone) }} {{ happening.end|date('H:i', happening.timeZone) }}</div>
+    {% endif %}
 
-        {% if withHourPrefix is defined and withHourPrefix == true %}
-            <span class="hour">{{ happening.begin|date('H:i', happening.timeZone) }} {{ happening.end|date('H:i', happening.timeZone) }}</span>
-        {% endif %}
-
+    <a class="content" href="#">
         <span class="prefix"><i class="icon icon-{{ picto }}"></i></span>
         <p class="title">
             {{ happening.title }}
             {% if suffixTitleWithTick is defined and suffixTitleWithTick == true %}
-                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide' }}"></i>
             {% endif %}
         </p>
     </a>

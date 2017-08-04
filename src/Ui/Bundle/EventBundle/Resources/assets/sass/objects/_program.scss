@@ -56,12 +56,27 @@
         min-height: 80px;
         background-color: #0093df;
 
+        div.hour {
+          display: flex;
+          width: 50px;
+          float: left;
+          color: white;
+          align-items: center;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -webkit-box-align: center;
+          position: absolute;
+          height: 100%;
+          margin-left: 10px;
+        }
+
         .content {
           display: flex;
           flex-direction: row;
           align-items: center;
           height: 100%;
           padding: 4% 4% 0 4%;
+          margin-left: 40px;
           color: #fff;
           z-index: 10;
 
@@ -91,7 +106,7 @@
           margin-bottom: 0;
           overflow: hidden;
           display: -webkit-box;
-          -webkit-line-clamp: 3;
+          -webkit-line-clamp: 5;
           -webkit-box-orient: vertical;
           width: 100%;
           font-size: 14px;
@@ -178,6 +193,20 @@
         height: 100%;
         overflow: hidden;
 
+        div.hour {
+          display: flex;
+          width: 50px;
+          float: left;
+          color: white;
+          align-items: center;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -webkit-box-align: center;
+          position: absolute;
+          height: 100%;
+          margin-left: 25px;
+        }
+
         .content {
           position: absolute;
           display: flex;
@@ -185,6 +214,7 @@
           align-items: center;
           height: 100%;
           padding: 0 0 0 24px;
+          margin-left: 50px;
           color: #fff;
           z-index: 10;
 
@@ -213,7 +243,7 @@
           margin-bottom: 0;
           overflow: hidden;
           display: -webkit-box;
-          -webkit-line-clamp: 3;
+          -webkit-line-clamp: 5;
           -webkit-box-orient: vertical;
           width: 100%;
           line-height: 30px;
