@@ -57,13 +57,17 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::CATALOG_ICON,
                 'navigation.category.catalog',
                 'navigation.category.catalog.link',
+                true,
+                 false,
                 true
             ),
             new SubmenuButtonView(
                 Category::MEETING_ICON,
                 'navigation.category.meeting',
                 'navigation.category.meeting.link',
-                false
+                false,
+                 false,
+                 true
             ),
         ];
 
@@ -105,7 +109,9 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::SHEET_ICON,
                 'sheet.title',
                 'sheet.title.link',
-                false
+                false,
+                false,
+                true
             ),
         ];
 
@@ -146,13 +152,17 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::AGENDA_ICON,
                 'agenda.title',
                 'agenda.title.link',
+                true,
+                false,
                 true
             ),
             new SubmenuButtonView(
                 Category::PLANNING_ICON,
                 'program.title',
                 'program.title.link',
-                false
+                false,
+                false,
+                true
             ),
         ];
 
