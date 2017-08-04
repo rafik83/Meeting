@@ -238,6 +238,15 @@
   width: 100%;
   z-index: 9999;
   padding: 10px;
+  #navigation {
+    position: absolute;
+    top: calc(50% - 20px);
+    right: 5px;
+    color: white;
+    > i {
+      font-size: 30px;
+    }
+  }
   .sub-header__item {
     display: flex;
     height: 100%;
@@ -248,8 +257,11 @@
       width: 50px;
       height: 50px;
       border-radius: 25px;
-      i {
-        font-size: 30px;
+      > span {
+        position: absolute;
+        top: 10px;
+        left: calc(25%);
+        font-size: 25px;
       }
     }
   }
