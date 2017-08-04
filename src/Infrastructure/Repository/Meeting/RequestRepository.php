@@ -241,6 +241,7 @@ class RequestRepository implements RequestRepositoryInterface
                 AND sheet.id IN (:sheets)
                 AND request.state = :state
                 AND request.event = :event
+                AND request.disabled = FALSE
                 AND (request.from = sheet OR request.to = sheet)
             ')
             ->groupBy('sheet.id')
