@@ -1,7 +1,7 @@
 /**
  * Program
  *
- * @param element
+ * @param {Node} element
  * @constructor
  */
 function Program(element) {
