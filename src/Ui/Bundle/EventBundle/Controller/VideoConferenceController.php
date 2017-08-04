@@ -13,10 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\MeetingAccessVoter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class VideoConferenceController extends Controller
@@ -30,9 +32,9 @@ class VideoConferenceController extends Controller
     public function requestAccessAction(EventDomain $eventDomain, Meeting $meeting): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
-        $this->denyAccessUnlessGranted('PERMISSION_MEETING_ACCESS', $meeting);
-        $this->denyAccessUnlessGranted('PERMISSION_VIDEO_MEETING_ACCESS', $meeting);
+        $this->denyAccessUnlessGranted(HappeningAccessVoter::PERMISSION, $eventDomain->getEvent());
+        $this->denyAccessUnlessGranted(MeetingAccessVoter::PERMISSION, $meeting);
+        $this->denyAccessUnlessGranted(VideoMeetingAccessVoter::PERMISSION, $meeting);
 
         if (!$meeting->getSpot()->isVisio()) {
             return new JsonResponse('Meeting is not visio', Response::HTTP_UNPROCESSABLE_ENTITY);
