@@ -92,7 +92,7 @@ class MeetingView extends AbstractTimeEntityView
         $isSheetDetailsSeeAble = false,
         $isUserParticipantMultipleSheets = false,
         bool $isVisio = false,
-        $isVisioAvailable = false
+        bool $isVisioAvailable = false
     ) {
         $this->id                              = $id;
         $this->userSheetTitle                  = $userSheetTitle;

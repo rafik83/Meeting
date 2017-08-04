@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Adapter;
 
 use OpenTok\Session;
+use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 interface VideoConferenceAdapterInterface
@@ -33,7 +34,7 @@ interface VideoConferenceAdapterInterface
      * @param Session     $session
      * @param MeetingSlot $slot
      * @param array       $options
-     * @throw InvalidTokenGeneratorArgumentsException
+     * @throws InvalidTokenGeneratorArgumentsException
      *        
      * @return string
      */
