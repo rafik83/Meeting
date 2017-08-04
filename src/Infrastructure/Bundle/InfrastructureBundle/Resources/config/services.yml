@@ -3976,6 +3976,14 @@ services:
         tags:
             - { name: console.command }
 
+    command_analytic_meeting_solution.generate_meeting_solution_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@tactician.commandbus'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
