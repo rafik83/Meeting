@@ -5,7 +5,7 @@
     <a class="content" href="#{{ happening.title|url_encode }}">
 
         {% if withHourPrefix is defined and withHourPrefix == true %}
-            {{ happening.begin|date('H:i', happening.timeZone) }} {{ happening.end|date('H:i', happening.timeZone) }}
+            <span class="hour">{{ happening.begin|date('H:i', happening.timeZone) }} {{ happening.end|date('H:i', happening.timeZone) }}</span>
         {% endif %}
 
         <span class="prefix"><i class="icon icon-{{ picto }}"></i></span>
