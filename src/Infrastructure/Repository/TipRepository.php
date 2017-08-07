@@ -191,4 +191,20 @@ class TipRepository implements TipRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+
+    /** {@inheritdoc} */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip, type')
+            ->from(Tip::class, 'tip')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

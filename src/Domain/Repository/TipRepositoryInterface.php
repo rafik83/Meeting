@@ -100,4 +100,11 @@ interface TipRepositoryInterface
      * @return bool
      */
     public function isTipAffectedToEvent(Tip $tip, Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Tip[]
+     */
+    public function getByEvent(Event $event);
 }
