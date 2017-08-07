@@ -60,13 +60,13 @@ interface CategoryRepositoryInterface
      *
      * @return Category[]
      */
-    public function getCategoriesByEventAndLocale(Event $event, string $locale);
+    public function getCategoriesByEventAndLocale(Event $event, string $locale): array;
 
     /**
      * @param int    $id
      * @param string $locale
      *
-     * @return CategoryView
+     * @return null|CategoryView
      */
     public function getCategoryViewById($id, $locale);
 }

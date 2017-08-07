@@ -141,7 +141,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategoriesByEventAndLocale(Event $event, string $locale)
+    public function getCategoriesByEventAndLocale(Event $event, string $locale): array
     {
         $queryBuilder = $this
             ->entityManager
