@@ -57,7 +57,7 @@ class Duplicator
      *
      * @return string
      */
-    public function getDuplicationHelperKey(WhoInterface $who)
+    public function getDuplicationHelperKey(WhoInterface $who): string
     {
         if ($who instanceof Type) {
             return 'type';
