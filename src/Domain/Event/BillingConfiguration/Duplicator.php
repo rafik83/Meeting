@@ -67,6 +67,6 @@ class Duplicator
             $event->setInvoiceLogo($invoiceLogo, $eventDuplicated->getInvoiceLogoExtension());
         }
 
-        $this->eventRepository->add($event);
+        $this->eventRepository->set($event);
     }
 }

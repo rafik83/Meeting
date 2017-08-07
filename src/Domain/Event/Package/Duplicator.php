@@ -50,6 +50,7 @@ class Duplicator
     public function duplicate(Event $event, array $duplicationHelper): array
     {
         $packages = $this->packageRepository->findByEvent($event->getDuplicatedFrom());
+        $duplicationHelper['packageTemplate'] = [];
 
         foreach ($packages as $package) {
             $newPackage = new Package($event, $package->getTitle(), $this->dateTime);

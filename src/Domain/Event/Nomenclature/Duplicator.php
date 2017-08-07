@@ -49,6 +49,7 @@ class Duplicator
     public function duplicate(Event $event, array $duplicationHelper): array
     {
         $nomenclatures = $this->nomenclatureRepository->findByEvent($event->getDuplicatedFrom());
+        $duplicationHelper['nomenclature'] = [];
 
         foreach ($nomenclatures as $nomenclature) {
             $newNomenclature = $this->nomenclatureCloner->duplicate($nomenclature, $event);

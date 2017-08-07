@@ -38,7 +38,7 @@ class DuplicatorTest extends TestCase
         $fileStorage->copyAndRename('testLogo')->shouldBeCalled()->willReturn('newLogoName');
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
-        $eventRepository->add($newEvent)->shouldBeCalled();
+        $eventRepository->set($newEvent)->shouldBeCalled();
 
         (new Duplicator($eventRepository->reveal(), $fileStorage->reveal()))->duplicate($newEvent);
     }

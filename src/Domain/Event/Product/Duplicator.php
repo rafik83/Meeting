@@ -49,10 +49,13 @@ class Duplicator
      *
      * @return array
      */
-    public function duplicate(Event $event): array
+    public function duplicate(Event $event, array $duplicationHelper = []): array
     {
+        $plans                        = [];
+        $duplicationHelper['product'] = [];
+        $this->duplicationHelper      = $duplicationHelper;
+
         $products = $this->productRepository->findByEvent($event->getDuplicatedFrom());
-        $plans = [];
 
         foreach ($products as $product) {
             /*
