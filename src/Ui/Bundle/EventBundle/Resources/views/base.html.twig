@@ -26,7 +26,7 @@
                 {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet is defined ? sheet : null })) }}
             {% endif %}
 
-            <div class="container-fluid">
+            <div class="container-fluid {% block full_mobile_container '' %}">
                 {{ include('EventBundle::flashes.html.twig') }}
 
                 {% block content %}{% endblock %}

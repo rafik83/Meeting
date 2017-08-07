@@ -1,5 +1,15 @@
-.program-container {
-  @media (max-width: 640px) {
+@media (max-width: 640px) {
+  .container-fluid {
+    &.full-mobile-container {
+      width: 100%;
+      max-width: none;
+      padding: 5px;
+      margin: 0 !important;
+    }
+  }
+
+  .program-container {
+
     .meets {
       .program-happening,
       .program-mass {
@@ -120,8 +130,11 @@
       }
     }
   }
+}
 
-  @media (min-width: 641px) {
+@media (min-width: 641px) {
+
+  .program-container {
     .program {
       margin-top: 40px;
     }
@@ -299,3 +312,4 @@
     }
   }
 }
+
