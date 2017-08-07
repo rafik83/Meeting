@@ -2,6 +2,12 @@
   margin: 50px 0 0 0;
   z-index: 0;
 
+  button {
+    > i {
+      margin: 0 !important;
+    }
+  }
+
   .agenda-head,
   .agenda-foot {
     font-size: 17px;
