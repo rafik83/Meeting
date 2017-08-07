@@ -8,8 +8,6 @@ function Happening(happening, modal)
     this.happeningParticipateIcon = happening.querySelector('.happeningParticipateIcon');
     this.happeningParticipateAction = happening.querySelector('.happeningParticipateAction');
 
-    console.log(this.happeningParticipateIcon, this.happeningParticipateAction);
-
     if (null !== this.happeningParticipateAction) {
         this.picto = this.happeningParticipateAction.getAttribute('data-picto');
         this.labelParticipate = this.happeningParticipateAction.getAttribute('data-label-participate');
