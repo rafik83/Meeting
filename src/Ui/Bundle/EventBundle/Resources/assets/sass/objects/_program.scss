@@ -47,15 +47,28 @@
         align-content: flex-end;
         justify-content: center;
         margin-right: 1%;
+
         > a {
+          display: flex;
+          flex-direction: column;
           order: 0;
           flex: 0 1 auto;
           align-self: auto;
-        }
-        > i {
-          order: 0;
-          flex: 0 1 auto;
-          align-self: auto;
+          > i {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: center;
+          }
+          > span {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: auto;
+          }
+
+          &:hover,
+          &:focus {
+            text-decoration: none;
+          }
         }
         > a, .label {
           float: right;
