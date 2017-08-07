@@ -24,64 +24,102 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DuplicatorTest extends TestCase
 {
-    public function testDuplicate()
+    private $date;
+    private $eventDuplicated;
+    private $event;
+    private $oldPackageTemplate;
+    private $packageTemplate;
+    private $registrationTemplate;
+    private $oldRegistrationTemplate;
+    private $sheetTemplate;
+    private $oldSheetTemplate;
+
+    public function setUp()
     {
-        $date                 = new \DateTime();
-        $eventDuplicated      = EventFactory::createEvent('event duplicated');
-        $event                = EventFactory::createEvent(
+        $this->date            = new \DateTime();
+        $this->eventDuplicated = EventFactory::createEvent('event duplicated');
+        $this->event           = EventFactory::createEvent(
             'event',
             EventFactory::FALLBACK_LOCALE_DEFAULT,
             ['fr', 'en',],
             Event::VAT_MODE_ET,
-            $eventDuplicated
+            $this->eventDuplicated
         );
-        $sheetTemplate        = new SheetTemplate(
-            'sheet template title',
-            [],
-            ['fr'],
-            'fr',
-            $date
-        );
-        $registrationTemplate = new RegistrationTemplate(
+
+        $this->packageTemplate    = new Package($this->event, 'package title', $this->date);
+        $this->oldPackageTemplate = new Package($this->event, 'package title', $this->date);
+        $reflection               = new \ReflectionClass(Package::class);
+        $property                 = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($this->oldPackageTemplate, 3);
+
+        $this->registrationTemplate = new RegistrationTemplate(
             'registration template',
             [],
             ['fr'],
             'fr',
-            $date
+            $this->date
         );
-        $expectedType         = new Type($event);
-        $expectedType->setSheetTemplate($sheetTemplate);
-        $expectedType->setRegistrationTemplate($registrationTemplate);
-        $expectedType->setPackage(new Package($event, 'package title', $date));
+        $this->oldRegistrationTemplate = new RegistrationTemplate(
+            'registration template',
+            [],
+            ['fr'],
+            'fr',
+            $this->date
+        );
+        $reflection = new \ReflectionClass(RegistrationTemplate::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($this->oldRegistrationTemplate, 5);
 
-        $type = new Type($eventDuplicated);
-        $type->setSheetTemplate($sheetTemplate);
-        $type->setRegistrationTemplate($registrationTemplate);
-        $type->setPackage(new Package($event, 'package title', $date));
+        $this->sheetTemplate    = new SheetTemplate(
+            'sheet template title',
+            [],
+            ['fr'],
+            'fr',
+            $this->date
+        );
+        $this->oldSheetTemplate = new SheetTemplate(
+            'sheet template title',
+            [],
+            ['fr'],
+            'fr',
+            $this->date
+        );
+        $reflection = new \ReflectionClass(SheetTemplate::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($this->oldSheetTemplate, 6);
+    }
+
+    public function testDuplicate()
+    {
+        $duplicatorHelper = [
+            'sheetTemplate'        => [6 => $this->sheetTemplate],
+            'registrationTemplate' => [5 => $this->registrationTemplate],
+            'packageTemplate'      => [3 => $this->packageTemplate],
+        ];
+
+        $expectedType = new Type($this->event);
+        $expectedType->setSheetTemplate($this->sheetTemplate);
+        $expectedType->setRegistrationTemplate($this->registrationTemplate);
+        $expectedType->setPackage($this->packageTemplate);
+
+        $type = new Type($this->eventDuplicated);
+        $type->setSheetTemplate($this->oldSheetTemplate);
+        $type->setRegistrationTemplate($this->oldRegistrationTemplate);
+        $type->setPackage($this->oldPackageTemplate);
+        $reflection = new \ReflectionClass(Type::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($type, 8);
 
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
-        $typeRepository->getTypesByEvent($eventDuplicated)->shouldBeCalled()->willReturn([$type]);
-
-        $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
-        $sheetTemplateCloner->duplicate(
-            $type->getSheetTemplate(),
-            $event,
-            $type->getSheetTemplate()->getTitle()
-        )->shouldBeCalled()->willReturn($sheetTemplate);
-
-        $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
-        $registrationTemplateCloner->duplicate(
-            $type->getRegistrationTemplate(),
-            $event,
-            $type->getRegistrationTemplate()->getTitle()
-        )->shouldBeCalled()->willReturn($registrationTemplate);
+        $typeRepository->getTypesByEvent($this->eventDuplicated)->shouldBeCalled()->willReturn([$type]);
 
         $typeRepository->add($expectedType)->shouldBeCalled();
 
-        (new Duplicator(
-            $typeRepository->reveal(),
-            $sheetTemplateCloner->reveal(),
-            $registrationTemplateCloner->reveal()
-        ))->duplicate($event);
+        $expected = (new Duplicator($typeRepository->reveal()))->duplicate($this->event, $duplicatorHelper);
+        $this->assertEquals($expected['type'][8], $expectedType);
     }
 }

@@ -24,36 +24,22 @@ class Duplicator
     private $typeRepository;
 
     /**
-     * @var SheetTemplateCloner
-     */
-    private $sheetTemplateCloner;
-
-    /**
-     * @var RegistrationTemplateCloner
-     */
-    private $registrationTemplateCloner;
-
-    /**
      * Duplicator constructor.
      *
      * @param TypeRepositoryInterface    $typeRepository
-     * @param SheetTemplateCloner        $sheetTemplateCloner
-     * @param RegistrationTemplateCloner $registrationTemplateCloner
      */
-    public function __construct(
-        TypeRepositoryInterface $typeRepository,
-        SheetTemplateCloner $sheetTemplateCloner,
-        RegistrationTemplateCloner $registrationTemplateCloner
-    ) {
+    public function __construct(TypeRepositoryInterface $typeRepository)
+    {
         $this->typeRepository             = $typeRepository;
-        $this->sheetTemplateCloner        = $sheetTemplateCloner;
-        $this->registrationTemplateCloner = $registrationTemplateCloner;
     }
 
     /**
-     * @param Event  $event
+     * @param Event $event
+     * @param array $duplicationHelper
+     *
+     * @return array
      */
-    public function duplicate(Event $event)
+    public function duplicate(Event $event, array $duplicationHelper): array
     {
         $types = $this->typeRepository->getTypesByEvent($event->getDuplicatedFrom());
 
@@ -71,22 +57,21 @@ class Duplicator
             }
 
             $newType->setSheetTemplate(
-                $this->sheetTemplateCloner->duplicate(
-                    $type->getSheetTemplate(),
-                    $event,
-                    $type->getSheetTemplate()->getTitle()
-                )
+                $duplicationHelper['sheetTemplate'][$type->getSheetTemplate()->getId()]
+            );
+
+            $newType->setPackage(
+                $duplicationHelper['packageTemplate'][$type->getPackage()->getId()]
             );
 
             $newType->setRegistrationTemplate(
-                $this->registrationTemplateCloner->duplicate(
-                    $type->getRegistrationTemplate(),
-                    $event,
-                    $type->getRegistrationTemplate()->getTitle()
-                )
+                $duplicationHelper['registrationTemplate'][$type->getRegistrationTemplate()->getId()]
             );
 
             $this->typeRepository->add($newType);
+            $duplicationHelper['type'][$type->getId()] = $newType;
         }
+
+        return $duplicationHelper;
     }
 }
