@@ -8,6 +8,8 @@ function Happening(happening, modal)
     this.happeningParticipateIcon = happening.querySelector('.happeningParticipateIcon');
     this.happeningParticipateAction = happening.querySelector('.happeningParticipateAction');
 
+    console.log(this.happeningParticipateIcon, this.happeningParticipateAction);
+
     if (null !== this.happeningParticipateAction) {
         this.picto = this.happeningParticipateAction.getAttribute('data-picto');
         this.labelParticipate = this.happeningParticipateAction.getAttribute('data-label-participate');
@@ -110,18 +112,17 @@ Happening.prototype.validateParticipation = function (label) {
     var buttonLabel;
 
     if ('cancel' === label) {
-        buttonLabel = this.labelCancel;
+        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i>' + this.labelCancel;
         this.happeningParticipateIcon.classList.remove('hide');
     } else if ('update' === label) {
-        buttonLabel = this.labelUpdate;
+        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i>' + this.labelUpdate;
         this.happeningParticipateIcon.classList.remove('hide');
     } else if ('participate' === label) {
-        buttonLabel = this.labelParticipate;
+        buttonLabel = '<i class="icon icon-Valider_4 happeningParticipateIcon"></i>' + this.labelParticipate;
         this.happeningParticipateIcon.classList.add('hide');
     }
-
     if (buttonLabel) {
-        this.happeningParticipateAction.textContent = buttonLabel;
+        this.happeningParticipateAction.innerHTML = buttonLabel;
     }
 };
 
