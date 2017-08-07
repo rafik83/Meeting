@@ -24,14 +24,31 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DuplicatorTest extends TestCase
 {
+    /** @var \DateTimeInterface */
     private $date;
+
+    /** @var Event */
     private $eventDuplicated;
+
+    /** @var Event */
     private $event;
+
+    /** @var Package */
     private $oldPackageTemplate;
+
+    /** @var Package */
     private $packageTemplate;
+
+    /** @var RegistrationTemplate */
     private $registrationTemplate;
+
+    /** @var RegistrationTemplate */
     private $oldRegistrationTemplate;
+
+    /** @var SheetTemplate */
     private $sheetTemplate;
+
+    /** @var SheetTemplate */
     private $oldSheetTemplate;
 
     public function setUp()
@@ -72,7 +89,7 @@ class DuplicatorTest extends TestCase
         $property->setAccessible(true);
         $property->setValue($this->oldRegistrationTemplate, 5);
 
-        $this->sheetTemplate    = new SheetTemplate(
+        $this->sheetTemplate = new SheetTemplate(
             'sheet template title',
             [],
             ['fr'],
