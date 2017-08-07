@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Event\SearchFacet;
+namespace Proximum\Vimeet\Domain\Event\Catalog\Internal\SearchFacet;
 
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;

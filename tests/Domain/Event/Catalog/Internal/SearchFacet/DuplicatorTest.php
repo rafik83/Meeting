@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Domain\Event\SearchFacet;
+namespace Proximum\Vimeet\Tests\Domain\Event\Catalog\Internal\SearchFacet;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Domain\Event\SearchFacet\Duplicator;
+use Proximum\Vimeet\Domain\Event\Catalog\Internal\SearchFacet\Duplicator;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
