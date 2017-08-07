@@ -17,22 +17,16 @@ use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 class Duplicator
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
+    /** @var ProductRepositoryInterface */
     private $productRepository;
 
-    /**
-     * @var FileStorageInterface
-     */
+    /** @var FileStorageInterface */
     private $fileStorage;
 
     /** @var array */
     private $duplicationHelper = [];
 
     /**
-     * Duplicator constructor.
-     *
      * @param ProductRepositoryInterface $productRepository
      * @param FileStorageInterface       $fileStorage
      */
@@ -67,11 +61,11 @@ class Duplicator
                 continue;
             }
 
-            $this->duplicatedProduct($product, $event);
+            $this->duplicateProduct($product, $event);
         }
 
         foreach ($plans as $plan) {
-            $this->duplicatedProduct($plan, $event);
+            $this->duplicateProduct($plan, $event);
         }
 
         return $this->duplicationHelper;
@@ -81,7 +75,7 @@ class Duplicator
      * @param Product $product
      * @param Event   $event
      */
-    private function duplicatedProduct(Product $product, Event $event)
+    private function duplicateProduct(Product $product, Event $event)
     {
         $productToAdd = Product::createProductFromType(
             $product->getType(),

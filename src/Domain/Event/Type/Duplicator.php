@@ -26,11 +26,11 @@ class Duplicator
     /**
      * Duplicator constructor.
      *
-     * @param TypeRepositoryInterface    $typeRepository
+     * @param TypeRepositoryInterface $typeRepository
      */
     public function __construct(TypeRepositoryInterface $typeRepository)
     {
-        $this->typeRepository             = $typeRepository;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
