@@ -21,8 +21,8 @@ class DayView
     /** @var \DateTimeInterface */
     public $endTime;
 
-    /** @var array of MassUnavaibilityView and HappeningView sorted by date */
-    public $massesAndHappeningsViews;
+    /** @var ProgramElementViewInterface[] */
+    public $programElementViews;
 
     /** @var HappeningView[] */
     public $happenings;
@@ -32,20 +32,20 @@ class DayView
      * @param \DateTimeInterface $endTime
      * @param int                $scale
      * @param HappeningView[]    $happeningView
-     * @param array              $massesAndHappeningsViews
+     * @param ProgramElementViewInterface[] $programElementViews
      */
     public function __construct(
         \DateTimeInterface $startTime,
         \DateTimeInterface $endTime,
         $scale,
         array $happeningView,
-        array $massesAndHappeningsViews = []
+        array $programElementViews = []
     ) {
         $this->startTime  = $startTime;
         $this->endTime    = $endTime;
         $this->scale      = $scale;
         $this->happenings = $happeningView;
-        $this->massesAndHappeningsViews = $massesAndHappeningsViews;
+        $this->programElementViews = $programElementViews;
     }
 
     /**

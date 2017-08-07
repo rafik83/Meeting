@@ -12,15 +12,21 @@ namespace Proximum\Vimeet\Application\View\Happening;
 
 use Proximum\Vimeet\Application\View\Unavailability\Mass\AbstractMassView;
 
-class MassUnavailabilityView extends AbstractMassView
+class MassUnavailabilityView extends AbstractMassView implements ProgramElementViewInterface
 {
-    const TYPE_MASS_UNAVAIBILITY = 'mass_unavaibility';
+    /**
+     * {@inheritdoc}
+     */
+    public function isHappeningView(): bool
+    {
+        return false;
+    }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getType(): string
+    public function isMassUnavailabilityView(): bool
     {
-        return self::TYPE_MASS_UNAVAIBILITY;
+        return true;
     }
 }

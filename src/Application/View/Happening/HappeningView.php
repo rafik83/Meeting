@@ -12,10 +12,8 @@ namespace Proximum\Vimeet\Application\View\Happening;
 
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
 
-class HappeningView extends AbstractTimeEntityView
+class HappeningView extends AbstractTimeEntityView implements ProgramElementViewInterface
 {
-    const TYPE_HAPPENING = 'happening';
-
     /** @var int */
     private $id;
 
@@ -203,10 +201,18 @@ class HappeningView extends AbstractTimeEntityView
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getType(): string
+    public function isHappeningView(): bool
     {
-        return self::TYPE_HAPPENING;
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isMassUnavailabilityView(): bool
+    {
+        return false;
     }
 }
