@@ -69,5 +69,5 @@ Feature: Unavailability
       | create_unavailability_message                 | "Concert de Patrick sebastien" |
     And I press "form.create_unavailability.children.submit.label"
     Then I should be on this page "/fr/sheet/2/agenda/participant/2"
-    And I should not see "unavailability.title"
+    And I should see "unavailability.title"
     And I should see "Concert de Patrick sebastien"
