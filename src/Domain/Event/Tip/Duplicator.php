@@ -22,11 +22,20 @@ class Duplicator
     private $tipRepository;
 
     /**
-     * @param TipRepositoryInterface $tipRepository
+     * @var \DateTimeInterface
      */
-    public function __construct(TipRepositoryInterface $tipRepository)
-    {
+    private $dateTime;
+
+    /**
+     * @param TipRepositoryInterface $tipRepository
+     * @param \DateTimeInterface     $dateTime
+     */
+    public function __construct(
+        TipRepositoryInterface $tipRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->tipRepository = $tipRepository;
+        $this->dateTime      = $dateTime;
     }
 
     /**
@@ -47,7 +56,7 @@ class Duplicator
                 $tip->isOnAgenda(),
                 $tip->isOnProgram(),
                 $tip->isOnConfirmationPhone(),
-                new \DateTime()
+                $this->dateTime
             );
 
             foreach ($tip->getTypes() as $type) {
@@ -59,7 +68,7 @@ class Duplicator
                     $locale,
                     $tip->getTranslationTitle($locale),
                     $tip->getTranslationContent($locale),
-                    new \DateTime()
+                    $this->dateTime
                 );
             }
 
