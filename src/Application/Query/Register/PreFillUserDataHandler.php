@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Register;
 
-
 use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
 use Proximum\Vimeet\Domain\Account\EventParticipationPreFiller;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
