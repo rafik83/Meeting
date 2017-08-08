@@ -82,12 +82,4 @@ interface EventRepositoryInterface
      * @return Event|null
      */
     public function getById($id);
-
-    /**
-     * @param User  $user
-     * @param Event $currentEvent
-     *
-     * @return null|Event
-     */
-    public function getLastEventParticipation(User $user, Event $currentEvent): ?Event;
 }
