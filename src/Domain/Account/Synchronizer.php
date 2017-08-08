@@ -66,7 +66,7 @@ class Synchronizer
      *
      * @return null|TemplateData
      */
-    public function get(TemplateData $templateData, User $user)
+    public function get(TemplateData $templateData, User $user): ?TemplateData
     {
         $account = $user->getAccount();
 
