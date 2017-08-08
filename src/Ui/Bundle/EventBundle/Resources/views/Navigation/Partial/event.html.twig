@@ -1,4 +1,4 @@
-<div class="header {{ not isHome ? 'hide-on-mobile' : '' }}">
+<div class="header {{ not isHeaderDisplayed ? 'hide-on-mobile' : '' }}">
     {% if menuHeaderView.event is defined %}
         {% if menuHeaderView.event.logo != null %}
             <a href="{{ path('event') }}">
