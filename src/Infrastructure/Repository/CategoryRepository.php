@@ -125,7 +125,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategoriesByEvent(Event $event)
+    public function getCategoriesByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

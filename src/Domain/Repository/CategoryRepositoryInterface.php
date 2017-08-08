@@ -52,7 +52,7 @@ interface CategoryRepositoryInterface
      *
      * @return Category[]
      */
-    public function getCategoriesByEvent(Event $event);
+    public function getCategoriesByEvent(Event $event): array;
 
     /**
      * @param Event  $event
