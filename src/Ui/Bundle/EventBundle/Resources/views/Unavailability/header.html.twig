@@ -11,7 +11,7 @@
         {% if participantId is defined %}
             <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id, 'participant': participantId, 'sheet': sheetId }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">
                 <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-primary btn-sm btn-inactive">
+                <button name="cancelUnavailability" type="submit" class="btn btn-primary btn-sm btn-inactive">
                     <i class="icon-Fermer_1"></i>
                 </button>
             </form>
