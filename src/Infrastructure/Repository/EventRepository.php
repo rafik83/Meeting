@@ -225,14 +225,11 @@ class EventRepository implements EventRepositoryInterface
             ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event = event')
             ->join(Participant::class, 'participant', 'WITH', 'participant.sheet = sheet AND participant.user = :user')
             ->join('event.days', 'day')
+            ->where('event != :event')
             ->orderBy('day.startTime', 'DESC')
             ->setParameter('user', $user)
+            ->setParameter('event', $currentEvent)
             ->setMaxResults(1);
-
-        if ($currentEvent !== null) {
-            $queryBuilder->where('event != :event')
-                ->setParameter('event', $currentEvent);
-        }
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
