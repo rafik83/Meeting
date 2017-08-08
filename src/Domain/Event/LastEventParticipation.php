@@ -11,39 +11,40 @@
 namespace Proximum\Vimeet\Domain\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class LastEventParticipation
 {
-    /** @var EventRepositoryInterface */
-    private $eventRepository;
-
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
     /**
-     * @param EventRepositoryInterface $eventRepository
-     * @param \DateTimeInterface       $dateTime
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(EventRepositoryInterface $eventRepository, \DateTimeInterface $dateTime)
+    public function __construct(ParticipantRepositoryInterface $participantRepository, \DateTimeInterface $dateTime)
     {
         $this->dateTime = $dateTime;
-        $this->eventRepository = $eventRepository;
+        $this->participantRepository = $participantRepository;
     }
 
     /**
-     * @param User  $user
+     * @param User $user
      * @param Event $currentEvent
      *
-     * @return null|Event
+     * @return null|Participant
      */
-    public function getLastEvent(User $user, Event $currentEvent): ?Event
+    public function getLastEvent(User $user, Event $currentEvent): ?Participant
     {
         // TODO: currentEvent getDuplicateFrom
 
-        $lastEvent = $this->eventRepository->getLastEventParticipation($user, $currentEvent);
+        $participant = $this->participantRepository->getLastEventParticipation($user, $currentEvent);
 
-        return $lastEvent;
+        return $participant;
     }
 }

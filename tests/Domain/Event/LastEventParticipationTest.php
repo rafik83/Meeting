@@ -12,8 +12,10 @@ namespace Domain\Event;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Event\LastEventParticipation;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class LastEventParticipationTest extends TestCase
@@ -22,22 +24,23 @@ class LastEventParticipationTest extends TestCase
     {
         $user = UserFactory::create();
         $currentEvent = EventFactory::createEvent();
-        $lastEvent = EventFactory::createEvent();
+        $sheet = SheetFactory::create($currentEvent);
+        $lastParticipation = ParticipantFactory::create($sheet, $user);
 
-        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $datetime = new \DateTime();
 
-        $eventRepository->getLastEventParticipation($user, $currentEvent)
+        $participantRepository->getLastEventParticipation($user, $currentEvent)
             ->shouldBeCalled()
-            ->willReturn($lastEvent);
+            ->willReturn($lastParticipation);
 
         $lastEventParticipation = new LastEventParticipation(
-            $eventRepository->reveal(),
+            $participantRepository->reveal(),
             $datetime
         );
 
-        $lastEventResult = $lastEventParticipation->getLastEvent($user, $currentEvent);
+        $lastParticipationResult = $lastEventParticipation->getLastEvent($user, $currentEvent);
 
-        $this->assertEquals($lastEvent, $lastEventResult);
+        $this->assertEquals($lastParticipation, $lastParticipationResult);
     }
 }
