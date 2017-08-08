@@ -194,7 +194,7 @@ class TipRepository implements TipRepositoryInterface
 
 
     /** {@inheritdoc} */
-    public function getByEvent(Event $event)
+    public function getByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

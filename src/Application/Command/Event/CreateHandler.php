@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Domain\Event\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -48,26 +49,40 @@ class CreateHandler
     private $fileStorage;
 
     /**
+     * @var Duplicator
+     */
+    private $duplicator;
+
+    /**
      * @param AdminRepositoryInterface   $adminRepository
      * @param EventRepositoryInterface   $eventRepository
      * @param ContentRepositoryInterface $contentRepository
      * @param Generator                  $guidelinesGenerator
      * @param FileStorageInterface       $fileStorage
+     * @param Duplicator                 $duplicator
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         EventRepositoryInterface $eventRepository,
         ContentRepositoryInterface $contentRepository,
         Generator $guidelinesGenerator,
-        FileStorageInterface $fileStorage
+        FileStorageInterface $fileStorage,
+        Duplicator $duplicator
     ) {
         $this->adminRepository     = $adminRepository;
         $this->eventRepository     = $eventRepository;
         $this->contentRepository   = $contentRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
         $this->fileStorage         = $fileStorage;
+        $this->duplicator = $duplicator;
     }
 
+    /**
+     * @param Create $create
+     *
+     * @throws DomainAlreadyUsedException
+     * @throws GuidelineAssetBuildFailedException
+     */
     public function handle(Create $create)
     {
         if (null !== $this->eventRepository->getEventByDomain($create->domain)) {
@@ -121,6 +136,10 @@ class CreateHandler
         }
 
         $this->generateContent($event);
+
+        if (null !== $create->duplicatedFrom) {
+            $this->duplicator->duplicate($event);
+        }
     }
 
     /**
