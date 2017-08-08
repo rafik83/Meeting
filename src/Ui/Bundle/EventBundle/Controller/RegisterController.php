@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
+use Proximum\Vimeet\Application\Query\Register\PreFillUserData;
+use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -25,6 +27,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -143,15 +146,29 @@ class RegisterController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->hasUserAlreadyCreatedParticipant($event, $this->getUser());
 
-        $locale               = $request->getLocale();
-        $type                 = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
-        $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromType($type, $locale);
-        $user                 = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
-        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
-        $participantBlock     = $registrationTemplate->getFirstBlock();
+        $locale = $request->getLocale();
 
-        $this->get('account.event_participation_pre_filler')
-            ->preFillTemplate($registrationTemplate, $event, $user, $locale);
+        $type = $this->get('vimeet_infrastructure.repository.type_repository')
+            ->getById($typeView->id);
+
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromType($type, $locale);
+
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')
+            ->findByEmail($this->getUser()->getEmail());
+
+        /** @var PreFillUserDataView $preFillUserDataView */
+        $preFillUserDataView = $this->get('tactician.commandbus.query')->handle(
+            new PreFillUserData(
+                $user,
+                $event,
+                $registrationTemplate,
+                $locale
+            )
+        );
+
+        $registrationTemplate = $preFillUserDataView->templateData;
+        $participantBlock = $registrationTemplate->getFirstBlock();
 
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
@@ -170,12 +187,22 @@ class RegisterController extends Controller
             $nextStep = $registrationTemplate->getNextBlockPosition(1);
 
             if ($nextStep) {
-                return $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participate->participant->getId()]);
+                return $this->redirectToRoute('event_participant_step', [
+                    'step' => $nextStep,
+                    'participant' => $participate->participant->getId()
+                ]);
             }
 
             $this->container->get('session')->getFlashBag()->set('first_registration', true);
 
             return $this->redirectToRoute('event_sheet_default', ['sheet' => $participate->sheet->getId()]);
+        }
+
+        if ($preFillUserDataView->isParticipationDataPreFilled()) {
+            $this->addFlash('success', new TransMessage(
+                'flash.register.participationData.prefilled',
+                ['%event%' => $preFillUserDataView->event->getTitle()]
+            ));
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Account;
 
 use Proximum\Vimeet\Domain\Exception\Event\NoPreviousEventParticipationException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
@@ -45,28 +46,16 @@ class EventParticipationPreFiller
 
     /**
      * @param TemplateData $templateData
-     * @param Event $event
-     * @param User $user
+     * @param Participant $participant
      * @param string $locale
      *
      * @return TemplateData
-     * @throws NoPreviousEventParticipationException
      */
     public function preFillTemplate(
         TemplateData $templateData,
-        Event $event,
-        User $user,
+        Participant $participant,
         string $locale
     ): TemplateData {
-        $participants = $this->participantRepository
-            ->getParticipantsByUserForEvent($user->getId(), $event);
-
-        if (empty($participants)) {
-            throw new NoPreviousEventParticipationException();
-        }
-
-        $participant = reset($participants);
-
         $previousTemplate = $this->templateDataFactory
             ->createRegistrationFromParticipant($participant, $locale);
 
@@ -90,7 +79,7 @@ class EventParticipationPreFiller
      * @param string $locale
      * @param array $previousTaggedData
      */
-    public function preFillByTags(ContentObjectInterface $templateObject, string $locale, array &$previousTaggedData)
+    private function preFillByTags(ContentObjectInterface $templateObject, string $locale, array &$previousTaggedData)
     {
         $tags = $templateObject->getTags();
 
@@ -106,7 +95,7 @@ class EventParticipationPreFiller
      * @param TemplateObject $previousTemplateObject
      * @param TemplateData $templateData
      */
-    public function preFillByKey(TemplateObject $previousTemplateObject, TemplateData &$templateData)
+    private function preFillByKey(TemplateObject $previousTemplateObject, TemplateData &$templateData)
     {
         try {
             $templateObject = $templateData->getObject($previousTemplateObject->getKey());

@@ -3169,6 +3169,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }
 
+    query.register.pre_fill_user_data_handler:
+        class: Proximum\Vimeet\Application\Query\Register\PreFillUserDataHandler
+        arguments:
+            - '@domain.event.last_event_participation'
+            - '@account.event_participation_pre_filler'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Register\PreFillUserData }
+
     ##
     #
     # Agenda Queries
@@ -4305,7 +4314,7 @@ services:
     domain.event.last_event_participation:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation
         arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
             - '@datetime'
 
     #
