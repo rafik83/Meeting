@@ -150,6 +150,9 @@ class RegisterController extends Controller
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
         $participantBlock     = $registrationTemplate->getFirstBlock();
 
+        $this->get('account.event_participation_pre_filler')
+            ->preFillTemplate($registrationTemplate, $event, $user, $locale);
+
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 

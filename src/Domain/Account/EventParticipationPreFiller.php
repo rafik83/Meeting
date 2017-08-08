@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Domain\Account;
 
-
 use Proximum\Vimeet\Domain\Exception\Event\NoPreviousEventParticipationException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 
 /**
@@ -56,8 +57,7 @@ class EventParticipationPreFiller
         Event $event,
         User $user,
         string $locale
-    ): TemplateData
-    {
+    ): TemplateData {
         $participants = $this->participantRepository
             ->getParticipantsByUserForEvent($user->getId(), $event);
 
@@ -74,19 +74,46 @@ class EventParticipationPreFiller
 
         foreach ($previousTemplate->getEditableObjects() as $object) {
             if ($object instanceof ContentObjectInterface) {
-                $tags = $object->getTags();
-
-                foreach ($tags as $tag) {
-                    $content = $object->getContentValueLocalize($locale);
-                    if (empty($previousTaggedData[$tag])) {
-                        $previousTaggedData[$tag] = $content;
-                    }
-                }
+                $this->preFillByTags($object, $locale, $previousTaggedData);
+                $this->preFillByKey($object, $templateData);
             }
         }
 
+        // pre fill old tagged data in new template
         $templateData->setTaggedData($previousTaggedData);
 
         return $templateData;
+    }
+
+    /**
+     * @param ContentObjectInterface|TemplateObject $templateObject
+     * @param string $locale
+     * @param array $previousTaggedData
+     */
+    public function preFillByTags(ContentObjectInterface $templateObject, string $locale, array &$previousTaggedData)
+    {
+        $tags = $templateObject->getTags();
+
+        foreach ($tags as $tag) {
+            $content = $templateObject->getContentValueLocalize($locale);
+            if (empty($previousTaggedData[$tag])) {
+                $previousTaggedData[$tag] = $content;
+            }
+        }
+    }
+
+    /**
+     * @param TemplateObject $previousTemplateObject
+     * @param TemplateData $templateData
+     */
+    public function preFillByKey(TemplateObject $previousTemplateObject, TemplateData &$templateData)
+    {
+        try {
+            $templateObject = $templateData->getObject($previousTemplateObject->getKey());
+        } catch (ObjectNotFoundException $exception) {
+            return;
+        }
+
+        $templateObject->setData($previousTemplateObject->getData());
     }
 }
