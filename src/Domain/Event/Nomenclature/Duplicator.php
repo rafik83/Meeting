@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Event\Nomenclature;
 
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
@@ -27,8 +28,6 @@ class Duplicator
     private $nomenclatureCloner;
 
     /**
-     * Duplicator constructor.
-     *
      * @param NomenclatureRepositoryInterface $nomenclatureRepository
      * @param NomenclatureCloner              $nomenclatureCloner
      */
@@ -37,26 +36,25 @@ class Duplicator
         NomenclatureCloner $nomenclatureCloner
     ) {
         $this->nomenclatureRepository = $nomenclatureRepository;
-        $this->nomenclatureCloner = $nomenclatureCloner;
+        $this->nomenclatureCloner     = $nomenclatureCloner;
     }
 
     /**
-     * @param Event $event
-     * @param array $duplicationHelper
+     * @param Event                 $event
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
         $nomenclatures = $this->nomenclatureRepository->findByEvent($event->getDuplicatedFrom());
-        $duplicationHelper['nomenclature'] = [];
 
         foreach ($nomenclatures as $nomenclature) {
             $newNomenclature = $this->nomenclatureCloner->duplicate($nomenclature, $event);
-            $duplicationHelper['nomenclature'][$nomenclature->getId()] = $newNomenclature;
+            $duplicatorDataStorage->nomenclatures[$nomenclature->getId()] = $newNomenclature;
             $this->nomenclatureRepository->add($newNomenclature);
         }
 
-        return $duplicationHelper;
+        return $duplicatorDataStorage;
     }
 }

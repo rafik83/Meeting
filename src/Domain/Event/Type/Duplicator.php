@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Event\Type;
 
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -35,11 +36,11 @@ class Duplicator
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
         $types = $this->typeRepository->getTypesByEvent($event->getDuplicatedFrom());
 
@@ -57,21 +58,21 @@ class Duplicator
             }
 
             $newType->setSheetTemplate(
-                $duplicationHelper['sheetTemplate'][$type->getSheetTemplate()->getId()]
+                $duplicatorDataStorage->sheetTemplates[$type->getSheetTemplate()->getId()]
             );
 
             $newType->setPackage(
-                $duplicationHelper['packageTemplate'][$type->getPackage()->getId()]
+                $duplicatorDataStorage->packageTemplates[$type->getPackage()->getId()]
             );
 
             $newType->setRegistrationTemplate(
-                $duplicationHelper['registrationTemplate'][$type->getRegistrationTemplate()->getId()]
+                $duplicatorDataStorage->registrationTemplates[$type->getRegistrationTemplate()->getId()]
             );
 
             $this->typeRepository->add($newType);
-            $duplicationHelper['type'][$type->getId()] = $newType;
+            $duplicatorDataStorage->types[$type->getId()] = $newType;
         }
 
-        return $duplicationHelper;
+        return $duplicatorDataStorage;
     }
 }

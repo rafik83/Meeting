@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\Catalog\External;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Event\Catalog\External\CatalogVisibilityDuplicator;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -68,18 +69,13 @@ class CatalogVisibilityDuplicatorTest extends TestCase
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($event)->shouldBeCalled();
 
-        $duplicationHelper = [
-            'type'     => [
-                1 => $newType,
-            ],
-            'category' => [
-                1 => $newCategory,
-            ],
-        ];
+        $duplicatorDataStorage             = new DuplicatorDataStorage();
+        $duplicatorDataStorage->types      = [1 => $newType];
+        $duplicatorDataStorage->categories = [1 => $newCategory];
 
         (new CatalogVisibilityDuplicator(
             $catalogVisibilityRepository->reveal(),
             $eventRepository->reveal()
-        ))->duplicate($event, $duplicationHelper);
+        ))->duplicate($event, $duplicatorDataStorage);
     }
 }

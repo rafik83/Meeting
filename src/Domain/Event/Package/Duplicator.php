@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Event\Package;
 
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
@@ -28,8 +29,6 @@ class Duplicator
     private $dateTime;
 
     /**
-     * Duplicator constructor.
-     *
      * @param PackageRepositoryInterface $packageRepository
      * @param \DateTimeInterface         $dateTime
      */
@@ -43,14 +42,13 @@ class Duplicator
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
         $packages = $this->packageRepository->findByEvent($event->getDuplicatedFrom());
-        $duplicationHelper['packageTemplate'] = [];
 
         foreach ($packages as $package) {
             $newPackage = new Package($event, $package->getTitle(), $this->dateTime);
@@ -70,7 +68,7 @@ class Duplicator
             foreach ($package->getGroups() as $group) {
                 $options = [];
                 foreach ($group->getOptions() as $product) {
-                    $options[] = $duplicationHelper['product'][$product->getId()];
+                    $options[] = $duplicatorDataStorage->products[$product->getId()];
                 }
 
                 $groupOptions[] = $options;
@@ -81,26 +79,26 @@ class Duplicator
             $plans = [];
 
             foreach ($package->getPlans() as $plan) {
-                $plans[] = $duplicationHelper['product'][$plan->getId()];
+                $plans[] = $duplicatorDataStorage->products[$plan->getId()];
             }
             $newPackage->setPlans($plans);
 
             if (null !== $package->getParticipant()) {
                 $newPackage->setParticipant(
-                    $duplicationHelper['product'][$package->getParticipant()->getId()]
+                    $duplicatorDataStorage->products[$package->getParticipant()->getId()]
                 );
             }
 
             if (null !== $package->getPlanning()) {
                 $newPackage->setPlanning(
-                    $duplicationHelper['product'][$package->getPlanning()->getId()]
+                    $duplicatorDataStorage->products[$package->getPlanning()->getId()]
                 );
             }
 
-            $duplicationHelper['packageTemplate'][$package->getId()] = $newPackage;
+            $duplicatorDataStorage->packageTemplates[$package->getId()] = $newPackage;
             $this->packageRepository->add($newPackage);
         }
 
-        return $duplicationHelper;
+        return $duplicatorDataStorage;
     }
 }

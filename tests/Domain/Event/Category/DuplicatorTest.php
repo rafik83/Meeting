@@ -11,6 +11,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\Category;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Event\Category\Duplicator;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
@@ -67,16 +68,13 @@ class DuplicatorTest extends TestCase
 
         $categoriesRepository->add($expectedCategory)->shouldBeCalled();
 
-        $duplicationHelper = [
-            'type' => [
-                2 => $newType,
-            ],
-        ];
+        $duplicationDataStorage = new DuplicatorDataStorage();
+        $duplicationDataStorage->types = [2 => $newType];
 
         $duplicator = new Duplicator($categoriesRepository->reveal());
-        $result = $duplicator->duplicate($event, $duplicationHelper);
+        $result = $duplicator->duplicate($event, $duplicationDataStorage);
 
-        $resultCategory = $result['category'][5];
+        $resultCategory = $result->categories[5];
         $this->assertEquals($resultCategory, $expectedCategory);
         $this->assertEquals($resultCategory->getTypes()[9], $newType);
     }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\Tip;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Tip\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -49,19 +50,12 @@ class DuplicatorTest extends TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tipRepository->getByEvent($eventDuplicated)->shouldBeCalled()->willReturn([$oldTip]);
-        $tipRepository->add(Argument::that(
-            function(Tip $newTip){
-                return true;
-            }
-        ))->shouldBeCalled();
+        $tipRepository->add(Argument::that(function(Tip $newTip) { return true; }))->shouldBeCalled();
 
-        $duplicationHelper = [
-            'type'     => [
-                1 => $newType
-            ],
-        ];
+        $duplicatorDataStorage = new DuplicatorDataStorage();
+        $duplicatorDataStorage->types = [1 => $newType];
 
-        $duplicator = new Duplicator($tipRepository->reveal());
-        $duplicator->duplicate($event, $duplicationHelper);
+        $duplicator = new Duplicator($tipRepository->reveal(), new \DateTime());
+        $duplicator->duplicate($event, $duplicatorDataStorage);
     }
 }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\SheetTemplate;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\SheetTemplate\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
@@ -74,12 +75,12 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($templateData);
 
-        $duplicationhelper = (new Duplicator(
+        $duplicatorDataStorage = (new Duplicator(
             $sheetTemplateRepository->reveal(),
             $sheetTemplateCloner->reveal(),
             $templateDataFactory->reveal()
-        ))->duplicate($event, []);
+        ))->duplicate($event, new DuplicatorDataStorage());
 
-        $this->assertEquals($clonedSheetTemplate, $duplicationhelper['sheetTemplate'][5]);
+        $this->assertEquals($clonedSheetTemplate, $duplicatorDataStorage->sheetTemplates[5]);
     }
 }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\Product;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Product\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
@@ -53,6 +54,11 @@ class DuplicatorTest extends TestCase
         $productRepository->findByEvent($eventDuplicated)->shouldBeCalled()->willReturn($result);
         $productRepository->add($expectedProduct)->shouldBeCalled();
 
-        (new Duplicator($productRepository->reveal(), $fileStorage->reveal()))->duplicate($event);
+        $duplicatorDataStorage = new DuplicatorDataStorage();
+
+        (new Duplicator(
+            $productRepository->reveal(),
+            $fileStorage->reveal()
+        ))->duplicate($event, $duplicatorDataStorage);
     }
 }

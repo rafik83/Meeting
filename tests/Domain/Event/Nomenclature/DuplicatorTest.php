@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\Nomenclature;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Nomenclature\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
@@ -48,11 +49,11 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($newNomenclature);
 
-        $duplicationHelper = (new Duplicator(
+        $duplicatorDataStorage = (new Duplicator(
             $nomenclatureRepository->reveal(),
             $nomenclatureCloner->reveal()
-        ))->duplicate($event, []);
+        ))->duplicate($event, new DuplicatorDataStorage());
 
-        $this->assertEquals($newNomenclature, $duplicationHelper['nomenclature'][2]);
+        $this->assertEquals($newNomenclature, $duplicatorDataStorage->nomenclatures[2]);
     }
 }

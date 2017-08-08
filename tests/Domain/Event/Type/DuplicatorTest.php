@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\Type;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Type\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -111,11 +112,11 @@ class DuplicatorTest extends TestCase
 
     public function testDuplicate()
     {
-        $duplicatorHelper = [
-            'sheetTemplate'        => [6 => $this->sheetTemplate],
-            'registrationTemplate' => [5 => $this->registrationTemplate],
-            'packageTemplate'      => [3 => $this->packageTemplate],
-        ];
+        $duplicatorDataStorage = new DuplicatorDataStorage();
+
+        $duplicatorDataStorage->sheetTemplates        = [6 => $this->sheetTemplate];
+        $duplicatorDataStorage->registrationTemplates = [5 => $this->registrationTemplate];
+        $duplicatorDataStorage->packageTemplates        = [3 => $this->packageTemplate];
 
         $expectedType = new Type($this->event);
         $expectedType->setSheetTemplate($this->sheetTemplate);
@@ -136,7 +137,7 @@ class DuplicatorTest extends TestCase
 
         $typeRepository->add($expectedType)->shouldBeCalled();
 
-        $expected = (new Duplicator($typeRepository->reveal()))->duplicate($this->event, $duplicatorHelper);
-        $this->assertEquals($expected['type'][8], $expectedType);
+        $expected = (new Duplicator($typeRepository->reveal()))->duplicate($this->event, $duplicatorDataStorage);
+        $this->assertEquals($expected->types[8], $expectedType);
     }
 }

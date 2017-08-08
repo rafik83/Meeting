@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Event\RegistrationTemplate;
 
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -33,8 +34,6 @@ class Duplicator
     private $registrationTemplateCloner;
 
     /**
-     * Duplicator constructor.
-     *
      * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
      * @param TemplateDataFactory                     $templateDataFactory
      * @param RegistrationTemplateCloner              $registrationTemplateCloner
@@ -51,11 +50,11 @@ class Duplicator
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
         $registrationTemplates = $this
             ->registrationTemplateRepository
@@ -73,15 +72,15 @@ class Duplicator
 
             foreach ($nomenclatureObjects as $nomenclatureObject) {
                 $nomenclatureId  = $nomenclatureObject->getNomenclatureId();
-                $newNomenclature = $duplicationHelper['nomenclature'][$nomenclatureId];
+                $newNomenclature = $duplicatorDataStorage->nomenclatures[$nomenclatureId];
                 $nomenclatureObject->setNomenclature($newNomenclature);
             }
 
             $clonedTemplate->setValue($templateData->getConfig());
             $this->registrationTemplateRepository->set($clonedTemplate);
-            $duplicationHelper['registrationTemplate'][$registrationTemplate->getId()] = $clonedTemplate;
+            $duplicatorDataStorage->registrationTemplates[$registrationTemplate->getId()] = $clonedTemplate;
         }
 
-        return $duplicationHelper;
+        return $duplicatorDataStorage;
     }
 }

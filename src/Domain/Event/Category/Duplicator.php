@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Event\Category;
 
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
@@ -32,14 +33,13 @@ class Duplicator
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
         $categories = $this->categoryRepository->getCategoriesByEvent($event->getDuplicatedFrom());
-        $duplicationHelper['category'] = [];
 
         foreach ($categories as $category) {
             $newCategory = new Category($event);
@@ -51,14 +51,14 @@ class Duplicator
             }
 
             foreach ($category->getTypes() as $type) {
-                $newType = $duplicationHelper['type'][$type->getId()];
+                $newType = $duplicatorDataStorage->types[$type->getId()];
                 $newCategory->setType($newType, $newType->getId());
             }
 
-            $duplicationHelper['category'][$category->getId()] = $newCategory;
+            $duplicatorDataStorage->categories[$category->getId()] = $newCategory;
             $this->categoryRepository->add($newCategory);
         }
 
-        return $duplicationHelper;
+        return $duplicatorDataStorage;
     }
 }

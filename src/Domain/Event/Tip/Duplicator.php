@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Event\Tip;
 
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -40,9 +41,9 @@ class Duplicator
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper)
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage)
     {
         $tips = $this->tipRepository->getByEvent($event->getDuplicatedFrom());
 
@@ -60,7 +61,7 @@ class Duplicator
             );
 
             foreach ($tip->getTypes() as $type) {
-                $newTip->addType($duplicationHelper['type'][$type->getId()]);
+                $newTip->addType($duplicatorDataStorage->types[$type->getId()]);
             }
 
             foreach ($event->getLocales() as $locale) {

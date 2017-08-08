@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Event\Catalog\External;
 
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
@@ -41,28 +42,30 @@ class CatalogVisibilityDuplicator
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper)
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage)
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event->getDuplicatedFrom());
 
-        $newCatalogVisibility = new CatalogVisibility($event);
-        $types = [];
-        $categories = [];
+        if (null !== $catalogVisibility) {
+            $newCatalogVisibility = new CatalogVisibility($event);
+            $types = [];
+            $categories = [];
 
-        foreach ($catalogVisibility->getTypes() as $type) {
-            $types[] = $duplicationHelper['type'][$type->getId()];
+            foreach ($catalogVisibility->getTypes() as $type) {
+                $types[] = $duplicatorDataStorage->types[$type->getId()];
+            }
+
+            foreach ($catalogVisibility->getCategories() as $category) {
+                $categories[] = $duplicatorDataStorage->categories[$category->getId()];
+            }
+
+            $newCatalogVisibility->updateTypesAndCategories($types, $categories);
+            $this->catalogVisibilityRepository->add($newCatalogVisibility);
+
+            $event->setExternalCatalog($event->getDuplicatedFrom()->isExternalCatalogEnabled());
+            $this->eventRepository->set($event);
         }
-
-        foreach ($catalogVisibility->getCategories() as $category) {
-            $categories[] = $duplicationHelper['category'][$category->getId()];
-        }
-
-        $newCatalogVisibility->updateTypesAndCategories($types, $categories);
-        $this->catalogVisibilityRepository->add($newCatalogVisibility);
-
-        $event->setExternalCatalog($event->getDuplicatedFrom()->isExternalCatalogEnabled());
-        $this->eventRepository->set($event);
     }
 }

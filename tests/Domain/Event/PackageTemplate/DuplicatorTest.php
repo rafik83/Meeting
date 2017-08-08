@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\PackageTemplate;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Package\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -86,20 +87,19 @@ class DuplicatorTest extends TestCase
             ->willReturn([$package])
         ;
 
-        $duplicationHelper = [
-            'product' => [
-                1 => $option,
-                3 => $plan,
-                5 => $planning,
-                7 => $participant
-            ]
+        $duplicatorDataStorage = new DuplicatorDataStorage();
+        $duplicatorDataStorage->products = [
+            1 => $option,
+            3 => $plan,
+            5 => $planning,
+            7 => $participant
         ];
 
         $duplicator = new Duplicator($packageRepository->reveal(), $date);
-        $result = $duplicator->duplicate($event, $duplicationHelper);
+        $result = $duplicator->duplicate($event, $duplicatorDataStorage);
 
         /** @var Package $newPackageResult */
-        $newPackageResult = $result['packageTemplate'][2];
+        $newPackageResult = $result->packageTemplates[2];
         $resultOption = $newPackageResult->getGroups()[0]->getOptions()[0];
         $resultPlan = $newPackageResult->getPlans()[0];
 

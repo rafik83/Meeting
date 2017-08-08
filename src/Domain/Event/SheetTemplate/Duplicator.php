@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Event\SheetTemplate;
 
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -33,8 +34,6 @@ class Duplicator
     private $templateDataFactory;
 
     /**
-     * Duplicator constructor.
-     *
      * @param SheetTemplateRepositoryInterface $sheetTemplateRepository
      * @param SheetTemplateCloner              $sheetTemplateCloner
      * @param TemplateDataFactory              $templateDataFactory
@@ -45,17 +44,17 @@ class Duplicator
         TemplateDataFactory $templateDataFactory
     ) {
         $this->sheetTemplateRepository = $sheetTemplateRepository;
-        $this->sheetTemplateCloner = $sheetTemplateCloner;
-        $this->templateDataFactory = $templateDataFactory;
+        $this->sheetTemplateCloner     = $sheetTemplateCloner;
+        $this->templateDataFactory     = $templateDataFactory;
     }
 
     /**
      * @param Event $event
-     * @param array $duplicationHelper
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
         $sheetTemplates = $this
             ->sheetTemplateRepository
@@ -73,15 +72,15 @@ class Duplicator
 
             foreach ($nomenclatureObjects as $nomenclatureObject) {
                 $nomenclatureId  = $nomenclatureObject->getNomenclatureId();
-                $newNomenclature = $duplicationHelper['nomenclature'][$nomenclatureId];
+                $newNomenclature = $duplicatorDataStorage->nomenclatures[$nomenclatureId];
                 $nomenclatureObject->setNomenclature($newNomenclature);
             }
 
             $clonedTemplate->setValue($templateData->getConfig());
             $this->sheetTemplateRepository->set($clonedTemplate);
-            $duplicationHelper['sheetTemplate'][$sheetTemplate->getId()] = $clonedTemplate;
+            $duplicatorDataStorage->sheetTemplates[$sheetTemplate->getId()] = $clonedTemplate;
         }
 
-        return $duplicationHelper;
+        return $duplicatorDataStorage;
     }
 }

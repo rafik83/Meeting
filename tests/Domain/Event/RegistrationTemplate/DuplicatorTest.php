@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event\RegistrationTemplate;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -76,12 +77,12 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($templateData);
 
-        $duplicationhelper = (new Duplicator(
+        $duplicatorDataStorage = (new Duplicator(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $registrationTemplateCloner->reveal()
-        ))->duplicate($event, []);
+        ))->duplicate($event, new DuplicatorDataStorage());
 
-        $this->assertEquals($clonedRegistrationTemplate, $duplicationhelper['registrationTemplate'][4]);
+        $this->assertEquals($clonedRegistrationTemplate, $duplicatorDataStorage->registrationTemplates[4]);
     }
 }

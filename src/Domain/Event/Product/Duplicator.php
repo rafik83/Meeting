@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Event\Product;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
@@ -23,8 +24,8 @@ class Duplicator
     /** @var FileStorageInterface */
     private $fileStorage;
 
-    /** @var array */
-    private $duplicationHelper = [];
+    /** @var DuplicatorDataStorage */
+    private $duplicatorDataStorage;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -39,15 +40,15 @@ class Duplicator
     }
 
     /**
-     * @param Event $event
+     * @param Event                 $event
+     * @param DuplicatorDataStorage $duplicatorDataStorage
      *
-     * @return array
+     * @return DuplicatorDataStorage
      */
-    public function duplicate(Event $event, array $duplicationHelper = []): array
+    public function duplicate(Event $event, DuplicatorDataStorage $duplicatorDataStorage): DuplicatorDataStorage
     {
-        $plans                        = [];
-        $duplicationHelper['product'] = [];
-        $this->duplicationHelper      = $duplicationHelper;
+        $plans                       = [];
+        $this->duplicatorDataStorage = $duplicatorDataStorage;
 
         $products = $this->productRepository->findByEvent($event->getDuplicatedFrom());
 
@@ -68,7 +69,7 @@ class Duplicator
             $this->duplicateProduct($plan, $event);
         }
 
-        return $this->duplicationHelper;
+        return $this->duplicatorDataStorage;
     }
 
     /**
@@ -110,7 +111,7 @@ class Duplicator
                 );
             }
         }
-        $this->duplicationHelper['product'][$product->getId()] = $productToAdd;
+        $this->duplicatorDataStorage->products[$product->getId()] = $productToAdd;
 
         if ($product->getType() === Product::TYPE_PLAN) {
             $this->handlePlanProductsAndFeatures($productToAdd, $product);
@@ -129,7 +130,7 @@ class Duplicator
     ) {
         foreach ($product->getIncludedProducts() as $productIncluded) {
             $productToAdd->includeProduct(
-                $this->duplicationHelper['product'][$productIncluded->getIncluded()->getId()],
+                $this->duplicatorDataStorage->products[$productIncluded->getIncluded()->getId()],
                 $productIncluded->getQuantity()
             );
         }

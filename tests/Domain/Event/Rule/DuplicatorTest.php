@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Event\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Rule\Duplicator;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -55,12 +56,11 @@ class DuplicatorTest extends TestCase
         $ruleRepository->getByEvent($eventDuplicated)->shouldBeCalled()->willReturn([$oldRule]);
         $ruleRepository->add($expectedRule)->shouldBeCalled();
 
-        $duplicationHelper = [
-            'type'     => [2 => $newSeer],
-            'category' => [6 => $newSeeable],
-        ];
+        $duplicatorDataStorage = new DuplicatorDataStorage();
+        $duplicatorDataStorage->types = [2 => $newSeer];
+        $duplicatorDataStorage->categories = [6 => $newSeeable];
 
         $duplicator = new Duplicator($ruleRepository->reveal());
-        $duplicator->duplicate($event, $duplicationHelper);
+        $duplicator->duplicate($event, $duplicatorDataStorage);
     }
 }

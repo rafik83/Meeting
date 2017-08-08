@@ -106,5 +106,5 @@ interface TipRepositoryInterface
      *
      * @return Tip[]
      */
-    public function getByEvent(Event $event);
+    public function getByEvent(Event $event): array;
 }
