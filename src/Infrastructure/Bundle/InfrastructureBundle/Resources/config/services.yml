@@ -4297,6 +4297,12 @@ services:
             - '@repository.cart_row_repository'
             - '@vimeet_infrastructure.repository.order_row_repository'
 
+    domain.event.last_event_participation:
+        class: Proximum\Vimeet\Domain\Event\LastEventParticipation
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@datetime'
+
     #
     # Transaction
     #

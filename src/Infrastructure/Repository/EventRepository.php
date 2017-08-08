@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class EventRepository implements EventRepositoryInterface
@@ -205,6 +208,31 @@ class EventRepository implements EventRepositoryInterface
             ->where('event.id = :id')
             ->setParameter('id', $id)
             ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastEventParticipation(User $user, Event $currentEvent): ?Event
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.event = event')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.sheet = sheet AND participant.user = :user')
+            ->join('event.days', 'day')
+            ->orderBy('day.startTime', 'DESC')
+            ->setParameter('user', $user)
+            ->setMaxResults(1);
+
+        if ($currentEvent !== null) {
+            $queryBuilder->where('event != :event')
+                ->setParameter('event', $currentEvent);
+        }
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

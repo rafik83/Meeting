@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventListView;
 
 interface EventRepositoryInterface
@@ -81,4 +82,12 @@ interface EventRepositoryInterface
      * @return Event|null
      */
     public function getById($id);
+
+    /**
+     * @param User  $user
+     * @param Event $currentEvent
+     *
+     * @return null|Event
+     */
+    public function getLastEventParticipation(User $user, Event $currentEvent): ?Event;
 }
