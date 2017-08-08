@@ -1664,6 +1664,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+            - '@command.meeting.admin.spot_reassign_handler'
             - '@adapter.entity_manager_adapter'
             - '@adapter.mailer_adapter'
             - '@adapter.local_file_storage'
@@ -1693,6 +1694,15 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
+
+    command.meeting.admin.spot_reassign_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassignHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@domain.meeting.visio_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign }
 
     command.meeting_request.admin.lock_meeting_request_update_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdateHandler

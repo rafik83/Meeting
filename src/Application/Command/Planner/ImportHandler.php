@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassignHandler;
 use Proximum\Vimeet\Application\Exception\Planner\Import\InvalidArgumentForImportException;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
@@ -52,6 +54,9 @@ class ImportHandler
 
     /** @var SpotRepositoryInterface */
     private $spotRepository;
+
+    /** @var SpotReassignHandler */
+    private $spotReassignHandler;
 
     /** @var EntityManagerAdapterInterface */
     private $entityManagerAdapter;
@@ -93,6 +98,7 @@ class ImportHandler
      * @param RequestRepositoryInterface     $requestRepository
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SpotRepositoryInterface        $spotRepository
+     * @param SpotReassignHandler            $spotReassignHandler
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
      * @param MailerInterface                $mailer
      * @param LocalFileStorageAdapter        $localFileStorage
@@ -108,6 +114,7 @@ class ImportHandler
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepositoryInterface $slotRepository,
         SpotRepositoryInterface $spotRepository,
+        SpotReassignHandler $spotReassignHandler,
         EntityManagerAdapterInterface $entityManagerAdapter,
         MailerInterface $mailer,
         LocalFileStorageAdapter $localFileStorage,
@@ -122,6 +129,7 @@ class ImportHandler
         $this->requestRepository    = $requestRepository;
         $this->slotRepository       = $slotRepository;
         $this->spotRepository       = $spotRepository;
+        $this->spotReassignHandler  = $spotReassignHandler;
         $this->entityManagerAdapter = $entityManagerAdapter;
         $this->mailer               = $mailer;
         $this->localFileStorage     = $localFileStorage;
@@ -152,6 +160,7 @@ class ImportHandler
         }
 
         $this->handlePlannerResult($import->event, $plannerResult);
+        $this->spotReassignHandler->handle(new SpotReassign($import->event));
 
         $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
 
