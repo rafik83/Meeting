@@ -180,10 +180,6 @@ class EventController extends Controller
 
         if ($duplicateForm->handleRequest($request)->isSubmitted() && $duplicateForm->isValid()) {
             $eventToDuplicate = $duplicateForm->get('event')->getData();
-
-            $this->addFlash('success', new TransMessage('flash.admin.event.duplicate.success', [
-                '%eventTitle%' => $eventToDuplicate->getTitle(),
-            ]));
             return $this->redirectToRoute('admin_event_create_from', [
                 'event' => $eventToDuplicate->getId(),
             ]);
