@@ -10,11 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Account;
 
-use Proximum\Vimeet\Domain\Exception\Event\NoPreviousEventParticipationException;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -29,19 +25,12 @@ class EventParticipationPreFiller
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
-
     /**
-     * @param ParticipantRepositoryInterface $participantRepository
      * @param TemplateDataFactory $templateDataFactory
      */
-    public function __construct(
-        ParticipantRepositoryInterface $participantRepository,
-        TemplateDataFactory $templateDataFactory
-    ) {
+    public function __construct(TemplateDataFactory $templateDataFactory)
+    {
         $this->templateDataFactory = $templateDataFactory;
-        $this->participantRepository = $participantRepository;
     }
 
     /**

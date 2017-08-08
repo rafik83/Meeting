@@ -2464,7 +2464,6 @@ services:
     account.event_participation_pre_filler:
         class: Proximum\Vimeet\Domain\Account\EventParticipationPreFiller
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.template_data_factory'
 
     #
