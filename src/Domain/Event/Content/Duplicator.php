@@ -42,8 +42,10 @@ class Duplicator
             ->findByEventAndType($event->getDuplicatedFrom(), $type)
         ;
 
-        foreach ($contentDuplicatedFrom->getEvent()->getLocales() as $locale) {
-            $content->translate($locale, $contentDuplicatedFrom->getValue($locale));
+        if (null !== $contentDuplicatedFrom) {
+            foreach ($contentDuplicatedFrom->getEvent()->getLocales() as $locale) {
+                $content->translate($locale, $contentDuplicatedFrom->getValue($locale));
+            }
         }
 
         $this->contentRepository->set($content);

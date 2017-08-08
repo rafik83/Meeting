@@ -54,11 +54,15 @@ class CatalogVisibilityDuplicator
             $categories = [];
 
             foreach ($catalogVisibility->getTypes() as $type) {
-                $types[] = $duplicatorDataStorage->types[$type->getId()];
+                if (isset($duplicatorDataStorage->types[$type->getId()])) {
+                    $types[] = $duplicatorDataStorage->types[$type->getId()];
+                }
             }
 
             foreach ($catalogVisibility->getCategories() as $category) {
-                $categories[] = $duplicatorDataStorage->categories[$category->getId()];
+                if (isset($duplicatorDataStorage->categories[$category->getId()])) {
+                    $categories[] = $duplicatorDataStorage->categories[$category->getId()];
+                }
             }
 
             $newCatalogVisibility->updateTypesAndCategories($types, $categories);

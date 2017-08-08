@@ -74,7 +74,7 @@ class CreateHandler
         $this->contentRepository   = $contentRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
         $this->fileStorage         = $fileStorage;
-        $this->duplicator = $duplicator;
+        $this->duplicator          = $duplicator;
     }
 
     /**
