@@ -80,10 +80,11 @@ class CreateHandler
     /**
      * @param Create $create
      *
+     * @return Event
      * @throws DomainAlreadyUsedException
      * @throws GuidelineAssetBuildFailedException
      */
-    public function handle(Create $create)
+    public function handle(Create $create): Event
     {
         if (null !== $this->eventRepository->getEventByDomain($create->domain)) {
             throw new DomainAlreadyUsedException(sprintf('Given domain %s', $create->domain));
@@ -140,6 +141,8 @@ class CreateHandler
         if (null !== $create->duplicatedFrom) {
             $this->duplicator->duplicate($event);
         }
+
+        return $event;
     }
 
     /**
