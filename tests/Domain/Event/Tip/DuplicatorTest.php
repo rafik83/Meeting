@@ -50,7 +50,9 @@ class DuplicatorTest extends TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $tipRepository->getByEvent($eventDuplicated)->shouldBeCalled()->willReturn([$oldTip]);
-        $tipRepository->add(Argument::that(function(Tip $newTip) { return true; }))->shouldBeCalled();
+        $tipRepository->add(Argument::that(function (Tip $newTip) {
+            return true;
+        }))->shouldBeCalled();
 
         $duplicatorDataStorage = new DuplicatorDataStorage();
         $duplicatorDataStorage->types = [1 => $newType];
