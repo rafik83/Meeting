@@ -59,9 +59,11 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         $slotEndDate    = clone $slot->getEnd();
         $sessionEndDate = $slotEndDate->modify('+15 min');
 
+        // TODO: Reset date checker after demo
+
         $defaultOption = [
             'role'       => Role::PUBLISHER,
-            'expireTime' => $sessionEndDate->getTimeStamp(),
+//            'expireTime' => $sessionEndDate->getTimeStamp(),
         ];
 
         try {

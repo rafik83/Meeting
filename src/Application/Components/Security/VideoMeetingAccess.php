@@ -39,6 +39,8 @@ class VideoMeetingAccess
         $start = (clone $meeting->getSlot()->getBegin())->modify('-15 min');
         $end = (clone $meeting->getSlot()->getEnd())->modify('+15 min');
 
-        return $this->dateTime >= $start && $this->dateTime <= $end;
+        // TODO: Reset date checker after demo
+
+        return true; //$this->dateTime >= $start && $this->dateTime <= $end;
     }
 }
