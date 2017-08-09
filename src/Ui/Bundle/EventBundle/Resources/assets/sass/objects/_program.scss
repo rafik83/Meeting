@@ -7,6 +7,17 @@
       margin: 0 !important;
     }
   }
+
+  .program-container {
+    .meet {
+      > header {
+        .content {
+          flex: 1 1 auto !important;
+          margin-left: 5% !important;
+        }
+      }
+    }
+  }
 }
 
 
@@ -161,7 +172,7 @@
         margin-bottom: 0;
         overflow: hidden;
         display: -webkit-box;
-        -webkit-line-clamp: 5;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
