@@ -44,18 +44,18 @@ class Create extends AbstractEvent
         $this->title         = $event->getTitle();
         $this->locales       = $event->getLocales();
         $this->fallback      = $event->getFallback();
+        $this->emailTeam     = $event->getEmailTeam();
         $this->mode          = $event->getMode();
-        $this->domain        = $event->getDomain();
-        $this->timeZone      = $event->getTimeZone();
+        $this->visible       = $event->isVisible();
         $this->country       = $event->getCountry();
+        $this->domain        = $event->getDomain();
         $this->vat           = $event->getVat();
         $this->currency      = $event->getCurrency();
+        $this->organiserName = $event->getOrganiserName();
+        $this->invoicePrefix = $event->getInvoicePrefix();
+        $this->timeZone      = $event->getTimeZone();
         $this->leftColor     = $event->getConfiguration()->getLeftColor();
         $this->rightColor    = $event->getConfiguration()->getRightColor();
         $this->textColor     = $event->getConfiguration()->getTextColor();
-        $this->organiserName = $event->getOrganiserName();
-        $this->emailTeam     = $event->getEmailTeam();
-        $this->invoicePrefix = $event->getInvoicePrefix();
-        $this->visible       = $event->isVisible();
     }
 }
