@@ -1,3 +1,13 @@
+<div class="row visible-xs">
+    <div class="col-md-12">
+        <p class="text-center lead">
+            {{ happening.title }}
+            {% if suffixTitleWithTick is defined and suffixTitleWithTick == true %}
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide' }}"></i>
+            {% endif %}
+        </p>
+    </div>
+</div>
 <div class="row">
     {% for speaker in happening.speakers %}
         {% if speaker.hasCompanyPicture %}
