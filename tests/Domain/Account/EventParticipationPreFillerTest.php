@@ -23,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class EventParticipationPreFillerTest extends TestCase
 {
-    public function testPreFillTemplate()
+    public function testPreFillTemplateByTags()
     {
         $event = EventFactory::createEvent();
         $user = UserFactory::create();
@@ -33,6 +33,48 @@ class EventParticipationPreFillerTest extends TestCase
 
         $templateData = $this->getPreviousTemplate();
         $currentTemplateData = $this->getCurrentTemplate();
+
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+
+        $templateDataFactory
+            ->createRegistrationFromParticipant($participant, $locale)
+            ->shouldBeCalled()->willReturn($templateData);
+
+        $eventParticipationPreFiller = new EventParticipationPreFiller($templateDataFactory->reveal());
+
+        $result = $eventParticipationPreFiller->preFillTemplate(
+            $currentTemplateData,
+            $participant,
+            $locale
+        );
+
+        $this->assertEquals($templateData, $result);
+    }
+
+    public function testPreFillTemplateByKey()
+    {
+        $event = EventFactory::createEvent();
+        $user = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+        $participant = ParticipantFactory::create($sheet, $user);
+        $locale = 'fr';
+
+        $currentTemplateData = new TemplateData('root', [], 'fr', 'fr');
+
+        $currentBlock = new Block('12', [], 'fr', 'fr');
+        $currentEditableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [], 'fr', 'fr');
+
+        $currentBlock->addChild(1, '69b3cde1', $currentEditableText1);
+        $currentTemplateData->addChild(0, '811f6edf', $currentBlock);
+
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+
+        $block = new Block('12', [], 'fr', 'fr');
+        $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [], 'fr', 'fr');
+        $editableText1->setData(['text' => 'Elao Paris']);
+
+        $block->addChild(1, '69b3cde1', $editableText1);
+        $templateData->addChild(0, '811f6edf', $block);
 
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
 
