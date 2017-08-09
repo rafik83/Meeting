@@ -17,19 +17,14 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class LastEventParticipation
 {
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
     /**
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(ParticipantRepositoryInterface $participantRepository, \DateTimeInterface $dateTime)
+    public function __construct(ParticipantRepositoryInterface $participantRepository)
     {
-        $this->dateTime = $dateTime;
         $this->participantRepository = $participantRepository;
     }
 

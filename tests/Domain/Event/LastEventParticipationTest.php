@@ -28,15 +28,13 @@ class LastEventParticipationTest extends TestCase
         $lastParticipation = ParticipantFactory::create($sheet, $user);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $datetime = new \DateTime();
 
         $participantRepository->getLastEventParticipation($user, $currentEvent)
             ->shouldBeCalled()
             ->willReturn($lastParticipation);
 
         $lastEventParticipation = new LastEventParticipation(
-            $participantRepository->reveal(),
-            $datetime
+            $participantRepository->reveal()
         );
 
         $lastParticipationResult = $lastEventParticipation->getLastEvent($user, $currentEvent);
@@ -55,7 +53,6 @@ class LastEventParticipationTest extends TestCase
         $lastParticipation = ParticipantFactory::create($sheet, $user);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $datetime = new \DateTime();
 
         $participantRepository->getParticipantsByUserForEvent($user->getId(), $duplicateFrom)
             ->shouldBeCalled()->willReturn([$lastParticipation]);
@@ -64,8 +61,7 @@ class LastEventParticipationTest extends TestCase
             ->shouldNotBeCalled();
 
         $lastEventParticipation = new LastEventParticipation(
-            $participantRepository->reveal(),
-            $datetime
+            $participantRepository->reveal()
         );
 
         $lastParticipationResult = $lastEventParticipation->getLastEvent($user, $currentEvent);

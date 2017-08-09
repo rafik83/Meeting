@@ -4314,7 +4314,6 @@ services:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@datetime'
 
     #
     # Transaction
