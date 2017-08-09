@@ -43,4 +43,33 @@ class LastEventParticipationTest extends TestCase
 
         $this->assertEquals($lastParticipation, $lastParticipationResult);
     }
+
+    public function testGetLastEventFromDuplicateEvent()
+    {
+        $user = UserFactory::create();
+
+        $duplicateFrom = EventFactory::createEvent();
+        $currentEvent = EventFactory::createEvent(null, null, ['fr'], null, $duplicateFrom);
+
+        $sheet = SheetFactory::create($currentEvent);
+        $lastParticipation = ParticipantFactory::create($sheet, $user);
+
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $datetime = new \DateTime();
+
+        $participantRepository->getParticipantsByUserForEvent($user->getId(), $duplicateFrom)
+            ->shouldBeCalled()->willReturn([$lastParticipation]);
+
+        $participantRepository->getLastEventParticipation($user, $currentEvent)
+            ->shouldNotBeCalled();
+
+        $lastEventParticipation = new LastEventParticipation(
+            $participantRepository->reveal(),
+            $datetime
+        );
+
+        $lastParticipationResult = $lastEventParticipation->getLastEvent($user, $currentEvent);
+
+        $this->assertEquals($lastParticipation, $lastParticipationResult);
+    }
 }
