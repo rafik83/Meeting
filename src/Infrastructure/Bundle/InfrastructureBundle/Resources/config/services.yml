@@ -1702,7 +1702,7 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@domain.meeting.visio_guesser'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign }
 
     command.meeting_request.admin.lock_meeting_request_update_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdateHandler
