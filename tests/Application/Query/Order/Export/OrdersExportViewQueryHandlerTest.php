@@ -36,8 +36,9 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class OrdersExportViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class OrdersExportViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

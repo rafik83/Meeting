@@ -27,8 +27,9 @@ use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TransactionViewQueryHandlerTest extends TestCase
 {
     public function testHandleNotificationPending()
     {

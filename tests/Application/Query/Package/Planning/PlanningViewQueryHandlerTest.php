@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlanningViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

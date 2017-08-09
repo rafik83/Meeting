@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Tests\Domain\Order\Numero;
 
 use Proximum\Vimeet\Domain\Order\Numero\Validator;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     public function testIsValid()
     {

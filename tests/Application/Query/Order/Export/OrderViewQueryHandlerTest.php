@@ -32,8 +32,9 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\InvoiceFactory;
+use PHPUnit\Framework\TestCase;
 
-class OrderViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class OrderViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

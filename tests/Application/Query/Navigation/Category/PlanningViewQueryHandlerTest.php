@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlanningViewQueryHandlerTest extends TestCase
 {
     /**
      * @var ObjectProphecy

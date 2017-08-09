@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\TestCase;
 
-class PostBatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
+class PostBatchEnableDisableHandlerTest extends TestCase
 {
     public function testHandle()
     {

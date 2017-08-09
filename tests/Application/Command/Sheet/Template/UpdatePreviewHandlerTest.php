@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 
-class UpdatePreviewHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdatePreviewHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInter
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
+class NewPasswordHandlerTest extends TestCase
 {
     public function testHandle()
     {

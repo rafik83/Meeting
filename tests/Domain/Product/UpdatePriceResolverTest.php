@@ -21,8 +21,9 @@ use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdatePriceResolverTest extends \PHPUnit_Framework_TestCase
+class UpdatePriceResolverTest extends TestCase
 {
     public function testResolveTrue()
     {

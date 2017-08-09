@@ -28,8 +28,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
+class SelectParticipantAndPlanningHandlerTest extends TestCase
 {
     public function testHandle()
     {

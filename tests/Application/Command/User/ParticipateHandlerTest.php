@@ -32,8 +32,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipateHandlerTest extends TestCase
 {
     public function testHandle()
     {

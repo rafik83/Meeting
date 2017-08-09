@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Planner\TypePriorityViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\TypePriorityViewQueryHandler;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class TypePriorityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TypePriorityViewQueryHandlerTest extends TestCase
 {
     /**
      * @var ObjectProphecy

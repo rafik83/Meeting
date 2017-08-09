@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

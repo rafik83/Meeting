@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PHPUnit\Framework\TestCase;
 
-class EventUrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class EventUrlGeneratorTest extends TestCase
 {
     public function testHandle()
     {
