@@ -54,7 +54,9 @@
                     <header class="agenda-head">
                         <p>
                             <i class="icon icon-Calendrier"></i>
-                            <span>{{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}</span>
+                            <span class="agenda-date" data-date="{{ day.day|date('d/m/y h:i:s') }}">
+                                {{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}
+                            </span>
                         </p>
                     </header>
                     <div class="meets">
