@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution;
 
-
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Graph\SpotFillingRateDayListView;
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Graph\SpotFillingRateDayView;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;

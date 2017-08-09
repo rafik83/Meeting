@@ -73,7 +73,7 @@ class SheetSatisfactionViewQueryHandlerTest extends TestCase
             [
                 0,
                 10,
-                new SheetSatisfactionView(1, 'title1', 2, 'typeTitle1', 1000)
+                new SheetSatisfactionView(1, 'title1', 2, 'typeTitle1', 100)
             ],
         ];
     }

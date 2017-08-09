@@ -75,23 +75,19 @@ class SpotFillingRateQueryHandlerTest extends TestCase
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository
-            ->countMeetingForSpotsAndSlot($event->reveal(), [$spot1->reveal(), $spot2->reveal()], $slot1->reveal())
+            ->countMeetingForSpotsAndSlot([$spot1->reveal(), $spot2->reveal()], $slot1->reveal())
             ->shouldBeCalled()
             ->willReturn(0)
         ;
 
         $meetingRepository
-            ->countMeetingForSpotsAndSlot($event->reveal(), [$spot2->reveal(), $spot3->reveal()], $slot2->reveal())
+            ->countMeetingForSpotsAndSlot([$spot2->reveal(), $spot3->reveal()], $slot2->reveal())
             ->shouldBeCalled()
             ->willReturn(6)
         ;
 
         $meetingRepository
-            ->countMeetingForSpotsAndSlot(
-                $event->reveal(),
-                [$spot1->reveal(), $spot2->reveal(), $spot3->reveal()],
-                $slot3->reveal()
-            )
+            ->countMeetingForSpotsAndSlot([$spot1->reveal(), $spot2->reveal(), $spot3->reveal()], $slot3->reveal())
             ->shouldBeCalled()
             ->willReturn(7)
         ;

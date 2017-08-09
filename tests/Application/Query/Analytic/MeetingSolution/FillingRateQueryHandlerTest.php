@@ -57,7 +57,7 @@ class FillingRateQueryHandlerTest extends TestCase
 
         // Mock
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->countMeetingForSpots($event->reveal(), $spots)->shouldBeCalled()->willReturn(5);
+        $meetingRepository->countMeetingForSpots($spots)->shouldBeCalled()->willReturn(5);
 
         $handler = new FillingRateQueryHandler($meetingRepository->reveal());
         $result = $handler->handle(new FillingRateQuery($event->reveal(), $slots, $spots));

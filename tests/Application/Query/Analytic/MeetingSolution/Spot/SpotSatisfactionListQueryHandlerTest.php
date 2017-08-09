@@ -42,7 +42,7 @@ class SpotSatisfactionListQueryHandlerTest extends TestCase
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository
-            ->countMeetingsBySpots($event->reveal(), $spots)
+            ->countMeetingsBySpots($spots)
             ->shouldBeCalled()
             ->willReturn([
                 1 => ['countMeetings' => 12],

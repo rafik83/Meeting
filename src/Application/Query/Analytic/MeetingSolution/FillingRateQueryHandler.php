@@ -51,7 +51,7 @@ class FillingRateQueryHandler
             $capacity = 1;
         }
 
-        $numberOfMeetingOnShared = $this->meetingRepository->countMeetingForSpots($query->event, $query->spots);
+        $numberOfMeetingOnShared = $this->meetingRepository->countMeetingForSpots($query->spots);
         $fillingRate = 100 * ($numberOfMeetingOnShared / $capacity);
 
         return $fillingRate;

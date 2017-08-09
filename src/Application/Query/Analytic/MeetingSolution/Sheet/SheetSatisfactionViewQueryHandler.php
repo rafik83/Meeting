@@ -22,7 +22,7 @@ class SheetSatisfactionViewQueryHandler
     public function handle(SheetSatisfactionViewQuery $query): SheetSatisfactionView
     {
         if (0 === $query->numberOfRequest) {
-            $satisfaction = ($query->numberOfMeetings / 1) * 100;
+            $satisfaction = 100;
         } else {
             $satisfaction = ($query->numberOfMeetings / $query->numberOfRequest) * 100;
         }

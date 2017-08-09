@@ -48,7 +48,7 @@ class SpotSatisfactionListQueryHandler
     public function handle(SpotSatisfactionListQuery $query): array
     {
         $spots = $this->spotRepository->getActiveByEvent($query->event);
-        $meetingBySpot = $this->meetingRepository->countMeetingsBySpots($query->event, $spots);
+        $meetingBySpot = $this->meetingRepository->countMeetingsBySpots($spots);
         $numberOfAvailableSlots = count($query->slots);
 
         $spotSatisfactionView = [];

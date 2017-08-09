@@ -53,11 +53,7 @@ class SpotFillingRateQueryHandler
                 }
             }
 
-            $numberOfMeeting = $this->meetingRepository->countMeetingForSpotsAndSlot(
-                $query->event,
-                $spotsOnSlot,
-                $meetingSlot
-            );
+            $numberOfMeeting = $this->meetingRepository->countMeetingForSpotsAndSlot($spotsOnSlot, $meetingSlot);
 
             // Avoid dividing by 0
             if (0 === $capacity) {

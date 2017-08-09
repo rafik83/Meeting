@@ -237,12 +237,11 @@ class RequestRepository implements RequestRepositoryInterface
                 Request::class,
                 'request',
                 'WITH',
-                'sheet.event = :event
-                AND sheet.id IN (:sheets)
+                'sheet.id IN (:sheets)
                 AND request.state = :state
                 AND request.event = :event
-                AND request.disabled = FALSE
                 AND (request.from = sheet OR request.to = sheet)
+                AND request.disabled = FALSE
             ')
             ->groupBy('sheet.id')
             ->setParameter('state', Request::STATE_APPROVED)

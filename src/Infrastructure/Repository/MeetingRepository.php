@@ -540,11 +540,10 @@ class MeetingRepository implements MeetingRepositoryInterface
                 Meeting::class,
                 'meeting',
                 'WITH',
-                'sheet.event = :event
-                AND sheet.id IN (:sheets)
-                AND meeting.state = :state
+                'sheet.id IN (:sheets)
                 AND meeting.event = :event
                 AND (meeting.fromSheet = sheet OR meeting.toSheet = sheet)
+                AND meeting.state = :state
             ')
             ->groupBy('sheet.id')
             ->setParameter('event', $event)
@@ -557,7 +556,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countMeetingsBySpots(Event $event, array $spots): array
+    public function countMeetingsBySpots(array $spots): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -568,10 +567,11 @@ class MeetingRepository implements MeetingRepositoryInterface
                 Meeting::class,
                 'meeting',
                 'WITH',
-                'spot.id IN (:spots) AND meeting.spot = spot AND meeting.state = :state AND meeting.event = :event'
+                'spot.id IN (:spots)
+                AND meeting.spot = spot
+                AND meeting.state = :state'
             )
             ->groupBy('spot.id')
-            ->setParameter('event', $event)
             ->setParameter('spots', $spots)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
@@ -581,17 +581,15 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countMeetingForSpots(Event $event, array $spots): int
+    public function countMeetingForSpots(array $spots): int
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('COUNT(meeting.id)')
             ->from(Meeting::class, 'meeting')
-            ->where('meeting.event = :event')
-            ->andWhere('meeting.spot IN (:spots)')
+            ->where('meeting.spot IN (:spots)')
             ->andWhere('meeting.state = :state')
-            ->setParameter('event', $event)
             ->setParameter('spots', $spots)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
@@ -601,18 +599,16 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countMeetingForSpotsAndSlot(Event $event, array $spots, MeetingSlot $meetingSlot): int
+    public function countMeetingForSpotsAndSlot(array $spots, MeetingSlot $meetingSlot): int
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('COUNT(meeting.id)')
             ->from(Meeting::class, 'meeting')
-            ->where('meeting.event = :event')
-            ->andWhere('meeting.slot = :slot')
+            ->where('meeting.slot = :slot')
             ->andWhere('meeting.spot IN (:spots)')
             ->andWhere('meeting.state = :state')
-            ->setParameter('event', $event)
             ->setParameter('slot', $meetingSlot)
             ->setParameter('spots', $spots)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
