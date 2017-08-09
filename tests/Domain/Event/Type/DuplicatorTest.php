@@ -116,7 +116,7 @@ class DuplicatorTest extends TestCase
 
         $duplicatorDataStorage->sheetTemplates        = [6 => $this->sheetTemplate];
         $duplicatorDataStorage->registrationTemplates = [5 => $this->registrationTemplate];
-        $duplicatorDataStorage->packageTemplates        = [3 => $this->packageTemplate];
+        $duplicatorDataStorage->packageTemplates      = [3 => $this->packageTemplate];
 
         $expectedType = new Type($this->event);
         $expectedType->setSheetTemplate($this->sheetTemplate);

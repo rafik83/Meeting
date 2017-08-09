@@ -73,6 +73,7 @@ class EventController extends Controller
             try {
                 $newEvent = $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('warning', 'flash.admin.event.duplicate.warning');
+
                 return $this->redirectToRoute('admin_event_update', ['event' => $newEvent->getId()]);
             } catch (GuidelineAssetBuildFailedException $ex) {
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');
@@ -89,7 +90,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request    $request
+     * @param Request $request
      *
      * @return RedirectResponse|Response
      */
@@ -180,6 +181,7 @@ class EventController extends Controller
 
         if ($duplicateForm->handleRequest($request)->isSubmitted() && $duplicateForm->isValid()) {
             $eventToDuplicate = $duplicateForm->get('event')->getData();
+
             return $this->redirectToRoute('admin_event_create_from', [
                 'event' => $eventToDuplicate->getId(),
             ]);
