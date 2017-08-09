@@ -37,7 +37,7 @@ class LastEventParticipationTest extends TestCase
             $participantRepository->reveal()
         );
 
-        $lastParticipationResult = $lastEventParticipation->getLastEvent($user, $currentEvent);
+        $lastParticipationResult = $lastEventParticipation->getLastEventParticipation($user, $currentEvent);
 
         $this->assertEquals($lastParticipation, $lastParticipationResult);
     }
@@ -64,7 +64,7 @@ class LastEventParticipationTest extends TestCase
             $participantRepository->reveal()
         );
 
-        $lastParticipationResult = $lastEventParticipation->getLastEvent($user, $currentEvent);
+        $lastParticipationResult = $lastEventParticipation->getLastEventParticipation($user, $currentEvent);
 
         $this->assertEquals($lastParticipation, $lastParticipationResult);
     }

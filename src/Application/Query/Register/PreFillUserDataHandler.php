@@ -54,7 +54,7 @@ class PreFillUserDataHandler
      */
     public function handle(PreFillUserData $command): PreFillUserDataView
     {
-        $lastParticipation = $this->lastEventParticipation->getLastEvent($command->user, $command->event);
+        $lastParticipation = $this->lastEventParticipation->getLastEventParticipation($command->user, $command->event);
 
         if ($lastParticipation !== null) {
             $templateData = $this->eventParticipationPreFiller->preFillTemplate(

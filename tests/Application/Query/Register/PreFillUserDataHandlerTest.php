@@ -37,7 +37,7 @@ class PreFillUserDataHandlerTest extends TestCase
         $eventParticipationPreFiller = $this->prophesize(EventParticipationPreFiller::class);
         $accountSynchronizer = $this->prophesize(Synchronizer::class);
 
-        $lastEventParticipation->getLastEvent($user, $event)
+        $lastEventParticipation->getLastEventParticipation($user, $event)
             ->shouldBeCalled()
             ->willReturn($lastParticipation);
 

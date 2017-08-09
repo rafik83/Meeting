@@ -34,7 +34,7 @@ class LastEventParticipation
      *
      * @return null|Participant
      */
-    public function getLastEvent(User $user, Event $currentEvent): ?Participant
+    public function getLastEventParticipation(User $user, Event $currentEvent): ?Participant
     {
         if (($lastEvent = $currentEvent->getDuplicatedFrom()) !== null) {
             $participants = $this->participantRepository->getParticipantsByUserForEvent($user->getId(), $lastEvent);
