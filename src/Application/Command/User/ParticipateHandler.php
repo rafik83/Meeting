@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Event\LastEventParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -57,13 +58,18 @@ class ParticipateHandler
     private $eventDispatcher;
 
     /**
+     * @var LastEventParticipation
+     */
+    private $lastEventParticipation;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param TypeResolver                   $typeResolver
      * @param Synchronizer                   $accountSynchronizer
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $dateTime
-     * @param DelayedEventDispatcher         $eventDispatcher
+     * @param LastEventParticipation         $lastEventParticipation
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -71,7 +77,8 @@ class ParticipateHandler
         TypeResolver $typeResolver,
         Synchronizer $accountSynchronizer,
         DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        LastEventParticipation $lastEventParticipation
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
@@ -80,6 +87,7 @@ class ParticipateHandler
         $this->dateTime              = $dateTime;
         $this->typeResolver          = $typeResolver;
         $this->eventDispatcher       = $eventDispatcher;
+        $this->lastEventParticipation = $lastEventParticipation;
     }
 
     /**
@@ -89,6 +97,14 @@ class ParticipateHandler
     {
         // Create a new sheet for this event
         $sheet = new Sheet($participate->event, $participate->type, [], $participate->user, $this->dateTime);
+        $lastUserParticipation = $this
+            ->lastEventParticipation
+            ->getLastEventParticipation($participate->user, $participate->event)
+        ;
+
+        if (null !== $lastUserParticipation) {
+            $sheet->setData($lastUserParticipation->getSheet()->getData());
+        }
 
         $this->typeResolver->resolve($participate->user, $participate->event, $participate->type);
 
