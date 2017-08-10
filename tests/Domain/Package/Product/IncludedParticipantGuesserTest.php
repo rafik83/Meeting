@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Package\Product;
 
-use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
