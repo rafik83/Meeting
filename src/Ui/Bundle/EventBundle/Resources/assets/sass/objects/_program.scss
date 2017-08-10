@@ -11,10 +11,6 @@
   .program-container {
     .meet {
       > header {
-        .content {
-          flex: 1 1 auto !important;
-        }
-
         .actions {
           margin-right: 5% !important;
           max-width: 60px !important;
@@ -143,12 +139,13 @@
       .content {
         display: flex;
         order: 0;
-        flex: 10 0 auto;
+        flex: 1 1 auto;
         align-content: center;
         justify-content: center;
         align-items: center;
         color: #fff;
         z-index: 10;
+        max-width: 86%;
 
         &:hover,
         &:focus {
