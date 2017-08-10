@@ -102,6 +102,7 @@ class ParticipateHandler
             ->getLastEventParticipation($participate->user, $participate->event)
         ;
 
+        // Prefill sheet data from last user participation
         if (null !== $lastUserParticipation) {
             $sheet->setData($lastUserParticipation->getSheet()->getData());
         }
