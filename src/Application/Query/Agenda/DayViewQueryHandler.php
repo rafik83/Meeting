@@ -29,6 +29,14 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
+    private $happeningViews = [];
+
+    private $unavailabilities = [];
+
+    private $masses = [];
+
+    private $meetings = [];
+
     /**
      * @param HappeningViewQueryHandler                      $happeningHandler
      * @param UnavailabilityViewQueryHandler                 $unavailabilityHandler
@@ -57,64 +65,11 @@ class DayViewQueryHandler
      */
     public function handle(DayViewQuery $query)
     {
-        $happeningViews       = [];
-        $unavailabilities     = [];
-        $masses               = [];
-        $meetings             = [];
-        $cancelAttendanceView = null;
-
         if ($query->currentSheet->attend()) {
-            foreach ($query->happenings as $happening) {
-                if ($query->day->contain($happening->getHappening())) {
-                    $happeningViews[] = $this->happeningHandler->handle(
-                        new HappeningViewQuery(
-                            $happening->getHappening(),
-                            $query->event,
-                            $query->locale
-                        )
-                    );
-                }
-            }
-
-            foreach ($query->unavailabilities as $unavailability) {
-                if ($query->day->contain($unavailability)) {
-                    $unavailabilities[] = $this->unavailabilityHandler->handle(
-                        new UnavailabilityViewQuery($unavailability, $query->event)
-                    );
-                }
-            }
-
-            foreach ($query->masses as $mass) {
-                if ($query->day->contain($mass)) {
-                    $massView = $this->massHandler->handle(
-                        new MassUnavailabilityViewQuery(
-                            $mass,
-                            $query->event,
-                            $query->participant,
-                            $query->locale
-                        )
-                    );
-
-                    if ($massView !== null) {
-                        $masses[] = $massView;
-                    }
-                }
-            }
-
-            foreach ($query->meetings as $meeting) {
-                if ($query->day->contain($meeting->getSlot())) {
-                    $meetings[] = $this->meetingHandler->handle(
-                        new MeetingViewQuery(
-                            $meeting,
-                            $query->currentSheet,
-                            $query->isUserParticipantMultipleSheet,
-                            $query->participant->getUser(),
-                            $query->event,
-                            $query->locale
-                        )
-                    );
-                }
-            }
+            $this->handleHappenings($query);
+            $this->handleUnavailabilities($query);
+            $this->handleMasses($query);
+            $this->handleMeetings($query);
         } else {
             $cancelAttendanceView = $this->cancelAttendanceUnavailabilityViewQueryHandler->handle(
                 new CancelAttendanceUnavailabilityViewQuery($query->event, $query->day)
@@ -125,11 +80,88 @@ class DayViewQueryHandler
             $query->day->getStartTime(),
             $query->day->getEndTime(),
             $query->day->getEvent()->getConfiguration()->getScheduleScale(),
-            $happeningViews,
-            $unavailabilities,
-            $masses,
-            $meetings,
-            $cancelAttendanceView
+            $this->happeningViews,
+            $this->unavailabilities,
+            $this->masses,
+            $this->meetings,
+            $cancelAttendanceView ?? null
         );
+    }
+
+    /**
+     * @param DayViewQuery $query
+     */
+    private function handleHappenings(DayViewQuery $query)
+    {
+        foreach ($query->happenings as $happening) {
+            if ($query->day->contain($happening->getHappening())) {
+                $this->happeningViews[] = $this->happeningHandler->handle(
+                    new HappeningViewQuery(
+                        $happening->getHappening(),
+                        $query->event,
+                        $query->locale
+                    )
+                );
+            }
+        }
+    }
+
+    /**
+     * @param DayViewQuery $query
+     */
+    private function handleUnavailabilities(DayViewQuery $query)
+    {
+        foreach ($query->unavailabilities as $unavailability) {
+            if ($query->day->contain($unavailability)) {
+                $this->unavailabilities[] = $this->unavailabilityHandler->handle(
+                    new UnavailabilityViewQuery($unavailability, $query->event)
+                );
+            }
+        }
+
+    }
+
+    /**
+     * @param DayViewQuery $query
+     */
+    private function handleMasses(DayViewQuery $query)
+    {
+        foreach ($query->masses as $mass) {
+            if ($query->day->contain($mass)) {
+                $massView = $this->massHandler->handle(
+                    new MassUnavailabilityViewQuery(
+                        $mass,
+                        $query->event,
+                        $query->participant,
+                        $query->locale
+                    )
+                );
+
+                if ($massView !== null) {
+                    $this->masses[] = $massView;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param DayViewQuery $query
+     */
+    private function handleMeetings(DayViewQuery $query)
+    {
+        foreach ($query->meetings as $meeting) {
+            if ($query->day->contain($meeting->getSlot())) {
+                $this->meetings[] = $this->meetingHandler->handle(
+                    new MeetingViewQuery(
+                        $meeting,
+                        $query->currentSheet,
+                        $query->isUserParticipantMultipleSheet,
+                        $query->participant->getUser(),
+                        $query->event,
+                        $query->locale
+                    )
+                );
+            }
+        }
     }
 }
