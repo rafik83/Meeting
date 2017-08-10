@@ -15,6 +15,12 @@
           margin-right: 5% !important;
           max-width: 60px !important;
         }
+
+        .content {
+          > p {
+            line-height: 1.5em !important;
+          }
+        }
       }
     }
   }
@@ -171,9 +177,6 @@
       p {
         margin-bottom: 0;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
 
