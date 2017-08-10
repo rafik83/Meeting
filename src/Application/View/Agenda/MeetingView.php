@@ -26,12 +26,6 @@ class MeetingView extends AbstractTimeEntityView
     /** @var MeetingParticipantView[] */
     public $participants;
 
-    /** @var \DateTimeInterface */
-    public $begin;
-
-    /** @var \DateTimeInterface */
-    public $end;
-
     /** @var string */
     public $sheetMetTitle;
 
@@ -90,13 +84,5 @@ class MeetingView extends AbstractTimeEntityView
         $this->participants          = $participants;
         $this->isSheetDetailsSeeAble = $isSheetDetailsSeeAble;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
-    }
-
-    /**
-     * @return \DateInterval
-     */
-    public function getDuration()
-    {
-        return $this->end->diff($this->begin);
     }
 }
