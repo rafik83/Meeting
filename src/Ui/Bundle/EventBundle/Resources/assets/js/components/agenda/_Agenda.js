@@ -50,7 +50,7 @@ function Agenda(element) {
  * Add slot
  *
  * @param {Number} time Time in minutes
- * @param dateAgenda
+ * @param {String} dateAgenda
  */
 Agenda.prototype.addSlot = function(time, dateAgenda) {
     var slot = new Slot(this, time, this.slotDuration, dateAgenda);
@@ -67,6 +67,7 @@ Agenda.prototype.addSlot = function(time, dateAgenda) {
 Agenda.prototype.addMeet = function(element) {
     var meet   = new Meet(this, element);
     var length = this.slots.length;
+
     this.meets.push(meet);
 
     for (var slot, i = 0; i < length; i++) {
