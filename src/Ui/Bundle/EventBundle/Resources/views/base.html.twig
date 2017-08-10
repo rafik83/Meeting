@@ -23,10 +23,10 @@
             {% endif %}
 
             {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
-                {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet is defined ? sheet : null })) }}
+                {#{{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet is defined ? sheet : null })) }}#}
             {% endif %}
 
-            <div class="container-fluid">
+            <div class="main-content container-fluid">
                 {{ include('EventBundle::flashes.html.twig') }}
 
                 {% block content %}{% endblock %}

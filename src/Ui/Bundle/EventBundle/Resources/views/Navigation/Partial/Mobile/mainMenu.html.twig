@@ -1,15 +1,23 @@
-<ul class="sub-header__item">
-    {% for button in submenuView.submenuButtonViews %}
-        {% if button.isShowOnMobile %}
-            <li>
-                <a href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
-                    <span class="{{ button.icon }}"></span>
+{% if menuView.categoriesView is not empty %}
+<div class="mobile-menu">
+    {% if menuHeaderView.event is defined %}
+        <div class="header-mobile">
+            {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
+        </div>
+    {% endif %}
 
-                    {% if button.hasAlert %}
-                        <span class="alert-notification">!</span>
-                    {% endif %}
-                </a>
-            </li>
-        {% endif %}
-    {% endfor %}
-</ul>
+    <div class="mobile-menu-items">
+        {% for key, category in menuView.categoriesView %}
+            <a href="#" class="btn btn-primary btn-lg btn-inactive"><i class="{{ category.icon }}"></i> {{ category.title|trans }}</a>
+            <a href="#" class="btn btn-primary btn-lg btn-inactive"><i class="{{ category.icon }}"></i> {{ category.title|trans }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="fixed__navigation__close">
+        <button type="button" class="navigation__close">
+            <i class="icon-Fermer_4"></i> {{ 'navigation.close'|trans }}
+        </button>
+        <div class="clearfix"></div>
+    </div>
+</div>
+{% endif %}

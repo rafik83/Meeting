@@ -1,14 +1,7 @@
 <div class="header">
     {% if menuHeaderView.event is defined %}
-        {% if menuHeaderView.event.logo != null %}
-            <a href="{{ path('event') }}">
-                {% if menuHeaderView.event.isSvgLogo %}
-                    <img src="{{ menuHeaderView.event.logo }}" class="logo">
-                {% else %}
-                    <img src="{{ menuHeaderView.event.logo|imagine_filter('event_header_logo') }}" class="logo">
-                {% endif %}
-            </a>
-        {% endif %}
+        {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
+
         <div class="header__info">
             <div>{{ menuHeaderView.event.description(app.request.locale)|nl2br }}</div>
         </div>
