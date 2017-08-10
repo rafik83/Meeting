@@ -11,6 +11,10 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Application\View\Agenda\HappeningView;
+use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 
 class DayViewQueryHandler
 {
@@ -29,12 +33,16 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
+    /** @var HappeningView[] */
     private $happeningViews = [];
 
+    /** @var UnavailabilityView[] */
     private $unavailabilities = [];
 
+    /** @var MassUnavailabilityView[] */
     private $masses = [];
 
+    /** @var MeetingView[] */
     private $meetings = [];
 
     /**
@@ -63,7 +71,7 @@ class DayViewQueryHandler
      *
      * @return DayView
      */
-    public function handle(DayViewQuery $query)
+    public function handle(DayViewQuery $query): DayView
     {
         if ($query->currentSheet->attend()) {
             $this->handleHappenings($query);
@@ -137,7 +145,9 @@ class DayViewQueryHandler
                     )
                 );
 
-                if ($massView !== null) {
+                if ($massView !== null
+                    && !$this->isMassOverlapUnavailability($massView, $this->unavailabilities)
+                ) {
                     $this->masses[] = $massView;
                 }
             }
@@ -163,5 +173,26 @@ class DayViewQueryHandler
                 );
             }
         }
+    }
+
+    /**
+     * @param MassUnavailabilityView $massesUnavailabilityView
+     * @param UnavailabilityView[]   $unavailabilityViews
+     *
+     * @return bool
+     */
+    private function isMassOverlapUnavailability(
+        MassUnavailabilityView $massesUnavailabilityView,
+        array $unavailabilityViews
+    ): bool {
+        foreach ($unavailabilityViews as $unavailabilityView) {
+            if ($massesUnavailabilityView->getBegin() <= $unavailabilityView->getBegin()
+                && $massesUnavailabilityView->getEnd() >= $unavailabilityView->getEnd()
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
