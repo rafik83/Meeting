@@ -146,7 +146,7 @@ class DayViewQueryHandler
                 );
 
                 if ($massView !== null
-                    && !$this->isMassOverlapUnavailability($massView, $this->unavailabilities)
+                    && !$this->isMassOverlapUnavailability($massView)
                 ) {
                     $this->masses[] = $massView;
                 }
@@ -176,18 +176,15 @@ class DayViewQueryHandler
     }
 
     /**
-     * @param MassUnavailabilityView $massesUnavailabilityView
-     * @param UnavailabilityView[]   $unavailabilityViews
+     * @param MassUnavailabilityView $massUnavailabilityView
      *
      * @return bool
      */
-    private function isMassOverlapUnavailability(
-        MassUnavailabilityView $massesUnavailabilityView,
-        array $unavailabilityViews
-    ): bool {
-        foreach ($unavailabilityViews as $unavailabilityView) {
-            if ($massesUnavailabilityView->getBegin() <= $unavailabilityView->getBegin()
-                && $massesUnavailabilityView->getEnd() >= $unavailabilityView->getEnd()
+    private function isMassOverlapUnavailability(MassUnavailabilityView $massUnavailabilityView): bool
+    {
+        foreach ($this->unavailabilities as $unavailabilityView) {
+            if ($massUnavailabilityView->getBegin() <= $unavailabilityView->getBegin()
+                && $massUnavailabilityView->getEnd() >= $unavailabilityView->getEnd()
             ) {
                 return true;
             }

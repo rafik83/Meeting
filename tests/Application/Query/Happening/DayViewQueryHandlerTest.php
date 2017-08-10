@@ -107,7 +107,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'picto',
             'leftColor',
             'rightColor',
-            'Europe/Paris'
+            'Europe/Paris',
+            false
         );
 
         $expected = new DayView(

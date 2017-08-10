@@ -51,7 +51,8 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'picto',
             'leftColor',
             'rightColor',
-            'Europe/Paris'
+            'Europe/Paris',
+            true
         );
 
         $this->assertEquals($expected, $result);

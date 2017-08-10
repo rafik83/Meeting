@@ -117,7 +117,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'picto',
             'leftColor',
             'rightColor',
-            'Europe/Paris'
+            'Europe/Paris',
+            false
         );
 
         $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2, 'Europe/Paris');
@@ -272,7 +273,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'picto',
             'leftColor',
             'rightColor',
-            'Europe/Paris'
+            'Europe/Paris',
+            false
         );
         
         $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2, 'Europe/Paris');
