@@ -74,7 +74,7 @@ class EventParticipationPreFiller
 
         foreach ($tags as $tag) {
             $content = $templateObject->getContentValueLocalize($locale);
-            if (empty($previousTaggedData[$tag])) {
+            if (empty($previousTaggedData[$tag]) && !empty($content)) {
                 $previousTaggedData[$tag] = $content;
             }
         }
