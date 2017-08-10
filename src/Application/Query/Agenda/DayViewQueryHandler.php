@@ -145,12 +145,40 @@ class DayViewQueryHandler
                     )
                 );
 
-                if ($massView !== null
-                    && !$this->isMassOverlapUnavailability($massView)
-                ) {
+                if ($massView !== null) {
                     $this->masses[] = $massView;
                 }
             }
+        }
+
+        // Remove non blocking mass that overlap a blocking mass
+        foreach ($this->masses as $massView) {
+            $this->handleBlockingMasses($massView);
+        }
+
+        // Remove mass that overlap an unavailability
+        foreach ($this->masses as $massView) {
+            $this->handleMassOverlapOnUnavailability($massView);
+        }
+    }
+
+    /**
+     * @param MassUnavailabilityView $massView
+     */
+    private function handleBlockingMasses(MassUnavailabilityView $massView)
+    {
+        if (false !== $nonBlockingMassOverlappedKey = $this->isBlockingMassOverlapNonBlockingMass($massView)) {
+            unset($this->masses[$nonBlockingMassOverlappedKey]);
+        }
+    }
+
+    /**
+     * @param MassUnavailabilityView $massView
+     */
+    private function handleMassOverlapOnUnavailability(MassUnavailabilityView $massView)
+    {
+        if (false !== $massKey = $this->isMassOverlapUnavailability($massView)) {
+            unset($this->masses[$massKey]);
         }
     }
 
@@ -177,16 +205,35 @@ class DayViewQueryHandler
 
     /**
      * @param MassUnavailabilityView $massUnavailabilityView
-     *
-     * @return bool
+     * @return bool|int
      */
-    private function isMassOverlapUnavailability(MassUnavailabilityView $massUnavailabilityView): bool
+    private function isMassOverlapUnavailability(MassUnavailabilityView $massUnavailabilityView)
     {
         foreach ($this->unavailabilities as $unavailabilityView) {
             if ($massUnavailabilityView->getBegin() <= $unavailabilityView->getBegin()
                 && $massUnavailabilityView->getEnd() >= $unavailabilityView->getEnd()
             ) {
-                return true;
+                return array_search($massUnavailabilityView, $this->masses);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param MassUnavailabilityView $massUnavailabilityView
+     *
+     * @return bool|int
+     */
+    private function isBlockingMassOverlapNonBlockingMass(MassUnavailabilityView $massUnavailabilityView)
+    {
+        foreach ($this->masses as $mass) {
+            if ($massUnavailabilityView->isBlocking && !$mass->isBlocking) {
+                if ($massUnavailabilityView->getBegin() <= $mass->getBegin()
+                    && $massUnavailabilityView->getEnd() >= $mass->getEnd()
+                ) {
+                    return array_search($mass, $this->masses);
+                }
             }
         }
 
