@@ -37,14 +37,14 @@ class DuplicatorTest extends TestCase
         $expectedProduct->updateOption(
             $expectedProduct->getName(),
             'new image',
-            $expectedProduct->getQuantityMax(),
-            $expectedProduct->getAvailabilityCurrent(),
+            $expectedProduct->getRawQuantityMax(),
+            0,
             $expectedProduct->getAvailabilityMax(),
             $expectedProduct->isUpdatable(),
             $expectedProduct->getUnitPrice(),
-            $expectedProduct->getDeletableUntil(),
+            null,
             $expectedProduct->isSubjectedToValidation(),
-            $expectedProduct->getBuyableUntil()
+            null
         );
 
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);

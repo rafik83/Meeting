@@ -84,13 +84,13 @@ class Duplicator
             $product->getName(),
             $this->fileStorage->copyAndRename($product->getImage()),
             $product->getUnitPrice(),
-            $product->getQuantityMax(),
-            $product->getAvailabilityCurrent(),
+            $product->getRawQuantityMax(),
+            0,
             $product->getAvailabilityMax(),
             $product->isUpdatable(),
-            $product->getDeletableUntil(),
+            null,
             $product->isSubjectedToValidation(),
-            $product->getBuyableUntil()
+            null
         );
 
         foreach ($product->getTranslationsData() as $locale => $translation) {
