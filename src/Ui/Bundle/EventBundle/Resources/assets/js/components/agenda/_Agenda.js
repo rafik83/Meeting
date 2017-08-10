@@ -33,8 +33,6 @@ function Agenda(element) {
         this.addSlot(time, this.agendaDate);
     }
 
-    this.setSlotHeight(this.slots[0].element.offsetHeight);
-
     Array.prototype.forEach.call(this.element.querySelectorAll('.meet'), this.addMeet);
 
     this.planner.setMeets(this.meets);
@@ -57,6 +55,7 @@ Agenda.prototype.addSlot = function(time, dateAgenda) {
     this.slots.push(slot);
     this.layout.appendChild(slot.element);
     slot.on('scale', this.onSlotScale);
+    this.setSlotHeight(slot.element.offsetHeight);
 };
 
 /**
