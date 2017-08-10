@@ -10,9 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Event;
 
-/*
- * Store duplicated data indexed by id of the same elements from the target event
- */
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -21,6 +18,9 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 
+/**
+ * Store duplicated data indexed by id of the same elements from the target event
+ */
 class DuplicatorDataStorage
 {
     /**
