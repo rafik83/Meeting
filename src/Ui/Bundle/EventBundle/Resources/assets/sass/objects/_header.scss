@@ -232,76 +232,6 @@
   position: relative;
 }
 
-
-
-.toolbar-mobile {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: 9999;
-
-  #navigation-mobile {
-    position: absolute;
-    margin: auto;
-    top: 0;
-    right: 5px;
-    bottom: 0;
-    color: white;
-    background: none;
-    border: none;
-    > i {
-      font-size: 30px;
-    }
-  }
-
-  .sub-header__item {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    a {
-      display: inline-block;
-      position: relative;
-      border-radius: 25px;
-      > span {
-        position: absolute;
-        top: 10px;
-        left: 0;
-        right: 0;
-        margin: auto;
-        font-size: 25px;
-      }
-    }
-  }
-}
-
-// Size of button in small width mobile screen
-@media screen and (max-width: 320px){
-  .toolbar-mobile {
-    .sub-header__item {
-      a {
-        height: 40px;
-        width: 40px;
-
-        > span {
-          font-size: 20px;
-        }
-      }
-    }
-  }
-}
-
-// Size of button in medium width mobile screen
-@media screen and (min-width: 321px) {
-  .toolbar-mobile {
-    .sub-header__item {
-      a {
-        height: 50px;
-        width: 50px;
-      }
-    }
-  }
-}
-
 .sub-header__item {
   > li {
     display: inline-block;
@@ -361,21 +291,61 @@
   }
 }
 
-.header-mobile {
-  height: 115px;
-  padding: 15px;
-  margin: 0 auto;
-  text-align: center;
-  @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
-  box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
+.toolbar-mobile {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 9999;
 
-  .logo {
-    max-height: 100px;
-    max-width: 250px;
+  #navigation-mobile {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 5px;
+    bottom: 0;
+    color: white;
+    background: none;
+    border: none;
+    > i {
+      font-size: 30px;
+    }
+  }
+
+  .sub-header__item {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    a {
+      display: inline-block;
+      position: relative;
+      border-radius: 25px;
+      > span {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        font-size: 25px;
+      }
+    }
   }
 }
 
 .mobile-menu {
+  .header-mobile {
+    height: 115px;
+    padding: 15px;
+    margin: 0 auto;
+    text-align: center;
+    @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+    box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
+
+    .logo {
+      max-height: 100px;
+      max-width: 250px;
+    }
+  }
+
   .mobile-menu-items {
     width: 100%;
     height: 100%;

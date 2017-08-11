@@ -27,9 +27,7 @@
   .header__info { display: none; }
 }
 
-
-
-
+// Mobile Menu and toolbar
 body {
   .wrapper {
     .mobile-menu {
@@ -71,6 +69,34 @@ body {
         .toolbar-mobile {
           display: none;
         }
+      }
+    }
+  }
+}
+
+// Size of button in small width mobile screen
+@media screen and (max-width: 320px){
+  .toolbar-mobile {
+    .sub-header__item {
+      a {
+        height: 40px;
+        width: 40px;
+
+        > span {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Size of button in medium width mobile screen
+@media screen and (min-width: 321px) {
+  .toolbar-mobile {
+    .sub-header__item {
+      a {
+        height: 50px;
+        width: 50px;
       }
     }
   }
