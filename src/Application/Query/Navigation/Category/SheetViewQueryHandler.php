@@ -41,7 +41,7 @@ class SheetViewQueryHandler
     {
         $linksView = [];
 
-        foreach($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
+        foreach ($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
             $linksView[] = new LinkView(
                 'navigation.links.sheet.locale',
                 $this->navigationBuilder->getRoute(
@@ -52,6 +52,6 @@ class SheetViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::SHEET, Category::SHEET_ICON, $linksView);
+        return new CategoryView(Category::SHEET, Category::SHEET_ICON, $linksView, true);
     }
 }

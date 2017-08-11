@@ -60,6 +60,6 @@ class BillingViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::BILLING, Category::BILLING_ICON, $linksView);
+        return new CategoryView(Category::BILLING, Category::BILLING_ICON, $linksView, false);
     }
 }

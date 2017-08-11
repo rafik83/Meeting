@@ -85,7 +85,7 @@ class PlanningViewQueryHandler
             $linkViews[] = $schedulePublishDateLinkView;
         }
 
-        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linkViews);
+        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linkViews, true);
     }
 
     /**

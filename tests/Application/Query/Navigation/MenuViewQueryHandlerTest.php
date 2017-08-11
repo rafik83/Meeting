@@ -54,7 +54,7 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $categoryViewQueryHandler
                 ->handle(new CategoryViewQuery($sheet, $user, $category, 'fr'))
                 ->shouldBeCalled()
-                ->willReturn(new CategoryView('title', 'icon', []));
+                ->willReturn(new CategoryView('title', 'icon', [], true));
         }
 
         // Handler
@@ -64,7 +64,7 @@ class MenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $categories = [];
         foreach (Category::$categories as $category) {
-            $categories[] = new CategoryView('title', 'icon', []);
+            $categories[] = new CategoryView('title', 'icon', [], true);
         }
         $expected = new MenuView($categories);
 
