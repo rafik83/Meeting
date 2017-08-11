@@ -1,7 +1,7 @@
 <header>
     <div class="content">
         <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
-        <p class="title">
+        <p class="title col-xs-12">
             {{ unavailability.begin|date('H:i', unavailability.timeZone) ~ ' - ' ~ unavailability.end|date('H:i', unavailability.timeZone) }}
             - {{ 'unavailability.title'|trans }} -
             {% if unavailability.hasMessage %}

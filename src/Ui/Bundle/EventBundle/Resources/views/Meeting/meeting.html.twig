@@ -1,6 +1,6 @@
 <div class="has-details meet" data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}" data-duration="{{ meeting.duration.format('%H:%I') }}">
     <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">
-        <a class="content" href="#">
+        <a class="content col-xs-12" href="#">
             <span class="prefix"><i class="icon icon-RDV"></i></span>
             <p class="title">
                 <b>{{ meeting.spotRef }}</b> -

@@ -150,9 +150,6 @@
       p {
         margin-bottom: 0;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
       }
@@ -220,5 +217,25 @@
 @media (max-width: 640px) {
   .agenda-container {
     margin: 20px 0 0 0;
+
+    .meet {
+      > header {
+        display: inherit !important;
+        .actions {
+          max-width: 60px !important;
+        }
+
+        .content {
+          > p {
+            overflow: visible;
+            line-height: 1.4em !important;
+          }
+
+          > span {
+            margin-right: 1%;
+          }
+        }
+      }
+    }
   }
 }
