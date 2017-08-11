@@ -20,11 +20,13 @@
         {% endif %}
 
         {% if menuView and menuView.categoriesView %}
-            {% for key, category in menuView.categoriesView %}
-                <a href="#" class="btn btn-primary btn-lg btn-inactive">
-                    <i class="{{ category.icon }}"></i>
-                    {{ category.title|trans }}
-                </a>
+            {% for category in menuView.categoriesView %}
+                {% if category.enabledLinkView %}
+                    <a href="{{ category.enabledLinkView.link }}" class="btn btn-primary btn-lg btn-inactive">
+                        <i class="{{ category.icon }}"></i>
+                        {{ category.title|trans }}
+                    </a>
+                {% endif %}
             {% endfor %}
         {% endif %}
 

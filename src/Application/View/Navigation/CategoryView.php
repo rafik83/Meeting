@@ -40,4 +40,15 @@ class CategoryView
         $this->icon      = $icon;
         $this->linksView = $linksView;
     }
+
+    public function getEnabledLinkView(): ?LinkView
+    {
+        foreach ($this->linksView as $linkView) {
+            if (true === $linkView->state) {
+                return $linkView;
+            }
+        }
+
+        return null;
+    }
 }
