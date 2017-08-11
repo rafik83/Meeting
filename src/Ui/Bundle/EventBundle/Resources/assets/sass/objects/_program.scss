@@ -7,12 +7,32 @@
       margin: 0 !important;
     }
   }
+
+  .program-container {
+    .meet {
+      > header {
+        .actions {
+          margin-right: 5% !important;
+          max-width: 60px !important;
+        }
+
+        .content {
+          max-width: 57% !important;
+          > p {
+            line-height: 1.5em !important;
+            margin-left: 4%;
+          }
+        }
+      }
+    }
+  }
 }
 
 
 .program-container {
   .program {
     margin-top: 40px;
+    margin-bottom: 40px;
   }
 
   .program-head,
@@ -46,7 +66,7 @@
         align-items: center;
         align-content: flex-end;
         justify-content: center;
-        margin-right: 1%;
+        margin-right: 2%;
 
         > a {
           display: flex;
@@ -54,6 +74,7 @@
           order: 0;
           flex: 0 1 auto;
           align-self: auto;
+          color: #ffffff;
           > i {
             order: 0;
             flex: 0 1 auto;
@@ -120,19 +141,20 @@
         -webkit-box-orient: horizontal;
         -webkit-box-direction: normal;
         -webkit-box-align: center;
-        margin-left: 25px;
+        margin-left: 2%;
       }
 
       .content {
         display: flex;
         order: 0;
-        flex: 10 0 auto;
+        flex: 1 1 auto;
         align-content: center;
         justify-content: center;
         align-items: center;
-        margin-left: 50px;
         color: #fff;
         z-index: 10;
+        max-width: 86%;
+        padding: 8px 0 8px 0;
 
         &:hover,
         &:focus {
@@ -158,9 +180,6 @@
       p {
         margin-bottom: 0;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 5;
-        -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
 
