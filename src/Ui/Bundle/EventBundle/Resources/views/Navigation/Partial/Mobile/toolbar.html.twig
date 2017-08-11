@@ -1,6 +1,6 @@
 <div class="toolbar-mobile">
     <div class="sub-header">
-        {% if menuView is not null %}
+        {% if submenuView and submenuView.submenuButtonViews is not empty %}
             <ul class="sub-header__item">
                 <li>
                     <div class="navigation">
@@ -23,6 +23,7 @@
                 </li>
             </ul>
         {% endif %}
+
         <button id="navigation-mobile" type="button" aria-haspopup="true" aria-expanded="false">
             <i class="icon-Menu_12"></i>
         </button>
