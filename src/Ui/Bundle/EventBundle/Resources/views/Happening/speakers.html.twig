@@ -1,7 +1,6 @@
 <div class="row visible-xs">
     <div class="col-md-12">
-        <p class="text-center lead">
-            {{ happening.title }}
+        <p>
             {% if suffixTitleWithTick is defined and suffixTitleWithTick == true %}
                 <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide' }}"></i>
             {% endif %}
