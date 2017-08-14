@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
@@ -79,6 +80,9 @@ class CatalogExternalController extends Controller
 
         $searchForm = $this->get('form_factory.search_facet_external_factory')
             ->createFiltered($event, $locale, $filters, $paginatedResult->aggregations);
+        $message = $this->get('tactician.commandbus.query')->handle(
+            new CatalogVisibilityMessageQuery($event, $locale)
+        );
 
         $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
 
@@ -107,7 +111,8 @@ class CatalogExternalController extends Controller
             'seeMoreButton'     => $seeMoreButtonStatus,
             'searchForm'        => $searchForm->createView(),
             'catalogOnlineDate' => $event->getConfiguration()->getCatalogOnlineDate()->format('d/m/Y'),
-            'typeViews'         => $typeViews
+            'typeViews'         => $typeViews,
+            'message'           => $message
         ]);
     }
 

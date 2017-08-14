@@ -45,6 +45,10 @@ class CatalogVisibilityRepository implements CatalogVisibilityRepositoryInterfac
     public function set(CatalogVisibility $catalogVisibility)
     {
         $this->entityManager->flush($catalogVisibility);
+
+        foreach ($catalogVisibility->getMessageTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
     }
 
     /**
