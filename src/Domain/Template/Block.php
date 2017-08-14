@@ -132,6 +132,22 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $tag
+     *
+     * @return null|TemplateObject
+     */
+    public function getObjectByTag(string $tag): ?TemplateObject
+    {
+        foreach ($this->getObjects() as $object) {
+            if ($object->hasTag($tag)) {
+                return $object;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string|null $key
      *
      * @return TemplateObject[]

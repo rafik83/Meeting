@@ -36,6 +36,12 @@ class Configure
     /** @var CatalogVisibility */
     public $catalogVisibility;
 
+    /** @var bool */
+    public $hasMessage;
+
+    /** @var array of CatalogVisibilityTranslation index by locale */
+    public $messageTranslations;
+
     /**
      * Configure constructor.
      *
@@ -45,11 +51,22 @@ class Configure
      */
     public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
     {
-        $this->event = $event;
-        $this->catalogVisibility = $catalogVisibility;
-        $this->searchFacets = $searchFacets;
+        $this->event                  = $event;
+        $this->catalogVisibility      = $catalogVisibility;
+        $this->searchFacets           = $searchFacets;
         $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
-        $this->types = $catalogVisibility->getTypes();
-        $this->categories = $catalogVisibility->getCategories();
+        $this->types                  = $catalogVisibility->getTypes();
+        $this->categories             = $catalogVisibility->getCategories();
+        $this->hasMessage             = $catalogVisibility->hasMessage();
+
+        foreach ($event->getLocales() as $locale) {
+            if (($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale)) !== null) {
+                $this->messageTranslations[$locale]['title']   = $catalogVisibilityTranslation->getTitle();
+                $this->messageTranslations[$locale]['content'] = $catalogVisibilityTranslation->getContent();
+            } else {
+                $this->messageTranslations[$locale]['title']   = '';
+                $this->messageTranslations[$locale]['content'] = '';
+            }
+        }
     }
 }
