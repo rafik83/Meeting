@@ -62,7 +62,7 @@ class SendCodeFormHandlerTest extends TestCase
         $this->request->getLocale()->willReturn('fr');
 
         $this->user = $this->prophesize(User::class);
-        $this->user->getPhone()->willReturn('+3312345678');
+        $this->user->getMobile()->willReturn('+3312345678');
 
         $this->event = $this->prophesize(Event::class);
         $this->event->getCountry()->willReturn('FR');

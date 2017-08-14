@@ -333,8 +333,20 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true AND fromSheet.attend = true')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true AND toSheet.attend = true')
+            ->join(
+                'request.from',
+                'fromSheet',
+                'WITH',
+                'fromSheet.event = :event AND fromSheet.inCatalog = true 
+                AND fromSheet.enable = true AND fromSheet.attend = true'
+            )
+            ->join(
+                'request.to',
+                'toSheet',
+                'WITH',
+                'toSheet.event = :event AND toSheet.inCatalog = true 
+                AND toSheet.enable = true AND toSheet.attend = true'
+            )
             ->join('fromSheet.participants', 'fromParticipants')
             ->join('toSheet.participants', 'toParticipants')
             ->where('request.state = :approved')
@@ -567,7 +579,12 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
+            ->join(
+                'request.from',
+                'fromSheet',
+                'WITH',
+                'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true'
+            )
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
             ->leftJoin('request.meeting', 'meeting')
             ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
@@ -687,7 +704,10 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->leftjoin('request.fromParticipants', 'fromParticipant')
             ->leftjoin('request.toParticipants', 'toParticipant')
-            ->where('request.state = :approved AND request.disabled = false AND (fromParticipant.id = :participant OR toParticipant.id = :participant)')
+            ->where(
+                'request.state = :approved AND request.disabled = false 
+                AND (fromParticipant.id = :participant OR toParticipant.id = :participant)'
+            )
             ->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)')
             ->setParameter('participant', $participant)
             ->setParameter('approved', Request::STATE_APPROVED);
@@ -707,7 +727,10 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->leftjoin('request.fromParticipants', 'fromParticipant')
             ->leftjoin('request.toParticipants', 'toParticipant')
-            ->where('(fromParticipant.id = :participant OR toParticipant.id = :participant) AND request.disabled = false')
+            ->where(
+                '(fromParticipant.id = :participant OR toParticipant.id = :participant) 
+                AND request.disabled = false'
+            )
             ->setParameter('participant', $participant)
             ->setMaxResults(1);
 

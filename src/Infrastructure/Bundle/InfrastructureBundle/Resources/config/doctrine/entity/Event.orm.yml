@@ -93,3 +93,7 @@ Proximum\Vimeet\Domain\Model\Event:
             cascade: ["persist"]
             joinColumn:
                 nullable: false
+        duplicatedFrom:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: true
