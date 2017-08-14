@@ -82,6 +82,7 @@ class NavigationController extends Controller
             'menuView'                => $menuView,
             'submenuView'             => $submenuView,
             'isShowingRegisterButton' => $isShowingRegisterButton,
+            'isHeaderDisplayed'       => $route === Route::EVENT || $route === Route::LOGIN
         ]);
     }
 }

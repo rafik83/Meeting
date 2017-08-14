@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibilityTranslation:
+    type:  entity
+    table: catalog_visibility_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            nullable: false
+        content:
+            type: string
+            nullable: false
+        locale:
+            type: string
+            nullable: false
+    manyToOne:
+        catalogVisibility:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility
+            inversedBy: messageTranslations
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

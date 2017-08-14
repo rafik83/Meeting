@@ -19,10 +19,10 @@ class EventFactory
 
     /**
      * @param string|null $eventTitle
-     * @param string      $fallbackLocale
-     * @param string[]    $locales
-     * @param string      $vatMode
-     * @param null|Event  $duplicatedFrom
+     * @param string $fallbackLocale
+     * @param string[] $locales
+     * @param string $vatMode
+     * @param null|Event $duplicatedFrom
      *
      * @return Event
      */

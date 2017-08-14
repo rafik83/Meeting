@@ -29,6 +29,10 @@
   .wrapper { padding: 0 0 80px 0; }
 
   .header {
+    &.hide-on-mobile {
+      display: none !important;
+    }
+
     position: fixed;
     top: 0;
     left: 0;
