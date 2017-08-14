@@ -1382,6 +1382,7 @@ services:
             - '@repository.event.content_repository'
             - '@guideline.generator'
             - '@adapter.local_file_storage'
+            - '@domain.event.duplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
     command.event.user.agenda.version.generate_versions_handler:
@@ -4318,6 +4319,119 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@vimeet_infrastructure.repository.order_row_repository'
+
+    domain.event.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Duplicator
+        arguments:
+            - '@domain.event.content.duplicator'
+            - '@domain.event.billing-configuration.duplicator'
+            - '@domain.event.practical-info.duplicator'
+            - '@domain.event.product.duplicator'
+            - '@domain.event.type.duplicator'
+            - '@domain.event.package.duplicator'
+            - '@domain.event.nomenclature.duplicator'
+            - '@domain.event.registration-template.duplicator'
+            - '@domain.event.sheet-template.duplicator'
+            - '@domain.event.category.duplicator'
+            - '@domain.event.rule.duplicator'
+            - '@domain.event.tip.duplicator'
+            - '@domain.event.catalog.internal.search-facet.duplicator'
+            - '@domain.event.catalog.external.search-facet.duplicator'
+            - '@domain.event.catalog.external.visibility.duplicator'
+            - '@domain.event.message.duplicator'
+
+    domain.event.content.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Content\Duplicator
+        arguments:
+            - '@repository.event.content_repository'
+
+    domain.event.billing-configuration.duplicator:
+        class: Proximum\Vimeet\Domain\Event\BillingConfiguration\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.local_file_storage'
+
+    domain.event.practical-info.duplicator:
+        class: Proximum\Vimeet\Domain\Event\PracticalInfo\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    domain.event.product.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Product\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+
+    domain.event.type.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Type\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.registration.registration_template_cloner'
+
+    domain.event.package.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Package\Duplicator
+        arguments:
+            - '@repository.package_repository'
+            - '@datetime'
+
+    domain.event.nomenclature.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Nomenclature\Duplicator
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@application.nomenclature.nomenclature_cloner'
+
+    domain.event.registration-template.duplicator:
+        class: Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@template.template_data_factory'
+            - '@template.registration.registration_template_cloner'
+
+    domain.event.sheet-template.duplicator:
+        class: Proximum\Vimeet\Domain\Event\SheetTemplate\Duplicator
+        arguments:
+            - '@repository.template.sheet_template_repository'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.template_data_factory'
+
+    domain.event.category.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Category\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+
+    domain.event.rule.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Rule\Duplicator
+        arguments:
+            - '@repository.rule_repository'
+
+    domain.event.tip.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Tip\Duplicator
+        arguments:
+            - '@repository.tip.repository'
+            - '@datetime'
+
+    domain.event.catalog.internal.search-facet.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Catalog\Internal\SearchFacet\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.search_facet'
+
+    domain.event.catalog.external.search-facet.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Catalog\External\SearchFacet\Duplicator
+        arguments:
+            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+
+    domain.event.catalog.external.visibility.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Catalog\External\CatalogVisibilityDuplicator
+        arguments:
+            - '@repository.catalog_visibility_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    domain.event.message.duplicator:
+        class: Proximum\Vimeet\Domain\Event\Message\Duplicator
+        arguments:
+            - '@repository.messaging.message_repository'
+            - '@datetime'
 
     domain.event.last_event_participation:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation

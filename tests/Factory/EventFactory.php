@@ -22,7 +22,7 @@ class EventFactory
      * @param string $fallbackLocale
      * @param string[] $locales
      * @param string $vatMode
-     * @param null|Event $duplicateFrom
+     * @param null|Event $duplicatedFrom
      *
      * @return Event
      */
@@ -31,7 +31,7 @@ class EventFactory
         $fallbackLocale = self::FALLBACK_LOCALE_DEFAULT,
         array $locales = ['fr', 'en'],
         $vatMode = Event::VAT_MODE_ET,
-        ?Event $duplicateFrom = null
+        Event $duplicatedFrom = null
     ) {
         $prefix = self::createInvoicePrefix();
 
@@ -49,7 +49,7 @@ class EventFactory
             'team-project@example.net',
             $prefix,
             true,
-            $duplicateFrom
+            $duplicatedFrom
         );
     }
 

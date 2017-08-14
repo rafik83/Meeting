@@ -194,7 +194,7 @@ abstract class AbstractFilterType extends AbstractType
         /** @var Event $event */
         $event = $options['event'];
 
-        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
+        $categories = $this->categoryRepository->getCategoriesByEventAndLocale($event, $options['locale']);
 
         if (count($categories) > 0) {
             $builder->add('category', CategoryChoiceType::class, [

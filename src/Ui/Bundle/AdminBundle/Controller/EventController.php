@@ -26,6 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -49,20 +50,55 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request    $request
-     * @param Event|null $event
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function createFromEventAction(Request $request, Event $event): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $create = new Create($this->getUser(), $event);
+        $action = $this->generateUrl('admin_event_create_from', ['event' => $event->getId()]);
+
+        $form = $this->createForm(CreateType::class, $create, [
+            'currentLocale' => $request->getLocale(),
+            'submit'        => true,
+            'action'        => $action,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $newEvent = $this->get('tactician.commandbus')->handle($create);
+                $this->addFlash('warning', 'flash.admin.event.duplicate.warning');
+
+                return $this->redirectToRoute('admin_event_update', ['event' => $newEvent->getId()]);
+            } catch (GuidelineAssetBuildFailedException $ex) {
+                $this->addFlash('error', 'flash.admin.event.update.asset.failed');
+            } catch (DomainAlreadyUsedException $ex) {
+                $form->get('domain')->addError(
+                    new FormError($this->get('translator')->trans('validators.event.domain.unique', [], 'validators'))
+                );
+            }
+        }
+
+        return $this->render('AdminBundle:Event:create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
      *
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, Event $event = null): Response
+    public function createAction(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        if ($event !== null) {
-            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        }
-
-        $create = new Create($this->getUser(), $event);
+        $create = new Create($this->getUser());
 
         $form = $this->createForm(CreateType::class, $create, [
             'currentLocale' => $request->getLocale(),
@@ -74,7 +110,6 @@ class EventController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.admin.event.create.success');
-
                 return $this->redirectToRoute('admin_event_list');
             } catch (GuidelineAssetBuildFailedException $ex) {
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');
