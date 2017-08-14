@@ -67,3 +67,4 @@ parameters:
 
     tokbox_api_key: ~
     tokbox_api_secret: ~
+    tokbox_security: false

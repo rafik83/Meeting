@@ -15,7 +15,6 @@ use OpenTok\OpenTok;
 use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\VideoConferenceInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
@@ -32,15 +31,22 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     private $openTok;
 
     /**
+     * @var bool
+     */
+    private $hasSecurity;
+
+    /**
      * VideoConferenceAdapter constructor.
      *
      * @param string $apiKey
      * @param string $apiSecret
+     * @param bool $hasSecurity
      */
-    public function __construct(string $apiKey, string $apiSecret)
+    public function __construct(string $apiKey, string $apiSecret, bool $hasSecurity)
     {
-        $this->apiKey  = $apiKey;
+        $this->apiKey = $apiKey;
         $this->openTok = new OpenTok($apiKey, $apiSecret);
+        $this->hasSecurity = $hasSecurity;
     }
 
     /**
@@ -56,19 +62,21 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string
     {
-        $slotEndDate    = clone $slot->getEnd();
-        $sessionEndDate = $slotEndDate->modify('+15 min');
+        $defaultOptions = ['role' => Role::PUBLISHER];
 
-        // TODO: Reset date checker after demo
+        if ($this->hasSecurity === true) {
+            /** @var \DateTime $slotEndDate */
+            $slotEndDate = clone $slot->getEnd();
+            $sessionEndDate = $slotEndDate->modify('+15 min');
 
-        $defaultOption = [
-            'role'       => Role::PUBLISHER,
-//            'expireTime' => $sessionEndDate->getTimeStamp(),
-        ];
+            $defaultOptions = array_merge($defaultOptions, [
+                'expireTime' => $sessionEndDate->getTimeStamp(),
+            ]);
+        }
 
         try {
             return $this->openTok->generateToken($session->getSessionId(), array_merge(
-                $defaultOption, $options
+                $defaultOptions, $options
             ));
         } catch (InvalidArgumentException $argumentException) {
             throw new InvalidTokenGeneratorArgumentsException();

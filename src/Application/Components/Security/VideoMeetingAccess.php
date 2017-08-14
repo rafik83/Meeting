@@ -20,13 +20,20 @@ class VideoMeetingAccess
     private $dateTime;
 
     /**
+     * @var bool
+     */
+    private $hasSecurity;
+
+    /**
      * VideoMeetingAccess constructor.
      *
      * @param \DateTimeInterface $dateTime
+     * @param bool $hasSecurity
      */
-    public function __construct(\DateTimeInterface $dateTime)
+    public function __construct(\DateTimeInterface $dateTime, bool $hasSecurity)
     {
         $this->dateTime = $dateTime;
+        $this->hasSecurity = $hasSecurity;
     }
 
     /**
@@ -36,11 +43,13 @@ class VideoMeetingAccess
      */
     public function allowedToAccess(Meeting $meeting): bool
     {
+        if (!$this->hasSecurity) {
+            return true;
+        }
+
         $start = (clone $meeting->getSlot()->getBegin())->modify('-15 min');
         $end = (clone $meeting->getSlot()->getEnd())->modify('+15 min');
 
-        // TODO: Reset date checker after demo
-
-        return true; //$this->dateTime >= $start && $this->dateTime <= $end;
+        return $this->dateTime >= $start && $this->dateTime <= $end;
     }
 }

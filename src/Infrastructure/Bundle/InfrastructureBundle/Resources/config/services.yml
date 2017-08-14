@@ -2067,6 +2067,7 @@ services:
         arguments:
             - '%tokbox_api_key%'
             - '%tokbox_api_secret%'
+            - '%tokbox_security%'
 
     #
     # Components
@@ -2244,6 +2245,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess
         arguments:
           - '@datetime'
+          - '%tokbox_security%'
 
     #
     # Guideline Component

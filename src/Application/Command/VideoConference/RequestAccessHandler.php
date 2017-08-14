@@ -32,7 +32,7 @@ class RequestAccessHandler
     /**
      * RequestAccessHandler constructor.
      *
-     * @param VideoConferenceAdapterInterface    $videoConferenceAdapter
+     * @param VideoConferenceAdapterInterface $videoConferenceAdapter
      * @param VideoConferenceRepositoryInterface $videoConferenceRepository
      */
     public function __construct(
@@ -40,7 +40,7 @@ class RequestAccessHandler
         VideoConferenceRepositoryInterface $videoConferenceRepository
     ) {
         $this->videoConferenceRepository = $videoConferenceRepository;
-        $this->videoConferenceAdapter    = $videoConferenceAdapter;
+        $this->videoConferenceAdapter = $videoConferenceAdapter;
     }
 
     /**
@@ -83,11 +83,19 @@ class RequestAccessHandler
         }
 
         $session = $this->videoConferenceAdapter->createSession();
-        $token   = $this->videoConferenceAdapter->generateAccessToken($session, $requestAccess->meeting->getSlot());
-
-        $this->videoConferenceRepository->add(
-            new VideoConference($session->getSessionId(), $requestAccess->meeting)
+        $token = $this->videoConferenceAdapter->generateAccessToken(
+            $session,
+            $requestAccess->meeting->getSlot()
         );
+
+        $videoConference = new VideoConference($session->getSessionId(), $requestAccess->meeting);
+        $videoConference->setToken(new VideoConferenceToken(
+            $videoConference,
+            $requestAccess->user,
+            $token
+        ));
+
+        $this->videoConferenceRepository->add($videoConference);
 
         return new VideoConferenceView(
             $token,
