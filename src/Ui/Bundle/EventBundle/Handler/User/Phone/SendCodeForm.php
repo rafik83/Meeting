@@ -33,16 +33,16 @@ class SendCodeForm
 
     /**
      * @param Request $request
-     * @param User    $user
-     * @param Event   $event
-     * @param null    $mobileNumberToValidate
-     * @param bool    $ignorePhoneAlreadyValidated
+     * @param User $user
+     * @param Event $event
+     * @param null|string $mobileNumberToValidate
+     * @param bool $ignorePhoneAlreadyValidated
      */
     public function __construct(
         Request $request,
         User $user,
         Event $event,
-        $mobileNumberToValidate = null,
+        ?string $mobileNumberToValidate = null,
         bool $ignorePhoneAlreadyValidated = false
     ) {
         $this->request = $request;
