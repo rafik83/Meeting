@@ -167,7 +167,6 @@ class RegisterController extends Controller
             )
         );
 
-        $registrationTemplate = $preFillUserDataView->templateData;
         $participantBlock = $registrationTemplate->getFirstBlock();
 
         // Add or update UserEvent type
@@ -180,8 +179,17 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data        = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
-            $participate = new Participate($this->getUser(), $event, $type, $locale, $data, $registrationTemplate);
+            $data = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
+
+            $participate = new Participate(
+                $this->getUser(),
+                $event,
+                $type,
+                $locale,
+                $data,
+                $registrationTemplate
+            );
+
             $this->get('tactician.commandbus')->handle($participate);
 
             $nextStep = $registrationTemplate->getNextBlockPosition(1);
@@ -210,7 +218,8 @@ class RegisterController extends Controller
             'typeView'        => $typeView,
             'form'            => $form->createView(),
             'stepTitle'       => $participantBlock->getTitle($locale),
-            'stepDescription' => $this->get('markdown')->toHtml($participantBlock->getDescription($locale)),
+            'stepDescription' => $this->get('markdown')
+                ->toHtml($participantBlock->getDescription($locale)),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
         ]);
     }
@@ -229,22 +238,48 @@ class RegisterController extends Controller
         $this->denyAccessIfWrongParticipant($eventDomain, $participant);
 
         $locale               = $request->getLocale();
-        $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromParticipant($participant, $locale);
-        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $participant->getUser());
-        $participantBlock     = $registrationTemplate->getBlock(intval($step));
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromParticipant($participant, $locale);
+
+        // pre-fill user participation data and update registration template with data
+        $this->get('tactician.commandbus.query')->handle(
+            new PreFillUserData(
+                $participant->getUser(),
+                $eventDomain->getEvent(),
+                $registrationTemplate,
+                $locale
+            )
+        );
+
+        $participantBlock = $registrationTemplate->getBlock(intval($step));
 
         if (null === $participantBlock) {
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $data = ['block' => $participantBlock, 'locale' => $locale, 'country' => $eventDomain->getEvent()->getCountry()];
+        $data = [
+            'block' => $participantBlock,
+            'locale' => $locale,
+            'country' => $eventDomain->getEvent()->getCountry()
+        ];
+
         $form = $this->createForm(BlockType::class, $participantBlock, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
+            $data = $this->handleData(
+                $registrationTemplate,
+                $form,
+                $participantBlock->getData()
+            );
 
             if ($form->isValid()) {
-                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                $participantStep = new ParticipantStep(
+                    $registrationTemplate,
+                    $participant,
+                    $step,
+                    $locale,
+                    $data
+                );
                 $this->get('tactician.commandbus')->handle($participantStep);
 
                 $nextStep = $registrationTemplate->getNextBlockPosition($step);
@@ -258,11 +293,15 @@ class RegisterController extends Controller
 
                 $this->container->get('session')->getFlashBag()->add('first_registration', true);
 
-                return $this->redirectToRoute('event_sheet_default', ['sheet' => $participant->getSheet()->getId()]);
+                return $this->redirectToRoute('event_sheet_default', [
+                    'sheet' => $participant->getSheet()->getId()
+                ]);
             }
         }
 
-        $participantCard = $this->get('tactician.commandbus.query')->handle(new CardViewQuery($participant, $locale));
+        $participantCard = $this->get('tactician.commandbus.query')->handle(
+            new CardViewQuery($participant, $locale)
+        );
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'event'           => $eventDomain->getEvent(),
@@ -270,7 +309,8 @@ class RegisterController extends Controller
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
             'stepTitle'       => $participantBlock->getTitle($locale),
-            'stepDescription' => $this->get('markdown')->toHtml($participantBlock->getDescription($locale)),
+            'stepDescription' => $this->get('markdown')
+                ->toHtml($participantBlock->getDescription($locale)),
             'participantCard' => $participantCard,
         ]);
     }
@@ -315,11 +355,15 @@ class RegisterController extends Controller
                         $data[$key]['image'] = $fileStorage->upload($file);
                         $fileStorage->remove($object->getContentValue());
                     } catch (\Exception $exception) {
-                        $form->get($key)->get('file')->addError(new FormError('account.profile.updateAvatar.error'));
+                        $form->get($key)->get('file')->addError(
+                            new FormError('account.profile.updateAvatar.error')
+                        );
                     }
 
                 } else {
-                    $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->get('file')->addError(
+                        new FormError('validators.field.notValid.image')
+                    );
                 }
             }
         }
