@@ -486,12 +486,6 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Category\Create }
-    vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:
-        class: Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Update }
     vimeet_infrastructure.vimeet.application.command.unavailability.remove_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler
         arguments:
