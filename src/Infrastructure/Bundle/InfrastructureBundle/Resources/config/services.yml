@@ -331,6 +331,7 @@ services:
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@domain.event.last_event_participation'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
@@ -2460,6 +2461,10 @@ services:
         class: Proximum\Vimeet\Domain\Account\Synchronizer
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
+    account.event_participation_pre_filler:
+        class: Proximum\Vimeet\Domain\Account\EventParticipationPreFiller
+        arguments:
+            - '@template.template_data_factory'
 
     #
     # Billing
@@ -3083,6 +3088,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery }
 
+    query.catalog.external.catalog_visibility_message_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQueryHandler
+        arguments:
+            - '@repository.catalog_visibility_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery }
+
     #
     # Program query
     #
@@ -3162,6 +3174,15 @@ services:
             - '@domain.product.remove_authorization_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }
+
+    query.register.pre_fill_user_data_handler:
+        class: Proximum\Vimeet\Application\Query\Register\PreFillUserDataHandler
+        arguments:
+            - '@domain.event.last_event_participation'
+            - '@account.event_participation_pre_filler'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Register\PreFillUserData }
 
     ##
     #
@@ -3463,6 +3484,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+            - '@adapter.locale_helper_adapter'
     query.navigation.category_program_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler
         arguments:
@@ -4296,6 +4318,11 @@ services:
             - '@repository.cart_row_repository'
             - '@vimeet_infrastructure.repository.order_row_repository'
 
+    domain.event.last_event_participation:
+        class: Proximum\Vimeet\Domain\Event\LastEventParticipation
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+
     #
     # Transaction
     #
@@ -4520,6 +4547,10 @@ services:
     #
     adapter.intl_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter
+    adapter.locale_helper_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\LocaleHelperAdapter
+        arguments:
+            - '@sonata.intl.templating.helper.locale'
 
     #
     # Guesser Cache

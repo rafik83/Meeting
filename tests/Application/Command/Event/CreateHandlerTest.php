@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -345,6 +346,69 @@ class CreateHandlerTest extends TestCase
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
             return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
         }))->shouldNotBeCalled();
+
+        // Handle
+        $handler = new CreateHandler(
+            $adminRepository->reveal(),
+            $eventRepository->reveal(),
+            $contentRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testCreateFromOtherEvent()
+    {
+        $prefix = new Prefix('Vimeet', 'Vi');
+        $user   = AdminFactory::create();
+        $event  = new Event(
+            'barfoo',
+            'en',
+            ['fr', 'en'],
+            Event::VAT_MODE_ATI,
+            20,
+            'FR',
+            'USD',
+            'Europe/Paris',
+            'hello.vimeet.proximum.dev',
+            'proximum',
+            'team-project@example.net',
+            $prefix,
+            true
+        );
+
+        $create = new Create($user, $event);
+
+        // Mock
+        $adminRepository    = $this->prophesize(AdminRepositoryInterface::class);
+        $eventRepository    = $this->prophesize(EventRepositoryInterface::class);
+        $guidelineGenerator = $this->prophesize(Generator::class);
+        $fileStorage        = $this->prophesize(FileStorageInterface::class);
+        $contentRepository  = $this->prophesize(ContentRepositoryInterface::class);
+
+        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+
+        $eventRepository->add(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $eventRepository->set(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $adminRepository->set($user)->shouldNotBeCalled();
+
+        $guidelineGenerator->generate(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $fileStorage->upload(Argument::type(UploadedFile::class))->shouldNotBeCalled();
+        $fileStorage->getExtension(Argument::type(UploadedFile::class))->shouldNotBeCalled();
+
+        $contentRepository->add(Argument::that(function (Event\Content $content) use ($event) {
+            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+        }))->shouldBeCalled();
 
         // Handle
         $handler = new CreateHandler(

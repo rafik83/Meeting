@@ -52,6 +52,16 @@ class ConfigureHandler
 
         $catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
 
+        $catalogVisibility->enableMessage($command->hasMessage);
+
+        foreach ($command->messageTranslations as $locale => $message) {
+            $catalogVisibility->translate(
+                $message['title'] ?? '',
+                $message['content'] ?? '',
+                $locale
+            );
+        }
+
         if (null !== $this->catalogVisibilityRepository->getByEvent($command->event)) {
             $this->catalogVisibilityRepository->set($catalogVisibility);
         } else {

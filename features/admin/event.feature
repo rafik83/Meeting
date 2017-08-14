@@ -92,3 +92,15 @@ Feature: See, create and update event
     Then I go to this page "/en/event"
     And I should see "Invisible"
     Then this event page "http://super-event.vimeet.proximum.dev/app_test.php/fr" returns 404
+
+  Scenario: I can duplicate an event
+    Given I am logged with "test@test.com" on admin
+    And the event "Paris Space Week" is created
+    And I am on this page "/en/event"
+    When I follow "admin.event.duplicate.title"
+    Then I should be on this page "/en/event/duplicate"
+    And I should see "Paris Space Week"
+    And I check the "Paris Space Week" radio
+    When I press "form.event_duplicate.children.submit.label"
+    Then I should be on this page "/en/event/create/from/3"
+    And the "event_create[title]" field should contain "Paris Space Week"
