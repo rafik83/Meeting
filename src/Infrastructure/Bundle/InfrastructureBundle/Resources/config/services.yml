@@ -83,7 +83,6 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     vimeet_infrastructure.repository.happening_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\HappeningRepository
         arguments:
@@ -332,6 +331,7 @@ services:
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@domain.event.last_event_participation'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
@@ -1355,6 +1355,13 @@ services:
             - '@application.nomenclature.nomenclature_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
+    command.nomenclature.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\RemoveHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@domain.nomenclature.remove_authorization_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Remove }
     command.event.payment_conditions.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler
         arguments:
@@ -1854,6 +1861,40 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@adapter.event_url_generator'
 
+    command.user.phone.update_black_list_handler:
+        class: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackListHandler
+        arguments:
+            - '@adapter.smsblack_list_adapter'
+            - '@repository.user.user_event_phone_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackList }
+
+    command.event.archive_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ArchiveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    command.event.un_archive_handler:
+        class: Proximum\Vimeet\Application\Command\Event\UnArchiveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+
+    command.event.archive_un_archive_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchiveHandler
+        arguments:
+            - '@command.event.archive_handler'
+            - '@command.event.un_archive_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
+
+    command.product.remove.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@domain.product.remove_authorization_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Remove\Remove }
+
     #
     # Post Batch Action
     #
@@ -2250,6 +2291,11 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.sheet.group_repository'
 
+    components.home.home_dispatch_anonymous_user:
+        class: Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser
+        arguments:
+            - '@domain.key_dates.checker.registration_access_checker'
+
     #
     # Happening component
     #
@@ -2410,6 +2456,10 @@ services:
         class: Proximum\Vimeet\Domain\Account\Synchronizer
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
+    account.event_participation_pre_filler:
+        class: Proximum\Vimeet\Domain\Account\EventParticipationPreFiller
+        arguments:
+            - '@template.template_data_factory'
 
     #
     # Billing
@@ -3014,6 +3064,32 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery }
 
+    query.nomenclature.abstract_nomenclature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Nomenclature\AbstractNomenclatureViewQueryHandler
+        abstract: true
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@domain.nomenclature.remove_authorization_checker'
+
+    query.nomenclature.event_nomenclature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQueryHandler
+        parent: query.nomenclature.abstract_nomenclature_view_query_handler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQuery }
+
+    query.nomenclature.global_nomenclature_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQueryHandler
+        parent: query.nomenclature.abstract_nomenclature_view_query_handler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery }
+
+    query.catalog.external.catalog_visibility_message_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQueryHandler
+        arguments:
+            - '@repository.catalog_visibility_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery }
+
     #
     # Program query
     #
@@ -3085,6 +3161,23 @@ services:
             - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery }
+
+    query.product.products_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Product\ProductsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@domain.product.remove_authorization_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }
+
+    query.register.pre_fill_user_data_handler:
+        class: Proximum\Vimeet\Application\Query\Register\PreFillUserDataHandler
+        arguments:
+            - '@domain.event.last_event_participation'
+            - '@account.event_participation_pre_filler'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Register\PreFillUserData }
 
     ##
     #
@@ -3203,6 +3296,7 @@ services:
             - '@query.agenda.agenda_day_view_query_handler'
             - '@template.participant_info_guesser'
             - '@domain.key_dates.checker.sms_activation_date_access_checker'
+            - '@repository.user.user_event_phone_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaParticipantViewQuery }
     query.agenda.agenda_day_view_query_handler:
@@ -3385,6 +3479,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+            - '@adapter.locale_helper_adapter'
     query.navigation.category_program_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler
         arguments:
@@ -3698,6 +3793,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
 
+    # Product
+    domain.product.remove_authorization_checker:
+        class: Proximum\Vimeet\Domain\Product\RemoveAuthorizationChecker
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+
     #
     # Elastic Adapter
     #
@@ -3881,6 +3982,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.event.user.agenda.version.generate_versions_handler'
+        tags:
+            - { name: console.command }
+
+    command_user.update_smsblack_list_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\User\UpdateSMSBlackListCommand
+        arguments:
+            - '@tactician.commandbus'
         tags:
             - { name: console.command }
 
@@ -4151,6 +4259,23 @@ services:
         arguments:
             - '@datetime'
 
+    domain.key_dates.checker.registration_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationAccessChecker
+        arguments:
+            - '@datetime'
+            - '@domain.key_dates.checker.registration_open_date_access_checker'
+            - '@domain.key_dates.checker.registration_close_date_access_checker'
+
+    domain.key_dates.checker.registration_open_date_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationOpenDateAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.registration_close_date_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
+        arguments:
+            - '@datetime'
+
     #
     # Nomenclature
     #
@@ -4160,12 +4285,20 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter
         arguments:
             - '@application.nomenclature.id.uniqu_id_generator'
+            - '@adapter.intl_adapter'
     application.nomenclature.export.csv_exporter:
         class: Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter
     application.nomenclature.nomenclature_cloner:
         class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
         arguments:
             - '@repository.nomenclature_repository'
+    domain.nomenclature.remove_authorization_checker:
+        class: Proximum\Vimeet\Domain\Nomenclature\RemoveAuthorizationChecker
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@repository.template.sheet_template_repository'
+            - '@template.template_data_factory'
+
     #
     # Event
     #
@@ -4179,6 +4312,11 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@vimeet_infrastructure.repository.order_row_repository'
+
+    domain.event.last_event_participation:
+        class: Proximum\Vimeet\Domain\Event\LastEventParticipation
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
 
     #
     # Transaction
@@ -4404,6 +4542,10 @@ services:
     #
     adapter.intl_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter
+    adapter.locale_helper_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\LocaleHelperAdapter
+        arguments:
+            - '@sonata.intl.templating.helper.locale'
 
     #
     # Guesser Cache
@@ -5059,6 +5201,12 @@ services:
             - '%ovh_sender_name%'
     adapter.smssender_alias: '@adapter.smssender_adapter'
 
+    adapter.smsblack_list_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SMSBlackListAdapter
+        arguments:
+            - '@ovh'
+            - '%ovh_service_name%'
+
     #
     # User Phone
     #
@@ -5099,3 +5247,14 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+
+    #
+    # HomeDispatcher
+    #
+    infrastructure.route.home_dispatch.home_user_dispatcher:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher
+        arguments:
+            - '@router'
+            - '@components.home.home_dispatch'
+            - '@components.home.home_dispatch_anonymous_user'
+            - '@adapter.authorization_checker'

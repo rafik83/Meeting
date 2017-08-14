@@ -6,12 +6,23 @@ Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        hasMessage:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
                 nullable: false
+    oneToMany:
+        messageTranslations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibilityTranslation
+            mappedBy: catalogVisibility
+            indexBy: locale
+            cascade: ["persist"]
     manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type

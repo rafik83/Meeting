@@ -91,7 +91,8 @@ class UpdateHandler
             $update->domain,
             $update->organiserName,
             $update->emailTeam,
-            $update->invoicePrefix
+            $update->invoicePrefix,
+            $update->visible
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 

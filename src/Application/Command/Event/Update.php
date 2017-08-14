@@ -52,6 +52,7 @@ class Update extends AbstractEvent
         $this->emailTeam     = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
+        $this->visible       = $event->isVisible();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

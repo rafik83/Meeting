@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Create;
@@ -23,10 +24,11 @@ use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -64,6 +66,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -78,7 +81,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -168,6 +172,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -182,7 +187,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -281,6 +287,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -295,7 +302,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -338,6 +346,69 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
             return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
         }))->shouldNotBeCalled();
+
+        // Handle
+        $handler = new CreateHandler(
+            $adminRepository->reveal(),
+            $eventRepository->reveal(),
+            $contentRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testCreateFromOtherEvent()
+    {
+        $prefix = new Prefix('Vimeet', 'Vi');
+        $user   = AdminFactory::create();
+        $event  = new Event(
+            'barfoo',
+            'en',
+            ['fr', 'en'],
+            Event::VAT_MODE_ATI,
+            20,
+            'FR',
+            'USD',
+            'Europe/Paris',
+            'hello.vimeet.proximum.dev',
+            'proximum',
+            'team-project@example.net',
+            $prefix,
+            true
+        );
+
+        $create = new Create($user, $event);
+
+        // Mock
+        $adminRepository    = $this->prophesize(AdminRepositoryInterface::class);
+        $eventRepository    = $this->prophesize(EventRepositoryInterface::class);
+        $guidelineGenerator = $this->prophesize(Generator::class);
+        $fileStorage        = $this->prophesize(FileStorageInterface::class);
+        $contentRepository  = $this->prophesize(ContentRepositoryInterface::class);
+
+        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+
+        $eventRepository->add(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $eventRepository->set(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $adminRepository->set($user)->shouldNotBeCalled();
+
+        $guidelineGenerator->generate(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $fileStorage->upload(Argument::type(UploadedFile::class))->shouldNotBeCalled();
+        $fileStorage->getExtension(Argument::type(UploadedFile::class))->shouldNotBeCalled();
+
+        $contentRepository->add(Argument::that(function (Event\Content $content) use ($event) {
+            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+        }))->shouldBeCalled();
 
         // Handle
         $handler = new CreateHandler(

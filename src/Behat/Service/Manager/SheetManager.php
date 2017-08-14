@@ -86,4 +86,15 @@ class SheetManager
 
         return $sheet;
     }
+
+    /**
+     * @param Event  $event
+     * @param string $sheetTitle
+     *
+     * @return null|Sheet
+     */
+    public function getSheetByEventAndTitle(Event $event, string $sheetTitle):? Sheet
+    {
+        return $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
+    }
 }

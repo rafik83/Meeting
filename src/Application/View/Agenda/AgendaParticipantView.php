@@ -30,6 +30,9 @@ class AgendaParticipantView
     /** @var bool */
     public $isSmsActivateDatePassed;
 
+    /** @var bool */
+    public $stopSMS;
+
     /**
      * @param int             $id
      * @param string          $fullname
@@ -37,6 +40,7 @@ class AgendaParticipantView
      * @param AgendaDayView[] $days
      * @param bool            $isAttending
      * @param bool            $isSmsActivateDatePassed
+     * @param bool            $stopSMS
      */
     public function __construct(
         int $id,
@@ -44,7 +48,8 @@ class AgendaParticipantView
         string $email,
         array $days,
         bool $isAttending = true,
-        bool $isSmsActivateDatePassed = false
+        bool $isSmsActivateDatePassed = false,
+        $stopSMS = false
     ) {
         $this->days     = $days;
         $this->id       = $id;
@@ -52,5 +57,6 @@ class AgendaParticipantView
         $this->email    = $email;
         $this->isAttending = $isAttending;
         $this->isSmsActivateDatePassed = $isSmsActivateDatePassed;
+        $this->stopSMS = $stopSMS;
     }
 }

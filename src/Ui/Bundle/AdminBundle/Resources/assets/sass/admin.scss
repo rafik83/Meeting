@@ -313,3 +313,13 @@ table th.sort-up:after {
 .pagination ul {
   margin-bottom: 0 !important;
 }
+
+.btn-group, .btn-group-vertical {
+  position: relative;
+  display: flex;
+  vertical-align: middle;
+}
+
+.btn-group-right {
+  float: right;
+}

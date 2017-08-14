@@ -10,13 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-interface IntlAdapterInterface
+interface LocaleHelperInterface
 {
     /**
-     * @param string      $countryCode
+     * Convert the locale code to the full name of the locale in the given locale
+     *
+     * @param string      $code
      * @param string|null $locale
      *
-     * @return string|null
+     * @return string
      */
-    public function getCountryName($countryCode, $locale = null);
+    public function language($code, $locale = null): string;
 }

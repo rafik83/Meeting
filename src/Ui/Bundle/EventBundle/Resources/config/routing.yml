@@ -17,6 +17,11 @@ event_multiplesheets_request_list:
     methods:  [GET]
     defaults: { _controller: EventBundle:MultipleSheets/Request:list }
 
+event_waiting_page:
+    path: /registration-not-opened
+    methods: [GET]
+    defaults: { _controller: EventBundle:Waiting:index }
+
 #
 # Register
 #

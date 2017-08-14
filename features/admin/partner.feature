@@ -23,7 +23,8 @@ Feature: Partner available features
       | Partner.yml                                                              |
     And elastica is populate
     And I am logged with "partner@proximumgroup.com" on admin
-    When I go to this page "/fr/event"
+    And I go to this page "/fr/event"
+    When I go to this page "/fr/event/past"
     Then I should see "ASD Days"
     And I should see "Les rendez-vous CARNOT 2016"
     And I should see "admin.users.link"

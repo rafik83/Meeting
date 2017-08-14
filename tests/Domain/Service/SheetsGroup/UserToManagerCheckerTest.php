@@ -10,6 +10,7 @@
 
 namespace Domain\Service\SheetsGroup;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class UserToManagerCheckerTest extends \PHPUnit_Framework_TestCase
+class UserToManagerCheckerTest extends TestCase
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -49,6 +50,14 @@ class UserToManagerCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowedUserToGroupManager()
     {
+        $this->groupRepository->getByEventAndManager($this->event, $this->user)
+            ->shouldBeCalled()
+            ->willReturn(null);
+
+        $this->sheetRepository->hasSheetWithGroupByUserByEvent($this->user, $this->event)
+            ->shouldBeCalled()
+            ->willReturn(false);
+
         $this->assertEquals(
             true,
             $this->userToManagerChecker->isUserToGroupManagerAllowed($this->event, $this->user)

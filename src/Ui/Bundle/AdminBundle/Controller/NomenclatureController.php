@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,13 @@ use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQuery;
+use Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ExportData;
@@ -62,8 +68,7 @@ class NomenclatureController extends Controller
             return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
         }
 
-        $repository    = $this->get('repository.nomenclature_repository');
-        $nomenclatures = $repository->findGlobals();
+        $nomenclatures = $this->get('tactician.commandbus.query')->handle(new GlobalNomenclatureViewQuery());
 
         return $this->render('AdminBundle:Nomenclature:globals.html.twig', [
             'form'          => $form->createView(),
@@ -94,8 +99,7 @@ class NomenclatureController extends Controller
             return $this->redirect($this->getReadNomenclatureUrl($result->nomenclature));
         }
 
-        $repository    = $this->get('repository.nomenclature_repository');
-        $nomenclatures = $repository->findByEvent($event);
+        $nomenclatures = $this->get('tactician.commandbus.query')->handle(new EventNomenclatureViewQuery($event));
 
         return $this->render('AdminBundle:Nomenclature:event.html.twig', [
             'event'         => $event,
@@ -228,16 +232,35 @@ class NomenclatureController extends Controller
             $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
 
             try {
-                $import = new Import($data->nomenclature, $data->file ? $data->file->getPathname() : null, $data->charset);
+                $import = new Import(
+                    $data->nomenclature,
+                    $data->file ? $data->file->getPathname() : null,
+                    $data->charset
+                );
 
                 $this->get('tactician.commandbus')->handle($import);
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
                 return $this->getReadNomenclatureUrl($data->nomenclature);
-            } catch (ImportException $exception) {
-                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+            } catch (DepthException $depthException) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.depthError'));
+            } catch (NoLocaleSpecifiedException $noLocaleSpecifiedException) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.noLocaleSpecified'));
+            } catch (InvalidLocaleException $invalidLocaleException) {
+                $form->addError($this->get('error_factory')->create(
+                    'validators.nomenclature.import.invalidLocale',
+                    null,
+                    'validators',
+                    ['%invalidLocale%' => $invalidLocaleException->getInvalidLocale()]
+                ));
+            } catch (LocalesMustCorrespondToThoseOfTheEventException $localesMustCorrespondToThoseOfTheEventException) {
+                $form->addError($this->get('error_factory')->create(
+                    'validators.nomenclature.import.localesMustCorrespondToThoseOfTheEventException'
+                ));
             } catch (MissingKeysException $exception) {
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
+            } catch (ImportException $exception) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
         }
 

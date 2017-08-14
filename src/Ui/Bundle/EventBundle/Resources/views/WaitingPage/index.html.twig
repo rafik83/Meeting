@@ -1,0 +1,24 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title event.title %}
+
+{% block body_attributes 'class="grey"' %}
+
+{% block content %}
+    <div class="mg-tp well text-center">
+        <p>
+            <b>{{ message }}</b>
+        </p>
+
+        {% if isLoginActivated == true and not is_granted('ROLE_USER') %}
+            <a href="{{ path('event_login') }}" class="btn btn-primary" title="{{ 'login.link'|trans }}">
+                {{ 'login.link.label'|trans }}
+            </a>
+        {% endif %}
+
+    </div>
+    <div class="text-center">
+        <img src="{{ asset('assets/images/vimeet_poweredby.png') }}">
+    </div>
+{% endblock %}
+

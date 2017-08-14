@@ -62,6 +62,14 @@ Proximum\Vimeet\Domain\Model\Event:
             type: boolean
             options:
                 default: false
+        visible:
+            type: boolean
+            options:
+                default: true
+        archived:
+            type: boolean
+            options:
+                default: false
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address
@@ -85,3 +93,7 @@ Proximum\Vimeet\Domain\Model\Event:
             cascade: ["persist"]
             joinColumn:
                 nullable: false
+        duplicatedFrom:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: true

@@ -184,6 +184,11 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
+            ->add('hasSpot', YesNoType::class, [
+                'label'    => 'form.sheet_filter.children.hasSpot.label',
+                'required' => false,
+                'expanded' => true,
+            ])
         ;
 
         /** @var Event $event */

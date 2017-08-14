@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackList;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery;
@@ -34,6 +35,8 @@ class AgendaController extends Controller
     public function indexAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $this->get('tactician.commandbus')->handle(new UpdateBlackList());
 
         return $this->render('AdminBundle:Agenda:index.html.twig', [
             'event'                        => $event,

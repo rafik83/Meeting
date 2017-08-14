@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventListView;
 
 interface EventRepositoryInterface
@@ -29,6 +30,13 @@ interface EventRepositoryInterface
      * @return Event[]
      */
     public function getEventsByAdmin(Admin $admin);
+
+    /**
+     * @param Admin $admin
+     *
+     * @return Event[]
+     */
+    public function findArchivedByAdmin(Admin $admin): array;
 
     /**
      * Get events order by title and last event day
