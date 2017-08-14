@@ -1905,6 +1905,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@repository.video_conference_repository'
+            - '%feature_video_conference_enabled%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestAccess }
 
@@ -2246,6 +2247,7 @@ services:
         arguments:
           - '@datetime'
           - '%tokbox_security%'
+          - '%feature_video_conference_enabled%'
 
     #
     # Guideline Component

@@ -25,15 +25,22 @@ class VideoMeetingAccess
     private $hasSecurity;
 
     /**
+     * @var bool
+     */
+    private $isVideoConferenceEnabled;
+
+    /**
      * VideoMeetingAccess constructor.
      *
      * @param \DateTimeInterface $dateTime
      * @param bool $hasSecurity
+     * @param bool $isVideoConferenceEnabled
      */
-    public function __construct(\DateTimeInterface $dateTime, bool $hasSecurity)
+    public function __construct(\DateTimeInterface $dateTime, bool $hasSecurity, bool $isVideoConferenceEnabled)
     {
         $this->dateTime = $dateTime;
         $this->hasSecurity = $hasSecurity;
+        $this->isVideoConferenceEnabled = $isVideoConferenceEnabled;
     }
 
     /**
@@ -43,6 +50,10 @@ class VideoMeetingAccess
      */
     public function allowedToAccess(Meeting $meeting): bool
     {
+        if (!$this->isVideoConferenceEnabled) {
+            return false;
+        }
+
         if (!$this->hasSecurity) {
             return true;
         }

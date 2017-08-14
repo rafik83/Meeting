@@ -67,4 +67,7 @@ parameters:
 
     tokbox_api_key: ~
     tokbox_api_secret: ~
-    tokbox_security: false
+    tokbox_security: false # enable date security for video conference
+
+    # Features flag
+    feature_video_conference_enabled: false
