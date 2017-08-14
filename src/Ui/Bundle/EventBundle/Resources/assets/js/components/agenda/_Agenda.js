@@ -11,7 +11,7 @@ var Meet          = require('./_Meet'),
  */
 function Agenda(element) {
     this.element      = element;
-    this.agendaDate   = moment(this.element.querySelector('.agenda-date').getAttribute('data-date'), 'MM/DD/YYYY HH:mm:ss').format('MM/DD/YY');
+    this.agendaDate   = moment(this.element.querySelector('.agenda-date').getAttribute('data-date'), 'DD-MM-YY HH:mm:ss').format('MM-DD-YY');
     this.start        = this.parseTime(this.element.getAttribute('data-beginhour'));
     this.end          = this.parseTime(this.element.getAttribute('data-endhour'));
     this.duration     = this.end - this.start;
