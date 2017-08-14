@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
@@ -48,15 +49,20 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request    $request
+     * @param Event|null $event
      *
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, Event $event = null): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $create = new Create($this->getUser());
+        if ($event !== null) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        }
+
+        $create = new Create($this->getUser(), $event);
 
         $form = $this->createForm(CreateType::class, $create, [
             'currentLocale' => $request->getLocale(),
@@ -80,7 +86,7 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:create.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -122,6 +128,32 @@ class EventController extends Controller
         return $this->render('AdminBundle:Event:update.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response|RedirectResponse
+     */
+    public function duplicateAction(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        $duplicateForm = $this->createForm(DuplicateType::class, [], [
+            'submit' => true,
+        ]);
+
+        if ($duplicateForm->handleRequest($request)->isSubmitted() && $duplicateForm->isValid()) {
+            $eventToDuplicate = $duplicateForm->get('event')->getData();
+
+            return $this->redirectToRoute('admin_event_create_from', [
+                'event' => $eventToDuplicate->getId(),
+            ]);
+        }
+
+        return $this->render('AdminBundle:Event:duplicate.html.twig', [
+            'form' => $duplicateForm->createView(),
         ]);
     }
 
@@ -204,7 +236,6 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.event.paymentConditions.update.success');
 
