@@ -115,6 +115,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $visible;
 
+    /** @var null|Event */
+    private $duplicatedFrom;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -129,6 +132,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string|null $emailTeam
      * @param Prefix      $invoicePrefix
      * @param bool        $visible
+     * @param null|Event  $duplicatedFrom
      */
     public function __construct(
         $title,
@@ -143,7 +147,8 @@ class Event implements EventInterface, TraceableInterface
         $organiserName,
         $emailTeam,
         Prefix $invoicePrefix,
-        bool $visible = true
+        bool $visible = true,
+        Event $duplicatedFrom = null
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -165,6 +170,7 @@ class Event implements EventInterface, TraceableInterface
         $this->visible        = $visible;
         $this->userAgendaVersionsGenerated = false;
         $this->archived = false;
+        $this->duplicatedFrom = $duplicatedFrom;
     }
 
     /**
@@ -744,5 +750,13 @@ class Event implements EventInterface, TraceableInterface
     public function unArchive()
     {
         $this->archived = false;
+    }
+
+    /**
+     * @return null|Event
+     */
+    public function getDuplicatedFrom()
+    {
+        return $this->duplicatedFrom;
     }
 }
