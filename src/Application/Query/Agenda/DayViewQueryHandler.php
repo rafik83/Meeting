@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
@@ -33,6 +34,9 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
+    /** @var AgendaCollisionManager */
+    private $agendaCollisionManager;
+
     /** @var HappeningView[] */
     private $happeningViews = [];
 
@@ -51,19 +55,22 @@ class DayViewQueryHandler
      * @param MassUnavailabilityViewQueryHandler             $massHandler
      * @param MeetingViewQueryHandler                        $meetingHandler
      * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+     * @param AgendaCollisionManager                         $agendaCollisionManager
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
         UnavailabilityViewQueryHandler $unavailabilityHandler,
         MassUnavailabilityViewQueryHandler $massHandler,
         MeetingViewQueryHandler $meetingHandler,
-        CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+        CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
+        AgendaCollisionManager $agendaCollisionManager
     ) {
         $this->happeningHandler                               = $happeningHandler;
         $this->unavailabilityHandler                          = $unavailabilityHandler;
         $this->massHandler                                    = $massHandler;
         $this->meetingHandler                                 = $meetingHandler;
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
+        $this->agendaCollisionManager                         = $agendaCollisionManager;
     }
 
     /**
@@ -84,14 +91,21 @@ class DayViewQueryHandler
             );
         }
 
+        $this->agendaCollisionManager->handleCollision(
+            $this->meetings,
+            $this->happeningViews,
+            $this->unavailabilities,
+            $this->masses
+        );
+
         return new DayView(
             $query->day->getStartTime(),
             $query->day->getEndTime(),
             $query->day->getEvent()->getConfiguration()->getScheduleScale(),
-            $this->happeningViews,
-            $this->unavailabilities,
-            $this->masses,
-            $this->meetings,
+            $this->agendaCollisionManager->getHappeningViews(),
+            $this->agendaCollisionManager->getUnavailabilityViews(),
+            $this->agendaCollisionManager->getMassViews(),
+            $this->agendaCollisionManager->getMeetingViews(),
             $cancelAttendanceView ?? null
         );
     }
@@ -150,36 +164,6 @@ class DayViewQueryHandler
                 }
             }
         }
-
-        // Remove non blocking mass that overlap a blocking mass
-        foreach ($this->masses as $massView) {
-            $this->handleBlockingMasses($massView);
-        }
-
-        // Remove mass that overlap an unavailability
-        foreach ($this->masses as $massView) {
-            $this->handleMassOverlapOnUnavailability($massView);
-        }
-    }
-
-    /**
-     * @param MassUnavailabilityView $massView
-     */
-    private function handleBlockingMasses(MassUnavailabilityView $massView)
-    {
-        if (false !== $nonBlockingMassOverlappedKey = $this->isBlockingMassOverlapNonBlockingMass($massView)) {
-            unset($this->masses[$nonBlockingMassOverlappedKey]);
-        }
-    }
-
-    /**
-     * @param MassUnavailabilityView $massView
-     */
-    private function handleMassOverlapOnUnavailability(MassUnavailabilityView $massView)
-    {
-        if (false !== $massKey = $this->isMassOverlapUnavailability($massView)) {
-            unset($this->masses[$massKey]);
-        }
     }
 
     /**
@@ -201,42 +185,5 @@ class DayViewQueryHandler
                 );
             }
         }
-    }
-
-    /**
-     * @param MassUnavailabilityView $massUnavailabilityView
-     * @return bool|int
-     */
-    private function isMassOverlapUnavailability(MassUnavailabilityView $massUnavailabilityView)
-    {
-        foreach ($this->unavailabilities as $unavailabilityView) {
-            if ($massUnavailabilityView->getBegin() <= $unavailabilityView->getBegin()
-                && $massUnavailabilityView->getEnd() >= $unavailabilityView->getEnd()
-            ) {
-                return array_search($massUnavailabilityView, $this->masses);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param MassUnavailabilityView $massUnavailabilityView
-     *
-     * @return bool|int
-     */
-    private function isBlockingMassOverlapNonBlockingMass(MassUnavailabilityView $massUnavailabilityView)
-    {
-        foreach ($this->masses as $mass) {
-            if ($massUnavailabilityView->isBlocking && !$mass->isBlocking) {
-                if ($massUnavailabilityView->getBegin() <= $mass->getBegin()
-                    && $massUnavailabilityView->getEnd() >= $mass->getEnd()
-                ) {
-                    return array_search($mass, $this->masses);
-                }
-            }
-        }
-
-        return false;
     }
 }
