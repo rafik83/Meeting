@@ -37,9 +37,9 @@ function Agenda(element) {
 
     this.planner.setMeets(this.meets);
 
-    if (moment(this.agendaDate, 'MM/DD/YY') === moment().format('MM/DD/YYYY')) {
+    //if (moment(this.agendaDate, 'MM/DD/YY') === moment().format('MM/DD/YYYY')) {
         [].forEach.call(this.slots, this.scrollOnSlot.bind(this));
-    }
+    //}
 
     this.resize.on('resized', this.onResize);
 }
@@ -90,6 +90,11 @@ Agenda.prototype.scrollOnSlot = function(slot) {
         && slot.element.id === this.agendaDate + '-' + slot.time
     ) {
         window.location.hash = slot.element.id;
+
+        // If there is an element on slot open it
+        if (slot.meets.length > 0) {
+            slot.meets[0].element.classList.add('open');
+        }
     }
 };
 
