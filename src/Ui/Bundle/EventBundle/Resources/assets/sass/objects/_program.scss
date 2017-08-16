@@ -11,17 +11,20 @@
   .program-container {
     .meet {
       > header {
-        .actions {
-          margin-right: 5% !important;
-          max-width: 60px !important;
-        }
-
         .content {
           max-width: 57% !important;
           > p {
             line-height: 1.5em !important;
             margin-left: 4%;
           }
+        }
+      }
+    }
+
+    .meets {
+      .actions {
+        > a {
+          margin-left: 16px !important;
         }
       }
     }
