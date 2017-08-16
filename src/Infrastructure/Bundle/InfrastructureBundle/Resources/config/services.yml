@@ -2068,7 +2068,7 @@ services:
         arguments:
             - '%tokbox_api_key%'
             - '%tokbox_api_secret%'
-            - '%tokbox_security%'
+            - '%feature_video_conference_date_security_enabled%'
 
     #
     # Components
@@ -2246,7 +2246,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess
         arguments:
           - '@datetime'
-          - '%tokbox_security%'
+          - '%feature_video_conference_date_security_enabled%'
           - '%feature_video_conference_enabled%'
 
     #
