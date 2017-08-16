@@ -46,7 +46,7 @@ class AgendaCollisionManager
     ): array {
         foreach ($unavailabilityViews as $unavailabilityView) {
             $massKey = $this->isOverlapping($unavailabilityView, $massViews);
-            if (null !== $massKey) {
+            if (false !== $massKey) {
                 unset($massViews[$massKey]);
             }
         }
