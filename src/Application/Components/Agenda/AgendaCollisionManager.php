@@ -29,47 +29,48 @@ class AgendaCollisionManager
 
     /** @var MassUnavailabilityView[] */
     private $massViews;
+
     /**
      * @param MeetingView[]            $meetingViews
      * @param HappeningView[]          $happeningViews
      * @param UnavailabilityView[]     $unavailabilityViews
      * @param MassUnavailabilityView[] $massViews
+     *
+     * @return array
      */
     public function handleCollision(
         array $meetingViews = [],
         array $happeningViews = [],
         array $unavailabilityViews = [],
         array $massViews = []
-    ) {
+    ): array {
 
         foreach ($unavailabilityViews as $unavailabilityView) {
-            $this->removeArrayElementIfNotNull(
-                $this->isOverlapping($unavailabilityView, $massViews),
-                $massViews
-            );
+            $massKey = $this->isOverlapping($unavailabilityView, $massViews);
+            if (null !== $massKey) {
+                unset($massViews[$massKey]);
+            }
         }
 
         foreach ($massViews as $massView) {
             if ($massView->isBlocking) {
-                $blockMassKey = $this->isOverlapping($massView, $massViews);
-
-                if ($blockMassKey !== null) {
-                    unset($massViews[$blockMassKey]);
-                }
+                $this->removeArrayElementIfNotNull(
+                    $this->isOverlapping($massView, $massViews),
+                    $massViews
+                );
             }
         }
 
         foreach ($happeningViews as $happeningView) {
-            $massKey = $this->isOverlapping($happeningView, $massViews);
-            if ($massKey !== null) {
-                unset($massViews[$massKey]);
-            }
+            $this->removeArrayElementIfNotNull(
+                $this->isOverlapping($happeningView, $massViews),
+                $massViews
+            );
 
-            $unavailabilityKey = $this->isOverlapping($happeningView, $unavailabilityViews);
-
-            if ($unavailabilityKey !== null) {
-                unset($unavailabilityViews[$unavailabilityKey]);
-            }
+            $this->removeArrayElementIfNotNull(
+                $this->isOverlapping($happeningView, $unavailabilityViews),
+                $unavailabilityViews
+            );
         }
 
         foreach ($meetingViews as $meetingView) {
@@ -85,10 +86,18 @@ class AgendaCollisionManager
                 unset($unavailabilityViews[$unavailabilityKey]);
             }
         }
+
         $this->meetingViews = $meetingViews;
         $this->happeningViews = $happeningViews;
         $this->unavailabilityViews = $unavailabilityViews;
         $this->massViews = $massViews;
+
+        return [
+            $meetingViews,
+            $happeningViews,
+            $unavailabilityViews,
+            $massViews
+        ];
     }
 
     /**
