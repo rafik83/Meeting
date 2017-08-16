@@ -142,12 +142,16 @@ class AgendaCollisionManager
         array $abstractTimeEntityViews
     ) {
         foreach ($abstractTimeEntityViews as $abstractTimeEntity) {
-            if (($abstractTimeEntityView->getBegin() >= $abstractTimeEntity->getBegin()
-                && $abstractTimeEntityView->getBegin() < $abstractTimeEntity->getEnd()
-                || $abstractTimeEntityView->getEnd() > $abstractTimeEntity->getBegin())
-                && ($abstractTimeEntityView->getEnd() <= $abstractTimeEntity->getEnd()
-                || $abstractTimeEntityView->getBegin() <= $abstractTimeEntity->getBegin()
-                && $abstractTimeEntityView->getEnd() >= $abstractTimeEntity->getEnd())
+            if ($this->doesFirstBeginAfterAndFinishBeforeSecond(
+                    $abstractTimeEntityView,
+                    $abstractTimeEntity
+                ) || $this->doesFirstFinishAfterSecondBeginAndFinishBeforeSecondEnd(
+                    $abstractTimeEntityView,
+                    $abstractTimeEntity
+                ) || $this->doesFirstBeginBeforeAndFinishAfterSecond(
+                    $abstractTimeEntityView,
+                    $abstractTimeEntity
+                )
             ) {
                 return array_search($abstractTimeEntity, $abstractTimeEntityViews);
             }
@@ -165,5 +169,47 @@ class AgendaCollisionManager
         if ($arrayKey !== false) {
             unset($array[$arrayKey]);
         }
+    }
+
+    /**
+     * @param AbstractTimeEntityView $firstTimeEntity
+     * @param AbstractTimeEntityView $secondTimeEntity
+     *
+     * @return bool
+     */
+    private function doesFirstBeginAfterAndFinishBeforeSecond(
+        AbstractTimeEntityView $firstTimeEntity,
+        AbstractTimeEntityView $secondTimeEntity
+    ): bool {
+        return $firstTimeEntity->getBegin() >= $secondTimeEntity->getBegin()
+        && $firstTimeEntity->getBegin() < $secondTimeEntity->getEnd();
+    }
+
+    /**
+     * @param AbstractTimeEntityView $firstTimeEntity
+     * @param AbstractTimeEntityView $secondTimeEntity
+     *
+     * @return bool
+     */
+    private function doesFirstFinishAfterSecondBeginAndFinishBeforeSecondEnd (
+        AbstractTimeEntityView $firstTimeEntity,
+        AbstractTimeEntityView $secondTimeEntity
+    ): bool {
+       return $firstTimeEntity->getEnd() > $secondTimeEntity->getBegin()
+            && $firstTimeEntity->getEnd() <= $secondTimeEntity->getEnd();
+    }
+
+    /**
+     * @param AbstractTimeEntityView $firstTimeEntity
+     * @param AbstractTimeEntityView $secondTimeEntity
+     *
+     * @return bool
+     */
+    private function doesFirstBeginBeforeAndFinishAfterSecond (
+        AbstractTimeEntityView $firstTimeEntity,
+        AbstractTimeEntityView $secondTimeEntity
+    ): bool {
+        return $firstTimeEntity->getBegin() <= $secondTimeEntity->getBegin()
+            && $firstTimeEntity->getEnd() >= $secondTimeEntity->getEnd();
     }
 }
