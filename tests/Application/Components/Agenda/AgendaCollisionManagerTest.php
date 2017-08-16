@@ -62,7 +62,9 @@ class AgendaCollisionManagerTest extends TestCase
 
         $expected = [[$meetingView], [], [$unavailabilityView], []];
 
-        $result = $this->agendaCollisionManager->handleCollision([$meetingView], [], [$unavailabilityView], [$massView]);
+        $result = $this
+            ->agendaCollisionManager
+            ->handleCollision([$meetingView], [], [$unavailabilityView], [$massView]);
 
         $this->assertEquals($expected, $result);
     }

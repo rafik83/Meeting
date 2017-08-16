@@ -44,7 +44,6 @@ class AgendaCollisionManager
         array $unavailabilityViews = [],
         array $massViews = []
     ): array {
-
         foreach ($unavailabilityViews as $unavailabilityView) {
             $massKey = $this->isOverlapping($unavailabilityView, $massViews);
             if (null !== $massKey) {
@@ -76,13 +75,13 @@ class AgendaCollisionManager
         foreach ($meetingViews as $meetingView) {
             $massKey = $this->isOverlapping($meetingView, $massViews);
 
-            if ($massKey !== null) {
+            if ($massKey !== false) {
                 unset($massViews[$massKey]);
             }
 
             $unavailabilityKey = $this->isOverlapping($meetingView, $unavailabilityViews);
 
-            if ($unavailabilityKey !== null) {
+            if ($unavailabilityKey !== false) {
                 unset($unavailabilityViews[$unavailabilityKey]);
             }
         }
@@ -136,7 +135,7 @@ class AgendaCollisionManager
      * @param AbstractTimeEntityView $abstractTimeEntityView
      * @param AbstractTimeEntityView[] $abstractTimeEntityViews
      *
-     * @return int
+     * @return int|bool
      */
     private function isOverlapping(
         AbstractTimeEntityView $abstractTimeEntityView,
@@ -153,15 +152,17 @@ class AgendaCollisionManager
                 return array_search($abstractTimeEntity, $abstractTimeEntityViews);
             }
         }
+
+        return false;
     }
 
     /**
-     * @param null|int $arrayKey
+     * @param bool|int $arrayKey
      * @param AbstractTimeEntityView[] $array
      */
-    private function removeArrayElementIfNotNull(?int $arrayKey, array $array)
+    private function removeArrayElementIfNotNull($arrayKey, array $array)
     {
-        if ($arrayKey !== null) {
+        if ($arrayKey !== false) {
             unset($array[$arrayKey]);
         }
     }
