@@ -36,10 +36,10 @@ class AgendaCollisionManager
      * @param MassUnavailabilityView[] $massViews
      */
     public function handleCollision(
-        array $meetingViews,
-        array $happeningViews,
-        array $unavailabilityViews,
-        array $massViews
+        array $meetingViews = [],
+        array $happeningViews = [],
+        array $unavailabilityViews = [],
+        array $massViews = []
     ) {
 
         foreach ($unavailabilityViews as $unavailabilityView) {
@@ -150,7 +150,7 @@ class AgendaCollisionManager
      * @param null|int $arrayKey
      * @param AbstractTimeEntityView[] $array
      */
-    private function removeArrayElementIfNotNull($arrayKey, array $array)
+    private function removeArrayElementIfNotNull(?int $arrayKey, array $array)
     {
         if ($arrayKey !== null) {
             unset($array[$arrayKey]);

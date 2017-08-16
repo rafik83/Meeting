@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQuery;
@@ -123,6 +124,9 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var DayView */
     private $expectedDayView;
 
+    /** @var AgendaCollisionManager */
+    private $agendaCollisionManager;
+
     public function setUp()
     {
         $this->event = EventFactory::createEvent();
@@ -162,9 +166,10 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [$this->expectedHappeningViews[0], $this->expectedHappeningViews[1]],
             [$this->unavailabilityView],
             [$this->massView],
-            [],
-            null
+            []
         );
+
+        $this->agendaCollisionManager = $this->prophesize(AgendaCollisionManager::class);
     }
     
     public function testHandle()
@@ -216,8 +221,35 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal()
+            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->agendaCollisionManager->reveal()
         );
+
+        $this->agendaCollisionManager
+            ->handleCollision(
+                [],
+                [$this->expectedHappeningViews[0], $this->expectedHappeningViews[1]],
+                [$this->unavailabilityView],
+                [$this->massView]
+            )
+            ->shouldBeCalled();
+
+        $this->agendaCollisionManager
+            ->getHappeningViews()
+            ->shouldBeCalled()
+            ->willReturn([$this->expectedHappeningViews[0], $this->expectedHappeningViews[1]]);
+
+        $this->agendaCollisionManager
+            ->getUnavailabilityViews()
+            ->shouldBeCalled()
+            ->willReturn([$this->unavailabilityView]);
+
+        $this->agendaCollisionManager
+            ->getMassViews()
+            ->shouldBeCalled()
+            ->willReturn([$this->massView]);
+        $this->agendaCollisionManager->getMeetingViews()->shouldBeCalled()->willReturn([]);
+
 
         $result = $handler->handle(new DayViewQuery(
             $this->day,
@@ -309,8 +341,35 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal()
+            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->agendaCollisionManager->reveal()
         );
+
+        $this->agendaCollisionManager
+            ->handleCollision(
+                [$meetingView],
+                [$this->expectedHappeningViews[0], $this->expectedHappeningViews[1]],
+                [$this->unavailabilityView],
+                [$this->massView]
+            )
+            ->shouldBeCalled();
+
+        $this->agendaCollisionManager
+            ->getHappeningViews()
+            ->shouldBeCalled()
+            ->willReturn([$this->expectedHappeningViews[0], $this->expectedHappeningViews[1]]);
+
+        $this->agendaCollisionManager
+            ->getUnavailabilityViews()
+            ->shouldBeCalled()
+            ->willReturn([$this->unavailabilityView]);
+
+        $this->agendaCollisionManager
+            ->getMassViews()
+            ->shouldBeCalled()
+            ->willReturn([$this->massView]);
+        $this->agendaCollisionManager->getMeetingViews()->shouldBeCalled()->willReturn([$meetingView]);
+
         $result  = $handler->handle(new DayViewQuery(
             $this->day,
             $this->sheet,
@@ -329,57 +388,98 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleCancelAttendance()
     {
+        $event     = EventFactory::createEvent();
+        $user      = UserFactory::create();
+        $category  = null;
+        $startTime = new \DateTime('2016-10-12 10:00:00');
+        $endTime   = new \DateTime('2016-10-12 18:00:00');
+        $eventDay  = new Day($event, $startTime, $endTime);
+        $sheet     = SheetFactory::create($event);
+        $sheet->setAttendance(false);
+        $participant  = ParticipantFactory::create($sheet);
+        $massCategory = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
+        // Data
+        $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
+        $beginHappening2 = new \DateTime('2016-10-12 15:30:00');
+        $endHappening1   = new \DateTime('2016-10-12 14:00:00');
+        $endHappening2   = new \DateTime('2016-10-12 16:50:00');
+        $categoryH1      = new Happening\Category($event, 'Conference', 1, '#123123', '#123123');
+        $categoryH2      = new Happening\Category($event, 'RDV', 2, '#123123', '#123123');
+        $happening1      = new Happening(
+            $event,
+            $beginHappening1,
+            $endHappening1,
+            $categoryH1
+        );
+        $happening2 = new Happening(
+            $event,
+            $beginHappening2,
+            $endHappening2,
+            $categoryH2
+        );
+        $participation1 = new HappeningParticipation($happening1, $user);
+        $participation2 = new HappeningParticipation($happening2, $user);
+        $unavailability = new Unavailability($participant->getUser(), $event, $beginHappening2, $endHappening2);
+        $mass           = new Unavailability\Mass($event, $massCategory, 'name', $beginHappening1, $endHappening1, true);
         // Expected
         $expected = new DayView(
-            $this->startTime,
-            $this->endTime,
-            $this->event->getConfiguration()->getScheduleScale(),
+            $startTime,
+            $endTime,
+            $event->getConfiguration()->getScheduleScale(),
             [],
             [],
             [],
             [],
-            new CancelAttendanceUnavailabilityView($this->startTime, $this->endTime, 'Europe/Paris')
+            new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris')
         );
-
         // Mock
         $happeningViewQueryHandler = $this->prophesize(HappeningViewQueryHandler::class);
-        $happeningViewQueryHandler
-            ->handle(new HappeningViewQuery($this->happening1, $this->event, 'fr'))
-            ->shouldNotBeCalled();
+        $happeningViewQueryHandler->handle(
+            new HappeningViewQuery(
+                $happening1,
+                $event,
+                'fr'
+            )
+        )->shouldNotBeCalled();
 
-        $massHandler = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
+        $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($this->mass, $this->event, $this->participant, 'fr'))->shouldNotBeCalled();
-        $unavailabilityHandler->handle(new UnavailabilityViewQuery($this->unavailability, $this->event))->shouldNotBeCalled();
-
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, $participant, 'fr'))->shouldNotBeCalled();
+        $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldNotBeCalled();
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
-
         $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
         $cancelAttendanceUnavailabilityViewQueryHandler
-            ->handle(new CancelAttendanceUnavailabilityViewQuery($this->event, $this->day))
+            ->handle(new CancelAttendanceUnavailabilityViewQuery($event, $eventDay))
             ->shouldBeCalled()
-            ->willReturn(new CancelAttendanceUnavailabilityView($this->startTime, $this->endTime, 'Europe/Paris'));
+            ->willReturn(new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris'));
 
         $handler = new DayViewQueryHandler(
             $happeningViewQueryHandler->reveal(),
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal()
+            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->agendaCollisionManager->reveal()
         );
 
-        $result = $handler->handle(new DayViewQuery(
-            $this->day,
-            $this->sheet,
-            $this->event,
-            $this->participant,
-            'fr',
-            [$this->participation1, $this->participation2],
-            [$this->unavailability],
-            [$this->mass]
-        ));
+        $this->agendaCollisionManager->handleCollision([], [], [], [])->shouldBeCalled();
+        $this->agendaCollisionManager->getHappeningViews()->shouldBeCalled()->willReturn([]);
+        $this->agendaCollisionManager->getUnavailabilityViews()->shouldBeCalled()->willReturn([]);
+        $this->agendaCollisionManager->getMassViews()->shouldBeCalled()->willReturn([]);
+        $this->agendaCollisionManager->getMeetingViews()->shouldBeCalled()->willReturn([]);
 
+        $result  = $handler->handle(new DayViewQuery(
+            $eventDay,
+            $sheet,
+            $event,
+            $participant,
+            false,
+            'fr',
+            [$participation1, $participation2],
+            [$unavailability],
+            [$mass]
+        ));
         $this->assertEquals($expected, $result);
     }
 }
