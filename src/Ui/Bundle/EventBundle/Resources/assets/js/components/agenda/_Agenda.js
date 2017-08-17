@@ -93,7 +93,9 @@ Agenda.prototype.scrollOnSlot = function(slot) {
 
         // If there is an element on slot open it
         if (slot.meets.length > 0) {
-            slot.meets[0].element.classList.add('open');
+            if (slot.meets[0].element.classList.contains('has-details')) {
+                slot.meets[0].element.classList.add('open');
+            }
         }
     }
 };
