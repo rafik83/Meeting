@@ -44,58 +44,36 @@ class AgendaCollisionManager
         array $unavailabilityViews = [],
         array $massViews = []
     ): array {
-        foreach ($unavailabilityViews as $unavailabilityView) {
-            $massKey = $this->isOverlapping($unavailabilityView, $massViews);
-            if (false !== $massKey) {
-                unset($massViews[$massKey]);
-            }
-        }
-
-        foreach ($massViews as $massView) {
-            if ($massView->isBlocking) {
-                $this->removeArrayElementIfNotNull(
-                    $this->isOverlapping($massView, $massViews),
-                    $massViews
-                );
-            }
-        }
-
-        foreach ($happeningViews as $happeningView) {
-            $this->removeArrayElementIfNotNull(
-                $this->isOverlapping($happeningView, $massViews),
-                $massViews
-            );
-
-            $this->removeArrayElementIfNotNull(
-                $this->isOverlapping($happeningView, $unavailabilityViews),
-                $unavailabilityViews
-            );
-        }
-
-        foreach ($meetingViews as $meetingView) {
-            $massKey = $this->isOverlapping($meetingView, $massViews);
-
-            if ($massKey !== false) {
-                unset($massViews[$massKey]);
-            }
-
-            $unavailabilityKey = $this->isOverlapping($meetingView, $unavailabilityViews);
-
-            if ($unavailabilityKey !== false) {
-                unset($unavailabilityViews[$unavailabilityKey]);
-            }
-        }
-
         $this->meetingViews = $meetingViews;
         $this->happeningViews = $happeningViews;
         $this->unavailabilityViews = $unavailabilityViews;
         $this->massViews = $massViews;
 
+        foreach ($this->unavailabilityViews as $unavailabilityView) {
+            $this->massViews = $this->removeElementIfOverlapping($unavailabilityView, $this->massViews);
+        }
+
+        foreach ($this->massViews as $massView) {
+            if ($massView->isBlocking) {
+                $this->massViews = $this->removeElementIfOverlapping($massView, $this->massViews);
+            }
+        }
+
+        foreach ($this->happeningViews as $happeningView) {
+            $this->massViews = $this->removeElementIfOverlapping($happeningView, $this->massViews);
+            $this->unavailabilityViews = $this->removeElementIfOverlapping($happeningView, $this->unavailabilityViews);
+        }
+
+        foreach ($this->meetingViews as $meetingView) {
+            $this->massViews = $this->removeElementIfOverlapping($meetingView, $this->massViews);
+            $this->unavailabilityViews = $this->removeElementIfOverlapping($meetingView, $this->unavailabilityViews);
+        }
+
         return [
-            $meetingViews,
-            $happeningViews,
-            $unavailabilityViews,
-            $massViews
+            $this->meetingViews,
+            $this->happeningViews,
+            $this->unavailabilityViews,
+            $this->massViews
         ];
     }
 
@@ -135,13 +113,13 @@ class AgendaCollisionManager
      * @param AbstractTimeEntityView $abstractTimeEntityView
      * @param AbstractTimeEntityView[] $abstractTimeEntityViews
      *
-     * @return int|bool
+     * @return AbstractTimeEntityView[]
      */
-    private function isOverlapping(
+    private function removeElementIfOverlapping(
         AbstractTimeEntityView $abstractTimeEntityView,
         array $abstractTimeEntityViews
-    ) {
-        foreach ($abstractTimeEntityViews as $abstractTimeEntity) {
+    ): array {
+        foreach ($abstractTimeEntityViews as $abstractTimeEntityKey => $abstractTimeEntity) {
             if ($this->doesFirstBeginAfterAndFinishBeforeSecond(
                     $abstractTimeEntityView,
                     $abstractTimeEntity
@@ -153,22 +131,20 @@ class AgendaCollisionManager
                     $abstractTimeEntity
                 )
             ) {
-                return array_search($abstractTimeEntity, $abstractTimeEntityViews);
+                $this->removeArrayElement($abstractTimeEntityKey, $abstractTimeEntityViews);
             }
         }
 
-        return false;
+        return $abstractTimeEntityViews;
     }
 
     /**
-     * @param bool|int $arrayKey
+     * @param int $arrayKey
      * @param AbstractTimeEntityView[] $array
      */
-    private function removeArrayElementIfNotNull($arrayKey, array $array)
+    private function removeArrayElement(int $arrayKey, array &$array)
     {
-        if ($arrayKey !== false) {
-            unset($array[$arrayKey]);
-        }
+        unset($array[$arrayKey]);
     }
 
     /**
