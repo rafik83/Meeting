@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event\PracticalInfo;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\UpdateHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {

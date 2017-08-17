@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Package\Product;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -23,7 +24,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
+class IncludedParticipantGuesserTest extends TestCase
 {
     /**
      * No plan selected

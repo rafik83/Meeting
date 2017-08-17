@@ -23,8 +23,9 @@ use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInter
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\TestCase;
 
-class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
+class ForgottenPasswordTokenHandlerTest extends TestCase
 {
     public function testHandle()
     {

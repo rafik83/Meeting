@@ -35,8 +35,9 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateSlotHandlerTest extends TestCase
 {
     /** @var \DateTimeInterface */
     private $dateTime;

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraft;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class PostBatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
+class PostBatchDraftHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\NewPassword;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
-class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
+class NewPasswordHandlerTest extends TestCase
 {
     public function testHandle()
     {

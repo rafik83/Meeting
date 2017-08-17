@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQuery;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class HappeningViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

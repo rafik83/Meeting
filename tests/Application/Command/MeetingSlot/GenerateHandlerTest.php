@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class GenerateHandlerTest extends \PHPUnit_Framework_TestCase
+class GenerateHandlerTest extends TestCase
 {
     public function testHandle()
     {

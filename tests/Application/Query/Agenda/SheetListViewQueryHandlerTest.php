@@ -32,8 +32,9 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SheetListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

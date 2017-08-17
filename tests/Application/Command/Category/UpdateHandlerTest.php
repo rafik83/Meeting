@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Category;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Category\Update;
 use Proximum\Vimeet\Application\Command\Category\UpdateHandler;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     /**
      * Category contains Types 1 and 2 and will be updated to contain Types 2 and 4

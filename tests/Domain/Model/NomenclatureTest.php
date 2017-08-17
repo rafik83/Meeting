@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Tests\Domain\Model;
 
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use PHPUnit\Framework\TestCase;
 
-class NomenclatureTest extends \PHPUnit_Framework_TestCase
+class NomenclatureTest extends TestCase
 {
     public function testGetLabel()
     {

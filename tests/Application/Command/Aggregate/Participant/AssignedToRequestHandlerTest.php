@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Aggregate\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\AssignedToRequest;
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\AssignedToRequestHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Request\ParticipantAssignedAggregator;
 
-class AssignedToRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class AssignedToRequestHandlerTest extends TestCase
 {
     public function testHandle()
     {

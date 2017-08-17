@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class BatchGenerateInvoiceHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchGenerateInvoiceHandlerTest extends TestCase
 {
     public function testHandle()
     {

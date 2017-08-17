@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event\Day;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Event\Day\Update;
 use Proximum\Vimeet\Application\Command\Event\Day\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     /**
      *  Add one day to the event

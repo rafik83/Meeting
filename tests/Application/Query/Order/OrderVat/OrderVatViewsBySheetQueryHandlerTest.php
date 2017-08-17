@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\OrderVat;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery;
@@ -19,7 +20,7 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class OrderVatViewsBySheetQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class OrderVatViewsBySheetQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

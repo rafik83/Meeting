@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {

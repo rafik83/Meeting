@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

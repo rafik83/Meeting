@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
 use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
@@ -27,7 +28,7 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveHandlerTest extends TestCase
 {
     public function testHandle()
     {

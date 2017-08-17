@@ -15,8 +15,9 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Order\Finder;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class FinderTest extends \PHPUnit_Framework_TestCase
+class FinderTest extends TestCase
 {
     public function testIsAllowedToFindFalseAsAdminIsPartner()
     {
