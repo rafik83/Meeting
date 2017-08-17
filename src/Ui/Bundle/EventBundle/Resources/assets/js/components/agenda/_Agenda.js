@@ -37,7 +37,7 @@ function Agenda(element) {
 
     this.planner.setMeets(this.meets);
 
-    if (moment(this.agendaDate, 'MM/DD/YY') === moment().format('MM/DD/YYYY')) {
+    if (moment(this.agendaDate, 'MM/DD/YY').format('MM/DD/YY') === moment().format('MM/DD/YY')) {
         [].forEach.call(this.slots, this.scrollOnSlot.bind(this));
     }
 
