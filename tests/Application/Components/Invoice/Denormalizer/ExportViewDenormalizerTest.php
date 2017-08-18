@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 use IntlDateFormatter;
 use Symfony\Component\Serializer\Serializer;
+use PHPUnit\Framework\TestCase;
 
-class ExportViewDenormalizerTest extends \PHPUnit_Framework_TestCase
+class ExportViewDenormalizerTest extends TestCase
 {
     public function testDenormalize()
     {

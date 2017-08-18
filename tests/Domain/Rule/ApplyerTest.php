@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Domain\Rule\Exception\NoRuleException;
+use PHPUnit\Framework\TestCase;
 
-class ApplyerTest extends \PHPUnit_Framework_TestCase
+class ApplyerTest extends TestCase
 {
     public function testApplyRuleForParticipantCardWithoutRules()
     {

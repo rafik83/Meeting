@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use PHPUnit\Framework\TestCase;
 
-class ReSendActivateAccountTokenHandlerTest extends \PHPUnit_Framework_TestCase
+class ReSendActivateAccountTokenHandlerTest extends TestCase
 {
     public function testHandle()
     {

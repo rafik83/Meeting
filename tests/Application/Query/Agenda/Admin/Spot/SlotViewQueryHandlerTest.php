@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Repository\SpotUnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
+use PHPUnit\Framework\TestCase;
 
-class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SlotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

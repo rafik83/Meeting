@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Tests\Application\Components\Spot;
 
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
+use PHPUnit\Framework\TestCase;
 
-class ReferenceFactoryTest extends \PHPUnit_Framework_TestCase
+class ReferenceFactoryTest extends TestCase
 {
     public static function provideRecipe()
     {

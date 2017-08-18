@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Group\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheetsHandler;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
@@ -27,7 +28,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
-class UpdateUsersSheetsHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateUsersSheetsHandlerTest extends TestCase
 {
     public function testUpdateUsersSheets()
     {

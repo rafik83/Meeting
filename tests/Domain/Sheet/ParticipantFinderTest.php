@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Sheet\ParticipantFinder;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantFinderTest extends \PHPUnit_Framework_TestCase
+class ParticipantFinderTest extends TestCase
 {
     public function testHasParticipantFalse()
     {

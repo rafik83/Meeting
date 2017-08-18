@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Domain\Payment;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DepositApplicableTest extends \PHPUnit_Framework_TestCase
+class DepositApplicableTest extends TestCase
 {
     public function testIsApplicableFalse()
     {

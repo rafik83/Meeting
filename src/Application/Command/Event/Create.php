@@ -57,5 +57,10 @@ class Create extends AbstractEvent
         $this->leftColor     = $event->getConfiguration()->getLeftColor();
         $this->rightColor    = $event->getConfiguration()->getRightColor();
         $this->textColor     = $event->getConfiguration()->getTextColor();
+        $this->organiserName = $event->getOrganiserName();
+        $this->emailTeam     = $event->getEmailTeam();
+        $this->invoicePrefix = $event->getInvoicePrefix();
+        $this->visible       = $event->isVisible();
+        $this->duplicatedFrom = $event;
     }
 }

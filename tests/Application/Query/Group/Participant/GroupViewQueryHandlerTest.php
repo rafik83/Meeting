@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -178,6 +178,7 @@ admin.event.trace.participant_imported: 'Participants importés le %at% par %by%
 admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
 admin.event.update.link: Modifier
 admin.event.update.title: 'Modifier l''évènement'
+admin.event.update.origin: 'Événement créé à partir de : '
 admin.event.vatMode.ati: TTC
 admin.event.vatMode.et: HT
 admin.events.link: 'Mes évènements'

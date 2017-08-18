@@ -56,7 +56,7 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
-        "phpunit/phpunit": "~5.0",
+        "phpunit/phpunit": "^6.0",
         "behat/symfony2-extension": "~2.1",
         "behat/mink": "~1.7.1",
         "behat/mink-extension": "~2.2",
@@ -70,7 +70,7 @@
         "behatch/contexts": "^2.5",
         "friends-of-behat/performance-extension": "^1.0",
         "friends-of-behat/context-service-extension": "^0.3.0",
-        "bruli/php-git-hooks": "^4.12",
+        "bruli/php-git-hooks": "^5.1",
         "phpspec/prophecy": "^1.7"
     },
     "scripts": {

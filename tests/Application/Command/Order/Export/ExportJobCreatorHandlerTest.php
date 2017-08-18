@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Order\Export\ExportJobCreator;
 use Proximum\Vimeet\Application\Command\Order\Export\ExportJobCreatorHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class ExportJobCreatorHandlerTest extends \PHPUnit_Framework_TestCase
+class ExportJobCreatorHandlerTest extends TestCase
 {
     public function testHandle()
     {
