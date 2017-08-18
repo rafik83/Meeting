@@ -117,7 +117,7 @@ class AgendaCollisionManager
      */
     private function removeElementIfOverlapping(
         AbstractTimeEntityView $abstractTimeEntityView,
-        array $abstractTimeEntityViews
+        array &$abstractTimeEntityViews
     ): array {
         foreach ($abstractTimeEntityViews as $abstractTimeEntityKey => $abstractTimeEntity) {
             if ($this->doesFirstBeginAfterAndFinishBeforeSecond(
