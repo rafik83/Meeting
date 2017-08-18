@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -97,6 +98,7 @@ class ValidateController extends Controller
     public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
         
         $userEventPhone = $this
             ->get('repository.user.user_event_phone_repository')
