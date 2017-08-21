@@ -80,6 +80,8 @@ class DayViewQueryHandler
      */
     public function handle(DayViewQuery $query): DayView
     {
+        $cancelAttendanceView = null;
+
         if ($query->currentSheet->attend()) {
             $this->handleHappenings($query);
             $this->handleUnavailabilities($query);
@@ -106,7 +108,7 @@ class DayViewQueryHandler
             $this->agendaCollisionManager->getUnavailabilityViews(),
             $this->agendaCollisionManager->getMassViews(),
             $this->agendaCollisionManager->getMeetingViews(),
-            $cancelAttendanceView ?? null
+            $cancelAttendanceView
         );
     }
 

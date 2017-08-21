@@ -50,23 +50,23 @@ class AgendaCollisionManager
         $this->massViews = $massViews;
 
         foreach ($this->unavailabilityViews as $unavailabilityView) {
-            $this->massViews = $this->removeElementIfOverlapping($unavailabilityView, $this->massViews);
+            $this->removeElementIfOverlapping($unavailabilityView, $this->massViews);
         }
 
         foreach ($this->massViews as $massView) {
             if ($massView->isBlocking) {
-                $this->massViews = $this->removeElementIfOverlapping($massView, $this->massViews);
+                $this->removeElementIfOverlapping($massView, $this->massViews);
             }
         }
 
         foreach ($this->happeningViews as $happeningView) {
-            $this->massViews = $this->removeElementIfOverlapping($happeningView, $this->massViews);
-            $this->unavailabilityViews = $this->removeElementIfOverlapping($happeningView, $this->unavailabilityViews);
+            $this->removeElementIfOverlapping($happeningView, $this->massViews);
+            $this->removeElementIfOverlapping($happeningView, $this->unavailabilityViews);
         }
 
         foreach ($this->meetingViews as $meetingView) {
-            $this->massViews = $this->removeElementIfOverlapping($meetingView, $this->massViews);
-            $this->unavailabilityViews = $this->removeElementIfOverlapping($meetingView, $this->unavailabilityViews);
+            $this->removeElementIfOverlapping($meetingView, $this->massViews);
+            $this->removeElementIfOverlapping($meetingView, $this->unavailabilityViews);
         }
 
         return [
@@ -112,13 +112,11 @@ class AgendaCollisionManager
     /**
      * @param AbstractTimeEntityView $abstractTimeEntityView
      * @param AbstractTimeEntityView[] $abstractTimeEntityViews
-     *
-     * @return AbstractTimeEntityView[]
      */
     private function removeElementIfOverlapping(
         AbstractTimeEntityView $abstractTimeEntityView,
         array &$abstractTimeEntityViews
-    ): array {
+    ) {
         foreach ($abstractTimeEntityViews as $abstractTimeEntityKey => $abstractTimeEntity) {
             if ($this->doesFirstBeginAfterAndFinishBeforeSecond(
                     $abstractTimeEntityView,
@@ -134,8 +132,6 @@ class AgendaCollisionManager
                 $this->removeArrayElement($abstractTimeEntityKey, $abstractTimeEntityViews);
             }
         }
-
-        return $abstractTimeEntityViews;
     }
 
     /**
