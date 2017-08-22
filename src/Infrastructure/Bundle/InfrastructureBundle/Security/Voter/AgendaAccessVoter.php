@@ -39,7 +39,7 @@ class AgendaAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return  $attribute === self::PERMISSION && $subject instanceof Event;
+        return $attribute === self::PERMISSION && $subject instanceof Event;
     }
 
     /**
