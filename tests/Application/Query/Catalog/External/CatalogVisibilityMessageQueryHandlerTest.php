@@ -43,7 +43,7 @@ class CatalogVisibilityMessageQueryHandlerTest extends TestCase
     {
         $expected = null;
         $catalogVisiblity = new CatalogVisibility($this->event, false);
-        
+
         $this->catalogVisibilityRepository
             ->getByEvent($this->event)
             ->shouldBeCalled()
