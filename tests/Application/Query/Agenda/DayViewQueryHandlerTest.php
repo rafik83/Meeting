@@ -285,6 +285,7 @@ class DayViewQueryHandlerTest extends TestCase
         $spot        = new Spot('ref', $event, 2, 3, 4, true);
         $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $event);
         $meetingView = new MeetingView(
+            1,
             'userSheetTitle',
             2,
             'title',

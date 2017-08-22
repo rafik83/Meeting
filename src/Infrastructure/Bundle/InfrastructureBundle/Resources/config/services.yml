@@ -300,6 +300,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Adapter\JobRepositoryAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.video_conference_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\VideoConferenceRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1660,6 +1664,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+            - '@command.meeting.admin.spot_reassign_handler'
             - '@adapter.entity_manager_adapter'
             - '@adapter.mailer_adapter'
             - '@adapter.local_file_storage'
@@ -1689,6 +1694,15 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
+
+    command.meeting.admin.spot_reassign_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassignHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@domain.meeting.visio_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign }
 
     command.meeting_request.admin.lock_meeting_request_update_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdateHandler
@@ -1896,6 +1910,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Remove\Remove }
 
+    command.video_conference.connect_session_handler:
+        class: Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@repository.video_conference_repository'
+            - '%feature_video_conference_enabled%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestAccess }
+
     #
     # Post Batch Action
     #
@@ -2049,6 +2072,13 @@ services:
             - '@security.impersonate'
             - '@adapter.event_url_generator'
             - '@router'
+
+    adapter.video_conference_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter
+        arguments:
+            - '%tokbox_api_key%'
+            - '%tokbox_api_secret%'
+            - '%feature_video_conference_date_security_enabled%'
 
     #
     # Components
@@ -2222,6 +2252,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
     components.security.admin_sheet_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
+    components.security.video_meeting_access:
+        class: Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess
+        arguments:
+          - '@datetime'
+          - '%feature_video_conference_date_security_enabled%'
+          - '%feature_video_conference_enabled%'
 
     #
     # Guideline Component
@@ -3211,6 +3247,7 @@ services:
         arguments:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
             - '@repository.rule_repository'
+            - '@components.security.video_meeting_access'
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
         arguments:
@@ -3632,6 +3669,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery }
+
     query.meeting.message.message_meeting_request_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\Message\MessageMeetingRequestViewQueryHandler
     query.meeting.message.discussion_meeting_request_view_query_handler:
@@ -3994,6 +4032,14 @@ services:
     command_user.update_smsblack_list_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\User\UpdateSMSBlackListCommand
         arguments:
+            - '@tactician.commandbus'
+        tags:
+            - { name: console.command }
+
+    command_analytic_meeting_solution.generate_meeting_solution_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
             - '@tactician.commandbus'
         tags:
             - { name: console.command }

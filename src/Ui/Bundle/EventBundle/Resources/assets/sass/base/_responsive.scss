@@ -25,8 +25,13 @@
   .header__info { display: none; }
 }
 
+// mobile
+@media screen and (max-width: 750px) {
+  .container-fluid { bottom: 80px; }
+}
+
 @media screen and (max-width: 435px) {
-  .wrapper { padding: 0 0 80px 0; }
+  .wrapper { padding: 0 0 40px 0; }
 
   .header {
     &.hide-on-mobile {
@@ -54,7 +59,7 @@
     left: 0;
     right: 0;
     z-index: 10;
-    box-shadow: 0px 5px 5px 8px rgba(0,0,0,.3);
+    box-shadow: 0 5px 5px 8px rgba(0,0,0,.3);
 
     .name { display: none; }
     .btn-lg { padding-left: 39px; }

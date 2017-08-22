@@ -2,42 +2,42 @@
 
 {% block title 'program.title'|trans %}
 
+{% block full_mobile_container 'full-mobile-container' %}
+
 {% block content %}
     {% if tipTranslationViews is defined %}
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
     {% endif %}
-    <div class="agenda-container">
-        <div class="row">
-            {% for day in program.days %}
-            <div class="col-md-{{ program.colSize }} agenda" data-beginHour="{{ day.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ day.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.scale }}">
-                <header class="agenda-head">
-                    <p>
-                        {% if not program.hasCategory %}
-                            <i class="icon icon-Conference"></i>
-                            <strong>
-                                {{ 'program.title'|trans }}
-                            </strong>
-                        {% else %}
-                            <i class="icon icon-{{ program.categoryPicto }}"></i>
-                            <strong>
-                                {{ program.categoryTitle }}
-                            </strong>
-                        {% endif %}
-                        <span>- {{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}</span>
-                    </p>
-                </header>
-                <div class="meets">
-                    {% for happening in day.happenings %}
-                        {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': happening, 'isUserAloneParticipant': isUserAloneParticipant }) }}
-                    {% endfor %}
-                    {% for mass in day.masses %}
-                        {{ include('EventBundle:Program:mass.html.twig', { 'mass': mass }) }}
-                    {% endfor %}
+    <div class="program-container">
+        {% for day in program.days %}
+            <div class="row">
+                <div class="col-md-12 program">
+                    <header class="program-head text-center">
+                        <p>
+                            <strong>{{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}</strong>
+                            <span>-
+                                {% if not program.hasCategory %}
+                                    <i class="icon icon-Conference"></i>
+                                    {{ 'program.title'|trans }}
+                                {% else %}
+                                    <i class="icon icon-{{ program.categoryPicto }}"></i>
+                                    {{ program.categoryTitle }}
+                                {% endif %}
+                            </span>
+                        </p>
+                    </header>
+                    <div class="meets">
+                        {% for programElementView in day.programElementViews %}
+                            {% if programElementView.isHappeningView %}
+                                {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': programElementView, 'isUserAloneParticipant': isUserAloneParticipant }) }}
+                            {% elseif programElementView.isMassUnavailabilityView %}
+                                {{ include('EventBundle:Program:mass.html.twig', { 'mass': programElementView, 'withHourPrefix': true }) }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="layout"></div>
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 
     {{ include('EventBundle:Program/Partials:modal.html.twig', {}, false) }}

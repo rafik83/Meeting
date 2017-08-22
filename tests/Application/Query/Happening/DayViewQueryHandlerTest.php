@@ -118,8 +118,13 @@ class DayViewQueryHandlerTest extends TestCase
             [
                 $happeningView1,
                 $happeningView2,
+
             ],
-            [$massView]
+            [
+                $massView,
+                $happeningView1,
+                $happeningView2,
+            ]
         );
 
         // Mock
@@ -147,7 +152,10 @@ class DayViewQueryHandlerTest extends TestCase
         )->shouldBeCalled()->willReturn($happeningView2);
 
         $massHandler = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $massHandler
+            ->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))
+            ->shouldBeCalled()
+            ->willReturn($massView);
 
 
         $handler = new DayViewQueryHandler(

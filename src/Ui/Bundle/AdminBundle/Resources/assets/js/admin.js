@@ -15,7 +15,8 @@ var $                       = require('jquery'),
     DateTimePicker          = require('./components/_DateTimePicker'),
     MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
     ParticipantVisio        = require('./components/_ParticipantVisio'),
-    TipPreview              = require('./components/_TipPreview');
+    TipPreview              = require('./components/_TipPreview'),
+    ToggleVisibility        = require('./components/_ToggleVisibility');
 
 require('elao-form.js');
 require('select2');
@@ -166,6 +167,10 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-preview-tip]'), function (element) {
         new TipPreview(element, target.querySelector('#tip_preview'), target.querySelector('#tip_pages'));
     });
+
+    [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
+        new ToggleVisibility(element, target);
+    })
 }
 
 // Call init function when element is added to DOM

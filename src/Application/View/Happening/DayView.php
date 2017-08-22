@@ -12,50 +12,40 @@ namespace Proximum\Vimeet\Application\View\Happening;
 
 class DayView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $scale;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $startTime;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $endTime;
 
-    /**
-     * @var array|HappeningView[]
-     */
+    /** @var ProgramElementViewInterface[] */
+    public $programElementViews;
+
+    /** @var HappeningView[] */
     public $happenings;
 
     /**
-     * @var MassUnavailabilityView[]
-     */
-    public $masses;
-
-    /**
-     * @param \DateTimeInterface       $startTime
-     * @param \DateTimeInterface       $endTime
-     * @param int                      $scale
-     * @param HappeningView[]          $happeningViews
-     * @param MassUnavailabilityView[] $massViews
+     * @param \DateTimeInterface $startTime
+     * @param \DateTimeInterface $endTime
+     * @param int                $scale
+     * @param HappeningView[]    $happeningView
+     * @param ProgramElementViewInterface[] $programElementViews
      */
     public function __construct(
         \DateTimeInterface $startTime,
         \DateTimeInterface $endTime,
         $scale,
-        array $happeningViews = [],
-        array $massViews = []
+        array $happeningView,
+        array $programElementViews = []
     ) {
         $this->startTime  = $startTime;
         $this->endTime    = $endTime;
         $this->scale      = $scale;
-        $this->happenings = $happeningViews;
-        $this->masses     = $massViews;
+        $this->happenings = $happeningView;
+        $this->programElementViews = $programElementViews;
     }
 
     /**

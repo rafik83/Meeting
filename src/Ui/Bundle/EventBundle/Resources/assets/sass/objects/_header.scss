@@ -99,7 +99,6 @@
 }
 
 .sub-header {
-  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -226,6 +225,73 @@
 
   .navigation__item {
     margin: 30px 0 10px;
+  }
+}
+
+.sub-header-desktop {
+  position: relative;
+}
+
+// Size of button in small width mobile screen
+@media screen and (max-width: 354px){
+  .sub-header-mobile {
+    .sub-header__item {
+      a {
+        height: 45px;
+        width: 45px;
+      }
+    }
+  }
+}
+
+// Size of button in medium width mobile screen
+@media screen and (min-width: 355px) {
+  .sub-header-mobile {
+    .sub-header__item {
+      a {
+        height: 50px;
+        width: 50px;
+      }
+    }
+  }
+}
+
+.sub-header-mobile {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 9999;
+  padding: 10px;
+  #navigation {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 5px;
+    bottom: 0;
+    color: white;
+    background: none;
+    border: none;
+    > i {
+      font-size: 30px;
+    }
+  }
+  .sub-header__item {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    a {
+      display: inline-block;
+      position: relative;
+      border-radius: 25px;
+      > span {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        font-size: 25px;
+      }
+    }
   }
 }
 
