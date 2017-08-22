@@ -87,7 +87,7 @@ Agenda.prototype.scrollOnSlot = function(slot) {
     if (this.agendaDate === slot.dateAgenda
         && currentTime >= slot.time
         && currentTime <= (slot.time + slot.duration)
-        && slot.element.id === this.agendaDate + '-' + slot.time
+        && slot.element.id ===  'm' + this.agendaDate + '-' + slot.time
     ) {
         window.location.hash = slot.element.id;
 

@@ -74,7 +74,7 @@ Slot.prototype.createElement = function(time, agendaDate) {
 
     label.innerText   = this.format(time);
     element.className = 'insert';
-    element.id =  agendaDate + '-' + time;
+    element.id =  'm' + agendaDate + '-' + time;
     element.appendChild(label);
 
     return element;
