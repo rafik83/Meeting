@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
