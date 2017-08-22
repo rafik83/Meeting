@@ -65,7 +65,9 @@ class AgendaSubmenuViewQueryHandler
                 Category::AGENDA_ICON,
                 'agenda.title',
                 $this->navigationBuilder->getRoute('event_agenda', ['sheet' => $query->sheet->getId()]),
-                Route::isAgenda($query->route)
+                Route::isAgenda($query->route),
+                false,
+                true
             );
         }
 
@@ -74,7 +76,9 @@ class AgendaSubmenuViewQueryHandler
                 Category::PLANNING_ICON,
                 'program.title',
                 $this->navigationBuilder->getRoute('happening_program', ['sheet' => $query->sheet->getId()]),
-                Route::isProgram($query->route)
+                Route::isProgram($query->route),
+                false,
+                true
             );
         }
 

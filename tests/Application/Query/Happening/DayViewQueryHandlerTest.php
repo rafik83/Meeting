@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use PHPUnit\Framework\TestCase;
 
-class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DayViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

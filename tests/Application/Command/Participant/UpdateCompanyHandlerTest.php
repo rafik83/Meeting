@@ -27,8 +27,9 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateCompanyHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -36,8 +36,9 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class AgendaViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

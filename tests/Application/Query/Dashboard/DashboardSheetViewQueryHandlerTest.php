@@ -15,8 +15,9 @@ use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetView;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DashboardSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DashboardSheetViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

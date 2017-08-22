@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisioHandler;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateVisioHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateVisioHandlerTest extends TestCase
 {
     public function testHandle()
     {

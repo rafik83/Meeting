@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfigureType extends AbstractType
@@ -33,16 +34,21 @@ class ConfigureType extends AbstractType
     {
         $builder
             ->add('externalCatalogEnabled', CheckboxType::class, ['required' => false])
+            ->add('hasMessage', CheckboxType::class, ['required' => false])
+            ->add('messageTranslations', CollectionType::class, [
+                'entry_type' => CatalogVisibilityTranslationType::class,
+                'label'      => true,
+            ])
             ->add('types', TypeChoiceType::class, [
-                'event' => $options['event'],
-                'locale' => $options['locale'],
-                'user' => $options['user'],
+                'event'    => $options['event'],
+                'locale'   => $options['locale'],
+                'user'     => $options['user'],
                 'expanded' => true,
                 'multiple' => true,
             ])
             ->add('categories', CategoryChoiceType::class, [
-                'event' => $options['event'],
-                'locale' => $options['locale'],
+                'event'    => $options['event'],
+                'locale'   => $options['locale'],
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -50,9 +56,9 @@ class ConfigureType extends AbstractType
                 'entry_type'    => SearchFacetType::class,
                 'entry_options' => [
                     'required' => false,
-                    'help' => true
+                    'help'     => true,
                 ],
-                'label' => false,
+                'label'         => false,
             ])
             ->add('submit', SubmitType::class);
     }
@@ -83,6 +89,10 @@ class ConfigureType extends AbstractType
         foreach ($view['searchFacets']->children as $key => $childView) {
             $childView->vars['label'] = str_replace('prototype', $options['types'][$key], $childView->vars['label']);
             $childView->vars['help']  = str_replace('prototype', $options['types'][$key], $childView->vars['help']);
+        }
+
+        foreach ($view->children['messageTranslations'] as $translation) {
+            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
         }
     }
 }

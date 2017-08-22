@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\User;
 
-use PHPUnit_Framework_TestCase;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -20,8 +19,9 @@ use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class UserDetailsViewQueryHandlerTest extends PHPUnit_Framework_TestCase
+class UserDetailsViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

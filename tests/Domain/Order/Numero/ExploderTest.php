@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Domain\Order\Numero;
 use Proximum\Vimeet\Domain\Exception\Order\Numero\CanNotExplodeNotValidNumeroOrderException;
 use Proximum\Vimeet\Domain\Order\Numero\Exploder;
 use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
+use PHPUnit\Framework\TestCase;
 
-class ExploderTest extends \PHPUnit_Framework_TestCase
+class ExploderTest extends TestCase
 {
     /**
      * @throws CanNotExplodeNotValidNumeroOrderException

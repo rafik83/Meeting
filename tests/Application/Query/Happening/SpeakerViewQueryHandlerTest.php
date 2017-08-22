@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 use Proximum\Vimeet\Application\View\Happening\HappeningSpeakerView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SpeakerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SpeakerViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -18,8 +18,9 @@ use Proximum\Vimeet\Application\View\User\UserView;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class UserImpersonateViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class UserImpersonateViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

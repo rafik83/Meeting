@@ -14,4 +14,5 @@ final class Route
 {
     const EVENT = 'event';
     const DEFAULT_EVENT = 'default_event';
+    const LOGIN = 'event_login';
 }

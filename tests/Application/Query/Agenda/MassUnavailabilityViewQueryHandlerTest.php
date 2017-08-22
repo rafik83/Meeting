@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MassUnavailabilityViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

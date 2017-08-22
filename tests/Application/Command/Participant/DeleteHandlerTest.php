@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\Delete;
 use Proximum\Vimeet\Application\Command\Participant\DeleteHandler;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantManager;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
+class DeleteHandlerTest extends TestCase
 {
     public function testHandle()
     {
