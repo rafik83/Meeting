@@ -10,6 +10,7 @@
 
 namespace Application\Query\Sheet\Group\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQueryHandler;
@@ -27,7 +28,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class GroupListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class GroupListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

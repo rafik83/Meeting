@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class UnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class UnavailabilityViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

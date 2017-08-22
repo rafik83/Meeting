@@ -10,6 +10,7 @@
 
 namespace Application\Query\Agenda\Admin\Indicator;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Indicator\SheetIndicatorsView;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class SheetIndicatorsViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SheetIndicatorsViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

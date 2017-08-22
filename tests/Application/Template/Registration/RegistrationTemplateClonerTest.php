@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class RegistrationTemplateClonerTest extends \PHPUnit_Framework_TestCase
+class RegistrationTemplateClonerTest extends TestCase
 {
     public function testDuplicate()
     {

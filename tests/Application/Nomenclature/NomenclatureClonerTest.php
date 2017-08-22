@@ -14,8 +14,9 @@ use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class NomenclatureClonerTest extends \PHPUnit_Framework_TestCase
+class NomenclatureClonerTest extends TestCase
 {
     public function testDuplicate()
     {

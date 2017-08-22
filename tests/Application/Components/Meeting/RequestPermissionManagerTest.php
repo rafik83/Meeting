@@ -25,8 +25,9 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
+use PHPUnit\Framework\TestCase;
 
-class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
+class RequestPermissionManagerTest extends TestCase
 {
     /** @varObjectProphecy */
     public $meetingPublishedAccessChecker;

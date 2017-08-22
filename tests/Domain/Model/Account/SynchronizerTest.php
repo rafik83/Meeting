@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use PHPUnit\Framework\TestCase;
 
-class SynchronizerTest extends \PHPUnit_Framework_TestCase
+class SynchronizerTest extends TestCase
 {
     public function testGet()
     {

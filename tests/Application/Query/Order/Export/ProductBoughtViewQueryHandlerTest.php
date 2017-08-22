@@ -14,8 +14,9 @@ use Proximum\Vimeet\Application\Query\Order\Export\ProductBoughtViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\ProductBoughtViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\ProductBoughtView;
 use Proximum\Vimeet\Domain\Model\Order\Row;
+use PHPUnit\Framework\TestCase;
 
-class ProductBoughtViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductBoughtViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

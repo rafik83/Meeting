@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class MeetingParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingParticipantViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantInfoViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantInfoViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
@@ -28,7 +29,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class ImportMappingHandlerTest extends \PHPUnit_Framework_TestCase
+class ImportMappingHandlerTest extends TestCase
 {
     public function testHandle()
     {

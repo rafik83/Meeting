@@ -28,8 +28,9 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateProfileHandlerTest extends TestCase
 {
     public function testHandle()
     {

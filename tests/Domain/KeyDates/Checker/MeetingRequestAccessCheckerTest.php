@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Tests\Domain\KeyDates\Checker;
 
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class MeetingRequestAccessCheckerTest extends \PHPUnit_Framework_TestCase
+class MeetingRequestAccessCheckerTest extends TestCase
 {
     public function testAllowedToAccessTrueAsDateIsNull()
     {

@@ -8,8 +8,9 @@ use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SlotViewsQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SlotViewsQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

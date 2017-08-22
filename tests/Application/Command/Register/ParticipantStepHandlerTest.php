@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Register;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler;
@@ -33,7 +34,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ParticipantStepHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantStepHandlerTest extends TestCase
 {
     public function testHandle()
     {

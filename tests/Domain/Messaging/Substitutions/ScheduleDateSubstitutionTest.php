@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\ScheduleDateSubstitution;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class ScheduleDateSubstitutionTest extends \PHPUnit_Framework_TestCase
+class ScheduleDateSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

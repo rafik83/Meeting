@@ -20,6 +20,8 @@
     {% endif %}
 
     <hr>
+    {{ form_row(form.hasMessage) }}
+    {{ form_row(form.messageTranslations) }}
     {{ form_row(form.types) }}
     {{ form_row(form.categories) }}
     {% include 'AdminBundle:SearchFacet:search_facets.html.twig' with {form: form} %}

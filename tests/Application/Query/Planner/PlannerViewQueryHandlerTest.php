@@ -39,8 +39,9 @@ use Proximum\Vimeet\Application\View\Planner\TypePriorityView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\Event;
+use PHPUnit\Framework\TestCase;
 
-class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlannerViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

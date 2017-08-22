@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Query\Catalog\PositionViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class PositionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PositionViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

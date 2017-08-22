@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateAvatar;
 use Proximum\Vimeet\Application\Command\Participant\UpdateAvatarHandler;
@@ -28,7 +29,7 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateAvatarHandlerTest extends TestCase
 {
     public function testHandle()
     {

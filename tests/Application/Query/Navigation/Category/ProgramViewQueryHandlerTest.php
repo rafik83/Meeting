@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ProgramViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

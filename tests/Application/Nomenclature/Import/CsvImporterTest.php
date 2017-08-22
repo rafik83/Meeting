@@ -962,7 +962,7 @@ class CsvImporterTest extends TestCase
         $event->getLocales()->willReturn(['fr', 'en']);
 
         $intl = $this->prophesize(IntlInterface::class);
-        $intl->getLocales()->willReturn(['en', 'fr']);
+        $intl->getLocales()->shouldBeCalled()->willReturn(['en', 'fr']);
 
         $importer = new CsvImporter($generator, $intl->reveal());
         $importer->import(new Nomenclature('Nomenclature title', 3), __DIR__.'/competences.csv', Charset::UTF_8);
