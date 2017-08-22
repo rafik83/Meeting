@@ -39,7 +39,7 @@ class CatalogVisibilityMessageQueryHandler
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($query->event);
 
-        if ($catalogVisibility === null) {
+        if ($catalogVisibility === null || $catalogVisibility->hasMessage() === false) {
             return null;
         }
 
