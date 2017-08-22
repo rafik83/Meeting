@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
+class SelectPlanHandlerTest extends TestCase
 {
     public function testHandle()
     {

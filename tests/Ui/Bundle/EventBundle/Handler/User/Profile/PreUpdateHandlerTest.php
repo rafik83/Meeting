@@ -10,12 +10,8 @@
 
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Handler\User\Profile;
 
-use League\Tactician\CommandBus;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\Security\ValidateMobileProcessAccessChecker;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -49,17 +45,11 @@ class PreUpdateHandlerTest extends TestCase
         $templateData->addChild(1, '811f6edf', $block);
 
         // Mock
-        $commandBus             = $this->prophesize(CommandBus::class);
-        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $validateMobileProcessAccessChecker = $this->prophesize(ValidateMobileProcessAccessChecker::class);
+        $participantInfoGuesser             = $this->prophesize(ParticipantInfoGuesser::class);
 
-        $commandBus->handle(
-            new TipTranslationViewByUserQuery(
-                $event,
-                $user,
-                TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
-                $locale
-            )
-        )->shouldBeCalled()->willReturn([Argument::type(TipTranslationView::class)]);
+        $validateMobileProcessAccessChecker->allowToAccess($event, $user, $locale)
+            ->shouldBeCalled()->willReturn(true);
 
         $participantInfoGuesser
             ->guessParticipantMobile($participant, $locale)
@@ -69,7 +59,7 @@ class PreUpdateHandlerTest extends TestCase
         $query = new PreUpdate($user, $participant, $event, $data, $templateData, $locale);
 
         $handler = new PreUpdateHandler(
-            $commandBus->reveal(),
+            $validateMobileProcessAccessChecker->reveal(),
             $participantInfoGuesser->reveal()
         );
 

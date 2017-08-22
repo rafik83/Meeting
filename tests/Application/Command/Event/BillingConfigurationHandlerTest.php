@@ -10,6 +10,7 @@
 
 namespace Application\Command\Event;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
+class BillingConfigurationHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -19,8 +19,9 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 use SendGrid\Mail;
 use SendGrid\Response;
+use PHPUnit\Framework\TestCase;
 
-class SendGridApiAdapterTest extends \PHPUnit_Framework_TestCase
+class SendGridApiAdapterTest extends TestCase
 {
     public function testSend()
     {

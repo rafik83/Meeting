@@ -14,8 +14,9 @@ use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class HappeningViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

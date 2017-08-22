@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotUnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class BatchUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchUnavailabilityHandlerTest extends TestCase
 {
     public function testHandle()
     {

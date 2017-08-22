@@ -18,8 +18,9 @@ use Proximum\Vimeet\Application\Command\Spot\CreateHandler;
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class BatchCreateHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchCreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

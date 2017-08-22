@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
+use PHPUnit\Framework\TestCase;
 
-class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class AbstractCommandHandlerTest extends TestCase
 {
     public function testNonUniqueCodeException()
     {

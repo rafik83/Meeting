@@ -21,8 +21,9 @@ use Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class AffectHandlerTest extends \PHPUnit_Framework_TestCase
+class AffectHandlerTest extends TestCase
 {
     /** @var AffectHandler */
     private $handler;

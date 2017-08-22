@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher;
+use PHPUnit\Framework\TestCase;
 
-class TimeSlotDispatcherTest extends \PHPUnit_Framework_TestCase
+class TimeSlotDispatcherTest extends TestCase
 {
     public function testDispatchNotEnabledThrowingUnableToDispatchException()
     {

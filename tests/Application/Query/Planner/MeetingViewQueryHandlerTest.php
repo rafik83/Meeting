@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planner\MeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planner\Day;
@@ -28,7 +29,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

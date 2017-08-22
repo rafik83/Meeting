@@ -45,7 +45,9 @@ class SheetSubmenuViewQueryHandler
             Category::SHEET_ICON,
             'sheet.title',
             $this->navigationBuilder->getRoute('event_sheet_default', ['sheet' => $query->sheet->getId()]),
-            Route::isSheet($query->route)
+            Route::isSheet($query->route),
+            false,
+            true
         );
 
         return $buttonViews;
