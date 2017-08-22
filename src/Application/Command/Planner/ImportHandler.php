@@ -161,6 +161,8 @@ class ImportHandler
 
         $this->jobQueue->aggregateParticipantAssignedToRequest($import->event);
         $this->jobQueue->aggregateEventUsersFullUnavailability($import->event, true);
+
+        $this->generateMeetingSolutionAnalytic($import->event);
     }
 
     /**
@@ -310,5 +312,13 @@ class ImportHandler
             $command->emailToNotify,
             $command->locale
         ));
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function generateMeetingSolutionAnalytic(Event $event)
+    {
+        $this->jobQueue->generateMeetingSolutionAnalytic($event);
     }
 }

@@ -1,0 +1,41 @@
+services:
+    query.analytic.meeting_solution.spot.spot_satisfaction_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot\SpotSatisfactionViewQueryHandler
+
+    query.analytic.meeting_solution.spot.spot_satisfaction_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot\SpotSatisfactionListQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@query.analytic.meeting_solution.spot.spot_satisfaction_view_query_handler'
+
+    query.analytic.meeting_solution.sheet.sheet_satisfaction_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionViewQueryHandler
+
+    query.analytic.meeting_solution.sheet.sheet_satisfaction_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionListQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@query.analytic.meeting_solution.sheet.sheet_satisfaction_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionListQuery }
+
+    query.analytic.meeting_solution.spot_filling_rate.spot_filling_rate_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\SpotFillingRate\SpotFillingRateQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+
+    query.analytic.meeting_solution.meeting_solution_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQueryHandler
+        arguments:
+            - '@repository.analytic.meeting_solution_repository'
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQuery }
+
+    query.analytic.meeting_solution.filling_rate_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\FillingRateQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'

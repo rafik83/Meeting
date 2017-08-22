@@ -90,6 +90,13 @@ interface RequestRepositoryInterface
     public function countAllByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countApprovedByEvent(Event $event): int;
+
+    /**
      * @param Event  $event
      * @param int    $page
      * @param int    $limit
@@ -234,6 +241,14 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Event $event
+     * @param array $sheets
+     *
+     * @return array of ['countRequest' => int, 'sheetId' => int]
+     */
+    public function countApprovedRequestBySheets(Event $event, array $sheets): array;
 
     /**
      * @param Sheet $sheet
