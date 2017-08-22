@@ -67,33 +67,6 @@ class ProgramView
     }
 
     /**
-     * @return int
-     */
-    public function getNumberOfDays()
-    {
-        return count($this->days);
-    }
-
-    /**
-     * In case of one day, take the fullscreen size
-     * If more, display 2 column size by size
-     *
-     * @return int
-     */
-    public function getColSize()
-    {
-        return $this->getNumberOfDays() === 1 ? 12 : 6;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasOnlyOneDay()
-    {
-        return $this->getNumberOfDays() === 1;
-    }
-
-    /**
      * @return DayView|null
      */
     public function getFirstDay()

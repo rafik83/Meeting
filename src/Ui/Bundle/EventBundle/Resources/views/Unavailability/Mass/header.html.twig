@@ -1,4 +1,7 @@
 <header style="background: linear-gradient(to right, {{ mass.leftColor }} 0%, {{ mass.rightColor }} 100%) !important;">
+    {% if withHourPrefix is defined and withHourPrefix == true %}
+        <div class="hour">{{ mass.begin|date('H:i', mass.timeZone) }} {{ mass.end|date('H:i', mass.timeZone) }}</div>
+    {% endif %}
     <a class="content" href="#{{ mass.title|url_encode }}">
         <span class="prefix"><i class="icon icon-{{ mass.picto }}"></i></span>
         <p class="title">

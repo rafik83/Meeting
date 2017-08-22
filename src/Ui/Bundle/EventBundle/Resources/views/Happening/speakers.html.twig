@@ -1,10 +1,19 @@
+<div class="row visible-xs">
+    <div class="col-md-12">
+        <p>
+            {% if suffixTitleWithTick is defined and suffixTitleWithTick == true %}
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide' }}"></i>
+            {% endif %}
+        </p>
+    </div>
+</div>
 <div class="row">
     {% for speaker in happening.speakers %}
-        <div class="col-md-4 text-center">
-            {% if speaker.hasCompanyPicture %}
+        {% if speaker.hasCompanyPicture %}
+            <div class="col-md-4 text-center">
                 <img src="{{ speaker.companyPicture|imagine_filter('program_company_logo') }}"/>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="col-md-8">
             <div class="list list--users">
                 <div class="user clearfix">
