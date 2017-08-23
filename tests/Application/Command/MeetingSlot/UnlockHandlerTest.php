@@ -15,8 +15,9 @@ use Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UnlockHandlerTest extends \PHPUnit_Framework_TestCase
+class UnlockHandlerTest extends TestCase
 {
     public function testHandle()
     {

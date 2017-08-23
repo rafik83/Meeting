@@ -15,8 +15,9 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class RuleSorterTest extends \PHPUnit_Framework_TestCase
+class RuleSorterTest extends TestCase
 {
     public static function provideRules()
     {

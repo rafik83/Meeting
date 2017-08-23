@@ -21,7 +21,9 @@ var $                     = require('jquery'),
     Happening             = require('./components/_Happening'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType   = require('./components/MeetingRequest/_FilterByType'),
-    CatalogPagination     = require('./components/_CatalogPagination');
+    CatalogPagination     = require('./components/_CatalogPagination'),
+    VideoConference       = require('./components/VideoConference/VideoConference')
+;
 
 require('bootstrap');
 require('elao-form.js');
@@ -193,6 +195,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-page]'), function (element) {
         new CatalogPagination(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.has-details.meet[data-isVisio]'), function (element) {
+        new VideoConference(element);
     });
 }
 

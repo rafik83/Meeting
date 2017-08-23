@@ -23,8 +23,9 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class BalanceTest extends \PHPUnit_Framework_TestCase
+class BalanceTest extends TestCase
 {
     /** @var Event */
     private $event;

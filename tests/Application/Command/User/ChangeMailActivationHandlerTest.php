@@ -17,8 +17,9 @@ use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class ChangeMailActivationHandlerTest extends \PHPUnit_Framework_TestCase
+class ChangeMailActivationHandlerTest extends TestCase
 {
     public function testHandle()
     {

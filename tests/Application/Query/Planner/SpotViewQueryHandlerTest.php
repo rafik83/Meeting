@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
+use PHPUnit\Framework\TestCase;
 
-class SpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SpotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

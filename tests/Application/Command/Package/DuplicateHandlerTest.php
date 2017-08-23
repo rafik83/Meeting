@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Command\Package\DuplicateHandler;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
+class DuplicateHandlerTest extends TestCase
 {
     public function testHandle()
     {

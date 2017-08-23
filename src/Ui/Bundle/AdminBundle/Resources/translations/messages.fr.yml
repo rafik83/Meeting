@@ -377,6 +377,7 @@ admin.messaging.message.compose.links.orders: 'Liste des commandes'
 admin.messaging.message.compose.links.package: Forfait
 admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
+admin.messaging.message.compose.links.validateMobilePhone: 'Confirmer votre téléphone'
 admin.messaging.message.compose.tags.cta.agendaConfirmation: 'Lien CTA confirmation agenda'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
@@ -506,6 +507,22 @@ admin.plan.name: Nom
 admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
+admin.planner.analytics.slotFillingRate.graph.legend: 'Taux de remplissage des mutualisés par créneau en %'
+admin.planner.analytics.spot.title: Lieux
+admin.planner.analytics.spot.table.column.reference: 'Référence'
+admin.planner.analytics.spot.table.column.satisfaction: Satisfaction
+admin.planner.analytics.spot.table.column.shared: 'Mutualisé'
+admin.planner.analytics.spot.table.column.visio: 'Visio'
+admin.planner.analytics.sheet.table.column.satisfaction: Satisfaction
+admin.planner.analytics.sheet.title: Fiches
+admin.planner.analytics.sheet.table.column.sheet: Fiche
+admin.planner.analytics.sheet.table.column.type: Type
+admin.planner.analytics.table.column.date: Date
+admin.planner.analytics.table.column.details: 'Détails'
+admin.planner.analytics.table.column.fillingRate: 'Taux remplissage mutualisé'
+admin.planner.analytics.table.column.meetings: Nombre de RDVs
+admin.planner.analytics.table.column.requests: Nombre de demandes
+admin.planner.analytics.table.column.ratio: Ratio RDVs/Demandes
 admin.planner.export: Exporter
 admin.planner.export.heading: admin.planner.export.heading
 admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'

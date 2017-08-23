@@ -213,6 +213,15 @@
   }
 }
 
+.video-container {
+  .publisher {
+    float: left;
+    margin-left: 10px;
+  }
+  .subscriber {
+    float: left;
+  }
+}
 
 @media (max-width: 640px) {
   .agenda-container {

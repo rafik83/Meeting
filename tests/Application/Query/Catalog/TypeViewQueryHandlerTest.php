@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class TypeViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TypeViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

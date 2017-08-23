@@ -15,8 +15,9 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class RequestTransformableTest extends \PHPUnit_Framework_TestCase
+class RequestTransformableTest extends TestCase
 {
     public function testOneToOneWithNoPreference()
     {

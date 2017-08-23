@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class RemoveDataHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveDataHandlerTest extends TestCase
 {
     public function testHandle()
     {

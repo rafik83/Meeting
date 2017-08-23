@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Rule\SeeWhat;
 use Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler;
 use Proximum\Vimeet\Domain\Model\Rule;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SeeWhatHandlerTest extends \PHPUnit_Framework_TestCase
+class SeeWhatHandlerTest extends TestCase
 {
     /**
      * Change the seeWhat of the rule

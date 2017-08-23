@@ -10,6 +10,7 @@
 
 namespace Application\Command\Sheet\Group\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
 use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUserHandler;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\View\Group\UserView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class SearchUserQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SearchUserQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

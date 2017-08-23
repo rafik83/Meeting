@@ -23,8 +23,9 @@ use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class OrdersToInvoiceTest extends \PHPUnit_Framework_TestCase
+class OrdersToInvoiceTest extends TestCase
 {
     public function testGetInvoiceViewForSheet()
     {

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class CreateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateTransactionHandlerTest extends TestCase
 {
     public function testCreatePaidTransactionHandle()
     {
