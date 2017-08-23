@@ -98,6 +98,6 @@ class PackageViewQueryHandler
             }
         }
 
-        return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView);
+        return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView, false);
     }
 }

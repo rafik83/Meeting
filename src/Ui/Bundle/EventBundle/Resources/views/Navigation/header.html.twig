@@ -1,6 +1,7 @@
 {{ include('EventBundle:Navigation/Partial:event.html.twig') }}
 
 {% if menuView is not null or submenuView is not null %}
+    {# Desktop menu and submenu #}
     <div class="sub-header sub-header-desktop hidden-xs">
         {% if menuView is not null %}
             <ul class="sub-header__item">
@@ -16,18 +17,11 @@
             {{ include('EventBundle:Navigation/Partial:submenu.html.twig') }}
         {% endif %}
     </div>
-    <div class="sub-header sub-header-mobile visible-xs">
-        {% if menuView is not null %}
-            <ul class="sub-header__item">
-                <li>
-                    <div class="navigation">
-                        {{ include('EventBundle:Navigation/Partial/Mobile:mainMenu.html.twig') }}
-                    </div>
-                </li>
-            </ul>
-        {% endif %}
-        <button id="navigation" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="icon-Menu_12"></i>
-        </button>
-    </div>
 {% endif %}
+
+{# Mobile menu #}
+{{ include('EventBundle:Navigation/Partial/Mobile:mainMenu.html.twig') }}
+
+
+{# Mobile bottom toolbar #}
+{{ include('EventBundle:Navigation/Partial/Mobile:toolbar.html.twig') }}

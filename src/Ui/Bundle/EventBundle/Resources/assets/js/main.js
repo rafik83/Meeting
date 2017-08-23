@@ -100,8 +100,15 @@ function init (target) {
         e.stopPropagation();
     });
 
-    $('.navigation__close', target).on('click', function (e) {
+    $('.navigation .navigation__close', target).on('click', function (e) {
         $('.navigation').toggleClass('open');
+    });
+
+    $('#navigation-mobile, .mobile-menu .navigation__close', target).on('click', function (e) {
+        $('.mobile-menu').toggle();
+        setTimeout(function() {
+          $('body').toggleClass('menu-mobile-opened').scrollTop(0);
+        }, 1);
     });
 
     $('.clear-on-hidden-modal', target)

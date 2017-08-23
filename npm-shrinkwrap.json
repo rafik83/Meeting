@@ -1433,7 +1433,7 @@
             },
             "extend": {
               "version": "3.0.1",
-              "from": "extend@>=3.0.0 <3.1.0",
+              "from": "extend@>=3.0.0 <4.0.0",
               "resolved": "https://registry.npmjs.org/extend/-/extend-3.0.1.tgz"
             },
             "forever-agent": {
