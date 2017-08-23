@@ -23,6 +23,7 @@
 
     .meets {
       .actions {
+        margin-right: 8px;
         > a {
           margin-left: 16px !important;
         }
@@ -69,7 +70,6 @@
         align-items: center;
         align-content: flex-end;
         justify-content: center;
-        margin-right: 2%;
 
         > a {
           display: flex;
