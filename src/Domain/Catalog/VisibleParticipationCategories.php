@@ -35,10 +35,10 @@ class VisibleParticipationCategories
      */
     public function getAllowedCategoriesList(Sheet $sheet)
     {
-        $visibleTypes  = [];
-        $filteredRules = [];
-        $categoryTypes = $sheet->getType()->getCategories();
-        $rules         = $this->ruleRepository->getByEvent($sheet->getEvent());
+        $visibleCategories = [];
+        $filteredRules     = [];
+        $categoryTypes     = $sheet->getType()->getCategories();
+        $rules             = $this->ruleRepository->getByEvent($sheet->getEvent());
 
         foreach ($categoryTypes as $categoryType) {
             $filteredRules = array_filter($rules, function (Rule $rule) use ($categoryType) {
@@ -49,10 +49,10 @@ class VisibleParticipationCategories
         foreach ($filteredRules as $rule) {
             /** @var Category $categoryType */
             foreach ($rule->getSeeableCategory() as $categoryType) {
-                $visibleTypes[$categoryType->getId()] = $categoryType;
+                $visibleCategories[$categoryType->getId()] = $categoryType;
             }
         }
 
-        return $visibleTypes;
+        return $visibleCategories;
     }
 }
