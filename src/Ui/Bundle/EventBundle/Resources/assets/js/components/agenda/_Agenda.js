@@ -82,13 +82,16 @@ Agenda.prototype.addMeet = function(element) {
  * @param {Slot} slot
  */
 Agenda.prototype.scrollOnSlot = function(slot) {
-    var currentTime = moment.duration(moment()).asMinutes();
+    var now = moment();
+    var momentMidnight = now.clone().startOf('day');
+    var currentTimeInMinutesFromMidnight = now.diff(momentMidnight, 'minutes');
 
     if (this.agendaDate === slot.dateAgenda
-        && currentTime >= slot.time
-        && currentTime <= (slot.time + slot.duration)
+        && currentTimeInMinutesFromMidnight >= slot.time
+        && currentTimeInMinutesFromMidnight <= (slot.time + slot.duration)
         && slot.element.id ===  'm' + this.agendaDate + '-' + slot.time
     ) {
+        console.log('ok');
         window.location.hash = slot.element.id;
 
         // If there is an element on slot open it
