@@ -91,7 +91,6 @@ Agenda.prototype.scrollOnSlot = function(slot) {
         && currentTimeInMinutesFromMidnight <= (slot.time + slot.duration)
         && slot.element.id ===  'm' + this.agendaDate + '-' + slot.time
     ) {
-        console.log('ok');
         window.location.hash = slot.element.id;
 
         // If there is an element on slot open it
