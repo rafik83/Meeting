@@ -153,7 +153,7 @@ class Category implements WhoInterface
      *
      * @return Category
      */
-    public function translate($locale, $title, $description): Category
+    public function translate(string $locale, string $title, string $description): Category
     {
         if ($this->translations->containsKey($locale)) {
             $this->translations->get($locale)->update($title, $description);

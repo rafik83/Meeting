@@ -201,7 +201,6 @@ class CatalogController extends Controller
                     ]
                 );
             }
-
         } else {
             $template = 'EventBundle:Catalog:index.html.twig';
         }
@@ -371,7 +370,10 @@ class CatalogController extends Controller
                 ->allowedToAccess($event);
 
             $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
-            $isMeetingRequestClosed          = !$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($event);
+            $isMeetingRequestClosed          = !$this
+                ->get('domain.key_dates.checker.meeting_request_access_checker')
+                ->allowedToAccess($event)
+            ;
             $isAnsweringMeetingRequestClosed = !$this
                 ->get('domain.key_dates.checker.answering_meeting_request_access_checker')
                 ->allowedToAccess($event)

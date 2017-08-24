@@ -75,7 +75,7 @@ interface CategoryRepositoryInterface
      * @param string $locale
      * @param array  $categories
      *
-     * @return mixed
+     * @return array
      */
-    public function getCategoriesTitleByEventAndLocale(Event $event, $locale, array $categories);
+    public function getCategoriesTitleByEventAndLocale(Event $event, string $locale, array $categories): array;
 }
