@@ -17,9 +17,7 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class VisibleParticipationCategories
 {
-    /**
-     * @var RuleRepositoryInterface
-     */
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
     /**
@@ -37,12 +35,10 @@ class VisibleParticipationCategories
      */
     public function getAllowedCategoriesList(Sheet $sheet)
     {
-        $visibleTypes = [];
-        $categoryTypes = $sheet->getType()->getCategories();
-
-        $rules = $this->ruleRepository->getByEvent($sheet->getEvent());
-
+        $visibleTypes  = [];
         $filteredRules = [];
+        $categoryTypes = $sheet->getType()->getCategories();
+        $rules         = $this->ruleRepository->getByEvent($sheet->getEvent());
 
         foreach ($categoryTypes as $categoryType) {
             $filteredRules = array_filter($rules, function (Rule $rule) use ($categoryType) {
