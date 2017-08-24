@@ -50,8 +50,10 @@ class VisibleParticipationCategoriesTest extends TestCase
                 $rule2,
             ]);
 
-        $visibleParticipationTypes = new VisibleParticipationCategories($ruleRepository->reveal());
-        $result = $visibleParticipationTypes->getAllowedCategoriesList($sheet->reveal());
+        $visibleParticipationCategories = new VisibleParticipationCategories(
+            $ruleRepository->reveal()
+        );
+        $result = $visibleParticipationCategories->getAllowedCategoriesList($sheet->reveal());
 
         $this->assertEquals($category3->reveal(), $result[8]);
     }
