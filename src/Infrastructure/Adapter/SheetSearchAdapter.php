@@ -74,7 +74,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
-
         } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy &&
             isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
         ) {
@@ -233,6 +232,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
     {
         return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoryAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove
+    ): array {
+        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_CATEGORY);
     }
 
     public function getOrganizationCategoryAggregations(

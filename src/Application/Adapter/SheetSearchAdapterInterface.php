@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 interface SheetSearchAdapterInterface
 {
     const ES_FIELD_TYPE                  = 'type';
+    const ES_FIELD_CATEGORY              = 'categories.id';
     const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
     const ES_FIELD_IN_CATALOG            = 'inCatalog';
     const ES_FIELD_POSITION              = 'position';
@@ -66,6 +67,8 @@ interface SheetSearchAdapterInterface
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array;
 
     public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array;
+
+    public function getCategoryAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array;
 
     public function getOrganizationCategoryAggregations(
         Event $event,
