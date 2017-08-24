@@ -26,18 +26,10 @@ class CategoryView
      * @param string $title
      * @param int    $count
      */
-    public function __construct($id, $title, $count)
+    public function __construct(int $id, string $title, int $count)
     {
         $this->id    = $id;
         $this->title = $title;
         $this->count = $count;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

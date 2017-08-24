@@ -29,7 +29,7 @@ class CategoryViewQuery
      * @param Category[] $visibleCategories
      * @param string     $locale
      */
-    public function __construct(Event $event, array $visibleCategories, $locale)
+    public function __construct(Event $event, array $visibleCategories, string $locale)
     {
         $this->event             = $event;
         $this->visibleCategories = $visibleCategories;
