@@ -122,7 +122,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */

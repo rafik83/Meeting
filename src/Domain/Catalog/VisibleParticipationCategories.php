@@ -33,7 +33,7 @@ class VisibleParticipationCategories
      *
      * @return Category[]
      */
-    public function getAllowedCategoriesList(Sheet $sheet)
+    public function getAllowedCategoriesList(Sheet $sheet): array
     {
         $visibleCategories = [];
         $filteredRules     = [];

@@ -16,6 +16,7 @@ final class SearchFields
     const FILTER_LOCALIZATION          = 'localization';
     const FILTER_POSITION              = 'position';
     const FILTER_TYPE                  = 'type';
+    const FILTER_CATEGORY              = 'category';
     const FILTER_CONTENT               = 'content';
     const FILTER_OBJECTIVE             = 'objective';
     const ORDER_BY                     = 'orderBy';

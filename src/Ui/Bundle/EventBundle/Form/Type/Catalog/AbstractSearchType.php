@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -45,6 +46,7 @@ abstract class AbstractSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $typeViews                 = $options['typeViews'];
+        $categoryViews             = $options['categoryViews'];
         $organizationCategoryViews = $options['organizationCategoryViews'];
         $positionViews             = $options['positionViews'];
 
@@ -68,6 +70,29 @@ abstract class AbstractSearchType extends AbstractType
                         },
                         'choice_label' => function (TypeView $typeView) {
                             return $typeView->title;
+                        },
+                    ]
+                );
+        }
+        $hasCategoryViews = count($categoryViews) > 1;
+        $categorySearchFacet = $searchFacetsView->hasCategory();
+
+        // show type facette only if there is more than one filter
+        if ($hasCategoryViews && $categorySearchFacet !== false) {
+            $builder
+                ->add(
+                    SearchFields::FILTER_CATEGORY,
+                    ChoiceType::class,
+                    [
+                        'label'        => $categorySearchFacet->label,
+                        'expanded'     => true,
+                        'multiple'     => true,
+                        'choices'      => $categoryViews,
+                        'choice_value' => function (CategoryView $categoryView) {
+                            return $categoryView->id;
+                        },
+                        'choice_label' => function (CategoryView $categoryView) {
+                            return $categoryView->title;
                         },
                     ]
                 );
@@ -139,6 +164,7 @@ abstract class AbstractSearchType extends AbstractType
     {
         $resolver->setRequired([
             'typeViews',
+            'categoryViews',
             'organizationCategoryViews',
             'positionViews',
             'event',
@@ -146,6 +172,7 @@ abstract class AbstractSearchType extends AbstractType
         ]);
 
         $resolver->setAllowedTypes('typeViews', 'array');
+        $resolver->setAllowedTypes('categoryViews', 'array');
         $resolver->setAllowedTypes('organizationCategoryViews', 'array');
         $resolver->setAllowedTypes('positionViews', 'array');
         $resolver->setAllowedTypes('locale', 'string');
