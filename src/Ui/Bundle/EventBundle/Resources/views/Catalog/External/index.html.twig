@@ -31,7 +31,11 @@
                 </div>
                 <div class="modal-body">
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        {{ 'catalog.external.modal.content.logged'|trans({'%catalogOnlineDate%': catalogOnlineDate}) }}
+                        {{ 'catalog.external.modal.content.logged'|trans({
+                            '%catalogOnlineDate%': null != catalogOnlineDate
+                                ? catalogOnlineDate|localizeddate('short', 'none', app.request.locale, event.timeZone)
+                                : 'navigation.links.incoming'|trans
+                        }) }}
                     {% else %}
                         {{ 'catalog.external.modal.content'|trans }}
                     {% endif %}
