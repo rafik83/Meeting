@@ -9,6 +9,10 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
+    <div class="catalog-mobile-filters visible-xs">
+        {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+    </div>
+
     <div class="catalog catalog--advanced">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
