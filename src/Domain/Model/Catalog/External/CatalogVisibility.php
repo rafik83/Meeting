@@ -45,7 +45,7 @@ class CatalogVisibility
      * @param Event $event
      * @param bool  $hasMessage
      */
-    public function __construct(Event $event, bool $hasMessage = true)
+    public function __construct(Event $event, bool $hasMessage = false)
     {
         $this->event               = $event;
         $this->types               = new ArrayCollection();
