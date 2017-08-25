@@ -42,11 +42,18 @@ interface MeetingRepositoryInterface
     public function getByEvent(Event $event, $page, $limit, $locale);
 
     /**
-     * @param Event  $event
+     * @param Event $event
      *
      * @return Meeting[]
      */
-    public function getAllByEvent(Event $event);
+    public function getAllByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Meeting[]
+     */
+    public function getNonBlockedSpotByEvent(Event $event): array;
 
     /**
      * @param Participant $participant

@@ -75,7 +75,10 @@ class SpotReassignHandlerTest extends TestCase
             $visioGuesser->reveal()
         );
 
-        $meetingRepository->getAllByEvent($event->reveal())->shouldBeCalled()->willReturn([$meeting1, $meeting2]);
+        $meetingRepository
+            ->getNonBlockedSpotByEvent($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$meeting1, $meeting2]);
 
         $visioGuesser->hasMeetingParticipantVisio($meeting1)->shouldBeCalled()->willReturn(false);
 

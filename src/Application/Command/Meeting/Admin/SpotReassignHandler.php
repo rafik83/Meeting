@@ -41,7 +41,7 @@ class SpotReassignHandler
 
     public function handle(SpotReassign $spotReassign): void
     {
-        $meetings = $this->meetingRepository->getAllByEvent($spotReassign->event);
+        $meetings = $this->meetingRepository->getNonBlockedSpotByEvent($spotReassign->event);
 
         foreach ($meetings as $meeting) {
             $fromSpot = $meeting->getFromSheet()->getSpot();
