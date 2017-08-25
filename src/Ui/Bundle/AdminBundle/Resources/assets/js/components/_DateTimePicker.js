@@ -9,7 +9,6 @@ function DateTimePicker(element, customConfig)
     this.parentZone     = null;
 
     this.standardConfig = {
-        locale: 'fr',
         sideBySide: true,
         allowInputToggle: true,
         icons: {
