@@ -108,20 +108,44 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllByEvent(Event $event)
+    public function getAllByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('meeting, fromParticipant, toParticipant, request')
             ->from(Meeting::class, 'meeting', 'meeting.id')
-            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'meeting.event = :event AND meeting.state = :state')
+            ->join('meeting.toSheet', 'toSheet')
             ->join('meeting.fromParticipants', 'fromParticipant')
             ->join('meeting.toParticipants', 'toParticipant')
             ->join('meeting.request', 'request')
             ->setParameter('event', $event)
-            ->where('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNonBlockedSpotByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting, fromSheet, toSheet, fromSheetSpot, toSheetSpot')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
+            ->join(
+                'meeting.fromSheet',
+                'fromSheet',
+                'WITH',
+                'meeting.event = :event AND meeting.state = :state AND meeting.blockedSpot = false'
+            )
+            ->join('meeting.toSheet', 'toSheet')
+            ->leftJoin('toSheet.spot', 'toSheetSpot')
+            ->leftJoin('fromSheet.spot', 'fromSheetSpot')
+            ->setParameter('event', $event)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
@@ -524,6 +548,114 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingBySheets(Event $event, array $sheets): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id) AS countMeetings, sheet.id AS sheetId')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join(
+                Meeting::class,
+                'meeting',
+                'WITH',
+                'sheet.id IN (:sheets)
+                AND meeting.event = :event
+                AND (meeting.fromSheet = sheet OR meeting.toSheet = sheet)
+                AND meeting.state = :state
+            ')
+            ->groupBy('sheet.id')
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingsBySpots(array $spots): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id) AS countMeetings, spot.id AS spotId')
+            ->from(Spot::class, 'spot', 'spot.id')
+            ->join(
+                Meeting::class,
+                'meeting',
+                'WITH',
+                'spot.id IN (:spots)
+                AND meeting.spot = spot
+                AND meeting.state = :state'
+            )
+            ->groupBy('spot.id')
+            ->setParameter('spots', $spots)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingForSpots(array $spots): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.spot IN (:spots)')
+            ->andWhere('meeting.state = :state')
+            ->setParameter('spots', $spots)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMeetingForSpotsAndSlot(array $spots, MeetingSlot $meetingSlot): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.slot = :slot')
+            ->andWhere('meeting.spot IN (:spots)')
+            ->andWhere('meeting.state = :state')
+            ->setParameter('slot', $meetingSlot)
+            ->setParameter('spots', $spots)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countByEvent(Event $event): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.event = :event')
+            ->andWhere('meeting.state = :state')
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

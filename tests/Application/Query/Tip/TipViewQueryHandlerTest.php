@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class TipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TipViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

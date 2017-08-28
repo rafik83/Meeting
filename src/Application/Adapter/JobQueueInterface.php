@@ -114,4 +114,9 @@ interface JobQueueInterface
      * @param Event $event
      */
     public function aggregateParticipantAssignedToRequest(Event $event);
+
+    /**
+     * @param $event
+     */
+    public function generateMeetingSolutionAnalytic(Event $event);
 }

@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\TipFactory;
+use PHPUnit\Framework\TestCase;
 
-class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveHandlerTest extends TestCase
 {
     public function testHandle()
     {

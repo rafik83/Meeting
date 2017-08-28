@@ -17,8 +17,9 @@ use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
 use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -49,7 +50,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Mock
         $speakerRepository = $this->prophesize(SpeakerRepositoryInterface::class);
-        $speakerRepository->add($expectedSpeaker);
+        $speakerRepository->add($expectedSpeaker)->shouldBeCalled();
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
 

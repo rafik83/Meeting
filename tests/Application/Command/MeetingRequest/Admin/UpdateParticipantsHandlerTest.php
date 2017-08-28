@@ -25,8 +25,9 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateParticipantsHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateParticipantsHandlerTest extends TestCase
 {
     public function testHandle()
     {

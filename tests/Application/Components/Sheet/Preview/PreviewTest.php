@@ -31,8 +31,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Participant as ParticipantObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
+use PHPUnit\Framework\TestCase;
 
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends TestCase
 {
     public function testGetPreview()
     {

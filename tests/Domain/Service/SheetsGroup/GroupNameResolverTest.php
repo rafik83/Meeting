@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\GroupFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class GroupNameResolverTest extends \PHPUnit_Framework_TestCase
+class GroupNameResolverTest extends TestCase
 {
     /** @var Event $event */
     public $event;

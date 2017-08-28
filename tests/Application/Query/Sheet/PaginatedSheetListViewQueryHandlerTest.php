@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
@@ -32,7 +33,7 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
-class PaginatedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PaginatedSheetListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

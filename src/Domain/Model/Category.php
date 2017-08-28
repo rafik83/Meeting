@@ -33,11 +33,6 @@ class Category implements WhoInterface
     private $types;
 
     /**
-     * @var array
-     */
-    private $filters = [];
-
-    /**
      * @var Event
      */
     private $event;
@@ -131,16 +126,6 @@ class Category implements WhoInterface
     public function getTitle($locale)
     {
         return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getTitle() : '';
-    }
-
-    /**
-     * Get filters.
-     *
-     * @return array
-     */
-    public function getFilters()
-    {
-        return $this->filters;
     }
 
     /**

@@ -234,4 +234,12 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function findByGroup(Group $group);
+
+    /**
+     * @param User $user
+     * @param Event $currentEvent
+     *
+     * @return null|Participant
+     */
+    public function getLastEventParticipation(User $user, Event $currentEvent): ?Participant;
 }

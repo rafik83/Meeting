@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\OwnerFirstnameSubstitution;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class FirstnameSubstitutionTest extends \PHPUnit_Framework_TestCase
+class FirstnameSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

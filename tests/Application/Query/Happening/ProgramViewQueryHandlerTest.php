@@ -26,8 +26,9 @@ use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ProgramViewQueryHandlerTest extends TestCase
 {
     public function testHandleException()
     {

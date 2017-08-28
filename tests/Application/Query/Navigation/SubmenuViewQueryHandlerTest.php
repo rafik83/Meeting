@@ -26,13 +26,14 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SubmenuViewQueryHandlerTest extends TestCase
 {
     public function testCatalogHandle()
     {
         $datetime = new \DateTime();
-        $event    = EventFactory::createEvent();
+        $event = EventFactory::createEvent();
 
         $event->getConfiguration()->setDates(
             $datetime->modify('-1 month'),
@@ -47,7 +48,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet->getId()->shouldBeCalled()->willReturn(1);
 
         $locale = 'fr';
-        $route  = 'event_catalog_index';
+        $route = 'event_catalog_index';
 
         $query = new CatalogSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
 
@@ -57,13 +58,17 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::CATALOG_ICON,
                 'navigation.category.catalog',
                 'navigation.category.catalog.link',
+                true,
+                false,
                 true
             ),
             new SubmenuButtonView(
                 Category::MEETING_ICON,
                 'navigation.category.meeting',
                 'navigation.category.meeting.link',
-                false
+                false,
+                false,
+                true
             ),
         ];
 
@@ -76,7 +81,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $navigationBuilder->getRoute('event_meeting_list_request', ['sheet' => 1])->shouldBeCalled()
             ->willReturn('navigation.category.meeting.link');
 
-        $handler         = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime);
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime);
         $menuButtonViews = $handler->handle($query);
 
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
@@ -85,17 +90,17 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSheetHandle()
     {
         $datetime = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $type     = new Type($event);
-        $user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $package  = new Package($event, 'package', $datetime);
+        $event = EventFactory::createEvent();
+        $type = new Type($event);
+        $user = new User('email@email.com', 'salt', 'password', 'fr');
+        $package = new Package($event, 'package', $datetime);
         $type->setPackage($package);
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->shouldBeCalled()->willReturn(2);
 
         $locale = 'fr';
-        $route  = 'event_catalog_index';
+        $route = 'event_catalog_index';
 
         $query = new SheetSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
 
@@ -105,7 +110,9 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::SHEET_ICON,
                 'sheet.title',
                 'sheet.title.link',
-                false
+                false,
+                false,
+                true
             ),
         ];
 
@@ -125,9 +132,9 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testAgendaHandle()
     {
         $datetime = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $type     = new Type($event);
-        $user     = new User('email@email.com', 'salt', 'password', 'fr');
+        $event = EventFactory::createEvent();
+        $type = new Type($event);
+        $user = new User('email@email.com', 'salt', 'password', 'fr');
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->shouldBeCalled()->willReturn(1);
@@ -136,7 +143,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $type->setPackage($package);
 
         $locale = 'fr';
-        $route  = 'event_agenda';
+        $route = 'event_agenda';
 
         $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
 
@@ -146,18 +153,22 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::AGENDA_ICON,
                 'agenda.title',
                 'agenda.title.link',
+                true,
+                false,
                 true
             ),
             new SubmenuButtonView(
                 Category::PLANNING_ICON,
                 'program.title',
                 'program.title.link',
-                false
+                false,
+                false,
+                true
             ),
         ];
 
         // Mock
-        $navigationBuilder      = $this->prophesize(NavigationBuilderInterface::class);
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $happeningAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
         $agendaAccessChecker = $this->prophesize(AgendaAccessChecker::class);
 

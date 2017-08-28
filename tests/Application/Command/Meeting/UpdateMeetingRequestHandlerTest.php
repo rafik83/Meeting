@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateMeetingRequestHandlerTest extends TestCase
 {
     public function testHandleWithStateSentForSheetFrom()
     {

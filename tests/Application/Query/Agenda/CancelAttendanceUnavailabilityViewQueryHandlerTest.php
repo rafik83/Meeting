@@ -15,8 +15,9 @@ use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQ
 use Proximum\Vimeet\Application\View\Agenda\CancelAttendanceUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CancelAttendanceUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class CancelAttendanceUnavailabilityViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

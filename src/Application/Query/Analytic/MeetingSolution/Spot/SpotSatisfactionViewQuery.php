@@ -1,0 +1,37 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot;
+
+use Proximum\Vimeet\Domain\Model\Spot;
+
+class SpotSatisfactionViewQuery
+{
+    /** @var int */
+    public $numberOfMeeting;
+
+    /** @var Spot */
+    public $spot;
+
+    /** @var int */
+    public $numberOfSlotAvailable;
+
+    /**
+     * @param Spot $spot
+     * @param int  $numberOfMeeting
+     * @param int  $numberOfSlotAvailable
+     */
+    public function __construct(Spot $spot, int $numberOfMeeting, int $numberOfSlotAvailable)
+    {
+        $this->spot = $spot;
+        $this->numberOfMeeting = $numberOfMeeting;
+        $this->numberOfSlotAvailable = $numberOfSlotAvailable;
+    }
+}

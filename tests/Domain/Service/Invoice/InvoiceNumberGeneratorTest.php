@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Service\Invoice;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Invoice\InvoiceNumberGenerator;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class InvoiceNumberGeneratorTest extends \PHPUnit_Framework_TestCase
+class InvoiceNumberGeneratorTest extends TestCase
 {
     /**
      * @var Event

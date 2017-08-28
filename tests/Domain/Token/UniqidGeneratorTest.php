@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Token;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Token\UniqidGenerator;
 
-class UniqidGeneratorTest extends \PHPUnit_Framework_TestCase
+class UniqidGeneratorTest extends TestCase
 {
     public function testGenerate()
     {

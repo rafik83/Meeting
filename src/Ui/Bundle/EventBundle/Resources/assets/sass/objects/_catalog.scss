@@ -2,11 +2,21 @@
   margin-top: 15px;
 }
 
-.catalog--advanced {
-  padding-left: 300px;
+@media screen and (max-width: 750px) {
+  .catalog--advanced {
+    padding-left: 0;
+    .catalog__research {
+      left: 0;
+    }
+  }
+}
 
-  .catalog__research {
-    left: 0;
+@media screen and (min-width: 750px) {
+  .catalog--advanced {
+    padding-left: 300px;
+    .catalog__research {
+      left: 0;
+    }
   }
 }
 

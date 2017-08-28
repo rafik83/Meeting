@@ -11,6 +11,7 @@
 namespace Application\Command\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Application\Command\Tip\CreateHandler;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

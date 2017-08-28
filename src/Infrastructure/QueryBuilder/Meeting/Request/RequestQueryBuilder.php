@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
@@ -149,6 +150,18 @@ class RequestQueryBuilder extends QueryBuilder
     public function isFromAttending()
     {
         $this->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
+
+        return $this;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return RequestQueryBuilder
+     */
+    public function fromEvent(Event $event)
+    {
+        $this->where('request.event = :event')->setParameter('event', $event);
 
         return $this;
     }

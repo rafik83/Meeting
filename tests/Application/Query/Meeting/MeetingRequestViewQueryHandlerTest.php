@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class MeetingRequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingRequestViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

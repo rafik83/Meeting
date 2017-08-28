@@ -33,8 +33,9 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
+class SlotAvailabilityTest extends TestCase
 {
     /**
      * @var HappeningParticipationRepositoryInterface

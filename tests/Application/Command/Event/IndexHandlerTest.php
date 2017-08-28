@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Event\Index;
 use Proximum\Vimeet\Application\Command\Event\IndexHandler;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class IndexHandlerTest extends \PHPUnit_Framework_TestCase
+class IndexHandlerTest extends TestCase
 {
     public function testHandle()
     {

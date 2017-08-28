@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class ImportHandlerTest extends \PHPUnit_Framework_TestCase
+class ImportHandlerTest extends TestCase
 {
     public function testHandle()
     {

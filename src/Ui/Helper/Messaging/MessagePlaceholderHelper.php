@@ -59,7 +59,7 @@ class MessagePlaceholderHelper
                 'text'  => $this->translator->trans($label),
             ];
         }
-        
+
         return $placeholders;
     }
 
@@ -96,15 +96,16 @@ class MessagePlaceholderHelper
     private static function getLinkLabels()
     {
         return [
-            Compose::LINK_SHEET                => 'admin.messaging.message.compose.links.sheet',
-            Compose::LINK_PACKAGE              => 'admin.messaging.message.compose.links.package',
-            Compose::LINK_ORDERS               => 'admin.messaging.message.compose.links.orders',
-            Compose::LINK_AGENDA               => 'admin.messaging.message.compose.links.agenda',
-            Compose::LINK_PROGRAM              => 'admin.messaging.message.compose.links.program',
-            Compose::LINK_CATALOG              => 'admin.messaging.message.compose.links.catalog',
-            Compose::LINK_MEETING_REQUEST      => 'admin.messaging.message.compose.links.meetingRequest',
-            Compose::LINK_ACTIVACTE_ACCOUNT    => 'admin.messaging.message.compose.links.activateAccount',
-            Compose::LINK_EXPORT_MEETING_SHEET => 'admin.messaging.message.compose.links.exportMeetingSheet',
+            Compose::LINK_SHEET                 => 'admin.messaging.message.compose.links.sheet',
+            Compose::LINK_PACKAGE               => 'admin.messaging.message.compose.links.package',
+            Compose::LINK_ORDERS                => 'admin.messaging.message.compose.links.orders',
+            Compose::LINK_AGENDA                => 'admin.messaging.message.compose.links.agenda',
+            Compose::LINK_PROGRAM               => 'admin.messaging.message.compose.links.program',
+            Compose::LINK_CATALOG               => 'admin.messaging.message.compose.links.catalog',
+            Compose::LINK_MEETING_REQUEST       => 'admin.messaging.message.compose.links.meetingRequest',
+            Compose::LINK_ACTIVACTE_ACCOUNT     => 'admin.messaging.message.compose.links.activateAccount',
+            Compose::LINK_EXPORT_MEETING_SHEET  => 'admin.messaging.message.compose.links.exportMeetingSheet',
+            Compose::LINK_VALIDATE_MOBILE_PHONE => 'admin.messaging.message.compose.links.validateMobilePhone',
         ];
     }
 }

@@ -23,8 +23,9 @@ use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

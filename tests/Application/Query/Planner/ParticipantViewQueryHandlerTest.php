@@ -28,8 +28,9 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

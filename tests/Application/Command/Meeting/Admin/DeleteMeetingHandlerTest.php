@@ -22,8 +22,9 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class DeleteMeetingHandlerTest extends \PHPUnit_Framework_TestCase
+class DeleteMeetingHandlerTest extends TestCase
 {
     public function testHandle()
     {

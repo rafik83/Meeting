@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use PHPUnit\Framework\TestCase;
 
-class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DayViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -118,8 +119,13 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 $happeningView1,
                 $happeningView2,
+
             ],
-            [$massView]
+            [
+                $massView,
+                $happeningView1,
+                $happeningView2,
+            ]
         );
 
         // Mock
@@ -147,7 +153,10 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         )->shouldBeCalled()->willReturn($happeningView2);
 
         $massHandler = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $massHandler
+            ->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))
+            ->shouldBeCalled()
+            ->willReturn($massView);
 
 
         $handler = new DayViewQueryHandler(

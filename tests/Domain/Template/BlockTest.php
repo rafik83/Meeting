@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use PHPUnit\Framework\TestCase;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends TestCase
 {
     public function testGetBlocks()
     {

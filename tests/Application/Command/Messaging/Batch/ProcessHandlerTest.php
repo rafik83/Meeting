@@ -21,8 +21,9 @@ use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class ProcessHandlerTest extends \PHPUnit_Framework_TestCase
+class ProcessHandlerTest extends TestCase
 {
     public function testHandle()
     {

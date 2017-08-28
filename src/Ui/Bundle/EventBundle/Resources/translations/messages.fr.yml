@@ -393,4 +393,7 @@ user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
 user_event.confirm.agenda.title: 'Confirmation de l''agenda'
 user.phone.confirmationCode.message: 'Saisir le code suivant pour confirmer : %code%'
 catalog.external.modal.content: 'Pour accéder à ce contenu, vous devez être inscrit ou connecté.'
-catalog.external.modal.content.logged: 'La prise de rendez-vous sera accessible le %catalogOnlineDate%.'
+catalog.external.modal.content.logged: 'La prise de rendez-vous sera accessible le : %catalogOnlineDate%.'
+meeting.video.start: 'Démarrer le RDV'
+meeting.video.end: 'Arrêter le RDV'
+meeting.video.waitingForParticipant: "En attente d'un participant"
