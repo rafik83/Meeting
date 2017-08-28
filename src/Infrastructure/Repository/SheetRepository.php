@@ -369,6 +369,7 @@ class SheetRepository implements SheetRepositoryInterface
         $type = null,
         $user = null
     ) {
+        // condition for filter sheet meeting request using sql exists
         $typeCondition  = '(r.from = sheet AND r.to IN (:sheets) OR r.to = sheet AND r.from IN (:sheets))';
         $stateCondition = '1 = 1';
         $userCondition  = '1 = 1';
@@ -391,6 +392,7 @@ class SheetRepository implements SheetRepositoryInterface
             $userCondition = '(fp.user = :user OR tp.user = :user)';
         }
 
+        // filter meeting request with fromParticipants or toParticipants empty
         if ($user === FilterRequestView::NO_PREFERENCE) {
             $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
             $typeCondition  =
