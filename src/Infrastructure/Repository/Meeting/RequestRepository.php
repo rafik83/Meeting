@@ -616,21 +616,12 @@ class RequestRepository implements RequestRepositoryInterface
                 $typeCondition = '(toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))';
             }
         }
-        
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->from(Request::class, 'request', 'request.id')
-            ->join(
-                'request.from',
-                'fromSheet',
-                'WITH',
-                'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true'
-            )
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
+
+        $queryBuilder = new FilterQueryBuilder($this->entityManager, $event);
+
+        $queryBuilder
             ->leftJoin('request.meeting', 'meeting')
             ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
-            ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);
 
@@ -651,8 +642,7 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         if ($state === Request::STATE_PLANNED) {
-            $queryBuilder
-                ->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
+            $queryBuilder->filterPlanned();
         }
 
         return $queryBuilder;
