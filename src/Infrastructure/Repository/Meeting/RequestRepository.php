@@ -617,6 +617,15 @@ class RequestRepository implements RequestRepositoryInterface
             }
         }
 
+        // filter meeting request with fromParticipants or toParticipants empty
+        if ($user === FilterRequestView::NO_PREFERENCE) {
+            $typeCondition = '(
+                (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)) AND fp.id IS NULL
+                OR
+                (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)) AND tp.id IS NULL
+            )';
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -646,8 +655,7 @@ class RequestRepository implements RequestRepositoryInterface
         if ($user === FilterRequestView::NO_PREFERENCE) {
             $queryBuilder
                 ->leftJoin('request.fromParticipants', 'fp')
-                ->leftJoin('request.toParticipants', 'tp')
-                ->andWhere('fp.id IS NULL OR tp.id IS NULL');
+                ->leftJoin('request.toParticipants', 'tp');
         }
 
         return $queryBuilder;
