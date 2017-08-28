@@ -1,0 +1,21 @@
+function HeaderMobile (element)
+{
+    this.element = element;
+    this.menu = element.querySelector('#' + element.dataset.anchor);
+
+    this.element.addEventListener('click', function () {
+        this.toggleMenu();
+    }.bind(this));
+
+    this.element.querySelector('.menu-mobile-title').addEventListener('click', function () {
+        this.toggleMenu();
+    }.bind(this));
+}
+
+HeaderMobile.prototype.toggleMenu = function () {
+    document.body.classList.toggle('menu-mobile-opened');
+    this.element.classList.toggle('open');
+    this.menu.classList.toggle('open');
+};
+
+module.exports = HeaderMobile;

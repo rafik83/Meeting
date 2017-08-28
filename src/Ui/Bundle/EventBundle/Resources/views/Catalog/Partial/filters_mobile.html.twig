@@ -1,6 +1,5 @@
 <ul>
     {% for child in form.children %}
-        {% set disabled = choices[child.vars.value].count == 0 %}
         <li class="filter__item">
             <a href="#" class="catalog-mobile-filter" data-filter-id="{{ choices[child.vars.value].id }}">
                 {{ child.vars.label|trans({}, child.vars.translation_domain) }}

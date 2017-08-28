@@ -14,6 +14,29 @@
     </head>
     <body {% block body_attributes '' %}>
         {% block body %}
+
+            <div class="header-mobile col-xs-12">
+                <div class="catalog-mobile-filters visible-xs">
+                    <div class="header-mobile-item open" data-anchor="filter-type">
+                        <div class="menu-mobile-button btn btn-primary btn-block">
+                            Tous les participants
+                            <span>(200)</span>
+                            <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                        </div>
+                        <div id="filter-type" class="header-mobile-menu">
+                            <h3 class="menu-mobile-title">Type de participants</h3>
+                            {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="header-mobile-close">
+                    <button type="button" class="header-close pull-right">
+                        {{ 'navigation.close'|trans }}
+                        <i class="icon-Fermer_4"></i>
+                    </button>
+                </div>
+            </div>
+
             <div class="wrapper">
                 {{ render(controller('EventBundle:Navigation:menu', { 'sheet': sheet is defined ? sheet : null })) }}
             </div>

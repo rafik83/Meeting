@@ -23,7 +23,8 @@ var $                     = require('jquery'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType   = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination     = require('./components/_CatalogPagination'),
-    VideoConference       = require('./components/VideoConference/VideoConference')
+    VideoConference       = require('./components/VideoConference/VideoConference'),
+    HeaderMobile          = require ('./components/_HeaderMobile')
 ;
 
 require('bootstrap');
@@ -211,6 +212,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.has-details.meet[data-isVisio]'), function (element) {
         new VideoConference(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.header-mobile-item'), function (element) {
+        new HeaderMobile(element);
     });
 }
 
