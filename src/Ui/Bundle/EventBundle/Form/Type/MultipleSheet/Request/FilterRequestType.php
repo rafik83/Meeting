@@ -67,7 +67,9 @@ class FilterRequestType extends AbstractType
             ])
             ->add('state', ChoiceType::class, [
                 'required' => false,
-                'choices' => Request::getAllStates(),
+                'choices' => array_merge([
+                    Request::STATE_PLANNED
+                ], Request::getAllStates()),
                 'choice_label' => function ($value) {
                     return 'form.multiple_sheet_request_filter_request_type.children.state.filter.' . $value;
                 },

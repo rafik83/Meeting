@@ -424,6 +424,16 @@ class SheetRepository implements SheetRepositoryInterface
             $queryBuilder->setParameter('user', $user);
         }
 
+        if ($state === Request::STATE_PLANNED) {
+            $queryBuilder
+                ->join(Request::class,
+                    'request',
+                    'WITH',
+                    'request.from = sheet or request.to = sheet'
+                )
+                ->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
+        }
+
         return $queryBuilder;
     }
 

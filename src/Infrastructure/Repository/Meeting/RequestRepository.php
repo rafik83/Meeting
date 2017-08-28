@@ -616,7 +616,7 @@ class RequestRepository implements RequestRepositoryInterface
                 $typeCondition = '(toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))';
             }
         }
-
+        
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -648,6 +648,11 @@ class RequestRepository implements RequestRepositoryInterface
                 ->leftJoin('request.fromParticipants', 'fp')
                 ->leftJoin('request.toParticipants', 'tp')
                 ->andWhere('fp.id IS NULL OR tp.id IS NULL');
+        }
+
+        if ($state === Request::STATE_PLANNED) {
+            $queryBuilder
+                ->andWhere('EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
         }
 
         return $queryBuilder;

@@ -47,6 +47,7 @@ form.multiple_sheet_request_filter_request_type.children.state.filter.all: Tous
 form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Accepté
 form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refusé
 form.multiple_sheet_request_filter_request_type.children.state.filter.sent: 'En attente'
+form.multiple_sheet_request_filter_request_type.children.state.filter.planned: 'Planifié'
 form.multiple_sheet_request_filter_request_type.children.state.label: Statut
 form.multiple_sheet_request_filter_request_type.children.submit.label: Filtrer
 form.multiple_sheet_request_filter_request_type.children.type.filter.all: Tous
