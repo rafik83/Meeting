@@ -54,6 +54,7 @@ form.multiple_sheet_request_filter_request_type.children.type.filter.proposition
 form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'Mes demandes'
 form.multiple_sheet_request_filter_request_type.children.type.label: Type
 form.multiple_sheet_request_filter_request_type.children.user.label: Participant
+form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'Pas de préférence'
 form.nomenclature_data.children.items.label: 'Sélectionnez :'
 form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider

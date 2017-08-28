@@ -178,11 +178,11 @@ interface SheetRepositoryInterface
     public function getSheetsByEventAndIds(Event $event, array $ids);
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return Sheet[]
      */
@@ -191,17 +191,17 @@ interface SheetRepositoryInterface
         array $sheets,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     );
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param int         $page
-     * @param int         $limit
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param int              $page
+     * @param int              $limit
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return PaginatedResult
      */
@@ -212,7 +212,7 @@ interface SheetRepositoryInterface
         $limit,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     );
 
     /**

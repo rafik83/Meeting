@@ -99,13 +99,19 @@ class FilterRequestType extends AbstractType
                 ],
             ])
             ->add('user', ChoiceType::class, [
-                'required'     => false,
-                'choices'      => $this->userRepository->getUsersParticipantOfSheets($options['sheets']),
-                'choice_label' => function (User $user) {
-                    return $user->getFullname();
+                'required' => false,
+                'choices' => array_merge([
+                    FilterRequestView::NO_PREFERENCE,
+                ], $this->userRepository->getUsersParticipantOfSheets($options['sheets'])),
+                'choice_label' => function ($user) {
+                    if ($user instanceof User) {
+                        return $user->getFullname();
+                    }
+
+                    return 'form.multiple_sheet_request_filter_request_type.children.user.noPreference.label';
                 },
-                'attr'         => [
-                    'class'            => 'form-control select2',
+                'attr' => [
+                    'class' => 'form-control select2',
                     'data-placeholder' => '',
                 ],
             ])

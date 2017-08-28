@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
@@ -328,7 +329,7 @@ class SheetRepository implements SheetRepositoryInterface
         array $sheets,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $queryBuilder = $this->getSheetsMetBySheetsBuilder($event, $sheets, $state, $type, $user);
 
@@ -345,7 +346,7 @@ class SheetRepository implements SheetRepositoryInterface
         $limit,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $queryBuilder = $this->getSheetsMetBySheetsBuilder($event, $sheets, $state, $type, $user);
 
@@ -353,11 +354,11 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return QueryBuilder
      */
@@ -366,7 +367,7 @@ class SheetRepository implements SheetRepositoryInterface
         array $sheets,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $typeCondition  = '(r.from = sheet AND r.to IN (:sheets) OR r.to = sheet AND r.from IN (:sheets))';
         $stateCondition = '1 = 1';
@@ -385,9 +386,17 @@ class SheetRepository implements SheetRepositoryInterface
             $stateCondition = sprintf("r.state = '%s'", $state);
         }
 
-        if ($user !== null) {
+        if ($user instanceof User) {
             $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
             $userCondition = '(fp.user = :user OR tp.user = :user)';
+        }
+
+        if ($user === FilterRequestView::NO_PREFERENCE) {
+            $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
+            $typeCondition  =
+                '((r.from = sheet AND r.to IN (:sheets) AND tp.id IS NULL) 
+                OR 
+                (r.to = sheet AND r.from IN (:sheets) AND fp.id IS NULL))';
         }
 
         $queryBuilder = $this
@@ -409,7 +418,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->orderBy('sheet.title', 'asc')
         ;
 
-        if ($user !== null) {
+        if ($user instanceof User) {
             $queryBuilder->setParameter('user', $user);
         }
 
@@ -429,7 +438,7 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-  
+
     /**
      * {@inheritdoc}
      */
