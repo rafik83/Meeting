@@ -37,18 +37,6 @@ class DayViewQueryHandler
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
-    /** @var HappeningView[] */
-    private $happeningViews = [];
-
-    /** @var UnavailabilityView[] */
-    private $unavailabilities = [];
-
-    /** @var MassUnavailabilityView[] */
-    private $masses = [];
-
-    /** @var MeetingView[] */
-    private $meetings = [];
-
     /**
      * @param HappeningViewQueryHandler                      $happeningHandler
      * @param UnavailabilityViewQueryHandler                 $unavailabilityHandler
@@ -81,12 +69,63 @@ class DayViewQueryHandler
     public function handle(DayViewQuery $query): DayView
     {
         $cancelAttendanceView = null;
+        $happeningViews       = [];
+        $unavailabilities     = [];
+        $masses               = [];
+        $meetings             = [];
 
         if ($query->currentSheet->attend()) {
-            $this->handleHappenings($query);
-            $this->handleUnavailabilities($query);
-            $this->handleMasses($query);
-            $this->handleMeetings($query);
+            foreach ($query->happenings as $happening) {
+                if ($query->day->contain($happening->getHappening())) {
+                    $happeningViews[] = $this->happeningHandler->handle(
+                        new HappeningViewQuery(
+                            $happening->getHappening(),
+                            $query->event,
+                            $query->locale
+                        )
+                    );
+                }
+            }
+
+            foreach ($query->unavailabilities as $unavailability) {
+                if ($query->day->contain($unavailability)) {
+                    $unavailabilities[] = $this->unavailabilityHandler->handle(
+                        new UnavailabilityViewQuery($unavailability, $query->event)
+                    );
+                }
+            }
+
+            foreach ($query->masses as $mass) {
+                if ($query->day->contain($mass)) {
+                    $massView = $this->massHandler->handle(
+                        new MassUnavailabilityViewQuery(
+                            $mass,
+                            $query->event,
+                            $query->participant,
+                            $query->locale
+                        )
+                    );
+
+                    if ($massView !== null) {
+                        $masses[] = $massView;
+                    }
+                }
+            }
+
+            foreach ($query->meetings as $meeting) {
+                if ($query->day->contain($meeting->getSlot())) {
+                    $meetings[] = $this->meetingHandler->handle(
+                        new MeetingViewQuery(
+                            $meeting,
+                            $query->currentSheet,
+                            $query->isUserParticipantMultipleSheet,
+                            $query->participant->getUser(),
+                            $query->event,
+                            $query->locale
+                        )
+                    );
+                }
+            }
         } else {
             $cancelAttendanceView = $this->cancelAttendanceUnavailabilityViewQueryHandler->handle(
                 new CancelAttendanceUnavailabilityViewQuery($query->event, $query->day)
@@ -94,10 +133,10 @@ class DayViewQueryHandler
         }
 
         $this->agendaCollisionManager->handleCollision(
-            $this->meetings,
-            $this->happeningViews,
-            $this->unavailabilities,
-            $this->masses
+            $meetings,
+            $happeningViews,
+            $unavailabilities,
+            $masses
         );
 
         return new DayView(
@@ -110,82 +149,5 @@ class DayViewQueryHandler
             $this->agendaCollisionManager->getMeetingViews(),
             $cancelAttendanceView
         );
-    }
-
-    /**
-     * @param DayViewQuery $query
-     */
-    private function handleHappenings(DayViewQuery $query)
-    {
-        foreach ($query->happenings as $happening) {
-            if ($query->day->contain($happening->getHappening())) {
-                $this->happeningViews[] = $this->happeningHandler->handle(
-                    new HappeningViewQuery(
-                        $happening->getHappening(),
-                        $query->event,
-                        $query->locale
-                    )
-                );
-            }
-        }
-    }
-
-    /**
-     * @param DayViewQuery $query
-     */
-    private function handleUnavailabilities(DayViewQuery $query)
-    {
-        foreach ($query->unavailabilities as $unavailability) {
-            if ($query->day->contain($unavailability)) {
-                $this->unavailabilities[] = $this->unavailabilityHandler->handle(
-                    new UnavailabilityViewQuery($unavailability, $query->event)
-                );
-            }
-        }
-
-    }
-
-    /**
-     * @param DayViewQuery $query
-     */
-    private function handleMasses(DayViewQuery $query)
-    {
-        foreach ($query->masses as $mass) {
-            if ($query->day->contain($mass)) {
-                $massView = $this->massHandler->handle(
-                    new MassUnavailabilityViewQuery(
-                        $mass,
-                        $query->event,
-                        $query->participant,
-                        $query->locale
-                    )
-                );
-
-                if ($massView !== null) {
-                    $this->masses[] = $massView;
-                }
-            }
-        }
-    }
-
-    /**
-     * @param DayViewQuery $query
-     */
-    private function handleMeetings(DayViewQuery $query)
-    {
-        foreach ($query->meetings as $meeting) {
-            if ($query->day->contain($meeting->getSlot())) {
-                $this->meetings[] = $this->meetingHandler->handle(
-                    new MeetingViewQuery(
-                        $meeting,
-                        $query->currentSheet,
-                        $query->isUserParticipantMultipleSheet,
-                        $query->participant->getUser(),
-                        $query->event,
-                        $query->locale
-                    )
-                );
-            }
-        }
     }
 }
