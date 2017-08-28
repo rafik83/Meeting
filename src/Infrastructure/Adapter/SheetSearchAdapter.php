@@ -27,6 +27,7 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
@@ -101,7 +102,12 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
             $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
-            $query->addAggregation($this->getNestedAggregation(self::ES_FIELD_POSITION));
+            $query->addAggregation(
+                $this->getNestedAggregation(self::ES_FIELD_CATEGORY, self::ES_PATH_CATEGORY)
+            );
+            $query->addAggregation(
+                $this->getNestedAggregation(self::ES_FIELD_POSITION, self::ES_PATH_POSITION)
+            );
         }
 
         try {
@@ -305,7 +311,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query   = new Query($builder->getQuery());
 
         if ($elasticField === self::ES_FIELD_POSITION) {
-            $query->addAggregation($this->getNestedAggregation($elasticField));
+            $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
+        } elseif ($elasticField === self::ES_FIELD_CATEGORY) {
+            $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORY));
         } else {
             $query->addAggregation($this->getAggregation($elasticField));
         }
@@ -325,9 +333,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $aggregation;
     }
 
-    private function getNestedAggregation(string $field): Nested
+    private function getNestedAggregation(string $field, string $path): Nested
     {
-        $nested = new Nested($field, 'participants');
+        $nested = new Nested($field, $path);
         $nested->addAggregation($this->getAggregation($field));
 
         return $nested;

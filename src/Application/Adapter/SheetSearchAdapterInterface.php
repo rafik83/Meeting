@@ -25,9 +25,12 @@ interface SheetSearchAdapterInterface
     const ES_FIELD_POSITION              = 'position';
 
     /** ElasticSearch keys */
-    const ES_BUCKETS = 'buckets';
+    const ES_BUCKETS   = 'buckets';
     const ES_DOC_COUNT = 'doc_count';
-    const ES_KEY = 'key';
+    const ES_KEY       = 'key';
+
+    const ES_PATH_POSITION = 'participants';
+    const ES_PATH_CATEGORY = 'categories';
 
     public function find(
         Event $event,

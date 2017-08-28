@@ -193,7 +193,8 @@ class FilteredFieldsQueryHandler
 
         $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
             $aggregations,
-            SheetSearchAdapterInterface::ES_FIELD_CATEGORY
+            SheetSearchAdapterInterface::ES_FIELD_CATEGORY,
+            true
         );
 
         foreach ($filteredFieldsQuery->categoryViews as $categoryView) {

@@ -124,7 +124,7 @@ class CatalogController extends Controller
             new PositionViewQuery($event, $locale)
         );
 
-        $filters = $this->getDefaultFilters($typeViews);
+        $filters = $this->getDefaultFilters($typeViews, $categoryViews);
 
         $searchForm = $this->getSearchForm(
             $filters,
@@ -143,6 +143,9 @@ class CatalogController extends Controller
             // if type field is empty, set the default types
             if (empty($filters[SearchFields::FILTER_TYPE])) {
                 $filters[SearchFields::FILTER_TYPE] = $typeViews;
+            }
+            if (empty($filters[SearchFields::FILTER_CATEGORY])) {
+                $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
             }
         }
 
@@ -428,15 +431,17 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param TypeView[] $typeViews
+     * @param TypeView[]     $typeViews
+     * @param CategoryView[] $categoryViews
      *
      * @return array
      */
-    private function getDefaultFilters(array $typeViews)
+    private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchFields::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchFields::FILTER_TYPE => $typeViews,
+            SearchFields::ORDER_BY        => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE     => $typeViews,
+            SearchFields::FILTER_CATEGORY => $categoryViews
         ];
 
         return $filters;
