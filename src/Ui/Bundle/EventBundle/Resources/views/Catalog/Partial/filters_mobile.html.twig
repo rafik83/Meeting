@@ -1,9 +1,17 @@
-<ul>
+{{ dump(choices) }}<ul>
+    <li class="filter_items">
+        <a href="#" class="catalog-mobile-filter" data-filter-id="all">
+            {{ 'catalog.mobile.filters.allParticipants'|trans }}
+            <span class="pull-right">( {{ totalParticipants }} )</span>
+        </a>
+    </li>
     {% for child in form.children %}
         <li class="filter__item">
             <a href="#" class="catalog-mobile-filter" data-filter-id="{{ choices[child.vars.value].id }}">
                 {{ child.vars.label|trans({}, child.vars.translation_domain) }}
-                <span class="pull-right">( {{ choices[child.vars.value].count }} )</span>
+                <span class="count-participant pull-right" data-count-participant="{{ choices[child.vars.value].count }}">
+                    ( {{ choices[child.vars.value].count }} )
+                </span>
             </a>
         </li>
     {% endfor %}
