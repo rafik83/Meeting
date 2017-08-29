@@ -2,6 +2,12 @@
   margin: 50px 0 0 0;
   z-index: 0;
 
+  button {
+    > i {
+      margin: 0 !important;
+    }
+  }
+
   .agenda-head,
   .agenda-foot {
     font-size: 17px;
@@ -100,6 +106,11 @@
     }
 
     > header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      align-content: center;
       min-height: 56px;
       background-color: #0093df;
       height: 100%;
@@ -107,7 +118,10 @@
 
       .content {
         display: flex;
-        flex-direction: row;
+        order: 0;
+        flex: 10 0 auto;
+        align-content: center;
+        justify-content: center;
         align-items: center;
         height: 100%;
         padding: 0 10px 0 25px;
@@ -136,9 +150,6 @@
       p {
         margin-bottom: 0;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
       }
@@ -209,5 +220,31 @@
   }
   .subscriber {
     float: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .agenda-container {
+    margin: 20px 0 0 0;
+
+    .meet {
+      > header {
+        display: inherit !important;
+        .actions {
+          max-width: 60px !important;
+        }
+
+        .content {
+          > p {
+            overflow: visible;
+            line-height: 1em !important;
+          }
+
+          > span {
+            margin-right: 1%;
+          }
+        }
+      }
+    }
   }
 }
