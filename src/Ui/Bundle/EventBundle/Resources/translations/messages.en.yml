@@ -14,7 +14,6 @@ agenda.title: 'My schedule'
 agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirm your absence'
-agenda.unavailability.remove: Remove
 'Bad credentials.': 'Bad credentials.'
 billing_info.title: 'Billing information'
 catalog.action.meeting.proposition.approved: 'Accepted proposal'
