@@ -110,7 +110,7 @@ class CatalogExternalController extends Controller
             'paginatedResult'   => $paginatedResult,
             'seeMoreButton'     => $seeMoreButtonStatus,
             'searchForm'        => $searchForm->createView(),
-            'catalogOnlineDate' => $event->getConfiguration()->getCatalogOnlineDate()->format('d/m/Y'),
+            'catalogOnlineDate' => $event->getConfiguration()->getCatalogOnlineDate(),
             'typeViews'         => $typeViews,
             'message'           => $message
         ]);

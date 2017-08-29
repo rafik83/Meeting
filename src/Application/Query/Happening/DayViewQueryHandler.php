@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
+use Proximum\Vimeet\Application\View\Agenda\HappeningView;
+use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
 use Proximum\Vimeet\Application\View\Happening\DayView;
 use Proximum\Vimeet\Application\View\Happening\ProgramElementViewInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
@@ -92,8 +94,8 @@ class DayViewQueryHandler
      * Merge array of MassUnavailabilityView and array of HappeningView
      * Then sort it by begin date, if begin date are equals the one who have the lowest end date rule
      *
-     * @param array $happeningViews
-     * @param array $massUnavailabilityView
+     * @param HappeningView[]          $happeningViews
+     * @param MassUnavailabilityView[] $massUnavailabilityView
      *
      * @return ProgramElementViewInterface[]
      */

@@ -156,7 +156,7 @@ app_patterns:
           - listen: 443 ssl
           - listen: 80
           - server_name: "{{ app.host }} *.{{ app.host }}"
-          #- server_name: "*.ngrok.io"
+          - server_name: "*.ngrok.io"
           - root:        "{{ app.dir }}{{ app.dir_release }}/web"
           - access_log:  "{{ app.log_dir }}/nginx.access.log"
           - error_log:   "{{ app.log_dir }}/nginx.error.log"

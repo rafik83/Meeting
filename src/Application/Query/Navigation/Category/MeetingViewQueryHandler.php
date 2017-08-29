@@ -61,7 +61,6 @@ class MeetingViewQueryHandler
         if ($catalogOnlineDate === null) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } elseif ($catalogOnlineDate < $this->dateTime) {
-
             if (!$meetingViewQuery->sheet->isInCatalog()) {
                 // catalog opened but sheet not in catalog
                 $linksView[] = new LinkView('navigation.links.catalog.sheet_not_in_catalog');
@@ -123,6 +122,6 @@ class MeetingViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::MEETING, Category::MEETING_ICON, $linksView);
+        return new CategoryView(Category::MEETING, Category::MEETING_ICON, $linksView, true);
     }
 }
