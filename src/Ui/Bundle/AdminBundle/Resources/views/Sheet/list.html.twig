@@ -60,6 +60,7 @@
             {% embed 'AdminBundle:Common:batch.html.twig' %}
                 {% block actions %}
                     <li>{{ form_widget(batch_form.accept) }}</li>
+                    <li>{{ form_widget(batch_form.pending) }}</li>
                     <li>
                         <a href="#" data-toggle="modal" data-target="#validate-comment">
                             {{ 'admin.sheet.validate'|trans }}
