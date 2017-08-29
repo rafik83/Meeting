@@ -68,7 +68,8 @@ class SheetViewQueryHandlerTest extends TestCase
                 new LinkView('Français', '/fr/sheet/fr', 'fr'),
                 new LinkView('Anglais', '/fr/sheet/en', 'en'),
                 new LinkView('Allemand', '/fr/sheet/de', 'de'),
-            ]
+            ],
+            true
         );
 
         $this->assertEquals($expected, $result);
