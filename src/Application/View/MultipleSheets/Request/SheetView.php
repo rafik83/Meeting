@@ -33,9 +33,9 @@ class SheetView
      * @param int         $sheetId
      * @param string      $sheetTitle
      * @param Sheet       $sheet
-     * @param null|string $type
+     * @param string $type
      */
-    public function __construct($sheetId, $sheetTitle, Sheet $sheet, $type = null)
+    public function __construct($sheetId, $sheetTitle, Sheet $sheet, string $type = '')
     {
         $this->sheetId = $sheetId;
         $this->sheetTitle = $sheetTitle;

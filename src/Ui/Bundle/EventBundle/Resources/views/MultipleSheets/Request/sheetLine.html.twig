@@ -1,6 +1,6 @@
 <tr class="catalog__sheet">
     <td rowspan="{{ sheetView.numberOfRequest }}">
-        <p>{{ sheetView.sheetTitle }} {% if sheetView.type is not null %}<span class="label label-primary">{{ sheetView.type }}</span>{% endif %}</p>
+        <p>{{ sheetView.sheetTitle }} {% if sheetView.type is not empty %}<span class="label label-primary">{{ sheetView.type }}</span>{% endif %}</p>
     </td>
 
     {% for requestView in sheetView.requestViews %}
