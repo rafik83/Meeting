@@ -627,6 +627,8 @@ class RequestRepository implements RequestRepositoryInterface
                 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true'
             )
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
+            ->join('fromSheet.type', 'fromSheetType')
+            ->join('toSheet.type', 'toSheetType')
             ->leftJoin('request.meeting', 'meeting')
             ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
             ->setParameter('event', $event)

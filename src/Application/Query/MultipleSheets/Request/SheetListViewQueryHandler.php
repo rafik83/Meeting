@@ -199,9 +199,9 @@ class SheetListViewQueryHandler
         Event $event,
         array &$multipleSheets,
         array &$sheetsMet,
-        $locale,
-        $state,
-        $type,
+        string $locale,
+        ?string $state,
+        ?string $type,
         User $user = null
     ) {
         /** @var SheetView[] $sheetViews */
