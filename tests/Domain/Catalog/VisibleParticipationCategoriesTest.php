@@ -39,7 +39,7 @@ class VisibleParticipationCategoriesTest extends TestCase
         $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $rule1->getSeerCategory()->shouldBeCalled()->willReturn($category1->reveal());
         $rule2->getSeerCategory()->shouldBeCalled()->willReturn($category2->reveal());
-        $rule2->getSeeableCategory()->shouldBeCalled()->willReturn([$category3->reveal()]);
+        $rule2->getSeeableCategory()->shouldBeCalled()->willReturn($category3->reveal());
 
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
         $ruleRepository

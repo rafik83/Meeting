@@ -30,6 +30,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Type\TypeInterface;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilder;
@@ -391,28 +392,22 @@ class SheetSearchQueryBuilder
      */
     protected function filterByCategory(array &$filters)
     {
-        if (!isset($filters['category']) || empty($filters['category'])) {
+        if (!isset($filters['categories']) || empty($filters['categories'])) {
             return;
         }
 
-        $categories = $filters['category'];
+        $nested = new Nested();
+        $nested->setPath('categories');
 
-        if ($categories instanceof Category) {
-            $categories = [$categories];
+        $matchId = new BoolQuery();
+
+        foreach ($filters['categories'] as $category) {
+            $matchId->addShould(
+                (new Term)->setTerm('categories.id', $category->id)
+            );
         }
 
-        $nested    = new Nested();
-        $boolQuery = new BoolQuery();
-
-        foreach ($categories as $category) {
-            if ($category instanceof Category) {
-                $matchQuery = new Match();
-                $matchQuery->setField('categories.id', $category->getId());
-                $boolQuery->addShould($matchQuery);
-            }
-        }
-
-        $nested->setQuery($boolQuery)->setPath('categories');
+        $nested->setQuery($matchId);
         $this->query->addMust($nested);
     }
 

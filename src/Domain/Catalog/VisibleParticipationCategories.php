@@ -37,20 +37,17 @@ class VisibleParticipationCategories
     {
         $visibleCategories = [];
         $filteredRules     = [];
-        $categoryTypes     = $sheet->getType()->getCategories();
+        $categories     = $sheet->getType()->getCategories();
         $rules             = $this->ruleRepository->getByEvent($sheet->getEvent());
 
-        foreach ($categoryTypes as $categoryType) {
-            $filteredRules = array_filter($rules, function (Rule $rule) use ($categoryType) {
-                return $rule->getSeerCategory() === $categoryType;
+        foreach ($categories as $category) {
+            $filteredRules = array_filter($rules, function (Rule $rule) use ($category) {
+                return $rule->getSeerCategory() === $category;
             });
         }
 
         foreach ($filteredRules as $rule) {
-            /** @var Category $categoryType */
-            foreach ($rule->getSeeableCategory() as $categoryType) {
-                $visibleCategories[$categoryType->getId()] = $categoryType;
-            }
+            $visibleCategories[$rule->getSeeableCategory()->getId()] = $rule->getSeeableCategory();
         }
 
         return $visibleCategories;

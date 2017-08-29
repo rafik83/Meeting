@@ -89,7 +89,7 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $event = $eventDomain->getEvent();
+        $event  = $eventDomain->getEvent();
         $locale = $request->getLocale();
 
         if (!$sheet->isInCatalog()) {
