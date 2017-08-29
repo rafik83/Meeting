@@ -446,6 +446,19 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsNotPendingById(array $ids)
+    {
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder
+            ->andWhere('sheet.state != :state')
+            ->setParameter('state', Sheet::STATE_PENDING);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUserSheetsByTypes(User $user, array $types)
     {
         $queryBuilder = $this

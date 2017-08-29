@@ -792,6 +792,11 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
+    command.sheet.batch_pending_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@?'
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
@@ -933,6 +938,7 @@ services:
             - '@command.sheet.batch_validation_validate_handler'
             - '@command.sheet.batch_generate_invoice_handler'
             - '@command.sheet.batch_assign_to_group_handler'
+            - '@command.sheet.batch_pending_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 
@@ -1948,6 +1954,11 @@ services:
             - '@datetime'
             - '@sheet.happening_participation.enable_disable_manager'
             - '@adapter.sheet_indexer'
+    command.sheet.post_batch.post_batch_pending_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchPendingHandler
+        arguments:
+           - '@event_dispatcher'
+           - '@datetime'
     command.sheet.post_batch.post_batch_draft_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraftHandler
         arguments:
@@ -3932,6 +3943,15 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_accept_handler'
+        tags:
+            - { name: console.command }
+
+    command_batch.batch_pending_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchPendingCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_pending_handler'
         tags:
             - { name: console.command }
 

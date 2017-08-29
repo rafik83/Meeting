@@ -63,6 +63,10 @@ class BatchHandler
 
     /** @var BatchAssignToGroupHandler */
     private $batchAssignToGroupHandler;
+    /**
+     * @var BatchPendingHandler
+     */
+    private $batchPendingHandler;
 
     /**
      * BatchHandler constructor.
@@ -77,6 +81,7 @@ class BatchHandler
      * @param BatchValidationValidateHandler $batchValidationValidateHandler
      * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
+     * @param BatchPendingHandler            $batchPendingHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -88,7 +93,8 @@ class BatchHandler
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
-        BatchAssignToGroupHandler $batchAssignToGroupHandler
+        BatchAssignToGroupHandler $batchAssignToGroupHandler,
+        BatchPendingHandler $batchPendingHandler
     ) {
         $this->sheetSearchAdapter             = $sheetSearchAdapter;
         $this->batchValidateHandler           = $batchValidateHandler;
@@ -100,6 +106,7 @@ class BatchHandler
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
         $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
         $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
+        $this->batchPendingHandler            = $batchPendingHandler;
     }
 
     /**
@@ -131,6 +138,12 @@ class BatchHandler
 
         if ($batch->accept) {
             return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids, $batch->admin));
+        }
+
+        if($batch->pending) {
+            return $this->batchPendingHandler->handle(
+                new BatchPending($batch->ids, $batch->admin)
+            );
         }
 
         if ($batch->enable || $batch->disable) {
@@ -168,11 +181,11 @@ class BatchHandler
                 new BatchValidationValidate($batch->event, $batch->ids, $batch->admin)
             );
         }
-        
+
         if ($batch->generateInvoice) {
-           return $this->batchGenerateInvoiceHandler->handle(
-               new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
-           );
+            return $this->batchGenerateInvoiceHandler->handle(
+                new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
+            );
         }
 
         if ($batch->assignToGroup && $batch->group !== null) {
