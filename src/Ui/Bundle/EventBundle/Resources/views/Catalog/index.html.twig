@@ -12,11 +12,11 @@
     <div class="header-mobile col-xs-12">
         <div class="catalog-mobile-filters visible-xs">
             <div class="header-mobile-item open" data-anchor="filter-type">
-                <div class="menu-mobile-button btn btn-primary btn-block">
+                <a href="#" class="menu-mobile-button btn btn-primary btn-block">
                     {{ 'catalog.mobile.filters.allParticipants'|trans }}
                     <span class="total-participants">( {{ paginatedResult.total }} )</span>
                     <i class="glyphicon glyphicon-chevron-down pull-right"></i>
-                </div>
+                </a>
                 <div id="filter-type" class="header-mobile-menu">
                     <h3 class="menu-mobile-title">Type de participants</h3>
                     {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {

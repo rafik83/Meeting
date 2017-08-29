@@ -1,18 +1,22 @@
-{{ dump(choices) }}<ul>
-    <li class="filter_items">
-        <a href="#" class="catalog-mobile-filter" data-filter-id="all">
-            {{ 'catalog.mobile.filters.allParticipants'|trans }}
-            <span class="pull-right">( {{ totalParticipants }} )</span>
-        </a>
+<ul>
+    <li
+            class="filter_items catalog-mobile-filter"
+            data-filter-id="all"
+            data-count-participant="{{ totalParticipants }}"
+            data-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
+    >
+        {{ 'catalog.mobile.filters.allParticipants'|trans }}
+        <span class="pull-right">( {{ totalParticipants }} )</span>
     </li>
     {% for child in form.children %}
-        <li class="filter__item">
-            <a href="#" class="catalog-mobile-filter" data-filter-id="{{ choices[child.vars.value].id }}">
-                {{ child.vars.label|trans({}, child.vars.translation_domain) }}
-                <span class="count-participant pull-right" data-count-participant="{{ choices[child.vars.value].count }}">
-                    ( {{ choices[child.vars.value].count }} )
-                </span>
-            </a>
+        <li
+                class="filter__item catalog-mobile-filter"
+                data-filter-id="{{ choices[child.vars.value].id }}"
+                data-count-participant="{{ choices[child.vars.value].count }}"
+                data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
+        >
+            {{ child.vars.label|trans({}, child.vars.translation_domain) }}
+            <span class="pull-right" >( {{ choices[child.vars.value].count }} )</span>
         </li>
     {% endfor %}
 </ul>

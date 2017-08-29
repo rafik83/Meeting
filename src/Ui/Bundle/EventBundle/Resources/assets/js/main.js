@@ -79,7 +79,12 @@ function init (target) {
     });
 
     $('.catalog-mobile-filter', target).on('click', function () {
-        new CatalogMobileFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+        new CatalogMobileFilters(
+            $(this),
+            $('.catalog form', target),
+            target.querySelector('.catalog'),
+            $('.menu-mobile-button')
+        );
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {

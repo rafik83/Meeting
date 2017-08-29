@@ -1,15 +1,15 @@
 var $      = require('jquery'),
     PubSub = require('pubsub-js');
 
-function CatalogMobileFilters (element, filterForm, catalog) {
+function CatalogMobileFilters (element, filterForm, catalog, button) {
     var data;
-    var filterId = element.attr('data-filter-id');
+    var filterId     = element.attr('data-filter-id');
     var checkedTypes = $(filterForm).find('input[name="type[]"]');
-    var action = $(filterForm).attr('action');
-    var content = element.text;
-    var count = element.querySelector('count-participant').dataset.countParticipant;
-    console.log(count);
-    console.log(content);
+    var action       = $(filterForm).attr('action');
+    var content      = element.attr('data-content');
+    var count        = element.attr('data-count-participant');
+
+    button.html(content + ' <span class="total-participants">( ' + count + ' ) </span><i class="glyphicon glyphicon-chevron-down pull-right"></i>');
 
     // Uncheck all filter checkbox except the one with the same id clicked
     for (var i = 0; i < checkedTypes.length; i++) {
