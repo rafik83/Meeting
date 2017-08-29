@@ -7,6 +7,7 @@
         'doesCurrentUserParticipate': happening.doesCurrentUserParticipate,
         'isUserAloneParticipant': isUserAloneParticipant,
         'withHourPrefix': true,
+        'isActionButtonsOnDetails': false,
     }) }}
 
     <div class="details">
@@ -14,6 +15,12 @@
 
         <p>{{ happening.description|nl2br }}</p>
 
-        {{ include('EventBundle:Happening:footer.html.twig', { 'happening': happening, 'beginHour': happening.begin, 'endHour': happening.end, 'isUserAloneParticipant': isUserAloneParticipant}) }}
+        {{ include('EventBundle:Happening:footer.html.twig', {
+            'happening': happening,
+            'beginHour': happening.begin,
+            'endHour': happening.end,
+            'isUserAloneParticipant': isUserAloneParticipant,
+            'isActionButtonsOnDetails': false,
+        }) }}
     </div>
 </div>

@@ -42,7 +42,7 @@ Feature: Unavailability
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr/sheet/2/agenda"
     And I should see "unavailability.title"
-    When I press "agenda.unavailability.remove"
+    When I press "cancelUnavailability"
     Then I should be on this page "/fr/sheet/2/agenda/participant/2"
     And I should not see "unavailability.title"
 
@@ -69,5 +69,5 @@ Feature: Unavailability
       | create_unavailability_message                 | "Concert de Patrick sebastien" |
     And I press "form.create_unavailability.children.submit.label"
     Then I should be on this page "/fr/sheet/2/agenda/participant/2"
-    And I should not see "unavailability.title"
+    And I should see "unavailability.title"
     And I should see "Concert de Patrick sebastien"

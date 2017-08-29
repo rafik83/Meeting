@@ -5,10 +5,19 @@
         'picto': happening.picto,
         'doesCurrentUserParticipate': true,
         'isUserAloneParticipant': isUserAloneParticipant,
+        'isActionButtonsOnDetails': true,
     }) }}
     <div class="details">
         {{ include('EventBundle:Happening:speakers.html.twig', {happening: happening}) }}
         <p>{{ happening.description|nl2br }}</p>
-        {{ include('EventBundle:Happening:footer.html.twig', { 'sheet': agenda.sheet, 'happening': happening, 'beginHour': happening.begin, 'endHour': happening.end, 'isUserAloneParticipant': isUserAloneParticipant }) }}
+        {{ include('EventBundle:Happening:footer.html.twig', {
+            'sheet': agenda.sheet,
+            'happening': happening,
+            'beginHour': happening.begin,
+            'endHour': happening.end,
+            'isUserAloneParticipant': isUserAloneParticipant,
+            'doesCurrentUserParticipate': true,
+            'isActionButtonsOnDetails': true,
+        }) }}
     </div>
 </div>
