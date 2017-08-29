@@ -1,17 +1,25 @@
+var $ = require('jquery');
+
+/**
+ * @param element
+ */
 function HeaderMobile (element)
 {
     this.element = element;
-    this.menu = element.querySelector('#' + element.dataset.anchor);
+    this.menu    = element.querySelector('#' + element.dataset.anchor);
 
     this.element.addEventListener('click', function () {
         this.toggleMenu();
     }.bind(this));
 
-    this.element.querySelector('.menu-mobile-title').addEventListener('click', function () {
+    $('.header-close').on('click', function() {
         this.toggleMenu();
     }.bind(this));
 }
 
+/**
+ * Open and close header mobile
+ */
 HeaderMobile.prototype.toggleMenu = function () {
     document.body.classList.toggle('menu-mobile-opened');
     this.element.classList.toggle('open');
