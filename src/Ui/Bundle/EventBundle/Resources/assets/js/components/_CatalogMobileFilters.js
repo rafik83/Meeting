@@ -1,7 +1,7 @@
 var $      = require('jquery'),
     PubSub = require('pubsub-js');
 
-function CatalogMobileFilters (element, filterForm, catalog, button) {
+function CatalogMobileFilters(element, filterForm, catalog, button) {
     var data;
     var filterId     = element.attr('data-filter-id');
     var checkedTypes = $(filterForm).find('input[name="type[]"]');
@@ -9,7 +9,10 @@ function CatalogMobileFilters (element, filterForm, catalog, button) {
     var content      = element.attr('data-content');
     var count        = element.attr('data-count-participant');
 
-    button.html(content + ' <span class="total-participants">( ' + count + ' ) </span><i class="glyphicon glyphicon-chevron-down pull-right"></i>');
+    button.html(
+        '<span>' + content + ' </span><span class="button-count total-participants">( ' + count + ' ) ' +
+        '<i class="glyphicon glyphicon-chevron-down"></i></span>'
+    );
 
     // Uncheck all filter checkbox except the one with the same id clicked
     for (var i = 0; i < checkedTypes.length; i++) {
@@ -25,8 +28,6 @@ function CatalogMobileFilters (element, filterForm, catalog, button) {
     $(catalog).find('.catalog__item').fadeTo('fast', 0.3);
 
     data = $(filterForm).serialize();
-
-    history.pushState({}, '', action + '?' + data);
 
     // Update sheets list
     $.get(action, data, function(response) {

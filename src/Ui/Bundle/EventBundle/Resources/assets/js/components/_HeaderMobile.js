@@ -3,18 +3,13 @@ var $ = require('jquery');
 /**
  * @param element
  */
-function HeaderMobile (element)
+function HeaderMobile(element)
 {
     this.element = element;
     this.menu    = element.querySelector('#' + element.dataset.anchor);
 
-    this.element.addEventListener('click', function () {
-        this.toggleMenu();
-    }.bind(this));
-
-    $('.header-close').on('click', function() {
-        this.toggleMenu();
-    }.bind(this));
+    this.element.addEventListener('click',  this.toggleMenu.bind(this));
+    $('.header-close').on('click', this.toggleMenu.bind(this));
 }
 
 /**

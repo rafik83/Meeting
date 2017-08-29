@@ -13,12 +13,14 @@
         <div class="catalog-mobile-filters visible-xs">
             <div class="header-mobile-item open" data-anchor="filter-type">
                 <a href="#" class="menu-mobile-button btn btn-primary btn-block">
-                    {{ 'catalog.mobile.filters.allParticipants'|trans }}
-                    <span class="total-participants">( {{ paginatedResult.total }} )</span>
-                    <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                    <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
+                    <span class="button-count total-participants">
+                        ( {{ paginatedResult.total }} )
+                         <i class="glyphicon glyphicon-chevron-down"></i>
+                    </span>
                 </a>
                 <div id="filter-type" class="header-mobile-menu">
-                    <h3 class="menu-mobile-title">Type de participants</h3>
+                    <h3 class="menu-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
                     {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {
                         form: searchForm.type,
                         choices: typeViews,
