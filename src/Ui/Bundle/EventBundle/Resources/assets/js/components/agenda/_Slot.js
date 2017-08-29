@@ -6,16 +6,19 @@ var EventEmitter = require('./_EventEmitter');
  * @param {Agenda} agenda Agenda
  * @param {Number} time Time (in minutes from midnight)
  * @param {Number} duration Duration (in minutes)
+ * @param {string} dateAgenda
  */
-function Slot(agenda, time, duration) {
-    EventEmitter.call(this, this.createElement(time));
-
+function Slot(agenda, time, duration, dateAgenda) {
     this.agenda   = agenda;
+    this.dateAgenda = dateAgenda;
     this.duration = duration;
+    this.time     = time;
     this.start    = this.agenda.getRelativeTime(time);
     this.end      = this.start + duration;
     this.meets    = [];
     this.scale    = 1;
+
+    EventEmitter.call(this, this.createElement(time, this.dateAgenda));
 
     this.onMeetScale = this.onMeetScale.bind(this);
     this.displayMeet = this.displayMeet.bind(this);
@@ -61,15 +64,17 @@ Slot.prototype.resolveScale = function() {
  * Create element
  *
  * @param {Number} time Time in minutes
+ * @param {string} agendaDate
  *
  * @return {Element}
  */
-Slot.prototype.createElement = function(time) {
+Slot.prototype.createElement = function(time, agendaDate) {
     var element = document.createElement('div');
     var label   = document.createElement('span');
 
     label.innerText   = this.format(time);
     element.className = 'insert';
+    element.id =  'm' + agendaDate + '-' + time;
     element.appendChild(label);
 
     return element;
