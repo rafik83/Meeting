@@ -11,15 +11,18 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\SheetsAvailableBySlotQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,9 +39,7 @@ class AgendaController extends Controller
      */
     public function indexAction(EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
+        $this->checkAccess($eventDomain, $sheet);
 
         $participant = $sheet->getUserParticipant($user);
 
@@ -71,9 +72,7 @@ class AgendaController extends Controller
         Sheet $sheet,
         UserInterface $user
     ) {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
+        $this->checkAccess($eventDomain, $sheet);
 
         if ($participant->getSheet() !== $sheet) {
             throw $this->createNotFoundException('This participant is not in this sheet');
@@ -101,5 +100,44 @@ class AgendaController extends Controller
             'sheet'               => $sheet,
             'tipTranslationViews' => $tipTranslationViews,
         ]);
+    }
+
+    /**
+     * @param EventDomain      $eventDomain
+     * @param UserInterface    $user
+     * @param Sheet            $excludedSheet
+     * @param SlotAvailability $slot
+     *
+     * @return JsonResponse
+     */
+    public function countSheetsAvailableBySlotAction(
+        EventDomain $eventDomain,
+        UserInterface $user,
+        Sheet $excludedSheet,
+        SlotAvailability $slot
+    ): JsonResponse {
+        $this->checkAccess($eventDomain, $excludedSheet);
+
+        $participant = $excludedSheet->getUserParticipant($user);
+
+        if ($participant === null || $participant->getSheet() !== $excludedSheet) {
+            return new JsonResponse(['response' => 'participant not found'], 404);
+        }
+
+        $query = new SheetsAvailableBySlotQuery($excludedSheet, $slot);
+        $this
+            ->get('query.agenda.sheets_available_by_slot_query_handler')
+            ->handle($query);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     * @param Sheet $sheet
+     */
+    private function checkAccess(EventDomain $eventDomain, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
     }
 }
