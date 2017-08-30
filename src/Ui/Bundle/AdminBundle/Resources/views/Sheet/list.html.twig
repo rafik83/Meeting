@@ -129,7 +129,7 @@
         </div>
     </div>
 
-    {% set hasCategories = filter_form.category is defined ? filter_form.category.vars.choices|length > 1 : false %}
+    {% set hasCategories = filter_form.categories is defined ? filter_form.categories.vars.choices|length > 1 : false %}
 
     <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-sheets="{{ sheetsLimit }}" data-all-sheets="{{ sheets.total }}">
         <p>

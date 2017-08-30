@@ -400,10 +400,9 @@ class SheetSearchQueryBuilder
         $nested->setPath('categories');
 
         $matchId = new BoolQuery();
-
         foreach ($filters['categories'] as $category) {
             $matchId->addShould(
-                (new Term)->setTerm('categories.id', $category->id)
+                (new Term)->setTerm('categories.id', $category->getId())
             );
         }
 

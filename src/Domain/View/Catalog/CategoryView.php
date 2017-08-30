@@ -32,4 +32,12 @@ class CategoryView
         $this->title = $title;
         $this->count = $count;
     }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }
