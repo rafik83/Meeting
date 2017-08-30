@@ -796,7 +796,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@?'
+            - '@adapter_batch_job_queue.batch_pending_job_queue'
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
@@ -2018,6 +2018,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_accept_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_pending_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchPendingJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_validate_job_queue:
