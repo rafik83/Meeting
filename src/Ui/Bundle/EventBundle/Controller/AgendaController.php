@@ -124,7 +124,7 @@ class AgendaController extends Controller
             return new JsonResponse(['response' => 'participant not found'], 404);
         }
 
-        $query = new SheetsAvailableBySlotQuery($excludedSheet, $slot);
+        $query = new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $excludedSheet, $slot);
         $this
             ->get('query.agenda.sheets_available_by_slot_query_handler')
             ->handle($query);

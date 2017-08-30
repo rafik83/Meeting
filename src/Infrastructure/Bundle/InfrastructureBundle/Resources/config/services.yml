@@ -3312,6 +3312,10 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
     query.agenda.sheets_available_by_slot_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\SheetsAvailableBySlotQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@catalog.visible_participation_types'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetsAvailableBySlotQuery }
     query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:

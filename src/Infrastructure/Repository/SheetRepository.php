@@ -87,7 +87,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsInCatalogByEvent(Event $event)
+    public function getSheetsInCatalogByEvent(Event $event, array $types = [], $excludedSheet = null)
     {
         $queryBuilder = $this
             ->entityManager
