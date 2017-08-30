@@ -28,9 +28,9 @@ use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
@@ -185,6 +185,7 @@ class SheetController extends Controller
             if ($batchForm->isValid()) {
                 $batch->assign             = $batchForm->get('assign')->isClicked();
                 $batch->accept             = $batchForm->get('accept')->isClicked();
+                $batch->pending            = $batchForm->get('pending')->isClicked();
                 $batch->validate           = $batchForm->get('validate')->isClicked();
                 $batch->draft              = $batchForm->get('validationStateDraft')->isClicked();
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
