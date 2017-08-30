@@ -27,7 +27,6 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
-use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
