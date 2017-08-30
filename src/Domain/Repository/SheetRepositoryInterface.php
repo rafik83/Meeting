@@ -234,7 +234,7 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getSheetsNotPendingById(array $ids);
+    public function getSheetsNotPendingById(array $ids): array;
 
     /**
      * @param User  $user

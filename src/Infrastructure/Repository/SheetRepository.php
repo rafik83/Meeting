@@ -446,7 +446,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsNotPendingById(array $ids)
+    public function getSheetsNotPendingById(array $ids): array
     {
         $queryBuilder = $this->findByIdsQueryBuilder($ids);
         $queryBuilder
