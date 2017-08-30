@@ -74,13 +74,35 @@ class MeetingSlot implements TimeRangeInterface
     }
 
     /**
-     * Get begin.
-     *
      * @return \DateTimeInterface
      */
     public function getBegin()
     {
         return $this->begin;
+    }
+
+    /**
+     * @param \DateTimeInterface $begin
+     *
+     * @return MeetingSlot
+     */
+    public function setBegin(\DateTimeInterface $begin)
+    {
+        $this->begin = $begin;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeInterface $end
+     *
+     * @return MeetingSlot
+     */
+    public function setEnd(\DateTimeInterface $end)
+    {
+        $this->end = $end;
+
+        return $this;
     }
 
     /**

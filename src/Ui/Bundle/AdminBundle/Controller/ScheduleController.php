@@ -57,6 +57,9 @@ class ScheduleController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
             'slots' => $slots,
+            'featureEventDatesToCurrentDateEnabled' => $this
+                ->container
+                ->getParameter('feature_event_dates_to_current_date_enabled'),
         ]);
     }
 
