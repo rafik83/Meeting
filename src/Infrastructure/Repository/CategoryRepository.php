@@ -185,8 +185,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->createQueryBuilder()
             ->select('category.id, translations.title')
             ->from('Entity:Category', 'category', 'category.id')
-            ->join('category.translations', 'translations', 'WITH', 'translations.locale = :locale')
-            ->where('category.event = :event')
+            ->join('category.translations', 'translations', 'WITH', 'category.event = :event AND translations.locale = :locale')
             ->setParameter('event', $event)
             ->setParameter('locale', $locale)
         ;

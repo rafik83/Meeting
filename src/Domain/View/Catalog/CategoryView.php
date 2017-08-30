@@ -26,7 +26,7 @@ class CategoryView
      * @param string $title
      * @param int    $count
      */
-    public function __construct(int $id, string $title, int $count)
+    public function __construct(int $id, string $title, int $count = 0)
     {
         $this->id    = $id;
         $this->title = $title;
