@@ -9,9 +9,9 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block header_mobile %}
-    <div class="open header-mobile col-xs-12">
+    <div class="open catalog-mobile col-xs-12">
         <div class="catalog-mobile-filters visible-xs">
-            <div class="header-mobile-item open" data-anchor="filter-type">
+            <div class="catalog-mobile-item open" data-anchor="filter-type">
                 <a href="#" class="menu-mobile-button btn btn-primary btn-block">
                     <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
                     <span class="button-count total-participants">
@@ -19,7 +19,7 @@
                          <i class="glyphicon glyphicon-chevron-down"></i>
                     </span>
                 </a>
-                <div id="filter-type" class="header-mobile-menu">
+                <div id="filter-type" class="catalog-mobile-menu">
                     <h3 class="menu-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
                     {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {
                         form: searchForm.type,
@@ -29,11 +29,13 @@
                 </div>
             </div>
         </div>
-        <div class="header-mobile-close">
-            <button type="button" class="header-close pull-right">
-                {{ 'navigation.close'|trans }}
-                <i class="icon-Fermer_4"></i>
+    </div>
+    <div class="catalog-mobile-menu">
+        <div class="catalog-mobile-close">
+            <button type="button" class="catalog-close">
+                <i class="icon-Fermer_4"></i> {{ 'navigation.close'|trans }}
             </button>
+            <div class="clearfix"></div>
         </div>
     </div>
 {% endblock %}

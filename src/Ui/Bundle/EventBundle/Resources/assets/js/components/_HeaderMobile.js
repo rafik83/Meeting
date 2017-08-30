@@ -9,7 +9,7 @@ function HeaderMobile(element)
     this.menu    = element.querySelector('#' + element.dataset.anchor);
 
     this.element.addEventListener('click',  this.toggleMenu.bind(this));
-    $('.header-close').on('click', this.toggleMenu.bind(this));
+    $('.catalog-close').on('click', this.toggleMenu.bind(this));
 }
 
 /**

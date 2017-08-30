@@ -83,7 +83,7 @@ function init (target) {
             $(this),
             $('.catalog form', target),
             target.querySelector('.catalog'),
-            $('.menu-mobile-button')
+            $('.catalog-mobile-button')
         );
     });
 
@@ -219,7 +219,7 @@ function init (target) {
         new VideoConference(element);
     });
 
-    [].forEach.call(target.querySelectorAll('.header-mobile-item'), function (element) {
+    [].forEach.call(target.querySelectorAll('.catalog-mobile-item'), function (element) {
         new HeaderMobile(element);
     });
 }
