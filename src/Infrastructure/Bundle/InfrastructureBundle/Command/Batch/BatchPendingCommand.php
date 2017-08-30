@@ -65,7 +65,6 @@ class BatchPendingCommand extends Command
             ->setDescription('Batch accept sheet action')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids separated by a comma')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id');
-
     }
 
     /**

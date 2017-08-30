@@ -16,56 +16,37 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchHandler
 {
-    /**
-     * @var BatchValidateHandler
-     */
+    /** @var BatchValidateHandler */
     private $batchValidateHandler;
 
-    /**
-     * @var BatchAssignHandler
-     */
+    /** @var BatchAssignHandler */
     private $batchAssignHandler;
 
-    /**
-     * @var BatchAcceptHandler
-     */
+    /** @var BatchAcceptHandler */
     private $batchAcceptHandler;
 
-    /**
-     * @var BatchEnableDisableHandler
-     */
+    /** @var BatchEnableDisableHandler */
     private $batchEnableDisableHandler;
 
-    /**
-     * @var BatchCatalogHandler
-     */
+    /** @var BatchCatalogHandler */
     private $batchCatalogHandler;
 
-    /**
-     * @var BatchDraftHandler
-     */
+    /** @var BatchDraftHandler */
     private $batchDraftHandler;
 
-    /**
-     * @var BatchValidationValidateHandler
-     */
+    /** @var BatchValidationValidateHandler */
     private $batchValidationValidateHandler;
 
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @var BatchGenerateInvoiceHandler;
-     */
+    /** @var BatchGenerateInvoiceHandler */
     private $batchGenerateInvoiceHandler;
 
     /** @var BatchAssignToGroupHandler */
     private $batchAssignToGroupHandler;
-    /**
-     * @var BatchPendingHandler
-     */
+
+    /** @var BatchPendingHandler */
     private $batchPendingHandler;
 
     /**

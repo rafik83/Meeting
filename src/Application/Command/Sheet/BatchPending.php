@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 class BatchPending extends AbstractBatch
 {
     /**
-     * @var array
+     * @var int[]
      */
     public $ids;
 
@@ -27,7 +27,7 @@ class BatchPending extends AbstractBatch
     /**
      * BatchPending constructor.
      *
-     * @param array $ids
+     * @param int[] $ids
      * @param Admin $admin
      */
     public function __construct(array $ids, Admin $admin)
