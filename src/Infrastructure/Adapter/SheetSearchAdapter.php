@@ -103,7 +103,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
             $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
             $query->addAggregation(
-                $this->getNestedAggregation(self::ES_FIELD_CATEGORY, self::ES_PATH_CATEGORY)
+                $this->getNestedAggregation(self::ES_FIELD_CATEGORIES, self::ES_PATH_CATEGORIES)
             );
             $query->addAggregation(
                 $this->getNestedAggregation(self::ES_FIELD_POSITION, self::ES_PATH_POSITION)
@@ -249,7 +249,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         array $filters,
         string $filterToRemove
     ): array {
-        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_CATEGORY);
+        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_CATEGORIES);
     }
 
     public function getOrganizationCategoryAggregations(
@@ -312,8 +312,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         if ($elasticField === self::ES_FIELD_POSITION) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
-        } elseif ($elasticField === self::ES_FIELD_CATEGORY) {
-            $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORY));
+        } elseif ($elasticField === self::ES_FIELD_CATEGORIES) {
+            $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORIES));
         } else {
             $query->addAggregation($this->getAggregation($elasticField));
         }

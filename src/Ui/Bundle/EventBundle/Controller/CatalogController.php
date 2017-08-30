@@ -441,7 +441,7 @@ class CatalogController extends Controller
         $filters = [
             SearchFields::ORDER_BY        => Sheet\Constant::ORDER_BY_RELEVANCE,
             SearchFields::FILTER_TYPE     => $typeViews,
-            SearchFields::FILTER_CATEGORY => $categoryViews
+            SearchFields::FILTER_CATEGORY => $categoryViews,
         ];
 
         return $filters;

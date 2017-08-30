@@ -37,7 +37,7 @@ class VisibleParticipationCategories
     {
         $visibleCategories = [];
         $filteredRules     = [];
-        $categories     = $sheet->getType()->getCategories();
+        $categories        = $sheet->getType()->getCategories();
         $rules             = $this->ruleRepository->getByEvent($sheet->getEvent());
 
         foreach ($categories as $category) {
