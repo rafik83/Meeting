@@ -83,6 +83,13 @@ interface RequestRepositoryInterface
     public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array;
+
+    /**
      * @param Event $event
      *
      * @return int

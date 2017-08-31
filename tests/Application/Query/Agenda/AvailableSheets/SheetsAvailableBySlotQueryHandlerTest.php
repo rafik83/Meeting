@@ -12,14 +12,13 @@ namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\RequestApprovedAndRefusedQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\RequestApprovedAndRefusedQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQueryHandler;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -40,13 +39,13 @@ class SheetsAvailableBySlotQueryHandlerTest extends TestCase
     private $visibleParticipationTypes;
 
     /** @var ObjectProphecy */
-    private $requestApprovedAndRefusedQueryHandler;
+    private $requestRepository;
 
     public function setUp()
     {
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $this->requestApprovedAndRefusedQueryHandler = $this->prophesize(RequestApprovedAndRefusedQueryHandler::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $this->visibleParticipationTypes = $this->prophesize(VisibleParticipationTypes::class);
     }
 
@@ -95,8 +94,8 @@ class SheetsAvailableBySlotQueryHandlerTest extends TestCase
             new Type($event),
         ];
 
-        $this->requestApprovedAndRefusedQueryHandler
-            ->handle(new RequestApprovedAndRefusedQuery($fromSheet->reveal()))
+        $this->requestRepository
+            ->getApprovedAndRefusedRequestBySheet($fromSheet->reveal())
             ->shouldBeCalled()
             ->willReturn($requestForExcludedSheets);
 
@@ -128,7 +127,7 @@ class SheetsAvailableBySlotQueryHandlerTest extends TestCase
         $handler = new SheetsAvailableBySlotQueryHandler(
             $this->sheetRepository->reveal(),
             $this->participantRepository->reveal(),
-            $this->requestApprovedAndRefusedQueryHandler->reveal(),
+            $this->requestRepository->reveal(),
             $this->visibleParticipationTypes->reveal()
         );
 

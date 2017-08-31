@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -23,27 +24,27 @@ class SheetsAvailableBySlotQueryHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /** @var RequestApprovedAndRefusedQueryHandler */
-    private $requestApprovedAndRefusedQueryHandler;
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
 
     /** @var VisibleParticipationTypes */
     private $visibleParticipationTypes;
 
     /**
-     * @param SheetRepositoryInterface              $sheetRepository
-     * @param ParticipantRepositoryInterface        $participantRepository
-     * @param RequestApprovedAndRefusedQueryHandler $requestApprovedAndRefusedQueryHandler
-     * @param VisibleParticipationTypes             $visibleParticipationTypes
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param RequestRepositoryInterface     $requestRepository
+     * @param VisibleParticipationTypes      $visibleParticipationTypes
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
-        RequestApprovedAndRefusedQueryHandler $requestApprovedAndRefusedQueryHandler,
+        RequestRepositoryInterface $requestRepository,
         VisibleParticipationTypes $visibleParticipationTypes
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->participantRepository = $participantRepository;
-        $this->requestApprovedAndRefusedQueryHandler = $requestApprovedAndRefusedQueryHandler;
+        $this->requestRepository = $requestRepository;
         $this->visibleParticipationTypes = $visibleParticipationTypes;
     }
 
@@ -55,10 +56,8 @@ class SheetsAvailableBySlotQueryHandler
     public function handle(SheetsAvailableBySlotQuery $query): int
     {
         $requestForExcludedSheet = $this
-            ->requestApprovedAndRefusedQueryHandler
-            ->handle(
-                new RequestApprovedAndRefusedQuery($query->excludedSheet)
-            );
+            ->requestRepository
+            ->getApprovedAndRefusedRequestBySheet($query->excludedSheet);
 
         $excludedSheets = [];
 
