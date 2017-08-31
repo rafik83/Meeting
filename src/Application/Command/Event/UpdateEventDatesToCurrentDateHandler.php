@@ -139,7 +139,7 @@ class UpdateEventDatesToCurrentDateHandler
 
         foreach ($days as $dayNumber => $day) {
             $day->setStartTime($this->update($day->getStartTime(), $dayNumber));
-            $day->setEndTime($this->update($day->getEndTime()), $dayNumber);
+            $day->setEndTime($this->update($day->getEndTime(), $dayNumber));
             $this->dayRepository->set($day);
         }
 
