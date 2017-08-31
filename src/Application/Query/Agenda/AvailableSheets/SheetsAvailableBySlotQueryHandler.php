@@ -67,7 +67,7 @@ class SheetsAvailableBySlotQueryHandler
             $excludedSheets[$sheetMet->getId()] = $sheetMet;
         }
 
-        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event, [], $excludedSheets);
+        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event, $excludedSheets);
         $availableSheets = [];
         $participants    = [];
 

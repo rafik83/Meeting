@@ -100,7 +100,7 @@ class SheetsAvailableBySlotQueryHandlerTest extends TestCase
             ->willReturn($requestForExcludedSheets);
 
 
-        $this->sheetRepository->getSheetsInCatalogByEvent($event, [], $excludedSheets)
+        $this->sheetRepository->getSheetsInCatalogByEvent($event, $excludedSheets)
             ->shouldBeCalled()
             ->willReturn([$thirdSheet]);
         
