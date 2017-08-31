@@ -3310,14 +3310,21 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
-    query.agenda.sheets_available_by_slot_query_handler:
-        class: Proximum\Vimeet\Application\Query\Agenda\SheetsAvailableBySlotQueryHandler
+    query.agenda.available_sheets.sheets_available_by_slot_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@query.agenda.available_sheets.request_approved_and_refused_query_handler'
             - '@catalog.visible_participation_types'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetsAvailableBySlotQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery }
+    query.agenda.available_sheets.request_approved_and_refused_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\RequestApprovedAndRefusedQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\RequestApprovedAndRefusedQuery }
     query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQueryHandler
         arguments:

@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda;
+namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
-use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetsAvailableBySlotQuery
@@ -22,18 +22,18 @@ class SheetsAvailableBySlotQuery
     /** @var Sheet */
     public $excludedSheet;
 
-    /** @var SlotAvailability */
+    /** @var MeetingSlot */
     public $slot;
 
     /**
-     * @param Event            $event
-     * @param Sheet            $excludedSheet
-     * @param SlotAvailability $slot
+     * @param Event       $event
+     * @param Sheet       $excludedSheet
+     * @param MeetingSlot $slot
      */
     public function __construct(
         Event $event,
         Sheet $excludedSheet,
-        SlotAvailability $slot
+        MeetingSlot $slot
     ) {
         $this->event = $event;
         $this->excludedSheet = $excludedSheet;

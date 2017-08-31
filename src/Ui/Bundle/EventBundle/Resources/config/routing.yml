@@ -672,7 +672,7 @@ event_agenda_count_sheets_available_by_slot:
     requirements:
         sheet: \d+
         slot: \d+
-    method: [GET]
+    methods: [GET]
     defaults: { _controller: EventBundle:Agenda:countSheetsAvailableBySlot }
 
 happening_program:

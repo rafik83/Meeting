@@ -87,7 +87,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsInCatalogByEvent(Event $event, array $types = [], $excludedSheet = null)
+    public function getSheetsInCatalogByEvent(Event $event, array $types = [], $excludedSheets = [])
     {
         $queryBuilder = $this
             ->entityManager
@@ -96,6 +96,11 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
             ->setParameter('event', $event);
+
+        if (!empty($excludedSheets)) {
+            $queryBuilder->where('sheet NOT IN (:excludedSheets)');
+            $queryBuilder->setParameter('excludedSheets', $excludedSheets);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

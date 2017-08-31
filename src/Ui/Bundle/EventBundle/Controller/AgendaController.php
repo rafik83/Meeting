@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\SheetsAvailableBySlotQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
-use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
@@ -106,7 +106,7 @@ class AgendaController extends Controller
      * @param EventDomain      $eventDomain
      * @param UserInterface    $user
      * @param Sheet            $excludedSheet
-     * @param SlotAvailability $slot
+     * @param MeetingSlot      $slot
      *
      * @return JsonResponse
      */
@@ -114,7 +114,7 @@ class AgendaController extends Controller
         EventDomain $eventDomain,
         UserInterface $user,
         Sheet $excludedSheet,
-        SlotAvailability $slot
+        MeetingSlot $slot
     ): JsonResponse {
         $this->checkAccess($eventDomain, $excludedSheet);
 
@@ -125,9 +125,12 @@ class AgendaController extends Controller
         }
 
         $query = new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $excludedSheet, $slot);
-        $this
-            ->get('query.agenda.sheets_available_by_slot_query_handler')
-            ->handle($query);
+        $countAvailableSheets = $this
+            ->get('tactician.commandbus.query')
+            ->handle($query)
+        ;
+
+        return new JsonResponse(['response' => $countAvailableSheets]);
     }
 
     /**
