@@ -1,6 +1,6 @@
 <tr class="catalog__sheet">
     <td rowspan="{{ sheetView.numberOfRequest }}">
-        {{ sheetView.sheetTitle }}
+        <p>{{ sheetView.sheetTitle }} <span class="label label-primary">{{ sheetView.type }}</span></p>
     </td>
 
     {% for requestView in sheetView.requestViews %}
