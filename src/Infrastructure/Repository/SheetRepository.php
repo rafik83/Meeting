@@ -404,8 +404,10 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet')
+            ->select('sheet', 'type', 'type_translations')
             ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'type_translations')
             ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->andWhere(
                 sprintf(
@@ -450,6 +452,19 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder
             ->andWhere('sheet.state != :state')
             ->setParameter('state', Sheet::STATE_ACCEPTED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsNotPendingById(array $ids): array
+    {
+        $queryBuilder = $this->findByIdsQueryBuilder($ids);
+        $queryBuilder
+            ->andWhere('sheet.state != :state')
+            ->setParameter('state', Sheet::STATE_PENDING);
 
         return $queryBuilder->getQuery()->getResult();
     }

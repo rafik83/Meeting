@@ -37,6 +37,11 @@ class Batch extends AbstractBatch
     /**
      * @var bool
      */
+    public $pending;
+
+    /**
+     * @var bool
+     */
     public $assign;
 
     /**

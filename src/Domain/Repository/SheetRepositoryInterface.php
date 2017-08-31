@@ -230,6 +230,13 @@ interface SheetRepositoryInterface
     public function getSheetsUnacceptedById(array $ids);
 
     /**
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsNotPendingById(array $ids): array;
+
+    /**
      * @param User  $user
      * @param array $types
      *

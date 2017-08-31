@@ -199,16 +199,18 @@ class SheetListViewQueryHandler
         Event $event,
         array &$multipleSheets,
         array &$sheetsMet,
-        $locale,
-        $state,
-        $type,
+        string $locale,
+        ?string $state,
+        ?string $type,
         $user = null
     ) {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
 
         foreach ($sheetsMet as $sheetMet) {
-            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(new SheetViewQuery($sheetMet));
+            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(
+                new SheetViewQuery($sheetMet, $locale)
+            );
         }
 
         $requests = $this->requestRepository->getRequestsOfSheetsWithSheets(
