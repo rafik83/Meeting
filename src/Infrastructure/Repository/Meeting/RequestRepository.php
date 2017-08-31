@@ -619,6 +619,7 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
+            ->select('request', 'fromSheet', 'toSheet')
             ->from(Request::class, 'request', 'request.id')
             ->join(
                 'request.from',
