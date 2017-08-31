@@ -30,10 +30,10 @@ class SheetsAvailableBySlotQueryHandler
     private $visibleParticipationTypes;
 
     /**
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param ParticipantRepositoryInterface $participantRepository
+     * @param SheetRepositoryInterface              $sheetRepository
+     * @param ParticipantRepositoryInterface        $participantRepository
      * @param RequestApprovedAndRefusedQueryHandler $requestApprovedAndRefusedQueryHandler
-     * @param VisibleParticipationTypes      $visibleParticipationTypes
+     * @param VisibleParticipationTypes             $visibleParticipationTypes
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,

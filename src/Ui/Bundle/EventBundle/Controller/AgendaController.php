@@ -103,10 +103,10 @@ class AgendaController extends Controller
     }
 
     /**
-     * @param EventDomain      $eventDomain
-     * @param UserInterface    $user
-     * @param Sheet            $excludedSheet
-     * @param MeetingSlot      $slot
+     * @param EventDomain   $eventDomain
+     * @param UserInterface $user
+     * @param Sheet         $excludedSheet
+     * @param MeetingSlot   $slot
      *
      * @return JsonResponse
      */
@@ -135,7 +135,7 @@ class AgendaController extends Controller
 
     /**
      * @param EventDomain $eventDomain
-     * @param Sheet $sheet
+     * @param Sheet       $sheet
      */
     private function checkAccess(EventDomain $eventDomain, Sheet $sheet)
     {
