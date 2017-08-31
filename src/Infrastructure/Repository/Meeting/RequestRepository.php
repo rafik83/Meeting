@@ -626,21 +626,11 @@ class RequestRepository implements RequestRepositoryInterface
             )';
         }
 
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request', 'fromSheet', 'toSheet')
-            ->from(Request::class, 'request', 'request.id')
-            ->join(
-                'request.from',
-                'fromSheet',
-                'WITH',
-                'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true'
-            )
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
+        $queryBuilder = new FilterQueryBuilder($this->entityManager, $event);
+
+        $queryBuilder
             ->leftJoin('request.meeting', 'meeting')
             ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
-            ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);
 
@@ -657,6 +647,10 @@ class RequestRepository implements RequestRepositoryInterface
             $queryBuilder
                 ->leftJoin('request.fromParticipants', 'fp')
                 ->leftJoin('request.toParticipants', 'tp');
+        }
+
+        if ($state === Request::STATE_PLANNED) {
+            $queryBuilder->filterPlanned();
         }
 
         return $queryBuilder;
