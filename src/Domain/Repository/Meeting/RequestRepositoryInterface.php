@@ -132,12 +132,12 @@ interface RequestRepositoryInterface
     public function getRequestBetweenSheets(Sheet $one, Sheet $another);
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param Sheet[]     $sheetsMet
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param Sheet[]          $sheetsMet
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return Request[]
      */
@@ -147,7 +147,7 @@ interface RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     );
 
     /**
@@ -156,7 +156,7 @@ interface RequestRepositoryInterface
      * @param Sheet[]     $sheetsMet
      * @param string|null $state
      * @param string|null $type
-     * @param User|null   $user
+     * @param User|string|null   $user
      *
      * @return int
      */
@@ -166,7 +166,7 @@ interface RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     );
 
     /**

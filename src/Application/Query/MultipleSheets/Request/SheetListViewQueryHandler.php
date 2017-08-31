@@ -185,13 +185,13 @@ class SheetListViewQueryHandler
     /**
      * Creates the SheetViews and returns them with there requests
      *
-     * @param Event       $event
-     * @param Sheet[]     $multipleSheets
-     * @param Sheet[]     $sheetsMet
-     * @param string      $locale
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $multipleSheets
+     * @param Sheet[]          $sheetsMet
+     * @param string           $locale
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return SheetView[]
      */
@@ -202,7 +202,7 @@ class SheetListViewQueryHandler
         string $locale,
         ?string $state,
         ?string $type,
-        User $user = null
+        $user = null
     ) {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
