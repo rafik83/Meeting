@@ -106,4 +106,12 @@ class CatalogVisibilityTranslation
     {
         $this->content = $content;
     }
+
+    /**
+     * @return CatalogVisibility
+     */
+    public function getCatalogVisibility(): CatalogVisibility
+    {
+        return $this->catalogVisibility;
+    }
 }
