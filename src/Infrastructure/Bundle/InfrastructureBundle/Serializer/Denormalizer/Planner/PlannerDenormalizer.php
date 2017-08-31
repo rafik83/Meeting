@@ -42,8 +42,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
 
     const TYPE_PARTICIPANT = 'type_participant';
     const TYPE_SLOT        = 'type_slot';
-    CONST TYPE_SPOT        = 'type_spot';
-    CONST TYPE_SHEET       = 'type_sheet';
+    const TYPE_SPOT        = 'type_spot';
+    const TYPE_SHEET       = 'type_sheet';
 
     /**
      * {@inheritdoc}
@@ -129,8 +129,12 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
         }
 
         if (is_array($data['participantList']['Participant'])) {
-            foreach ($data['participantList']['Participant'] as $participant) {
-                $this->handleParticipant($participant);
+            if (!$this->isSingle($data['participantList']['Participant'])) {
+                foreach ($data['participantList']['Participant'] as $participant) {
+                    $this->handleParticipant($participant);
+                }
+            } else {
+                $this->handleParticipant($data['participantList']['Participant']);
             }
         }
 
@@ -184,7 +188,6 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
                     $this->handleSlot($slot);
                 }
             }
-
         }
 
         return $spotResult;
@@ -224,7 +227,6 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
                         $this->handleSlot($slot);
                     }
                 }
-
             }
 
             return $participantResult;
@@ -386,10 +388,18 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             && isset($meeting['participantList']['Participant'])
             && is_array($meeting['participantList']['Participant'])
         ) {
-            foreach ($meeting['participantList']['Participant'] as $participant) {
-                $participantResult = $this->handleParticipant($participant);
+            if (!$this->isSingle($meeting['participantList']['Participant'])) {
+                foreach ($meeting['participantList']['Participant'] as $participant) {
+                    $participantResult = $this->handleParticipant($participant);
 
-                if ($participantResult !== null) { // this case should not happened but it does not cost much to check
+                    if ($participantResult !== null) {
+                        $meetingResult->addParticipant($participantResult);
+                    }
+                }
+            } else {
+                $participantResult = $this->handleParticipant($meeting['participantList']['Participant']);
+
+                if ($participantResult !== null) {
                     $meetingResult->addParticipant($participantResult);
                 }
             }
