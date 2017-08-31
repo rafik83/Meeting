@@ -4,8 +4,8 @@
   }
 
   .catalog-mobile {
+    display: none;
     position: fixed;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: stretch;
@@ -13,6 +13,15 @@
     background: $color-primary;
     top: 0;
     padding: 17px;
+    z-index: 10;
+
+    &.open {
+      display: flex;
+    }
+
+    &.shadow {
+      box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
+    }
 
     .catalog-mobile-item {
 
@@ -30,22 +39,22 @@
 
       &.open {
 
-        .menu-mobile-title {
+        .catalog-mobile-title {
           display: none;
         }
 
-        .menu-mobile-button {
+        .catalog-mobile-button {
           display: block
         }
       }
 
-      .menu-mobile-title {
+      .catalog-mobile-title {
         display: block;
         margin-left:12px;
         font-size: 15px !important;
       }
 
-      .menu-mobile-button {
+      .catalog-mobile-button {
         display: none;
       }
 
@@ -87,7 +96,7 @@
       display: none;
 
       &.open {
-        display: block;
+        display: block !important;
       }
     }
   }
@@ -117,5 +126,15 @@
         }
       }
     }
+  }
+
+  .catalog {
+    margin-top: 128px;
+  }
+}
+
+@media screen and (min-width: 426px) {
+  .catalog-mobile-menu {
+    display: none;
   }
 }

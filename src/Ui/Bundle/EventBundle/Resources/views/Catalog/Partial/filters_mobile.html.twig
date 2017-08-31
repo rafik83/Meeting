@@ -6,7 +6,7 @@
             data-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
     >
         <span class="col-xs-10 filter-content">{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
-        <span class="col-xs-2 filter-count">( {{ totalParticipants }} )</span>
+        <span class="col-xs-2 filter-count">({{ totalParticipants }})</span>
     </li>
     {% for child in form.children %}
         <li
@@ -16,7 +16,7 @@
                 data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
         >
             <span class="col-xs-10 filter-content">{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
-            <span class="col-xs-2 filter-count">( {{ choices[child.vars.value].count }} )</span>
+            <span class="col-xs-2 filter-count">({{ choices[child.vars.value].count }})</span>
         </li>
     {% endfor %}
 </ul>

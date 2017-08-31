@@ -10,7 +10,7 @@ function CatalogMobileFilters(element, filterForm, catalog, button) {
     var count        = element.attr('data-count-participant');
 
     button.html(
-        '<span>' + content + ' </span><span class="button-count total-participants">( ' + count + ' ) ' +
+        '<span>' + content + ' </span><span class="button-count total-participants">(' + count + ')' +
         '<i class="glyphicon glyphicon-chevron-down"></i></span>'
     );
 

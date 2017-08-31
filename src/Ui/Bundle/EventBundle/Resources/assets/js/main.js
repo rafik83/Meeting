@@ -117,6 +117,7 @@ function init (target) {
 
     $('#navigation-mobile, .mobile-menu .navigation__close', target).on('click', function (e) {
         $('.mobile-menu').toggle();
+        $('.catalog-mobile').toggleClass('open');
         setTimeout(function() {
           $('body').toggleClass('menu-mobile-opened').scrollTop(0);
         }, 1);

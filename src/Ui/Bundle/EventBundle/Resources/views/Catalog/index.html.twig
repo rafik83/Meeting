@@ -12,15 +12,15 @@
     <div class="open catalog-mobile col-xs-12">
         <div class="catalog-mobile-filters visible-xs">
             <div class="catalog-mobile-item open" data-anchor="filter-type">
-                <a href="#" class="menu-mobile-button btn btn-primary btn-block">
+                <a href="#" class="catalog-mobile-button btn btn-primary btn-block">
                     <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
                     <span class="button-count total-participants">
-                        ( {{ paginatedResult.total }} )
+                        ({{ paginatedResult.total }})
                          <i class="glyphicon glyphicon-chevron-down"></i>
                     </span>
                 </a>
                 <div id="filter-type" class="catalog-mobile-menu">
-                    <h3 class="menu-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
+                    <h3 class="catalog-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
                     {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {
                         form: searchForm.type,
                         choices: typeViews,
