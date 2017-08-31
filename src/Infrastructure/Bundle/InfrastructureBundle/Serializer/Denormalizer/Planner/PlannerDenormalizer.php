@@ -421,13 +421,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
-        if (isset($meeting['blockedSlot']) && $meeting['blockedSlot'] === true) {
-            $meetingResult->isBlockedSlot = true;
-        }
-
-        if (isset($meeting['blockedSpot']) && $meeting['blockedSpot'] === true) {
-            $meetingResult->isBlockedSpot = true;
-        }
+        $meetingResult->isBlockedSlot = isset($meeting['blockedSlot']) && $meeting['blockedSlot'] === 'true';
+        $meetingResult->isBlockedSpot = isset($meeting['blockedSpot']) && $meeting['blockedSpot'] === 'true';
 
         $this->meetingList[] = $meetingResult;
     }
@@ -439,10 +434,6 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      */
     private function isSingle(array &$element)
     {
-        if (isset($element['@reference']) || isset($element['@id'])) {
-            return true;
-        }
-
-        return false;
+        return isset($element['@reference']) || isset($element['@id']);
     }
 }
