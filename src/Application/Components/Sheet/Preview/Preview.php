@@ -81,7 +81,9 @@ class Preview
 
                     // Create card view for each participant limited by the number of participant shown
                     for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
-                        $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
+                        $cardView = $this->cardViewQueryHandler->handle(
+                            new CardViewQuery($participants[$index], $locale)
+                        );
 
                         if (null !== $composedRule && null !== $composedRule->rule) {
                             $this->applyer->applyRuleForParticipantCard($cardView, $rules);
@@ -102,6 +104,7 @@ class Preview
                         // In EditableText there is only one tag therefore it is not useful to add a comma
                         foreach ($object->getTaggedDataViews() as $taggedDataView) {
                             $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
+                            $previewView->populatedFromTag = $taggedDataView->tag;
                         }
                     } else {
                         $previewView->content = $object->getContentValue();
@@ -117,6 +120,14 @@ class Preview
                 $previewObjects[] = $previewView;
             } catch (ObjectNotFoundException $exception) {
                 continue;
+            }
+        }
+
+        /** @var PreviewView $previewObject */
+        foreach ($previewObjects as $previewObjectKey => $previewObject) {
+            // Dont display sheet title twice on sheet card if they are no image
+            if ($previewObject->isPopulatedFromTagSheetOrganization()) {
+                unset($previewObjects[$previewObjectKey]);
             }
         }
 
