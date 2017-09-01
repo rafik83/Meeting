@@ -151,7 +151,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             try {
-                list($sheetData, $participantData, $sheetTitle) = $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
+                list($sheetData, $participantData, $sheetTitle) = $this->handleRow(
+                    $row,
+                    $mappingGuesser,
+                    $registrationTemplate,
+                    $context
+                );
 
                 $this->createEntities(
                     $context,
@@ -162,7 +167,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $participantData,
                     $registrationTemplate
                 );
-
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
                     $key,
@@ -237,6 +241,9 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $participantData = [];
         $sheetTitle      = '';
 
+        // clear previous data before process current imported participant row
+        $registrationTemplate->clear();
+
         foreach ($row as $key => $column) {
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
@@ -252,10 +259,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            if ($templateObject->hasTag(Tag::SHEET_TITLE)) {
-                $sheetTitle = $templateObject->getContentValue();
-            }
-
             try {
                 if ($templateObject instanceof TemplateObject\Telephone) {
                     $column = $this->denormalizerPhoneNumber($column);
@@ -268,8 +271,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 ]);
 
                 if (!$validatorError->hasError()) {
-                    $registrationTemplate->clear();
-
                     if ($templateObject instanceof TemplateObject\Nomenclature) {
                         $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
                         $templateObject->setContentValue($nomenclatureKey);
@@ -281,11 +282,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 } else {
                     throw new InvalidObjectContentException($validatorError);
                 }
-
             } catch (ObjectValidatorNotExistException $exception) {
                 // if not validator defined, set data without check if valid
-                $registrationTemplate->clear();
-
                 if ($templateObject instanceof TemplateObject\Nomenclature) {
                     $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
                     $templateObject->setContentValue($nomenclatureKey);
@@ -294,6 +292,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 }
 
                 $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+            }
+
+            if ($templateObject->hasTag(Tag::SHEET_ORGANIZATION) && !empty($templateObject->getContentValue())) {
+                $sheetTitle = $column;
+            }
+
+            if ('' === $sheetTitle && $templateObject->hasTag(Tag::SHEET_TITLE)
+                && !empty($templateObject->getContentValue())
+            ) {
+                $sheetTitle = $column;
             }
         }
 
@@ -340,16 +348,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
         $sheet->setImported(true);
-        $sheet->setTitle(!empty($sheetTitle) ? $sheetTitle : $user->getFullname());
+        $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
+        $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
+        $sheet->setTitle($sheetTitle);
 
         $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);
 
         $sheet->setRegistrationData($sheetData);
-
         $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
-
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection
 
         $this->importLogger->sheetImported($sheet);
