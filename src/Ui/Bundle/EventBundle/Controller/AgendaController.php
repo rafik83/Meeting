@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -131,6 +132,35 @@ class AgendaController extends Controller
         ;
 
         return new JsonResponse(['countAvailableSheets' => $countAvailableSheets]);
+    }
+
+    /**
+     * @param EventDomain   $eventDomain
+     * @param UserInterface $user
+     * @param Sheet         $sheet
+     *
+     * @return JsonResponse
+     */
+    public function getSlotsAvailableByUserAction(
+        EventDomain $eventDomain,
+        UserInterface $user,
+        Sheet $sheet
+    ): JsonResponse {
+        $this->checkAccess($eventDomain, $sheet);
+
+        $participant = $sheet->getUserParticipant($user);
+
+        if ($participant === null) {
+            return new JsonResponse(['message' => 'participant not found'], 404);
+        }
+
+        $query = new AvailableSlotsByParticipantQuery($eventDomain->getEvent(), $participant);
+        $availableSlotViews = $this
+            ->get('tactician.commandbus.query')
+            ->handle($query)
+        ;
+
+        return new JsonResponse(['availableSlotViews' => $availableSlotViews]);
     }
 
     /**
