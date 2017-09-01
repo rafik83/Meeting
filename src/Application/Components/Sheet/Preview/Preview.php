@@ -100,15 +100,17 @@ class Preview
                         $previewView->strong = true;
                     }
 
+
                     if ($object->getContentValue() === '' && $object->getTag() !== null) {
                         // In EditableText there is only one tag therefore it is not useful to add a comma
                         foreach ($object->getTaggedDataViews() as $taggedDataView) {
                             $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
-                            $previewView->populatedFromTag = $taggedDataView->tag;
                         }
                     } else {
                         $previewView->content = $object->getContentValue();
                     }
+
+                    $previewView->populatedFromTag = $object->getTag();
                 } elseif ($object instanceof TemplateObject\Tag) {
                     foreach ($object->getTaggedDataViews() as $taggedDataView) {
                         $previewView->addTagView(
@@ -116,7 +118,6 @@ class Preview
                         );
                     }
                 }
-
                 $previewObjects[] = $previewView;
             } catch (ObjectNotFoundException $exception) {
                 continue;
@@ -124,10 +125,14 @@ class Preview
         }
 
         /** @var PreviewView $previewObject */
-        foreach ($previewObjects as $previewObjectKey => $previewObject) {
-            // Dont display sheet title twice on sheet card if they are no image
-            if ($previewObject->isPopulatedFromTagSheetOrganization()) {
-                unset($previewObjects[$previewObjectKey]);
+        foreach ($previewObjects as $previewObject) {
+            if ($previewObject->isImage() && $previewObject->content === '') {
+                foreach ($previewObjects as $previewObjectKey => $previewObjectValue) {
+                    // Dont display sheet title twice on sheet card if they are no image
+                    if ($previewObjectValue->isPopulatedFromTagSheetOrganization()) {
+                        unset($previewObjects[$previewObjectKey]);
+                    }
+                }
             }
         }
 
