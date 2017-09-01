@@ -124,14 +124,19 @@ class Preview
             }
         }
 
-        /** @var PreviewView $previewObject */
+        $hasEmptyImage = false;
+
         foreach ($previewObjects as $previewObject) {
             if ($previewObject->isImage() && $previewObject->content === '') {
-                foreach ($previewObjects as $previewObjectKey => $previewObjectValue) {
-                    // Dont display sheet title twice on sheet card if they are no image
-                    if ($previewObjectValue->isPopulatedFromTagSheetOrganization()) {
-                        unset($previewObjects[$previewObjectKey]);
-                    }
+                $hasEmptyImage = true;
+                break;
+            }
+        }
+
+        if ($hasEmptyImage) {
+            foreach ($previewObjects as $previewObjectKey => $previewObjectValue) {
+                if ($previewObjectValue->isPopulatedFromTagSheetOrganization()) {
+                    unset($previewObjects[$previewObjectKey]);
                 }
             }
         }
