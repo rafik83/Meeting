@@ -68,15 +68,12 @@ class SheetsAvailableBySlotQueryHandler
         }
 
         $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event, $excludedSheets);
-        $availableSheets = [];
         $participants    = [];
 
         foreach ($sheets as $sheet) {
             $allowedTypes = $this->visibleParticipationTypes->getAllowedTypesList($sheet);
 
             if (in_array($sheet->getType(), $allowedTypes)) {
-                $availableSheets[] = $sheet;
-
                 foreach ($sheet->getParticipants() as $participant) {
                     $participants[] = $participant;
                 }
