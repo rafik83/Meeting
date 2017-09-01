@@ -105,7 +105,7 @@ class AgendaController extends Controller
     /**
      * @param EventDomain   $eventDomain
      * @param UserInterface $user
-     * @param Sheet         $excludedSheet
+     * @param Sheet         $sheet
      * @param MeetingSlot   $slot
      *
      * @return JsonResponse
@@ -113,24 +113,24 @@ class AgendaController extends Controller
     public function countSheetsAvailableBySlotAction(
         EventDomain $eventDomain,
         UserInterface $user,
-        Sheet $excludedSheet,
+        Sheet $sheet,
         MeetingSlot $slot
     ): JsonResponse {
-        $this->checkAccess($eventDomain, $excludedSheet);
+        $this->checkAccess($eventDomain, $sheet);
 
-        $participant = $excludedSheet->getUserParticipant($user);
+        $participant = $sheet->getUserParticipant($user);
 
-        if ($participant === null || $participant->getSheet() !== $excludedSheet) {
-            return new JsonResponse(['response' => 'participant not found'], 404);
+        if ($participant === null) {
+            return new JsonResponse(['message' => 'participant not found'], 404);
         }
 
-        $query = new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $excludedSheet, $slot);
+        $query = new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $sheet, $slot);
         $countAvailableSheets = $this
             ->get('tactician.commandbus.query')
             ->handle($query)
         ;
 
-        return new JsonResponse(['response' => $countAvailableSheets]);
+        return new JsonResponse(['countAvailableSheets' => $countAvailableSheets]);
     }
 
     /**

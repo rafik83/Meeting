@@ -133,6 +133,6 @@ class SheetsAvailableBySlotQueryHandlerTest extends TestCase
 
         $result = $handler->handle($query);
 
-        $this->assertEquals(0, $result);
+        $this->assertEquals(1, $result);
     }
 }

@@ -92,14 +92,8 @@ class SheetsAvailableBySlotQueryHandler
         $filteredAvailableSheets = [];
 
         foreach ($availableParticipants as $availableParticipant) {
-            foreach ($availableSheets as $availableSheet) {
-                if ($availableParticipant->getSheet() === $availableSheet
-                    && !in_array($availableSheet, $filteredAvailableSheets)
-                ) {
-                    $filteredAvailableSheets[] = $availableSheet;
-                }
-            }
-         }
+            $filteredAvailableSheets[$availableParticipant->getSheet()->getId()] = $availableParticipant->getSheet();
+        }
 
        return count($filteredAvailableSheets);
     }
