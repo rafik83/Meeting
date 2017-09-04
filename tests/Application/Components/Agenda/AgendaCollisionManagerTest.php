@@ -33,6 +33,7 @@ class AgendaCollisionManagerTest extends TestCase
         $endHappening1 = new \DateTime('2016-10-12 15:30:00');
         $endHappening2 = new \DateTime('2016-10-12 17:30:00');
         $meetingView = new MeetingView(
+            1,
             'userSheetTitle',
             2,
             'title',

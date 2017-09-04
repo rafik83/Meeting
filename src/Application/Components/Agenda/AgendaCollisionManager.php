@@ -61,12 +61,10 @@ class AgendaCollisionManager
 
         foreach ($this->happeningViews as $happeningView) {
             $this->removeElementIfOverlapping($happeningView, $this->massViews);
-            $this->removeElementIfOverlapping($happeningView, $this->unavailabilityViews);
         }
 
         foreach ($this->meetingViews as $meetingView) {
             $this->removeElementIfOverlapping($meetingView, $this->massViews);
-            $this->removeElementIfOverlapping($meetingView, $this->unavailabilityViews);
         }
 
         return [
@@ -110,26 +108,26 @@ class AgendaCollisionManager
     }
 
     /**
-     * @param AbstractTimeEntityView $abstractTimeEntityView
-     * @param AbstractTimeEntityView[] $abstractTimeEntityViews
+     * @param AbstractTimeEntityView   $needle
+     * @param AbstractTimeEntityView[] $haystack
      */
     private function removeElementIfOverlapping(
-        AbstractTimeEntityView $abstractTimeEntityView,
-        array &$abstractTimeEntityViews
+        AbstractTimeEntityView $needle,
+        array &$haystack
     ) {
-        foreach ($abstractTimeEntityViews as $abstractTimeEntityKey => $abstractTimeEntity) {
+        foreach ($haystack as $abstractTimeEntityKey => $abstractTimeEntity) {
             if ($this->doesFirstBeginAfterAndFinishBeforeSecond(
-                    $abstractTimeEntityView,
+                    $needle,
                     $abstractTimeEntity
                 ) || $this->doesFirstFinishAfterSecondBeginAndFinishBeforeSecondEnd(
-                    $abstractTimeEntityView,
+                    $needle,
                     $abstractTimeEntity
                 ) || $this->doesFirstBeginBeforeAndFinishAfterSecond(
-                    $abstractTimeEntityView,
+                    $needle,
                     $abstractTimeEntity
                 )
             ) {
-                $this->removeArrayElement($abstractTimeEntityKey, $abstractTimeEntityViews);
+                $this->removeArrayElement($abstractTimeEntityKey, $haystack);
             }
         }
     }
@@ -154,7 +152,7 @@ class AgendaCollisionManager
         AbstractTimeEntityView $secondTimeEntity
     ): bool {
         return $firstTimeEntity->getBegin() >= $secondTimeEntity->getBegin()
-        && $firstTimeEntity->getBegin() < $secondTimeEntity->getEnd();
+            && $firstTimeEntity->getBegin() < $secondTimeEntity->getEnd();
     }
 
     /**
