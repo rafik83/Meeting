@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\View\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
-use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 
 class MeetingView extends AbstractTimeEntityView
 {

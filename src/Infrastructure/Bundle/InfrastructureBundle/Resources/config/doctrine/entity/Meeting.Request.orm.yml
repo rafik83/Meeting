@@ -1,6 +1,9 @@
 Proximum\Vimeet\Domain\Model\Meeting\Request:
     type: entity
     table: meeting_request
+    indexes:
+        state:
+            columns: [ state ]
     id:
         id:
             type: integer
@@ -28,6 +31,9 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:

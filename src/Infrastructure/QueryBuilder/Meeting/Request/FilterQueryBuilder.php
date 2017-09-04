@@ -28,9 +28,8 @@ class FilterQueryBuilder extends QueryBuilder
         $this
             ->select('request', 'fromSheet', 'toSheet')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
-            ->join('request.to', 'toSheet')
-            ->where('request.disabled = FALSE')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND request.event = :event AND fromSheet.enable = true')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.enable = true')
             ->orderBy('request.stateUpdatedAt', 'DESC')
             ->setParameter('event', $event);
     }

@@ -12,10 +12,12 @@
             {% endif %}
         </p>
     </a>
-    {{ include('EventBundle:Happening:actions.html.twig', {
-        'sheet': sheet,
-        'happening': happening,
-        'isUserAloneParticipant': isUserAloneParticipant,
-        'doesCurrentUserParticipate': doesCurrentUserParticipate
-    }) }}
+    {% if not isActionButtonsOnDetails %}
+        {{ include('EventBundle:Happening:actions.html.twig', {
+            'sheet': sheet,
+            'happening': happening,
+            'isUserAloneParticipant': isUserAloneParticipant,
+            'doesCurrentUserParticipate': doesCurrentUserParticipate
+        }) }}
+    {% endif %}
 </header>

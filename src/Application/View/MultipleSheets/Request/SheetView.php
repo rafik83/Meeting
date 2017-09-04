@@ -26,17 +26,22 @@ class SheetView
     /** @var RequestView[] */
     public $requestViews;
 
+    /** @var string */
+    public $type;
+
     /**
-     * @param int    $sheetId
-     * @param string $sheetTitle
-     * @param Sheet  $sheet
+     * @param int         $sheetId
+     * @param string      $sheetTitle
+     * @param Sheet       $sheet
+     * @param string $type
      */
-    public function __construct($sheetId, $sheetTitle, Sheet $sheet)
+    public function __construct($sheetId, $sheetTitle, Sheet $sheet, string $type = '')
     {
         $this->sheetId = $sheetId;
         $this->sheetTitle = $sheetTitle;
         $this->sheet = $sheet;
         $this->requestViews = [];
+        $this->type = $type;
     }
 
     /**
