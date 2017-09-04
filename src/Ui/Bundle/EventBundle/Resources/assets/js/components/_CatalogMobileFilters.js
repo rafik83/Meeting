@@ -9,6 +9,8 @@ function CatalogMobileFilters(element, filterForm, catalog, button) {
     var content      = element.attr('data-content');
     var count        = element.attr('data-count-participant');
 
+    $('.catalog-mobile-button').addClass('disabled');
+
     button.html(
         '<span>' + content + ' </span><span class="button-count total-participants">(' + count + ')' +
         '<i class="glyphicon glyphicon-chevron-down"></i></span>'
@@ -33,6 +35,7 @@ function CatalogMobileFilters(element, filterForm, catalog, button) {
     $.get(action, data, function(response) {
         $(catalog).html(response);
         PubSub.publish('dom.added', catalog.parentNode);
+        $('.catalog-mobile-button').removeClass('disabled');
     });
 }
 
