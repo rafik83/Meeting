@@ -40,7 +40,11 @@ class AvailableSlotsByParticipantQueryHandler
         $availableSlotViews = [];
 
         foreach ($availableSlots as $availableSlot) {
-            $availableSlotViews[] = new AvailableSlotView($availableSlot->getId());
+            $availableSlotViews[] = new AvailableSlotView(
+                $availableSlot->getId(),
+                $availableSlot->getBegin(),
+                $availableSlot->duration()
+            );
         }
 
         return $availableSlotViews;

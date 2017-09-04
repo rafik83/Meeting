@@ -15,11 +15,21 @@ class AvailableSlotView
     /** @var int */
     public $id;
 
+    /** @var \DateTimeInterface */
+    public $beginHour;
+
+    /** @var string */
+    public $duration;
+
     /**
-     * @param int $id
+     * @param int                $id
+     * @param \DateTimeInterface $beginHour
+     * @param string             $duration
      */
-    public function __construct(int $id)
+    public function __construct(int $id, \DateTimeInterface $beginHour, string $duration)
     {
         $this->id = $id;
+        $this->beginHour = $beginHour;
+        $this->duration = $duration;
     }
 }

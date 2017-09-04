@@ -50,7 +50,7 @@
     <div class="agenda-container">
         <div class="row">
             {% for day in agenda.days %}
-                <div class="col-md-12 agenda" data-beginHour="{{ day.begin|date('H:i', event.timeZone) }}" data-endHour="{{ day.end|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.getScale }}" data-sheet-id="{{ sheet.id }}">
+                <div class="col-md-12 agenda" data-beginHour="{{ day.begin|date('H:i', event.timeZone) }}" data-endHour="{{ day.end|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.getScale }}">
                     <header class="agenda-head">
                         <p>
                             <i class="icon icon-Calendrier"></i>
