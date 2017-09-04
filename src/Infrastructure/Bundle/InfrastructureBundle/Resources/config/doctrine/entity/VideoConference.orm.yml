@@ -1,0 +1,29 @@
+Proximum\Vimeet\Domain\Model\VideoConference:
+    type:  entity
+    table: video_conference
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    uniqueConstraints:
+        unique_meeting_idx:
+            columns: [meeting_id]
+    fields:
+        sessionId:
+            type: string
+    manyToOne:
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+            cascade: ["persist"]
+    oneToMany:
+        tokens:
+            targetEntity: Proximum\Vimeet\Domain\Model\VideoConferenceToken
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+            cascade: ["persist"]
+            mappedBy: videoConference

@@ -10,16 +10,16 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Spot;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatchHandler;
 use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class DeleteBatchHandlerTest extends \PHPUnit_Framework_TestCase
+class DeleteBatchHandlerTest extends TestCase
 {
     public function testDeleteSpot()
     {

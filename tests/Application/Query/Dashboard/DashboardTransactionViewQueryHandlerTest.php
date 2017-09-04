@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Application\Query\Dashboard;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DashboardTransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DashboardTransactionViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

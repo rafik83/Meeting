@@ -20,8 +20,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use PHPUnit\Framework\TestCase;
 
-class SheetNotFoundExceptionListenerTest extends \PHPUnit_Framework_TestCase
+class SheetNotFoundExceptionListenerTest extends TestCase
 {
     public function testOnKernelException()
     {

@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToLockSlotException;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class LockHandlerTest extends \PHPUnit_Framework_TestCase
+class LockHandlerTest extends TestCase
 {
     public function testHandle()
     {

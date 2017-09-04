@@ -10,7 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
+use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
+use Proximum\Vimeet\Application\View\Agenda\HappeningView;
+use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
 use Proximum\Vimeet\Application\View\Happening\DayView;
+use Proximum\Vimeet\Application\View\Happening\ProgramElementViewInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class DayViewQueryHandler
@@ -59,7 +63,7 @@ class DayViewQueryHandler
         );
 
         $happeningViews = [];
-        $massView       = [];
+        $massViews      = [];
 
         foreach ($happenings as $happening) {
             $happeningViews[] = $this->happeningViewQueryHandler->handle(
@@ -71,7 +75,7 @@ class DayViewQueryHandler
             if ($mass->getBegin() >= $query->eventDay->getStartTime()
                 && $mass->getEnd() <= $query->eventDay->getEndTime()
             ) {
-                $massView[] = $this->massUnavailabilityViewQueryHandler->handle(
+                $massViews[] = $this->massUnavailabilityViewQueryHandler->handle(
                     new MassUnavailabilityViewQuery($mass, $query->event, $query->locale)
                 );
             }
@@ -82,7 +86,31 @@ class DayViewQueryHandler
             $query->eventDay->getEndTime(),
             $query->event->getConfiguration()->getScheduleScale(),
             $happeningViews,
-            $massView
+            $this->mergeAndSortMassViewsAndHappeningViews($happeningViews, $massViews)
         );
+    }
+
+    /**
+     * Merge array of MassUnavailabilityView and array of HappeningView
+     * Then sort it by begin date, if begin date are equals the one who have the lowest end date rule
+     *
+     * @param HappeningView[]          $happeningViews
+     * @param MassUnavailabilityView[] $massUnavailabilityView
+     *
+     * @return ProgramElementViewInterface[]
+     */
+    private function mergeAndSortMassViewsAndHappeningViews(array $happeningViews, array $massUnavailabilityView): array
+    {
+        $programElementViews = array_merge($happeningViews, $massUnavailabilityView);
+
+        usort($programElementViews, function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
+            if ($first->begin === $second->begin) {
+                return $first->end < $second->end ? -1 : 1;
+            }
+
+            return $first->begin < $second->begin ? -1 : 1;
+        });
+
+        return $programElementViews;
     }
 }

@@ -14,8 +14,9 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\CustomRowView;
+use PHPUnit\Framework\TestCase;
 
-class CustomRowViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class CustomRowViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

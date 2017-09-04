@@ -27,8 +27,9 @@ use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
+class ChoiceWithDepositHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Request\ParticipantAssignedAggregator;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantAssignedAggregatorTest extends \PHPUnit_Framework_TestCase
+class ParticipantAssignedAggregatorTest extends TestCase
 {
     public function testAggregateNoRequest()
     {

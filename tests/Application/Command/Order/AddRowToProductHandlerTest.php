@@ -10,6 +10,7 @@
 
 namespace Application\Command\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
 use Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class AddRowToProductTest extends \PHPUnit_Framework_TestCase
+class AddRowToProductTest extends TestCase
 {
     public function testHandle()
     {

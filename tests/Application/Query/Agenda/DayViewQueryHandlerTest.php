@@ -40,8 +40,9 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DayViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -284,6 +285,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $spot        = new Spot('ref', $event, 2, 3, 4, true);
         $meeting     = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $event);
         $meetingView = new MeetingView(
+            1,
             'userSheetTitle',
             2,
             'title',

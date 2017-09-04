@@ -16,53 +16,38 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchHandler
 {
-    /**
-     * @var BatchValidateHandler
-     */
+    /** @var BatchValidateHandler */
     private $batchValidateHandler;
 
-    /**
-     * @var BatchAssignHandler
-     */
+    /** @var BatchAssignHandler */
     private $batchAssignHandler;
 
-    /**
-     * @var BatchAcceptHandler
-     */
+    /** @var BatchAcceptHandler */
     private $batchAcceptHandler;
 
-    /**
-     * @var BatchEnableDisableHandler
-     */
+    /** @var BatchEnableDisableHandler */
     private $batchEnableDisableHandler;
 
-    /**
-     * @var BatchCatalogHandler
-     */
+    /** @var BatchCatalogHandler */
     private $batchCatalogHandler;
 
-    /**
-     * @var BatchDraftHandler
-     */
+    /** @var BatchDraftHandler */
     private $batchDraftHandler;
 
-    /**
-     * @var BatchValidationValidateHandler
-     */
+    /** @var BatchValidationValidateHandler */
     private $batchValidationValidateHandler;
 
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @var BatchGenerateInvoiceHandler;
-     */
+    /** @var BatchGenerateInvoiceHandler */
     private $batchGenerateInvoiceHandler;
 
     /** @var BatchAssignToGroupHandler */
     private $batchAssignToGroupHandler;
+
+    /** @var BatchPendingHandler */
+    private $batchPendingHandler;
 
     /**
      * BatchHandler constructor.
@@ -77,6 +62,7 @@ class BatchHandler
      * @param BatchValidationValidateHandler $batchValidationValidateHandler
      * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
+     * @param BatchPendingHandler            $batchPendingHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -88,7 +74,8 @@ class BatchHandler
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
-        BatchAssignToGroupHandler $batchAssignToGroupHandler
+        BatchAssignToGroupHandler $batchAssignToGroupHandler,
+        BatchPendingHandler $batchPendingHandler
     ) {
         $this->sheetSearchAdapter             = $sheetSearchAdapter;
         $this->batchValidateHandler           = $batchValidateHandler;
@@ -100,6 +87,7 @@ class BatchHandler
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
         $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
         $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
+        $this->batchPendingHandler            = $batchPendingHandler;
     }
 
     /**
@@ -131,6 +119,12 @@ class BatchHandler
 
         if ($batch->accept) {
             return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids, $batch->admin));
+        }
+
+        if($batch->pending) {
+            return $this->batchPendingHandler->handle(
+                new BatchPending($batch->ids, $batch->admin)
+            );
         }
 
         if ($batch->enable || $batch->disable) {
@@ -168,11 +162,11 @@ class BatchHandler
                 new BatchValidationValidate($batch->event, $batch->ids, $batch->admin)
             );
         }
-        
+
         if ($batch->generateInvoice) {
-           return $this->batchGenerateInvoiceHandler->handle(
-               new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
-           );
+            return $this->batchGenerateInvoiceHandler->handle(
+                new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
+            );
         }
 
         if ($batch->assignToGroup && $batch->group !== null) {

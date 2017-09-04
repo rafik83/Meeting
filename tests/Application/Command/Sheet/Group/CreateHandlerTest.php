@@ -10,6 +10,7 @@
 
 namespace Application\Command\Sheet\Group;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Group\CreateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -23,7 +24,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -28,16 +28,34 @@ class CategoryView
     public $linksView;
 
     /**
+     * @var bool
+     */
+    public $isShowOnMobile;
+
+    /**
      * CategoryView constructor.
      *
      * @param string     $title
      * @param string     $icon
      * @param LinkView[] $linksView
+     * @param bool       $isShowOnMobile
      */
-    public function __construct($title, $icon, array $linksView)
+    public function __construct(string $title, string $icon, array $linksView, bool $isShowOnMobile)
     {
-        $this->title     = $title;
-        $this->icon      = $icon;
-        $this->linksView = $linksView;
+        $this->title          = $title;
+        $this->icon           = $icon;
+        $this->linksView      = $linksView;
+        $this->isShowOnMobile = $isShowOnMobile;
+    }
+
+    public function getEnabledLinkView(): ?LinkView
+    {
+        foreach ($this->linksView as $linkView) {
+            if (true === $linkView->state) {
+                return $linkView;
+            }
+        }
+
+        return null;
     }
 }

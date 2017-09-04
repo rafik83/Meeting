@@ -104,8 +104,12 @@ form.choose_payment_mode.children.submit.label: Enregistrer
 form.common.choices.all: 'Tout sélectionner'
 form.configure.children.externalCatalogEnabled.label: 'Catalogue public activé'
 form.configure.children.types.label: 'Types visibles'
-form.configure.children.submit.label: 'Enregistrer'
 form.configure.children.categories.label: 'Catégories visibles'
+form.configure.children.hasMessage.label: 'Message activé'
+form.configure.children.messageTranslations.label: 'Message'
+form.configure.children.messageTranslations.prototype.children.title.label: 'Titre'
+form.configure.children.messageTranslations.prototype.children.content.label: 'Contenu'
+form.configure.children.submit.label: 'Enregistrer'
 form.configure.children.searchFacets.category.help: ''
 form.configure.children.searchFacets.category.label: Catégorie
 form.configure.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
@@ -188,6 +192,8 @@ form.event_configure_date.children.smsActivationDate.label: 'Date d''activation 
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.submit.label: Enregistrer
+form.event_duplicate.children.event.label: 'Événement'
+form.event_duplicate.children.submit.label: 'Créer'
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
 form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
@@ -625,6 +631,7 @@ form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'
 form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
 form.sheet_attendance_choice.children.submit.label: 'Confirmer la modification'
 form.sheet_batch.children.accept.label: Accepter
+form.sheet_batch.children.pending.label: En attente
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
 form.sheet_batch.children.assignToGroup.label: Assigner

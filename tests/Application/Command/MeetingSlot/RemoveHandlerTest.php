@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -1,7 +1,8 @@
 {{ include('EventBundle:Navigation/Partial:event.html.twig') }}
 
 {% if menuView is not null or submenuView is not null %}
-    <div class="sub-header">
+    {# Desktop menu and submenu #}
+    <div class="sub-header sub-header-desktop hidden-xs">
         {% if menuView is not null %}
             <ul class="sub-header__item">
                 <li>
@@ -17,3 +18,10 @@
         {% endif %}
     </div>
 {% endif %}
+
+{# Mobile menu #}
+{{ include('EventBundle:Navigation/Partial/Mobile:mainMenu.html.twig') }}
+
+
+{# Mobile bottom toolbar #}
+{{ include('EventBundle:Navigation/Partial/Mobile:toolbar.html.twig') }}

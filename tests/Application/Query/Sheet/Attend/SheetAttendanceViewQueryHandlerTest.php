@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet\Attend;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQueryHandler;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Application\View\Sheet\Attend\SheetAttendanceView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
-class SheetAttendanceViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SheetAttendanceViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

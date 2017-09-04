@@ -26,8 +26,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
+class CompletenessCalculatorTest extends TestCase
 {
     public function testCalculateFullCompleteness()
     {

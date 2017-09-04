@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\PromotionCodeView;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 
-class PromotionCodeViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PromotionCodeViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

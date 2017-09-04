@@ -185,13 +185,13 @@ class SheetListViewQueryHandler
     /**
      * Creates the SheetViews and returns them with there requests
      *
-     * @param Event       $event
-     * @param Sheet[]     $multipleSheets
-     * @param Sheet[]     $sheetsMet
-     * @param string      $locale
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $multipleSheets
+     * @param Sheet[]          $sheetsMet
+     * @param string           $locale
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return SheetView[]
      */
@@ -199,16 +199,18 @@ class SheetListViewQueryHandler
         Event $event,
         array &$multipleSheets,
         array &$sheetsMet,
-        $locale,
-        $state,
-        $type,
-        User $user = null
+        string $locale,
+        ?string $state,
+        ?string $type,
+        $user = null
     ) {
         /** @var SheetView[] $sheetViews */
         $sheetViews = [];
 
         foreach ($sheetsMet as $sheetMet) {
-            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(new SheetViewQuery($sheetMet));
+            $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(
+                new SheetViewQuery($sheetMet, $locale)
+            );
         }
 
         $requests = $this->requestRepository->getRequestsOfSheetsWithSheets(

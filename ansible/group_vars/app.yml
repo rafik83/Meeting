@@ -153,13 +153,17 @@ app_patterns:
     - file: app.conf
       config:
         - server:
+          - listen: 443 ssl
+          - listen: 80
           - server_name: "{{ app.host }} *.{{ app.host }}"
-          #- server_name: "*.ngrok.io"
+          - server_name: "*.ngrok.io"
           - root:        "{{ app.dir }}{{ app.dir_release }}/web"
           - access_log:  "{{ app.log_dir }}/nginx.access.log"
           - error_log:   "{{ app.log_dir }}/nginx.error.log"
           - client_max_body_size: 8M
           - include:     conf.d/app_gzip
+          - ssl_certificate: "{{ certificate_path }}/{{ certificate_domain }}/cert.pem"
+          - ssl_certificate_key: "{{ certificate_path }}/{{ certificate_domain }}/privkey.pem"
           - location /:
             - try_files: $uri /app.php$is_args$args
           - location ~ ^/(app(_[-\w]+)?)\.php(/|$):
@@ -207,3 +211,7 @@ app_patterns:
           - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
           # Dev
           - autostart:       false
+
+certificate_path: '/etc/nginx/certificates'
+certificate_domain: 'vimeet'
+certificate_email: 'vimeet@elao.com'

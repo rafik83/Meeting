@@ -30,8 +30,9 @@ use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SheetListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

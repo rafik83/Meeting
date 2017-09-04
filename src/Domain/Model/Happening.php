@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
-use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\Talking;
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
@@ -77,9 +76,7 @@ class Happening implements TimeRangeInterface
     private $participations;
 
     /**
-     * Question[]
-     *
-     * @var ArrayCollection
+     * @var ArrayCollection of Question
      */
     private $questions;
 
@@ -346,7 +343,7 @@ class Happening implements TimeRangeInterface
     }
 
     /**
-     * @return Happening\Question[]
+     * @return ArrayCollection of Question
      */
     public function getQuestions()
     {

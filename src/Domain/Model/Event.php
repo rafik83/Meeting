@@ -115,6 +115,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $visible;
 
+    /** @var null|Event */
+    private $duplicatedFrom;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -129,6 +132,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string|null $emailTeam
      * @param Prefix      $invoicePrefix
      * @param bool        $visible
+     * @param null|Event  $duplicatedFrom
      */
     public function __construct(
         $title,
@@ -143,7 +147,8 @@ class Event implements EventInterface, TraceableInterface
         $organiserName,
         $emailTeam,
         Prefix $invoicePrefix,
-        bool $visible = true
+        bool $visible = true,
+        Event $duplicatedFrom = null
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -165,6 +170,7 @@ class Event implements EventInterface, TraceableInterface
         $this->visible        = $visible;
         $this->userAgendaVersionsGenerated = false;
         $this->archived = false;
+        $this->duplicatedFrom = $duplicatedFrom;
     }
 
     /**
@@ -216,7 +222,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getDescription($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -226,7 +234,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getBankInfo($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBankInfo() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getBankInfo() : '';
     }
 
     /**
@@ -236,7 +246,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getBillingAddress($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBillingAddress() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getBillingAddress() : '';
     }
 
     /**
@@ -246,7 +258,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getPaymentCondition($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentCondition() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getPaymentCondition() : '';
     }
 
     /**
@@ -256,7 +270,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getPaymentFooter($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentFooter() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getPaymentFooter() : '';
     }
 
     /**
@@ -744,5 +760,13 @@ class Event implements EventInterface, TraceableInterface
     public function unArchive()
     {
         $this->archived = false;
+    }
+
+    /**
+     * @return null|Event
+     */
+    public function getDuplicatedFrom(): ?Event
+    {
+        return $this->duplicatedFrom;
     }
 }

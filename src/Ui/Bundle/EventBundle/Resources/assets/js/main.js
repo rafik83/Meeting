@@ -13,6 +13,7 @@ var $                     = require('jquery'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
     Agenda                = require('./components/agenda/_Agenda'),
+    Program               = require('./components/agenda/_Program'),
     ShowMore              = require('./components/_ShowMore'),
     ShowMoreParticipants  = require('./components/_ShowMoreParticipants'),
     CatalogFilters        = require('./components/_CatalogFilters'),
@@ -20,7 +21,9 @@ var $                     = require('jquery'),
     Happening             = require('./components/_Happening'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType   = require('./components/MeetingRequest/_FilterByType'),
-    CatalogPagination     = require('./components/_CatalogPagination');
+    CatalogPagination     = require('./components/_CatalogPagination'),
+    VideoConference       = require('./components/VideoConference/VideoConference')
+;
 
 require('bootstrap');
 require('elao-form.js');
@@ -81,6 +84,10 @@ function init (target) {
         new Agenda(element);
     });
 
+    [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function(element) {
+       new Program(element);
+    });
+
     [].forEach.call(target.querySelectorAll('.catalog__meeting_request'), function (element) {
         var buttons = target.querySelector('[data-meeting-request-filter-type-buttons]');
 
@@ -93,8 +100,15 @@ function init (target) {
         e.stopPropagation();
     });
 
-    $('.navigation__close', target).on('click', function (e) {
+    $('.navigation .navigation__close', target).on('click', function (e) {
         $('.navigation').toggleClass('open');
+    });
+
+    $('#navigation-mobile, .mobile-menu .navigation__close', target).on('click', function (e) {
+        $('.mobile-menu').toggle();
+        setTimeout(function() {
+          $('body').toggleClass('menu-mobile-opened').scrollTop(0);
+        }, 1);
     });
 
     $('.clear-on-hidden-modal', target)
@@ -188,6 +202,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-page]'), function (element) {
         new CatalogPagination(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.has-details.meet[data-isVisio]'), function (element) {
+        new VideoConference(element);
     });
 }
 

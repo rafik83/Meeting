@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlanningViewQueryHandlerTest extends TestCase
 {
     /**
      * @var ObjectProphecy
@@ -68,7 +69,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
 
         $linkView = new LinkView('navigation.links.incoming', null);
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView], true);
 
         $this->assertEquals($expected, $result);
     }
@@ -98,7 +99,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView], true);
 
         $this->assertEquals($expected, $result);
     }
@@ -131,7 +132,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView], true);
 
         $this->assertEquals($expected, $result);
     }
@@ -162,7 +163,12 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkViewHappening, $linkView]);
+        $expected = new CategoryView(
+            Category::PLANNING,
+            Category::PLANNING_ICON,
+            [$linkViewHappening, $linkView],
+            true
+        );
 
         $this->assertEquals($expected, $result);
     }
@@ -196,7 +202,13 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkViewHappening, $linkView]);
+
+        $expected = new CategoryView(
+            Category::PLANNING,
+            Category::PLANNING_ICON,
+            [$linkViewHappening, $linkView],
+            true
+        );
 
         $this->assertEquals($expected, $result);
     }

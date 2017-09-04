@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BillingInfoViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class BillingInfoViewQueryHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $billingInfoRepository;
