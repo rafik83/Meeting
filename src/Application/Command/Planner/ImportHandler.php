@@ -264,11 +264,14 @@ class ImportHandler
         $participantsFrom = [];
         $participantsTo   = [];
 
-
         // Check if participant are present also
-        foreach ($meetingResult->participants as $participant) {
-            $participantFrom = ParticipantFinder::getParticipantWithId($sheetFrom, $participant->id);
-            $participantTo   = ParticipantFinder::getParticipantWithId($sheetTo, $participant->id);
+        foreach ($meetingResult->userResults as $userResult) {
+            $participantFrom = ParticipantFinder::getParticipantWithUserId($sheetFrom, $userResult->id);
+            $participantTo   = ParticipantFinder::getParticipantWithUserId($sheetTo, $userResult->id);
+
+            if ((null === $participantFrom && $participantTo === null)) {
+                return null; // Participant of the meeting not found
+            }
 
             if (null !== $participantFrom) {
                 $participantsFrom[] = $participantFrom;
@@ -276,10 +279,6 @@ class ImportHandler
 
             if (null !== $participantTo) {
                 $participantsTo[] = $participantTo;
-            }
-
-            if ((null === $participantFrom && $participantTo === null)) {
-                return null; // Early return if participant of the meeting not found
             }
         }
 

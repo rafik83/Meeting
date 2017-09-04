@@ -19,7 +19,7 @@ class PlannerResult
     public $sheets;
 
     /** @var array */
-    public $participants;
+    public $users;
 
     /** @var array */
     public $slots;
