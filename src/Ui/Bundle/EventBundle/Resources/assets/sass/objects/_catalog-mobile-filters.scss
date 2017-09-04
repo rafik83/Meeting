@@ -34,6 +34,11 @@
 
         > span.button-count {
           float: right;
+
+          > i.glyphicon {
+              top: 3px !important;
+              left: 5px !important;
+          }
         }
       }
 
@@ -129,7 +134,7 @@
   }
 
   .catalog {
-    margin-top: 128px;
+    margin-top: 128px !important;
   }
 }
 
