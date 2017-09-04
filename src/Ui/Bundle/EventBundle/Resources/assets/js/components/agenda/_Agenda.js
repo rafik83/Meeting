@@ -1,8 +1,10 @@
-var Meet          = require('./_Meet'),
-    Slot          = require('./_Slot'),
-    Planner       = require('./_Planner'),
-    ResizeHandler = require('./_ResizeHandler'),
-    moment        = require('moment');
+var Meet                         = require('./_Meet'),
+    Slot                         = require('./_Slot'),
+    Planner                      = require('./_Planner'),
+    ResizeHandler                = require('./_ResizeHandler'),
+    AvailableSlotsForParticipant = require('./_AvailableSlotsForParticipant'),
+    AvailableSheetForSlot        = require('./_AvailableSheetsForSlot'),
+    moment                       = require('moment');
 
 /**
  * Agenda
@@ -12,6 +14,7 @@ var Meet          = require('./_Meet'),
 function Agenda(element) {
     this.element      = element;
     this.agendaDate   = moment(this.element.querySelector('.agenda-date').getAttribute('data-date'), 'DD-MM-YY HH:mm:ss').format('MM-DD-YY');
+    this.sheetId      = this.element.getAttribute('data-sheet-id');
     this.start        = this.parseTime(this.element.getAttribute('data-beginhour'));
     this.end          = this.parseTime(this.element.getAttribute('data-endhour'));
     this.duration     = this.end - this.start;
@@ -19,6 +22,7 @@ function Agenda(element) {
     this.layout       = this.element.querySelector('.layout');
     this.planner      = new Planner();
     this.resize       = new ResizeHandler(window);
+    this.availableSlotForParticipant = new AvailableSlotsForParticipant(element);
     this.meets        = [];
     this.slots        = [];
     this.scale        = 0;
@@ -32,7 +36,6 @@ function Agenda(element) {
     for (var time = this.start; time <= this.end; time += this.slotDuration) {
         this.addSlot(time, this.agendaDate);
     }
-
     Array.prototype.forEach.call(this.element.querySelectorAll('.meet'), this.addMeet);
 
     this.planner.setMeets(this.meets);
@@ -40,6 +43,11 @@ function Agenda(element) {
     if (moment(this.agendaDate, 'MM/DD/YY').format('MM/DD/YY') === moment().format('MM/DD/YY')) {
         [].forEach.call(this.slots, this.scrollOnSlot.bind(this));
     }
+
+    this.availableSlotForParticipant.on('available-slot-handled', function() {
+        console.log(this.availableSlotForParticipant.availableSlotForParticipant);
+        // Get available sheet for each slot and display it on slot
+    }.bind(this));
 
     this.resize.on('resized', this.onResize);
 }

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantsQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -41,7 +41,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         ];
 
         $query = new AvailableSlotsByParticipantQuery($event, $participant);
-        $handler = new AvailableSlotsByParticipantsQueryHandler($meetingSlotRepository->reveal());
+        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal());
 
         $meetingSlotRepository
             ->findAvailableSlotsByParticipants($event, [$participant])

@@ -3319,8 +3319,8 @@ services:
             - '@catalog.visible_participation_types'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery }
-    query.agenda.available_sheets.available_slots_by_participants_query_handler:
-        class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantsQueryHandler
+    query.agenda.available_sheets.available_slots_by_participant_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:

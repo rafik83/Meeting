@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
-class AvailableSlotsByParticipantsQueryHandler
+class AvailableSlotsByParticipantQueryHandler
 {
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
@@ -34,10 +34,7 @@ class AvailableSlotsByParticipantsQueryHandler
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
         $availableSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
-            $query->event,
-            [
-                $query->participant,
-            ]
+            $query->event, [$query->participant]
         );
 
         $availableSlotViews = [];
