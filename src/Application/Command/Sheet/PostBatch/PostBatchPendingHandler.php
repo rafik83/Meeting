@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -27,11 +28,21 @@ class PostBatchPendingHandler
     private $dateTime;
 
     /**
+     * @var SheetIndexerInterface
+     */
+    private $sheetIndexer;
+
+    /**
+     * @param SheetIndexerInterface    $sheetIndexer
      * @param EventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface       $dateTime
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, \DateTimeInterface $dateTime)
-    {
+    public function __construct(
+        SheetIndexerInterface $sheetIndexer,
+        EventDispatcherInterface $eventDispatcher,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->sheetIndexer    = $sheetIndexer;
         $this->eventDispatcher = $eventDispatcher;
         $this->dateTime        = $dateTime;
     }
@@ -51,5 +62,7 @@ class PostBatchPendingHandler
                 )
             );
         }
+
+        $this->sheetIndexer->updateSheets($command->sheets);
     }
 }

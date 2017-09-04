@@ -1957,6 +1957,7 @@ services:
     command.sheet.post_batch.post_batch_pending_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchPendingHandler
         arguments:
+           - '@adapter.sheet_indexer'
            - '@event_dispatcher'
            - '@datetime'
     command.sheet.post_batch.post_batch_draft_handler:
